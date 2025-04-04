@@ -5,7 +5,7 @@ GF_SavedVariables = {
 	disablechatfiltering		= false;
 	translate					= true;
 	showoriginal				= false;
-	automatictranslate			= false;
+	usewhoongroups				= false;
 	blockpolitics				= false;
 	blockmessagebelowlevel		= 1;
 	grouplistingduration		= 15,
@@ -79,7 +79,6 @@ local GF_PlayerMessages 		= {}
 local GF_IncomingMessagePrune 	= 0;
 local GF_PreviousMessage		= {};
 local GF_SentMessage			= "";
-local GF_TranslatedMessage		= nil;
 
 local GF_Classes	= {};
 
@@ -110,10 +109,7 @@ function GF_OnLoad()
 	
 	local old_ChatFrame_OnEvent = ChatFrame_OnEvent;
 	function ChatFrame_OnEvent(event)
-		if not arg1 or arg1 == GF_SentMessage or not arg2 or arg2 == "" or arg2 == UnitName("player") or not arg9 then
-			if GF_SavedVariables.showoriginal and arg1 and arg1 ~= "" and arg1 == GF_SentMessage and string.find(arg1, "([\227\228\229\230\231\232\233\234\235\236\237])") then
-				SELECTED_CHAT_FRAME:AddMessage("Translated text: "..GF_TranslateMessage(arg1), 1, 1, 1)
-			end 
+		if not arg1 or arg1 == "" or arg1 == GF_SentMessage or not arg2 or arg2 == "" or arg2 == UnitName("player") or not arg9 then
 			GF_SentMessage = nil;
 			if GF_SavedVariables.errorfilter and arg1 then 
 				for i=1, getn(GF_ErrorFilters) do
@@ -124,8 +120,7 @@ function GF_OnLoad()
 			end
 		else
 			if not GF_PreviousMessage[arg2] or GF_PreviousMessage[arg2][1] ~= arg1 or GF_PreviousMessage[arg2][2] + 30 < GetTime() then
-				GF_PreviousMessage[arg2] = {arg1,GetTime(), nil, arg1} -- Old message, time of last message, whether to block message, translated message
-				GF_TranslatedMessage = nil
+				GF_PreviousMessage[arg2] = {arg1,GetTime(), nil, arg1} -- Old message, time of last message, whether to block message
 				local tempwhodata = GF_GetWhoData(arg2)
 				if not GF_PlayersCurrentlyInGroup[arg2] and not GF_FriendsAndGuildies[arg2] then									-- Block blacklist, website spam, and politics.
 					if GF_BlackList[arg2] then
@@ -155,9 +150,6 @@ function GF_OnLoad()
 				end
 				if not Questie and string.find(arg1, "|c%w+|Hquest[0-9a-fA-F:]+|h%[.-%]%|h|r") then								-- Block broken questie links
 					arg1 = string.gsub(arg1, "|c%w+|Hquest[0-9a-fA-F:]+|h%[(.-)%]%|h|r", "%1")
-				end
-				if GF_SavedVariables.translate then 																			-- Translate Chinese to English
-					arg1 = GF_TranslateMessage(arg1)
 				end
 				GF_PreviousMessage[arg2][4] = arg1
 				local foundgroup, data;
@@ -196,7 +188,7 @@ function GF_OnLoad()
 								and tonumber(tempwhodata.level) <= GF_SavedVariables.autoblacklistminlevel and string.len(arg1) > 120 then 
 									if tempwhodata.recordedTime + 60*60*6 < time() then
 										GF_WhoTable[arg2] = nil;
-										GFAWM.addNameToWhoQueue(arg2)
+										if GF_SavedVariables.usewhoongroups then GFAWM.addNameToWhoQueue(arg2) end
 									else
 										GF_BlackList[arg2] = string.sub(arg1,1,80);
 									end
@@ -279,23 +271,6 @@ function GF_OnLoad()
 			end
 		end
 		old_ChatFrame_OnEvent(event);
-	end
-	local old_SendChatMessage = SendChatMessage;
-	function SendChatMessage(arg1, arg2, arg3, arg4)
-		local channelname;
-		local istesting = string.find(string.sub(arg1,1,6), "testt ");
-		if arg4 then _,channelname = GetChannelName(arg4) end
-		if (GF_SavedVariables.automatictranslate and channelname and string.lower(channelname) == "china") or string.lower(string.sub(arg1,1,2)) == "t " or istesting then
-			arg1 = GF_TranslateSentMessage(arg1)
-		end
-		GF_SentMessage = arg1;
-		if not istesting then
-			old_SendChatMessage(arg1, arg2, arg3, arg4)
-		else
-			arg1 = string.sub(arg1,7)
-			SELECTED_CHAT_FRAME:AddMessage("Translated text: "..arg1, 1, 1, 1)
-			SELECTED_CHAT_FRAME:AddMessage("Post-translated text: "..GF_TranslateMessage(arg1), 1, 1, 1)
-		end
 	end
 	local old_AddIgnore = AddIgnore;
 	function AddIgnore(name)
@@ -402,13 +377,15 @@ function GF_OnUpdate()
 						GF_MessageList[i].whoAttempts = 0;
 						GF_ApplyFiltersToGroupList()
 					else
-						if GF_MessageList[i].whoAttempts < 5 then
-							if GFAWM.getPositionInQueue(name) == 0 then
-								GF_MessageList[i].whoAttempts = GF_MessageList[i].whoAttempts + 1;
-								GFAWM.addNameToWhoQueue(name);
+						if GF_SavedVariables.usewhoongroups then
+							if GF_MessageList[i].whoAttempts < 5 then
+								if GFAWM.getPositionInQueue(name) == 0 then
+									GF_MessageList[i].whoAttempts = GF_MessageList[i].whoAttempts + 1;
+									GFAWM.addNameToWhoQueue(name);
+								end
+							else
+								table.remove(GF_MessageList, i);
 							end
-						else
-							table.remove(GF_MessageList, i);
 						end
 					end
 				end
@@ -483,7 +460,7 @@ local function GF_LoadSettings()
 
 	GF_FrameJoinWorldCheckButton:SetChecked(GF_SavedVariables.joinworld);
 	GF_FrameDisableChatFilteringCheckButton:SetChecked(GF_SavedVariables.disablechatfiltering);
-	GF_FrameAutomaticTranslateCheckButton:SetChecked(GF_SavedVariables.automatictranslate);
+	GF_FrameUseWhoOnGroupsCheckButton:SetChecked(GF_SavedVariables.usewhoongroups);
 	GF_FrameShowOriginalTextCheckButton:SetChecked(GF_SavedVariables.showoriginal);
 	
 	GF_FrameErrorFilterCheckButton:SetChecked(GF_SavedVariables.errorfilter);
@@ -502,7 +479,7 @@ local function GF_LoadSettings()
 	GF_LFGAutoCheckButton:SetChecked(GF_SavedVariables.lfgauto);
 	getglobal(GF_SearchFrameDescriptionEditBox:GetName()):SetText(GF_SavedVariables.searchtext or "");
 	getglobal(GF_LFGDescriptionEditBox:GetName()):SetText(GF_SavedVariables.searchlfgtext or "");
-	getglobal(GF_LFGExtraEditBox:GetName()):SetText(GF_SavedVariables.searchlfgwhispertext or "");
+	getglobal(GF_LFGWhoWhisperEditBox:GetName()):SetText(GF_SavedVariables.searchlfgwhispertext or "");
 	GF_FrameLFGSizeSlider:SetValue((GF_SavedVariables.lfgsize or 5));
 	GF_FrameAnnounceTimerSlider:SetValue((GF_SavedVariables.announcetimer/60 or 2));
 	getglobal(GF_LFGWhoClassDropdown:GetName().."TextLabel"):SetText(GF_SavedVariables.lfgwhisperclass or "");
@@ -682,8 +659,7 @@ function GF_SendChatMessage(message, messageType, channel)
 end
 
 function GF_EntryMatchesGroupFilterCriteria(entry, nolevelcheck)
-	if (GF_SavedVariables.showtranslate or not entry.translated)
-	and ((GF_SavedVariables.showdungeons and entry.type == "D") or (GF_SavedVariables.showraids and entry.type == "R")
+	if ((GF_SavedVariables.showdungeons and entry.type == "D") or (GF_SavedVariables.showraids and entry.type == "R")
 	or (GF_SavedVariables.showquests and entry.type == "Q") or (GF_SavedVariables.showother and entry.type == "N"))
 	and ((GF_SavedVariables.showlfg and string.find(string.lower(entry.message), "lfg"))
 	or (GF_SavedVariables.showlfm and not string.find(string.lower(entry.message), "lfg")))
@@ -787,16 +763,16 @@ function GF_GetWhoData(arg2)
 	end
 	if whodata then
 		if not GF_WhoTable[arg2] then
-			if whodata.level <= GF_SavedVariables.autoblacklistminlevel  then
+			if whodata.level <= GF_SavedVariables.autoblacklistminlevel and GF_SavedVariables.usewhoongroups then
 				GFAWM.addNameToWhoQueue(arg2)
 				return
 			else
 				GF_WhoTable[arg2] = { time(), whodata.level, whodata.class, whodata.guild };
 			end
 		end
-		if whodata.recordedTime + 259200 < time() then GF_WhoTable[arg2] = nil; GFAWM.addNameToWhoQueue(arg2) end
+		if whodata.recordedTime + 259200 < time() then GF_WhoTable[arg2] = nil; if GF_SavedVariables.usewhoongroups then GFAWM.addNameToWhoQueue(arg2) end end
 	else
-		GFAWM.addNameToWhoQueue(arg2)
+		if GF_SavedVariables.usewhoongroups then GFAWM.addNameToWhoQueue(arg2) end
 	end
 	return whodata
 end
@@ -1142,7 +1118,7 @@ function GF_ToggleGetWho()
 end
 
 function GF_LFGWhisperButton()
-	local whispermessage = GF_LFGExtraEditBox:GetText()
+	local whispermessage = GF_LFGWhoWhisperEditBox:GetText()
 	if whispermessage == "" then whispermessage = GF_LFGDescriptionEditBox:GetText() end
 	if string.len(whispermessage) > 5 then
 		GF_GetWhoLevel = GF_FindDungeonLevel()
@@ -1280,7 +1256,7 @@ function GF_ShowDropdownList(bframe)
 			local button = getglobal("GF_"..bframe..GF_NumSearchButtons) or GF_CreateSearchButton(GF_NumSearchButtons, getglobal("GF_"..bframe))
 			getglobal(button:GetName().."TextLabel"):SetText(dtable[1]);
 			if getglobal(button:GetName().."TextLabel"):GetStringWidth() > width then width = getglobal(button:GetName().."TextLabel"):GetStringWidth() end
-			getglobal(button:GetName().."TextLabel"):SetWidth(width);
+			getglobal(button:GetName().."TextLabel"):SetWidth(width+10);
 			button:Show()
 			if bframe == "SearchList" then
 				if string.find(GF_SavedVariables.searchbuttonstext, dtable[4]) then
@@ -1312,7 +1288,7 @@ function GF_ShowDropdownList(bframe)
 	getglobal("GF_"..bframe):SetWidth(width + 45)
 	getglobal("GF_"..bframe):ClearAllPoints()
 	getglobal("GF_"..bframe):SetPoint("TOPLEFT", getglobal("GF_"..bframe.."Dropdown"), "BOTTOMLEFT", 0, 4)
-	getglobal("GF_"..bframe):Show()
+	if GF_NumSearchButtons > 0 then getglobal("GF_"..bframe):Show() end
 end
 
 function GF_AddRemoveSearch(bframe, entryname, add)
@@ -1419,276 +1395,4 @@ function GF_CheckForGroups(arg1, arg2, arg8, untranslated)
 	entry.ilevel = glevel;
 	entry.channel = arg8;
 	return score, entry
-end
-
-function GF_TranslateMessage(arg1)
-	local untranslatedsnips = {}
-	local translatedsnips = {}
-	local st,et,su,se;
--- Remove spam and non-punctuation characters
-	local checkchars = { {"(AA+)", "AA"}, {"(%++)", "+"}, {"(=+)", "="}, {"(MM+)", "MM"}, {"(NN+)", "N"}, {"(TT+)", "T"}, {"(~+)", "~"}, {"(\\+)", "\\"}, {"(%-+)", "-"},
-	{"(：+)", ""}, {"(ω+)", ""}, {"(·+)", ""}, {"(？+)", "?"}, {"(?+)", "?"}, {"(;+)", ","}, {"(》+)", ","}, {"(《+)", ","}, {"(（+)", ","}, {"(）+)", ","},
-	{"(，+)", ","}, {"(、+)", ","}, {"(,+)", ","}, {"(！+)", "!"}, {"(! )", "!"}, {"(!+)", "!"}, {"(。+)", " "}, }
-	for i=1, getn(checkchars) do
-		arg1 = string.gsub(arg1, checkchars[i][1], checkchars[i][2])
-	end
--- Translate all links
-	local startingposition = 1;
-	untranslatedsnips = { [1] = { arg1, 1, string.len(arg1) } }
-	for linkcolor, linktype, linkstring, linkname in string.gfind(arg1, "|c(.-)|H([a-tA-T]*):(.-)|h%[(.-)%]|h|r") do
-		st,et = string.find(arg1, "|c.-|H[a-tA-T]*:.-|h%[.-%]|h|r", startingposition)
-		for i=1, getn(untranslatedsnips) do
-			su,eu = string.find(untranslatedsnips[i][1], "|c.-|H[a-tA-T]*:.-|h%[.-%]|h|r")
-			if st and su then
-				local _,_,itemid = string.find(linkstring, "(%d+)(:[:%d]+)")
-				local name;
-				if itemid then name = GetItemInfo(itemid); end
-				if (not name and linktype == "item") or linktype == "enchant" then
-					table.insert(translatedsnips, { "|c"..linkcolor.."|H"..linktype..":"..linkstring.."|h[", st})
-					table.insert(translatedsnips, { "]|h|r", et})
-					table.insert(untranslatedsnips, { linkname, et-string.len(linkname)-4, string.len(linkname)})
-					table.insert(untranslatedsnips, { string.sub(untranslatedsnips[i][1], eu+1), et+1, string.len(string.sub(untranslatedsnips[i][1], eu+1))})
-					untranslatedsnips[i] = { string.sub(untranslatedsnips[i][1], 1, su-1), st-1, string.len(string.sub(untranslatedsnips[i][1], 1, su-1))}
-					local replaceitemlinkwithchars = ""
-					for j=st, et-string.len(linkname)-5 do
-						replaceitemlinkwithchars = replaceitemlinkwithchars.."="
-					end
-					arg1 = string.sub(arg1, 1, st-1)..replaceitemlinkwithchars..linkname.."====="..string.sub(arg1, et+1)
-					break
-				end
-				if not name then name = linkname; end
-				table.insert(translatedsnips, { "|c"..linkcolor.."|H"..linktype..":"..linkstring.."|h["..name.."]|h|r", st})
-				table.insert(untranslatedsnips, { string.sub(untranslatedsnips[i][1], eu+1), et+1, string.len(string.sub(untranslatedsnips[i][1], eu+1))})
-				untranslatedsnips[i] = { string.sub(untranslatedsnips[i][1], 1, su-1), st-1, string.len(string.sub(untranslatedsnips[i][1], 1, su-1))}
-				local replaceitemlinkwithchars = ""
-				for j=st,et do
-					replaceitemlinkwithchars = replaceitemlinkwithchars.."="
-				end
-				arg1 = string.sub(arg1, 1, st-1)..replaceitemlinkwithchars..string.sub(arg1, et+1)
-				break
-			end
-			startingposition = et+1
-		end
-	end
-	table.sort(untranslatedsnips, function(a,b) return a[2] < b[2] end)
--- Find all Chinese character sequences to compare to.
-	startingposition = 1																																
-	while true do
-		st,et,checkchars = string.find(arg1, "([%w%s%p]+)", startingposition)
-		for i=1, getn(untranslatedsnips) do
-			su,eu = string.find(untranslatedsnips[i][1], "([%w%s%p]+)", 1)
-			if st and su and not string.find(checkchars, "==") then
-				table.insert(untranslatedsnips, { string.sub(untranslatedsnips[i][1], 1, su-1), st-1, string.len(string.sub(untranslatedsnips[i][1], 1, su-1))})
-				table.insert(untranslatedsnips, { checkchars, st,string.len(checkchars)})
-				untranslatedsnips[i] = { string.sub(untranslatedsnips[i][1], eu+1), et+1, string.len(string.sub(untranslatedsnips[i][1], eu+1))}
-				break
-			end
-		end
-		if not st or not su then break else startingposition = et+1 end
-	end
--- Compare the Chinese sequences against our database
-	st = {}
-	local r = 0;
-	local counter;
-	local w;
-	local charstring;
-	while getn(untranslatedsnips) > r do
-		r = getn(untranslatedsnips)
-		table.sort(untranslatedsnips, function(a,b) return a[3] > b[3] end)
-		for i=1, r do
-			if untranslatedsnips[i][1] ~= "" and string.find(untranslatedsnips[i][1], "([\227\228\229\230\231\232\233\234\235\236\237])") then
-				untranslatedsnips[i][1] = string.gsub(untranslatedsnips[i][1], "[%w%s%p]+", "")
-				checkchars = string.len(untranslatedsnips[i][1])
-				counter = math.floor(checkchars/3)
-				while counter > 0 and checkchars >= 3 do
-					su = 1
-					eu = counter * 3
-					while eu <= checkchars do
-						charstring = string.sub(untranslatedsnips[i][1],su,eu)
-						w = GF_Translate[counter][charstring]
-						if w then
-							if not st[charstring] then st[charstring] = 1 end
-							st[charstring], et = string.find(arg1, charstring, st[charstring])
-							table.insert(translatedsnips, { w[1], st[charstring] })
-							table.insert(untranslatedsnips, { string.sub(untranslatedsnips[i][1], 1, su-1), st[charstring]-1,string.len(string.sub(untranslatedsnips[i][1], 1, su-1))})
-							untranslatedsnips[i] = { string.sub(untranslatedsnips[i][1], eu+1), et+1,string.len(string.sub(untranslatedsnips[i][1], eu+1))}
-							st[charstring] = et+1
-							counter = counter + 1
-							break
-						end
-						su = su + 3
-						eu = eu + 3
-					end
-					counter = counter - 1
-				end
-			end
-		end
-	end
--- Translate abbreviations into English
-	table.sort(untranslatedsnips, function(a,b) return a[3] > b[3] end)
-	if string.find(arg1, "([\227\228\229\230\231\232\233\234\235\236\237])") then GF_TranslatedMessage = true; end
-	startingposition = 1;
-	while true do
-		st,et,checkchars = string.find(string.upper(arg1),"([%a']+)",startingposition)
-		if st then
-			for k,v in pairs(GF_Translate["ENGLISH"]) do
-				if checkchars == k and (string.len(checkchars) > 2 or GF_TranslatedMessage) then -- and not string.find(checkchars, "[ABCDEGHIJKLMOPRUVWXYZ]")) then
-					for i=1, getn(untranslatedsnips) do
-						su = string.find(string.upper(untranslatedsnips[i][1]),checkchars,1,true)
-						c,eu = string.find(checkchars,k,1,true)
-						if su and c then
-							table.insert(translatedsnips, { v[1], st+c-1})
-							table.insert(untranslatedsnips, { string.sub(untranslatedsnips[i][1], su+eu), st+eu,})
-							untranslatedsnips[i] = { string.sub(untranslatedsnips[i][1], 1, su-1), st+c-2}
-							GF_TranslatedMessage = true;
-							break
-						end
-					end
-				end
-			end
-			startingposition = et+1
-		else
-			break
-		end
-	end
--- Translate the 4=1-type messages into LFM messages
-	startingposition = 1;
-	while true do
-		st,et,checkchars,w = string.find(arg1,"(%d)%=+(%d)",startingposition)
-		if not st then st,et,w = string.find(arg1,"%=+(%d)",startingposition) end
-		for i=1, getn(untranslatedsnips) do
-			su,eu = string.find(untranslatedsnips[i][1],"%d%=+(%d)",1)
-			if not su then su,eu = string.find(untranslatedsnips[i][1],"%=+(%d)",1) end
-			if st and su then
-				if tonumber(w) > 0 then
-					if checkchars then table.insert(translatedsnips, { "LF"..w.."M", st}) else table.insert(translatedsnips, { "need "..w, st}) end
-					table.insert(untranslatedsnips, { string.sub(untranslatedsnips[i][1], eu+1), et+1,string.len(string.sub(untranslatedsnips[i][1], eu+1))})
-					untranslatedsnips[i] = { string.sub(untranslatedsnips[i][1], 1, su-1), st-1,string.len(string.sub(untranslatedsnips[i][1], 1, su-1))}
-				end
-				break
-			end
-		end
-		if not st or not su then break else startingposition = et+1 end
-	end
--- Place the remaining untranslated snips into the translated database
-	for i=1, getn(untranslatedsnips) do
-		if untranslatedsnips[i][1] ~= "" then 
-			table.insert(translatedsnips, untranslatedsnips[i])
-		end
-	end
--- Sort the translated snips by original position so that I can create the final string to be returned
-	table.sort(translatedsnips, function(a,b) return a[2] < b[2] end)
-	arg1 = ""
-	for i=1, getn(translatedsnips) do
-		if arg1 ~= "" and not string.find(translatedsnips[i][1],"^[ ,=%+]") then arg1 = arg1.." " end
-		arg1 = arg1..translatedsnips[i][1]
-	end
-	arg1 = string.gsub(arg1,"( +)", " ")
-	return arg1
-end
-
-function GF_TranslateSentMessage(arg1)
-	if string.sub(arg1,1,2) == "t " then arg1 = string.sub(arg1,3) end
-	local untranslatedsnips = {}
-	local translatedsnips = {}
-	local st,et,su,se
--- Remove punctuation characters
-	local checkchars = { {"(')", ""}, }
-	for i=1, getn(checkchars) do
-		arg1 = string.gsub(arg1, checkchars[i][1], checkchars[i][2])
-	end
--- Translate all links
-	local startingposition = 1;
-	untranslatedsnips = { [1] = { arg1, 1, string.len(arg1) } }
-	for linkcolor, linktype, linkstring, linkname in string.gfind(arg1, "|c(.-)|H([a-tA-T]*):(.-)|h%[(.-)%]|h|r") do
-		st,et = string.find(arg1, "|c.-|H[a-tA-T]*:.-|h%[.-%]|h|r", startingposition)
-		for i=1, getn(untranslatedsnips) do
-			su,eu = string.find(untranslatedsnips[i][1], "|c.-|H[a-tA-T]*:.-|h%[.-%]|h|r")
-			if st and su then
-				--[[if linktype == "item" or linktype == "enchant" then
-					table.insert(translatedsnips, { "|c"..linkcolor.."|H"..linktype..":"..linkstring.."|h[", st})
-					table.insert(translatedsnips, { "]|h|r", et})
-					table.insert(untranslatedsnips, { linkname, et-string.len(linkname)-4, string.len(linkname)})
-					table.insert(untranslatedsnips, { string.sub(untranslatedsnips[i][1], eu+1), et+1, string.len(string.sub(untranslatedsnips[i][1], eu+1))})
-					untranslatedsnips[i] = { string.sub(untranslatedsnips[i][1], 1, su-1), st-1, string.len(string.sub(untranslatedsnips[i][1], 1, su-1))}
-					local replaceitemlinkwithchars = ""
-					for j=st, et-string.len(linkname)-5 do
-						replaceitemlinkwithchars = replaceitemlinkwithchars.."="
-					end
-					arg1 = string.sub(arg1, 1, st-1)..replaceitemlinkwithchars..linkname.."====="..string.sub(arg1, et+1)
-					break
-				end--]]
-				table.insert(translatedsnips, { "|c"..linkcolor.."|H"..linktype..":"..linkstring.."|h["..linkname.."]|h|r", st})
-				table.insert(untranslatedsnips, { string.sub(untranslatedsnips[i][1], eu+1), et+1, string.len(string.sub(untranslatedsnips[i][1], eu+1))})
-				untranslatedsnips[i] = { string.sub(untranslatedsnips[i][1], 1, su-1), st-1, string.len(string.sub(untranslatedsnips[i][1], 1, su-1))}
-				local replaceitemlinkwithchars = ""
-				for j=st,et do
-					replaceitemlinkwithchars = replaceitemlinkwithchars.."="
-				end
-				arg1 = string.sub(arg1, 1, st-1)..replaceitemlinkwithchars..string.sub(arg1, et+1)
-				break
-			end
-			startingposition = et+1
-		end
-	end
--- Convert everything to lowercase
-	for i=1, getn(untranslatedsnips) do
-		untranslatedsnips[i][1] = string.lower(untranslatedsnips[i][1])
-	end
-	arg1 = string.lower(arg1)
--- Translate from LF??M to =??
-	startingposition = 1;
-	local w;
-	while true do
-		st,et,w = string.find(arg1,"lf(%d+)m",startingposition)
-		for i=1, getn(untranslatedsnips) do
-			su,eu = string.find(untranslatedsnips[i][1],"lf(%d+)m",1)
-			if st and su then
-				if tonumber(w) > 0 then
-					table.insert(translatedsnips, { "="..num, st})
-					table.insert(untranslatedsnips, { string.sub(untranslatedsnips[i][1], eu+1), et+1,string.len(string.sub(untranslatedsnips[i][1], eu+1))})
-					untranslatedsnips[i] = { string.sub(untranslatedsnips[i][1], 1, su-1), st-1,string.len(string.sub(untranslatedsnips[i][1], 1, su-1))}
-				end
-				break
-			end
-		end
-		if not st or not su then break else startingposition = et+1 end
-	end
--- Translate to Chinese
-	local counter;
-	counter = getn(GF_Translate)
-	while counter > 0 do
-		for k,v in pairs(GF_Translate[counter]) do
-			for j=1, getn(v) do
-				startingposition = 1;
-				while true do
-					st,et = string.find(arg1,v[j],startingposition,true)
-					for i=1, getn(untranslatedsnips) do
-						su,eu = string.find(untranslatedsnips[i][1],v[j],1,true)
-						if st and su and not string.find(string.sub(arg1,st-1,st-1),"[a-z]") and not string.find(string.sub(arg1,et+1,et+1),"[a-z]") then
-							table.insert(translatedsnips, { k, st})
-							table.insert(untranslatedsnips, { string.sub(untranslatedsnips[i][1], eu+1), et+1,string.len(string.sub(untranslatedsnips[i][1], eu+1))})
-							untranslatedsnips[i] = { string.sub(untranslatedsnips[i][1], 1, su-1), st-1,string.len(string.sub(untranslatedsnips[i][1], 1, su-1))}
-							break
-						end
-					end
-					if not st then break else startingposition = et+1 end
-				end
-			end
-		end
-		counter = counter - 1
-	end
-	for i=1, getn(untranslatedsnips) do
-		if untranslatedsnips[i][1] ~= "" then 
-			table.insert(translatedsnips, untranslatedsnips[i])
-		end
-	end
-	table.sort(translatedsnips, function(a,b) return a[2] < b[2] end)
-	arg1 = ""
-	for i=1, getn(translatedsnips) do
-		--if arg1 ~= "" and string.sub(arg1, string.len(arg1)) ~= " " then arg1 = arg1.." " end
-		arg1 = arg1..translatedsnips[i][1]
-	end
-	arg1 = string.gsub(arg1,"( +)", " ")
-	return arg1
 end

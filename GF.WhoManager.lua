@@ -197,7 +197,8 @@ GFAWM.hookedSetItemRef = function(...)
 		if name and strlen(name) > 0 then
 			if IsShiftKeyDown() then
 				if ChatFrameEditBox:IsVisible() then
-					ChatFrameEditBox:Insert("|cffffffff|Hplayer:"..name.."|h["..name.."]|h|r")
+					--ChatFrameEditBox:Insert("|cffffffff|Hplayer:"..name.."|h["..name.."]|h|r")
+					ChatFrameEditBox:Insert(name)
 					return
 				else
 					urgentWhoRequest = name;

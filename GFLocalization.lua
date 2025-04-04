@@ -16,6 +16,7 @@ GF_MAIN_HEADER	 		= "Group Finder"; -- Main window title
 GF_FIND_PLAYERS_AND_GROUPS	= "Find players and groups"; -- Label for Groupfinder tab
 GF_MORE_FEATURES		= "More"; -- Label for "More" frame(Settings/Log/Blacklist)
 GF_SHOW_GROUPS_IN		= "Show groups in"
+GF_WORLD_SEND_TEXT		= "Below is the message that gets announced to World Channel"
 GF_CHAT					= "Chat"
 GF_MINIMAP				= "Minimap"
 GF_NEW_ONLY				= "New only"
@@ -26,7 +27,6 @@ GF_CHAT_ON				= "Chat on"
 GF_CHAT_OFF				= "Chat off"
 GF_CHAT_GROUP_ON		= "Groups in chat, on"
 GF_CHAT_GROUP_OFF		= "Groups in chat, off"
-GF_PLAY_SOUND			= "Play sound on groups"; -- Label for GF_PlaySoundOnResultsCheckButton
 
 -- Search related buttons and texts
 GF_UPDATE_LIST 			= "Update list";
@@ -68,13 +68,13 @@ GF_FilterLevelNotes[5] = "MAX: Messages must have at least three triggers.";
 
 GF_JOIN_WORLD				= "Join World channel"
 GF_DISABLE_CHAT_FILTER		= "Disable Chat Filtering"
-GF_AUTOMATIC_TRANSLATE		= "Auto Translate Messages"
-GF_AUTOMATIC_TRANSLATE		= "Auto translate messages"
+GF_PLAY_SOUND			= "Play sound on groups"; -- Label for GF_PlaySoundOnResultsCheckButton
 GF_ERROR_FILTER				= "Enable Error Filtering"
+GF_USE_WHO_ON_GROUPS		= "Auto /who for player info"
 GF_SHOW_ORIGINAL			= "Show untranslated text"
-GF_BLOCK_POLITICS			= "Block political messages"
 GF_SPAM_FILTER				= "Enable Spam Filtering"
 GF_AUTO_BLACKLIST			= "Enable Auto Blacklist"
+GF_BLOCK_POLITICS			= "Block political messages"
 GF_SPAM_FILTER_TIMER		= "Spam flag clear time"
 GF_BLACKLIST_MINLEVEL		= "Auto Blacklist maximum level"
 GF_BLOCK_BELOW_LEVEL		= "Block messages below level"
@@ -85,10 +85,10 @@ GF_NEW_GROUP_TIMEOUT		= "New listing duration"
 -- LFG related buttons and texts
 GF_AUTO						= "Auto"
 GF_GROUP_SIZE				= "Group Size";
-GF_LFM_LFG					= "LFM/LFG"
-GF_DUNGEON					= "Dungeon"
-GF_RAID						= "Raid"
-GF_ROLE						= "Role"
+GF_LFM_LFG					= " LFM/LFG"
+GF_DUNGEON					= " Dungeon"
+GF_RAID						= " Raid"
+GF_ROLE						= " Role"
 GF_TANK						= "Tank"
 GF_HEALER					= "Healer"
 GF_DPS						= "DPS"
@@ -203,18 +203,50 @@ GF_SearchFrameShowLFGCheckButton = {
 GF_SearchFrameDescriptionEditBox = { 
 	tooltip1 		= "Search descriptions", 
 	tooltip2 		= "Only groups with matches will be included in the results. Use '/' operator for multiple searches(e.g. dm/ubrs/scholo/etc)" },
+GF_LFGWhoWhisperEditBox = { 
+	tooltip1 		= "Whisper Message", 
+	tooltip2 		= "Use the 'Get Who' button to make a list of players in the level range of the dungeon and class selected. Press the 'Invite' button to send this text. Will not message the same person more than once every 15 minutes." },
 GF_LFGAutoCheckButton = { 
 	tooltip1 		= "Auto-adjust LFM", 
 	tooltip2 		= "Adjusts your 'LFM' or 'LFxM' messages by the number of people in the group relative to the selected group size." },
 GF_LFGGetWhoButton = { 
 	tooltip1 		= "Gets a who list",
-	tooltip2 		= "Looks for players of the class to the right and within the level range of the dungeon selected. The Invite button uses this list to whisper.",  },
+	tooltip2 		= "Looks for players of the class selected and within the level range of the dungeon selected.",  },
 GF_LFGInviteButton = { 
 	tooltip1 		= "Send an invite whisper", 
 	tooltip2 		= "Whispers a player from the list produced by the Get Who button the LFG message in the box to the left. If that is blank it will use bottom text.",  },
 GF_AnnounceToLFGButton = {
 	tooltip1 		= "Announce",
 	tooltip2 		= "Announces your group to the world channel automatically" },
+
+GF_FrameJoinWorldCheckButton = {
+	tooltip1 		= "Join World",
+	tooltip2 		= "When checked, you will join the World Channel automatically." },
+GF_FrameDisableChatFilteringCheckButton = {
+	tooltip1 		= "Disable Chat Filtering",
+	tooltip2 		= "When checked, all chat messages will display like normal(bypasses all filters)." },
+GF_PlaySoundOnResultsCheckButton = {
+	tooltip1 		= "Play Sound on groups",
+	tooltip2 		= "When checked, an alert sound will be made when a group is found that matches your filters." },
+GF_FrameErrorFilterCheckButton = {
+	tooltip1 		= "Filter Quest/Invite Errors",
+	tooltip2 		= "When checked, error messages from group invites and from sharing quests will be hidden." },
+GF_FrameUseWhoOnGroupsCheckButton = {
+	tooltip1 		= "Use who on groups",
+	tooltip2 		= "When checked, will use /who to find class/level/guild information." },
+GF_FrameShowOriginalTextCheckButton = {
+	tooltip1 		= "Show Untranslated Text",
+	tooltip2 		= "When checked, when using translation 't ', shows both the original and translated text." },
+GF_FrameSpamFilterCheckButton = {
+	tooltip1 		= "Spam Filter",
+	tooltip2 		= "When checked, if the same message is repeated more than once within the 'spam flag clear time', non-group messages from that player will be blocked(except friends/guildies/party members)." },
+GF_FrameAutoBlacklistCheckButton = {
+	tooltip1 		= "Blacklist Filter",
+	tooltip2 		= "When checked, players who repeat the same message repeatedly and who are below the 'auto blacklist maximum level' will be permanently added to the blacklist." },
+GF_FrameBlockPoliticsCheckButton = {
+	tooltip1 		= "Block Politics",
+	tooltip2 		= "When checked, messages that include words of a political or derogatory nature will be blocked." },
+
 };
 
 GF_TRIGGER_LIST = {
@@ -243,14 +275,15 @@ GF_TRIGGER_LIST = {
 
 	["SPAM"] = { "l f m", "h e a l", "n o s t", "please come to web", "c o m", "n 0 s t", "level service", "c o m", },
 	
-	["POLITICS"] = { "jews", "hitler", "stalin", "kike", "nazi", "supremacist", "racism", "gas chamber", "pedo", "biden", "trump", "pelosi", "semiti", "tranny", "trannies",
-						"6 million", "gorillion", "republican", "democrat", "politic", "bankers", "apartheid", "holocaust", "holohoax", "bigot", "schizo", "jewish",
-						"sexist", "globalist", "racist", "immigrants", "refugees", "nigger", "chink", "misogyn", },
+	["POLITICS"] = { "jews", "hitler", "stalin", "kike", "nazi", "supremacist", "racism", "gas chamber", "pedo", "pedophile", "biden", "trump", "pelosi", "semiti", "tranny", "trannies",
+						"6 million", "gorillion", "republican", "democrat", "politic", "bankers", "apartheid", "holocaust", "holohoax", "bigot", "schizo", "jewish", "transgender", "abortion",
+						"sexist", "feminism", "globalist", "racist", "racism", "immigrants", "refugees", "nigger", "chink", "misogyn", "faggot", "negro", "muslim", },
 
 	["TRADE"] = { "wtb", "wts", "buying", "selling", "wtt", "trading", "lfw", "for sale", "on ah", "cod", },
 	
-	["RAID"] = { "molten core", "mc", "ragnaros", " rag", "blackwing", "bwl", "zulg", "zg", "gurub", "hakkar", "aq20", " ahn", " aq ", "ossir", "aq40", "quiraj",
-				"naxxramas", "naxx", "onyxia", " ony", "azuregos", "kazzak", "world boss", "lethon", "ysondre", "taerar", "emeris", },
+	["RAID"] = { "molten core", " mc", "ragnaros", " rag", "blackwing", "bwl", "zulg", "zg", "gurub", "hakkar", "aq20", " ahn", " aq ", "ossir", "aq40", "quiraj",
+				"naxxramas", "naxx", "onyxia", " ony", "azuregos", "kazzak", "world boss", "lethon", "ysondre", "taerar", "emeris", 
+				"kara", " bm", "Moras", "sanctum", "vault", "hateforge", "quarry", "crypts", "crescent", "grove", "Concavius", "Ostarius", "Nerub", "Reaver", "gilneas", "aq15", },
 
 	["PVP"] = { "premade", "av ", " ab ", "wsg", "warsong", "alterac valley", "arathi basin", "gulch", },
 

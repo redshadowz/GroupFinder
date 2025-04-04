@@ -162,6 +162,7 @@ GF_Util.rateResults = function (msg, fLevel)
 		end
 	end
 	for _,instance in GF_TRIGGER_LIST.DUNGEON do
+		counter = 0
 		for _,word in instance do
 			if counter == 0 then
 				counter = counter + 1;
