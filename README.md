@@ -2,7 +2,5 @@
 Groupfinder Addon for Vanilla Wow 1.12.1
 
 I used the core of the Calltoarms addon, ripped everything out of it except its main layout and menus, then added a lot of chat parsing.
-It started out as just a way to more easily block annoying spam and to more easily parse world chat, but then I decided to make an attempt
-at writing a Chinese to English translator.
 
-I mainly need more Chinese words/phrases to add to the dictionary in GFTranslation.lua, but I would also love ideas or anything else that might be useful.
+Update 4/4/2025: I didn't realize anyone was using this addon. I fixed a few things and made /who an option, but I removed the translation(Chinese to English) entirely for now(plan to move it into a separate addon). I'll be updating again in a couple days when I get everything done.
