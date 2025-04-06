@@ -146,16 +146,16 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 		<Scripts>
 			<OnClick>			
 				if this:GetChecked() then
-					GF_AddRemoveSearch(string.sub(string.gsub(this:GetName(),"(%w)%d","%1"), 4), getglobal(this:GetName().."TextLabel"):GetText(), true)
+					GF_AddRemoveSearch(string.sub(string.gsub(this:GetName(),"(%w)%d*","%1"), 4), getglobal(this:GetName().."TextLabel"):GetText(), true)
 				else
 					if getglobal(this:GetName().."TextLabel"):GetText() == "Clear" then
 						for i=1, GF_NumSearchButtons-1 do
-							local button = getglobal(string.gsub(this:GetName(),"(%a)%d","%1")..i)
+							local button = getglobal(string.gsub(this:GetName(),"(%a)%d*","%1")..i)
 							button:SetChecked(false)
 						end
 						this:SetChecked(true)
 					end
-					GF_AddRemoveSearch(string.sub(string.gsub(this:GetName(),"(%w)%d","%1"), 4), getglobal(this:GetName().."TextLabel"):GetText(), nil)
+					GF_AddRemoveSearch(string.sub(string.gsub(this:GetName(),"(%w)%d*","%1"), 4), getglobal(this:GetName().."TextLabel"):GetText(), nil)
 				end
 			</OnClick>
 		</Scripts>							
@@ -292,21 +292,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Anchor>
 					</Anchors>
 				</Texture>											
-				<Texture name ="$parentTexturePurple" hidden="true">
-					<Anchors>
-						<Anchor point="TOPLEFT">
-							<Offset>
-								<AbsDimension x="30" y="-1"/>
-							</Offset>
-						</Anchor>
-						<Anchor point="BOTTOMRIGHT">
-							<Offset>
-								<AbsDimension x="0" y="1"/>
-							</Offset>
-						</Anchor>						
-					</Anchors>
-					<Color r="0.25" g="0.1" b="0.0" a="0.75"/>
-				</Texture>
 				<Texture name ="$parentTextureBlue" hidden="true">
 					<Anchors>
 						<Anchor point="TOPLEFT">
@@ -341,54 +326,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</Anchors>
 					<TexCoords left="0" right="2.0" top="0.1" bottom="1.0"/>
 				</Texture>				
-				
-				
-				<Texture name ="$parentTextureGold" hidden="true">
-					<Anchors>
-						<Anchor point="TOPLEFT">
-							<Offset>
-								<AbsDimension x="-5" y="-1"/>
-							</Offset>
-						</Anchor>
-						<Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMLEFT">
-							<Offset>
-								<AbsDimension x="-1" y="1"/>
-							</Offset>
-						</Anchor>						
-					</Anchors>
-					<Color r="1" g="0.85" b="0.0" a="1"/>
-				</Texture>	
-
-				<Texture name ="$parentTextureSilver" hidden="true">
-					<Anchors>
-						<Anchor point="TOPLEFT">
-							<Offset>
-								<AbsDimension x="-5" y="-1"/>
-							</Offset>
-						</Anchor>
-						<Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMLEFT">
-							<Offset>
-								<AbsDimension x="-1" y="1"/>
-							</Offset>
-						</Anchor>						
-					</Anchors>
-					<Color r="0.95" g="0.95" b="1" a="1"/>
-				</Texture>	
-
-				<Texture name ="$parentTextureSelected" file="Interface\FriendsFrame\UI-FriendsFrame-HighlightBar" alphaMode="ADD" hidden="true">
-					<Anchors>
-						<Anchor point="TOPLEFT">
-							<Offset>
-								<AbsDimension x="0" y="0"/>
-							</Offset>
-						</Anchor>
-						<Anchor point="BOTTOMRIGHT">
-							<Offset>
-								<AbsDimension x="0" y="0"/>
-							</Offset>
-						</Anchor>						
-					</Anchors>
-				</Texture>											
 			</Layer>
 			<Layer level="OVERLAY">
 				<FontString inherits="GameFontNormal" name="$parentNameLabel" justifyH="LEFT">
@@ -426,7 +363,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					<Anchors>
 						<Anchor point="RIGHT">
 							<Offset>
-								<AbsDimension x="-2" y="-6"/>
+								<AbsDimension x="-20" y="-6"/>
 							</Offset>
 						</Anchor>					
 					</Anchors>
@@ -450,7 +387,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Anchors>
 				<Scripts>
 					<OnEnter>
-						GF_ListItemAuxLeft_ShowTooltip();
+						GF_ListItemAuxLeft_ShowTooltip(this:GetParent());
 						GF_ResultItem_Hover_On(this:GetParent());
 					</OnEnter>
 					<OnLeave>
@@ -459,55 +396,23 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLeave>		
 				</Scripts>					
 			</Frame>
-			
-			<Frame name="$parentAuxFrameRight">						
+			<Button name="$parentGroupWhoButton" inherits="GF_AbstractButton" text="Who" hidden="true">
 				<Anchors>
-					<Anchor point="TOPLEFT" relativePoint="TOPRIGHT">
+					<Anchor point="TOPRIGHT">
 						<Offset>
-							<AbsDimension x="-32" y="0"/>
+							<AbsDimension x="20" y="0"/>
 						</Offset>
 					</Anchor>
-					<Anchor point="BOTTOMRIGHT"/>						
 				</Anchors>
-				<Layers>			
-					<Layer level="OVERLAY">
-						<Texture name ="$parentTextureLock" file="Interface\ChatFrame\UI-ChatFrame-LockIcon" alphaMode="ADD" hidden="true">
-							<Size>
-								<AbsDimension x="16" y="16"/>
-							</Size>
-							<Anchors>
-								<Anchor point="TOPLEFT">
-									<Offset>
-										<AbsDimension x="9" y="-1"/>
-									</Offset>
-								</Anchor>
-							</Anchors>
-						</Texture>	
-						<Texture name ="$parentTextureInfo" file="Interface\Buttons\UI-GuildButton-OfficerNote-Disabled" alphaMode="ADD" >
-							<Size>
-								<AbsDimension x="16" y="16"/>
-							</Size>
-							<Anchors>
-								<Anchor point="TOPLEFT">
-									<Offset>
-										<AbsDimension x="15" y="-1"/>
-									</Offset>
-								</Anchor>
-							</Anchors>
-						</Texture>	
-					</Layer>
-				</Layers>
+				<Size>
+					<AbsDimension x="40" y="18"/>
+				</Size>
 				<Scripts>
-					<OnEnter>
-						GF_ListItemAuxRight_ShowTooltip();
-						GF_ResultItem_Hover_On(this:GetParent());
-					</OnEnter>
-					<OnLeave>
-						GameTooltip:Hide();
-						GF_ResultItem_Hover_Off(this:GetParent());
-					</OnLeave>		
-				</Scripts>					
-			</Frame>	
+					<OnClick>
+						GF_GetGroupWhoButton(this:GetParent())
+					</OnClick>
+				</Scripts>
+			</Button>
 		</Frames>		
 		<Scripts>
 		    <OnMouseUp>
@@ -922,18 +827,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</Anchors>
 				</FontString>				
 				
-				<FontString inherits="GF_TitleFont" name="GF_MainFrameReleaseLabel" nonspacewrap="false" justifyH="RIGHT"  text="GF_RELEASEVERSION">
-					<Size>
-						<AbsDimension x="this:GetStringWidth()" y="32"/>
-					</Size>
-					<Anchors>
-						<Anchor point="TOPRIGHT">
-							<Offset>
-								<AbsDimension x="-32" y="5"/>
-							</Offset>
-						</Anchor>
-					</Anchors>
-				</FontString>						
 				<FontString inherits="GF_TitleFont" name="GF_ShowGroupsInLabel" nonspacewrap="false" justifyH="LEFT"  text="GF_SHOW_GROUPS_IN">
 					<Size>
 						<AbsDimension x="100" y="32"/>
@@ -1075,6 +968,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					<OnClick>			
 						GF_SavedVariables.showtradestexts = this:GetChecked();
 					</OnClick>
+					<OnEnter>
+						GF_ShowTooltip(this);
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide();
+					</OnLeave>
 					<OnLoad>
 						getglobal(this:GetName().."TextLabel"):SetWidth(100);
 						getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_TRADES);
@@ -1082,7 +981,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLoad>
 				</Scripts>							
 			</CheckButton>
-			<CheckButton name="GF_TranslateCheckButton" inherits="GF_AbstractLabelCheckButton">
+			<CheckButton name="GF_ShowLootCheckButton" inherits="GF_AbstractLabelCheckButton">
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="GF_ShowTradesCheckButton">
 						<Offset>
@@ -1091,17 +990,19 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</Anchor>
 				</Anchors>
 				<Scripts>
-					<OnClick>			
-						GF_SavedVariables.translate = this:GetChecked();
+					<OnClick>		
+						GF_SavedVariables.showloottexts = this:GetChecked();
 					</OnClick>
+					<OnEnter>
+						GF_ShowTooltip(this);
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide();
+					</OnLeave>
 					<OnLoad>
-						if GF_TranslateMessage then
-							getglobal(this:GetName().."TextLabel"):SetWidth(100);
-							getglobal(this:GetName().."TextLabel"):SetText(GF_TRANSLATE);
-							getglobal(this:GetName().."TextLabel"):SetPoint("TOPLEFT", "GF_TranslateCheckButton", "TOPLEFT", 24, 2);
-						else
-							GF_TranslateCheckButton:Hide()
-						end
+						getglobal(this:GetName().."TextLabel"):SetWidth(100);
+						getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_LOOT);
+						getglobal(this:GetName().."TextLabel"):SetPoint("TOPLEFT", "GF_ShowLootCheckButton", "TOPLEFT", 24, 2);
 					</OnLoad>
 				</Scripts>							
 			</CheckButton>
@@ -1218,7 +1119,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLeave>			
 									<OnLoad>
 										this:SetTextInsets(4,0,0,0);
-										this:SetWidth( 120 );
+										this:SetWidth(120);
 										getglobal(this:GetName().."TextLabel"):SetText(GF_KEYWORDS_DROPDOWN_DESCR);
 									</OnLoad>
 									<OnEnterPressed>
@@ -1353,7 +1254,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeTo="GF_AutoFilterCheckButton" >
 										<Offset>
-											<AbsDimension x="100" y="0"/>
+											<AbsDimension x="85" y="0"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -1379,7 +1280,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeTo="GF_SearchFrameShowTranslateCheckButton" >
 										<Offset>
-											<AbsDimension x="100" y="0"/>
+											<AbsDimension x="85" y="0"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -1405,7 +1306,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeTo="GF_SearchFrameShowDungeonCheckButton" >
 										<Offset>
-											<AbsDimension x="104" y="0"/>
+											<AbsDimension x="109" y="0"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -1431,7 +1332,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeTo="GF_SearchFrameShowRaidCheckButton" >
 										<Offset>
-											<AbsDimension x="104" y="0"/>
+											<AbsDimension x="109" y="0"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -1457,7 +1358,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeTo="GF_SearchFrameShowQuestCheckButton" >
 										<Offset>
-											<AbsDimension x="90" y="0"/>
+											<AbsDimension x="95" y="0"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -1483,7 +1384,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeTo="GF_SearchFrameShowOtherCheckButton" >
 										<Offset>
-											<AbsDimension x="90" y="0"/>
+											<AbsDimension x="95" y="0"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -2051,7 +1952,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							</Frame>
 							<EditBox name="GF_LFGWhoWhisperEditBox" letters="128" inherits="GF_AbstractEditBox">
 								<Size>
-									<AbsDimension x="150" y="25"/>
+									<AbsDimension x="150" y="22"/>
 								</Size>
 								<Anchors>
 									<Anchor point="LEFT" relativeTo="GF_LFGWhoClassDropdown">

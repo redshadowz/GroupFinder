@@ -1,7 +1,6 @@
 local MaxEntriesPerRealm = 1000
-local GFAWM_WHO_COOL_DOWN_TIME = 6;
+local GFAWM_WHO_COOL_DOWN_TIME = 10;
 local NextAvailableWhoTime = 0;
-local whoQueue = {};
 local ClassWhoQueue = {};
 local urgentWhoRequest = nil;
 local urgentWhoSent = nil;
@@ -9,6 +8,7 @@ local getwhoparams = {};
 local getclasswhostate = 1;
 
 GFAWM = {};
+whoQueue = {};
 GF_WhoTable = {}
 GF_ClassWhoTable = {}
 GF_ClassWhoRequest = nil;
@@ -26,7 +26,9 @@ GFAWM.onEventVariablesLoaded = function(event)
 	GFAWM.preHookSetItemRef = SetItemRef;
 	SetItemRef = GFAWM.hookedSetItemRef;
 	
-	if not GF_WhoTable[UnitName("player")] or GF_WhoTable[UnitName("player")][1] < GetTime() then GFAWM.pruneWhoTable(); GF_WhoTable[UnitName("player")] = { time() + 60*60*24*14, UnitLevel("player"), UnitClass("player"), "<>" }; end
+	if not GF_WhoTable[UnitName("player")] or GF_WhoTable[UnitName("player")][1] < time() then GFAWM.pruneWhoTable(); GF_WhoTable[UnitName("player")] = { time() + 60*60*24*14, UnitLevel("player"), UnitClass("player"), "<>" }; end
+
+	if string.sub(GetRealmName(), 1, 9) == "Nordanaar" or string.sub(GetRealmName(), 1, 8) == "Tel'Abim" then GFAWM_WHO_COOL_DOWN_TIME = 30; end
 end
 
 GFAWM.onEventWhoListUpdated = function()
@@ -41,7 +43,7 @@ GFAWM.onEventWhoListUpdated = function()
 
 	if GF_ClassWhoRequest then
 		if not ClassWhoQueue[1] then
-			if GetNumWhoResults() == 49 then
+			if GetNumWhoResults() >= 49 then
 				getclasswhostate = getclasswhostate + 1
 				GF_LFGGetWhoButton:SetText(GF_STOP_WHO.." - "..GFAWM.ClassWhoMatchingResults);
 				GFAWM.setClassWhoSearchNames(getwhoparams[1], getwhoparams[2])
@@ -72,18 +74,22 @@ GFAWM.getClassWholist = function(class, level, excludedungeonspvp)
 	GFAWM.setClassWhoSearchNames(class, level)
 end
 
-GFAWM.onUpdate = function() -- it is skipping the first every time
-	if NextAvailableWhoTime < GetTime()  then
-		NextAvailableWhoTime = GetTime() + GFAWM_WHO_COOL_DOWN_TIME;
+GFAWM.onUpdate = function()
+	if (urgentWhoRequest or whoQueue[1] or ClassWhoQueue[1]) and NextAvailableWhoTime < time()  then -- (CurTime + WhoTimeOut) must be less(earlier) than CurTime
 		if urgentWhoRequest then
 			SetWhoToUI(0);
 			SendWho("n-"..urgentWhoRequest);
 			urgentWhoSent = urgentWhoRequest;
 			urgentWhoRequest = nil;
-		elseif GF_ClassWhoRequest and ClassWhoQueue[1] and not WhoFrame:IsVisible() then
-			SetWhoToUI(1);
-			SendWho(ClassWhoQueue[1]);
-			table.remove(ClassWhoQueue, 1);
+		elseif GF_ClassWhoRequest and not WhoFrame:IsVisible() then
+			if ClassWhoQueue[1] then
+				SetWhoToUI(1);
+				SendWho(ClassWhoQueue[1]);
+				table.remove(ClassWhoQueue, 1);
+			else
+				GF_ClassWhoRequest = nil
+				GF_LFGGetWhoButton:SetText(GF_GET_WHO.." - "..GFAWM.ClassWhoMatchingResults);
+			end
 		elseif whoQueue[1] and not WhoFrame:IsVisible() then
 			if GF_WhoTable[whoQueue[1]] and GF_WhoTable[whoQueue[1]][1] + 259200 > time() then
 				table.remove(whoQueue, 1);
@@ -98,35 +104,63 @@ end
 GFAWM.setClassWhoSearchNames = function(class, level)
 	local minlevel = level-GFAWM_GETWHO_LEVEL_RANGE
 	local maxlevel = level+GFAWM_GETWHO_LEVEL_RANGE
-	if minlevel < 1 then minlevel = 1 end
-	if level > 60 then level = 60 end
-	if maxlevel > 60 then maxlevel = 60 end
+	if level > 60 then
+		maxlevel = 60
+		level = 60
+	elseif minlevel < 1 then
+		minlevel = 1
+	end
 	if getclasswhostate == 1 then
 		table.insert(ClassWhoQueue, "c-"..class.." "..minlevel .."-"..maxlevel);
-	elseif getclasswhostate == 2 then
+	elseif getclasswhostate == 2 and (level ~= maxlevel) then
 		table.insert(ClassWhoQueue, "c-"..class.." "..minlevel .."-"..level-1);
 		table.insert(ClassWhoQueue, "c-"..class.." "..level.."-"..maxlevel);
-	elseif getclasswhostate == 3 then
+	elseif getclasswhostate == 3 or (getclasswhostate == 2 and (level == maxlevel)) then
 		if UnitFactionGroup("player") == "Alliance" then
-			table.insert(ClassWhoQueue, "c-"..class.." ".."r-Dwarf".." "..minlevel .."-"..maxlevel);
-			table.insert(ClassWhoQueue, "c-"..class.." ".."r-\"Night Elf\"".." "..minlevel .."-"..maxlevel);
-			table.insert(ClassWhoQueue, "c-"..class.." ".."r-Gnome".." "..minlevel .."-"..maxlevel);
-			table.insert(ClassWhoQueue, "c-"..class.." ".."r-Human".." "..minlevel .."-"..maxlevel);
+			if GFAWM.classMatchesRace(class, "Dwarf") then table.insert(ClassWhoQueue, "c-"..class.." "..minlevel .."-"..maxlevel.." ".."r-\"Dwarf\""); end
+			if GFAWM.classMatchesRace(class, "Gnome") then table.insert(ClassWhoQueue, "c-"..class.." "..minlevel .."-"..maxlevel.." ".."r-\"Gnome\""); end
+			if GFAWM.classMatchesRace(class, "Night Elf") then table.insert(ClassWhoQueue, "c-"..class.." "..minlevel .."-"..maxlevel.." ".."r-\"Night Elf\""); end
+			if GFAWM.classMatchesRace(class, "Human") then table.insert(ClassWhoQueue, "c-"..class.." "..minlevel .."-"..maxlevel.." ".."r-\"Human\""); end
 		else
-			table.insert(ClassWhoQueue, "c-"..class.." ".."r-Tauren".." "..minlevel .."-"..maxlevel);
-			table.insert(ClassWhoQueue, "c-"..class.." ".."r-Troll".." "..minlevel .."-"..maxlevel);
-			table.insert(ClassWhoQueue, "c-"..class.." ".."r-Orc".." "..minlevel .."-"..maxlevel);
-			table.insert(ClassWhoQueue, "c-"..class.." ".."r-Undead".." "..minlevel .."-"..maxlevel);
+			if GFAWM.classMatchesRace(class, "Tauren") then table.insert(ClassWhoQueue, "c-"..class.." "..minlevel .."-"..maxlevel.." ".."r-\"Tauren\""); end
+			if GFAWM.classMatchesRace(class, "Troll") then table.insert(ClassWhoQueue, "c-"..class.." "..minlevel .."-"..maxlevel.." ".."r-\"Troll\""); end
+			if GFAWM.classMatchesRace(class, "Orc") then table.insert(ClassWhoQueue, "c-"..class.." "..minlevel .."-"..maxlevel.." ".."r-\"Orc\""); end
+			if GFAWM.classMatchesRace(class, "Undead") then table.insert(ClassWhoQueue, "c-"..class.." "..minlevel .."-"..maxlevel.." ".."r-\"Undead\""); end
 		end
+		getclasswhostate = 3
 	elseif getclasswhostate == 4 then
-		table.insert(ClassWhoQueue, "c-"..class.." ".."n-a".." "..minlevel .."-"..maxlevel);
-		table.insert(ClassWhoQueue, "c-"..class.." ".."n-e".." "..minlevel .."-"..maxlevel);
-		table.insert(ClassWhoQueue, "c-"..class.." ".."n-i".." "..minlevel .."-"..maxlevel);
-		table.insert(ClassWhoQueue, "c-"..class.." ".."n-o".." "..minlevel .."-"..maxlevel);
-		table.insert(ClassWhoQueue, "c-"..class.." ".."n-u".." "..minlevel .."-"..maxlevel);
+		table.insert(ClassWhoQueue, "c-"..class.."\" "..minlevel .."-"..maxlevel.." ".."n-\"a\"");
+		table.insert(ClassWhoQueue, "c-"..class.."\" "..minlevel .."-"..maxlevel.." ".."n-\"e\"");
+		table.insert(ClassWhoQueue, "c-"..class.."\" "..minlevel .."-"..maxlevel.." ".."n-\"i\"");
+		table.insert(ClassWhoQueue, "c-"..class.."\" "..minlevel .."-"..maxlevel.." ".."n-\"o\"");
+		table.insert(ClassWhoQueue, "c-"..class.."\" "..minlevel .."-"..maxlevel.." ".."n-\"u\"");
 	else
 		GF_ClassWhoRequest = nil
 		GF_LFGGetWhoButton:SetText(GF_GET_WHO.." - "..GFAWM.ClassWhoMatchingResults);
+	end
+end
+
+GFAWM.classMatchesRace = function(class, race)
+	if string.sub(GetRealmName(), 1, 9) == "Nordanaar" or string.sub(GetRealmName(), 1, 8) == "Tel'Abim" then
+		if (class == "Druid") and (race == "Night Elf" or race == "Tauren") then return true
+		elseif (class == "Hunter") and (race == "Human" or race == "Night Elf" or race == "Dwarf" or race == "Gnome" or race == "Undead" or race == "Orc" or race == "Troll" or race == "Tauren" or race == "High Elf" or race == "Goblin") then return true
+		elseif (class == "Mage") and (race == "Human" or race == "Dwarf" or race == "Gnome" or race == "Undead" or race == "Orc" or race == "Troll" or race == "High Elf" or race == "Goblin") then return true
+		elseif (class == "Paladin") and (race == "Human" or race == "Dwarf" or race == "High Elf") then return true
+		elseif (class == "Priest") and (race == "Human" or race == "Night Elf" or race == "Dwarf" or race == "Undead" or race == "Troll" or race == "High Elf") then return true
+		elseif (class == "Rogue") and (race == "Human" or race == "Night Elf" or race == "Dwarf" or race == "Gnome" or race == "Undead" or race == "Orc" or race == "Troll" or race == "High Elf" or race == "Goblin") then return true
+		elseif (class == "Shaman") and (race == "Orc" or race == "Troll" or race == "Tauren") then return true
+		elseif (class == "Warlock") and (race == "Human" or race == "Gnome" or race == "Undead" or race == "Orc" or race == "Troll" or race == "Goblin") then return true
+		elseif (class == "Warrior") and (race == "Human" or race == "Night Elf" or race == "Dwarf" or race == "Gnome" or race == "Undead" or race == "Orc" or race == "Troll" or race == "Tauren" or race == "High Elf" or race == "Goblin") then return true end
+	else
+		if (class == "Druid") and (race == "Night Elf" or race == "Tauren") then return true
+		elseif (class == "Hunter") and (race == "Night Elf" or race == "Dwarf" or race == "Orc" or race == "Troll" or race == "Tauren") then return true
+		elseif (class == "Mage") and (race == "Human" or race == "Gnome" or race == "Undead" or race == "Troll") then return true
+		elseif (class == "Paladin") and (race == "Human" or race == "Dwarf") then return true
+		elseif (class == "Priest") and (race == "Human" or race == "Night Elf" or race == "Dwarf" or race == "Undead" or race == "Troll") then return true
+		elseif (class == "Rogue") and (race == "Human" or race == "Night Elf" or race == "Dwarf" or race == "Gnome" or race == "Undead" or race == "Orc" or race == "Troll") then return true
+		elseif (class == "Shaman") and (race == "Orc" or race == "Troll" or race == "Tauren") then return true
+		elseif (class == "Warlock") and (race == "Human" or race == "Gnome" or race == "Undead" or race == "Orc") then return true
+		elseif (class == "Warrior") and (race == "Human" or race == "Night Elf" or race == "Dwarf" or race == "Gnome" or race == "Undead" or race == "Orc" or race == "Troll" or race == "Tauren") then return true end
 	end
 end
 
@@ -173,7 +207,7 @@ GFAWM.toOldFormat = function(name)
 end
 
 GFAWM.hookedSendWho = function(...) 
-	NextAvailableWhoTime = GetTime() + GFAWM_WHO_COOL_DOWN_TIME;
+	NextAvailableWhoTime = time() + GFAWM_WHO_COOL_DOWN_TIME;
 	GFAWM.preHookSendWho(unpack(arg));
 end
 

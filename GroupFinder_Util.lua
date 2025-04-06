@@ -153,7 +153,7 @@ GF_Util.rateResults = function (msg, fLevel)
 		end
 	end
 	for _,instance in GF_TRIGGER_LIST.QUEST do
-		for _ , word in instance do
+		for _, word in instance do
 			if string.find(msgnew, word) then
 				goal_score = 1;
 				gtype = "Q"
@@ -194,11 +194,11 @@ GF_Util.rateResults = function (msg, fLevel)
 			break;
 		end
 	end
-	for _,word in GF_TRIGGER_LIST.RAID do
+	for temp,word in GF_TRIGGER_LIST.RAID do
 		if string.find(msgnew, word) then
 			goal_score = 1;
 			gtype = "R"
-			instancelevel = 60;
+			instancelevel = 63;
 			break;
 		end
 	end

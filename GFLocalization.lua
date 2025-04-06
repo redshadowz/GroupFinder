@@ -22,7 +22,7 @@ GF_MINIMAP				= "Minimap"
 GF_NEW_ONLY				= "New only"
 GF_SHOW_CHAT			= "Show Chat"
 GF_SHOW_TRADES			= "Show Trades"
-GF_TRANSLATE			= "Translate"
+GF_SHOW_LOOT			= "Show Loots"
 GF_CHAT_ON				= "Chat on"
 GF_CHAT_OFF				= "Chat off"
 GF_CHAT_GROUP_ON		= "Groups in chat, on"
@@ -40,9 +40,8 @@ GF_SHOW_OTHER			= "Show Other";
 GF_SHOW_LFM				= "Show LFM";
 GF_SHOW_LFG				= "Show LFG";
 GF_CLEAR				= "Clear"
-GF_RESULTS_FOUND 		= "Results: Found"; -- Shows number of groups on list
+GF_RESULTS_FOUND 		= "Found:"; -- Shows number of groups on list
 GF_PAGE 				= "PAGE"; -- Label for pages of groups.
-GF_RESULTS 				= "Results:"; -- Not sure where this is actually displayed
 
 -- Settings tab buttons and texts
 GF_LOG					= "Log"; -- Label for Log tab
@@ -163,7 +162,7 @@ GF_GroupsInChatCheckButton = {
 	tooltip2 		= "When checked, new groups that meet your criteria will be displayed in chat.",  },
 GF_GroupsInMinimapCheckButton = { 
 	tooltip1 		= "Show groups on the minimap", 
-	tooltip2 		= "When checked, new groups that meet your criteria will be displayed on the minimap.",  },
+	tooltip2 		= "When checked, new groups that meet your criteria will be displayed next to the minimap.",  },
 GF_GroupsNewOnlyCheckButton = { 
 	tooltip1 		= "Show only new groups", 
 	tooltip2 		= "When checked, only new groups will displayed in chat and on the minimap.",  },
@@ -173,9 +172,9 @@ GF_ShowChatCheckButton = {
 GF_ShowTradesCheckButton = {
 	tooltip1 		= "Show trade chat",
 	tooltip2 		= "When checked, WTS/WTB/LFW-type messages will be shown. Otherwise it will be hidden.",  },
-GF_TranslateCheckButton = {
-	tooltip1 		= "Show language translations",
-	tooltip2 		= "When checked, will try to translate chat text into English where possible.",  },
+GF_ShowLootCheckButton = {
+	tooltip1 		= "Show loot messages",
+	tooltip2 		= "When checked, item rolls, looting of money and grey items, selecting greed/need for uncommon items, and experience/honor/reputation gains will be shown. Otherwise they will be hidden.",  },
 GF_AutoFilterCheckButton = {
 	tooltip1 		= "Auto-Filter", 
 	tooltip2 		= "When checked, only groups near your level will be shown." },
@@ -205,7 +204,7 @@ GF_SearchFrameDescriptionEditBox = {
 	tooltip2 		= "Only groups with matches will be included in the results. Use '/' operator for multiple searches(e.g. dm/ubrs/scholo/etc)" },
 GF_LFGWhoWhisperEditBox = { 
 	tooltip1 		= "Whisper Message", 
-	tooltip2 		= "Use the 'Get Who' button to make a list of players in the level range of the dungeon and class selected. Press the 'Invite' button to send this text. Will not message the same person more than once every 15 minutes." },
+	tooltip2 		= "Use the 'Get Who' button to make a list of players matching the class and level range of the dungeon selected. Press the 'Invite' button to send this text(if blank, it will send the World Channel message instead). Will not message the same person more than once every 15 minutes." },
 GF_LFGAutoCheckButton = { 
 	tooltip1 		= "Auto-adjust LFM", 
 	tooltip2 		= "Adjusts your 'LFM' or 'LFxM' messages by the number of people in the group relative to the selected group size." },
@@ -251,7 +250,7 @@ GF_FrameBlockPoliticsCheckButton = {
 
 GF_TRIGGER_LIST = {
 	["LFM"] = { "lf%s", "lf%d", "lfm", "flm", "lf.m", "lf..m", "looking for more", "need more", "looking for .* more", "need %d* dps","need %d* heal", "need %d* tank", "need heal", "need tank", "need dps",
-	"need range", "need caster", "need melee", "need one", "need two", "need three", "anyone for", "come tank", "come healer", "come dps"},
+	"need range", "need caster", "need melee", "need one", "need two", "need three", "anyone for", "come tank", "come healer", "come dps", },
 	
 	["LFG"] = {	"lfg", "looking for group",  },
 	
@@ -271,7 +270,7 @@ GF_TRIGGER_LIST = {
 	},
 	
 	["IGNORE"] = { "channel", "lol", "lmao", "lmfao", "rofl", "wts", "wtb", "stfu", "ignore", "noob", "website", "http",
-				"nub", "n00b", "recruit", "trogdoor", "raid times", "dedicated", "lockbox", "lfw", "cod"},
+				"nub", "n00b", "recruit", "trogdoor", "raid times", "dedicated", "lockbox", "lfw", "cod", },
 
 	["SPAM"] = { "l f m", "h e a l", "n o s t", "please come to web", "c o m", "n 0 s t", "level service", "c o m", },
 	
@@ -282,9 +281,8 @@ GF_TRIGGER_LIST = {
 	["TRADE"] = { "wtb", "wts", "buying", "selling", "wtt", "trading", "lfw", "for sale", "on ah", "cod", },
 	
 	["RAID"] = { "molten core", " mc", "ragnaros", " rag", "blackwing", "bwl", "zulg", "zg", "gurub", "hakkar", "aq20", " ahn", " aq ", "ossir", "aq40", "quiraj",
-				"naxxramas", "naxx", "onyxia", " ony", "azuregos", "kazzak", "world boss", "lethon", "ysondre", "taerar", "emeris", 
-				"kara", " bm", "Moras", "sanctum", "vault", "hateforge", "quarry", "crypts", "crescent", "grove", "Concavius", "Ostarius", "Nerub", "Reaver", "gilneas", "aq15", },
-
+				"naxxramas", "naxx", "onyxia", " ony", "azuregos", "kazzak", "world boss", "lethon", "ysondre", "taerar", "emeris", },
+				
 	["PVP"] = { "premade", "av ", " ab ", "wsg", "warsong", "alterac valley", "arathi basin", "gulch", },
 
 	["QUEST"] = {
@@ -315,7 +313,7 @@ GF_TRIGGER_LIST = {
 		["THOUSANDNEEDLES"] = { "encrusted tail fins", "test of strength", "arikara", "hypercapacitor", "steelsnap", },
 		["UNGORO"] 			= { "dangerous to go alone", },
 		["WESTFALL"] 		= { "westfall"},
-		["WESTPLAGUE"] 		= { "western plaguelands", "wpl", "araj", "in dreams", "fordring", },
+		["WESTPLAGUE"] 		= { "western plaguelands", "wpl", "araj", "in dreams", "fordring", "last barov", },
 		["WETLANDS"] 		= { "wetlands?", "grim task", "balgaras", "nekrosh", "thandol span", "dark iron war", },
 		["WINTERSPRING"] 	= { "winterspring", "luck be with you", "frostmaul", "rotam", "winterfall", "brumeran", "ursius", "timbermaw hold",},
 		["ALL"] 			= { "elite", "escort", "quest", "rep farm", },
@@ -467,3 +465,78 @@ GF_ErrorFilters = {
 	[7]	= "is already in a group.",
 	[8]	= "is under attack!",
 }
+
+GF_LootFilters = {
+	[1]	= "Your share of the loot is ", --always filter these
+	[2]	= "You loot ",
+	[3]	= "Greed Roll - ",
+	[4]	= "Need Roll - ",
+	[5]	= "You have selected Greed for: ",
+	[6]	= "You have selected Need for: ",
+	[7]	= "You passed on: ",
+	[8]= " dies, you gain",
+	[9]= " reputation has increased by ",
+	[10]= "You have been awarded ",
+	[11]= "9d9d9d", -- grey quality filter
+
+	[12]	= " has selected Greed for: ", -- filter these if green quality or lower
+	[13]	= " has selected Need for: ",
+	[14]= " passed on: ",
+	[15]= " won: ",
+}
+
+local GF_TurtleTriggerListDungeons = {
+		["CRESCENTGROVE"]	= { 36, "crescent", "grove", " cg", },
+		["GILNEASCITY"] 	= { 47, "gilneas", },
+		["HATEFORGEQUARRY"] = { 55, "hateforge", "quarry", " hf", },
+		["EMERALDSANCTUM"] 	= { 60, " es ", "sanctum", },
+		["STORMWINDVAULT"] 	= { 60, " sv", "vault", },
+		["COTBLACKMORASS"] 	= { 60, "morass", " bm ", },
+		["KARACRYPT"] 		= { 60, " crypt", },
+}
+local GF_TurtleTriggerListRaids = { "kara", "k10", "k40", "concavius", "ostarius", "nerub", "reaver", "aq15", }
+local GF_TurtleSearchList = {
+		[1] = { "Crescent Grove", 32, 38, "crescent", "grove", "cg-", },
+		[2] = { "Gilneas City", 43, 50, "gilneas", },
+		[3] = { "Hateforge Quarry", 52, 60, "hateforge", "quarry", "hf-", },
+		[4] = { "Stormwind Vault", 58, 60, "vault", "sv-", },
+		[5] = { "Black Morass", 58, 60, "morass", "bm-", },
+		[6] = { "Karazhan Crypt", 60, 60, "crypt", },
+		[7] = { "Emerald Sanctum", 60, 60, "sanctum", "es-", },
+}
+local GF_TurtleGroupButtonsListDungeons = { -- header, min to show, max to show, filter to remove names, filter to remove names, Who list level
+		[1] = { "Crescent Grove", 32, 40, "cg", "Crescent Grove", 33, },
+		[2] = { "Gilneas City", 42, 50, "gilneas", "Gilneas City", 46, },
+		[3] = { "Hateforge Quarry", 52, 60, "quarry", "Hateforge Quarry", 61, },
+		[4] = { "Stormwind Vault", 58, 60, "vault", "Stormwind Vault", 61, },
+		[5] = { "Black Morass", 58, 60, "morass", "Black Morass", 63, },
+		[6] = { "Karazhan Crypt", 60, 60, "crypt", "Karazhan Crypt", 63, },
+		[7] = { "Emerald Sanctum", 60, 60, "sanctum", "Emerald Sanctum", 63, },
+}
+local GF_TurtleGroupButtonsListRaids = {
+		[1] = { "Lower Karazhan", 1, 60, "kara10", "Lower Karazhan", 63, },
+		[2] = { "Upper Karazhan", 1, 60, "kara40", "Upper Karazhan", 63, },
+}
+local GF_TurtleSearchListNew40RaidString = { "40-man Raids", 60, 60, "mc-", "molten+core", "rag-","ragnaros", "blackwing", "bwl", "nef-", "nefari", "aq40", "cthun", "aq+40", "naxx", "ony-", "onyxia", "qiraj",
+											"kara40", "upper+kara", "k40", "concavius", "ostarius", "nerub", "reaver", }
+local GF_TurtleSearchListNew20RaidString = { "20-man Raids", 58, 60, "zg-", "zul+g", "gurub", "hakkar", "aq20", "ossi", "aq15", "k10", "kara10", "lower+kara", }					
+
+function GF_AddTurtleWoWDungeonsRaids()
+	for instance,_ in GF_TurtleTriggerListDungeons do
+		GF_TRIGGER_LIST.DUNGEON[instance] = GF_TurtleTriggerListDungeons[instance]
+	end
+	for i=1, getn(GF_TurtleTriggerListRaids) do
+		table.insert(GF_TRIGGER_LIST.RAID, 1, GF_TurtleTriggerListRaids[i]);
+	end
+	GF_BUTTONS_LIST.SearchList[27] = GF_TurtleSearchListNew40RaidString;
+	GF_BUTTONS_LIST.SearchList[28] = GF_TurtleSearchListNew20RaidString;
+	for i=1, getn(GF_TurtleSearchList) do
+		table.insert(GF_BUTTONS_LIST.SearchList, 27, GF_TurtleSearchList[i]);
+	end
+	for i=1, getn(GF_TurtleGroupButtonsListDungeons) do
+		table.insert(GF_BUTTONS_LIST.LFGDungeon, 28, GF_TurtleGroupButtonsListDungeons[i]);
+	end
+	for i=1, getn(GF_TurtleGroupButtonsListRaids) do
+		table.insert(GF_BUTTONS_LIST.LFGRaid, 8, GF_TurtleGroupButtonsListRaids[i]);
+	end
+end

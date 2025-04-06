@@ -1,9 +1,7 @@
-﻿GF_RELEASEVERSION 				= "R12";
-GF_SavedVariables = {
+﻿GF_SavedVariables = {
 	joinworld					= true,
 	lastlogout					= 0,
 	disablechatfiltering		= false;
-	translate					= true;
 	showoriginal				= false;
 	usewhoongroups				= false;
 	blockpolitics				= false;
@@ -15,6 +13,7 @@ GF_SavedVariables = {
 	showgroupsnewonlytime		= 3,
 	showchattexts				= true,
 	showtradestexts				= true,
+	showloottexts				= true;
 	errorfilter					= false,
 	spamfilter					= true,
 	spamfilterduration			= 3,
@@ -111,6 +110,17 @@ function GF_OnLoad()
 	function ChatFrame_OnEvent(event)
 		if not arg1 or arg1 == "" or arg1 == GF_SentMessage or not arg2 or arg2 == "" or arg2 == UnitName("player") or not arg9 then
 			GF_SentMessage = nil;
+			if not GF_SavedVariables.showloottexts and arg1 then
+				for i=1, getn(GF_LootFilters) do
+					if string.find(arg1, GF_LootFilters[i]) then
+						if i > 11 then 
+							if string.find(arg1, "ffffff") or string.find(arg1, "1eff00") then return end
+						else
+							return
+						end
+					end
+				end
+			end
 			if GF_SavedVariables.errorfilter and arg1 then 
 				for i=1, getn(GF_ErrorFilters) do
 					if string.find(arg1, GF_ErrorFilters[i]) then
@@ -175,7 +185,7 @@ function GF_OnLoad()
 						if not GF_PlayerMessages[arg2] then
 							GF_PlayerMessages[arg2] = { [1] = string.sub(arg1,math.floor(sniprandom/4),math.floor(sniprandom/4) + 50), [2] = "ZXYXZ123" }
 						elseif GF_PlayerMessages[arg2].time then
-							if GF_PlayerMessages[arg2].time > time() and (string.find(arg1,GF_PlayerMessages[arg2][1],1,true) or string.find(arg1,GF_PlayerMessages[arg2][2],1,true)) then
+							if GF_PlayerMessages[arg2].time > GetTime() and (string.find(arg1,GF_PlayerMessages[arg2][1],1,true) or string.find(arg1,GF_PlayerMessages[arg2][2],1,true)) then
 								GF_Log:AddMessage("["..GF_GetTime(true).."] "..GF_BLOCKED_SPAM..arg2..": "..string.sub(arg1,1,80), 1.0, 1.0, 0.5);
 								GF_PreviousMessage[arg2][3] = true;
 								return;
@@ -186,7 +196,7 @@ function GF_OnLoad()
 							if string.find(arg1,GF_PlayerMessages[arg2][1],1,true) or string.find(arg1,GF_PlayerMessages[arg2][2],1,true) then
 								if GF_SavedVariables.autoblacklist and not GF_BlackList[arg2] and tempwhodata
 								and tonumber(tempwhodata.level) <= GF_SavedVariables.autoblacklistminlevel and string.len(arg1) > 120 then 
-									if tempwhodata.recordedTime + 60*60*6 < time() then
+									if tempwhodata.recordedTime + 60*60*6 < GetTime() then
 										GF_WhoTable[arg2] = nil;
 										if GF_SavedVariables.usewhoongroups then GFAWM.addNameToWhoQueue(arg2) end
 									else
@@ -195,7 +205,7 @@ function GF_OnLoad()
 								end
 								GF_Log:AddMessage("["..GF_GetTime(true).."] "..GF_BLOCKED_SPAM..arg2..": "..string.sub(arg1,1,80), 1.0, 1.0, 0.5);
 								GF_PreviousMessage[arg2][3] = true;
-								GF_PlayerMessages[arg2].time = time() + GF_SavedVariables.spamfilterduration*60;
+								GF_PlayerMessages[arg2].time = GetTime() + GF_SavedVariables.spamfilterduration*60;
 								return;
 							end
 							table.insert(GF_PlayerMessages[arg2],1, string.sub(arg1,math.floor(sniprandom/4),math.floor(sniprandom/4) + 50))
@@ -322,6 +332,7 @@ function GF_OnUpdate()
 			local counter = 0;
 			for n,m in pairs(GF_SendAddonMessageBuffer) do
 				local timedifference = (tonumber(string.sub(GF_GetTime(),1,2))*60 + tonumber(string.sub(GF_GetTime(),3,4))) - (tonumber(string.sub(m.time,1,2))*60 + tonumber(string.sub(m.time,3,4)))
+				if timedifference < 0 then timedifference = 720 - (timedifference + 720) end
 				if m.who and not m.translated and (m.type == "D" or m.type == "R") and timedifference < 15 then
 					local t = m.time
 					local c = GF_Classes[m.who.class] or 7
@@ -405,7 +416,7 @@ local function GF_LoadSettings()
 	GF_Classes[5] = GF_HUNTER;
 	GF_Classes[6] = GF_ROGUE;
 	GF_Classes[7] = GF_WARRIOR;
-	if UnitFactionGroup("player") == "Alliance" then GF_Classes[8] = GF_PALADIN; else	GF_Classes[8] = GF_SHAMAN; end			
+	if UnitFactionGroup("player") == "Alliance" then GF_Classes[8] = GF_PALADIN; else GF_Classes[8] = GF_SHAMAN; end			
 	GF_Classes[GF_PRIEST] 	= 1;
 	GF_Classes[GF_MAGE] 	= 2;
 	GF_Classes[GF_WARLOCK] 	= 3;
@@ -447,7 +458,7 @@ local function GF_LoadSettings()
 
 	GF_ShowChatCheckButton:SetChecked(GF_SavedVariables.showchattexts);
 	GF_ShowTradesCheckButton:SetChecked(GF_SavedVariables.showtradestexts);
-	GF_TranslateCheckButton:SetChecked(GF_SavedVariables.translate);
+	GF_ShowLootCheckButton:SetChecked(GF_SavedVariables.showloottexts);
 
 	GF_AutoFilterCheckButton:SetChecked(GF_SavedVariables.autofilter);
 	GF_SearchFrameShowTranslateCheckButton:SetChecked(GF_SavedVariables.showtranslate);
@@ -484,6 +495,9 @@ local function GF_LoadSettings()
 	GF_FrameAnnounceTimerSlider:SetValue((GF_SavedVariables.announcetimer/60 or 2));
 	getglobal(GF_LFGWhoClassDropdown:GetName().."TextLabel"):SetText(GF_SavedVariables.lfgwhisperclass or "");
 	getglobal(GF_LFGWhoClassDropdown:GetName().."TextLabel"):SetPoint("LEFT", "GF_LFGWhoClassDropdown", "LEFT", 22, 3);
+	
+	--if string.sub(GetRealmName(), 1, 9) == "Nordanaar" or string.sub(GetRealmName(), 1, 8) == "Tel'Abim" then GF_AddTurtleWoWDungeonsRaids() end
+	GF_AddTurtleWoWDungeonsRaids()
 end
 
 function GF_OnEvent(event)
@@ -524,7 +538,7 @@ function GF_OnEvent(event)
 			end
 			GF_SendAddonWhoNames = {}
 			for n,w in pairs(GF_WhoTable) do
-				if not GF_SendAddonWhoBuffer[w] and w[1] + 900 > time() then GF_SendAddonWhoNames[n] = true; end
+				if not GF_SendAddonWhoBuffer[w] and w[1] + 900 > GetTime() then GF_SendAddonWhoNames[n] = true; end
 			end
 			GF_RequestTimer = 0;
 			GF_TimeSinceLastBroadcast = math.random(27);
@@ -543,7 +557,7 @@ function GF_OnEvent(event)
 		elseif string.sub(arg2,1,1) == ":" then
 			for sentclass,sentname,sentlevel,sentguild in gfind(arg2, ":(%d)([a-zA-Z]+)(%d+)([a-zA-Z%s<>]+)") do
 				if not GF_WhoTable[sentname] then
-					GF_WhoTable[sentname] = { time(), tonumber(sentlevel), GF_Classes[tonumber(sentclass)], string.gsub(sentguild,"[<>]", "") };
+					GF_WhoTable[sentname] = { GetTime(), tonumber(sentlevel), GF_Classes[tonumber(sentclass)], string.gsub(sentguild,"[<>]", "") };
 				end
 				GF_SendAddonWhoNames[sentname] = nil;
 				GF_SendAddonRequestNames[sentname] = nil;
@@ -559,7 +573,7 @@ function GF_OnEvent(event)
 
 				if not tim or not cla or not sentlevel or not sentguild or not sentname or not senttype or not sentchannel or not sentilevel or not com then break end
 
-				if not GF_WhoTable[sentname] then GF_WhoTable[sentname] = { time(), tonumber(sentlevel), GF_Classes[cla], string.gsub(sentguild,"[<>]", "")}; end
+				if not GF_WhoTable[sentname] then GF_WhoTable[sentname] = { GetTime(), tonumber(sentlevel), GF_Classes[cla], string.gsub(sentguild,"[<>]", "")}; end
 				local whodata = {class=GF_Classes[cla], level=tonumber(sentlevel), guild=sentguild };
 				for i = 1, getn(GF_MessageList) do
 					if GF_MessageList[i].op and GF_MessageList[i].op == sentname then
@@ -676,8 +690,10 @@ function GF_ApplyFiltersToGroupList()
 	for i=1, getn(GF_MessageList) do
 		local data = GF_MessageList[i];
 		if data then
+		-- if saved at 690, and current time is midnight, then it would be -690 + 720 = 30.
 			local timedifference = (tonumber(string.sub(GF_GetTime(),1,2))*60 + tonumber(string.sub(GF_GetTime(),3,4))) - (tonumber(string.sub(data.time,1,2))*60 + tonumber(string.sub(data.time,3,4))) + 1
-			if timedifference >= 0 and (timedifference < GF_SavedVariables.grouplistingduration or timedifference+720<GF_SavedVariables.grouplistingduration) then
+			if timedifference < 0 then timedifference = 720 - (timedifference + 720) end
+			if timedifference >= 0 and timedifference < GF_SavedVariables.grouplistingduration then
 				if (GF_SavedVariables.searchtext ~= "" and GF_EntryMatchesGroupFilterCriteria(data, true) and (GF_Util.search(data.message, GF_SavedVariables.searchtext) > 0 or GF_Util.search(data.message, GF_SavedVariables.searchbuttonstext) > 0))
 				or (GF_SavedVariables.searchtext == "" and GF_EntryMatchesGroupFilterCriteria(data) and (GF_SavedVariables.searchbuttonstext == "" or GF_Util.search(data.message, GF_SavedVariables.searchbuttonstext) > 0)) then
 					data.elapsed = timedifference;
@@ -740,7 +756,12 @@ function GF_UpdateResults()
 				end
 				getglobal(c.."NameLabel"):SetText(mainText);
 				getglobal(c.."MoreLabel"):SetText(moreText);
-				getglobal(c):Show();	
+				getglobal(c):Show();
+				if not GF_SavedVariables.usewhoongroups and not (GF_WhoTable[entry.op] and GF_WhoTable[entry.op][1] and GF_WhoTable[entry.op][1] + 259200 > GetTime()) and GFAWM.getPositionInQueue(entry.op, whoQueue) == 0 then
+					getglobal(c.."GroupWhoButton"):Show();
+				else
+					getglobal(c.."GroupWhoButton"):Hide();
+				end
 			else	
 				getglobal(c):Hide();
 			end
@@ -757,7 +778,7 @@ function GF_GetWhoData(arg2)
 		whodata = pfUI_playerDB[arg2] 
 		if whodata then
 			whodata.class = string.sub(whodata.class,1,1)..string.lower(string.sub(whodata.class,2))
-			whodata.recordedTime = time()
+			whodata.recordedTime = GetTime()
 			whodata.guild = "<>"
 		end 
 	end
@@ -767,10 +788,10 @@ function GF_GetWhoData(arg2)
 				GFAWM.addNameToWhoQueue(arg2)
 				return
 			else
-				GF_WhoTable[arg2] = { time(), whodata.level, whodata.class, whodata.guild };
+				GF_WhoTable[arg2] = { GetTime(), whodata.level, whodata.class, whodata.guild };
 			end
 		end
-		if whodata.recordedTime + 259200 < time() then GF_WhoTable[arg2] = nil; if GF_SavedVariables.usewhoongroups then GFAWM.addNameToWhoQueue(arg2) end end
+		if whodata.recordedTime + 259200 < GetTime() then GF_WhoTable[arg2] = nil; if GF_SavedVariables.usewhoongroups then GFAWM.addNameToWhoQueue(arg2) end end
 	else
 		if GF_SavedVariables.usewhoongroups then GFAWM.addNameToWhoQueue(arg2) end
 	end
@@ -818,80 +839,63 @@ end
 
 function GF_ListItem_OnMouseUp() -- When you click a name in the list.
 	local value = string.gsub(this:GetName(), "GF_NewItem(%d+)", "%1"); 
-	if GF_SelectedResultListItem == GF_ResultsListOffset + value then
-		GF_SelectedResultListItem = 0;
-		getglobal(this:GetName().."TextureSelected"):Hide();
-	else
-		if GF_SelectedResultListItem > 0 then getglobal("GF_NewItem"..GF_SelectedResultListItem.."TextureSelected"):Hide(); end
-		GF_SelectedResultListItem = GF_ResultsListOffset + value;
-		getglobal(this:GetName().."TextureSelected"):Show();
-		local raid = GF_FilteredResultsList[GF_ResultsListOffset + value];
+	local raid = GF_FilteredResultsList[GF_ResultsListOffset + value];
 		
-	   	if (arg1 == "RightButton") then
-	   		local name = raid.op or raid.author;
-			HideDropDownMenu(1);
-			if name ~= UnitName("player") then
-				FriendsDropDown.initialize = FriendsFrameDropDown_Initialize;
-				FriendsDropDown.displayMode = "MENU";
-				FriendsDropDown.name = name;
-				ToggleDropDownMenu(1, nil, FriendsDropDown, this:GetName());
-			end
-			return;
+	if (arg1 == "RightButton") then
+		local name = raid.op or raid.author;
+		HideDropDownMenu(1);
+		if name ~= UnitName("player") then
+			FriendsDropDown.initialize = FriendsFrameDropDown_Initialize;
+			FriendsDropDown.displayMode = "MENU";
+			FriendsDropDown.name = name;
+			ToggleDropDownMenu(1, nil, FriendsDropDown, "cursor");
 		end
+		return;
 	end
-	GF_UpdateResults();
 end
 
-function GF_ListItemAuxLeft_ShowTooltip()
-	GetMouseFocus():GetName()
-	GameTooltip:ClearLines();
-	local parent = this:GetParent();
+function GF_ListItemAuxLeft_ShowTooltip(parent)
 	local value = GF_ResultsListOffset + string.gsub(parent:GetName(), "GF_NewItem(%d+)", "%1");
-	
 	local entry = GF_FilteredResultsList[value];
+
+	GameTooltip:ClearLines();
 	GameTooltip:SetOwner(this, "ANCHOR_BOTTOMLEFT");
 	GameTooltip:ClearAllPoints();
 	GameTooltip:SetPoint("BOTTOMLEFT", parent:GetName(), "TOPLEFT", 0, 8);
 	
-	if entry == nil then return; end
+	if not entry then return; end
 	
 	GameTooltip:AddLine(entry.op or entry.author);
 	GameTooltip:AddLine(entry.message, 0.9, 0.9, 1.0, 1, 1);
 	GameTooltip:Show();
 end
 
-function GF_ListItemAuxRight_ShowTooltip()
-	local parent = this:GetParent();
-	GameTooltip:ClearLines();
+function GF_GetGroupWhoButton(parent)
 	local value = GF_ResultsListOffset + string.gsub(parent:GetName(), "GF_NewItem(%d+)", "%1");
-	
-	local raid = GF_FilteredResultsList[value];
-	GameTooltip:SetOwner(this, "ANCHOR_BOTTOMRIGHT");
-	GameTooltip:ClearAllPoints();
-	GameTooltip:SetPoint("BOTTOMRIGHT", parent:GetName(), "TOPRIGHT", 0, 8);
-	
-	if raid == nil then return; end
+	local entry = GF_FilteredResultsList[value];
 
-	GameTooltip:AddLine(raid.op, 0.9, 0.9, 0.9, 1, 1)
-	GameTooltip:AddLine(raid.message, 0.3, 0.9, 0.3, 1, 1)
-	GameTooltip:Show();	
+	if not entry then return; end
+
+	GFAWM.addNameToWhoQueue(entry.op)
+	getglobal(parent:GetName().."GroupWhoButton"):Hide();
 end
 
 function GF_ResultItem_Hover_On(parent) -- Displays tooltip when hovering over a group in main list.
 	local value = GF_ResultsListOffset + string.gsub(parent:GetName(), "GF_NewItem(%d+)", "%1");
 	local entry = GF_FilteredResultsList[value];
-	if entry == nil then return; end
+
+	if not entry then return; end
 
 	parent:SetHeight(32);
 	getglobal(parent:GetName().."MoreLabel"):Show();
 	getglobal(parent:GetName().."MoreRightLabel"):Show();
 	getglobal(parent:GetName().."TextureBlue"):Show();
-	getglobal(parent:GetName().."TextureSelectedIcon"):SetTexture("Interface\\Icons\\Spell_Holy_SealOfFury");	
+	
 	getglobal(parent:GetName().."NameLabel"):SetPoint("TOPLEFT", parent:GetName(), "TOPLEFT", 37, 0);
 	getglobal(parent:GetName().."MoreLabel"):SetPoint("LEFT", parent:GetName(), "LEFT", 37, -6);
+	
 	getglobal(parent:GetName().."TextureSelectedBg"):Show();
 	getglobal(parent:GetName().."TextureSelectedIcon"):Show();
-
 end
 
 function GF_ResultItem_Hover_Off(parent) -- Displays tooltip when hovering over a group in main list.
@@ -905,7 +909,6 @@ function GF_ResultItem_Hover_Off(parent) -- Displays tooltip when hovering over 
 		
 	getglobal(parent:GetName().."TextureSelectedBg"):Hide();
 	getglobal(parent:GetName().."TextureSelectedIcon"):Hide();
-
 end
 
 function GF_GetNumGroupMembers()
@@ -1123,9 +1126,9 @@ function GF_LFGWhisperButton()
 	if string.len(whispermessage) > 5 then
 		GF_GetWhoLevel = GF_FindDungeonLevel()
 		for k,v in pairs(GF_ClassWhoTable) do
-			if GF_ClassWhoTable[k][1] < time()-GFAWM_GETWHO_RESET_TIMER then
+			if GF_ClassWhoTable[k][1] < GetTime()-GFAWM_GETWHO_RESET_TIMER then
 				if GF_ClassWhoTable[k][2] >= GF_GetWhoLevel-GFAWM_GETWHO_LEVEL_RANGE and GF_ClassWhoTable[k][2] <= GF_GetWhoLevel+GFAWM_GETWHO_LEVEL_RANGE and GF_ClassWhoTable[k][3] == GF_SavedVariables.lfgwhisperclass then
-					GF_ClassWhoTable[k][1] = time()
+					GF_ClassWhoTable[k][1] = GetTime()
 					GFAWM.ClassWhoMatchingResults = GFAWM.ClassWhoMatchingResults - 1;
 					GF_LFGGetWhoButton:SetText(GF_GET_WHO.." - "..GFAWM.ClassWhoMatchingResults);
 					GF_ClassWhoRequest = nil;
@@ -1376,8 +1379,9 @@ function GF_CheckForGroups(arg1, arg2, arg8, untranslated)
 	entry.message = arg1;
 	entry.untranslated = untranslated;
 	local timedifference = (tonumber(string.sub(GF_GetTime(),1,2))*60 + tonumber(string.sub(GF_GetTime(),3,4))) - (tonumber(string.sub(savedtime,1,2))*60 + tonumber(string.sub(savedtime,3,4)))
+	if timedifference < 0 then timedifference = 720 - (timedifference + 720) end
 	if savedmessage == arg1 then
-		if timedifference <= GF_SavedVariables.showgroupsnewonlytime or timedifference+720 <= GF_SavedVariables.showgroupsnewonlytime then
+		if timedifference <= GF_SavedVariables.showgroupsnewonlytime then
 			score = 1;
 			entry.time = savedtime;
 		else
