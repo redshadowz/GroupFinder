@@ -1,5 +1,0 @@
-<Bindings>
-	<Binding name="GF_SHOW_FRAME" header="GF_MAIN_HEADER">
-		GF_MainFrame:Show();
-	</Binding>
-</Bindings>
