@@ -12,6 +12,8 @@ GFAWM = {};
 whoQueue = {};
 GF_WhoTable = {}
 GF_WhoTable[GF_RealmName]		= {}
+GF_MessageList 					= {};
+GF_MessageList[GF_RealmName] 	= {};
 
 GF_ClassWhoTable = {}
 GF_ClassWhoRequest 				= nil;

@@ -46,8 +46,6 @@
 
 local GF_WorldFound				= nil;
 GF_BlackList 					= {};
-GF_MessageList 					= {};
-GF_MessageList[GF_RealmName] 	= {};
 GF_FilteredResultsList 			= {};
 GF_ResultsListOffset 			= 0;
 GF_BlackListOffset 			= 0;
