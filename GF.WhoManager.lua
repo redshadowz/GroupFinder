@@ -256,23 +256,25 @@ end
 
 GFAWM.pruneWhoTable = function()
 	local tempwhotable = {}
-	for i=1, getn(GF_MessageList[GF_RealmName]) do
-		if GF_MessageList[GF_RealmName][i].who then
-			tempwhotable[GF_MessageList[GF_RealmName][i].op] = { GF_MessageList[GF_RealmName][i].who.recordedTime,GF_MessageList[GF_RealmName][i].who.level,GF_MessageList[GF_RealmName][i].who.class,GF_MessageList[GF_RealmName][i].who.guild };
+	for realmname,_ in GF_WhoTable do
+		for i=1, getn(GF_MessageList[realmname]) do
+			if GF_MessageList[realmname][i].who then
+				tempwhotable[GF_MessageList[realmname][i].op] = { GF_MessageList[realmname][i].who.recordedTime,GF_MessageList[realmname][i].who.level,GF_MessageList[realmname][i].who.class,GF_MessageList[realmname][i].who.guild };
+			end
 		end
-	end
-	
-	local length = 0;
-	for name, whoData in GF_WhoTable[GF_RealmName] do
-		if whoData[1] + 604800 > time() then -- 60*60*24*7 = 7 days
-			tempwhotable[name] = whoData
+		
+		local length = 0;
+		for name, whoData in GF_WhoTable[realmname] do
+			if whoData[1] + 604800 > time() then -- 60*60*24*7 = 7 days
+				tempwhotable[name] = whoData
+			end
+			length = length + 1;
+			if length == MaxEntriesPerRealm then break end
 		end
-		length = length + 1;
-		if length == MaxEntriesPerRealm then break end
-	end
-	if length == MaxEntriesPerRealm then
-		GF_WhoTable[GF_RealmName] = {}
-		GF_WhoTable[GF_RealmName] = tempwhotable;
+		if length == MaxEntriesPerRealm then
+			GF_WhoTable[realmname] = {}
+			GF_WhoTable[realmname] = tempwhotable;
+		end
 	end
 
 	tempwhotable = {}
