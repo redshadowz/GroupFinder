@@ -501,6 +501,7 @@ function GF_OnEvent(event)
 	if event == "PLAYER_ENTERING_WORLD" and GF_OnStartupRunOnce then
 		GF_OnStartupRunOnce = nil;
 		if not GF_WhoTable[GF_RealmName] then GF_WhoTable[GF_RealmName] = {} end
+		if not GF_MessageList[GF_RealmName] then GF_MessageList[GF_RealmName] = {} end
 		GF_LoadSettings()
 		GFAWM.onEventVariablesLoaded(event);	
 		GF_UpdateBlackListItems(); 
