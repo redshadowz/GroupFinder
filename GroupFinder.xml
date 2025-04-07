@@ -1082,30 +1082,16 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							</Layer>
 						</Layers>	
 						<Frames>							
-							<Button name="GF_SearchButton" inherits="GF_AbstractButton" text="GF_UPDATE_LIST">
-								<Anchors>
-									<Anchor point="TOPRIGHT">
-										<Offset>
-											<AbsDimension x="5" y="-12"/>
-										</Offset>
-									</Anchor>
-								</Anchors>
-								<Scripts>
-									<OnClick>
-										GF_ApplyFiltersToGroupList();
-									</OnClick>
-								</Scripts>
-							</Button>
 							<EditBox name="GF_SearchFrameDescriptionEditBox" inherits="GF_AbstractEditBox">
 								<Anchors>
-									<Anchor point="RIGHT" relativeTo="GF_SearchDropdown">
+									<Anchor point="RIGHT">
 										<Offset>
 											<AbsDimension x="280" y="50"/>
 										</Offset>
 									</Anchor>
-									<Anchor point="RIGHT" relativeTo="GF_SearchButton" relativePoint="LEFT">
+									<Anchor point="TOPRIGHT">
 										<Offset>
-											<AbsDimension x="-20" y="0"/>
+											<AbsDimension x="-104" y="-14"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -1128,15 +1114,16 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnEnterPressed>
 									<OnEscapePressed>
 										this:ClearFocus();
+										GF_ApplyFiltersToGroupList();
 									</OnEscapePressed>
 								</Scripts>				
 							</EditBox>
 							<Button name="GF_SearchListDropdown" topLevel="true" virtual="true">
 								<Size x="24" y="24"/>
 								<Anchors>
-									<Anchor point="LEFT" relativeTo="GF_SearchButton" relativePoint="LEFT">
+									<Anchor point="LEFT" relativeTo="GF_SearchFrameDescriptionEditBox" relativePoint="RIGHT">
 										<Offset>
-											<AbsDimension x="-20" y="0"/>
+											<AbsDimension x="0" y="0"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -1158,6 +1145,56 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Down" setAllPoints="true"/>
 								<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD" setAllPoints="true"/>
 							</Button>
+							<CheckButton name="GF_FrameShowPoliticsCheckButton" inherits="GF_AbstractLabelCheckButton">
+								<Anchors>
+									<Anchor point="RIGHT" relativeTo="GF_SearchListDropdown">
+										<Offset>
+											<AbsDimension x="22" y="8"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnEnter>
+										GF_ShowTooltip(this);
+									</OnEnter>
+									<OnLeave>
+										GameTooltip:Hide();
+									</OnLeave>			
+									<OnClick>								
+										GF_SavedVariables.showpolitics = this:GetChecked();
+									</OnClick>
+									<OnLoad>
+										getglobal(this:GetName().."TextLabel"):SetWidth(300);
+										getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_POLITICS);
+										getglobal(this:GetName().."TextLabel"):SetPoint("TOPLEFT", "GF_FrameShowPoliticsCheckButton", "TOPLEFT", 24, 2);
+									</OnLoad>
+								</Scripts>							
+							</CheckButton>
+							<CheckButton name="GF_FrameUseWhoOnGroupsCheckButton" inherits="GF_AbstractLabelCheckButton">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GF_FrameShowPoliticsCheckButton">
+										<Offset>
+											<AbsDimension x="0" y="-16"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnEnter>
+										GF_ShowTooltip(this);
+									</OnEnter>
+									<OnLeave>
+										GameTooltip:Hide();
+									</OnLeave>			
+									<OnClick>								
+										GF_SavedVariables.usewhoongroups = this:GetChecked();
+									</OnClick>
+									<OnLoad>
+										getglobal(this:GetName().."TextLabel"):SetWidth(300);
+										getglobal(this:GetName().."TextLabel"):SetText(GF_USE_WHO_ON_GROUPS);
+										getglobal(this:GetName().."TextLabel"):SetPoint("TOPLEFT", "GF_FrameUseWhoOnGroupsCheckButton", "TOPLEFT", 24, 2);
+									</OnLoad>
+								</Scripts>							
+							</CheckButton>
 							<Frame name="GF_SearchList" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true" virtual="true">
 								<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border">
 									<BackgroundInsets>
@@ -1198,7 +1235,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Anchors>
 									<Anchor point="TOPLEFT">
 										<Offset>
-											<AbsDimension x="-10" y="-4"/>
+											<AbsDimension x="-14" y="-4"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -1220,33 +1257,28 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>							
 							</CheckButton>
-							<CheckButton name="GF_SearchFrameShowTranslateCheckButton" inherits="GF_AbstractLabelCheckButton">
+							<CheckButton name="GF_PlaySoundOnResultsCheckButton" inherits="GF_AbstractLabelCheckButton">
 								<Anchors>
-									<Anchor point="LEFT" relativeTo="GF_AutoFilterCheckButton">
+									<Anchor point="TOPLEFT" relativeTo="GF_AutoFilterCheckButton">
 										<Offset>
 											<AbsDimension x="0" y="-16"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
 								<Scripts>
-									<OnClick>								
-										GF_SavedVariables.showtranslate = this:GetChecked();
-										GF_ApplyFiltersToGroupList();
-									</OnClick>
 									<OnEnter>
 										GF_ShowTooltip(this);
 									</OnEnter>
 									<OnLeave>
 										GameTooltip:Hide();
-									</OnLeave>
+									</OnLeave>			
+									<OnClick>								
+										GF_SavedVariables.playsounds = this:GetChecked();
+									</OnClick>
 									<OnLoad>
-										if GF_TranslateMessage then
-											getglobal(this:GetName().."TextLabel"):SetWidth(100);
-											getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_TRANSLATE);
-											getglobal(this:GetName().."TextLabel"):SetPoint("TOPLEFT", "GF_SearchFrameShowTranslateCheckButton", "TOPLEFT", 24, 2);
-										else
-											GF_SearchFrameShowTranslateCheckButton:Hide()
-										end
+										getglobal(this:GetName().."TextLabel"):SetWidth(300);
+										getglobal(this:GetName().."TextLabel"):SetText(GF_PLAY_SOUND);
+										getglobal(this:GetName().."TextLabel"):SetPoint("TOPLEFT", "GF_PlaySoundOnResultsCheckButton", "TOPLEFT", 24, 2);
 									</OnLoad>
 								</Scripts>							
 							</CheckButton>
@@ -1254,7 +1286,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeTo="GF_AutoFilterCheckButton" >
 										<Offset>
-											<AbsDimension x="85" y="0"/>
+											<AbsDimension x="82" y="0"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -1278,9 +1310,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							</CheckButton>
 							<CheckButton name="GF_SearchFrameShowRaidCheckButton" inherits="GF_AbstractLabelCheckButton">
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="GF_SearchFrameShowTranslateCheckButton" >
+									<Anchor point="TOPLEFT" relativeTo="GF_PlaySoundOnResultsCheckButton" >
 										<Offset>
-											<AbsDimension x="85" y="0"/>
+											<AbsDimension x="82" y="0"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -1306,7 +1338,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeTo="GF_SearchFrameShowDungeonCheckButton" >
 										<Offset>
-											<AbsDimension x="109" y="0"/>
+											<AbsDimension x="107" y="0"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -1332,7 +1364,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeTo="GF_SearchFrameShowRaidCheckButton" >
 										<Offset>
-											<AbsDimension x="109" y="0"/>
+											<AbsDimension x="107" y="0"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -1358,7 +1390,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeTo="GF_SearchFrameShowQuestCheckButton" >
 										<Offset>
-											<AbsDimension x="95" y="0"/>
+											<AbsDimension x="93" y="0"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -1384,7 +1416,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeTo="GF_SearchFrameShowOtherCheckButton" >
 										<Offset>
-											<AbsDimension x="95" y="0"/>
+											<AbsDimension x="93" y="0"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -2575,7 +2607,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 
 							<Frame name="GF_SettingsFrameChatSettings" inherits="GF_OptionFrameBoxTemplate">
 								<Size>
-									<AbsDimension x="600" y="150"/>
+									<AbsDimension x="600" y="125"/>
 								</Size>
 								<Anchors>
 									<Anchor point="TOP">
@@ -2611,7 +2643,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											</OnLoad>
 										</Scripts>							
 									</CheckButton>
-									<CheckButton name="GF_FrameDisableChatFilteringCheckButton" inherits="GF_AbstractLabelCheckButton">
+									<CheckButton name="GF_FrameSpamFilterCheckButton" inherits="GF_AbstractLabelCheckButton">
 										<Anchors>
 											<Anchor point="TOPLEFT" relativeTo="GF_FrameJoinWorldCheckButton">
 												<Offset>
@@ -2627,37 +2659,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												GameTooltip:Hide();
 											</OnLeave>			
 											<OnClick>								
-												GF_SavedVariables.disablechatfiltering = this:GetChecked();
+												GF_SavedVariables.spamfilter = this:GetChecked();
 											</OnClick>
 											<OnLoad>
 												getglobal(this:GetName().."TextLabel"):SetWidth(300);
-												getglobal(this:GetName().."TextLabel"):SetText(GF_DISABLE_CHAT_FILTER);
-												getglobal(this:GetName().."TextLabel"):SetPoint("TOPLEFT", "GF_FrameDisableChatFilteringCheckButton", "TOPLEFT", 24, 2);
-											</OnLoad>
-										</Scripts>							
-									</CheckButton>
-									<CheckButton name="GF_PlaySoundOnResultsCheckButton" inherits="GF_AbstractLabelCheckButton">
-										<Anchors>
-											<Anchor point="TOPLEFT" relativeTo="GF_FrameDisableChatFilteringCheckButton">
-												<Offset>
-													<AbsDimension x="0" y="-30"/>
-												</Offset>
-											</Anchor>
-										</Anchors>
-										<Scripts>
-											<OnEnter>
-												GF_ShowTooltip(this);
-											</OnEnter>
-											<OnLeave>
-												GameTooltip:Hide();
-											</OnLeave>			
-											<OnClick>								
-												GF_SavedVariables.playsounds = this:GetChecked();
-											</OnClick>
-											<OnLoad>
-												getglobal(this:GetName().."TextLabel"):SetWidth(300);
-												getglobal(this:GetName().."TextLabel"):SetText(GF_PLAY_SOUND);
-												getglobal(this:GetName().."TextLabel"):SetPoint("TOPLEFT", "GF_PlaySoundOnResultsCheckButton", "TOPLEFT", 24, 2);
+												getglobal(this:GetName().."TextLabel"):SetText(GF_SPAM_FILTER);
+												getglobal(this:GetName().."TextLabel"):SetPoint("TOPLEFT", "GF_FrameSpamFilterCheckButton", "TOPLEFT", 24, 2);
 											</OnLoad>
 										</Scripts>							
 									</CheckButton>
@@ -2665,7 +2672,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										<Anchors>
 											<Anchor point="TOP">
 												<Offset>
-													<AbsDimension x="-68" y="-10"/>
+													<AbsDimension x="-60" y="-10"/>
 												</Offset>
 											</Anchor>
 										</Anchors>
@@ -2686,7 +2693,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											</OnLoad>
 										</Scripts>							
 									</CheckButton>
-									<CheckButton name="GF_FrameUseWhoOnGroupsCheckButton" inherits="GF_AbstractLabelCheckButton">
+									<CheckButton name="GF_FrameAutoBlacklistCheckButton" inherits="GF_AbstractLabelCheckButton">
 										<Anchors>
 											<Anchor point="TOPLEFT" relativeTo="GF_FrameErrorFilterCheckButton">
 												<Offset>
@@ -2702,18 +2709,48 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												GameTooltip:Hide();
 											</OnLeave>			
 											<OnClick>								
-												GF_SavedVariables.usewhoongroups = this:GetChecked();
+												GF_SavedVariables.autoblacklist = this:GetChecked();
 											</OnClick>
 											<OnLoad>
 												getglobal(this:GetName().."TextLabel"):SetWidth(300);
-												getglobal(this:GetName().."TextLabel"):SetText(GF_USE_WHO_ON_GROUPS);
-												getglobal(this:GetName().."TextLabel"):SetPoint("TOPLEFT", "GF_FrameUseWhoOnGroupsCheckButton", "TOPLEFT", 24, 2);
+												getglobal(this:GetName().."TextLabel"):SetText(GF_AUTO_BLACKLIST);
+												getglobal(this:GetName().."TextLabel"):SetPoint("TOPLEFT", "GF_FrameAutoBlacklistCheckButton", "TOPLEFT", 24, 2);
+											</OnLoad>
+										</Scripts>							
+									</CheckButton>
+									<CheckButton name="GF_SearchFrameShowTranslateCheckButton" inherits="GF_AbstractLabelCheckButton">
+										<Anchors>
+											<Anchor point="TOPRIGHT">
+												<Offset>
+													<AbsDimension x="-158" y="-10"/>
+												</Offset>
+											</Anchor>
+										</Anchors>
+										<Scripts>
+											<OnClick>								
+												GF_SavedVariables.showtranslate = this:GetChecked();
+												GF_ApplyFiltersToGroupList();
+											</OnClick>
+											<OnEnter>
+												GF_ShowTooltip(this);
+											</OnEnter>
+											<OnLeave>
+												GameTooltip:Hide();
+											</OnLeave>
+											<OnLoad>
+												if GF_TranslateMessage then
+													getglobal(this:GetName().."TextLabel"):SetWidth(100);
+													getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_TRANSLATE);
+													getglobal(this:GetName().."TextLabel"):SetPoint("TOPLEFT", "GF_SearchFrameShowTranslateCheckButton", "TOPLEFT", 24, 2);
+												else
+													GF_SearchFrameShowTranslateCheckButton:Hide()
+												end
 											</OnLoad>
 										</Scripts>							
 									</CheckButton>
 									<CheckButton name="GF_FrameShowOriginalTextCheckButton" inherits="GF_AbstractLabelCheckButton">
 										<Anchors>
-											<Anchor point="TOPLEFT" relativeTo="GF_FrameUseWhoOnGroupsCheckButton">
+											<Anchor point="TOPLEFT" relativeTo="GF_SearchFrameShowTranslateCheckButton">
 												<Offset>
 													<AbsDimension x="0" y="-30"/>
 												</Offset>
@@ -2737,81 +2774,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												else
 													GF_FrameShowOriginalTextCheckButton:Hide()
 												end
-											</OnLoad>
-										</Scripts>							
-									</CheckButton>
-									<CheckButton name="GF_FrameSpamFilterCheckButton" inherits="GF_AbstractLabelCheckButton">
-										<Anchors>
-											<Anchor point="TOPRIGHT">
-												<Offset>
-													<AbsDimension x="-158" y="-10"/>
-												</Offset>
-											</Anchor>
-										</Anchors>
-										<Scripts>
-											<OnEnter>
-												GF_ShowTooltip(this);
-											</OnEnter>
-											<OnLeave>
-												GameTooltip:Hide();
-											</OnLeave>			
-											<OnClick>								
-												GF_SavedVariables.spamfilter = this:GetChecked();
-											</OnClick>
-											<OnLoad>
-												getglobal(this:GetName().."TextLabel"):SetWidth(300);
-												getglobal(this:GetName().."TextLabel"):SetText(GF_SPAM_FILTER);
-												getglobal(this:GetName().."TextLabel"):SetPoint("TOPLEFT", "GF_FrameSpamFilterCheckButton", "TOPLEFT", 24, 2);
-											</OnLoad>
-										</Scripts>							
-									</CheckButton>
-									<CheckButton name="GF_FrameAutoBlacklistCheckButton" inherits="GF_AbstractLabelCheckButton">
-										<Anchors>
-											<Anchor point="TOPLEFT" relativeTo="GF_FrameSpamFilterCheckButton">
-												<Offset>
-													<AbsDimension x="0" y="-30"/>
-												</Offset>
-											</Anchor>
-										</Anchors>
-										<Scripts>
-											<OnEnter>
-												GF_ShowTooltip(this);
-											</OnEnter>
-											<OnLeave>
-												GameTooltip:Hide();
-											</OnLeave>			
-											<OnClick>								
-												GF_SavedVariables.autoblacklist = this:GetChecked();
-											</OnClick>
-											<OnLoad>
-												getglobal(this:GetName().."TextLabel"):SetWidth(300);
-												getglobal(this:GetName().."TextLabel"):SetText(GF_AUTO_BLACKLIST);
-												getglobal(this:GetName().."TextLabel"):SetPoint("TOPLEFT", "GF_FrameAutoBlacklistCheckButton", "TOPLEFT", 24, 2);
-											</OnLoad>
-										</Scripts>							
-									</CheckButton>
-									<CheckButton name="GF_FrameBlockPoliticsCheckButton" inherits="GF_AbstractLabelCheckButton">
-										<Anchors>
-											<Anchor point="TOPLEFT" relativeTo="GF_FrameAutoBlacklistCheckButton">
-												<Offset>
-													<AbsDimension x="0" y="-30"/>
-												</Offset>
-											</Anchor>
-										</Anchors>
-										<Scripts>
-											<OnEnter>
-												GF_ShowTooltip(this);
-											</OnEnter>
-											<OnLeave>
-												GameTooltip:Hide();
-											</OnLeave>			
-											<OnClick>								
-												GF_SavedVariables.blockpolitics = this:GetChecked();
-											</OnClick>
-											<OnLoad>
-												getglobal(this:GetName().."TextLabel"):SetWidth(300);
-												getglobal(this:GetName().."TextLabel"):SetText(GF_BLOCK_POLITICS);
-												getglobal(this:GetName().."TextLabel"):SetPoint("TOPLEFT", "GF_FrameBlockPoliticsCheckButton", "TOPLEFT", 24, 2);
 											</OnLoad>
 										</Scripts>							
 									</CheckButton>

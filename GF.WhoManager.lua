@@ -1,18 +1,21 @@
-local MaxEntriesPerRealm = 1000
-local GFAWM_WHO_COOL_DOWN_TIME = 10;
-local NextAvailableWhoTime = 0;
-local ClassWhoQueue = {};
-local urgentWhoRequest = nil;
-local urgentWhoSent = nil;
-local getwhoparams = {};
-local getclasswhostate = 1;
+local MaxEntriesPerRealm		= 1000
+local GFAWM_WHO_COOL_DOWN_TIME	= 10;
+local NextAvailableWhoTime 		= 0;
+local ClassWhoQueue 			= {};
+local urgentWhoRequest 			= nil;
+local urgentWhoSent 			= nil;
+local getwhoparams 				= {};
+local getclasswhostate 			= 1;
+GF_RealmName 					= GetRealmName()
 
 GFAWM = {};
 whoQueue = {};
 GF_WhoTable = {}
+GF_WhoTable[GF_RealmName]		= {}
+
 GF_ClassWhoTable = {}
-GF_ClassWhoRequest = nil;
-GFAWM.ClassWhoMatchingResults = 0;
+GF_ClassWhoRequest 				= nil;
+GFAWM.ClassWhoMatchingResults 	= 0;
 GFAWM_GETWHO_LEVEL_RANGE 		= 3;
 GFAWM_GETWHO_RESET_TIMER		= 900;
 
@@ -26,7 +29,7 @@ GFAWM.onEventVariablesLoaded = function(event)
 	GFAWM.preHookSetItemRef = SetItemRef;
 	SetItemRef = GFAWM.hookedSetItemRef;
 	
-	if not GF_WhoTable[UnitName("player")] or GF_WhoTable[UnitName("player")][1] < time() then GFAWM.pruneWhoTable(); GF_WhoTable[UnitName("player")] = { time() + 60*60*24*14, UnitLevel("player"), UnitClass("player"), "<>" }; end
+	if not GF_WhoTable[GF_RealmName][UnitName("player")] or GF_WhoTable[GF_RealmName][UnitName("player")][1] < time() then GFAWM.pruneWhoTable(); GF_WhoTable[GF_RealmName][UnitName("player")] = { time() + 60*60*24*14, UnitLevel("player"), UnitClass("player"), "<>" }; end
 
 	if string.sub(GetRealmName(), 1, 9) == "Nordanaar" or string.sub(GetRealmName(), 1, 8) == "Tel'Abim" then GFAWM_WHO_COOL_DOWN_TIME = 30; end
 end
@@ -34,7 +37,7 @@ end
 GFAWM.onEventWhoListUpdated = function()
 	for i=1, GetNumWhoResults() do
 		local name, guild, level, race, class, zone = GetWhoInfo(i);
-		GF_WhoTable[name] = { time(), level, class, guild };
+		GF_WhoTable[GF_RealmName][name] = { time(), level, class, guild };
 		if GF_ClassWhoRequest and not GF_ClassWhoTable[name] and not GF_PlayersCurrentlyInGroup[name] and class == getwhoparams[1] and level >= getwhoparams[2]-GFAWM_GETWHO_LEVEL_RANGE and level <= getwhoparams[2]+GFAWM_GETWHO_LEVEL_RANGE and (not getwhoparams[3] or (getwhoparams[3] and not GFAWM.isClassWhoInGroup(zone))) then
 			GF_ClassWhoTable[name] = { time()-GFAWM_GETWHO_RESET_TIMER, level, class, zone }
 			GFAWM.ClassWhoMatchingResults = GFAWM.ClassWhoMatchingResults + 1
@@ -91,7 +94,7 @@ GFAWM.onUpdate = function()
 				GF_LFGGetWhoButton:SetText(GF_GET_WHO.." - "..GFAWM.ClassWhoMatchingResults);
 			end
 		elseif whoQueue[1] and not WhoFrame:IsVisible() then
-			if GF_WhoTable[whoQueue[1]] and GF_WhoTable[whoQueue[1]][1] + 259200 > time() then
+			if GF_WhoTable[GF_RealmName][whoQueue[1]] and GF_WhoTable[GF_RealmName][whoQueue[1]][1] + 259200 > time() then
 				table.remove(whoQueue, 1);
 				return;
 			end
@@ -193,7 +196,7 @@ GFAWM.addNameToWhoQueue = function(name)
 end
 
 GFAWM.toOldFormat = function(name)
-	local data = GF_WhoTable[name];
+	local data = GF_WhoTable[GF_RealmName][name];
 	if data then
 		return {
 			recordedTime = data[1];
@@ -215,7 +218,7 @@ GFAWM.hookedFriendsFrame_OnEvent = function(event)
 	local tempwhodata = {}
 	for i=1, GetNumWhoResults() do
 		local name,guild,level,_,class = GetWhoInfo(i);
-		GF_WhoTable[name] = { time(), level, class, guild };
+		GF_WhoTable[GF_RealmName][name] = { time(), level, class, guild };
 		tempwhodata[name] = true;
 	end
 	if tempwhodata[urgentWhoSent] or FriendsFrame:IsVisible() or (event and event ~= "WHO_LIST_UPDATE") then
@@ -253,28 +256,29 @@ end
 
 GFAWM.pruneWhoTable = function()
 	local tempwhotable = {}
-	for i=1, getn(GF_MessageList) do
-		if GF_MessageList[i].op and GF_WhoTable[GF_MessageList[i].op] then
-			tempwhotable[GF_MessageList[i].op] = { time(),GF_MessageList[i].who.level,GF_MessageList[i].who.class,GF_MessageList[i].who.guild };
+	for i=1, getn(GF_MessageList[GF_RealmName]) do
+		if GF_MessageList[GF_RealmName][i].who then
+			tempwhotable[GF_MessageList[GF_RealmName][i].op] = { GF_MessageList[GF_RealmName][i].who.recordedTime,GF_MessageList[GF_RealmName][i].who.level,GF_MessageList[GF_RealmName][i].who.class,GF_MessageList[GF_RealmName][i].who.guild };
 		end
 	end
 	
 	local length = 0;
-	for name, whoData in GF_WhoTable do
-		if whoData[1] + 60*60*24*7 > time() then
-			tempwhotable[name] = { time(),whoData[2],whoData[3],whoData[4] };
+	for name, whoData in GF_WhoTable[GF_RealmName] do
+		if whoData[1] + 604800 > time() then -- 60*60*24*7 = 7 days
+			tempwhotable[name] = whoData
 		end
 		length = length + 1;
+		if length == MaxEntriesPerRealm then break end
 	end
-	if length > MaxEntriesPerRealm then
-		GF_WhoTable = {}
-		GF_WhoTable = tempwhotable;
+	if length == MaxEntriesPerRealm then
+		GF_WhoTable[GF_RealmName] = {}
+		GF_WhoTable[GF_RealmName] = tempwhotable;
 	end
 
 	tempwhotable = {}
 	for name, whoData in GF_ClassWhoTable do
-		if whoData[1] + 60*60 > time() then
-			tempwhotable[name] = { time()-GFAWM_GETWHO_RESET_TIMER,whoData[2],whoData[3],whoData[4] };
+		if whoData[1] + 3600 > time() then -- 60*60 - 1 hour
+			tempwhotable[name] = whoData
 		end
 	end
 	GF_ClassWhoTable = {}
