@@ -53,8 +53,8 @@ GF_ResultsListOffset 			= 0;
 GF_BlackListOffset 			= 0;
 local GF_SelectedResultListItem = 0;
 
-local GF_OnStartupRunOnce 		= true;
-local GF_OnStartupQueueURequest = true;
+local GF_OnStartupRunOnce 					= true;
+local GF_OnStartupQueueURequest 			= true;
 local GF_AddonWhoDataToBeSentBuffer			= {};
 local GF_AddonAllNamesForResponseToLogin	= {};
 local GF_AddonNamesToBeSentAsARequest		= {};
@@ -391,12 +391,12 @@ function GF_OnUpdate()
 			GF_RequestTimer = 30;
 			GF_ApplyFiltersToGroupList()
 			for i=1, getn(GF_MessageList[GF_RealmName]) do
-				if GF_MessageList[GF_RealmName][i] and not GF_MessageList[GF_RealmName][i].who then
+				if not GF_MessageList[GF_RealmName][i].who and GFAWM.getPositionInQueue(GF_MessageList[GF_RealmName][i].op, whoQueue) == 0 then
 					GF_MessageList[GF_RealmName][i].whoAttempts = GF_MessageList[GF_RealmName][i].whoAttempts or 0;
 					GF_MessageList[GF_RealmName][i].who = GFAWM.toOldFormat(GF_MessageList[GF_RealmName][i].op);
 					if GF_SavedVariables.usewhoongroups and not GF_MessageList[GF_RealmName][i].who and GF_MessageList[GF_RealmName][i].whoAttempts < 3 then
 						GF_MessageList[GF_RealmName][i].whoAttempts = GF_MessageList[GF_RealmName][i].whoAttempts + 1;
-						GFAWM.addNameToWhoQueue(GF_MessageList[GF_RealmName][i].op);
+						GFAWM.addNameToWhoQueue(GF_MessageList[GF_RealmName][i].op)
 					end
 				end
 				if GF_AddonMakeAListOfGroupsForSending and not GF_AddonOPSentNamesOnLogin[GF_MessageList[GF_RealmName][i].op] then GF_AddonGroupDataToBeSentBuffer[GF_MessageList[GF_RealmName][i].op] = GF_MessageList[GF_RealmName][i] end
