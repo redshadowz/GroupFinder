@@ -299,14 +299,14 @@ end
 
 function GF_OnUpdate()
 	GFAWM.onUpdate();
-	if GF_UpdateTicker < time() then -- Triggers everything below every second.
-		GF_UpdateTicker = time() + 1
+	if GF_UpdateTicker < GetTime() then -- Triggers everything below every second.
+		GF_UpdateTicker = GetTime() + 1
 
 		if GF_AutoAnnounceTimer then -- Auto Announce routine
 			GF_AutoAnnounceTimer = GF_AutoAnnounceTimer + 1;
 			if GF_AutoAnnounceTimer > GF_SavedVariables.announcetimer then
 				GF_AutoAnnounceTimer = 0;
-				if GF_LFGDescriptionEditBox:GetText() ~= "" and string.len(GF_LFGDescriptionEditBox:GetText()) >= 6 then
+				if string.len(GF_LFGDescriptionEditBox:GetText()) >= 6 then
 					if GF_SavedVariables.lfgauto and string.sub(GF_LFGDescriptionEditBox:GetText(), 1, 2) == "lf" and string.sub(GF_LFGDescriptionEditBox:GetText(), 1, 3) ~= "lfg" then 
 						local lfgmessage = string.gsub(GF_LFGDescriptionEditBox:GetText(), "%w+%s(.+)", "%1") or ""
 						GF_SendChatMessage("LF"..GF_SavedVariables.lfgsize-GF_GetNumGroupMembers().."M "..lfgmessage, "CHANNEL", GF_CHANNEL_NAME);
@@ -495,13 +495,13 @@ local function GF_LoadSettings()
 	getglobal(GF_LFGWhoClassDropdown:GetName().."TextLabel"):SetPoint("LEFT", "GF_LFGWhoClassDropdown", "LEFT", 22, 3);
 	
 	if string.sub(GetRealmName(), 1, 9) == "Nordanaar" or string.sub(GetRealmName(), 1, 8) == "Tel'Abim" then GF_AddTurtleWoWDungeonsRaids() end
+	if not GF_WhoTable[GF_RealmName] then GF_WhoTable[GF_RealmName] = {} end
+	if not GF_MessageList[GF_RealmName] then GF_MessageList[GF_RealmName] = {} end
 end
 
 function GF_OnEvent(event)
 	if event == "PLAYER_ENTERING_WORLD" and GF_OnStartupRunOnce then
 		GF_OnStartupRunOnce = nil;
-		if not GF_WhoTable[GF_RealmName] then GF_WhoTable[GF_RealmName] = {} end
-		if not GF_MessageList[GF_RealmName] then GF_MessageList[GF_RealmName] = {} end
 		GF_LoadSettings()
 		GFAWM.onEventVariablesLoaded(event);	
 		GF_UpdateBlackListItems(); 

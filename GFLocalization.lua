@@ -245,7 +245,7 @@ GF_FrameShowPoliticsCheckButton = {
 
 GF_TRIGGER_LIST = {
 	["LFM"] = { "lf%s", "lf%d", "lfm", "flm", "lf.m", "lf..m", "looking for more", "need more", "looking for .* more", "need %d* dps","need %d* heal", "need %d* tank", "need heal", "need tank", "need dps",
-	"need range", "need caster", "need melee", "need one", "need two", "need three", "anyone for", "come tank", "come healer", "come dps", },
+	"need range", "need caster", "need melee", "need one", "need two", "need three", "anyone for", "come tank", "come healer", "come dps", "hosting", },
 	
 	["LFG"] = {	"lfg", "looking for group",  },
 	
@@ -273,7 +273,7 @@ GF_TRIGGER_LIST = {
 						"6 million", "gorillion", "republican", "democrat", "politic", "bankers", "apartheid", "holocaust", "holohoax", "bigot", "schizo", "jewish", "transgender", "abortion",
 						"sexist", "feminism", "globalist", "racist", "racism", "immigrants", "refugees", "nigger", "chink", "misogyn", "faggot", "negro", "muslim", },
 
-	["TRADE"] = { "wtb", "wts", "buying", "selling", "wtt", "trading", "lfw", "for sale", "on ah", "cod", },
+	["TRADE"] = { "wtb", "wts", "buying", "selling", "wtt", "trading", "lfw", "for sale", "on ah", "cod", "summons service", "summon service", },
 	
 	["RAID"] = { "molten core", " mc", "ragnaros", " rag", "blackwing", "bwl", "zulg", "zg", "gurub", "hakkar", "aq20", " ahn", " aq ", "ossir", "aq40", "quiraj",
 				"naxxramas", "naxx", "onyxia", " ony", "azuregos", "kazzak", "world boss", "lethon", "ysondre", "taerar", "emeris", },
@@ -489,6 +489,39 @@ local GF_TurtleTriggerListDungeons = {
 		["COTBLACKMORASS"] 	= { 60, "morass", " bm ", },
 		["KARACRYPT"] 		= { 60, " crypt", },
 }
+local GF_TurtleTriggerListQuests = {
+		["TURTLE"]			= { 60, "binding of xanthar", "head of solnius", "scythe of the goddess", },
+		["TDESOLACE"]		= { 35, "almaudrak", "fear incarnate", "palkeote", "the lingering mother", "raging oceans blue", "unforgotten and unforgiven", },
+		["TAZSHARA"]		= { 54, "azure scale", "killing the tide lord", "mystery of lake mennar", "tinkerspark transponder", "stop the dragonflight", "the big energy project", "dampening must end", },
+		["TDUSTWALLOW"]		= { 37, "and justice for all", "draconic presence", "justice for dustwallow", },
+		["THINTERLANDS"]	= { 47, "bring down the priestess", "decimate their ranks", "read it in a book once", },
+		["TARATHIHIGHLANDS"]= { 37, "cleaning job", "securing the keep", "securing the roads", },
+		["TWINTERSPRING"]	= { 60, "darkwhisper culling", "saving the shadowtooth", "terrible krampus", },
+		["TDUROTAR"]		= { 10, "deep blue sea", },
+		["TBLACKSTONE"]		= { 13, "destroying venture Co. leadership", "alverold", },
+		["TTIRISFAL"]		= { 15, "fall of the usurper", "magical interference", },
+		["TTANARIS"]		= { 47, "favor for gelweg", "plight of the sandfury", },
+		["TBLASTEDLANDS"]	= { 50, "fel energy irregularities", },
+		["HYJAL"]			= { 60, "hostile envoys", "xanvarak", "corruption of the barkskin tribe", },
+		["TUNGORO"]			= { 58, "in a rush", "the race", },
+		["TELABIM"]			= { 60, "morogo", },
+		["ALAHTHALAS"]		= { 60, "kingsbane", "leaders of the reefscale", },
+		["TFERALAS"]		= { 47, "janira", },
+		["GILLIJIM"]		= { 50, "lykourgos", "hazzuri dark vessels", "tanglemoss", "the aqua stone", "Hermit['s]+ Wrath", "tower of lapidis", },
+		["GILNEAS"]			= { 44, "ravenwood keep", "revenge after death", "snarlclaw", "ravenwood scepter", },
+		["THILLSBRAD"]		= { 34, "returning property", },
+		["TWETLANDS"]		= { 30, "strange bedfellows", "hawk['s]+ vigil", },
+		["KARAZHAN"]		= { 60, "depths of karazhan", "mystery of karazhan", },
+		["TASHENVALE"]		= { 30, "the final strike", "the mortal strike", },
+		["TBADLANDS"]		= { 40, "head of the hunters", "undoing the curse", },
+		["TSWAMPSORROWS"]	= { 40, "hunt for sorrowclaw", "magic of dragons", "tablet of zef['e]+k", },
+		["WHISPERINGFOREST"]= { 30, "the lost tablets", "shadow well", },
+		["TWESTFALL"]		= { 19, "church of westfall", },
+		["TDUNMOROGH"]		= { 10, "terror of chill breeze", },
+		["TEASTPLAGUE"]		= { 58, "wrath of the light fall upon thee", },
+		["TFELWOOD"]		= { 56, "hunt the hunter", },
+		["TBURNINGSTEPPES"]	= { 55, "vilegrip", "miners union mutiny", },
+}
 local GF_TurtleTriggerListRaids = { "kara", "k10", "k40", "concavius", "ostarius", "nerub", "reaver", "aq15", }
 local GF_TurtleSearchList = {
 		[1] = { "Crescent Grove", 32, 38, "crescent", "grove", "cg-", },
@@ -519,6 +552,9 @@ local GF_TurtleSearchListNew20RaidString = { "20-man Raids", 58, 60, "zg-", "zul
 function GF_AddTurtleWoWDungeonsRaids()
 	for instance,_ in GF_TurtleTriggerListDungeons do
 		GF_TRIGGER_LIST.DUNGEON[instance] = GF_TurtleTriggerListDungeons[instance]
+	end
+	for instance,_ in GF_TurtleTriggerListQuests do
+		GF_TRIGGER_LIST.QUEST[instance] = GF_TurtleTriggerListQuests[instance]
 	end
 	for i=1, getn(GF_TurtleTriggerListRaids) do
 		table.insert(GF_TRIGGER_LIST.RAID, 1, GF_TurtleTriggerListRaids[i]);
