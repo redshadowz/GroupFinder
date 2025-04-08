@@ -18,6 +18,7 @@ Show loots - This will show/hide chat messages from item rolls, looting of money
 Note: All blocked chat is recorded in the 'Log'.  
 
 >Auto Filter - Whether to only show groups near your level(default: 6 level difference).  
+Play Sound - Plays a sound when a group is found.
 Show Dungeons/Raids/Quests/Other/LFM/LFG - To show/hide groups matching your criteria.  
 "Keywords" editbox - Filters your group list using this text. Use "/" for more than one search. The dropdown box will auto-populate a list of groups based on your level.  
 Auto /Who - Whether to automatically '/who' groups/players from chat for their class/level information.  
@@ -46,3 +47,5 @@ PS: I made the 'Group Maker' for my niece. She hated finding groups for low-leve
 PS: I made the Chat Filtering because Everlook was absolutely filled to the brim with gold-sellers and other spammers.  
 
 PS: With the Chat Filters, you can make 'World' channel into groups-only, or chat-only. So if you don't like what people are talking about in World Chat, you can still see the groups(or vice-versa).  
+
+Update: 4/8/2025... I changed a lot in the last few days. I have only one thing left to do. Which isn't important. It's a data sharing routine. So you don't have potentially thousands of people /who'ing the server at the same time. I was also interested in some kind of text compression algorithm for sharing data more efficiently.
