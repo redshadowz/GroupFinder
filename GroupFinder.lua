@@ -550,7 +550,7 @@ function GF_OnEvent(event)
 			end
 			local counter = 0;
 			for n,w in pairs(GF_WhoTable[GF_RealmName]) do
-				counter=counter+1;
+				if n and w then counter=counter+1; break end
 			end
 --for randomization, make a database for every 50 entries, create all the tables, then randomly table.insert them back, put new names in their own database and put them in first.. if all database are empty, table.remove
 			if counter == 0 then
