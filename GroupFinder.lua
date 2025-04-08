@@ -201,7 +201,7 @@ function GF_OnLoad()
 								if GF_SavedVariables.autoblacklist and not GF_BlackList[GF_RealmName][arg2] and tempwhodata and tonumber(tempwhodata.level) <= GF_SavedVariables.autoblacklistminlevel and string.len(arg1) > 120 then
 									if tempwhodata.recordedTime + 21600 < time() then -- 6 hours
 										GF_WhoTable[GF_RealmName][arg2] = nil;
-										if GF_SavedVariables.usewhoongroups then GFAWM.addNameToWhoQueue(arg2) end
+										if GF_SavedVariables.usewhoongroups and (not GF_SavedVariables.showoriginalchat or foundInGroup) then GFAWM.addNameToWhoQueue(arg2) end
 									else
 										GF_BlackList[GF_RealmName][arg2] = "("..tempwhodata.level..") "..arg1;
 										GF_Log:AddMessage("["..GF_GetTime(true).."] "..GF_BLACKLIST_MESSAGE..arg2..": "..arg1, 1.0, 1.0, 0.5);	
@@ -552,7 +552,7 @@ function GF_OnEvent(event)
 			for n,w in pairs(GF_WhoTable[GF_RealmName]) do
 				if n and w then counter=counter+1; break end
 			end
---for randomization, make a database for every 50 entries, create all the tables, then randomly table.insert them back, put new names in their own database and put them in first.. if all database are empty, table.remove
+--for randomization, make a database for every 50 entries, create all the tables, then randomly table.insert them back, put new names in their own database and put them first.. if a database is empty, table.remove
 			if counter == 0 then
 				for n,w in pairs(GF_WhoTable[GF_RealmName]) do
 					if not GF_AddonWhoDataToBeSentBuffer[n] and w[1] + 900 > time() then GF_AddonAllNamesForResponseToLogin[n] = true; end -- 15 minutes
@@ -798,16 +798,16 @@ function GF_GetWhoData(arg2,groupfound)
 	end
 	if whodata then
 		if not GF_WhoTable[GF_RealmName][arg2] then
-			if whodata.level <= GF_SavedVariables.autoblacklistminlevel and GF_SavedVariables.usewhoongroups then
+			if whodata.level <= GF_SavedVariables.autoblacklistminlevel and GF_SavedVariables.usewhoongroups and (not GF_SavedVariables.showoriginalchat or groupfound) then
 				GFAWM.addNameToWhoQueue(arg2,groupfound)
 				return
 			else
 				GF_WhoTable[GF_RealmName][arg2] = { time(), whodata.level, whodata.class, whodata.guild };
 			end
 		end
-		if whodata.recordedTime < (time() - 259200) then GF_WhoTable[GF_RealmName][arg2] = nil; if GF_SavedVariables.usewhoongroups then GFAWM.addNameToWhoQueue(arg2,groupfound) end end -- 3 days
+		if whodata.recordedTime < (time() - 259200) then GF_WhoTable[GF_RealmName][arg2] = nil; if GF_SavedVariables.usewhoongroups and (not GF_SavedVariables.showoriginalchat or groupfound) then GFAWM.addNameToWhoQueue(arg2,groupfound) end end -- 3 days
 	else
-		if GF_SavedVariables.usewhoongroups then GFAWM.addNameToWhoQueue(arg2,groupfound) end
+		if GF_SavedVariables.usewhoongroups and (not GF_SavedVariables.showoriginalchat or groupfound) then GFAWM.addNameToWhoQueue(arg2,groupfound) end
 	end
 	return whodata
 end
