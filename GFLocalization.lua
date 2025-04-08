@@ -237,7 +237,7 @@ GF_FrameSpamFilterCheckButton = {
 	tooltip2 		= "When checked, if the same message is repeated more than once within the 'spam flag clear time', non-group messages from that player will be blocked(except friends/guildies/party members)." },
 GF_FrameAutoBlacklistCheckButton = {
 	tooltip1 		= "Blacklist Filter",
-	tooltip2 		= "When checked, players who repeat the same message repeatedly and who are below the 'auto blacklist maximum level' will be permanently added to the blacklist." },
+	tooltip2 		= "When checked, players who repeat the same message repeatedly(more than 120 characters) and who are below the 'auto blacklist maximum level' will be permanently added to the blacklist." },
 GF_FrameShowPoliticsCheckButton = {
 	tooltip1 		= "Show Politics",
 	tooltip2 		= "When checked, messages that include words of a political or derogatory nature will be shown. Otherwise they will be hidden." },
@@ -245,7 +245,7 @@ GF_FrameShowPoliticsCheckButton = {
 
 GF_TRIGGER_LIST = {
 	["LFM"] = { "lf%s", "lf%d", "lfm", "flm", "lf.m", "lf..m", "looking for more", "need more", "looking for .* more", "need %d* dps","need %d* heal", "need %d* tank", "need heal", "need tank", "need dps",
-	"need range", "need caster", "need melee", "need one", "need two", "need three", "anyone for", "come tank", "come healer", "come dps", "hosting", },
+	"need range", "need rdps", "need caster", "need melee", "need mdps", "need one", "need two", "need three", "anyone for", "come tank", "come healer", "come dps", "hosting", "ms>os", },
 	
 	["LFG"] = {	"lfg", "looking for group", "anyone for", "want to group", },
 	
@@ -490,7 +490,7 @@ local GF_TurtleTriggerListDungeons = {
 		["KARACRYPT"] 		= { 60, " crypt", },
 }
 local GF_TurtleTriggerListQuests = {
-		["TURTLE"]			= { 60, "xanthar", "solnius", "scythe of the goddess", },
+		["TURTLE"]			= { 60, "xanthar", "upper binding", "solnius", "scythe of the goddess", },
 		["TDESOLACE"]		= { 35, "almaudrak", "fear incarnate", "palkeote", "lingering mother", "raging oceans blue", "unforgotten and unforgiven", },
 		["TAZSHARA"]		= { 54, "azure scale", "killing the tide lord", "mystery of lake mennar", "tinkerspark transponder", "stop the dragonflight", "big energy project", "dampening must end", },
 		["TDUSTWALLOW"]		= { 37, "and justice for all", "draconic presence", "justice for dustwallow", },

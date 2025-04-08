@@ -237,9 +237,20 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Anchors>
 				<FontString inherits="ChatFontNormal"/>
 				<Scripts>
+					<OnShow>
+						this:SetFocus();
+					</OnShow>
 					<OnLoad>
 						this:SetTextInsets(4,0,0,0);
 					</OnLoad>
+					<OnEnterPressed>
+						this:ClearFocus();
+						GF_DialogOKButton_OnCLick()
+					</OnEnterPressed>
+					<OnEscapePressed>
+						this:ClearFocus();
+						GF_AddPlayerFrame:Hide();
+					</OnEscapePressed>
 				</Scripts>				
 			</EditBox>
 			<Button name="$parentOkButton" inherits="GF_AbstractButton">
@@ -464,7 +475,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</FontString>							
 				<FontString inherits="GameFontNormalSmall" name="$parentNoteLabel" justifyH="LEFT">
 					<Size>
-						<AbsDimension x="340" y="18"/>
+						<AbsDimension x="450" y="18"/>
 					</Size>
 					<Anchors>
 						<Anchor point="LEFT">
@@ -474,30 +485,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Anchor>					
 					</Anchors>
 				</FontString>		
-				<FontString inherits="GameFontNormalSmall" name="$parentStatusLabel" justifyH="LEFT">
-					<Size>
-						<AbsDimension x="100" y="18"/>
-					</Size>
-					<Anchors>
-						<Anchor point="LEFT">
-							<Offset>
-								<AbsDimension x="450" y="0"/>
-							</Offset>
-						</Anchor>					
-					</Anchors>
-				</FontString>
-				<FontString inherits="GameFontNormalSmall" name="$parentRatingLabel">
-					<Size>
-						<AbsDimension x="30" y="18"/>
-					</Size>
-					<Anchors>
-						<Anchor point="LEFT">
-							<Offset>
-								<AbsDimension x="550" y="0"/>
-							</Offset>
-						</Anchor>					
-					</Anchors>
-				</FontString>	
 			</Layer>
 		</Layers>			
 	</Button>			

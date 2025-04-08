@@ -31,7 +31,9 @@ GFAWM.onEventVariablesLoaded = function(event)
 	GFAWM.preHookSetItemRef = SetItemRef;
 	SetItemRef = GFAWM.hookedSetItemRef;
 	
-	if not GF_WhoTable[GF_RealmName][UnitName("player")] or GF_WhoTable[GF_RealmName][UnitName("player")][1] < time() then GFAWM.pruneWhoTable(); GF_WhoTable[GF_RealmName][UnitName("player")] = { time() + 60*60*24*14, UnitLevel("player"), UnitClass("player"), "<>" }; end
+	if not GF_WhoTable[GF_RealmName][UnitName("player")] or GF_WhoTable[GF_RealmName][UnitName("player")][1] < time() then -- Prune the wholist
+		GFAWM.pruneWhoTable(); GF_WhoTable[GF_RealmName][UnitName("player")] = { time() + 60*60*24*14, UnitLevel("player"), UnitClass("player"), "<>" }; -- 14 days
+	end
 
 	if string.sub(GetRealmName(), 1, 9) == "Nordanaar" or string.sub(GetRealmName(), 1, 8) == "Tel'Abim" then GFAWM_WHO_COOL_DOWN_TIME = 30; end
 end
@@ -40,6 +42,7 @@ GFAWM.onEventWhoListUpdated = function()
 	for i=1, GetNumWhoResults() do
 		local name, guild, level, race, class, zone = GetWhoInfo(i);
 		GF_WhoTable[GF_RealmName][name] = { time(), level, class, guild };
+		GF_AddonAllNamesForResponseToLogin[name] = true;
 		if GF_ClassWhoRequest and not GF_ClassWhoTable[name] and not GF_PlayersCurrentlyInGroup[name] and class == getwhoparams[1] and level >= getwhoparams[2]-GFAWM_GETWHO_LEVEL_RANGE and level <= getwhoparams[2]+GFAWM_GETWHO_LEVEL_RANGE and (not getwhoparams[3] or (getwhoparams[3] and not GFAWM.isClassWhoInGroup(zone))) then
 			GF_ClassWhoTable[name] = { time()-GFAWM_GETWHO_RESET_TIMER, level, class, zone }
 			GFAWM.ClassWhoMatchingResults = GFAWM.ClassWhoMatchingResults + 1
@@ -60,6 +63,7 @@ GFAWM.onEventWhoListUpdated = function()
 			GF_LFGGetWhoButton:SetText(GF_STOP_WHO.." - "..GFAWM.ClassWhoMatchingResults);
 		end
 	end
+	GF_ApplyFiltersToGroupList()
 	SetWhoToUI(0);
 end
 
@@ -96,7 +100,7 @@ GFAWM.onUpdate = function()
 				GF_LFGGetWhoButton:SetText(GF_GET_WHO.." - "..GFAWM.ClassWhoMatchingResults);
 			end
 		elseif whoQueue[1] and not WhoFrame:IsVisible() then
-			if GF_WhoTable[GF_RealmName][whoQueue[1]] and GF_WhoTable[GF_RealmName][whoQueue[1]][1] + 259200 > time() then
+			if GF_WhoTable[GF_RealmName][whoQueue[1]] and GF_WhoTable[GF_RealmName][whoQueue[1]][1] + 259200 > time() then -- 3 days
 				table.remove(whoQueue, 1);
 				return;
 			end
@@ -191,15 +195,23 @@ GFAWM.getPositionInQueue = function(name, tbl)
 	return 0;
 end
 
-GFAWM.addNameToWhoQueue = function(name)
+GFAWM.addNameToWhoQueue = function(name,groupfound)
 	if GFAWM.getPositionInQueue(name, whoQueue) == 0 then
-		table.insert(whoQueue, name);
+		if groupfound then
+			table.insert(whoQueue, 1, name);
+		else
+			table.insert(whoQueue, name);
+		end
+		GF_RequestTimer = NextAvailableWhoTime - time()
+		return true
 	end
+	return false
 end
 
 GFAWM.toOldFormat = function(name)
 	local data = GF_WhoTable[GF_RealmName][name];
 	if data then
+		data[4] = string.gsub(data[4],"[<>]", "")
 		return {
 			recordedTime = data[1];
 			level = data[2];

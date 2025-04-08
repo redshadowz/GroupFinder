@@ -15,7 +15,7 @@
 	showloottexts				= true;
 	errorfilter					= false,
 	spamfilter					= true,
-	spamfilterduration			= 3,
+	spamfilterduration			= 5,
 	autoblacklist				= true,
 	autoblacklistminlevel		= 12,
 	playsounds					= false,
@@ -46,21 +46,24 @@
 
 local GF_WorldFound				= nil;
 GF_BlackList 					= {};
+GF_BlackList[GF_RealmName]		= {}
 GF_FilteredResultsList 			= {};
 GF_ResultsListOffset 			= 0;
 GF_BlackListOffset 			= 0;
 local GF_SelectedResultListItem = 0;
 
 local GF_OnStartupRunOnce 					= true;
-local GF_OnStartupQueueURequest 			= true;
+local GF_OnStartupQueueURequest 			= nil;
 local GF_AddonWhoDataToBeSentBuffer			= {};
-local GF_AddonAllNamesForResponseToLogin	= {};
+GF_AddonAllNamesForResponseToLogin			= {};
 local GF_AddonNamesToBeSentAsARequest		= {};
 local GF_AddonMakeAResponseToLoginList		= nil;
 
 local GF_AddonOPSentNamesOnLogin			= {};
 local GF_AddonGroupDataToBeSentBuffer		= {};
 local GF_AddonMakeAListOfGroupsForSending	= nil;
+
+local GF_AddonListOfGuildiesWithAddon		= {};
 
 local GF_AutoAnnounceTimer 		= nil;
 
@@ -71,7 +74,8 @@ local GF_GetWhoLevel 			= 0;
 
 local GF_UpdateTicker 			= 0;
 local GF_TimeTillNextBroadcast	= 25;
-local GF_RequestTimer			= 0;
+GF_RequestTimer					= 2;
+GF_RequestWhoDataPeriodicallyTimer= 30;
 
 local GF_PlayerMessages 		= {}
 local GF_IncomingMessagePrune 	= 0;
@@ -130,46 +134,52 @@ function GF_OnLoad()
 		else
 			if not GF_PreviousMessage[arg2] or GF_PreviousMessage[arg2][1] ~= arg1 or GF_PreviousMessage[arg2][2] + 30 < time() then
 				GF_PreviousMessage[arg2] = {arg1,time(), nil, arg1} -- Old message, time of last message, whether to block message
-				local tempwhodata = GF_GetWhoData(arg2)
-				if not GF_PlayersCurrentlyInGroup[arg2] and not GF_FriendsAndGuildies[arg2] then									-- Block blacklist, website spam, and politics.
-					if GF_BlackList[arg2] then
-						GF_Log:AddMessage("["..GF_GetTime(true).."] "..GF_BLACKLIST_MESSAGE..arg2..": "..string.sub(arg1,1,80), 1.0, 1.0, 0.5);	
+				if not GF_PlayersCurrentlyInGroup[arg2] and not GF_FriendsAndGuildies[arg2] then											-- Block blacklist, website spam, and politics.
+					if GF_BlackList[GF_RealmName][arg2] then
+						GF_Log:AddMessage("["..GF_GetTime(true).."] "..GF_BLACKLIST_MESSAGE..arg2..": "..arg1, 1.0, 1.0, 0.5);	
 						GF_PreviousMessage[arg2][3] = true;
 						return;
 					end
 					if GF_SavedVariables.autoblacklist then
 						for i=1, getn(GF_TRIGGER_LIST.SPAM) do
 							if string.find(string.lower(arg1), GF_TRIGGER_LIST.SPAM[i]) then
-								GF_BlackList[arg2] = string.sub(arg1,1,80);
-								GF_Log:AddMessage("["..GF_GetTime(true).."] "..GF_BLACKLIST_ADDED..arg2..": "..string.sub(arg1,1,80), 1.0, 1.0, 0.5);
+								GF_Log:AddMessage("["..GF_GetTime(true).."] "..GF_BLOCKED_SPAM..arg2..": "..arg1, 1.0, 1.0, 0.5);
 								GF_PreviousMessage[arg2][3] = true;
-								return
+								return;
 							end
 						end
 					end
 					if not GF_SavedVariables.showpolitics and arg9 ~= "" then
 						for i=1, getn(GF_TRIGGER_LIST.POLITICS) do
 							if string.find(string.lower(arg1), GF_TRIGGER_LIST.POLITICS[i]) then
-								GF_Log:AddMessage("["..GF_GetTime(true).."] "..GF_BLOCKED_POLITICS..arg2..": "..string.sub(arg1,1,80), 1.0, 1.0, 0.5);
+								GF_Log:AddMessage("["..GF_GetTime(true).."] "..GF_BLOCKED_POLITICS..arg2..": "..arg1, 1.0, 1.0, 0.5);
 								GF_PreviousMessage[arg2][3] = true;
 								return
 							end
 						end
 					end
 				end
-				if not Questie and string.find(arg1, "|c%w+|Hquest[0-9a-fA-F:]+|h%[.-%]%|h|r") then								-- Block broken questie links
+				if not Questie and string.find(arg1, "|c%w+|Hquest[0-9a-fA-F:]+|h%[.-%]%|h|r") then											-- Block broken questie links
 					arg1 = string.gsub(arg1, "|c%w+|Hquest[0-9a-fA-F:]+|h%[(.-)%]%|h|r", "%1")
 				end
 				GF_PreviousMessage[arg2][4] = arg1
-				local foundgroup, data;
-				if arg9 ~= "" then foundgroup, data = GF_CheckForGroups(arg1,arg2); end
-				if not GF_PlayersCurrentlyInGroup[arg2] and not GF_FriendsAndGuildies[arg2] then								-- Block if below level
+				local foundInGroup, data;
+				if arg9 ~= "" then
+					foundInGroup, data = GF_CheckForGroups(arg1,arg2);
+					if foundInGroup then
+						if GF_SelectedResultListItem > 0 then getglobal("GF_NewItem"..GF_SelectedResultListItem.."TextureSelected"):Hide(); GF_SelectedResultListItem = 0; end
+						table.insert(GF_MessageList[GF_RealmName], 1, data);
+						GF_ApplyFiltersToGroupList()
+					end
+				end
+				local tempwhodata = GF_GetWhoData(arg2, foundInGroup)
+				if not GF_PlayersCurrentlyInGroup[arg2] and not GF_FriendsAndGuildies[arg2] then											-- Block if below level
 					if (tempwhodata and tonumber(tempwhodata.level) < GF_SavedVariables.blockmessagebelowlevel) then
-						GF_Log:AddMessage("["..GF_GetTime(true).."] "..GF_BLOCKED_BELOWLEVEL..arg2..": "..string.sub(arg1,1,80), 1.0, 1.0, 0.5);
+						GF_Log:AddMessage("["..GF_GetTime(true).."] "..GF_BLOCKED_BELOWLEVEL..arg2..": "..arg1, 1.0, 1.0, 0.5);
 						GF_PreviousMessage[arg2][3] = true;
 						return
 					end
-					if GF_SavedVariables.spamfilter and (not foundgroup or string.len(arg1) > 50) then							-- Block chat spam
+					if GF_SavedVariables.spamfilter and (not foundInGroup or string.len(arg1) > 50) then									-- Block chat spam
 						if GF_IncomingMessagePrune < time() then
 							local tempplayermessages = {}
 							for name,data in GF_PlayerMessages do
@@ -178,97 +188,89 @@ function GF_OnLoad()
 								end
 							end
 							GF_PlayerMessages = tempplayermessages;
-							GF_IncomingMessagePrune = time()+60*60;
+							GF_IncomingMessagePrune = time()+ 3600; -- 1 hour
 						end
 						local sniprandom = math.random(string.len(arg1) or 4)
 						if not GF_PlayerMessages[arg2] then
 							GF_PlayerMessages[arg2] = { [1] = string.sub(arg1,math.floor(sniprandom/4),math.floor(sniprandom/4) + 50), [2] = "ZXYXZ123" }
-						elseif GF_PlayerMessages[arg2].time then
-							if GF_PlayerMessages[arg2].time > time() and (string.find(arg1,GF_PlayerMessages[arg2][1],1,true) or string.find(arg1,GF_PlayerMessages[arg2][2],1,true)) then
-								GF_Log:AddMessage("["..GF_GetTime(true).."] "..GF_BLOCKED_SPAM..arg2..": "..string.sub(arg1,1,80), 1.0, 1.0, 0.5);
-								GF_PreviousMessage[arg2][3] = true;
-								return;
-							else
-								GF_PlayerMessages[arg2] = nil;
-							end
 						else
 							if string.find(arg1,GF_PlayerMessages[arg2][1],1,true) or string.find(arg1,GF_PlayerMessages[arg2][2],1,true) then
-								if GF_SavedVariables.autoblacklist and not GF_BlackList[arg2] and tempwhodata
-								and tonumber(tempwhodata.level) <= GF_SavedVariables.autoblacklistminlevel and string.len(arg1) > 120 then 
-									if tempwhodata.recordedTime + 60*60*6 < time() then
+								if GF_SavedVariables.autoblacklist and not GF_BlackList[GF_RealmName][arg2] and tempwhodata and tonumber(tempwhodata.level) <= GF_SavedVariables.autoblacklistminlevel and string.len(arg1) > 120 then
+									if tempwhodata.recordedTime + 21600 < time() then -- 6 hours
 										GF_WhoTable[GF_RealmName][arg2] = nil;
 										if GF_SavedVariables.usewhoongroups then GFAWM.addNameToWhoQueue(arg2) end
 									else
-										GF_BlackList[arg2] = string.sub(arg1,1,80);
+										GF_BlackList[GF_RealmName][arg2] = "("..tempwhodata.level..") "..arg1;
+										GF_Log:AddMessage("["..GF_GetTime(true).."] "..GF_BLACKLIST_MESSAGE..arg2..": "..arg1, 1.0, 1.0, 0.5);	
+										GF_PreviousMessage[arg2][3] = true;
+										return;
 									end
 								end
-								GF_Log:AddMessage("["..GF_GetTime(true).."] "..GF_BLOCKED_SPAM..arg2..": "..string.sub(arg1,1,80), 1.0, 1.0, 0.5);
+								if not GF_PlayerMessages[arg2].time or GF_PlayerMessages[arg2].time > time() then
+									GF_Log:AddMessage("["..GF_GetTime(true).."] "..GF_BLOCKED_SPAM..arg2..": "..arg1, 1.0, 1.0, 0.5);
+									GF_PreviousMessage[arg2][3] = true;
+									GF_PlayerMessages[arg2].time = time() + GF_SavedVariables.spamfilterduration*60;
+									return;
+								else
+									GF_PlayerMessages[arg2] = { [1] = string.sub(arg1,math.floor(sniprandom/4),math.floor(sniprandom/4) + 50), [2] = "ZXYXZ123" }
+								end
+							elseif string.find(arg1,string.sub(arg1,1,20),21, true) then 													-- Repeating the same message more than once
+								GF_Log:AddMessage("["..GF_GetTime(true).."] "..GF_BLOCKED_SPAM..arg2..": "..arg1, 1.0, 1.0, 0.5);
 								GF_PreviousMessage[arg2][3] = true;
-								GF_PlayerMessages[arg2].time = time() + GF_SavedVariables.spamfilterduration*60;
-								return;
+								return
 							end
 							table.insert(GF_PlayerMessages[arg2],1, string.sub(arg1,math.floor(sniprandom/4),math.floor(sniprandom/4) + 50))
 							table.remove(GF_PlayerMessages[arg2],3)
 						end
-						if string.find(arg1,string.sub(arg1,1,20),21, true) then
-							GF_Log:AddMessage("["..GF_GetTime(true).."] "..GF_BLOCKED_SPAM..arg2..": "..string.sub(arg1,1,80), 1.0, 1.0, 0.5);
-							GF_PreviousMessage[arg2][3] = true;
-							return
-						end
 					end
 				end
-				if arg9 ~= "" then
-					if foundgroup then
-						if GF_SelectedResultListItem > 0 then getglobal("GF_NewItem"..GF_SelectedResultListItem.."TextureSelected"):Hide(); GF_SelectedResultListItem = 0; end
-						table.insert(GF_MessageList[GF_RealmName], 1, data);
-						GF_ApplyFiltersToGroupList()
-						if not GF_SavedVariables.showgroupsnewonly or foundgroup == 2 then
-							if data and ((GF_SavedVariables.searchtext ~= "" and GF_EntryMatchesGroupFilterCriteria(data, true) and (GF_Util.search(data.message, GF_SavedVariables.searchtext) > 0 or GF_Util.search(data.message, GF_SavedVariables.searchbuttonstext) > 0))
-							or (GF_SavedVariables.searchtext == "" and GF_EntryMatchesGroupFilterCriteria(data) and (GF_SavedVariables.searchbuttonstext == "" or GF_Util.search(data.message, GF_SavedVariables.searchbuttonstext) > 0))) then
-								if GF_SavedVariables.showgroupsinminimap then
-									if tempwhodata then 
-										GF_MinimapMessageFrame:AddMessage("|cff"..(GF_ClassColors[tempwhodata.class] or "ffffff").."|Hplayer:"..arg2.."|h "..arg2..", "..tempwhodata.level.." "..tempwhodata.class.."|h|r", 1, 0.8, 0);
-									else
-										GF_MinimapMessageFrame:AddMessage("|cff".."ffffff".."|Hplayer:"..arg2.."|h "..arg2.."|h|r", 1, 0.8, 0);
-									end
-									GF_MinimapMessageFrame2:AddMessage("|cff".."bbffbb"..arg1.. "|r", 1, 0.8, 0);
-								end
-								if GF_SavedVariables.playsounds then PlaySoundFile( "Sound\\Interface\\PickUp\\PutDownRing.wav" ); end
-								if GF_SavedVariables.showgroupsinchat then
-									if tempwhodata then
-										GF_AddMessage(arg1, arg2, arg8, arg9, tempwhodata)
-										GF_PreviousMessage[arg2][3] = true;
-										return
-									end
+				if arg9 ~= "" and foundInGroup then
+					if not GF_SavedVariables.showgroupsnewonly or foundInGroup == 2 then
+						if data and ((GF_SavedVariables.searchtext ~= "" and GF_EntryMatchesGroupFilterCriteria(data, true) and (GF_Util.search(data.message, GF_SavedVariables.searchtext) > 0 or GF_Util.search(data.message, GF_SavedVariables.searchbuttonstext) > 0))
+						or (GF_SavedVariables.searchtext == "" and GF_EntryMatchesGroupFilterCriteria(data) and (GF_SavedVariables.searchbuttonstext == "" or GF_Util.search(data.message, GF_SavedVariables.searchbuttonstext) > 0))) then
+							if GF_SavedVariables.showgroupsinminimap then
+								if tempwhodata then 
+									GF_MinimapMessageFrame:AddMessage("|cff"..(GF_ClassColors[tempwhodata.class] or "ffffff").."|Hplayer:"..arg2.."|h "..arg2..", "..tempwhodata.level.." "..tempwhodata.class.."|h|r", 1, 0.8, 0);
 								else
-									GF_Log:AddMessage("["..GF_GetTime(true).."] "..GF_BLOCKED_GROUPS..arg2..": "..string.sub(arg1,1,80), 1.0, 1.0, 0.5);
+									GF_MinimapMessageFrame:AddMessage("|cff".."ffffff".."|Hplayer:"..arg2.."|h "..arg2.."|h|r", 1, 0.8, 0);
+								end
+								GF_MinimapMessageFrame2:AddMessage("|cff".."bbffbb"..arg1.. "|r", 1, 0.8, 0);
+							end
+							if GF_SavedVariables.playsounds then PlaySoundFile( "Sound\\Interface\\PickUp\\PutDownRing.wav" ); end
+							if GF_SavedVariables.showgroupsinchat then
+								if tempwhodata then
+									GF_AddMessage(arg1, arg2, arg8, arg9, tempwhodata)
 									GF_PreviousMessage[arg2][3] = true;
 									return
 								end
 							else
-								GF_Log:AddMessage("["..GF_GetTime(true).."] "..GF_BLOCKED_GROUPS..arg2..": "..string.sub(arg1,1,80), 1.0, 1.0, 0.5);
+								GF_Log:AddMessage("["..GF_GetTime(true).."] "..GF_BLOCKED_GROUPS..arg2..": "..arg1, 1.0, 1.0, 0.5);
 								GF_PreviousMessage[arg2][3] = true;
 								return
 							end
 						else
-							GF_Log:AddMessage("["..GF_GetTime(true).."] "..GF_BLOCKED_NEW..arg2..": "..string.sub(arg1,1,80), 1.0, 1.0, 0.5);
+							GF_Log:AddMessage("["..GF_GetTime(true).."] "..GF_BLOCKED_GROUPS..arg2..": "..arg1, 1.0, 1.0, 0.5);
 							GF_PreviousMessage[arg2][3] = true;
 							return
 						end
 					else
-						local foundtrades;
-						for i=1, getn(GF_TRIGGER_LIST.TRADE) do	if string.find(string.lower(arg1), GF_TRIGGER_LIST.TRADE[i]) then foundtrades = true; end end
-						if (GF_SavedVariables.showtradestexts and foundtrades) or (GF_SavedVariables.showchattexts and not foundtrades) then
-							if tempwhodata then
-								GF_AddMessage(arg1, arg2, arg8, arg9, tempwhodata)
-								GF_PreviousMessage[arg2][3] = true;
-								return
-							end
-						else
-							GF_Log:AddMessage("["..GF_GetTime(true).."] "..GF_BLOCKED_CHAT..arg2..": "..string.sub(arg1,1,80), 1.0, 1.0, 0.5);
+						GF_Log:AddMessage("["..GF_GetTime(true).."] "..GF_BLOCKED_NEW..arg2..": "..arg1, 1.0, 1.0, 0.5);
+						GF_PreviousMessage[arg2][3] = true;
+						return
+					end
+				else
+					local foundtrades;
+					for i=1, getn(GF_TRIGGER_LIST.TRADE) do	if string.find(string.lower(arg1), GF_TRIGGER_LIST.TRADE[i]) then foundtrades = true; end end
+					if (GF_SavedVariables.showtradestexts and foundtrades) or (GF_SavedVariables.showchattexts and not foundtrades) then
+						if tempwhodata then
+							GF_AddMessage(arg1, arg2, arg8, arg9, tempwhodata)
 							GF_PreviousMessage[arg2][3] = true;
 							return
 						end
+					else
+						GF_Log:AddMessage("["..GF_GetTime(true).."] "..GF_BLOCKED_CHAT..arg2..": "..arg1, 1.0, 1.0, 0.5);
+						GF_PreviousMessage[arg2][3] = true;
+						return
 					end
 				end
 			else
@@ -285,7 +287,7 @@ function GF_OnLoad()
 	function AddIgnore(name)
 		name = string.lower(name);
 		name = string.gsub(name, "^%l", string.upper);
-		GF_BlackList[name] = GF_DEFAULT_PLAYER_NOTE;
+		GF_BlackList[GF_RealmName][name] = GF_DEFAULT_PLAYER_NOTE;
 		old_AddIgnore(name);
 	end
 end
@@ -383,24 +385,36 @@ function GF_OnUpdate()
 			end
 			if string.len(addonsendstring) > 1 then SendAddonMessage("GF", addonsendstring, "GUILD"); end
 		end
-	
+
 		GF_RequestTimer = GF_RequestTimer - 1;
 		if GF_RequestTimer < 0 then
 			GF_RequestTimer = 30;
 			GF_ApplyFiltersToGroupList()
 			for i=1, getn(GF_MessageList[GF_RealmName]) do
-				if not GF_MessageList[GF_RealmName][i].who and GFAWM.getPositionInQueue(GF_MessageList[GF_RealmName][i].op, whoQueue) == 0 then
+				if not GF_MessageList[GF_RealmName][i].who then
 					GF_MessageList[GF_RealmName][i].whoAttempts = GF_MessageList[GF_RealmName][i].whoAttempts or 0;
 					GF_MessageList[GF_RealmName][i].who = GFAWM.toOldFormat(GF_MessageList[GF_RealmName][i].op);
 					if GF_SavedVariables.usewhoongroups and not GF_MessageList[GF_RealmName][i].who and GF_MessageList[GF_RealmName][i].whoAttempts < 3 then
-						GF_MessageList[GF_RealmName][i].whoAttempts = GF_MessageList[GF_RealmName][i].whoAttempts + 1;
-						GFAWM.addNameToWhoQueue(GF_MessageList[GF_RealmName][i].op)
+						if GFAWM.addNameToWhoQueue(GF_MessageList[GF_RealmName][i].op, true) then GF_MessageList[GF_RealmName][i].whoAttempts = GF_MessageList[GF_RealmName][i].whoAttempts + 1; end
 					end
 				end
 				if GF_AddonMakeAListOfGroupsForSending and not GF_AddonOPSentNamesOnLogin[GF_MessageList[GF_RealmName][i].op] then GF_AddonGroupDataToBeSentBuffer[GF_MessageList[GF_RealmName][i].op] = GF_MessageList[GF_RealmName][i] end
 			end
 			GF_AddonMakeAListOfGroupsForSending = nil;
 			GF_AddonOPSentNamesOnLogin = {}
+		end
+
+		GF_RequestWhoDataPeriodicallyTimer = GF_RequestWhoDataPeriodicallyTimer - 1;
+		if GF_RequestWhoDataPeriodicallyTimer < 0 then
+			GF_RequestWhoDataPeriodicallyTimer = 30;
+			for i=1, GetNumGuildMembers() do
+				local name = GetGuildRosterInfo(i)
+				if name and GF_AddonListOfGuildiesWithAddon[name] then
+					GF_AddonMakeAResponseToLoginList = true;
+					GF_TimeTillNextBroadcast = 0;
+					break
+				end
+			end
 		end
 	end
 end
@@ -495,6 +509,7 @@ local function GF_LoadSettings()
 	if string.sub(GetRealmName(), 1, 9) == "Nordanaar" or string.sub(GetRealmName(), 1, 8) == "Tel'Abim" then GF_AddTurtleWoWDungeonsRaids() end
 	if not GF_WhoTable[GF_RealmName] then GF_WhoTable[GF_RealmName] = {} end
 	if not GF_MessageList[GF_RealmName] then GF_MessageList[GF_RealmName] = {} end
+	if not GF_BlackList[GF_RealmName] then GF_BlackList[GF_RealmName] = {} end
 end
 
 function GF_OnEvent(event)
@@ -513,7 +528,7 @@ function GF_OnEvent(event)
 			local name = GetGuildRosterInfo(i)
 			if name and not GF_FriendsAndGuildies[name] then GF_FriendsAndGuildies[name] = true; end
 		end
-		if GF_SavedVariables.lastlogout + 600 < time() then
+		if GF_SavedVariables.lastlogout + 600 < time() then -- 10 minutes
 			GF_OnStartupQueueURequest = true;
 			GF_TimeTillNextBroadcast = 0;
 		end
@@ -521,13 +536,20 @@ function GF_OnEvent(event)
 		GF_ToggleAnnounce();
 		GF_Println(GF_AFK_ANNOUNCE_OFF);
 	elseif event == "CHAT_MSG_ADDON" and arg1 == "GF" and arg4 ~= UnitName("player") then
+		GF_AddonListOfGuildiesWithAddon[arg4] = true;
 		if string.sub(arg2,1,1) == "U" then -- (From OP) Sent on login with a list of names from OP's group list(up to 240 characters).
 			for w in string.gfind(arg2, "(%w+)") do
 				GF_AddonOPSentNamesOnLogin[w] = true;
 			end
-			GF_AddonAllNamesForResponseToLogin = {}
+			local counter = 0;
 			for n,w in pairs(GF_WhoTable[GF_RealmName]) do
-				if not GF_AddonWhoDataToBeSentBuffer[n] and w[1] + 900 > time() then GF_AddonAllNamesForResponseToLogin[n] = true; end
+				counter=counter+1;
+			end
+--for randomization, make a database for every 50 entries, then randomly pick them when sending... put new names in its own database, always put it first
+			if counter == 0 then
+				for n,w in pairs(GF_WhoTable[GF_RealmName]) do
+					if not GF_AddonWhoDataToBeSentBuffer[n] and w[1] + 900 > time() then GF_AddonAllNamesForResponseToLogin[n] = true; end -- 15 minutes
+				end
 			end
 			GF_TimeTillNextBroadcast = math.random(29) + 1;
 			GF_AddonMakeAResponseToLoginList = true;
@@ -741,7 +763,8 @@ function GF_UpdateResults()
 				getglobal(c.."NameLabel"):SetText(mainText);
 				getglobal(c.."MoreLabel"):SetText(moreText);
 				getglobal(c):Show();
-				if not GF_SavedVariables.usewhoongroups and not (GF_WhoTable[GF_RealmName][entry.op] and GF_WhoTable[GF_RealmName][entry.op][1] and GF_WhoTable[GF_RealmName][entry.op][1] + 259200 > time()) and GFAWM.getPositionInQueue(entry.op, whoQueue) == 0 then
+				if not GF_SavedVariables.usewhoongroups and not (GF_WhoTable[GF_RealmName][entry.op] and GF_WhoTable[GF_RealmName][entry.op][1] and
+					GF_WhoTable[GF_RealmName][entry.op][1] + 259200 > time()) and GFAWM.getPositionInQueue(entry.op, whoQueue) == 0 then -- 3 days
 					getglobal(c.."GroupWhoButton"):Show();
 				else
 					getglobal(c.."GroupWhoButton"):Hide();
@@ -754,7 +777,7 @@ function GF_UpdateResults()
 	end
 end
 
-function GF_GetWhoData(arg2)
+function GF_GetWhoData(arg2,groupfound)
 	if string.find(arg2," ") then return end
 	local whodata = GFAWM.toOldFormat(arg2)
 	if not whodata and IsAddOnLoaded("InventoryOnPar") then whodata = IOP.Data[GetRealmName()][arg2] end
@@ -769,15 +792,15 @@ function GF_GetWhoData(arg2)
 	if whodata then
 		if not GF_WhoTable[GF_RealmName][arg2] then
 			if whodata.level <= GF_SavedVariables.autoblacklistminlevel and GF_SavedVariables.usewhoongroups then
-				GFAWM.addNameToWhoQueue(arg2)
+				GFAWM.addNameToWhoQueue(arg2,groupfound)
 				return
 			else
 				GF_WhoTable[GF_RealmName][arg2] = { time(), whodata.level, whodata.class, whodata.guild };
 			end
 		end
-		if whodata.recordedTime < (time() - 259200) then GF_WhoTable[GF_RealmName][arg2] = nil; if GF_SavedVariables.usewhoongroups then GFAWM.addNameToWhoQueue(arg2) end end
+		if whodata.recordedTime < (time() - 259200) then GF_WhoTable[GF_RealmName][arg2] = nil; if GF_SavedVariables.usewhoongroups then GFAWM.addNameToWhoQueue(arg2,groupfound) end end -- 3 days
 	else
-		if GF_SavedVariables.usewhoongroups then GFAWM.addNameToWhoQueue(arg2) end
+		if GF_SavedVariables.usewhoongroups then GFAWM.addNameToWhoQueue(arg2,groupfound) end
 	end
 	return whodata
 end
@@ -930,7 +953,6 @@ end
 function GF_UpdateBlackListItems()
 	GF_BlackListItem0NameLabel:SetText(GF_NAME);
 	GF_BlackListItem0NoteLabel:SetText(GF_PLAYER_NOTE);
-	GF_BlackListItem0StatusLabel:SetText("");
 	GF_BlackListItem0:Show();
 
 	local counter = 0;
@@ -938,7 +960,7 @@ function GF_UpdateBlackListItems()
 	for i=1, 15 do 
 		getglobal("GF_BlackListItem"..i):Hide();
 	end
-	for name, note in pairs(GF_BlackList) do
+	for name, note in pairs(GF_BlackList[GF_RealmName]) do
 		counter = counter + 1;
 		if counter > GF_BlackListOffset and counter <= GF_BlackListOffset + 15 then
 			index = index + 1;
@@ -968,10 +990,10 @@ end
 		
 function GF_EditBlackListItem()
 	GF_BlackListItemEditFrame.name = (getglobal(this:GetName().."NameLabel"):GetText() or "?");
-	if not GF_BlackList[GF_BlackListItemEditFrame.name] then
-		GF_BlackList[GF_BlackListItemEditFrame.name] = GF_DEFAULT_PLAYER_NOTE;
+	if not GF_BlackList[GF_RealmName][GF_BlackListItemEditFrame.name] then
+		GF_BlackList[GF_RealmName][GF_BlackListItemEditFrame.name] = GF_DEFAULT_PLAYER_NOTE;
 	end
-	GF_BlackListItemEditFrameEditBox:SetText(GF_BlackList[GF_BlackListItemEditFrame.name]);
+	GF_BlackListItemEditFrameEditBox:SetText(GF_BlackList[GF_RealmName][GF_BlackListItemEditFrame.name]);
 	GF_BlackListItemEditFrameTitleLabel:SetText(GF_EDIT_PLAYER..": "..GF_BlackListItemEditFrame.name);
 	GF_BlackListItemEditFrame:Show();
 end
@@ -979,22 +1001,22 @@ end
 function GF_DialogOKButton_OnCLick()
 	local name = GF_AddPlayerFrameEditBox:GetText();
 	if name and name ~= ""  then
-		GF_BlackList[name] = GF_DEFAULT_PLAYER_NOTE;
+		GF_BlackList[GF_RealmName][name] = GF_DEFAULT_PLAYER_NOTE;
 	end
 	GF_AddPlayerFrame:Hide();
 	GF_ShowBlackListFrame()
 end
 		
 function GF_BlackListItemSaveChanges()
-	GF_BlackList[GF_BlackListItemEditFrame.name] = GF_BlackListItemEditFrameEditBox:GetText();
-	GF_BlackList[GF_BlackListItemEditFrame.name] = GF_BlackListItemEditFrameEditBox:GetText();
+	GF_BlackList[GF_RealmName][GF_BlackListItemEditFrame.name] = GF_BlackListItemEditFrameEditBox:GetText();
+	GF_BlackList[GF_RealmName][GF_BlackListItemEditFrame.name] = GF_BlackListItemEditFrameEditBox:GetText();
 	
 	GF_BlackListItemEditFrame:Hide();
 	GF_ShowBlackListFrame();
 end
 		
 function GF_DeletePlayer()
-	GF_BlackList[GF_BlackListItemEditFrame.name] = nil;
+	GF_BlackList[GF_RealmName][GF_BlackListItemEditFrame.name] = nil;
 	GF_BlackListItemEditFrame:Hide();
 	GF_ShowBlackListFrame();
 end
