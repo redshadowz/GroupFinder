@@ -44,7 +44,7 @@ Note: Will not message the same person more than once every 15 minutes.
 
 PS: I made the 'Group Maker' for my niece. She hated finding groups for low-level dungeons. I tried to get her to /whisper people in her level range, but it was too much work for her.  
 
-PS: I made the Chat Filtering because Everlook was absolutely filled to the brim with gold-sellers and other spammers.  
+PS: I made the Chat Filtering because Everlook was absolutely filled to the brim with gold-sellers and other spammers. I personally turn off 'Show groups in Chat' and toggle 'Show groups in Minimap' to turn World into a chatroom.
 
 PS: With the Chat Filters, you can make 'World' channel into groups-only, or chat-only. So if you don't like what people are talking about in World Chat, you can still see the groups(or vice-versa).  
 
