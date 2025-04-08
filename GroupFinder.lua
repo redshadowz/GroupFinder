@@ -186,7 +186,7 @@ function GF_OnLoad()
 						if GF_IncomingMessagePrune < time() then
 							local tempplayermessages = {}
 							for name,data in GF_PlayerMessages do
-								if GF_PlayerMessages[name].time > time() then
+								if GF_PlayerMessages[name].time and GF_PlayerMessages[name].time > time() then
 									tempplayermessages[name] = GF_PlayerMessages[name]
 								end
 							end
