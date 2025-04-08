@@ -1491,7 +1491,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Anchors>
 									<Anchor point="LEFT" relativeTo="GF_LFGDescriptionEditBox">
 										<Offset>
-											<AbsDimension x="-85" y="2" />
+											<AbsDimension x="-85" y="5" />
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -1522,7 +1522,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Anchors>
 									<Anchor point="RIGHT" relativeTo="GF_LFGDescriptionEditBox">
 										<Offset>
-											<AbsDimension x="85" y="2"/>
+											<AbsDimension x="85" y="5"/>
 										</Offset>
 									</Anchor>
 								</Anchors>

@@ -1137,7 +1137,7 @@ function GF_LFGWhisperButton()
 	local whispermessage = GF_LFGWhoWhisperEditBox:GetText()
 	if whispermessage == "" then whispermessage = GF_LFGDescriptionEditBox:GetText() end
 	if string.len(whispermessage) > 5 then
-		GF_GetWhoLevel = GF_FindDungeonLevel()
+		GF_GetWhoLevel = GF_FindDungeonLevel() or 60;
 		for k,v in pairs(GF_ClassWhoTable) do
 			if GF_ClassWhoTable[k][1] < time()-GFAWM_GETWHO_RESET_TIMER then
 				if GF_ClassWhoTable[k][2] >= GF_GetWhoLevel-GFAWM_GETWHO_LEVEL_RANGE and GF_ClassWhoTable[k][2] <= GF_GetWhoLevel+GFAWM_GETWHO_LEVEL_RANGE and GF_ClassWhoTable[k][3] == GF_SavedVariables.lfgwhisperclass then
