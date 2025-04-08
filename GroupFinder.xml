@@ -2705,11 +2705,30 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											</OnLoad>
 										</Scripts>							
 									</CheckButton>
-									<CheckButton name="GF_SearchFrameShowTranslateCheckButton" inherits="GF_AbstractLabelCheckButton">
+									<CheckButton name="GF_FrameShowOriginalChatCheckButton" inherits="GF_AbstractLabelCheckButton">
 										<Anchors>
 											<Anchor point="TOPRIGHT">
 												<Offset>
 													<AbsDimension x="-158" y="-10"/>
+												</Offset>
+											</Anchor>
+										</Anchors>
+										<Scripts>
+											<OnClick>								
+												GF_SavedVariables.showoriginalchat = this:GetChecked();
+											</OnClick>
+											<OnLoad>
+												getglobal(this:GetName().."TextLabel"):SetWidth(300);
+												getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_ORIGINAL_CHAT);
+												getglobal(this:GetName().."TextLabel"):SetPoint("TOPLEFT", "GF_FrameShowOriginalChatCheckButton", "TOPLEFT", 24, 2);
+											</OnLoad>
+										</Scripts>							
+									</CheckButton>
+									<CheckButton name="GF_SearchFrameShowTranslateCheckButton" inherits="GF_AbstractLabelCheckButton">
+										<Anchors>
+											<Anchor point="TOPLEFT" relativeTo="GF_SearchFrameShowTranslateCheckButton">
+												<Offset>
+													<AbsDimension x="0" y="-30"/>
 												</Offset>
 											</Anchor>
 										</Anchors>
@@ -2731,35 +2750,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 													getglobal(this:GetName().."TextLabel"):SetPoint("TOPLEFT", "GF_SearchFrameShowTranslateCheckButton", "TOPLEFT", 24, 2);
 												else
 													GF_SearchFrameShowTranslateCheckButton:Hide()
-												end
-											</OnLoad>
-										</Scripts>							
-									</CheckButton>
-									<CheckButton name="GF_FrameShowOriginalTextCheckButton" inherits="GF_AbstractLabelCheckButton">
-										<Anchors>
-											<Anchor point="TOPLEFT" relativeTo="GF_SearchFrameShowTranslateCheckButton">
-												<Offset>
-													<AbsDimension x="0" y="-30"/>
-												</Offset>
-											</Anchor>
-										</Anchors>
-										<Scripts>
-											<OnEnter>
-												GF_ShowTooltip(this);
-											</OnEnter>
-											<OnLeave>
-												GameTooltip:Hide();
-											</OnLeave>			
-											<OnClick>								
-												GF_SavedVariables.showoriginal = this:GetChecked();
-											</OnClick>
-											<OnLoad>
-												if GF_TranslateMessage then
-													getglobal(this:GetName().."TextLabel"):SetWidth(300);
-													getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_ORIGINAL);
-													getglobal(this:GetName().."TextLabel"):SetPoint("TOPLEFT", "GF_FrameShowOriginalTextCheckButton", "TOPLEFT", 24, 2);
-												else
-													GF_FrameShowOriginalTextCheckButton:Hide()
 												end
 											</OnLoad>
 										</Scripts>							
@@ -3013,7 +3003,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							</Frame>				
 							<Frame name="$parentMinimapSettings" inherits="GF_OptionFrameBoxTemplate">
 								<Size>
-									<AbsDimension x="600" y="90"/>
+									<AbsDimension x="600" y="100"/>
 								</Size>
 								<Anchors>
 									<Anchor point="TOP" relativeTo="GF_SettingsFrameLFxSettings" relativePoint="BOTTOM">
@@ -3082,7 +3072,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										<Anchors>
 											<Anchor point="TOPLEFT">
 												<Offset>
-													<AbsDimension x="24" y="-56" />
+													<AbsDimension x="24" y="-66" />
 												</Offset>
 											</Anchor>
 										</Anchors>
@@ -3108,7 +3098,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										<Anchors>
 											<Anchor point="TOPRIGHT">
 												<Offset>
-													<AbsDimension x="-24" y="-56" />
+													<AbsDimension x="-24" y="-66" />
 												</Offset>
 											</Anchor>
 										</Anchors>

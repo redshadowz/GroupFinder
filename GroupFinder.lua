@@ -1,7 +1,7 @@
 ﻿GF_SavedVariables = {
 	joinworld					= true,
 	lastlogout					= 0,
-	showoriginal				= false;
+	showoriginalchat		= false;
 	usewhoongroups				= true;
 	showpolitics				= true;
 	blockmessagebelowlevel		= 1;
@@ -117,8 +117,11 @@ function GF_OnLoad()
 				for i=1, getn(GF_LootFilters) do
 					if string.find(arg1, GF_LootFilters[i]) then
 						if i > 11 then 
-							if string.find(arg1, "ffffff") or string.find(arg1, "1eff00") then return end
+							if string.find(arg1, "1eff00") then 
+								GF_Log:AddMessage("["..GF_GetTime(true).."] "..arg1, 1.0, 1.0, 0.5);
+							return end
 						else
+							GF_Log:AddMessage("["..GF_GetTime(true).."] "..arg1, 1.0, 1.0, 0.5);
 							return
 						end
 					end
@@ -239,7 +242,7 @@ function GF_OnLoad()
 							if GF_SavedVariables.playsounds then PlaySoundFile( "Sound\\Interface\\PickUp\\PutDownRing.wav" ); end
 							if GF_SavedVariables.showgroupsinchat then
 								if tempwhodata then
-									GF_AddMessage(arg1, arg2, arg8, arg9, tempwhodata)
+									if not GF_SavedVariables.showoriginalchat then GF_AddMessage(arg1, arg2, arg8, arg9, tempwhodata) else old_ChatFrame_OnEvent(event); end
 									GF_PreviousMessage[arg2][3] = true;
 									return
 								end
@@ -263,12 +266,16 @@ function GF_OnLoad()
 					for i=1, getn(GF_TRIGGER_LIST.TRADE) do	if string.find(string.lower(arg1), GF_TRIGGER_LIST.TRADE[i]) then foundtrades = true; end end
 					if (GF_SavedVariables.showtradestexts and foundtrades) or (GF_SavedVariables.showchattexts and not foundtrades) then
 						if tempwhodata then
-							GF_AddMessage(arg1, arg2, arg8, arg9, tempwhodata)
+							if not GF_SavedVariables.showoriginalchat then GF_AddMessage(arg1, arg2, arg8, arg9, tempwhodata) else old_ChatFrame_OnEvent(event); end
 							GF_PreviousMessage[arg2][3] = true;
 							return
 						end
 					else
-						GF_Log:AddMessage("["..GF_GetTime(true).."] "..GF_BLOCKED_CHAT..arg2..": "..arg1, 1.0, 1.0, 0.5);
+						if foundtrades then
+							GF_Log:AddMessage("["..GF_GetTime(true).."] "..GF_BLOCKED_TRADES..arg2..": "..arg1, 1.0, 1.0, 0.5);
+						else
+							GF_Log:AddMessage("["..GF_GetTime(true).."] "..GF_BLOCKED_CHAT..arg2..": "..arg1, 1.0, 1.0, 0.5);
+						end
 						GF_PreviousMessage[arg2][3] = true;
 						return
 					end
@@ -481,8 +488,8 @@ local function GF_LoadSettings()
 	GF_SearchFrameShowLFGCheckButton:SetChecked(GF_SavedVariables.showlfg);
 
 	GF_FrameJoinWorldCheckButton:SetChecked(GF_SavedVariables.joinworld);
+	GF_FrameShowOriginalChatCheckButton:SetChecked(GF_SavedVariables.showoriginalchat);
 	GF_FrameUseWhoOnGroupsCheckButton:SetChecked(GF_SavedVariables.usewhoongroups);
-	GF_FrameShowOriginalTextCheckButton:SetChecked(GF_SavedVariables.showoriginal);
 	
 	GF_FrameErrorFilterCheckButton:SetChecked(GF_SavedVariables.errorfilter);
 	GF_FrameShowPoliticsCheckButton:SetChecked(GF_SavedVariables.showpolitics);
@@ -545,7 +552,7 @@ function GF_OnEvent(event)
 			for n,w in pairs(GF_WhoTable[GF_RealmName]) do
 				counter=counter+1;
 			end
---for randomization, make a database for every 50 entries, then randomly pick them when sending... put new names in its own database, always put it first
+--for randomization, make a database for every 50 entries, create all the tables, then randomly table.insert them back, put new names in their own database and put them in first.. if all database are empty, table.remove
 			if counter == 0 then
 				for n,w in pairs(GF_WhoTable[GF_RealmName]) do
 					if not GF_AddonWhoDataToBeSentBuffer[n] and w[1] + 900 > time() then GF_AddonAllNamesForResponseToLogin[n] = true; end -- 15 minutes
