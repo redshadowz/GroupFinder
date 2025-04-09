@@ -636,7 +636,7 @@ function GF_OnEvent(event)
 	elseif (event == "GUILD_ROSTER_UPDATE" and GetNumGuildMembers() ~= GF_CurrentNumGuildies) or (event == "FRIENDLIST_UPDATE" and GetNumFriends() ~= GF_CurrentNumFriends) then
 		GF_UpdateFriendsAndGuildiesList()
 	end
-	if event == "GUILD_ROSTER_UPDATE" then print("guild update") end
+	--if event == "GUILD_ROSTER_UPDATE" then print("guild update") end
 end
 
 function GF_UpdatePlayersInGroupList()
