@@ -636,6 +636,7 @@ function GF_OnEvent(event)
 	elseif (event == "GUILD_ROSTER_UPDATE" and GetNumGuildMembers() ~= GF_CurrentNumGuildies) or (event == "FRIENDLIST_UPDATE" and GetNumFriends() ~= GF_CurrentNumFriends) then
 		GF_UpdateFriendsAndGuildiesList()
 	end
+	if event == "GUILD_ROSTER_UPDATE" then print("guild update") end
 end
 
 function GF_UpdatePlayersInGroupList()
@@ -1245,21 +1246,24 @@ function GF_FixLFGStrings()
 			GF_SavedVariables.searchlfgtext = prelfg..postlfg
 		end
     end
-	if lfglfmtext ~= "" and lfgdungeonraidtext ~= "" then
-		lfglfmtext = lfglfmtext.." "..lfgdungeonraidtext
-	else 
-		lfglfmtext = lfglfmtext..lfgdungeonraidtext 
-	end
-	if lfglfmtext ~= "" and lfgroletext ~= "" then
-		lfglfmtext = lfglfmtext.." "..lfgroletext
-	else 
+
+	if string.find(lfglfmtext, "LFG") then
+		if lfgroletext ~= "" and lfglfmtext ~= "" then lfgroletext = lfgroletext.." " end
+		lfgroletext = lfgroletext..lfglfmtext
+		if lfgroletext ~= "" and lfgdungeonraidtext ~= "" then lfgroletext = lfgroletext.." " end
+		lfgroletext = lfgroletext..lfgdungeonraidtext
+		if lfgroletext ~= "" and GF_SavedVariables.searchlfgtext ~= "" then lfgroletext = lfgroletext.." " end
+		lfgroletext = lfgroletext..GF_SavedVariables.searchlfgtext
+		lfglfmtext = lfgroletext;
+	else
+		if lfglfmtext ~= "" and lfgdungeonraidtext ~= "" then lfglfmtext = lfglfmtext.." " end
+		lfglfmtext = lfglfmtext..lfgdungeonraidtext
+		if lfglfmtext ~= "" and lfgroletext ~= "" then lfglfmtext = lfglfmtext.." " end
 		lfglfmtext = lfglfmtext..lfgroletext
-	end
-	if lfglfmtext ~= "" and GF_SavedVariables.searchlfgtext ~= "" then
-		lfglfmtext = lfglfmtext.." "..GF_SavedVariables.searchlfgtext
-	else 
+		if lfglfmtext ~= "" and GF_SavedVariables.searchlfgtext ~= "" then lfglfmtext = lfglfmtext.." " end
 		lfglfmtext = lfglfmtext..GF_SavedVariables.searchlfgtext
 	end
+
 	GF_SavedVariables.searchlfgtext = lfglfmtext
 	getglobal(GF_LFGDescriptionEditBox:GetName()):SetText(GF_SavedVariables.searchlfgtext);
 end

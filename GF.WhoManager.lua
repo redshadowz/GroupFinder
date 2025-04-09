@@ -30,14 +30,15 @@ GFAWM.onEventVariablesLoaded = function(event)
 	
 	GFAWM.preHookSetItemRef = SetItemRef;
 	SetItemRef = GFAWM.hookedSetItemRef;
-	if not GF_WhoTable[GF_RealmName] then GF_WhoTable[GF_RealmName] = {} end
-	if not GF_MessageList[GF_RealmName] then GF_MessageList[GF_RealmName] = {} end
-	
+
 	if not GF_WhoTable[GF_RealmName][UnitName("player")] or GF_WhoTable[GF_RealmName][UnitName("player")][1] < time() then -- Prune the wholist
 		GFAWM.pruneWhoTable(); GF_WhoTable[GF_RealmName][UnitName("player")] = { time() + 60*60*24*14, UnitLevel("player"), UnitClass("player"), "<>" }; -- 14 days
 	end
 
 	if string.sub(GetRealmName(), 1, 9) == "Nordanaar" or string.sub(GetRealmName(), 1, 8) == "Tel'Abim" then GFAWM_WHO_COOL_DOWN_TIME = 30; end
+	
+	if not GF_WhoTable[GF_RealmName] then GF_WhoTable[GF_RealmName] = {} end
+	if not GF_MessageList[GF_RealmName] then GF_MessageList[GF_RealmName] = {} end
 end
 
 GFAWM.onEventWhoListUpdated = function()
@@ -45,7 +46,8 @@ GFAWM.onEventWhoListUpdated = function()
 		local name, guild, level, race, class, zone = GetWhoInfo(i);
 		GF_WhoTable[GF_RealmName][name] = { time(), level, class, guild };
 		GF_AddonAllNamesForResponseToLogin[name] = true;
-		if GF_ClassWhoRequest and not GF_ClassWhoTable[name] and not GF_PlayersCurrentlyInGroup[name] and class == getwhoparams[1] and level >= getwhoparams[2]-GFAWM_GETWHO_LEVEL_RANGE and level <= getwhoparams[2]+GFAWM_GETWHO_LEVEL_RANGE and (not getwhoparams[3] or (getwhoparams[3] and not GFAWM.isClassWhoInGroup(zone))) then
+		if GF_ClassWhoRequest and not GF_ClassWhoTable[name] and not GF_PlayersCurrentlyInGroup[name] and class == getwhoparams[1] and level >= getwhoparams[2]-GFAWM_GETWHO_LEVEL_RANGE and level <= getwhoparams[2]+GFAWM_GETWHO_LEVEL_RANGE
+		and (not getwhoparams[3] or (getwhoparams[3] and not GFAWM.isClassWhoPlayerInADungeonOrPvP(zone))) then
 			GF_ClassWhoTable[name] = { time()-GFAWM_GETWHO_RESET_TIMER, level, class, zone }
 			GFAWM.ClassWhoMatchingResults = GFAWM.ClassWhoMatchingResults + 1
 		end
@@ -130,11 +132,17 @@ GFAWM.setClassWhoSearchNames = function(class, level)
 		table.insert(ClassWhoQueue, "c-"..class.." "..level.."-"..maxlevel);
 	elseif getclasswhostate == 3 or (getclasswhostate == 2 and (level == maxlevel)) then
 		if UnitFactionGroup("player") == "Alliance" then
+			if (string.sub(GetRealmName(), 1, 9) == "Nordanaar" or string.sub(GetRealmName(), 1, 8) == "Tel'Abim") and GFAWM.classMatchesRace(class, "High Elf") then
+				table.insert(ClassWhoQueue, "c-"..class.." "..minlevel .."-"..maxlevel.." ".."r-\"High Elf\"");
+			end
 			if GFAWM.classMatchesRace(class, "Dwarf") then table.insert(ClassWhoQueue, "c-"..class.." "..minlevel .."-"..maxlevel.." ".."r-\"Dwarf\""); end
 			if GFAWM.classMatchesRace(class, "Gnome") then table.insert(ClassWhoQueue, "c-"..class.." "..minlevel .."-"..maxlevel.." ".."r-\"Gnome\""); end
 			if GFAWM.classMatchesRace(class, "Night Elf") then table.insert(ClassWhoQueue, "c-"..class.." "..minlevel .."-"..maxlevel.." ".."r-\"Night Elf\""); end
 			if GFAWM.classMatchesRace(class, "Human") then table.insert(ClassWhoQueue, "c-"..class.." "..minlevel .."-"..maxlevel.." ".."r-\"Human\""); end
 		else
+			if (string.sub(GetRealmName(), 1, 9) == "Nordanaar" or string.sub(GetRealmName(), 1, 8) == "Tel'Abim") and GFAWM.classMatchesRace(class, "Goblin") then
+				table.insert(ClassWhoQueue, "c-"..class.." "..minlevel .."-"..maxlevel.." ".."r-\"Goblin\"");
+			end
 			if GFAWM.classMatchesRace(class, "Tauren") then table.insert(ClassWhoQueue, "c-"..class.." "..minlevel .."-"..maxlevel.." ".."r-\"Tauren\""); end
 			if GFAWM.classMatchesRace(class, "Troll") then table.insert(ClassWhoQueue, "c-"..class.." "..minlevel .."-"..maxlevel.." ".."r-\"Troll\""); end
 			if GFAWM.classMatchesRace(class, "Orc") then table.insert(ClassWhoQueue, "c-"..class.." "..minlevel .."-"..maxlevel.." ".."r-\"Orc\""); end
@@ -177,7 +185,7 @@ GFAWM.classMatchesRace = function(class, race)
 	end
 end
 
-GFAWM.isClassWhoInGroup = function(zone)
+GFAWM.isClassWhoPlayerInADungeonOrPvP = function(zone)
 	for _,dtable in pairs(GF_BUTTONS_LIST["LFGDungeon"]) do
 		if zone == dtable[5] then return true end
     end
