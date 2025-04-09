@@ -6,17 +6,10 @@ local urgentWhoRequest 			= nil;
 local urgentWhoSent 			= nil;
 local getwhoparams 				= {};
 local getclasswhostate 			= 1;
-GF_RealmName 					= GetRealmName()
 
 GFAWM = {};
 whoQueue = {};
-GF_WhoTable = {}
-GF_WhoTable[GF_RealmName]		= {}
-GF_MessageList 					= {};
-GF_MessageList[GF_RealmName] 	= {};
 
-GF_ClassWhoTable = {}
-GF_ClassWhoRequest 				= nil;
 GFAWM.ClassWhoMatchingResults 	= 0;
 GFAWM_GETWHO_LEVEL_RANGE 		= 3;
 GFAWM_GETWHO_RESET_TIMER		= 900;
@@ -36,9 +29,6 @@ GFAWM.onEventVariablesLoaded = function(event)
 	end
 
 	if string.sub(GetRealmName(), 1, 9) == "Nordanaar" or string.sub(GetRealmName(), 1, 8) == "Tel'Abim" then GFAWM_WHO_COOL_DOWN_TIME = 30; end
-	
-	if not GF_WhoTable[GF_RealmName] then GF_WhoTable[GF_RealmName] = {} end
-	if not GF_MessageList[GF_RealmName] then GF_MessageList[GF_RealmName] = {} end
 end
 
 GFAWM.onEventWhoListUpdated = function()
@@ -290,18 +280,18 @@ GFAWM.pruneWhoTable = function()
 			if length == MaxEntriesPerRealm then break end
 		end
 		if length == MaxEntriesPerRealm then
-			GF_WhoTable[realmname] = {}
 			GF_WhoTable[realmname] = tempwhotable;
 		end
 	end
 
 	tempwhotable = {}
-	for name, whoData in GF_ClassWhoTable do
-		if whoData[1] + 3600 > time() then -- 60*60 - 1 hour
-			tempwhotable[name] = whoData
+	if GF_ClassWhoTable then
+		for name, whoData in GF_ClassWhoTable do
+			if whoData and whoData[1] + 3600 > time() then -- 60*60 - 1 hour
+				tempwhotable[name] = whoData
+			end
 		end
 	end
-	GF_ClassWhoTable = {}
 	GF_ClassWhoTable = tempwhotable;
 end
 

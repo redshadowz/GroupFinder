@@ -45,12 +45,19 @@
 };
 
 local GF_WorldFound				= nil;
+GF_RealmName 					= GetRealmName()
+GF_WhoTable = {}
+GF_WhoTable[GF_RealmName]		= {}
+GF_ClassWhoTable 				= {}
+GF_MessageList 					= {};
+GF_MessageList[GF_RealmName] 	= {};
 GF_BlackList 					= {};
 GF_BlackList[GF_RealmName]		= {}
 GF_FilteredResultsList 			= {};
 GF_ResultsListOffset 			= 0;
 GF_BlackListOffset 			= 0;
 local GF_SelectedResultListItem = 0;
+
 
 local GF_OnStartupRunOnce 					= true;
 local GF_OnStartupQueueURequest 			= nil;
@@ -76,7 +83,7 @@ local GF_CurrentNumGuildies		= 0;
 local GF_GetWhoLevel 			= 0;
 
 local GF_UpdateTicker 			= 0;
-local GF_TimeTillNextBroadcast	= 25;
+local GF_TimeTillNextBroadcast	= 10;
 GF_RequestTimer					= 2;
 GF_RequestWhoDataPeriodicallyTimer= 30;
 
@@ -340,20 +347,19 @@ function GF_OnUpdate()
 		if GF_TimeTillNextBroadcast < 0 then 
 			GF_TimeTillNextBroadcast = 4;
 			local counter = 0;
-			for n,m in pairs(GF_AddonGroupDataToBeSentBuffer) do
-				local timedifference = (tonumber(string.sub(GF_GetTime(),1,2))*60 + tonumber(string.sub(GF_GetTime(),3,4))) - (tonumber(string.sub(m.time,1,2))*60 + tonumber(string.sub(m.time,3,4)))
-				if timedifference < 0 then timedifference = 720 - (timedifference + 720) end
-				if m.who and (m.type == "D" or m.type == "R") and timedifference < 15 then
-					local t = m.time
-					local c = GF_Classes[m.who.class] or 7
-					local d = m.type
-					local v = m.ilevel or 0
-					local n = m.op
-					local l = m.who.level or 60
-					local g = m.who.guild or "<>"
-					local r = m.who.recordedTime or time()
-					local s = string.gsub(string.gsub(m.message, "|c(%w+)|H(.+):(.+)|h(.+)|h|r", "%4"),":","")
-					SendAddonMessage("GF", t..c..d..v..":"..n..l..g..r..":"..s, "GUILD");
+			for n,entry in pairs(GF_AddonGroupDataToBeSentBuffer) do
+				if entry.who and (entry.type == "D" or entry.type == "R") and entry.time + 900 > time() then
+					local c = GF_Classes[entry.who.class] or 7
+					local t = entry.time
+					local y = entry.type
+					local d = entry.dlevel or 60
+					local n = entry.op
+					local l = entry.who.level or 60
+					local g = entry.who.guild or ""
+					local r = entry.who.recordedTime or time()
+					local s = string.gsub(string.gsub(entry.message, "|c(%w+)|H(.+):(.+)|h(.+)|h|r", "%4"),":","")
+					SendAddonMessage("GF", c..t..y..d..n..l..g..r..":"..s, "GUILD");
+					if GF_GetNumGroupMembers() > 1 or GetNumRaidMembers() > 1 then SendAddonMessage("GF", c..t..y..d..n..l..g..r..":"..s, "PARTY"); end
 					counter = counter + 1
 					if counter == 10 then break end
 				end
@@ -368,6 +374,7 @@ function GF_OnUpdate()
 					end
 				end
 				SendAddonMessage("GF", addonsendstring, "GUILD");
+				if GF_GetNumGroupMembers() > 0 or GetNumRaidMembers() > 1 then SendAddonMessage("GF", addonsendstring, "PARTY"); end
 				GF_OnStartupQueueURequest = nil;
 			end
 			addonsendstring = "W"
@@ -376,7 +383,7 @@ function GF_OnUpdate()
 					if w then addonsendstring = addonsendstring..":"..n end
 					if string.len(addonsendstring) > 240 then break end
 				end
-				if string.len(addonsendstring) > 1 then SendAddonMessage("GF", addonsendstring, "GUILD"); end
+				if string.len(addonsendstring) > 1 then SendAddonMessage("GF", addonsendstring, "GUILD"); if GF_GetNumGroupMembers() > 0 or GetNumRaidMembers() > 1 then SendAddonMessage("GF", addonsendstring, "PARTY"); end end
 				GF_AddonMakeAResponseToLoginList = nil;
 			end
 			addonsendstring = "R"
@@ -385,7 +392,7 @@ function GF_OnUpdate()
 				if GF_AddonNamesToBeSentAsARequest then GF_AddonNamesToBeSentAsARequest[n] = nil; end
 				if string.len(addonsendstring) > 240 then break end
 			end
-			if string.len(addonsendstring) > 1 then SendAddonMessage("GF", addonsendstring, "GUILD"); end
+			if string.len(addonsendstring) > 1 then SendAddonMessage("GF", addonsendstring, "GUILD");  if GF_GetNumGroupMembers() > 0 or GetNumRaidMembers() > 1 then SendAddonMessage("GF", addonsendstring, "PARTY"); end end
 			addonsendstring = ""
 			for n,w in pairs(GF_AddonWhoDataToBeSentBuffer) do
 				if w[4] == "" then w[4] = "<>" end
@@ -393,7 +400,7 @@ function GF_OnUpdate()
 				if GF_AddonWhoDataToBeSentBuffer[n] then GF_AddonWhoDataToBeSentBuffer[n] = nil; end
 				if string.len(addonsendstring) > 202 then break end
 			end
-			if string.len(addonsendstring) > 1 then SendAddonMessage("GF", addonsendstring, "GUILD"); end
+			if string.len(addonsendstring) > 1 then SendAddonMessage("GF", addonsendstring, "GUILD");  if GF_GetNumGroupMembers() > 0 or GetNumRaidMembers() > 1 then SendAddonMessage("GF", addonsendstring, "PARTY"); end end
 		end
 
 		GF_RequestTimer = GF_RequestTimer - 1;
@@ -428,7 +435,6 @@ function GF_OnUpdate()
 		end
 	end
 end
-
 local function GF_LoadSettings()
 	GF_Classes[1] = GF_PRIEST;
 	GF_Classes[2] = GF_MAGE;
@@ -517,9 +523,10 @@ local function GF_LoadSettings()
 	getglobal(GF_LFGWhoClassDropdown:GetName().."TextLabel"):SetPoint("LEFT", "GF_LFGWhoClassDropdown", "LEFT", 22, 3);
 	
 	if string.sub(GetRealmName(), 1, 9) == "Nordanaar" or string.sub(GetRealmName(), 1, 8) == "Tel'Abim" then GF_AddTurtleWoWDungeonsRaids() end
+	if not GF_WhoTable[GF_RealmName] then GF_WhoTable[GF_RealmName] = {} end
+	if not GF_MessageList[GF_RealmName] then GF_MessageList[GF_RealmName] = {} end
 	if not GF_BlackList[GF_RealmName] then GF_BlackList[GF_RealmName] = {} end
 end
-
 function GF_OnEvent(event)
 	if event == "PLAYER_ENTERING_WORLD" and GF_OnStartupRunOnce then
 		GF_OnStartupRunOnce = nil;
@@ -529,7 +536,6 @@ function GF_OnEvent(event)
 		GF_ApplyFiltersToGroupList()	
 		if GF_SavedVariables.lastlogout + 600 < time() then -- 10 minutes
 			GF_OnStartupQueueURequest = true;
-			GF_TimeTillNextBroadcast = 0;
 		end
 	elseif event == "CHAT_MSG_SYSTEM" and GF_AutoAnnounceTimer and string.find(arg1, GF_NOW_AFK) then
 		GF_ToggleAnnounce();
@@ -574,29 +580,25 @@ function GF_OnEvent(event)
 				GF_AddonWhoDataToBeSentBuffer[sentname] = nil;
 			end
 		elseif string.len(arg2) > 2 then -- (To Everyone) This is the full group information. Which is sent separately from the who data.
-			for code, sentname, sentlevel, sentguild, sentrecordedtime, com in string.gfind(arg2, "(.+):([a-zA-Z]+)(%d+)([a-zA-Z%s<>]+)(%d+):(.+)") do
-				local tim = string.sub(code,1,4);
-				local cla = tonumber(string.sub(code,5,5));
-				local senttype = string.sub(code,6,6);
-				local sentilevel = tonumber(string.sub(code,7,8)) or 0;
-				if not tim or not cla or not sentname or not sentlevel or not sentguild or not sentrecordedtime or not senttype or not sentilevel or not com then break end
+			for sentclass, senttime,senttype,sentdlevel, sentname, sentplevel, sentguild, sentrecordedtime, message in string.gfind(arg2, "(%d)(%d+)([a-zA-Z])(%d+)([a-zA-Z]+)(%d+)([a-zA-Z%s<>]+)(%d+):(.+)") do
+				if not GF_WhoTable[GF_RealmName][sentname] or tonumber(sentrecordedtime) > GF_WhoTable[GF_RealmName][sentname][1] then
+					GF_WhoTable[GF_RealmName][sentname] = { tonumber(sentrecordedtime), tonumber(sentplevel), GF_Classes[tonumber(sentclass)], string.gsub(sentguild,"[<>]", "") };
+				end
 
-				if not GF_WhoTable[GF_RealmName][sentname] then GF_WhoTable[GF_RealmName][sentname] = { tonumber(sentrecordedtime), tonumber(sentlevel), GF_Classes[cla], string.gsub(sentguild,"[<>]", "")}; end
-				local whodata = {class=GF_Classes[cla], level=tonumber(sentlevel), guild=sentguild, recordedTime=tonumber(sentrecordedtime), };
+				local entry = {};
+				entry.op = sentname;
+				entry.message = message;
+				entry.type = senttype;
+				entry.dlevel = tonumber(sentdlevel)
+				entry.who = GFAWM.toOldFormat(sentname);
+				entry.time = tonumber(senttime);
+				
 				for i = 1, getn(GF_MessageList[GF_RealmName]) do
 					if GF_MessageList[GF_RealmName][i].op and GF_MessageList[GF_RealmName][i].op == sentname then
-						whodata = GF_MessageList[GF_RealmName][i].who;
 						table.remove(GF_MessageList[GF_RealmName], i);
 						break;
 					end
 				end
-				local entry = {};
-				entry.message = com;
-				entry.time = tim;
-				entry.op = sentname;
-				entry.who = whodata;
-				entry.type = senttype;
-				entry.ilevel = sentilevel
 				if getn(GF_MessageList[GF_RealmName]) > 0 then
 					for i = 1, getn(GF_MessageList[GF_RealmName]) do
 						if entry.time > GF_MessageList[GF_RealmName][i].time then
@@ -634,7 +636,6 @@ function GF_OnEvent(event)
 		GF_UpdateFriendsAndGuildiesList()
 	end
 end
-
 function GF_UpdatePlayersInGroupList()
 		GF_PlayersCurrentlyInGroup = {}
 		GF_PlayersCurrentlyInGroup[UnitName("player")] = true;
@@ -645,7 +646,6 @@ function GF_UpdatePlayersInGroupList()
 			if UnitExists("raid"..i) then GF_PlayersCurrentlyInGroup[GetRaidRosterInfo(i)] = true; end
 		end	
 end
-
 function GF_UpdateFriendsAndGuildiesList()
 	GF_FriendsAndGuildies = {};
 	for i=1, GetNumFriends() do
@@ -655,7 +655,6 @@ function GF_UpdateFriendsAndGuildiesList()
 		if GetGuildRosterInfo(i) then GF_FriendsAndGuildies[GetGuildRosterInfo(i)] = true; end
 	end
 end
-
 function GF_JoinWorld(show)
 	GF_WorldFound = nil;
 	for i=1, 10 do
@@ -671,7 +670,6 @@ function GF_JoinWorld(show)
 	end
 	if show then ChatFrame_AddChannel(ChatFrame1, GF_CHANNEL_NAME) end
 end
-
 function GF_LeaveWorld()
 	for i=1, 10 do
 		local _,cName = GetChannelName(i)
@@ -681,7 +679,6 @@ function GF_LeaveWorld()
 		end
 	end
 end
-
 function GF_EntryMatchesGroupFilterCriteria(entry, nolevelcheck)
 	if ((GF_SavedVariables.showdungeons and entry.type == "D") or (GF_SavedVariables.showraids and entry.type == "R")
 	or (GF_SavedVariables.showquests and entry.type == "Q") or (GF_SavedVariables.showother and entry.type == "N"))
@@ -689,10 +686,9 @@ function GF_EntryMatchesGroupFilterCriteria(entry, nolevelcheck)
 	or (GF_SavedVariables.showlfm and not string.find(string.lower(entry.message), "lfg")))
 	and (nolevelcheck or (not GF_SavedVariables.autofilter or (entry.who and entry.who.level and entry.who.level ~= 0
 	and (entry.who.level >= UnitLevel("player")-GF_SavedVariables.autofilterlevelvar and entry.who.level <= UnitLevel("player")+GF_SavedVariables.autofilterlevelvar))
-	or (entry.ilevel and entry.ilevel >= UnitLevel("player")-5 and entry.ilevel <= UnitLevel("player")+5)))
+	or (entry.dlevel and entry.dlevel >= UnitLevel("player")-5 and entry.dlevel <= UnitLevel("player")+5)))
 	then return true; end
 end
-
 function GF_ApplyFiltersToGroupList()
 	GF_SavedVariables.searchtext = GF_SearchFrameDescriptionEditBox:GetText()
 	GF_SavedVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText()
@@ -700,16 +696,11 @@ function GF_ApplyFiltersToGroupList()
 	for i=1, getn(GF_MessageList[GF_RealmName]) do
 		local data = GF_MessageList[GF_RealmName][i];
 		if data then
-			local timedifference = (tonumber(string.sub(GF_GetTime(),1,2))*60 + tonumber(string.sub(GF_GetTime(),3,4))) - (tonumber(string.sub(data.time,1,2))*60 + tonumber(string.sub(data.time,3,4))) + 1
-			if timedifference < 0 then timedifference = 720 - (timedifference + 720) end
-			if timedifference >= 0 and timedifference < GF_SavedVariables.grouplistingduration then
+			if (data.time + GF_SavedVariables.grouplistingduration*60) > time() then
 				if (GF_SavedVariables.searchtext ~= "" and GF_EntryMatchesGroupFilterCriteria(data, true) and (GF_Util.search(data.message, GF_SavedVariables.searchtext) > 0 or GF_Util.search(data.message, GF_SavedVariables.searchbuttonstext) > 0))
 				or (GF_SavedVariables.searchtext == "" and GF_EntryMatchesGroupFilterCriteria(data) and (GF_SavedVariables.searchbuttonstext == "" or GF_Util.search(data.message, GF_SavedVariables.searchbuttonstext) > 0)) then
-					data.elapsed = timedifference;
+					data.elapsed = ceil((time() - data.time)/60);
 					table.insert(GF_FilteredResultsList, data);
-				elseif data.type ~= "N" and data.type ~= "D" and data.type ~= "R" and data.type ~= "Q" then
-					table.remove(GF_MessageList[GF_RealmName] , i);
-					i = i - 1;
 				end
 			else
 				table.remove(GF_MessageList[GF_RealmName] , i);
@@ -720,7 +711,6 @@ function GF_ApplyFiltersToGroupList()
 	if floor(GF_ResultsListOffset/20) > floor(getn(GF_FilteredResultsList)/20) then GF_ResultsListOffset = GF_ResultsListOffset - 20 end
 	GF_UpdateResults();
 end
-
 function GF_UpdateResults()
 	local index = 1;
 	local groupListLength = getn(GF_FilteredResultsList);
@@ -779,7 +769,6 @@ function GF_UpdateResults()
 		index = index + 1;
 	end
 end
-
 function GF_GetWhoData(arg2,groupfound)
 	if string.find(arg2," ") then return end
 	local whodata = GFAWM.toOldFormat(arg2)
@@ -794,15 +783,13 @@ function GF_GetWhoData(arg2,groupfound)
 			end
 		end
 	end
-	-- if old data and I'm using who on groups and it's a group
 	if (not whodata or whodata.recordedTime < time() - 259200) and GF_SavedVariables.usewhoongroups and (groupfound or not GF_SavedVariables.showoriginalchat) then -- 3 days
-			GFAWM.addNameToWhoQueue(arg2,groupfound)
+		GFAWM.addNameToWhoQueue(arg2,groupfound)
 	else
 		GF_WhoTable[GF_RealmName][arg2] = { whodata.recordedTime, whodata.level, whodata.class, whodata.guild };
 	end
 	return whodata
 end
-
 function GF_AddMessage(arg1, arg2, arg8, arg9, whodata)
 	arg9 = string.gsub(arg9, " - .*", "")
 	for i=1,NUM_CHAT_WINDOWS do
@@ -815,7 +802,6 @@ function GF_AddMessage(arg1, arg2, arg8, arg9, whodata)
 		end
 	end
 end
-
 function GF_GetIOPScore(name)
 	if IsAddOnLoaded("InventoryOnPar") then
 		local playerInfo = IOP_GetPlayerRecord(name);
@@ -841,7 +827,6 @@ function GF_GetIOPScore(name)
 		end
 	end	
 end
-
 function GF_ListItem_OnMouseUp() -- When you click a name in the list.
 	local value = string.gsub(this:GetName(), "GF_NewItem(%d+)", "%1"); 
 	local raid = GF_FilteredResultsList[GF_ResultsListOffset + value];
@@ -858,7 +843,6 @@ function GF_ListItem_OnMouseUp() -- When you click a name in the list.
 		return;
 	end
 end
-
 function GF_ListItemAuxLeft_ShowTooltip(parent)
 	local value = GF_ResultsListOffset + string.gsub(parent:GetName(), "GF_NewItem(%d+)", "%1");
 	local entry = GF_FilteredResultsList[value];
@@ -874,17 +858,15 @@ function GF_ListItemAuxLeft_ShowTooltip(parent)
 	GameTooltip:AddLine(entry.message, 0.9, 0.9, 1.0, 1, 1);
 	GameTooltip:Show();
 end
-
 function GF_GetGroupWhoButton(parent)
 	local value = GF_ResultsListOffset + string.gsub(parent:GetName(), "GF_NewItem(%d+)", "%1");
 	local entry = GF_FilteredResultsList[value];
 
 	if not entry then return; end
 
-	GFAWM.addNameToWhoQueue(entry.op)
+	GFAWM.addNameToWhoQueue(entry.op,true)
 	getglobal(parent:GetName().."GroupWhoButton"):Hide();
 end
-
 function GF_ResultItem_Hover_On(parent) -- Displays tooltip when hovering over a group in main list.
 	local value = GF_ResultsListOffset + string.gsub(parent:GetName(), "GF_NewItem(%d+)", "%1");
 	local entry = GF_FilteredResultsList[value];
@@ -902,7 +884,6 @@ function GF_ResultItem_Hover_On(parent) -- Displays tooltip when hovering over a
 	getglobal(parent:GetName().."TextureSelectedBg"):Show();
 	getglobal(parent:GetName().."TextureSelectedIcon"):Show();
 end
-
 function GF_ResultItem_Hover_Off(parent) -- Displays tooltip when hovering over a group in main list.
 	parent:SetHeight(18);
 	getglobal(parent:GetName().."MoreLabel"):Hide();
@@ -915,7 +896,6 @@ function GF_ResultItem_Hover_Off(parent) -- Displays tooltip when hovering over 
 	getglobal(parent:GetName().."TextureSelectedBg"):Hide();
 	getglobal(parent:GetName().."TextureSelectedIcon"):Hide();
 end
-
 function GF_GetNumGroupMembers()
 	if GetNumRaidMembers() > 0 then
 		return GetNumRaidMembers();
@@ -925,7 +905,6 @@ function GF_GetNumGroupMembers()
 		return 1;
 	end
 end
-
 function GF_ConvertToParty()
 	local numRaidMembers = GetNumRaidMembers();
 	if numRaidMembers > 5 then
@@ -947,7 +926,6 @@ function GF_ConvertToParty()
 	end
 	GF_Println(GF_CONVERTING_TO_PARTY);
 end
-
 function GF_UpdateBlackListItems()
 	GF_BlackListItem0NameLabel:SetText(GF_NAME);
 	GF_BlackListItem0NoteLabel:SetText(GF_PLAYER_NOTE);
@@ -978,14 +956,12 @@ function GF_UpdateBlackListItems()
 	if tpage == 0 or tpage < counter / 15 then tpage = tpage + 1; end
 	GF_BlackListFramePageLabel:SetText(GF_PAGE.." "..cpage.." / "..tpage);
 end
-
 function GF_ShowBlackListFrame()
 	GF_SettingsFrame:Hide();
 	GF_LogFrame:Hide();
 	GF_BlackListFrame:Show();
 	GF_UpdateBlackListItems();	
 end
-		
 function GF_EditBlackListItem()
 	GF_BlackListItemEditFrame.name = (getglobal(this:GetName().."NameLabel"):GetText() or "?");
 	if not GF_BlackList[GF_RealmName][GF_BlackListItemEditFrame.name] then
@@ -995,7 +971,6 @@ function GF_EditBlackListItem()
 	GF_BlackListItemEditFrameTitleLabel:SetText(GF_EDIT_PLAYER..": "..GF_BlackListItemEditFrame.name);
 	GF_BlackListItemEditFrame:Show();
 end
-
 function GF_DialogOKButton_OnCLick()
 	local name = GF_AddPlayerFrameEditBox:GetText();
 	if name and name ~= ""  then
@@ -1004,7 +979,6 @@ function GF_DialogOKButton_OnCLick()
 	GF_AddPlayerFrame:Hide();
 	GF_ShowBlackListFrame()
 end
-		
 function GF_BlackListItemSaveChanges()
 	GF_BlackList[GF_RealmName][GF_BlackListItemEditFrame.name] = GF_BlackListItemEditFrameEditBox:GetText();
 	GF_BlackList[GF_RealmName][GF_BlackListItemEditFrame.name] = GF_BlackListItemEditFrameEditBox:GetText();
@@ -1012,13 +986,11 @@ function GF_BlackListItemSaveChanges()
 	GF_BlackListItemEditFrame:Hide();
 	GF_ShowBlackListFrame();
 end
-		
 function GF_DeletePlayer()
 	GF_BlackList[GF_RealmName][GF_BlackListItemEditFrame.name] = nil;
 	GF_BlackListItemEditFrame:Hide();
 	GF_ShowBlackListFrame();
 end
-
 function GF_ToggleMainFrame()
 	PlaySound("igCharacterInfoTab");
 	if GF_MainFrame:IsVisible() then
@@ -1028,7 +1000,6 @@ function GF_ToggleMainFrame()
 		GF_MainFrame:Show();
 	end
 end
-
 function GF_Tab_OnCLick() -- When clicking tabs
 	PlaySound("igCharacterInfoTab");
 	GF_SearchFrame:Hide();
@@ -1051,7 +1022,6 @@ function GF_Tab_OnCLick() -- When clicking tabs
 		GF_MoreFeaturesFrame:Show();
 	end
 end
-
 function GF_UpdateMinimapIcon()
 	local xpos = Minimap:GetRight()
 	local ypos = Minimap:GetTop()
@@ -1070,14 +1040,12 @@ function GF_UpdateMinimapIcon()
 		(0 - ((GF_SavedVariables.MinimapMsgRadiusOffset) * cos(GF_SavedVariables.MinimapMsgArcOffset + xradadjust))) - 55,
 		((GF_SavedVariables.MinimapMsgRadiusOffset) * sin(GF_SavedVariables.MinimapMsgArcOffset + yradadjust)) - 55);
 end
-
 function GF_GetTime(colon)
 	local hour, minute = GetGameTime();
 	if hour < 10 then hour = "0"..hour; end
 	if minute < 10 then minute = "0"..minute; end
 	if colon then return hour..":"..minute else return hour..minute; end
 end
-
 function GF_ShowTooltip() -- Generic Tooltip. Called by XML
 	if GF_GenTooltips[this:GetName()] then
 		GameTooltip:SetOwner(getglobal(this:GetName()), "ANCHOR_TOP");
@@ -1089,11 +1057,9 @@ function GF_ShowTooltip() -- Generic Tooltip. Called by XML
 		GameTooltip:Show();
 	end
 end
-		
 function GF_Println(m)
 	if m and DEFAULT_CHAT_FRAME then DEFAULT_CHAT_FRAME:AddMessage("GF: "..m, 1, 1, 0.5); end		
 end
-
 function GF_ToggleAnnounce()
 	if GF_AutoAnnounceTimer then
 		GF_AutoAnnounceTimer = nil;
@@ -1110,7 +1076,6 @@ function GF_ToggleAnnounce()
 		end
 	end
 end
-
 function GF_ToggleGetWho()
 	if not GF_ClassWhoRequest then
 		GF_GetWhoLevel = GF_FindDungeonLevel()
@@ -1124,7 +1089,6 @@ function GF_ToggleGetWho()
 		GF_LFGGetWhoButton:SetText(GF_GET_WHO.." - "..GFAWM.ClassWhoMatchingResults);
 	end
 end
-
 function GF_LFGWhisperButton()
 	local whispermessage = GF_LFGWhoWhisperEditBox:GetText()
 	if whispermessage == "" then whispermessage = GF_LFGDescriptionEditBox:GetText() end
@@ -1148,7 +1112,6 @@ function GF_LFGWhisperButton()
 		GF_Println(GF_NO_WHISPER_TEXT);
 	end
 end
-
 function GF_FindDungeonLevel()
 	for _,dtable in pairs(GF_BUTTONS_LIST["LFGDungeon"]) do
 		for w in string.gfind(string.lower(GF_SavedVariables.searchlfgtext), string.lower(dtable[1])) do
@@ -1161,7 +1124,6 @@ function GF_FindDungeonLevel()
 		end
     end
 end
-
 local function GF_CreateSearchButton(id, parent)
 	local button = CreateFrame("CheckButton", parent:GetName() .. id, parent, "GF_AbstractLabelCheckButtonClick")
 	if id == 1 then
@@ -1171,7 +1133,6 @@ local function GF_CreateSearchButton(id, parent)
 	end
 	return button
 end
-
 function GF_FixLFGStrings()
 	local lfglfmtext = ""
 	for _,dtable in pairs(GF_BUTTONS_LIST["LFGLFM"]) do
@@ -1255,7 +1216,6 @@ function GF_FixLFGStrings()
 	GF_SavedVariables.searchlfgtext = lfglfmtext
 	getglobal(GF_LFGDescriptionEditBox:GetName()):SetText(GF_SavedVariables.searchlfgtext);
 end
-
 function GF_ShowDropdownList(bframe)
 	local width = 0
 	GF_NumSearchButtons = 0;
@@ -1301,7 +1261,6 @@ function GF_ShowDropdownList(bframe)
 	getglobal("GF_"..bframe):SetPoint("TOPLEFT", getglobal("GF_"..bframe.."Dropdown"), "BOTTOMLEFT", 0, 4)
 	if GF_NumSearchButtons > 0 then getglobal("GF_"..bframe):Show() end
 end
-
 function GF_AddRemoveSearch(bframe, entryname, add)
 	if bframe == "SearchList" then
 		if entryname == "Clear" then
@@ -1365,42 +1324,24 @@ function GF_AddRemoveSearch(bframe, entryname, add)
 		GF_FixLFGStrings()
 	end
 end
-
 function GF_CheckForGroups(arg1, arg2)
 	local score, gtype, glevel = GF_Util.rateResults(arg1, GF_SavedVariables.FilterLevel);
 	if score == 0 then return end
 
-	local whoData = nil;
-	local savedmessage = "";
-	local savedtime = string.sub(tonumber(GF_GetTime())-(GF_SavedVariables.showgroupsnewonlytime+1)+10000, 2,5)
+	local entry = {};
+	entry.op = arg2;
+	entry.message = arg1;
+	entry.type = gtype;
+	entry.dlevel = glevel;
+	entry.who = GFAWM.toOldFormat(arg2);
+	entry.time = time()
+
 	for i = 1, getn(GF_MessageList[GF_RealmName]) do
 		if arg2 == GF_MessageList[GF_RealmName][i].op then
-			whoData = GF_MessageList[GF_RealmName][i].who;
-			savedmessage = GF_MessageList[GF_RealmName][i].message;
-			savedtime = GF_MessageList[GF_RealmName][i].time;
+			if GF_MessageList[GF_RealmName][i].time + GF_SavedVariables.showgroupsnewonlytime*60 < time() then score = 2; end
 			table.remove(GF_MessageList[GF_RealmName], i);
 			break;
 		end
 	end
-	local entry = {};
-	entry.message = arg1;
-	local timedifference = (tonumber(string.sub(GF_GetTime(),1,2))*60 + tonumber(string.sub(GF_GetTime(),3,4))) - (tonumber(string.sub(savedtime,1,2))*60 + tonumber(string.sub(savedtime,3,4)))
-	if timedifference < 0 then timedifference = 720 - (timedifference + 720) end
-	if savedmessage == arg1 then
-		if timedifference <= GF_SavedVariables.showgroupsnewonlytime then
-			score = 1;
-			entry.time = savedtime;
-		else
-			score = 2;
-			entry.time = GF_GetTime();
-		end
-	else 
-		score = 2;
-		entry.time = GF_GetTime();
-	end
-	entry.who = GFAWM.toOldFormat(arg2) or whoData;
-	entry.op = arg2;
-	entry.type = gtype;
-	entry.ilevel = glevel;
 	return score, entry
 end
