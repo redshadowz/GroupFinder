@@ -636,16 +636,15 @@ function GF_OnEvent(event)
 	elseif (event == "GUILD_ROSTER_UPDATE" and GetNumGuildMembers() ~= GF_CurrentNumGuildies) or (event == "FRIENDLIST_UPDATE" and GetNumFriends() ~= GF_CurrentNumFriends) then
 		GF_UpdateFriendsAndGuildiesList()
 	end
-	--if event == "GUILD_ROSTER_UPDATE" then print("guild update") end
 end
 
 function GF_UpdatePlayersInGroupList()
 		GF_PlayersCurrentlyInGroup = {}
 		GF_PlayersCurrentlyInGroup[UnitName("player")] = true;
-		for i=1, GetNumPartyMembers() do
+		for i=1,5 do
 			GF_PlayersCurrentlyInGroup[UnitName("party"..i)] = true;
 		end
-		for i=1, GetNumRaidMembers() do
+		for i=1,40 do
 			GF_PlayersCurrentlyInGroup[GetRaidRosterInfo(i)] = true;
 		end	
 end
@@ -653,10 +652,10 @@ end
 function GF_UpdateFriendsAndGuildiesList()
 	GF_FriendsAndGuildies = {};
 	for i=1, GetNumFriends() do
-		GF_FriendsAndGuildies[GetFriendInfo(i)] = true;
+		if GetFriendInfo(i) then GF_FriendsAndGuildies[GetFriendInfo(i)] = true; end
 	end
 	for i=1, GetNumGuildMembers() do
-		GF_FriendsAndGuildies[GetGuildRosterInfo(i)] = true;
+		if GetGuildRosterInfo(i) then GF_FriendsAndGuildies[GetGuildRosterInfo(i)] = true; end
 	end
 end
 
