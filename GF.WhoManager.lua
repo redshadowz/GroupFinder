@@ -30,10 +30,10 @@ GFAWM.onEventVariablesLoaded = function(event)
 	
 	GFAWM.preHookSetItemRef = SetItemRef;
 	SetItemRef = GFAWM.hookedSetItemRef;
+	if not GF_WhoTable[GF_RealmName] then GF_WhoTable[GF_RealmName] = {} end
+	if not GF_MessageList[GF_RealmName] then GF_MessageList[GF_RealmName] = {} end
 	
 	if not GF_WhoTable[GF_RealmName][UnitName("player")] or GF_WhoTable[GF_RealmName][UnitName("player")][1] < time() then -- Prune the wholist
-		if not GF_WhoTable[GF_RealmName] then GF_WhoTable[GF_RealmName] = {} end
-		if not GF_MessageList[GF_RealmName] then GF_MessageList[GF_RealmName] = {} end
 		GFAWM.pruneWhoTable(); GF_WhoTable[GF_RealmName][UnitName("player")] = { time() + 60*60*24*14, UnitLevel("player"), UnitClass("player"), "<>" }; -- 14 days
 	end
 
