@@ -642,10 +642,10 @@ function GF_UpdatePlayersInGroupList()
 		GF_PlayersCurrentlyInGroup = {}
 		GF_PlayersCurrentlyInGroup[UnitName("player")] = true;
 		for i=1,5 do
-			GF_PlayersCurrentlyInGroup[UnitName("party"..i)] = true;
+			if UnitExists("party"..i) then GF_PlayersCurrentlyInGroup[UnitName("party"..i)] = true; end
 		end
 		for i=1,40 do
-			GF_PlayersCurrentlyInGroup[GetRaidRosterInfo(i)] = true;
+			if UnitExists("raid"..i) then GF_PlayersCurrentlyInGroup[GetRaidRosterInfo(i)] = true; end
 		end	
 end
 
