@@ -208,7 +208,7 @@ function GF_OnLoad()
 										return;
 									else
 										GF_WhoTable[GF_RealmName][arg2] = nil;
-										GFAWM.addNameToWhoQueue(arg2,true);
+										if GF_SavedVariables.usewhoongroups then GFAWM.addNameToWhoQueue(arg2,true); end
 									end
 								end
 								if not GF_PlayerMessages[arg2].time or GF_PlayerMessages[arg2].time > time() then
