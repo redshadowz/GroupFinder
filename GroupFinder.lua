@@ -58,41 +58,33 @@ GF_ResultsListOffset 			= 0;
 GF_BlackListOffset 			= 0;
 local GF_SelectedResultListItem = 0;
 
-
 local GF_OnStartupRunOnce 					= true;
 local GF_OnStartupQueueURequest 			= nil;
 local GF_AddonWhoDataToBeSentBuffer			= {};
 GF_AddonAllNamesForResponseToLogin			= {};
 local GF_AddonNamesToBeSentAsARequest		= {};
 local GF_AddonMakeAResponseToLoginList		= nil;
-
 local GF_AddonOPSentNamesOnLogin			= {};
 local GF_AddonGroupDataToBeSentBuffer		= {};
 local GF_AddonMakeAListOfGroupsForSending	= nil;
-
 local GF_AddonListOfGuildiesWithAddon		= {};
-
 local GF_AutoAnnounceTimer 		= nil;
 local GF_WasPartyLeaderBefore	= nil;
-
 GF_NumSearchButtons				= 0;
 GF_PlayersCurrentlyInGroup 		= {};
 local GF_FriendsAndGuildies		= {};
 local GF_CurrentNumFriends		= 0;
 local GF_CurrentNumGuildies		= 0;
 local GF_GetWhoLevel 			= 0;
-
 local GF_UpdateTicker 			= 0;
 local GF_TimeTillNextBroadcast	= 10;
 GF_RequestTimer					= 2;
 GF_RequestWhoDataPeriodicallyTimer= 30;
-
 local GF_PlayerMessages 		= {}
 local GF_IncomingMessagePrune 	= 0;
 local GF_PreviousMessage		= {};
 
 local GF_Classes	= {};
-
 local GF_ClassColors = {};
 GF_ClassColors[GF_PRIEST]  	= "ffffff";
 GF_ClassColors[GF_MAGE] 	= "68ccef";
@@ -756,7 +748,7 @@ function GF_UpdateResults()
 				getglobal(c.."NameLabel"):SetText(mainText);
 				getglobal(c.."MoreLabel"):SetText(moreText);
 				getglobal(c):Show();
-				if not GF_SavedVariables.usewhoongroups and not (GF_WhoTable[GF_RealmName][entry.op] and GF_WhoTable[GF_RealmName][entry.op][1] and
+				if (not GF_SavedVariables.usewhoongroups or (entry.whoAttempts and entry.whoAttempts > 2)) and not (GF_WhoTable[GF_RealmName][entry.op] and GF_WhoTable[GF_RealmName][entry.op][1] and
 					GF_WhoTable[GF_RealmName][entry.op][1] + 259200 > time()) and GFAWM.getPositionInQueue(entry.op, whoQueue) == 0 then -- 3 days
 					getglobal(c.."GroupWhoButton"):Show();
 				else
@@ -863,7 +855,7 @@ function GF_GetGroupWhoButton(parent)
 	local entry = GF_FilteredResultsList[value];
 
 	if not entry then return; end
-
+	GF_FilteredResultsList[value].whoAttempts = 0
 	GFAWM.addNameToWhoQueue(entry.op,true)
 	getglobal(parent:GetName().."GroupWhoButton"):Hide();
 end
