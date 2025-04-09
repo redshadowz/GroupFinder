@@ -83,7 +83,6 @@ GF_RequestWhoDataPeriodicallyTimer= 30;
 local GF_PlayerMessages 		= {}
 local GF_IncomingMessagePrune 	= 0;
 local GF_PreviousMessage		= {};
-local GF_SentMessage			= "";
 
 local GF_Classes	= {};
 
@@ -116,8 +115,7 @@ function GF_OnLoad()
 	
 	local old_ChatFrame_OnEvent = ChatFrame_OnEvent;
 	function ChatFrame_OnEvent(event)
-		if not arg1 or arg1 == "" or arg1 == GF_SentMessage or not arg2 or arg2 == "" or arg2 == UnitName("player") or not arg9 then
-			GF_SentMessage = nil;
+		if not arg1 or arg1 == "" or not arg2 or arg2 == "" or arg2 == UnitName("player") or not arg9 then
 			if not GF_SavedVariables.showloottexts and arg1 then
 				for i=1, getn(GF_LootFilters) do
 					if string.find(arg1, GF_LootFilters[i]) then
@@ -141,7 +139,7 @@ function GF_OnLoad()
 			end
 		else
 			if not GF_PreviousMessage[arg2] or GF_PreviousMessage[arg2][1] ~= arg1 or GF_PreviousMessage[arg2][2] + 30 < time() then
-				GF_PreviousMessage[arg2] = {arg1,time(), nil, arg1} -- Old message, time of last message, whether to block message
+				GF_PreviousMessage[arg2] = {arg1,time(), nil} -- [1]arg1... [2]time of last message... [3]whether to block message
 				
 				if not GF_PlayersCurrentlyInGroup[arg2] and not GF_FriendsAndGuildies[arg2] then											-- Block blacklist, website spam, and politics.
 					if GF_BlackList[GF_RealmName][arg2] then
@@ -171,7 +169,6 @@ function GF_OnLoad()
 				if not Questie and string.find(arg1, "|c%w+|Hquest[0-9a-fA-F:]+|h%[.-%]%|h|r") then											-- Block broken questie links
 					arg1 = string.gsub(arg1, "|c%w+|Hquest[0-9a-fA-F:]+|h%[(.-)%]%|h|r", "%1")
 				end
-				GF_PreviousMessage[arg2][4] = arg1
 				local foundInGroup, data;
 				if arg9 ~= "" then
 					foundInGroup, data = GF_CheckForGroups(arg1,arg2);
@@ -287,10 +284,10 @@ function GF_OnLoad()
 					end
 				end
 			else
-				if GF_PreviousMessage[arg2][3] or (GF_PreviousMessage[arg2][1] == arg1 and GF_PreviousMessage[arg2][2] + 30 > time() and GF_PreviousMessage[arg2][2] + .25 < time()) then
+				if GF_PreviousMessage[arg2][3] then -- Flagged as blocked
 						return
 				else
-					arg1 = GF_PreviousMessage[arg2][4]
+					arg1 = GF_PreviousMessage[arg2][1]
 				end
 			end
 		end
