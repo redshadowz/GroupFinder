@@ -319,10 +319,10 @@ function GF_OnUpdate()
 				if string.len(GF_LFGDescriptionEditBox:GetText()) >= 6 then
 					if GF_SavedVariables.lfgauto and string.lower(string.sub(GF_LFGDescriptionEditBox:GetText(), 1, 2)) == "lf" and string.sub(GF_LFGDescriptionEditBox:GetText(), 1, 3) ~= "lfg" then 
 						local lfgmessage = string.gsub(GF_LFGDescriptionEditBox:GetText(), "%w+%s(.+)", "%1") or ""
-						GF_SendChatMessage("LF"..GF_SavedVariables.lfgsize-GF_GetNumGroupMembers().."M "..lfgmessage, "CHANNEL", GF_CHANNEL_NAME);
+						SendChatMessage("LF"..GF_SavedVariables.lfgsize-GF_GetNumGroupMembers().."M "..lfgmessage, "CHANNEL", nil, GetChannelName(GF_CHANNEL_NAME));
 						GF_Println(GF_SENT.."LF"..GF_SavedVariables.lfgsize-GF_GetNumGroupMembers().."M "..lfgmessage);
 					else
-						GF_SendChatMessage(GF_LFGDescriptionEditBox:GetText(), "CHANNEL", GF_CHANNEL_NAME);
+						SendChatMessage(GF_LFGDescriptionEditBox:GetText(), "CHANNEL", nil, GetChannelName(GF_CHANNEL_NAME));
 						GF_Println(GF_SENT..GF_LFGDescriptionEditBox:GetText());
 					end
 					PlaySound("TellMessage");
@@ -680,14 +680,6 @@ function GF_LeaveWorld()
 			return
 		end
 	end
-end
-
-function GF_SendChatMessage(message, messageType, channel)
-	if messageType == "CHANNEL" and type(channel)=="string" then
-		local index = GetChannelName(channel)
-		if index~=0 then channel = index end
-	end
-	SendChatMessage(string.gsub(message, "|c(%w+)|H(%w+):(.+)|h(.+)|h|r", "%4"), messageType, nil, channel);
 end
 
 function GF_EntryMatchesGroupFilterCriteria(entry, nolevelcheck)
