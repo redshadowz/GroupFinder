@@ -778,7 +778,7 @@ function GF_GetWhoData(arg2,groupfound)
 	if (not whodata or whodata.recordedTime < time() - 259200) and GF_SavedVariables.usewhoongroups and (groupfound or not GF_SavedVariables.showoriginalchat) then -- 3 days
 		GFAWM.addNameToWhoQueue(arg2,groupfound)
 	else
-		GF_WhoTable[GF_RealmName][arg2] = { whodata.recordedTime, whodata.level, whodata.class, whodata.guild };
+		if whodata then GF_WhoTable[GF_RealmName][arg2] = { whodata.recordedTime, whodata.level, whodata.class, whodata.guild }; end
 	end
 	return whodata
 end
