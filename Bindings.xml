@@ -1,0 +1,5 @@
+<Bindings>
+	<Binding name="GF_SHOW_FRAME" header="GF_MAIN_HEADER">
+		GF_ToggleMainFrame();
+	</Binding>
+</Bindings>

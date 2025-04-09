@@ -1,6 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
-	<Script file="GFLocalization.lua"/>
+	<Script file="localization.lua"/>
 	<Script file="GroupFinder_Util.lua"/>
 	<Script file="GF.WhoManager.lua"/>
 	<Script file="GroupFinder.lua"/>
@@ -2647,6 +2647,10 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											</OnLeave>			
 											<OnClick>								
 												GF_SavedVariables.spamfilter = this:GetChecked();
+												if not GF_SavedVariables.spamfilter then
+													GF_FrameAutoBlacklistCheckButton:SetChecked(false);
+													GF_SavedVariables.autoblacklist = false;
+												end
 											</OnClick>
 											<OnLoad>
 												getglobal(this:GetName().."TextLabel"):SetWidth(300);

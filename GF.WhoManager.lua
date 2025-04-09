@@ -32,6 +32,8 @@ GFAWM.onEventVariablesLoaded = function(event)
 	SetItemRef = GFAWM.hookedSetItemRef;
 	
 	if not GF_WhoTable[GF_RealmName][UnitName("player")] or GF_WhoTable[GF_RealmName][UnitName("player")][1] < time() then -- Prune the wholist
+		if not GF_WhoTable[GF_RealmName] then GF_WhoTable[GF_RealmName] = {} end
+		if not GF_MessageList[GF_RealmName] then GF_MessageList[GF_RealmName] = {} end
 		GFAWM.pruneWhoTable(); GF_WhoTable[GF_RealmName][UnitName("player")] = { time() + 60*60*24*14, UnitLevel("player"), UnitClass("player"), "<>" }; -- 14 days
 	end
 
@@ -90,23 +92,25 @@ GFAWM.onUpdate = function()
 			SendWho("n-"..urgentWhoRequest);
 			urgentWhoSent = urgentWhoRequest;
 			urgentWhoRequest = nil;
-		elseif GF_ClassWhoRequest and not WhoFrame:IsVisible() then
-			if ClassWhoQueue[1] then
+		elseif not FriendsFrame:IsVisible() then
+			if GF_ClassWhoRequest then
+				if ClassWhoQueue[1] then
+					SetWhoToUI(1);
+					SendWho(ClassWhoQueue[1]);
+					table.remove(ClassWhoQueue, 1);
+				else
+					GF_ClassWhoRequest = nil
+					GF_LFGGetWhoButton:SetText(GF_GET_WHO.." - "..GFAWM.ClassWhoMatchingResults);
+				end
+			elseif whoQueue[1] then
+				if GF_WhoTable[GF_RealmName][whoQueue[1]] and GF_WhoTable[GF_RealmName][whoQueue[1]][1] + 259200 > time() then -- 3 days
+					table.remove(whoQueue, 1);
+					return;
+				end
 				SetWhoToUI(1);
-				SendWho(ClassWhoQueue[1]);
-				table.remove(ClassWhoQueue, 1);
-			else
-				GF_ClassWhoRequest = nil
-				GF_LFGGetWhoButton:SetText(GF_GET_WHO.." - "..GFAWM.ClassWhoMatchingResults);
-			end
-		elseif whoQueue[1] and not WhoFrame:IsVisible() then
-			if GF_WhoTable[GF_RealmName][whoQueue[1]] and GF_WhoTable[GF_RealmName][whoQueue[1]][1] + 259200 > time() then -- 3 days
+				SendWho("n-"..whoQueue[1]);
 				table.remove(whoQueue, 1);
-				return;
 			end
-			SetWhoToUI(1);
-			SendWho("n-"..whoQueue[1]);
-			table.remove(whoQueue, 1);
 		end
 	end
 end
@@ -195,9 +199,9 @@ GFAWM.getPositionInQueue = function(name, tbl)
 	return 0;
 end
 
-GFAWM.addNameToWhoQueue = function(name,groupfound)
+GFAWM.addNameToWhoQueue = function(name,addToTopOfList)
 	if GFAWM.getPositionInQueue(name, whoQueue) == 0 then
-		if groupfound then
+		if addToTopOfList then
 			table.insert(whoQueue, 1, name);
 		else
 			table.insert(whoQueue, name);
@@ -235,8 +239,8 @@ GFAWM.hookedFriendsFrame_OnEvent = function(event)
 		GF_WhoTable[GF_RealmName][name] = { time(), level, class, guild };
 		tempwhodata[name] = true;
 	end
-	if tempwhodata[urgentWhoSent] or FriendsFrame:IsVisible() or (event and event ~= "WHO_LIST_UPDATE") then
-		if urgentWhoSent then urgentWhoSent = nil; end
+	if tempwhodata[urgentWhoSent] or WhoFrame:IsVisible() or (event and event ~= "WHO_LIST_UPDATE") then
+		if tempwhodata[urgentWhoSent] and urgentWhoSent then urgentWhoSent = nil; end
 		GFAWM.preHookFriendsFrame_OnEvent(event);
 	end
 end
@@ -245,17 +249,9 @@ GFAWM.hookedSetItemRef = function(...)
 	local link = arg[1];
 	if strsub(link, 1, 6) == "player" then
 		local name = strsub(link, 8);
-		if name and strlen(name) > 0 then
-			if IsShiftKeyDown() then
-				if ChatFrameEditBox:IsVisible() then
-					--ChatFrameEditBox:Insert("|cffffffff|Hplayer:"..name.."|h["..name.."]|h|r")
-					ChatFrameEditBox:Insert(name)
-					return
-				else
-					urgentWhoRequest = name;
-					return;
-				end
-			end
+		if name and strlen(name) > 0 and IsShiftKeyDown() and not ChatFrameEditBox:IsVisible() then
+			urgentWhoRequest = name;
+			return;
 		end
 	end
 	GFAWM.preHookSetItemRef(unpack(arg));

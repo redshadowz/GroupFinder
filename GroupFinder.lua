@@ -66,10 +66,13 @@ local GF_AddonMakeAListOfGroupsForSending	= nil;
 local GF_AddonListOfGuildiesWithAddon		= {};
 
 local GF_AutoAnnounceTimer 		= nil;
+local GF_WasPartyLeaderBefore	= nil;
 
 GF_NumSearchButtons				= 0;
 GF_PlayersCurrentlyInGroup 		= {};
 local GF_FriendsAndGuildies		= {};
+local GF_CurrentNumFriends		= 0;
+local GF_CurrentNumGuildies		= 0;
 local GF_GetWhoLevel 			= 0;
 
 local GF_UpdateTicker 			= 0;
@@ -108,6 +111,8 @@ function GF_OnLoad()
 	this:RegisterEvent("WHO_LIST_UPDATE");
 	this:RegisterEvent("ZONE_CHANGED");
 	this:RegisterEvent("PLAYER_LEAVING_WORLD");
+	this:RegisterEvent("GUILD_ROSTER_UPDATE");
+	this:RegisterEvent("FRIENDLIST_UPDATE");
 	
 	local old_ChatFrame_OnEvent = ChatFrame_OnEvent;
 	function ChatFrame_OnEvent(event)
@@ -137,6 +142,7 @@ function GF_OnLoad()
 		else
 			if not GF_PreviousMessage[arg2] or GF_PreviousMessage[arg2][1] ~= arg1 or GF_PreviousMessage[arg2][2] + 30 < time() then
 				GF_PreviousMessage[arg2] = {arg1,time(), nil, arg1} -- Old message, time of last message, whether to block message
+				
 				if not GF_PlayersCurrentlyInGroup[arg2] and not GF_FriendsAndGuildies[arg2] then											-- Block blacklist, website spam, and politics.
 					if GF_BlackList[GF_RealmName][arg2] then
 						GF_Log:AddMessage("["..GF_GetTime(true).."] "..GF_BLACKLIST_MESSAGE..arg2..": "..arg1, 1.0, 1.0, 0.5);	
@@ -197,16 +203,16 @@ function GF_OnLoad()
 						if not GF_PlayerMessages[arg2] then
 							GF_PlayerMessages[arg2] = { [1] = string.sub(arg1,math.floor(sniprandom/4),math.floor(sniprandom/4) + 50), [2] = "ZXYXZ123" }
 						else
-							if string.find(arg1,GF_PlayerMessages[arg2][1],1,true) or string.find(arg1,GF_PlayerMessages[arg2][2],1,true) then
-								if GF_SavedVariables.autoblacklist and not GF_BlackList[GF_RealmName][arg2] and tempwhodata and tonumber(tempwhodata.level) <= GF_SavedVariables.autoblacklistminlevel and string.len(arg1) > 120 then
-									if tempwhodata.recordedTime + 21600 < time() then -- 6 hours
-										GF_WhoTable[GF_RealmName][arg2] = nil;
-										if GF_SavedVariables.usewhoongroups and (not GF_SavedVariables.showoriginalchat or foundInGroup) then GFAWM.addNameToWhoQueue(arg2) end
-									else
+							if string.find(arg1,GF_PlayerMessages[arg2][1],1,true) or string.find(arg1,GF_PlayerMessages[arg2][2],1,true) then -- Found Spammer
+								if GF_SavedVariables.autoblacklist and not GF_BlackList[GF_RealmName][arg2] and string.len(arg1) > 120 then
+									if tempwhodata and tonumber(tempwhodata.level) <= GF_SavedVariables.autoblacklistminlevel and tempwhodata.recordedTime + 21600 > time() then -- 6 hours
 										GF_BlackList[GF_RealmName][arg2] = "("..tempwhodata.level..") "..arg1;
 										GF_Log:AddMessage("["..GF_GetTime(true).."] "..GF_BLACKLIST_MESSAGE..arg2..": "..arg1, 1.0, 1.0, 0.5);	
 										GF_PreviousMessage[arg2][3] = true;
 										return;
+									else
+										GF_WhoTable[GF_RealmName][arg2] = nil;
+										GFAWM.addNameToWhoQueue(arg2,true);
 									end
 								end
 								if not GF_PlayerMessages[arg2].time or GF_PlayerMessages[arg2].time > time() then
@@ -314,7 +320,7 @@ function GF_OnUpdate()
 			if GF_AutoAnnounceTimer > GF_SavedVariables.announcetimer then
 				GF_AutoAnnounceTimer = 0;
 				if string.len(GF_LFGDescriptionEditBox:GetText()) >= 6 then
-					if GF_SavedVariables.lfgauto and string.sub(GF_LFGDescriptionEditBox:GetText(), 1, 2) == "lf" and string.sub(GF_LFGDescriptionEditBox:GetText(), 1, 3) ~= "lfg" then 
+					if GF_SavedVariables.lfgauto and string.lower(string.sub(GF_LFGDescriptionEditBox:GetText(), 1, 2)) == "lf" and string.sub(GF_LFGDescriptionEditBox:GetText(), 1, 3) ~= "lfg" then 
 						local lfgmessage = string.gsub(GF_LFGDescriptionEditBox:GetText(), "%w+%s(.+)", "%1") or ""
 						GF_SendChatMessage("LF"..GF_SavedVariables.lfgsize-GF_GetNumGroupMembers().."M "..lfgmessage, "CHANNEL", GF_CHANNEL_NAME);
 						GF_Println(GF_SENT.."LF"..GF_SavedVariables.lfgsize-GF_GetNumGroupMembers().."M "..lfgmessage);
@@ -514,8 +520,6 @@ local function GF_LoadSettings()
 	getglobal(GF_LFGWhoClassDropdown:GetName().."TextLabel"):SetPoint("LEFT", "GF_LFGWhoClassDropdown", "LEFT", 22, 3);
 	
 	if string.sub(GetRealmName(), 1, 9) == "Nordanaar" or string.sub(GetRealmName(), 1, 8) == "Tel'Abim" then GF_AddTurtleWoWDungeonsRaids() end
-	if not GF_WhoTable[GF_RealmName] then GF_WhoTable[GF_RealmName] = {} end
-	if not GF_MessageList[GF_RealmName] then GF_MessageList[GF_RealmName] = {} end
 	if not GF_BlackList[GF_RealmName] then GF_BlackList[GF_RealmName] = {} end
 end
 
@@ -526,15 +530,6 @@ function GF_OnEvent(event)
 		GFAWM.onEventVariablesLoaded(event);	
 		GF_UpdateBlackListItems(); 
 		GF_ApplyFiltersToGroupList()	
-		GF_UpdatePlayersInGroupList()
-		for i=1, GetNumFriends() do
-			local name = GetFriendInfo(i)
-			if name and not GF_FriendsAndGuildies[name] then GF_FriendsAndGuildies[name] = true; end
-		end
-		for i=1, GetNumGuildMembers() do
-			local name = GetGuildRosterInfo(i)
-			if name and not GF_FriendsAndGuildies[name] then GF_FriendsAndGuildies[name] = true; end
-		end
 		if GF_SavedVariables.lastlogout + 600 < time() then -- 10 minutes
 			GF_OnStartupQueueURequest = true;
 			GF_TimeTillNextBroadcast = 0;
@@ -623,7 +618,7 @@ function GF_OnEvent(event)
 		GFAWM.onEventWhoListUpdated();
 	elseif event == "RAID_ROSTER_UPDATE" or event == "PARTY_LEADER_CHANGED" or event == "PARTY_MEMBERS_CHANGED" then
 		if GF_AutoAnnounceTimer then
-			if not UnitIsPartyLeader("player") and GF_GetNumGroupMembers() > 1 then
+			if GF_WasPartyLeaderBefore and not UnitIsPartyLeader("player") and GF_GetNumGroupMembers() > 1 then
 				GF_Println(GF_JOIN_ANNOUNCE_OFF);
 				GF_ToggleAnnounce()
 				GF_AutoAnnounceTimer = nil;
@@ -632,12 +627,14 @@ function GF_OnEvent(event)
 				GF_ToggleAnnounce()
 				GF_AutoAnnounceTimer = nil;
 			end
-			GF_UpdatePlayersInGroupList()
 		end
+		if not event == "PARTY_LEADER_CHANGED" then GF_UpdatePlayersInGroupList() end
 	elseif event == "ZONE_CHANGED" and not GF_WorldFound then
 		GF_JoinWorld()
 	elseif event == "PLAYER_LEAVING_WORLD" then
 		GF_SavedVariables.lastlogout = time();
+	elseif (event == "GUILD_ROSTER_UPDATE" and GetNumGuildMembers() ~= GF_CurrentNumGuildies) or (event == "FRIENDLIST_UPDATE" and GetNumFriends() ~= GF_CurrentNumFriends) then
+		GF_UpdateFriendsAndGuildiesList()
 	end
 end
 
@@ -650,6 +647,16 @@ function GF_UpdatePlayersInGroupList()
 		for i=1, GetNumRaidMembers() do
 			GF_PlayersCurrentlyInGroup[GetRaidRosterInfo(i)] = true;
 		end	
+end
+
+function GF_UpdateFriendsAndGuildiesList()
+	GF_FriendsAndGuildies = {};
+	for i=1, GetNumFriends() do
+		GF_FriendsAndGuildies[GetFriendInfo(i)] = true;
+	end
+	for i=1, GetNumGuildMembers() do
+		GF_FriendsAndGuildies[GetGuildRosterInfo(i)] = true;
+	end
 end
 
 function GF_JoinWorld(show)
@@ -787,27 +794,22 @@ end
 function GF_GetWhoData(arg2,groupfound)
 	if string.find(arg2," ") then return end
 	local whodata = GFAWM.toOldFormat(arg2)
-	if not whodata and IsAddOnLoaded("InventoryOnPar") then whodata = IOP.Data[GetRealmName()][arg2] end
-	if not whodata and IsAddOnLoaded("pfUI") then
-		whodata = pfUI_playerDB[arg2] 
-		if whodata then
-			whodata.class = string.sub(whodata.class,1,1)..string.lower(string.sub(whodata.class,2))
-			whodata.recordedTime = time()
-			whodata.guild = "<>"
-		end 
-	end
-	if whodata then
-		if not GF_WhoTable[GF_RealmName][arg2] then
-			if whodata.level <= GF_SavedVariables.autoblacklistminlevel and GF_SavedVariables.usewhoongroups and (not GF_SavedVariables.showoriginalchat or groupfound) then
-				GFAWM.addNameToWhoQueue(arg2,groupfound)
-				return
-			else
-				GF_WhoTable[GF_RealmName][arg2] = { time(), whodata.level, whodata.class, whodata.guild };
+	if not whodata then 
+		if IsAddOnLoaded("InventoryOnPar") then whodata = IOP.Data[GetRealmName()][arg2] end
+		if IsAddOnLoaded("pfUI") then
+			whodata = pfUI_playerDB[arg2] 
+			if whodata then
+				whodata.class = string.sub(whodata.class,1,1)..string.lower(string.sub(whodata.class,2))
+				whodata.recordedTime = time() - 21601 -- 6 hours + 1 second
+				whodata.guild = ""
 			end
 		end
-		if whodata.recordedTime < (time() - 259200) then GF_WhoTable[GF_RealmName][arg2] = nil; if GF_SavedVariables.usewhoongroups and (not GF_SavedVariables.showoriginalchat or groupfound) then GFAWM.addNameToWhoQueue(arg2,groupfound) end end -- 3 days
+	end
+	-- if old data and I'm using who on groups and it's a group
+	if (not whodata or whodata.recordedTime < time() - 259200) and GF_SavedVariables.usewhoongroups and (groupfound or not GF_SavedVariables.showoriginalchat) then -- 3 days
+			GFAWM.addNameToWhoQueue(arg2,groupfound)
 	else
-		if GF_SavedVariables.usewhoongroups and (not GF_SavedVariables.showoriginalchat or groupfound) then GFAWM.addNameToWhoQueue(arg2,groupfound) end
+		GF_WhoTable[GF_RealmName][arg2] = { whodata.recordedTime, whodata.level, whodata.class, whodata.guild };
 	end
 	return whodata
 end
@@ -1109,8 +1111,9 @@ function GF_ToggleAnnounce()
 		GF_AnnounceToLFGButton:SetText(GF_ANNOUNCE_LFG_BTN);
 		DEFAULT_CHAT_FRAME:AddMessage(GF_AUTO_ANNOUNCE_TURNED_OFF)
 	else
-		if string.len(GF_LFGDescriptionEditBox:GetText()) >= 6 then
+		if string.len(GF_LFGDescriptionEditBox:GetText()) >= 5 then
 			GF_AutoAnnounceTimer = GF_SavedVariables.announcetimer;
+			if UnitIsPartyLeader("player") then GF_WasPartyLeaderBefore = true; end
 			GF_AnnounceToLFGButton:SetText(GF_ANNOUNCE_LFG_BTN.."-"..GF_SavedVariables.announcetimer);
 			DEFAULT_CHAT_FRAME:AddMessage(GF_AUTO_ANNOUNCE_TURNED_ON)
 		else
