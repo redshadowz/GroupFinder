@@ -3151,17 +3151,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 	  	</Scripts>				
 	</Frame>
 
-	<Frame name="GF_SneakyFrame"  frameStrata="BACKGROUND" parent="UIParent">	
-		<Size>
-			<AbsDimension x="1" y="1"/>
-		</Size>
-		<Anchors>
-			<Anchor point="TOPLEFT">
-				<Offset>
-					<AbsDimension x="0" y="0"/>
-				</Offset>
-			</Anchor>
-		</Anchors>	
+	<Frame name="GF_HiddenFrameToTriggerUpdates"  frameStrata="BACKGROUND" parent="UIParent">	
 		<Scripts>
 			<OnLoad>
 				this:Show();

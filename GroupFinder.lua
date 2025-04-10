@@ -525,6 +525,16 @@ function GF_OnEvent(event)
 		if GF_SavedVariables.lastlogout + 600 < time() then -- 10 minutes
 			GF_OnStartupQueueURequest = true;
 		end
+		if not GetBindingKey("GF_SHOW_FRAME") then -- Bind the window to "I" if I isn't already bound.
+			local foundIKey = false;
+			for i=1, GetNumBindings() do
+				local _,key1,key2 = GetBinding(i);
+				if (key1 == "I" or key2 == "I") then
+					foundIKey = true;
+				end
+			end
+			if not foundIKey then SetBinding("I","GF_SHOW_FRAME"); end
+		end
 	elseif event == "CHAT_MSG_SYSTEM" and GF_AutoAnnounceTimer and string.find(arg1, GF_NOW_AFK) then
 		GF_ToggleAnnounce();
 		GF_Println(GF_AFK_ANNOUNCE_OFF);
