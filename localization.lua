@@ -488,7 +488,7 @@ GF_LootFilters = {
 
 local GF_TurtleTriggerListDungeons = {
 		["CRESCENTGROVE"]	= { 36, "crescent", "grove", " cg", },
-		["GILNEASCITY"] 	= { 47, "gilneas", },
+		["GILNEASCITY"] 	= { 47, "gilneas", "gc", },
 		["HATEFORGEQUARRY"] = { 55, "hateforge", "quarry", " hf", },
 		["EMERALDSANCTUM"] 	= { 60, " es ", "sanctum", },
 		["STORMWINDVAULT"] 	= { 60, " sv", "vault", },

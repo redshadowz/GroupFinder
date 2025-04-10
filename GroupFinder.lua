@@ -525,7 +525,7 @@ function GF_OnEvent(event)
 		if GF_SavedVariables.lastlogout + 600 < time() then -- 10 minutes
 			GF_OnStartupQueueURequest = true;
 		end
-		if not GetBindingKey("GF_SHOW_FRAME") then -- Bind the window to "I" if I isn't already bound.
+		if not GetBindingKey("GF_SHOW_FRAME") then -- Bind the Group Finder window to "I" if it isn't already bound.
 			local foundIKey = false;
 			for i=1, GetNumBindings() do
 				local _,key1,key2 = GetBinding(i);
