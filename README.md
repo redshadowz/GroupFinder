@@ -33,8 +33,8 @@ The 'Group Maker' makes it easy to send group messages to world chat...
 1) Select the dropdown for the Dungeon/Raid.  
 2) Select the dropdowns for whether you are LFM/LFG and the roles you need/have.  
 3) Press the 'Announce' button to send your group message to world chat every X minutes(default: 2 minutes).  
-Note: You can type your own message in the Edit Box. You can also make a 'LFM' that adjusts automatically to the current group size by clicking 'Auto' and setting the group size. When your group is full, 'Announce' will turn itself off.  
-
+Note: You can type your own message in the Edit Box. You can also make a 'LFM' that adjusts automatically to the current group size by clicking 'Auto' and setting the group size. When your group is full, 'Announce' will turn itself off. 
+  
 The 'Get Who' and 'Invite' Edit Box is for whispering people who match the selected 'class'. It is useful for low-level dungeons and for people who have 'World' channel turned off.  
 1) Select the dropdown for the Dungeon/Raid(so it knows the levels of who to message).  
 2) Press the 'Get Who' button to make a list of all players of the selected class in the level range of the dungeon.  
@@ -47,5 +47,7 @@ PS: I made the 'Group Maker' for my niece. She hated finding groups for low-leve
 PS: I made the Chat Filtering because Everlook was absolutely filled to the brim with gold-sellers and other spammers. I personally turn off 'Show groups in Chat' and toggle 'Show groups in Minimap' to turn World into a chatroom.
 
 PS: With the Chat Filters, you can make 'World' channel into groups-only, or chat-only. So if you don't like what people are talking about in World Chat, you can still see the groups(or vice-versa).  
+
+PS: You can keybind the Group Window. This makes it easier for me since I use PFUI(and it hides my buttons). I keybind to Shift-G. Or you could do "I" like dungeon finder in WoW.  
 
 Update: 4/8/2025... I changed a lot in the last few days. I have only one thing left to do. Which isn't important. It's a data sharing routine. So you don't have potentially thousands of people /who'ing the server at the same time. I was also interested in some kind of text compression algorithm for sharing data more efficiently.
