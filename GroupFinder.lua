@@ -137,7 +137,7 @@ function GF_OnLoad()
 				end
 			end
 		else
-			if not GF_PreviousMessage[arg2] or GF_PreviousMessage[arg2][1] ~= arg1 or GF_PreviousMessage[arg2][2] + 30 < time() then
+			if not GF_PreviousMessage[arg2] or GF_PreviousMessage[arg2][1] ~= arg1 or GF_PreviousMessage[arg2][2] + 30 < time() then -- GF_PreviousMessage[1/2] = Old messages...[3]whether blocked
 				GF_PreviousMessage[arg2] = {arg1,time(), nil} -- [1]arg1... [2]time of last message... [3]whether to block message
 				
 				if not GF_PlayersCurrentlyInGroup[arg2] and not GF_FriendsAndGuildies[arg2] then											-- Block blacklist, website spam, and politics.
@@ -244,7 +244,7 @@ function GF_OnLoad()
 							end
 							if GF_SavedVariables.playsounds then PlaySoundFile( "Sound\\Interface\\PickUp\\PutDownRing.wav" ); end
 							if GF_SavedVariables.showgroupsinchat then
-								if not GF_SavedVariables.showoriginalchat and tempwhodata then GF_AddMessage(arg1, arg2, arg8, arg9, tempwhodata) return end
+								if not GF_SavedVariables.showoriginalchat and tempwhodata then GF_AddMessage(arg1, arg2, arg8, arg9, tempwhodata) GF_PreviousMessage[arg2][3] = true; return end
 							else
 								GF_Log:AddMessage("["..GF_GetTime(true).."] "..GF_BLOCKED_GROUPS..arg2..": "..arg1, 1.0, 1.0, 0.5);
 								GF_PreviousMessage[arg2][3] = true;
@@ -265,7 +265,7 @@ function GF_OnLoad()
 					for i=1, getn(GF_TRIGGER_LIST.TRADE) do	if string.find(string.lower(arg1), GF_TRIGGER_LIST.TRADE[i]) then foundtrades = true; end end
 					if (GF_SavedVariables.showtradestexts and foundtrades) or (GF_SavedVariables.showchattexts and not foundtrades) then
 						if tempwhodata then
-							if not GF_SavedVariables.showoriginalchat then GF_AddMessage(arg1, arg2, arg8, arg9, tempwhodata) return end
+							if not GF_SavedVariables.showoriginalchat then GF_AddMessage(arg1, arg2, arg8, arg9, tempwhodata) GF_PreviousMessage[arg2][3] = true; return end
 						end
 					else
 						if foundtrades then
@@ -277,11 +277,9 @@ function GF_OnLoad()
 						return
 					end
 				end
-			else
+			else-- same message as last time
 				if GF_PreviousMessage[arg2][3] then -- Flagged as blocked
 					return
-				else
-					arg1 = GF_PreviousMessage[arg2][1]
 				end
 			end
 		end
@@ -789,7 +787,6 @@ function GF_AddMessage(arg1, arg2, arg8, arg9, whodata)
 			if string.find(arg9,channellist[j]) then
 				getglobal("ChatFrame"..i):AddMessage("["..arg8..". "..string.upper(string.sub(arg9,1,1))..string.lower(string.sub(arg9,2)).."] ".."|cff"..(GF_ClassColors[whodata.class] or "ffffff").."[|Hplayer:"..arg2.."|h"..arg2..", "..whodata.level.."|h|r]: "..arg1, 1, 192/255, 192/255) 
 			end
-			j=j+1
 		end
 	end
 end
