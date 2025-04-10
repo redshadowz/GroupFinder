@@ -770,8 +770,8 @@ function GF_GetWhoData(arg2,groupfound)
 	if not whodata then 
 		--if IsAddOnLoaded("InventoryOnPar") then whodata = IOP.Data[GetRealmName()][arg2] end
 		if IsAddOnLoaded("pfUI") then
-			whodata = pfUI_playerDB[arg2] 
-			if whodata then	whodata.recordedTime = time() - 21601 end -- 6 hours + 1 second
+			whodata = pfUI_playerDB[arg2]
+			if whodata then	whodata.recordedTime = time() - 21601 whodata.guild = whodata.guild or "" end -- 6 hours + 1 second
 		end
 	end
 	if (not whodata or whodata.recordedTime < time() - 259200) and GF_SavedVariables.usewhoongroups and (groupfound or not GF_SavedVariables.showoriginalchat) then -- 3 days
