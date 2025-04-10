@@ -71,12 +71,12 @@ GF_FilterLevelNotes[3] = "MED: Messages must have at least one trigger.";
 GF_FilterLevelNotes[4] = "HIGH: Messages must have at least two triggers.";
 GF_FilterLevelNotes[5] = "MAX: Messages must have at least three triggers.";
 
-GF_JOIN_WORLD				= "Join World channel"
-GF_SHOW_ORIGINAL_CHAT		= "Show Original Chat"
-GF_ERROR_FILTER				= "Enable Error Filtering"
 GF_USE_WHO_ON_GROUPS		= "Auto /Who"
-GF_SPAM_FILTER				= "Enable Spam Filtering"
-GF_AUTO_BLACKLIST			= "Enable Auto Blacklist"
+GF_JOIN_WORLD				= " Join World channel"
+GF_SHOW_ORIGINAL_CHAT		= " Show Unformatted Chat"
+GF_ERROR_FILTER				= " Enable Error Filtering"
+GF_SPAM_FILTER				= " Enable Spam Filtering"
+GF_AUTO_BLACKLIST			= " Enable Auto Blacklist"
 GF_SPAM_FILTER_TIMER		= "Spam flag clear time"
 GF_BLACKLIST_MINLEVEL		= "Auto Blacklist maximum level"
 GF_BLOCK_BELOW_LEVEL		= "Block messages below level"
@@ -103,6 +103,7 @@ GF_INVITE					= "Invite"
 GF_RESET					= "Reset"
 GF_NO_WHISPER_DUNGEON		= "Couldn't find dungeon name."
 GF_NO_WHISPER_TEXT			= "No valid text to send."
+GF_WHISPER_TEXT_TOO_SHORT	= "Message must be more than five characters."
 GF_NO_PLAYERS_TO_WHISPER	= "No players in whisper queue"
 
 -- Other buttons related to blacklist, log, etc
@@ -236,7 +237,7 @@ GF_FrameUseWhoOnGroupsCheckButton = {
 	tooltip2 		= "When checked, will use /who automatically to find class/level/guild information." },
 GF_FrameShowOriginalChatCheckButton = {
 	tooltip1 		= "Show Original Chat",
-	tooltip2 		= "When checked, chat messages will be shown in their original format instead of with class colors/levels. In addition, \"/auto Who\" will no longer search names in chat(groups only)." },
+	tooltip2 		= "When checked, chat messages will be shown in their original format instead of with class colors/levels. In addition, \"/auto Who\" will no longer search names from chat(search groups only)." },
 GF_FrameSpamFilterCheckButton = {
 	tooltip1 		= "Spam Filter",
 	tooltip2 		= "When checked, if the same message is repeated more than once within the 'spam flag clear time', non-group messages from that player will be blocked(except friends/guildies/party members)." },
@@ -270,7 +271,7 @@ GF_TRIGGER_LIST = {
 	},
 	
 	["IGNORE"] = { "channel", "lol", "lmao", "lmfao", "rofl", "wts", "wtb", "stfu", "ignore", "noob", "website", "http",
-				"nub", "n00b", "recruit", "trogdoor", "raid times", "dedicated", "lockbox", "lfw", "cod", },
+				"nub", "n00b", "recruit", "trogdoor", "raid times", "raiding times", "dedicated", "lockbox", "lfw", "cod", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday", "sign up", "server time", },
 
 	["SPAM"] = { "l f m", "h e a l", "n o s t", "please come to web", "c o m", "n 0 s t", "level service", "c o m", },
 	
@@ -278,7 +279,7 @@ GF_TRIGGER_LIST = {
 						"6 million", "gorillion", "republican", "democrat", "politic", "bankers", "apartheid", "holocaust", "holohoax", "bigot", "schizo", "jewish", "transgender", "abortion",
 						"sexist", "feminism", "globalist", "racist", "racism", "immigrants", "refugees", "nigger", "chink", "misogyn", "faggot", "negro", "muslim", },
 
-	["TRADE"] = { "wtb", "wts", "buying", "selling", "wtt", "trading", "lfw", "for sale", "on ah", "cod", "summons service", "summon service", },
+	["TRADE"] = { "wtb", "wts", "buying", "selling", "wtt", "trading", "lfw", "for sale", "on ah", "cod", "summons service", "summon service", "jc", },
 	
 	["RAID"] = { "molten core", " mc", "ragnaros", " rag", "blackwing", "bwl", "zulg", "zg", "gurub", "hakkar", "aq20", " ahn", " aq ", "ossir", "aq40", "quiraj",
 				"naxxramas", "naxx", "onyxia", " ony", "azuregos", "kazzak", "world boss", "lethon", "ysondre", "taerar", "emeris", },

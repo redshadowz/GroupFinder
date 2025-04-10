@@ -1,11 +1,11 @@
 ﻿GF_SavedVariables = {
 	joinworld					= true,
 	lastlogout					= 0,
-	showoriginalchat		= false;
+	showoriginalchat			= false;
 	usewhoongroups				= true;
 	showpolitics				= true;
 	blockmessagebelowlevel		= 1;
-	grouplistingduration		= 15,
+	grouplistingduration		= 30,
 	showgroupsinchat			= true,
 	showgroupsinminimap			= false,
 	showgroupsnewonly			= false,
@@ -33,7 +33,7 @@
 	searchlfgtext				= "",
 	searchlfgwhispertext		= "",
 	lfgwhisperclass				= GF_WARRIOR,
-	announcetimer				= 120,
+	announcetimer				= 300,
 	lfgauto						= false,
 	lfgsize						= 5,
 	FilterLevel					= 4,
@@ -113,7 +113,7 @@ function GF_OnLoad()
 	this:RegisterEvent("FRIENDLIST_UPDATE");
 	
 	local old_ChatFrame_OnEvent = ChatFrame_OnEvent;
-	function ChatFrame_OnEvent(event)
+	function ChatFrame_OnEvent(event) -- arg1(message), arg2(sender), arg4("Channel#." "(City/Trade)" "channelName"), arg5, (nameOfPlayerWhoLooted), arg7(zoneChannel#), arg8(channel#), arg9("City/Trade" "channelName")
 		if not arg1 or arg1 == "" or not arg2 or arg2 == "" or arg2 == UnitName("player") or not arg9 then
 			if not GF_SavedVariables.showloottexts and arg1 then
 				for i=1, getn(GF_LootFilters) do
@@ -201,7 +201,8 @@ function GF_OnLoad()
 						else
 							if string.find(arg1,GF_PlayerMessages[arg2][1],1,true) or string.find(arg1,GF_PlayerMessages[arg2][2],1,true) then -- Found Spammer
 								if GF_SavedVariables.autoblacklist and not GF_BlackList[GF_RealmName][arg2] and string.len(arg1) > 120 then
-									if tempwhodata and tonumber(tempwhodata.level) <= GF_SavedVariables.autoblacklistminlevel and tempwhodata.recordedTime + 21600 > time() then -- 6 hours
+									if tempwhodata and tonumber(tempwhodata.level) <= GF_SavedVariables.autoblacklistminlevel and tempwhodata.recordedTime + 21600 > time() and
+									string.find(arg1,GF_PlayerMessages[arg2][1],1,true) and string.find(arg1,GF_PlayerMessages[arg2][2],1,true) then -- 6 hours... No blacklist unless at three messages in a row instead of two
 										GF_BlackList[GF_RealmName][arg2] = "("..tempwhodata.level..") "..arg1;
 										GF_Log:AddMessage("["..GF_GetTime(true).."] "..GF_BLACKLIST_MESSAGE..arg2..": "..arg1, 1.0, 1.0, 0.5);	
 										GF_PreviousMessage[arg2][3] = true;
@@ -243,11 +244,8 @@ function GF_OnLoad()
 							end
 							if GF_SavedVariables.playsounds then PlaySoundFile( "Sound\\Interface\\PickUp\\PutDownRing.wav" ); end
 							if GF_SavedVariables.showgroupsinchat then
-								if tempwhodata then
-									if not GF_SavedVariables.showoriginalchat then GF_AddMessage(arg1, arg2, arg8, arg9, tempwhodata) else old_ChatFrame_OnEvent(event); end
-									GF_PreviousMessage[arg2][3] = true;
-									return
-								end
+								if not GF_SavedVariables.showoriginalchat and tempwhodata then GF_AddMessage(arg1, arg2, arg8, arg9, tempwhodata) else old_ChatFrame_OnEvent(event); end
+								return
 							else
 								GF_Log:AddMessage("["..GF_GetTime(true).."] "..GF_BLOCKED_GROUPS..arg2..": "..arg1, 1.0, 1.0, 0.5);
 								GF_PreviousMessage[arg2][3] = true;
@@ -300,12 +298,10 @@ function GF_OnLoad()
 		old_AddIgnore(name);
 	end
 end
-
 function GF_SlashHandler()
 	if GF_MainFrame:IsVisible() then GF_MainFrame:Hide(); else GF_MainFrame:Show(); end
 	return;
 end
-
 function GF_OnUpdate()
 	GFAWM.onUpdate();
 	if GF_UpdateTicker < GetTime() then -- Triggers everything below every second.
@@ -1084,7 +1080,10 @@ end
 function GF_LFGWhisperButton()
 	local whispermessage = GF_LFGWhoWhisperEditBox:GetText()
 	if whispermessage == "" then whispermessage = GF_LFGDescriptionEditBox:GetText() end
-	if string.len(whispermessage) > 5 then
+
+	if whispermessage == "" then
+		GF_Println(GF_NO_WHISPER_TEXT);
+	elseif string.len(whispermessage) > 5 then
 		GF_GetWhoLevel = GF_FindDungeonLevel() or 60;
 		for k,v in pairs(GF_ClassWhoTable) do
 			if GF_ClassWhoTable[k][1] < time()-GFAWM_GETWHO_RESET_TIMER then
@@ -1101,15 +1100,29 @@ function GF_LFGWhisperButton()
 		end
 		GF_Println(GF_NO_PLAYERS_TO_WHISPER);
 	else
-		GF_Println(GF_NO_WHISPER_TEXT);
+		GF_Println(GF_WHISPER_TEXT_TOO_SHORT);
 	end
 end
 function GF_FindDungeonLevel()
+	if GF_LFGWhoWhisperEditBox:GetText() ~= "" then 
+		for _,dtable in pairs(GF_BUTTONS_LIST["LFGDungeon"]) do
+			for w in string.gfind(string.lower(GF_LFGWhoWhisperEditBox:GetText()), string.lower(dtable[1])) do
+				return dtable[6]
+			end
+		end
+	end
 	for _,dtable in pairs(GF_BUTTONS_LIST["LFGDungeon"]) do
 		for w in string.gfind(string.lower(GF_SavedVariables.searchlfgtext), string.lower(dtable[1])) do
 			return dtable[6]
 		end
     end
+	if GF_LFGWhoWhisperEditBox:GetText() ~= "" then 
+		for _,dtable in pairs(GF_BUTTONS_LIST["LFGRaid"]) do
+			for w in string.gfind(string.lower(GF_LFGWhoWhisperEditBox:GetText()), string.lower(dtable[1])) do
+				return dtable[6]
+			end
+		end
+	end
 	for _,dtable in pairs(GF_BUTTONS_LIST["LFGRaid"]) do
 		for w in string.gfind(string.lower(GF_SavedVariables.searchlfgtext), string.lower(dtable[1])) do
 			return dtable[6]

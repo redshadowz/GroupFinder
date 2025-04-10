@@ -2663,7 +2663,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										<Anchors>
 											<Anchor point="TOP">
 												<Offset>
-													<AbsDimension x="-60" y="-10"/>
+													<AbsDimension x="-65" y="-10"/>
 												</Offset>
 											</Anchor>
 										</Anchors>
@@ -2713,7 +2713,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										<Anchors>
 											<Anchor point="TOPRIGHT">
 												<Offset>
-													<AbsDimension x="-158" y="-10"/>
+													<AbsDimension x="-163" y="-10"/>
 												</Offset>
 											</Anchor>
 										</Anchors>
