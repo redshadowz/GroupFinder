@@ -1061,7 +1061,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									<Anchors>
 										<Anchor point="BOTTOM">
 											<Offset>
-												<AbsDimension x="-60" y="23"/>
+												<AbsDimension x="-60" y="25"/>
 											</Offset>
 										</Anchor>
 									</Anchors>
@@ -1455,12 +1455,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							<Frame name="GF_NewItem20"  inherits="GF_NewItemTemplate"></Frame>	
 							<EditBox name="GF_LFGDescriptionEditBox" letters="128" inherits="GF_AbstractEditBox">
 								<Size>
-									<AbsDimension x="365" y="22"/>
+									<AbsDimension x="360" y="22"/>
 								</Size>
 								<Anchors>
 									<Anchor point="BOTTOMLEFT">
 										<Offset>
-											<AbsDimension x="75" y="0"/>
+											<AbsDimension x="80" y="0"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -1491,7 +1491,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Anchors>
 									<Anchor point="LEFT" relativeTo="GF_LFGDescriptionEditBox">
 										<Offset>
-											<AbsDimension x="-85" y="5" />
+											<AbsDimension x="-88" y="5" />
 										</Offset>
 									</Anchor>
 								</Anchors>

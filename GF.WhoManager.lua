@@ -95,7 +95,7 @@ GFAWM.onUpdate = function()
 					GF_LFGGetWhoButton:SetText(GF_GET_WHO.." - "..GFAWM.ClassWhoMatchingResults);
 				end
 			elseif whoQueue[1] then
-				if GF_WhoTable[GF_RealmName][whoQueue[1]] and GF_WhoTable[GF_RealmName][whoQueue[1]][1] + 259200 > time() then -- 3 days
+				if GF_WhoTable[GF_RealmName][whoQueue[1]] and GF_WhoTable[GF_RealmName][whoQueue[1]][1] + 259200 > time() and not GF_AddonNamesToBeSentAsARequest[whoQueue[1]] then -- 3 days
 					table.remove(whoQueue, 1);
 					return;
 				end

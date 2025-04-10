@@ -62,7 +62,7 @@ local GF_OnStartupRunOnce 					= true;
 local GF_OnStartupQueueURequest 			= nil;
 local GF_AddonWhoDataToBeSentBuffer			= {};
 GF_AddonAllNamesForResponseToLogin			= {};
-local GF_AddonNamesToBeSentAsARequest		= {};
+GF_AddonNamesToBeSentAsARequest				= {};
 local GF_AddonMakeAResponseToLoginList		= nil;
 local GF_AddonOPSentNamesOnLogin			= {};
 local GF_AddonGroupDataToBeSentBuffer		= {};
@@ -179,7 +179,7 @@ function GF_OnLoad()
 				end
 				local tempwhodata = GF_GetWhoData(arg2, foundInGroup)
 				if not GF_PlayersCurrentlyInGroup[arg2] and not GF_FriendsAndGuildies[arg2] then											-- Block if below level
-					if (tempwhodata and tonumber(tempwhodata.level) < GF_SavedVariables.blockmessagebelowlevel) then
+					if (tempwhodata and tonumber(tempwhodata.level) < GF_SavedVariables.blockmessagebelowlevel) and tempwhodata.recordedTime + 21600 > time() then
 						GF_Log:AddMessage("["..GF_GetTime(true).."] "..GF_BLOCKED_BELOWLEVEL..arg2..": "..arg1, 1.0, 1.0, 0.5);
 						GF_PreviousMessage[arg2][3] = true;
 						return
@@ -244,8 +244,7 @@ function GF_OnLoad()
 							end
 							if GF_SavedVariables.playsounds then PlaySoundFile( "Sound\\Interface\\PickUp\\PutDownRing.wav" ); end
 							if GF_SavedVariables.showgroupsinchat then
-								if not GF_SavedVariables.showoriginalchat and tempwhodata then GF_AddMessage(arg1, arg2, arg8, arg9, tempwhodata) else old_ChatFrame_OnEvent(event); end
-								return
+								if not GF_SavedVariables.showoriginalchat and tempwhodata then GF_AddMessage(arg1, arg2, arg8, arg9, tempwhodata) return end
 							else
 								GF_Log:AddMessage("["..GF_GetTime(true).."] "..GF_BLOCKED_GROUPS..arg2..": "..arg1, 1.0, 1.0, 0.5);
 								GF_PreviousMessage[arg2][3] = true;
@@ -266,9 +265,7 @@ function GF_OnLoad()
 					for i=1, getn(GF_TRIGGER_LIST.TRADE) do	if string.find(string.lower(arg1), GF_TRIGGER_LIST.TRADE[i]) then foundtrades = true; end end
 					if (GF_SavedVariables.showtradestexts and foundtrades) or (GF_SavedVariables.showchattexts and not foundtrades) then
 						if tempwhodata then
-							if not GF_SavedVariables.showoriginalchat then GF_AddMessage(arg1, arg2, arg8, arg9, tempwhodata) else old_ChatFrame_OnEvent(event); end
-							GF_PreviousMessage[arg2][3] = true;
-							return
+							if not GF_SavedVariables.showoriginalchat then GF_AddMessage(arg1, arg2, arg8, arg9, tempwhodata) return end
 						end
 					else
 						if foundtrades then
@@ -282,7 +279,7 @@ function GF_OnLoad()
 				end
 			else
 				if GF_PreviousMessage[arg2][3] then -- Flagged as blocked
-						return
+					return
 				else
 					arg1 = GF_PreviousMessage[arg2][1]
 				end
@@ -771,14 +768,10 @@ function GF_GetWhoData(arg2,groupfound)
 	if string.find(arg2," ") then return end
 	local whodata = GFAWM.toOldFormat(arg2)
 	if not whodata then 
-		if IsAddOnLoaded("InventoryOnPar") then whodata = IOP.Data[GetRealmName()][arg2] end
+		--if IsAddOnLoaded("InventoryOnPar") then whodata = IOP.Data[GetRealmName()][arg2] end
 		if IsAddOnLoaded("pfUI") then
 			whodata = pfUI_playerDB[arg2] 
-			if whodata then
-				whodata.class = string.sub(whodata.class,1,1)..string.lower(string.sub(whodata.class,2))
-				whodata.recordedTime = time() - 21601 -- 6 hours + 1 second
-				whodata.guild = ""
-			end
+			if whodata then	whodata.recordedTime = time() - 21601 end -- 6 hours + 1 second
 		end
 	end
 	if (not whodata or whodata.recordedTime < time() - 259200) and GF_SavedVariables.usewhoongroups and (groupfound or not GF_SavedVariables.showoriginalchat) then -- 3 days
@@ -1139,15 +1132,6 @@ function GF_FindDungeonLevel()
 		end
     end
 end
-local function GF_CreateSearchButton(id, parent)
-	local button = CreateFrame("CheckButton", parent:GetName() .. id, parent, "GF_AbstractLabelCheckButtonClick")
-	if id == 1 then
-		button:SetPoint("TOPLEFT", parent, "TOPLEFT", 6, -4)
-	else
-		button:SetPoint("TOP", getglobal(parent:GetName() .. (id - 1) ), "BOTTOM", 0, 6)
-	end
-	return button
-end
 function GF_FixLFGStrings()
 	local lfglfmtext = ""
 	for _,dtable in pairs(GF_BUTTONS_LIST["LFGLFM"]) do
@@ -1231,6 +1215,15 @@ function GF_FixLFGStrings()
 	GF_SavedVariables.searchlfgtext = lfglfmtext
 	getglobal(GF_LFGDescriptionEditBox:GetName()):SetText(GF_SavedVariables.searchlfgtext);
 end
+local function GF_CreateSearchButton(id, parent)
+	local button = CreateFrame("CheckButton", parent:GetName()..id, parent, "GF_AbstractLabelCheckButtonClick")
+	if id == 1 then
+		button:SetPoint("TOPLEFT", parent, "TOPLEFT", 6, -4)
+	else
+		button:SetPoint("TOP", getglobal(parent:GetName()..(id-1) ), "BOTTOM", 0, 6)
+	end
+	return button
+end
 function GF_ShowDropdownList(bframe)
 	local width = 0
 	GF_NumSearchButtons = 0;
@@ -1241,8 +1234,7 @@ function GF_ShowDropdownList(bframe)
 			GF_NumSearchButtons = GF_NumSearchButtons + 1
 			local button = getglobal("GF_"..bframe..GF_NumSearchButtons) or GF_CreateSearchButton(GF_NumSearchButtons, getglobal("GF_"..bframe))
 			getglobal(button:GetName().."TextLabel"):SetText(dtable[1]);
-			if getglobal(button:GetName().."TextLabel"):GetStringWidth() > width then width = getglobal(button:GetName().."TextLabel"):GetStringWidth() end
-			getglobal(button:GetName().."TextLabel"):SetWidth(width+10);
+			if getglobal(button:GetName().."TextLabel"):GetStringWidth() >= width then width = getglobal(button:GetName().."TextLabel"):GetStringWidth()+5 end
 			button:Show()
 			if bframe == "SearchList" then
 				if string.find(GF_SavedVariables.searchbuttonstext, dtable[4]) then
