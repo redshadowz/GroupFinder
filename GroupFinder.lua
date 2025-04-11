@@ -66,7 +66,7 @@ GF_AddonNamesToBeSentAsARequest				= {};
 local GF_AddonMakeAResponseToLoginList		= nil;
 local GF_AddonOPSentNamesOnLogin			= {};
 local GF_AddonGroupDataToBeSentBuffer		= {};
-local GF_AddonMakeAListOfGroupsForSending	= nil;
+local GF_AddonMakeAListOfGroup7sForSending	= nil;
 local GF_AddonListOfGuildiesWithAddon		= {};
 local GF_AutoAnnounceTimer 		= nil;
 local GF_WasPartyLeaderBefore	= nil;
@@ -83,7 +83,7 @@ GF_RequestWhoDataPeriodicallyTimer= 30;
 local GF_PlayerMessages 		= {}
 local GF_IncomingMessagePrune 	= 0;
 local GF_PreviousMessage		= {};
-
+local GF_SentMessage = { "","",false };
 local GF_Classes	= {};
 local GF_ClassColors = {};
 GF_ClassColors[GF_PRIEST]  	= "ffffff";
@@ -114,7 +114,9 @@ function GF_OnLoad()
 	
 	local old_ChatFrame_OnEvent = ChatFrame_OnEvent;
 	function ChatFrame_OnEvent(event) -- arg1(message), arg2(sender), arg4("Channel#." "(City/Trade)" "channelName"), arg5, (nameOfPlayerWhoLooted), arg7(zoneChannel#), arg8(channel#), arg9("City/Trade" "channelName")
-		if not arg1 or arg1 == "" or not arg2 or arg2 == "" or arg2 == UnitName("player") or not arg9 then
+		if GF_SentMessage[3] and arg1 == GF_SentMessage[1] and arg2 == GF_SentMessage[2] then
+			GF_UpdateTicker = 1;
+		elseif not arg1 or arg1 == "" or not arg2 or arg2 == "" or arg2 == UnitName("player") or not arg9 then
 			if not GF_SavedVariables.showloottexts and arg1 then
 				for i=1, getn(GF_LootFilters) do
 					if string.find(arg1, GF_LootFilters[i]) then
@@ -244,7 +246,7 @@ function GF_OnLoad()
 							end
 							if GF_SavedVariables.playsounds then PlaySoundFile( "Sound\\Interface\\PickUp\\PutDownRing.wav" ); end
 							if GF_SavedVariables.showgroupsinchat then
-								if not GF_SavedVariables.showoriginalchat and tempwhodata then GF_AddMessage(arg1, arg2, arg8, arg9, tempwhodata) GF_PreviousMessage[arg2][3] = true; return end
+								if arg8 ~= 0 and not GF_SavedVariables.showoriginalchat and tempwhodata then GF_AddMessage(arg1, arg2, arg8, arg9, tempwhodata) GF_PreviousMessage[arg2][3] = true; return end
 							else
 								GF_Log:AddMessage("["..GF_GetTime(true).."] "..GF_BLOCKED_GROUPS..arg2..": "..arg1, 1.0, 1.0, 0.5);
 								GF_PreviousMessage[arg2][3] = true;
@@ -265,7 +267,7 @@ function GF_OnLoad()
 					for i=1, getn(GF_TRIGGER_LIST.TRADE) do	if string.find(string.lower(arg1), GF_TRIGGER_LIST.TRADE[i]) then foundtrades = true; end end
 					if (GF_SavedVariables.showtradestexts and foundtrades) or (GF_SavedVariables.showchattexts and not foundtrades) then
 						if tempwhodata then
-							if not GF_SavedVariables.showoriginalchat then GF_AddMessage(arg1, arg2, arg8, arg9, tempwhodata) GF_PreviousMessage[arg2][3] = true; return end
+							if arg8 ~= 0 and not GF_SavedVariables.showoriginalchat then GF_AddMessage(arg1, arg2, arg8, arg9, tempwhodata) GF_PreviousMessage[arg2][3] = true; return end
 						end
 					else
 						if foundtrades then
@@ -277,7 +279,7 @@ function GF_OnLoad()
 						return
 					end
 				end
-			else-- same message as last time
+			else -- same message as last time
 				if GF_PreviousMessage[arg2][3] then -- Flagged as blocked
 					return
 				end
@@ -285,6 +287,15 @@ function GF_OnLoad()
 		end
 		old_ChatFrame_OnEvent(event);
 	end
+	local old_SendChatMessage = SendChatMessage;
+	function SendChatMessage(arg1, arg2, arg3, arg4)
+		if arg2 == "WHISPER" then 
+			GF_SentMessage = { arg1,arg4,true }; -- message, "WHISPER", language, target
+			GF_UpdateTicker = GetTime() + 30;
+		end
+		old_SendChatMessage(arg1, arg2, arg3, arg4)
+	end
+
 	local old_AddIgnore = AddIgnore;
 	function AddIgnore(name)
 		name = string.lower(name);
@@ -301,6 +312,7 @@ function GF_OnUpdate()
 	GFAWM.onUpdate();
 	if GF_UpdateTicker < GetTime() then -- Triggers everything below every second.
 		GF_UpdateTicker = GetTime() + 1
+		if GF_SentMessage[3] then GF_SentMessage = { "","",false }; end
 
 		if GF_AutoAnnounceTimer then -- Auto Announce routine
 			GF_AutoAnnounceTimer = GF_AutoAnnounceTimer + 1;
