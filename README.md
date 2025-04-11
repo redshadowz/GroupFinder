@@ -51,5 +51,3 @@ PS: I made the Chat Filtering because Everlook was absolutely filled to the brim
 PS: With the Chat Filters, you can make 'World' channel into groups-only, or chat-only. So if you don't like what people are talking about in World Chat, you can still see the groups(or vice-versa).  
 
 PS: By default, the groupfinder will be bound to button "I". It will not override your current bindings.
-
-Update: 4/8/2025... I changed a lot in the last few days. I have only one thing left to do. Which isn't important. It's a data sharing routine. So you don't have potentially thousands of people /who'ing the server at the same time. I was also interested in some kind of text compression algorithm for sharing data more efficiently.
