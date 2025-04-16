@@ -266,9 +266,8 @@ function GF_AddLogMessage(arg1,filteredChat,add,arg2,arg8,arg9)
 		else
 			arg1 = "["..date("%H:%M").."] "..GF_LogMessageCodes[filteredChat].."["..arg8..". "..string.upper(string.sub(arg9,1,1))..string.lower(string.sub(arg9,2)).."] ".."|cff".."9d9d9d".."[|Hplayer:"..arg2.."|h"..arg2.."|h|r]: "..arg1
 		end
-		table.insert(GF_LogHistory[GF_RealmName],1,GetTime())
-		GF_LogHistory[GF_LogHistory[GF_RealmName][1]] = { arg1,filteredChat }
-		if getn(GF_LogHistory[GF_RealmName]) > 500 then GF_LogHistory[GF_LogHistory[GF_RealmName][501]] = nil table.remove(GF_LogHistory[GF_RealmName],501) end
+		table.insert(GF_LogHistory[GF_RealmName],1, {arg1, filteredChat})
+		if getn(GF_LogHistory[GF_RealmName]) > 500 then table.remove(GF_LogHistory[GF_RealmName],501) end
 	end
 	if (filteredChat == 12 or (GF_SavedVariables.logshowgroup and (filteredChat == 1 or filteredChat == 2 or filteredChat == 11)) or (GF_SavedVariables.logshowchat and filteredChat == 3)
 	or (GF_SavedVariables.logshowtrades and filteredChat == 4) or (GF_SavedVariables.logshowpolitics and filteredChat == 5) or (GF_SavedVariables.logshowloot and filteredChat == 6)
@@ -278,14 +277,19 @@ function GF_AddLogMessage(arg1,filteredChat,add,arg2,arg8,arg9)
 end
 function GF_DisplayLog()
 	GF_Log:SetMaxLines(128)
-	table.sort(GF_LogHistory[GF_RealmName])
+	local tempHistoryTable = {}
 	for i=1, getn(GF_LogHistory[GF_RealmName]) do
-		GF_AddLogMessage(GF_LogHistory[GF_LogHistory[GF_RealmName][i]][1],GF_LogHistory[GF_LogHistory[GF_RealmName][i]][2],nil)
-		if i == 128 then break end
+		if (GF_LogHistory[GF_RealmName][i][2] == 12 or (GF_SavedVariables.logshowgroup and (GF_LogHistory[GF_RealmName][i][2] == 1 or GF_LogHistory[GF_RealmName][i][2] == 2 or GF_LogHistory[GF_RealmName][i][2] == 11)) or (GF_SavedVariables.logshowchat and GF_LogHistory[GF_RealmName][i][2] == 3)
+		or (GF_SavedVariables.logshowtrades and GF_LogHistory[GF_RealmName][i][2] == 4) or (GF_SavedVariables.logshowpolitics and GF_LogHistory[GF_RealmName][i][2] == 5) or (GF_SavedVariables.logshowloot and GF_LogHistory[GF_RealmName][i][2] == 6)
+		or (GF_SavedVariables.logshowspam and GF_LogHistory[GF_RealmName][i][2] == 7) or (GF_SavedVariables.logshowblacklist and GF_LogHistory[GF_RealmName][i][2] == 8) or (GF_SavedVariables.logshowbelowlevel and GF_LogHistory[GF_RealmName][i][2] == 9)) then
+			table.insert(tempHistoryTable,1,GF_LogHistory[GF_RealmName][i])
+			if getn(tempHistoryTable) == 128 then break end
+		end
+	end
+	for i=1, getn(tempHistoryTable) do
+		GF_Log:AddMessage(tempHistoryTable[i][1], 1, 192/255, 192/255)
 	end
 end
-
-
 function GF_SlashHandler()
 	if GF_MainFrame:IsVisible() then GF_MainFrame:Hide(); else GF_MainFrame:Show(); end
 	return;
