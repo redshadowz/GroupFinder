@@ -197,9 +197,13 @@ function GF_OnLoad()
 		if strsub(link, 1, 6) == "player" then
 			local name = strsub(gsub(link, "([^%s]*)%s+([^%s]*)", "%2"),8);
 			if name and strlen(name) > 0 then 
-				if IsShiftKeyDown() and button == "LeftButton" and not ChatFrameEditBox:IsVisible() then -- Add linked player to top of /who list
-					GF_UrgentWhoRequest = name;
-					return;
+				if IsShiftKeyDown() and button == "LeftButton" then
+					if GF_LogEditBox:IsVisible() then
+						GF_LogEditBox:SetText(GF_LogEditBox:GetText()..name)
+					elseif not ChatFrameEditBox:IsVisible() then -- Add linked player to top of /who list
+						GF_UrgentWhoRequest = name;
+						return;
+					end
 				end
 				if IsControlKeyDown() and button == "LeftButton" then
 					for i=1, GetNumRaidMembers() do
