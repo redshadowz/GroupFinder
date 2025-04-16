@@ -945,7 +945,7 @@ function GF_GetWhoData(arg2,groupfound)
 	if not GF_WhoTable[GF_RealmName][arg2] then 
 		if IsAddOnLoaded("pfUI") then
 			local whodata = pfUI_playerDB[arg2]
-			if whodata then	GF_WhoTable[GF_RealmName][arg2] = { time() - 21601, whodata[2], GF_Classes[whodata[3]], whodata[4] }; end -- 6 hours + 1 second
+			if whodata then	GF_WhoTable[GF_RealmName][arg2] = { time() - 21601, whodata.level, GF_Classes[whodata.class], whodata.guild }; end -- 6 hours + 1 second
 		end
 	end
 	if (not GF_WhoTable[GF_RealmName][arg2] or GF_WhoTable[GF_RealmName][arg2][1] < time() - 259200) and GF_SavedVariables.usewhoongroups and (groupfound or not GF_SavedVariables.showoriginalchat) then -- 3 days
