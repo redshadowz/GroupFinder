@@ -51,6 +51,8 @@
 	logshowspam					= true,
 	logshowblacklist			= true,
 	logshowbelowlevel			= true,
+	loghidemainframe			= false,
+	logshowwhisperwindow		= false,
 };
 
 GF_RealmName							= GetRealmName()
@@ -281,7 +283,6 @@ function GF_DisplayLog()
 		GF_AddLogMessage(GF_LogHistory[GF_RealmName][logLength-i+1][1],GF_LogHistory[GF_RealmName][logLength-i+1][2],nil)
 		if i == 128 then break end
 	end
-
 end
 function GF_SlashHandler()
 	if GF_MainFrame:IsVisible() then GF_MainFrame:Hide(); else GF_MainFrame:Show(); end
@@ -667,6 +668,7 @@ function GF_LoadSettings()
 	GF_LogShowSpam:SetChecked(GF_SavedVariables.logshowspam);
 	GF_LogShowBlacklist:SetChecked(GF_SavedVariables.logshowblacklist);
 	GF_LogShowBelowLevel:SetChecked(GF_SavedVariables.logshowbelowlevel);
+	GF_LogHideMainFrame:SetChecked(GF_SavedVariables.loghidemainframe);
 
 	GF_FrameJoinWorldCheckButton:SetChecked(GF_SavedVariables.joinworld);
 	GF_FrameShowOriginalChatCheckButton:SetChecked(GF_SavedVariables.showoriginalchat);
@@ -703,6 +705,101 @@ function GF_LoadSettings()
 
 	if (GF_RealmName == "Nordanaar" or GF_RealmName == "Tel'Abim") then GF_AddTurtleWoWDungeonsRaids(); GF_WhoCooldownTime = 30; end
 	GF_DisplayLog()
+	GF_ToggleHideMainFrame()
+end
+function GF_ToggleHideMainFrame()
+	if GF_SavedVariables.loghidemainframe then
+		GF_GroupsFrame:Hide();
+		GF_LogFrame:Show();
+		GF_MainFrame:SetAlpha(0)
+		GF_MainFrame:SetFrameStrata("BACKGROUND")
+		GF_MainFrame:EnableMouse(false)
+		GF_MainFrame:IsMovable(false)
+		GF_MainFrameCloseButton:Hide()
+		GF_LogFrame:SetAlpha(GF_SavedVariables.MainFrameTransparency)
+		GF_LogFrameInternalFrameTitle:SetText("");
+		GF_LogFrameInternalFrame:SetBackdropBorderColor(.4,.4,.4,0)
+		GF_LogFrameInternalFrame:SetBackdropColor(.14,.14,.14,0)
+		GF_GroupsInChatCheckButton:Hide()
+		GF_GroupsNewOnlyCheckButton:Hide()
+		GF_GroupsInMinimapCheckButton:Hide()
+		GF_ShowChatCheckButton:Hide()
+		GF_ShowTradesCheckButton:Hide()
+		GF_ShowLootCheckButton:Hide()
+		GF_FrameShowPoliticsCheckButton:Hide()
+		GF_FrameUseWhoOnGroupsCheckButton:Hide()
+		GF_SearchListDropdown:Hide()
+		GF_GroupsFrameDescriptionEditBox:Hide()
+		GF_AutoFilterCheckButton:Hide()
+		GF_PlaySoundOnResultsCheckButton:Hide()
+		GF_GroupsFrameShowDungeonCheckButton:Hide()
+		GF_GroupsFrameShowRaidCheckButton:Hide()
+		GF_GroupsFrameShowQuestCheckButton:Hide()
+		GF_GroupsFrameShowOtherCheckButton:Hide()
+		GF_GroupsFrameShowLFMCheckButton:Hide()
+		GF_GroupsFrameShowLFGCheckButton:Hide()
+		GF_ShowSearchButton:Hide()
+		GF_SettingsFrameButton:Hide()
+		GF_ShowBlacklistButton:Hide()
+		GF_LogFrameButton:Hide()
+		GF_AnnounceToLFGButton:Hide()
+		GF_ResetLFGDescriptionButton:Hide()
+		GF_LogBottomButton:Hide()
+		GF_LogDownButton:Hide()
+		GF_LogUpButton:Hide()
+		GF_LogShowGroups:Hide()
+		GF_LogShowChat:Hide()
+		GF_LogShowTrades:Hide()
+		GF_LogShowPolitics:Hide()
+		GF_LogShowLoot:Hide()
+		GF_LogShowSpam:Hide()
+		GF_LogShowBlacklist:Hide()
+		GF_LogShowBelowLevel:Hide()
+	else
+		GF_MainFrame:SetAlpha(GF_SavedVariables.MainFrameTransparency)
+		GF_MainFrame:SetFrameStrata("DIALOG")
+		GF_MainFrame:EnableMouse(true)
+		GF_MainFrame:IsMovable(true)
+		GF_MainFrameCloseButton:Show()
+		GF_LogFrameInternalFrameTitle:SetText(GF_LOG_AND_MONITOR);
+		GF_LogFrameInternalFrame:SetBackdropBorderColor(.4,.4,.4,1)
+		GF_LogFrameInternalFrame:SetBackdropColor(.14,.14,.14,1)
+		GF_GroupsInChatCheckButton:Show()
+		GF_GroupsNewOnlyCheckButton:Show()
+		GF_GroupsInMinimapCheckButton:Show()
+		GF_ShowChatCheckButton:Show()
+		GF_ShowTradesCheckButton:Show()
+		GF_ShowLootCheckButton:Show()
+		GF_FrameShowPoliticsCheckButton:Show()
+		GF_FrameUseWhoOnGroupsCheckButton:Show()
+		GF_SearchListDropdown:Show()
+		GF_GroupsFrameDescriptionEditBox:Show()
+		GF_AutoFilterCheckButton:Show()
+		GF_PlaySoundOnResultsCheckButton:Show()
+		GF_GroupsFrameShowDungeonCheckButton:Show()
+		GF_GroupsFrameShowRaidCheckButton:Show()
+		GF_GroupsFrameShowQuestCheckButton:Show()
+		GF_GroupsFrameShowOtherCheckButton:Show()
+		GF_GroupsFrameShowLFMCheckButton:Show()
+		GF_GroupsFrameShowLFGCheckButton:Show()
+		GF_ShowSearchButton:Show()
+		GF_SettingsFrameButton:Show()
+		GF_ShowBlacklistButton:Show()
+		GF_LogFrameButton:Show()
+		GF_AnnounceToLFGButton:Show()
+		GF_ResetLFGDescriptionButton:Show()
+		GF_LogBottomButton:Show()
+		GF_LogDownButton:Show()
+		GF_LogUpButton:Show()
+		GF_LogShowGroups:Show()
+		GF_LogShowChat:Show()
+		GF_LogShowTrades:Show()
+		GF_LogShowPolitics:Show()
+		GF_LogShowLoot:Show()
+		GF_LogShowSpam:Show()
+		GF_LogShowBlacklist:Show()
+		GF_LogShowBelowLevel:Show()
+	end
 end
 function GF_GetNumGroupMembers()
 	if GetNumRaidMembers() > 0 then
