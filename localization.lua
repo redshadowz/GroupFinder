@@ -11,6 +11,13 @@ GF_WARRIOR	       		= "Warrior";
 GF_PALADIN	       		= "Paladin";
 GF_SHAMAN				= "Shaman";
 
+GF_5_MAN				= " 5-man";
+GF_10_MAN				= " 10-man";
+GF_15_MAN				= " 15-man";
+GF_20_MAN				= " 20-man";
+GF_25_MAN				= " 25-man";
+GF_40_MAN				= " 40-man";
+
 -- Binding Names
 BINDING_HEADER_GF_MAIN_HEADER	= "Group Finder"; -- Main window title
 BINDING_NAME_GF_SHOW_FRAME		= "Toggle Main Window"; -- Bindings Name
@@ -20,7 +27,7 @@ GF_MAIN_HEADER	 		= "Group Finder"; -- Main window title
 GF_FIND_PLAYERS_AND_GROUPS	= "Find players and groups"; -- Label for Groupfinder tab
 GF_MORE_FEATURES		= "More"; -- Label for "More" frame(Settings/Log/Blacklist)
 GF_SHOW_GROUPS_IN		= "Show groups in"
-GF_WORLD_SEND_TEXT		= "Below is the message that gets announced to World Channel"
+GF_WORLD_SEND_TEXT		= "Below is the message that gets announced to the World Channel"
 GF_CHAT					= "Chat"
 GF_MINIMAP				= "Minimap"
 GF_NEW_ONLY				= "New only"
@@ -34,9 +41,17 @@ GF_CHAT_OFF				= "Chat off"
 GF_CHAT_GROUP_ON		= "Groups in chat, on"
 GF_CHAT_GROUP_OFF		= "Groups in chat, off"
 
+GF_LOG_GROUP			= "Group"
+GF_LOG_CHAT				= "Chat"
+GF_LOG_TRADES			= "Trades"
+GF_LOG_POLITICS			= "Politics"
+GF_LOG_LOOT				= "Loot"
+GF_LOG_SPAM				= "Spam"
+GF_LOG_BLACKLIST		= "Blacklist"
+GF_LOG_BELOWLEVEL		= "BelowLevel"
+
 -- Search related buttons and texts
-GF_UPDATE_LIST 			= "Update list";
-GF_KEYWORDS_DROPDOWN_DESCR	= "Keywords:"; -- Label to the left of the GF_SearchFrameDescriptionEditBox on group frame
+GF_KEYWORDS_DROPDOWN_DESCR= "Keywords:"; -- Label to the left of the GF_GroupsFrameDescriptionEditBox on group frame
 GF_AUTO_FILTER			= "Auto Filter";
 GF_SHOW_TRANSLATE		= "Show Translate";
 GF_SHOW_DUNGEONS		= "Show Dungeons";
@@ -50,7 +65,7 @@ GF_RESULTS_FOUND 		= "Found:"; -- Shows number of groups on list
 GF_PAGE 				= "PAGE"; -- Label for pages of groups.
 
 -- Settings tab buttons and texts
-GF_LOG					= "Log"; -- Label for Log tab
+GF_LOG					= "    Log    "; -- Label for Log tab
 GF_SETTINGS				= "Settings"; -- Label for Settings tab
 GF_BLACK_LIST			= "Blacklist"; -- Label for Blacklist tab
 GF_MINIMAP_ICON_SETTINGS= "Minimap icon settings"; -- Label for minimap section of Settings tab
@@ -62,14 +77,14 @@ GF_ICON_TEXT			= "Icon text"; -- Label for Minimap adjust icon text adjust/radiu
 GF_ADJUST_ANGLE			= "Adjust angle"; -- Label for Minimap adjust icon adjust/radius
 GF_ADJUST_RADIUS		= "Adjust radius"; -- Label for Minimap adjust icon text adjust/radius
 GF_ADJUST_TRANSPARENCY	= "Adjust window transparency"; -- Label for adjust transparency on Settings tab
+GF_ADJUST_UISCALE		= "Adjust window scale"; -- Label for adjust transparency on Settings tab
+GF_UISCALE_UPDATE		= "Update"; -- Label for update UIScale
 
-GF_ADJUST_FILTER_LEVEL	= "Looking For Group channel filtering"; -- Label for Filter slider on Settings tab
+GF_ADJUST_FILTER_LEVEL	= "Group Filtering"; -- Label for Filter slider on Settings tab
 GF_FilterLevelNotes = {};
-GF_FilterLevelNotes[1] = "OFF: All messages will be shown";-- Level 1
-GF_FilterLevelNotes[2] = "LOW: Messages on ignore list will not be shown.";
-GF_FilterLevelNotes[3] = "MED: Messages must have at least one trigger.";
-GF_FilterLevelNotes[4] = "HIGH: Messages must have at least two triggers.";
-GF_FilterLevelNotes[5] = "MAX: Messages must have at least three triggers.";
+GF_FilterLevelNotes[1] = "Requires one trigger";
+GF_FilterLevelNotes[2] = "Requires two triggers";
+GF_FilterLevelNotes[3] = "Requires three triggers";
 
 GF_USE_WHO_ON_GROUPS		= "Auto /Who"
 GF_JOIN_WORLD				= " Join World channel"
@@ -82,11 +97,10 @@ GF_BLACKLIST_MINLEVEL		= "Auto Blacklist maximum level"
 GF_BLOCK_BELOW_LEVEL		= "Block messages below level"
 GF_GROUP_LIST_DURATION		= "Group display time"
 GF_AUTO_FILTER_LEVEL		= "Auto Filter level range"
-GF_NEW_GROUP_TIMEOUT		= "New listing duration"
+GF_NEW_GROUP_TIMEOUT		= "Flagged as new listing"
 
 -- LFG related buttons and texts
 GF_AUTO						= "Auto"
-GF_GROUP_SIZE				= "Group Size";
 GF_LFM_LFG					= " LFM/LFG"
 GF_DUNGEON					= " Dungeon"
 GF_RAID						= " Raid"
@@ -97,55 +111,64 @@ GF_DPS						= "DPS"
 GF_MELEE					= "Melee"
 GF_RANGE					= "Range"
 GF_CASTER					= "Caster"
+GF_EVERYTHING				= "Everything"
+GF_WHO						= "Who"
 GF_GET_WHO					= "Get Who"
 GF_STOP_WHO					= "Stop Who"
 GF_INVITE					= "Invite"
+GF_REQUEST					= "Request"
 GF_RESET					= "Reset"
-GF_NO_WHISPER_DUNGEON		= "Couldn't find dungeon name."
+GF_INVITE_PLEASE			= "Invite Please"
+GF_INVITING_FOR				= "Inviting you for: "
+
+GF_NO_WHISPER_DUNGEON		= "There are no dungeons in the input boxes. I need a dungeon name to know what levels to look for."
 GF_NO_WHISPER_TEXT			= "No valid text to send."
-GF_WHISPER_TEXT_TOO_SHORT	= "Message must be more than five characters."
 GF_NO_PLAYERS_TO_WHISPER	= "No players in whisper queue"
+GF_WHISPER_FORMAT			= "Error: Wrong whisper format."
 
 -- Other buttons related to blacklist, log, etc
 GF_OK						= "Ok"; -- Popup Dialog Button
 GF_CANCEL 					= "Cancel"; -- Popup Dialog Button
 GF_ENTER_PLAYER_NAME		= "Enter the name of the player to be blacklisted:"; -- Label for blacklist add player popup
-GF_ADD_PLAYER				= "Add player"; -- Blacklist add player button label
-GF_EDIT_PLAYER				= "Edit player information"; -- Blacklist Edit button label
-GF_NAME						= "Name"; -- Name label for blacklist list
-GF_DELETE					= "Delete"; -- Blacklist delete button label
-GF_SAVE						= "Save"; -- Blacklist save button label
-GF_PLAYER_NOTE				= "Note"; -- Note label for blacklist list
+GF_ADD_PLAYER				= "Add player"; -- Blacklist add player button Label
+GF_INVALID_PLAYER_NAME		= " is an invalid player name."; -- Blacklist tried to add invalid player name
+GF_EDIT_PLAYER				= "Edit player information"; -- Blacklist Edit button Label
+GF_NAME						= "Name"; -- Name Label for blacklist list
+GF_DELETE					= "Delete"; -- Blacklist delete button Label
+GF_SAVE						= "Save"; -- Blacklist save button Label
+GF_PLAYER_NOTE				= "Note"; -- Note Label for blacklist list
 GF_DEFAULT_PLAYER_NOTE		= "New player added. Click here to edit this note." -- Default Blacklist note
-GF_DEFAULT_IMPORTED_IGNORED_PLAYER_NOTE= "Imported from ignored players. Click here to edit this note."; -- Default message for imported ignored players
 GF_LOG_AND_MONITOR			= "Log Entries"; -- Label at top of Log frame
 
-GF_BLOCKED_POLITICS			= "Blocked politics from "; -- Text added to Log tab when a message is blocked
-GF_BLOCKED_BELOWLEVEL		= "Message below level from "; -- Text added to Log tab when a message is blocked
-GF_BLOCKED_SPAM				= "Blocked spam from "; -- Text added to Log tab when a message is blocked
-GF_BLOCKED_GROUPS			= "Not showing group from "; -- Text added to Log tab when a message is blocked
-GF_BLOCKED_NEW				= "Blocking old group from "; -- Text added to Log tab when a message is blocked
-GF_BLOCKED_CHAT				= "Not showing chat from "; -- Text added to Log tab when a message is blocked
-GF_BLOCKED_TRADES			= "Not showing trades from "; -- Text added to Log tab when a message is blocked
-GF_BLACKLIST_MESSAGE		= "Blacklisted message from "; -- Text added to Log tab when a message is blocked
+GF_LOG_ME					= "[M] "; -- Text added to Log tab when a message is blocked
+GF_BLOCKED_GROUPS			= "[G] "; -- Text added to Log tab when a message is blocked
+GF_BLOCKED_NEW				= "[N] "; -- Text added to Log tab when a message is blocked
+GF_BLOCKED_CHAT				= "[C] "; -- Text added to Log tab when a message is blocked
+GF_BLOCKED_TRADES			= "[T] "; -- Text added to Log tab when a message is blocked
+GF_BLOCKED_POLITICS			= "[P] "; -- Text added to Log tab when a message is blocked
+GF_LOOT_MESSAGE				= "[L] "; -- Text added to Log tab when a message is blocked
+GF_BLOCKED_SPAM				= "[S] "; -- Text added to Log tab when a message is blocked
+GF_BLOCKED_BELOWLEVEL		= "[V] "; -- Text added to Log tab when a message is blocked
+GF_BLOCKED_FILTER			= "[F] "; -- Text added to Log tab when a message is blocked
+GF_BLACKLIST_MESSAGE		= "[B] "; -- Text added to Log tab when a message is blocked
 GF_BLACKLIST_ADDED			= "Blacklist added for "; -- Text added to Log tab when a message is blocked
 
 -- Announce related buttons
-GF_ANNOUNCE_LFG_BTN			= "Announce"; -- Label for the group finder announce when turned off
+GF_ANNOUNCE_LFG_BTN			= "Announce Group"; -- Label for the group finder announce when turned off
 GF_AUTO_ANNOUNCE_TURNED_ON	= "Auto announce ON."; -- Internal text when I click the announce button to start announcing.
 GF_AUTO_ANNOUNCE_TURNED_OFF= "Auto announce OFF"; -- Internal text when I click the announce button to stop announcing
 GF_NOTHING_TO_ANNOUNCE		= "Nothing to announce: Setting auto announce to OFF"; -- If GF_LFGDescriptionEditBox is then can't start announce
 GF_SENT 					= "Sent: "
 GF_ANNOUNCED_LFG_EXT		= "Announced LFG message to LookingForGroup channel"; -- Minimap text when your group is announced.
 GF_AFK_ANNOUNCE_OFF			= "You are AFK: Setting auto announce to OFF"; -- Text when announce is on and you are AFK.
-GF_JOIN_ANNOUNCE_OFF		= "You have joined a group. LFG Auto announce OFF"; -- Text when announce is on and you join someone else's group
+GF_JOINED_GROUP_ANNOUNCE_OFF= "You have joined a group or are no longer leader. LFG Auto announce OFF"; -- Text when announce is on and you join someone else's group
 GF_NO_MORE_PLAYERS_NEEDED	= "No more players needed."; -- "Your group is full. LFG Auto announce OFF"
 
 -- Common text
 GF_SECONDS					= " seconds"
 GF_MIN						= "min"
-GF_MINUTE					= " minute"
-GF_MINUTES					= " minutes"
+GF_MINUTE					= "minute"
+GF_MINUTES					= "minutes"
 GF_NOW_AFK					= "You are now AFK"; -- The text the client receives when it goes afk(used to turn off announce).
 GF_TIME_AGO					= " ago"; -- Label for righttext on group list, showing how many minutes ago group was found
 GF_TIME_LEFT				= "Found "; -- Text for righttext on group list, "Found ## minutes ago"
@@ -164,13 +187,13 @@ GF_MinimapIcon = {
 	relativePoint	= "TOPLEFT" },
 GF_GroupsInChatCheckButton = { 
 	tooltip1 		= "Show groups in chat", 
-	tooltip2 		= "When checked, new groups that meet your criteria will be displayed in chat.",  },
+	tooltip2 		= "When checked, groups that meet your criteria will be displayed in chat.",  },
 GF_GroupsInMinimapCheckButton = { 
 	tooltip1 		= "Show groups on the minimap", 
 	tooltip2 		= "When checked, new groups that meet your criteria will be displayed next to the minimap.",  },
 GF_GroupsNewOnlyCheckButton = { 
 	tooltip1 		= "Show only new groups", 
-	tooltip2 		= "When checked, only new groups will be displayed in chat and on the minimap.",  },
+	tooltip2 		= "When checked, only groups flagged as 'NEW' will be displayed in chat and on the minimap.",  },
 GF_ShowChatCheckButton = { 
 	tooltip1 		= "Show non-group chat",
 	tooltip2 		= "When checked, non-group and non-trade chat will be displayed as normal in channels. Otherwise it will be hidden.",  },
@@ -183,45 +206,45 @@ GF_ShowLootCheckButton = {
 GF_AutoFilterCheckButton = {
 	tooltip1 		= "Auto-Filter", 
 	tooltip2 		= "When checked, only groups near your level will be shown." },
-GF_SearchFrameShowTranslateCheckButton = { 
+GF_GroupsFrameShowTranslateCheckButton = { 
 	tooltip1 		= "Show Translated", 
 	tooltip2 		= "When checked, results will include translated groups." },
-GF_SearchFrameShowDungeonCheckButton = { 
+GF_GroupsFrameShowDungeonCheckButton = { 
 	tooltip1 		= "Show dungeon groups", 
 	tooltip2 		= "When checked, results will include dungeon groups." },
-GF_SearchFrameShowRaidCheckButton = { 
+GF_GroupsFrameShowRaidCheckButton = { 
 	tooltip1 		= "Show raid groups", 
 	tooltip2 		= "When checked, results will include raid groups." },
-GF_SearchFrameShowQuestCheckButton = { 
+GF_GroupsFrameShowQuestCheckButton = { 
 	tooltip1 		= "Show raid groups", 
 	tooltip2 		= "When checked, results will include quest groups." },
-GF_SearchFrameShowOtherCheckButton = { 
+GF_GroupsFrameShowOtherCheckButton = { 
 	tooltip1 		= "Show other groups", 
 	tooltip2 		= "When checked, results will include groups other than dungeons/raids/quests." },
-GF_SearchFrameShowLFMCheckButton = { 
+GF_GroupsFrameShowLFMCheckButton = { 
 	tooltip1 		= "Show groups looking for more", 
 	tooltip2 		= "When checked, results will include any group that isn't flagged with LFG" },
-GF_SearchFrameShowLFGCheckButton = {
+GF_GroupsFrameShowLFGCheckButton = {
 	tooltip1 		= "Show players looking for group", 
 	tooltip2 		= "When checked, results will include all groups flagged with LFG" },
-GF_SearchFrameDescriptionEditBox = { 
+GF_GroupsFrameDescriptionEditBox = { 
 	tooltip1 		= "Search descriptions", 
 	tooltip2 		= "Only groups with matches will be included in the results. Use '/' operator for multiple searches(e.g. dm/ubrs/scholo/etc)" },
 GF_LFGWhoWhisperEditBox = { 
 	tooltip1 		= "Whisper Message", 
-	tooltip2 		= "Use the 'Get Who' button to make a list of players matching the class and level range of the dungeon selected. Press the 'Invite' button to send this text(if blank, it will send the World Channel message instead). Will not message the same person more than once every 15 minutes." },
-GF_LFGAutoCheckButton = { 
+	tooltip2 		= "Use the 'Get Who' button to make a list of players matching the class and level range of the dungeon selected. Press the 'Invite' button to send this text(if blank it will send the World Channel message instead). Will not message the same person more than once every 15 minutes." },
+GF_GroupAutoCheckButton = { 
 	tooltip1 		= "Auto-adjust LFM", 
 	tooltip2 		= "Adjusts your 'LFM' or 'LFxM' messages by the number of people in the group relative to the selected group size." },
 GF_LFGGetWhoButton = { 
 	tooltip1 		= "Gets a who list",
 	tooltip2 		= "Looks for players of the class selected and within the level range of the dungeon selected.",  },
-GF_LFGInviteButton = { 
+GF_LFGWhisperButton = { 
 	tooltip1 		= "Send an invite whisper", 
-	tooltip2 		= "Whispers a player from the list produced by the Get Who button the LFG message in the box to the left. If that is blank it will use bottom text.",  },
+	tooltip2 		= "Whispers one player per click from the list made by the 'Get Who' button. Whispers the text below. If blank it will send the World Channel message instead.",  },
 GF_AnnounceToLFGButton = {
 	tooltip1 		= "Announce",
-	tooltip2 		= "Announces your group to the world channel automatically. Stops announcing if you go afk or if your group is full or if you are no longer the party leader." },
+	tooltip2 		= "Announces your group to the world channel automatically. Stops announcing if you go afk or if your group is full or if you lose party leader(doesn't require party leader)." },
 
 GF_FrameJoinWorldCheckButton = {
 	tooltip1 		= "Join World",
@@ -247,45 +270,65 @@ GF_FrameAutoBlacklistCheckButton = {
 GF_FrameShowPoliticsCheckButton = {
 	tooltip1 		= "Show Politics",
 	tooltip2 		= "When checked, messages that include words of a political or derogatory nature will be shown. Otherwise they will be hidden." },
-};
 
+GF_LogShowGroups = {
+	tooltip1 		= "Show Groups",
+	tooltip2 		= "Logs will include [G] Groups [N] New Groups, [F] Groups that don't match your filters." },
+GF_LogShowChat = {
+	tooltip1 		= "Show Chat",
+	tooltip2 		= "Logs will include [C] Chat Messages." },
+GF_LogShowTrades = {
+	tooltip1 		= "Show Trades",
+	tooltip2 		= "Logs will include [T] Trades Messages." },
+GF_LogShowPolitics = {
+	tooltip1 		= "Show Politics",
+	tooltip2 		= "Logs will include [P] Political Messages." },
+GF_LogShowLoot = {
+	tooltip1 		= "Show Loot",
+	tooltip2 		= "Logs will include [L] Filtered Loot Messages." },
+GF_LogShowSpam = {
+	tooltip1 		= "Show Spam",
+	tooltip2 		= "Logs will include [S] Spam Messages." },
+GF_LogShowBlacklist = {
+	tooltip1 		= "Show Blacklist",
+	tooltip2 		= "Logs will include [B] Blacklisted Messages." },
+GF_LogShowBelowLevel = {
+	tooltip1 		= "Show Below Level",
+	tooltip2 		= "Logs will include [V] Messages from players below your threshold." },
+
+GF_LogShowEditBox = {
+	tooltip1 		= "Toggle a Chat Input Box",
+	tooltip2 		= "Toggles an Input Box that sends messages to the World Channel. Can also whisper with /w 'name' like normal." },
+};
 GF_TRIGGER_LIST = {
 	["LFM"] = { "lf%s", "lf%d", "lfm", "flm", "lf.m", "lf..m", "looking for more", "need more", "looking for .* more", "need %d* dps","need %d* heal", "need %d* tank", "need heal", "need tank", "need dps",
 	"need range", "need rdps", "need caster", "need melee", "need mdps", "need one", "need two", "need three", "anyone for", "come tank", "come healer", "come dps", "hosting", "ms>os", },
-	
 	["LFG"] = {	"lfg", "looking for group", "anyone for", "want to group", },
-	
 	["CLASSES"] = {
-		["Druid"] = 	{ "Feral", "Balance", "Resto", "druid", "drood", "driud", },
+		["Druid"] = 	{ "Balance", "Feral", "Resto", "druid", "drood", "driud", },
 		["Hunter"] = 	{ "BM", "Marks", "Survival", "hunter", "hutner", },
 		["Mage"] = 		{ "Arcane", "Fire", "Frost", "mage", },
 		["Paladin"] = 	{ "Holy", "Prot", "Ret", "paladin", "pally", "paly", "pallie", "healadin", },
 		["Priest"] = 	{ "Disc", "Holy", "Shadow", "priest", "preist", },
-		["Rogue"] = 	{ "Dagger", "Sword", "Sublety", "rogue", "rouge", },
-		["Shaman"] = 	{ "Elemental", "Enhancement", "Resto", "shaman", "shammy", },
+		["Rogue"] = 	{ "Assassin", "Combat", "Sub", "rogue", "rouge", },
+		["Shaman"] = 	{ "Ele", "Enh", "Resto", "shaman", "shammy", },
 		["Warlock"] = 	{ "Affliction", "Demonology", "Destruction", "lock", "warlock", },
 		["Warrior"] = 	{ "Arms", "Fury", "Prot", "warrior", "warr", },
 		["HEALER"] = 	{ "Z", "Z", "Z","healer", "heals", },
 		["TANK"] = 		{ "Z", "Z", "Z", "tank", " tanks", },
 		["DAMAGE"] = 	{ "Z", "Z", "Z", "damage", "dps", "dmg", "deeps", "range", "melee", "caster", },
 	},
-	
-	["IGNORE"] = { "channel", "lol", "lmao", "lmfao", "rofl", "wts", "wtb", "stfu", "ignore", "noob", "website", "http",
+	["IGNORE"] = { "channel", "lol", "lmao", "lmfao", "rofl", "wts", "wtb", "stfu", "ignore", "noob", "website", "http", "progression",
 				"nub", "n00b", "recruit", "trogdoor", "raid times", "raiding times", "dedicated", "lockbox", "lfw", "cod", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday", "sign up", "server time", },
-
 	["SPAM"] = { "l f m", "h e a l", "n o s t", "please come to web", "c o m", "n 0 s t", "level service", "c o m", },
-	
 	["POLITICS"] = { "jews", "hitler", "stalin", "kike", "nazi", "supremacist", "racism", "gas chamber", "pedo", "pedophile", "biden", "trump", "pelosi", "semiti", "tranny", "trannies",
-						"6 million", "gorillion", "republican", "democrat", "politic", "bankers", "apartheid", "holocaust", "holohoax", "bigot", "schizo", "jewish", "transgender", "abortion",
-						"sexist", "feminism", "globalist", "racist", "racism", "immigrants", "refugees", "nigger", "chink", "misogyn", "faggot", "negro", "muslim", },
-
-	["TRADE"] = { "wtb", "wts", "buying", "selling", "wtt", "trading", "lfw", "for sale", "on ah", "cod", "summons service", "summon service", "jc", },
-	
-	["RAID"] = { "molten core", " mc", "ragnaros", " rag", "blackwing", "bwl", "zulg", "zg", "gurub", "hakkar", "aq20", " ahn", " aq ", "ossir", "aq40", "quiraj",
-				"naxxramas", "naxx", "onyxia", " ony", "azuregos", "kazzak", "world boss", "lethon", "ysondre", "taerar", "emeris", },
-				
-	["PVP"] = { "premade", "av ", " ab ", "wsg", "warsong", "alterac valley", "arathi basin", "gulch", },
-
+				"6 million", "gorillion", "republican", "democrat", "politic", "bankers", "apartheid", "holocaust", "holohoax", "bigot", "schizo", "jewish", "transgender", "abortion",
+				"sexist", "feminism", "globalist", "racist", "racism", "immigrants", "refugees", "nigger", "chink", "misogyn", "faggot", "negro", "muslim", },
+	["TRADE"] = { [1] = { "wtb", "wts", "buying", "selling", "wtt", "trading", "lfw", "for sale", "on ah", "cod", "summons service", "summon service",},
+					[2] = { "jc", "jewel", "enchant", "tailor", "blacksmith", "leatherwork", "engineer", }, },
+	["RAID"] = { "molten core", "mc", "ragnaros", "rag", "blackwing", "bwl", "zulg", "zg", "gurub", "hakkar", "aq20", "ahn", "aq", "ossir", "aq40", "quiraj",
+				"naxxramas", "naxx", "onyxia", "ony", "azuregos", "kazzak", "world boss", "lethon", "ysondre", "taerar", "emeris", },
+	["PVP"] = { "premade", "av", "ab", "wsg", "warsong", "alterac valley", "arathi basin", "gulch", },
 	["QUEST"] = {
 		["ARATHIHIGHLANDS"] = { "arathi highlands", "fozruk", "breaking the keystone", "sigil of trollbane", "call to arms", "the broken sigil", "the real threat", "otto and falconcrest", "attack on the tower", "trelane", "marez cowl", "stromgarde", },
 		["AZSHARA"] 		= { "azsharite", "hetaera", "the name of the beast", },
@@ -321,66 +364,65 @@ GF_TRIGGER_LIST = {
 	},
 	["DUNGEON"] = {
 		["RAGEFIRECHASM"] 	= { 15, "ragefire", "rfc", },
-		["DEADMINES"] 		= { 20, "dead mines", " dm", " vc", "cleef", "deadmines", "death mine", },
-		["WAILINGCAVERNS"] 	= { 21, "wailing cave", "wc", },
+		["DEADMINES"] 		= { 20, "dead mines", "dm", "vc", "cleef", "deadmines", "death mine", },
+		["WAILINGCAVERNS"] 	= { 20, "wailing cave", "wc", },
 		["BLACKFATHOM"] 	= { 25, "blackfathom", "bfd",},
 		["SHADOWFANG"] 		= { 25, "shadowfang", "sfk", },
 		["STOCKADE"] 		= { 25, "stockade", "stocks", },
 		["GNOMEREGAN"] 		= { 31, "gnomer", },
-		["RAZORFENKRAUL"]	= { 31, "kraul", "rfk", },
-		["RAZORFENDOWNS"]	= { 40, "downs", "rfd", },
-		["SMGRAVEYARD"] 	= { 31, "graveyard", "sm gy", "monastery gy", },
+		["RAZORFENKRAUL"]	= { 32, "kraul", "rfk", },
+		["RAZORFENDOWNS"]	= { 39, "downs", "rfd", },
+		["SMGRAVEYARD"] 	= { 32, "graveyard", "sm gy", "monastery gy", },
 		["SMLIBRARY"] 		= { 36, "library", " lib", "sm full", "sm questrun", },
 		["SMARMORY"] 		= { 38, "armory", "sm arm", "sm full", "sm questrun",},
-		["SMCATHEDRAL"] 	= { 40, "cath", "sm full", "sm questrun", },
+		["SMCATHEDRAL"] 	= { 39, "cath", "sm full", "sm questrun", },
 		["ULDAMAN"] 		= { 44, "ulda", },
 		["ZULFARRAK"] 		= { 47, "zul", "zf", "farrak", " mallet", },
-		["MARAUDON"] 		= { 49, "mara", "princess", },
-		["SUNKENTEMPLE"] 	= { 53, " st", "sunken", "temple", },
-		["BLACKROCKDEPTHS"] = { 56, "depths", "brd", " emp ", "windsor", "jailbreak", "angerforge", "hand of justice", "lava run", },
-		["LBRS"] 			= { 58, "lower .*spire", "lower .*blackrock", "lbrs", },
-		["DIREMAULEAST"] 	= { 58, "dme", "maul east", "dm.*e", },
-		["DIREMAULNORTH"] 	= { 60, "dmn", "dmt", "maul north", "maul tribute", "dm.*n", "dm.*t", },
-		["DIREMAULWEST"]	= { 60, "dmw", "maul west", "dm.*w", },
-		["SCHOLOMANCE"] 	= { 60, "scholo", },
-		["STRATHOLME"] 		= { 60, "strath", "starth", "baron", "ud strat", "live strat", "strat live", "strat ud", "ud side", "live side", },
-		["UBRS"] 			= { 60, "upper *.spire", "upper *.blackrock", "urbs", "brs", },
+		["MARAUDON"] 		= { 48, "mara", "princess", },
+		["SUNKENTEMPLE"] 	= { 54, "st", "sunken", "temple", },
+		["BLACKROCKDEPTHS"] = { 56, "depths", "brd", "emp", "windsor", "jailbreak", "angerforge", "hand of justice", "lava run", },
+		["LBRS"] 			= { 58, "lower[%w%s]+spire", "lower[%w%s]+blackrock", "lbrs", },
+		["DIREMAULEAST"] 	= { 58, "dme", "maul east", "dm.e", },
+		["DIREMAULNORTH"] 	= { 61, "dmn", "dmt", "maul north", "maul tribute", "dm.n", "dm.t", },
+		["DIREMAULWEST"]	= { 62, "dmw", "maul west", "dm.w", },
+		["SCHOLOMANCE"] 	= { 62, "scholo", },
+		["STRATHOLME"] 		= { 62, "strath", "starth", "baron", "ud strat", "live strat", "strat live", "strat ud", "ud side", "live side", },
+		["UBRS"] 			= { 63, "upper[%w%s]+spire", "upper[%w%s]+blackrock ", "urbs", "brs", },
 		["INSTANCE"] 		= { 1, " instan[zc]", },
 		["ANYTHING"] 		= { 1, "anything", },
 	},
 }
-
 GF_BUTTONS_LIST = {
 	["SearchList"] = {
 		[1] = { "Ragefire Chasm", 10, 18, "rfc", "ragefire", },
-		[2] = { "Deadmines", 15, 25, "dead+mines", "dm-", "deadmines", "vc-", "cleef", },
-		[3] = { "Wailing Caverns", 16, 26, "wc-", "wailing", },
+		[2] = { "Deadmines", 15, 25, "dead mines", " dm ", "deadmines", " vc ", "cleef", },
+		[3] = { "Wailing Caverns", 16, 26, "wc ", "wailing", },
 		[4] = { "Blackfathom Deeps", 20, 30, "bfd", "blackfa", },
-		[5] = { "Shadowfang Keep", 20, 30, "sfk-", "shadowfang", },
+		[5] = { "Shadowfang Keep", 20, 30, "sfk ", "shadowfang", },
 		[6] = { "Stockades", 20, 30, "stockade", "stocks", },
 		[7] = { "Gnomeregan", 26, 36, "gnomer", },
 		[8] = { "Razorfen Kraul", 26, 36, "rfk", "kraul", },
-		[9] = { "Razorfen Downs", 35, 45, "rfd", "downs-", },
-		[10] = { "SM Graveyard", 26, 36, "graveyard", "gy-", },
-		[11] = { "SM Library", 30, 42, "lib-", "library", },
-		[12] = { "SM Armory", 34, 44, "arm-", "arms","armory" },
-		[13] = { "SM Cathedral", 35, 46, "cath-", "sm+full", "cathedral"},
-		[14] = { "Uldaman", 38, 50, "ulda", },
-		[15] = { "Zul'Farrak", 42, 54, "zf", "farrak", "mallet", "zul-", },
-		[16] = { "Maraudon", 43, 55, "mara", "princess", },
-		[17] = { "Sunken Temple", 47, 58, "sunken", "st-", "temple", },
-		[18] = { "Blackrock Depths", 48, 60, "brd", "blackrock+depth", "windsor", "jailbreak", },
-		[19] = { "Lower Blackrock Spire", 52, 60, "lbrs", "lower", },
-		[20] = { "Dire Maul East", 50, 60, "dme", "east", },
+		[9] = { "Razorfen Downs", 35, 45, "rfd", " downs ", },
+		[10] = { "SM Graveyard", 26, 36, "graveyard", " gy ", },
+		[11] = { "SM Library", 30, 42, " lib ", "library", },
+		[12] = { "SM Armory", 34, 44, " arm ", " arms ","armory", },
+		[13] = { "SM Cathedral", 35, 46, " cath ", "sm full", "cathedral"},
+		[14] = { "Uldaman", 38, 50, " ulda ", },
+		[15] = { "Zul'Farrak", 42, 54, "zf", "farrak", "mallet", "zul ", },
+		[16] = { "Maraudon", 43, 55, " mara ", "princess", },
+		[17] = { "Sunken Temple", 47, 58, "sunken", " st ", "temple", },
+		[18] = { "Blackrock Depths", 48, 60, "brd", "blackrock depth", "windsor", "jailbreak", },
+		[19] = { "Lower Blackrock Spire", 52, 60, "lbrs", " lower ", },
+		[20] = { "Dire Maul East", 50, 60, "dme", " east ", },
 		[21] = { "Dire Maul North", 54, 60, "dmn", "north", },
-		[22] = { "Dire Maul West", 55, 60, "dmw", "west", },
-		[23] = { "Dire Maul Tribute", 54, 60, "dmt", "trib-", "tribute" },
+		[22] = { "Dire Maul West", 55, 60, "dmw", " west ", },
+		[23] = { "Dire Maul Tribute", 54, 60, "dmt", " trib ", "tribute", },
 		[24] = { "Scholomance", 55, 60, "scholo", },
-		[25] = { "Stratholme", 55, 60, "strat-", "stratholme", "ud-", "live-", "baron", },
+		[25] = { "Stratholme", 55, 60, " strat ", "stratholme", " ud ", " live ", "baron", },
 		[26] = { "Upper Blackrock Spire", 55, 60, "ubrs", "upper", },
-		[27] = { "40-man Raids", 58, 60, "mc-", "molten+core", "rag-","ragnaros", "blackwing", "bwl", "nef-", "nefari", "aq40", "cthun", "aq+40", "naxx", "ony-", "onyxia", "qiraj", },
-		[28] = { "20-man Raids", 58, 60, "zg-", "zul+g", "gurub", "hakkar", "aq20", "ossi", },
-		[29] = { "PvP", 18, 60, "premade", "av-", "ab-",  "wsg-", "alterac+valley", "arathi+basin", "warsong+gulch", },
+		[27] = { "40-man Raids", 58, 60, " mc ", "molten core", " rag ","ragnaros", "blackwing", "bwl", " nef ", " nefar", "aq40", "cthun", "aq 40", "naxx", " ony ", "onyxia", "qiraj", },
+		[28] = { "20-man Raids", 58, 60, " zg ", "zul g", "gurub", "hakkar", "aq20", "ossi", },
+		[29] = { "PvP", 18, 60, "premade", " av ", " ab ",  "wsg", "alterac valley", "arathi basin", "warsong gulch", },
 		[30] = { GF_CLEAR, 1, 60, "", },
 	},
 	["LFGWhoClass"] = {
@@ -409,6 +451,7 @@ GF_BUTTONS_LIST = {
 		[4] = { GF_MELEE, 1, 60, },
 		[5] = { GF_RANGE, 1, 60, },
 		[6] = { GF_CASTER, 1, 60, },
+		[7] = { GF_EVERYTHING, 1, 60, },
 	},
 	["LFGDungeon"] = {
 		[1] = { "Ragefire Chasm", 10, 18, "rfc", "Ragefire Chasm", 15, },
@@ -441,21 +484,28 @@ GF_BUTTONS_LIST = {
 		[27] = { "Upper Blackrock Spire", 55, 60, "ubrs", "Blackrock Spire", 62, },
 	},
 	["LFGRaid"] = {
-		[1] = { "Molten Core", 1, 60, "mc", "Molten Core", 63, },
-		[2] = { "Blackwing Lair", 1, 60, "bwl", "Blackwing Lair", 63 },
-		[3] = { "AQ40", 1, 60, "aq 40", "Ahn'Qiraj", 63, },
-		[4] = { "Naxxramas", 1, 60, "naxx", "Naxxramas", 63, },
-		[5] = { "Onyxia", 1, 60, "ony", "Onyxia's Lair", 63, },
-		[6] = { "ZG", 1, 60, "zulgurub", "Zul'Gurub", 63, },
-		[7] = { "AQ20", 1, 60, "aq 20", "Ruins of Ahn'Qiraj", 63, },
+		[1] = { "Molten Core", 1, 60, "mc", "Molten Core", 63, 40, },
+		[2] = { "Blackwing Lair", 1, 60, "bwl", "Blackwing Lair", 63, 40, },
+		[3] = { "AQ40", 1, 60, "aq 40", "Ahn'Qiraj", 63, 40, },
+		[4] = { "Naxxramas", 1, 60, "naxx", "Naxxramas", 63, 40, },
+		[5] = { "Onyxia", 1, 60, "ony", "Onyxia's Lair", 63, 40, },
+		[6] = { "ZG", 1, 60, "zulgurub", "Zul'Gurub", 63, 20, },
+		[7] = { "AQ20", 1, 60, "aq 20", "Ruins of Ahn'Qiraj", 63, 20, },
 	},
 	["LFGPvP"] = {
 		[1] = { "Arathi Basin", 1, 60, "ab", "Arathi Basin", 63, },
 		[2] = { "Alterac Valley", 1, 60, "av", "Alterac Valley", 63 },
 		[3] = { "Warsong Gulch", 1, 60, "wsg", "Warsong Gulch", 63, },
 	},
+	["LFGSize"] = {
+		[1] = { GF_5_MAN, 1, 60, },
+		[2] = { GF_10_MAN, 1, 60, },
+		[3] = { GF_15_MAN, 1, 60, },
+		[4] = { GF_20_MAN, 1, 60, },
+		[5] = { GF_25_MAN, 1, 60, },
+		[6] = { GF_40_MAN, 1, 60, },
+	},
 }
-
 GF_ErrorFilters = {
 	[1]	= "has completed that quest",
 	[2]	= "is not eligible for that quest",
@@ -466,7 +516,6 @@ GF_ErrorFilters = {
 	[7]	= "is already in a group.",
 	[8]	= "is under attack!",
 }
-
 GF_LootFilters = {
 	[1]	= "Your share of the loot is ", --always filter these
 	[2]	= "You loot ",
@@ -485,15 +534,14 @@ GF_LootFilters = {
 	[14]= " passed on: ",
 	[15]= " won: ",
 }
-
 local GF_TurtleTriggerListDungeons = {
-		["CRESCENTGROVE"]	= { 36, "crescent", "grove", " cg", },
+		["CRESCENTGROVE"]	= { 36, "crescent", "grove", "cg", },
 		["GILNEASCITY"] 	= { 47, "gilneas", "gc", },
-		["HATEFORGEQUARRY"] = { 55, "hateforge", "quarry", " hf", },
-		["EMERALDSANCTUM"] 	= { 60, " es ", "sanctum", },
-		["STORMWINDVAULT"] 	= { 60, " sv", "vault", },
-		["COTBLACKMORASS"] 	= { 60, "morass", " bm ", },
-		["KARACRYPT"] 		= { 60, " crypt", },
+		["HATEFORGEQUARRY"] = { 55, "hateforge", "quarry", "hf", },
+		["EMERALDSANCTUM"] 	= { 60, "es", "sanctum", },
+		["STORMWINDVAULT"] 	= { 60, "sv", "vault", },
+		["COTBLACKMORASS"] 	= { 60, "morass", "bm", },
+		["KARACRYPT"] 		= { 60, "crypt", },
 }
 local GF_TurtleTriggerListQuests = {
 		["TURTLE"]			= { 60, "xanthar", "upper binding", "solnius", "scythe of the goddess", "into the dream", },
@@ -529,13 +577,13 @@ local GF_TurtleTriggerListQuests = {
 }
 local GF_TurtleTriggerListRaids = { "kara", "k10", "k40", "concavius", "ostarius", "nerub", "reaver", "aq15", }
 local GF_TurtleSearchList = {
-		[1] = { "Crescent Grove", 32, 38, "crescent", "grove", "cg-", },
+		[1] = { "Crescent Grove", 32, 38, "crescent", "grove", "cg ", },
 		[2] = { "Gilneas City", 43, 50, "gilneas", },
-		[3] = { "Hateforge Quarry", 52, 60, "hateforge", "quarry", "hf-", },
-		[4] = { "Stormwind Vault", 58, 60, "vault", "sv-", },
-		[5] = { "Black Morass", 58, 60, "morass", "bm-", },
+		[3] = { "Hateforge Quarry", 52, 60, "hateforge", "quarry", "hf ", },
+		[4] = { "Stormwind Vault", 58, 60, "vault", "sv ", },
+		[5] = { "Black Morass", 58, 60, "morass", "bm ", },
 		[6] = { "Karazhan Crypt", 60, 60, "crypt", },
-		[7] = { "Emerald Sanctum", 60, 60, "sanctum", "es-", },
+		[7] = { "Emerald Sanctum", 60, 60, "sanctum", "es ", },
 }
 local GF_TurtleGroupButtonsListDungeons = { -- header, min to show, max to show, filter to remove names, filter to remove names, Who list level
 		[1] = { "Crescent Grove", 32, 40, "cg", "Crescent Grove", 33, },
@@ -547,13 +595,12 @@ local GF_TurtleGroupButtonsListDungeons = { -- header, min to show, max to show,
 		[7] = { "Emerald Sanctum", 60, 60, "sanctum", "Emerald Sanctum", 63, },
 }
 local GF_TurtleGroupButtonsListRaids = {
-		[1] = { "Lower Karazhan", 1, 60, "kara10", "Lower Karazhan", 63, },
-		[2] = { "Upper Karazhan", 1, 60, "kara40", "Upper Karazhan", 63, },
+		[1] = { "Lower Karazhan", 1, 60, "kara10", "Lower Karazhan", 63, 10, },
+		[2] = { "Upper Karazhan", 1, 60, "kara40", "Upper Karazhan", 63, 40, },
 }
-local GF_TurtleSearchListNew40RaidString = { "40-man Raids", 60, 60, "mc-", "molten+core", "rag-","ragnaros", "blackwing", "bwl", "nef-", "nefari", "aq40", "cthun", "aq+40", "naxx", "ony-", "onyxia", "qiraj",
-											"kara40", "upper+kara", "k40", "concavius", "ostarius", "nerub", "reaver", }
-local GF_TurtleSearchListNew20RaidString = { "20-man Raids", 58, 60, "zg-", "zul+g", "gurub", "hakkar", "aq20", "ossi", "aq15", "k10", "kara10", "lower+kara", }					
-
+local GF_TurtleSearchListNew40RaidString = { "40-man Raids", 60, 60, "mc ", "molten core", "rag ","ragnaros", "blackwing", "bwl", " nef ", "nefari", "aq40", "cthun", "aq 40", "naxx", " ony", "onyxia", "qiraj",
+											"kara40", "upper kara", "k40", "concavius", "ostarius", "nerub", "reaver", }
+local GF_TurtleSearchListNew20RaidString = { "20-man Raids", 58, 60, "zg", "zul g", "gurub", "hakkar", "aq20", "ossi", "aq15", "k10", "kara10", "lower kara", }					
 function GF_AddTurtleWoWDungeonsRaids()
 	for instance,_ in GF_TurtleTriggerListDungeons do
 		GF_TRIGGER_LIST.DUNGEON[instance] = GF_TurtleTriggerListDungeons[instance]
