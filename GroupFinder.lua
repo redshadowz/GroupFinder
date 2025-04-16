@@ -266,9 +266,9 @@ function GF_AddLogMessage(arg1,filteredChat,add,arg2,arg8,arg9)
 		else
 			arg1 = "["..date("%H:%M").."] "..GF_LogMessageCodes[filteredChat].."["..arg8..". "..string.upper(string.sub(arg9,1,1))..string.lower(string.sub(arg9,2)).."] ".."|cff".."9d9d9d".."[|Hplayer:"..arg2.."|h"..arg2.."|h|r]: "..arg1
 		end
-		table.insert(GF_LogHistory[GF_RealmName],1,GetTime()*1000)
+		table.insert(GF_LogHistory[GF_RealmName],1,GetTime())
 		GF_LogHistory[GF_LogHistory[GF_RealmName][1]] = { arg1,filteredChat }
-		if getn(GF_LogHistory[GF_RealmName]) > 500 then table.remove(GF_LogHistory[GF_RealmName],501) end
+		if getn(GF_LogHistory[GF_RealmName]) > 500 then GF_LogHistory[GF_LogHistory[GF_RealmName][501]] = nil table.remove(GF_LogHistory[GF_RealmName],501) end
 	end
 	if (filteredChat == 12 or (GF_SavedVariables.logshowgroup and (filteredChat == 1 or filteredChat == 2 or filteredChat == 11)) or (GF_SavedVariables.logshowchat and filteredChat == 3)
 	or (GF_SavedVariables.logshowtrades and filteredChat == 4) or (GF_SavedVariables.logshowpolitics and filteredChat == 5) or (GF_SavedVariables.logshowloot and filteredChat == 6)
