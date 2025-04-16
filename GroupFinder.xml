@@ -2433,7 +2433,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							</Anchor>
 						</Anchors>	
 						<Frames>	
-							<ScrollingMessageFrame name="GF_Log" displayDuration="1200.0" maxLines="128" EnableMouseWheel="true">
+							<ScrollingMessageFrame name="GF_Log" displayDuration="1200.0" maxLines="128" EnableMouseWheel="true" backdrop="">
 								<Anchors>
 									<Anchor point="TOPLEFT">
 										<Offset>
@@ -2841,6 +2841,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											GF_MainFrameCloseButton:Hide()
 											GF_LogFrame:SetAlpha(GF_SavedVariables.MainFrameTransparency)
 											GF_LogFrameInternalFrameTitle:SetText("");
+											GF_LogFrameInternalFrame:SetBackdropBorderColor(.4,.4,.4,0)
+											GF_LogFrameInternalFrame:SetBackdropColor(.14,.14,.14,0)
 											GF_GroupsInChatCheckButton:Hide()
 											GF_GroupsNewOnlyCheckButton:Hide()
 											GF_GroupsInMinimapCheckButton:Hide()
@@ -2883,6 +2885,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											GF_MainFrame:IsMovable(true)
 											GF_MainFrameCloseButton:Show()
 											GF_LogFrameInternalFrameTitle:SetText(GF_LOG_AND_MONITOR);
+											GF_LogFrameInternalFrame:SetBackdropBorderColor(.4,.4,.4,1)
+											GF_LogFrameInternalFrame:SetBackdropColor(.14,.14,.14,1)
 											GF_GroupsInChatCheckButton:Show()
 											GF_GroupsNewOnlyCheckButton:Show()
 											GF_GroupsInMinimapCheckButton:Show()

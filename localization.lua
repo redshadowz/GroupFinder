@@ -299,6 +299,9 @@ GF_LogShowBelowLevel = {
 GF_LogShowEditBox = {
 	tooltip1 		= "Toggle a Chat Input Box",
 	tooltip2 		= "Toggles an Input Box that sends messages to the World Channel. Can also whisper with /w 'name' like normal." },
+GF_LogHideMainFrame = {
+	tooltip1 		= "Toggles hiding Main Window",
+	tooltip2 		= "Hides the main window, most buttons, and makes this frame click-through." },
 };
 GF_TRIGGER_LIST = {
 	["LFM"] = { "lf%s", "lf%d", "lfm", "flm", "lf.m", "lf..m", "looking for more", "need more", "looking for .* more", "need %d* dps","need %d* heal", "need %d* tank", "need heal", "need tank", "need dps",
