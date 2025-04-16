@@ -276,6 +276,7 @@ end
 function GF_DisplayLog()
 	GF_Log:SetMaxLines(128)
 	local logLength = getn(GF_LogHistory[GF_RealmName])
+	if logLength > 128 then logLength = 128 end
 	for i=1, logLength do
 		GF_AddLogMessage(GF_LogHistory[GF_RealmName][logLength-i+1][1],GF_LogHistory[GF_RealmName][logLength-i+1][2],nil)
 		if i == 128 then break end
