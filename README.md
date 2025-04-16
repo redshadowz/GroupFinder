@@ -1,7 +1,7 @@
 # GroupFinder
-Group finder Addon for Vanilla Wow 1.12.1 based on the CallToArms addon by Sacha Beharry and Eike Hanus(with Turtle WoW support).  
+Group finder Addon for Vanilla Wow 1.12.1 based on the CallToArms addon(with Turtle WoW support).  
 
-Update 4/10/2025: I think I fixed all the chat issues. But that's what I always think(and I'm always wrong)...  
+Update 4/15/2025: I made a major overhaul. If your addon is throwing errors, you might have to delete your GroupFinder WTF settings. A lot of things I can't test thoroughly. So if you have any problems, please let me know.
 
 The goal of this addon was to find groups without needing to sift through endless chat spam. I tried to make this addon as intuitive as possible, but it's probably pretty intimidating at first glance. Lots of checkboxes. Lots of edit boxes. Lots of dropdowns. I put as much as possible on the front page because the original CallToArms addon had too many pages to flip through and too many useless features.  
 
