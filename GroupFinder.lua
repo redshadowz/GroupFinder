@@ -281,6 +281,7 @@ function GF_DisplayLog()
 	table.sort(GF_LogHistory[GF_RealmName])
 	for i=1, getn(GF_LogHistory[GF_RealmName]) do
 		GF_AddLogMessage(GF_LogHistory[GF_LogHistory[GF_RealmName][i]][1],GF_LogHistory[GF_LogHistory[GF_RealmName][i]][2],nil)
+		if i == 128 then break end
 	end
 end
 
