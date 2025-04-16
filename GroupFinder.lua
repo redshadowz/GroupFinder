@@ -266,7 +266,8 @@ function GF_AddLogMessage(arg1,filteredChat,add,arg2,arg8,arg9)
 		else
 			arg1 = "["..date("%H:%M").."] "..GF_LogMessageCodes[filteredChat].."["..arg8..". "..string.upper(string.sub(arg9,1,1))..string.lower(string.sub(arg9,2)).."] ".."|cff".."9d9d9d".."[|Hplayer:"..arg2.."|h"..arg2.."|h|r]: "..arg1
 		end
-		table.insert(GF_LogHistory[GF_RealmName],1, {arg1, filteredChat})
+		table.insert(GF_LogHistory[GF_RealmName],1,GetTime()*1000)
+		GF_LogHistory[GF_LogHistory[GF_RealmName][1]] = { arg1,filteredChat }
 		if getn(GF_LogHistory[GF_RealmName]) > 500 then table.remove(GF_LogHistory[GF_RealmName],501) end
 	end
 	if (filteredChat == 12 or (GF_SavedVariables.logshowgroup and (filteredChat == 1 or filteredChat == 2 or filteredChat == 11)) or (GF_SavedVariables.logshowchat and filteredChat == 3)
@@ -277,13 +278,13 @@ function GF_AddLogMessage(arg1,filteredChat,add,arg2,arg8,arg9)
 end
 function GF_DisplayLog()
 	GF_Log:SetMaxLines(128)
-	local logLength = getn(GF_LogHistory[GF_RealmName])
-	if logLength > 128 then logLength = 128 end
-	for i=1, logLength do
-		GF_AddLogMessage(GF_LogHistory[GF_RealmName][logLength-i+1][1],GF_LogHistory[GF_RealmName][logLength-i+1][2],nil)
-		if i == 128 then break end
+	table.sort(GF_LogHistory[GF_RealmName])
+	for i=1, getn(GF_LogHistory[GF_RealmName]) do
+		GF_AddLogMessage(GF_LogHistory[GF_LogHistory[GF_RealmName][i]][1],GF_LogHistory[GF_LogHistory[GF_RealmName][i]][2],nil)
 	end
 end
+
+
 function GF_SlashHandler()
 	if GF_MainFrame:IsVisible() then GF_MainFrame:Hide(); else GF_MainFrame:Show(); end
 	return;
