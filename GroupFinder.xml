@@ -3088,7 +3088,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLeave>			
 									<OnClick>								
 										GF_SavedVariables.joinworld = this:GetChecked();
-										if GF_SavedVariables.joinworld then GF_JoinWorld(); else GF_LeaveWorld() end
+										if GF_SavedVariables.joinworld then GF_JoinWorld(); else LeaveChannelByName(GF_CHANNEL_NAME) end
 									</OnClick>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetWidth(300);

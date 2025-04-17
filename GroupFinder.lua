@@ -203,37 +203,6 @@ function GF_OnLoad()
 		end
 		old_SendChatMessage(arg1, arg2, arg3, arg4)
 	end
---	old_ChatEdit_ParseText = ChatEdit_ParseText
---[[function ChatEdit_ParseText(editBox, send)
-
-	local target
-
-	local _, _, command, parameter = strfind(editBox:GetText(), '^(/%S+)%s*(%S*)')
-	if command then
-		command = strupper(command)
-		local i = 1
-		while true do
-			if getglobal('SLASH_WHISPER'..i) and command == strupper(TEXT(getglobal('SLASH_WHISPER'..i))) and parameter ~= '' then
-				target = gsub(strlower(parameter), '^%l', strupper)
-				break
-			elseif getglobal('SLASH_REPLY'..i) and command == strupper(TEXT(getglobal('SLASH_REPLY'..i))) and ChatEdit_GetLastTellTarget(editBox) ~= '' then
-				target = ChatEdit_GetLastTellTarget(editBox)
-				break
-			elseif not getglobal('SLASH_WHISPER'..i) and not getglobal('SLASH_REPLY'..i) then
-				break
-			end
-			i = i + 1
-		end
-	end
-
-	if target then
-		WIM_PostMessage(target, '', 5, '', '')
-		editBox:SetText('')
-		editBox:Hide()	
-	else
-		return old_ChatEdit_ParseText(editBox, send)
-	end
-end--]]
 	local old_AddIgnore = AddIgnore;
 	function AddIgnore(name)
 		if not GF_BlackList[GF_RealmName][name] then
@@ -694,7 +663,7 @@ end
 function GF_LoadSettings()
 	local SliderVariablesToSet = { GF_SavedVariables.MinimapArcOffset, GF_SavedVariables.MinimapRadiusOffset, GF_SavedVariables.MinimapMsgArcOffset, GF_SavedVariables.MinimapMsgRadiusOffset, GF_SavedVariables.FilterLevel, GF_SavedVariables.MainFrameUIScale,
 	GF_SavedVariables.MainFrameTransparency, GF_SavedVariables.spamfilterduration,GF_SavedVariables.autoblacklistminlevel,GF_SavedVariables.blockmessagebelowlevel,GF_SavedVariables.grouplistingduration,GF_SavedVariables.autofilterlevelvar,
-	GF_SavedVariables.showgroupsnewonlytime, GF_SavedVariables.announcetimer/6 }
+	GF_SavedVariables.showgroupsnewonlytime, GF_SavedVariables.announcetimer/60 }
 	local SliderNames = { "GF_MinimapArcSlider", "GF_MinimapRadiusSlider", "GF_MinimapMsgArcSlider", "GF_MinimapMsgRadiusSlider", "GF_FilterLevelSlider", "GF_UIScaleSlider", "GF_FrameTransparencySlider", "GF_FrameSpamFilterDurationSlider",
 	"GF_FrameSpamBlacklistMinLevelSlider", "GF_FrameBlockMessagesBelowLevelSlider", "GF_GroupListingDurationSlider", "GF_AutoFilterLevelSlider", "GF_GroupNewTimeoutSlider", "GF_FrameAnnounceTimerSlider" }
 	for i=1, 14 do getglobal(SliderNames[i]):SetValue(SliderVariablesToSet[i]) end
@@ -809,27 +778,14 @@ function GF_UpdateFriendsAndGuildiesList()
 end
 function GF_JoinWorld(show)
 	if GF_SavedVariables.joinworld then
-		local worldFound = false;
-		for i=1, 10 do
-			local _,cName = GetChannelName(i)
-			if cName and string.lower(cName) == string.lower(GF_CHANNEL_NAME) then
-				worldFound = true;
-				break
+		local chanList = { GetChannelList() }
+		for i=1, getn(chanList) do
+			if string.lower(chanList[i]) == string.lower(GF_CHANNEL_NAME) then
+				return true
 			end
 		end
-		if not worldFound then
-			JoinChannelByName(GF_CHANNEL_NAME);
-			if show then ChatFrame_AddChannel(ChatFrame1, GF_CHANNEL_NAME); end
-		end
-	end
-end
-function GF_LeaveWorld()
-	for i=1, 10 do
-		local _,cName = GetChannelName(i)
-		if cName and string.lower(cName) == string.lower(GF_CHANNEL_NAME) then
-			ChatFrame_RemoveChannel(1, cName);
-			return
-		end
+		JoinChannelByName(GF_CHANNEL_NAME);
+		if show then ChatFrame_AddChannel(ChatFrame1, GF_CHANNEL_NAME); end
 	end
 end
 function GF_ParseIncomingAddonMessages(arg2)
