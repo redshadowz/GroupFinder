@@ -1482,7 +1482,15 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						GameTooltip:Hide();
 					</OnLeave>
 					<OnClick>
-						if GF_AutoAnnounceTimer then GF_TurnOffAnnounce() else GF_TurnOnAnnounce() end
+						if GF_AutoAnnounceTimer then
+							GF_TurnOffAnnounce()
+						else
+							if GF_LFGDescriptionEditBox:GetText() ~= "" then
+								GF_TurnOnAnnounce()
+							else
+								DEFAULT_CHAT_FRAME:AddMessage(GF_NOTHING_TO_ANNOUNCE2, 1, 1, 0.5)
+							end
+						end
 					</OnClick>
 				</Scripts>
 			</Button>

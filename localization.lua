@@ -160,6 +160,7 @@ GF_ANNOUNCE_LFG_BTN			= "Announce Group"; -- Label for the group finder announce
 GF_AUTO_ANNOUNCE_TURNED_ON	= "Auto announce ON."; -- Internal text when I click the announce button to start announcing.
 GF_AUTO_ANNOUNCE_TURNED_OFF= "Auto announce OFF"; -- Internal text when I click the announce button to stop announcing
 GF_NOTHING_TO_ANNOUNCE		= "Nothing to announce: Setting auto announce to OFF"; -- If GF_LFGDescriptionEditBox is then can't start announce
+GF_NOTHING_TO_ANNOUNCE2		= "Nothing to announce"; -- If GF_LFGDescriptionEditBox is then can't start announce
 GF_SENT 					= "Sent: "
 GF_ANNOUNCED_LFG_EXT		= "Announced LFG message to LookingForGroup channel"; -- Minimap text when your group is announced.
 GF_AFK_ANNOUNCE_OFF			= "You are AFK: Setting auto announce to OFF"; -- Text when announce is on and you are AFK.

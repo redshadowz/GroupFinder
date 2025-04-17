@@ -1698,8 +1698,11 @@ function GF_CleanUpMessagesOfBadLinks(arg1)
 end
 function GF_ShowGroupsOnMinimap(arg1,arg2)
 	if GF_MiniMapMessages[1] > time() and GF_MiniMapMessages[2] > time() and GF_MiniMapMessages[3] > time() and GF_MiniMapMessages[4] > time() and GF_MiniMapMessages[5] > time() and GF_MiniMapMessages[6] > time() then
-		table.sort(GF_MiniMapMessages)
-		GF_MiniMapMessages[1] = 0;
+		local lowest = time()
+		for i=1, 6 do
+			if GF_MiniMapMessages[i] < lowest then lowest = i end
+		end
+		GF_MiniMapMessages[lowest] = 0;
 	end
 	for i=1, 6 do
 		if GF_MiniMapMessages[i] < time() then
