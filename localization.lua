@@ -42,13 +42,15 @@ GF_CHAT_GROUP_ON		= "Groups in chat, on"
 GF_CHAT_GROUP_OFF		= "Groups in chat, off"
 
 GF_LOG_GROUP			= "Group"
+GF_LOG_FILTERED			= "Filtered"
 GF_LOG_CHAT				= "Chat"
 GF_LOG_TRADES			= "Trades"
 GF_LOG_POLITICS			= "Politics"
 GF_LOG_LOOT				= "Loot"
 GF_LOG_SPAM				= "Spam"
 GF_LOG_BLACKLIST		= "Blacklist"
-GF_LOG_BELOWLEVEL		= "BelowLevel"
+GF_LOG_BELOWLEVEL		= "Level"
+GF_LOG_SHOWLOG			= "Show Log"
 
 -- Search related buttons and texts
 GF_KEYWORDS_DROPDOWN_DESCR= "Keywords:"; -- Label to the left of the GF_GroupsFrameDescriptionEditBox on group frame
@@ -302,6 +304,9 @@ GF_LogShowEditBox = {
 GF_LogHideMainFrame = {
 	tooltip1 		= "Toggles hiding Main Window",
 	tooltip2 		= "Hides the main window, most buttons, and makes this frame click-through." },
+GF_LogShowWhisperHistory = {
+	tooltip1 		= "Toggles the Whisper History Window",
+	tooltip2 		= "This will show your whisper history(when I get done programming it)." },
 };
 GF_TRIGGER_LIST = {
 	["LFM"] = { "lf%s", "lf%d", "lfm", "flm", "lf.m", "lf..m", "looking for more", "need more", "looking for .* more", "need %d* dps","need %d* heal", "need %d* tank", "need heal", "need tank", "need dps",
@@ -492,8 +497,8 @@ GF_BUTTONS_LIST = {
 		[3] = { "AQ40", 1, 60, "aq 40", "Ahn'Qiraj", 63, 40, },
 		[4] = { "Naxxramas", 1, 60, "naxx", "Naxxramas", 63, 40, },
 		[5] = { "Onyxia", 1, 60, "ony", "Onyxia's Lair", 63, 40, },
-		[6] = { "ZG", 1, 60, "zulgurub", "Zul'Gurub", 63, 20, },
-		[7] = { "AQ20", 1, 60, "aq 20", "Ruins of Ahn'Qiraj", 63, 20, },
+		[6] = { "ZG", 1, 60, "zg", "Zul'Gurub", 63, 20, },
+		[7] = { "AQ20", 1, 60, "aq20", "Ruins of Ahn'Qiraj", 63, 20, },
 	},
 	["LFGPvP"] = {
 		[1] = { "Arathi Basin", 1, 60, "ab", "Arathi Basin", 63, },
@@ -520,22 +525,20 @@ GF_ErrorFilters = {
 	[8]	= "is under attack!",
 }
 GF_LootFilters = {
-	[1]	= "Your share of the loot is ", --always filter these
-	[2]	= "You loot ",
-	[3]	= "Greed Roll - ",
-	[4]	= "Need Roll - ",
-	[5]	= "You have selected Greed for: ",
-	[6]	= "You have selected Need for: ",
-	[7]	= "You passed on: ",
-	[8]= " dies, you gain",
-	[9]= " reputation has increased by ",
-	[10]= "You have been awarded ",
-	[11]= "9d9d9d", -- grey quality filter
+	[1]	= "Your share of the loot is", --always filter these
+	[2]	= "You loot",
+	[3]	= "Greed Roll",
+	[4]	= "Need Roll",
+	[5]	= "You have selected",
+	[6]	= "You passed on",
+	[7] = "experience",
+	[8] = "reputation",
+	[9] = "You have been awarded ",
+	[10]= "9d9d9d", -- grey quality filter
 
-	[12]	= " has selected Greed for: ", -- filter these if green quality or lower
-	[13]	= " has selected Need for: ",
-	[14]= " passed on: ",
-	[15]= " won: ",
+	[11]= "has selected", -- filter these if green quality or lower
+	[12]= "passed on",
+	[13]= "won",
 }
 local GF_TurtleTriggerListDungeons = {
 		["CRESCENTGROVE"]	= { 36, "crescent", "grove", "cg", },
@@ -616,6 +619,8 @@ function GF_AddTurtleWoWDungeonsRaids()
 	end
 	GF_BUTTONS_LIST.SearchList[27] = GF_TurtleSearchListNew40RaidString;
 	GF_BUTTONS_LIST.SearchList[28] = GF_TurtleSearchListNew20RaidString;
+	GF_BUTTONS_LIST.LFGRaid[7] = { "AQ15", 1, 60, "aq15", "Ruins of Ahn'Qiraj", 63, 20, }
+
 	for i=1, getn(GF_TurtleSearchList) do
 		table.insert(GF_BUTTONS_LIST.SearchList, 27, GF_TurtleSearchList[i]);
 	end

@@ -2,12 +2,50 @@
 C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 	<Script file="localization.lua"/>
 	<Script file="GroupFinder.lua"/>
-	<Script file="GroupFinder_Util.lua"/>
-	<Script file="GF.WhoManager.lua"/>
-
+	<Button name="GF_AbstractGrayButton" inherits="UIPanelButtonGrayTemplate" hidden="true" virtual="true">
+		<NormalText inherits="GameFontHighlightSmall"/>
+		<DisabledText inherits="GameFontDisableSmall"/>
+		<HighlightText inherits="GameFontHighlightSmall"/>
+		<Size>
+			<AbsDimension x="100" y="20"/>
+		</Size>
+		<Anchors>
+			<Anchor point="TOPRIGHT">
+				<Offset>
+					<AbsDimension x="97" y="0"/>
+				</Offset>
+			</Anchor>
+		</Anchors>
+		<Scripts>
+			<OnClick>
+				GF_WhisperHistoryButtonPressed(this:GetID())
+			</OnClick>
+		</Scripts>
+	</Button>
 	<FontString name="GF_TitleFont" inherits="GameFontNormal" virtual="true">
 		<Color r="0.9" g="0.9" b="0.9"/>
 	</FontString>
+ 	<CheckButton name="GF_AbstractSmallCheckButton" inherits="UICheckButtonTemplate" hidden="true" virtual="true">
+		<Size>
+			<AbsDimension x="20" y="20"/>
+		</Size>
+		<Scripts>
+			<OnEnter>
+				GF_ShowTooltip();
+			</OnEnter>
+			<OnLeave>
+				GameTooltip:Hide();
+			</OnLeave>	
+			<OnClick>
+				if (this:GetChecked()) then
+					PlaySound("igMainMenuOptionCheckBoxOff");
+				else
+					PlaySound("igMainMenuOptionCheckBoxOn");
+				end
+				GF_WhisperHistoryPriorityListCheckButtonPressed(this:GetID(),getglobal("GF_WhisperHistoryButton"..this:GetID()):GetText(),this:GetChecked())
+			</OnClick>
+		</Scripts>	
+	</CheckButton>		
 	<EditBox name="GF_AbstractEditBox" autoFocus="false" virtual="true">		
 		<Size>
 			<AbsDimension x="140" y="20"/>
@@ -411,7 +449,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Size>
 				<Scripts>
 					<OnClick>
-						GF_GetGroupWhoButton(this:GetParent())
+						GF_GetGroupWhoButton(this:GetParent(),this:GetParent():GetID())
 					</OnClick>
 				</Scripts>
 			</Button>
@@ -428,7 +466,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Size>
 				<Scripts>
 					<OnClick>
-						GF_LFGInviteButton(this:GetParent())
+						GF_LFGInviteButton(this:GetParent(),this:GetParent():GetID())
 					</OnClick>
 				</Scripts>
 			</Button>
@@ -445,20 +483,20 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Size>
 				<Scripts>
 					<OnClick>
-						GF_LFMWhisperRequestInviteButton(this:GetParent())
+						GF_LFMWhisperRequestInviteButton(this:GetParent(),this:GetParent():GetID())
 					</OnClick>
 				</Scripts>
 			</Button>
 		</Frames>		
 		<Scripts>
 		    <OnMouseUp>
-				GF_ListItem_OnMouseUp();
+				GF_ListItem_OnMouseUp(this,this:GetID());
 		    </OnMouseUp>
 			<OnEnter>
-				GF_ResultItem_Hover_On(this);
+				GF_ResultItem_Hover_On(this,this:GetID());
 			</OnEnter>
 			<OnLeave>
-				GF_ResultItem_Hover_Off(this);
+				GF_ResultItem_Hover_Off(this,this:GetID());
 			</OnLeave>		
 		</Scripts>					
 	</Frame>		
@@ -525,7 +563,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						GF_DeletePlayer(this:GetParent());
+						GF_DeletePlayer(this:GetParent():GetID());
 					</OnClick>
 				</Scripts>
 			</Button>		
@@ -681,7 +719,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</OnLeave>	
 			<OnLoad>
 				GF_MinimapIconBgTexture:SetVertexColor( 0.5, 0.25, 0.25 );
-				GF_UpdateMinimapIcon();
 				this:RegisterForClicks("LeftButtonUp","RightButtonUp")
 				this:Show();
 			</OnLoad>
@@ -1091,16 +1128,22 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						this:SetWidth(120);
 						getglobal(this:GetName().."TextLabel"):SetText(GF_KEYWORDS_DROPDOWN_DESCR);
 					</OnLoad>
+					<OnEditFocusLost>
+						GF_SavedVariables.searchtext = GF_GroupsFrameDescriptionEditBox:GetText();
+					</OnEditFocusLost>	
 					<OnTabPressed>
 						this:ClearFocus();
+						GF_SavedVariables.searchtext = GF_GroupsFrameDescriptionEditBox:GetText()
 						GF_ApplyFiltersToGroupList();
 					</OnTabPressed>
 					<OnEnterPressed>
 						this:ClearFocus();
+						GF_SavedVariables.searchtext = GF_GroupsFrameDescriptionEditBox:GetText()
 						GF_ApplyFiltersToGroupList();
 					</OnEnterPressed>
 					<OnEscapePressed>
 						this:ClearFocus();
+						GF_SavedVariables.searchtext = GF_GroupsFrameDescriptionEditBox:GetText()
 						GF_ApplyFiltersToGroupList();
 					</OnEscapePressed>
 				</Scripts>				
@@ -1504,7 +1547,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										<AbsDimension x="70" y="20"/>
 									</Size>
 									<Anchors>
-										<Anchor point="TOP" relativeTo="GF_ResultsLabel" relativePoint="BOTTOM">
+										<Anchor point="TOPRIGHT" relativeTo="GF_ResultsLabel" relativePoint="BOTTOMRIGHT">
 											<Offset>
 												<AbsDimension x="0" y="0"/>
 											</Offset>
@@ -1524,7 +1567,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							</Layer>
 						</Layers>	
 						<Frames>							
-							<Frame name="GF_NewItem1" inherits="GF_NewItemTemplate">	
+							<Frame name="GF_NewItem1" inherits="GF_NewItemTemplate" id="1">	
 								<Anchors>
 									<Anchor point="TOPLEFT">
 										<Offset>
@@ -1533,25 +1576,25 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</Anchor>
 								</Anchors>
 							</Frame>			
-							<Frame name="GF_NewItem2"  inherits="GF_NewItemTemplate"></Frame>	
-							<Frame name="GF_NewItem3"  inherits="GF_NewItemTemplate"></Frame>	
-							<Frame name="GF_NewItem4"  inherits="GF_NewItemTemplate"></Frame>	
-							<Frame name="GF_NewItem5"  inherits="GF_NewItemTemplate"></Frame>	
-							<Frame name="GF_NewItem6"  inherits="GF_NewItemTemplate"></Frame>	
-							<Frame name="GF_NewItem7"  inherits="GF_NewItemTemplate"></Frame>	
-							<Frame name="GF_NewItem8"  inherits="GF_NewItemTemplate"></Frame>	
-							<Frame name="GF_NewItem9"  inherits="GF_NewItemTemplate"></Frame>	
-							<Frame name="GF_NewItem10" inherits="GF_NewItemTemplate"></Frame>	
-							<Frame name="GF_NewItem11"  inherits="GF_NewItemTemplate"></Frame>	
-							<Frame name="GF_NewItem12"  inherits="GF_NewItemTemplate"></Frame>	
-							<Frame name="GF_NewItem13"  inherits="GF_NewItemTemplate"></Frame>	
-							<Frame name="GF_NewItem14"  inherits="GF_NewItemTemplate"></Frame>	
-							<Frame name="GF_NewItem15"  inherits="GF_NewItemTemplate"></Frame>	
-							<Frame name="GF_NewItem16"  inherits="GF_NewItemTemplate"></Frame>	
-							<Frame name="GF_NewItem17"  inherits="GF_NewItemTemplate"></Frame>	
-							<Frame name="GF_NewItem18"  inherits="GF_NewItemTemplate"></Frame>	
-							<Frame name="GF_NewItem19"  inherits="GF_NewItemTemplate"></Frame>	
-							<Frame name="GF_NewItem20"  inherits="GF_NewItemTemplate"></Frame>	
+							<Frame name="GF_NewItem2"  inherits="GF_NewItemTemplate" id="2"></Frame>	
+							<Frame name="GF_NewItem3"  inherits="GF_NewItemTemplate" id="3"></Frame>	
+							<Frame name="GF_NewItem4"  inherits="GF_NewItemTemplate" id="4"></Frame>	
+							<Frame name="GF_NewItem5"  inherits="GF_NewItemTemplate" id="5"></Frame>	
+							<Frame name="GF_NewItem6"  inherits="GF_NewItemTemplate" id="6"></Frame>	
+							<Frame name="GF_NewItem7"  inherits="GF_NewItemTemplate" id="7"></Frame>	
+							<Frame name="GF_NewItem8"  inherits="GF_NewItemTemplate" id="8"></Frame>	
+							<Frame name="GF_NewItem9"  inherits="GF_NewItemTemplate" id="9"></Frame>	
+							<Frame name="GF_NewItem10" inherits="GF_NewItemTemplate" id="10"></Frame>	
+							<Frame name="GF_NewItem11"  inherits="GF_NewItemTemplate" id="11"></Frame>	
+							<Frame name="GF_NewItem12"  inherits="GF_NewItemTemplate" id="12"></Frame>	
+							<Frame name="GF_NewItem13"  inherits="GF_NewItemTemplate" id="13"></Frame>	
+							<Frame name="GF_NewItem14"  inherits="GF_NewItemTemplate" id="14"></Frame>	
+							<Frame name="GF_NewItem15"  inherits="GF_NewItemTemplate" id="15"></Frame>	
+							<Frame name="GF_NewItem16"  inherits="GF_NewItemTemplate" id="16"></Frame>	
+							<Frame name="GF_NewItem17"  inherits="GF_NewItemTemplate" id="17"></Frame>	
+							<Frame name="GF_NewItem18"  inherits="GF_NewItemTemplate" id="18"></Frame>	
+							<Frame name="GF_NewItem19"  inherits="GF_NewItemTemplate" id="19"></Frame>	
+							<Frame name="GF_NewItem20"  inherits="GF_NewItemTemplate" id="20"></Frame>	
 							<Button name="$parentPrev">
 								<Size>
 									<AbsDimension x="25" y="25"/>
@@ -1976,6 +2019,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										this:SetTextInsets(4,0,0,0);
 									</OnLoad>
 									<OnEditFocusLost>
+										GF_SavedVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText();
 									</OnEditFocusLost>	
 									<OnTabPressed>
 										GF_SavedVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText();
@@ -2036,7 +2080,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										this:SetTextInsets(4,0,0,0);
 									</OnLoad>
 									<OnEditFocusLost>
-									</OnEditFocusLost>	
+										GF_SavedVariables.searchlfgwhispertext = GF_LFGWhoWhisperEditBox:GetText();
+									</OnEditFocusLost>
 									<OnTabPressed>
 										GF_SavedVariables.searchlfgwhispertext = GF_LFGWhoWhisperEditBox:GetText();
 										this:ClearFocus();
@@ -2190,7 +2235,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			    <OnLoad>		    	
 			    	for i = 2, 20 do
 			    		getglobal("GF_NewItem"..i):SetPoint("TOP", "GF_NewItem"..(i-1), "BOTTOM", 0, 0);
-			    	end
+					end
 			    </OnLoad>
 			  </Scripts>		
 			</Frame>
@@ -2222,26 +2267,26 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</Layer>
 				</Layers>
 				<Frames>
-					<Button name="GF_BlackListItem1" inherits="GF_BlackListTemplate" ></Button>
-					<Button name="GF_BlackListItem2" inherits="GF_BlackListTemplate" ></Button>
-					<Button name="GF_BlackListItem3" inherits="GF_BlackListTemplate" ></Button>
-					<Button name="GF_BlackListItem4" inherits="GF_BlackListTemplate" ></Button>
-					<Button name="GF_BlackListItem5" inherits="GF_BlackListTemplate" ></Button>
-					<Button name="GF_BlackListItem6" inherits="GF_BlackListTemplate" ></Button>
-					<Button name="GF_BlackListItem7" inherits="GF_BlackListTemplate" ></Button>
-					<Button name="GF_BlackListItem8" inherits="GF_BlackListTemplate" ></Button>
-					<Button name="GF_BlackListItem9" inherits="GF_BlackListTemplate" ></Button>
-					<Button name="GF_BlackListItem10" inherits="GF_BlackListTemplate" ></Button>
-					<Button name="GF_BlackListItem11" inherits="GF_BlackListTemplate" ></Button>
-					<Button name="GF_BlackListItem12" inherits="GF_BlackListTemplate" ></Button>
-					<Button name="GF_BlackListItem13" inherits="GF_BlackListTemplate" ></Button>
-					<Button name="GF_BlackListItem14" inherits="GF_BlackListTemplate" ></Button>
-					<Button name="GF_BlackListItem15" inherits="GF_BlackListTemplate" ></Button>
-					<Button name="GF_BlackListItem16" inherits="GF_BlackListTemplate" ></Button>
-					<Button name="GF_BlackListItem17" inherits="GF_BlackListTemplate" ></Button>
-					<Button name="GF_BlackListItem18" inherits="GF_BlackListTemplate" ></Button>
-					<Button name="GF_BlackListItem19" inherits="GF_BlackListTemplate" ></Button>
-					<Button name="GF_BlackListItem20" inherits="GF_BlackListTemplate" ></Button>
+					<Button name="GF_BlackListItem1" inherits="GF_BlackListTemplate" id="1"></Button>
+					<Button name="GF_BlackListItem2" inherits="GF_BlackListTemplate" id="2"></Button>
+					<Button name="GF_BlackListItem3" inherits="GF_BlackListTemplate" id="3"></Button>
+					<Button name="GF_BlackListItem4" inherits="GF_BlackListTemplate" id="4"></Button>
+					<Button name="GF_BlackListItem5" inherits="GF_BlackListTemplate" id="5"></Button>
+					<Button name="GF_BlackListItem6" inherits="GF_BlackListTemplate" id="6"></Button>
+					<Button name="GF_BlackListItem7" inherits="GF_BlackListTemplate" id="7"></Button>
+					<Button name="GF_BlackListItem8" inherits="GF_BlackListTemplate" id="8"></Button>
+					<Button name="GF_BlackListItem9" inherits="GF_BlackListTemplate" id="9"></Button>
+					<Button name="GF_BlackListItem10" inherits="GF_BlackListTemplate" id="10"></Button>
+					<Button name="GF_BlackListItem11" inherits="GF_BlackListTemplate" id="11"></Button>
+					<Button name="GF_BlackListItem12" inherits="GF_BlackListTemplate" id="12"></Button>
+					<Button name="GF_BlackListItem13" inherits="GF_BlackListTemplate" id="13"></Button>
+					<Button name="GF_BlackListItem14" inherits="GF_BlackListTemplate" id="14"></Button>
+					<Button name="GF_BlackListItem15" inherits="GF_BlackListTemplate" id="15"></Button>
+					<Button name="GF_BlackListItem16" inherits="GF_BlackListTemplate" id="16"></Button>
+					<Button name="GF_BlackListItem17" inherits="GF_BlackListTemplate" id="17"></Button>
+					<Button name="GF_BlackListItem18" inherits="GF_BlackListTemplate" id="18"></Button>
+					<Button name="GF_BlackListItem19" inherits="GF_BlackListTemplate" id="19"></Button>
+					<Button name="GF_BlackListItem20" inherits="GF_BlackListTemplate" id="20"></Button>
 
 					<Button name="$parentPrev">
 						<Size>
@@ -2364,6 +2409,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										this:SetFocus();
 									</OnLoad>
 									<OnEditFocusLost>
+										GF_BlackListItemSaveChanges()
+										GF_BlackListItemEditFrame:Hide()
 									</OnEditFocusLost>	
 									<OnTabPressed>
 										GF_BlackListItemSaveChanges()
@@ -2423,12 +2470,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				<Frames>
 					<Frame name="$parentInternalFrame" inherits="GF_OptionFrameBoxTemplate">
 						<Size>
-							<AbsDimension x="635" y="435"/>
+							<AbsDimension x="640" y="435"/>
 						</Size>
 						<Anchors>
-							<Anchor point="TOP">
+							<Anchor point="TOPLEFT">
 								<Offset>
-									<AbsDimension x="0" y="-64"/>
+									<AbsDimension x="32" y="-64"/>
 								</Offset>
 							</Anchor>
 						</Anchors>	
@@ -2542,7 +2589,11 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									<OnMouseWheel>
 										if arg1 == 1 then
 											this:ScrollUp();
+											this:ScrollUp();
+											this:ScrollUp();
 										else
+											this:ScrollDown();
+											this:ScrollDown();
 											this:ScrollDown();
 										end
 									</OnMouseWheel>
@@ -2585,9 +2636,35 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>							
 							</CheckButton>
-							<CheckButton name="GF_LogShowChat" inherits="GF_AbstractLabelCheckButton">
+							<CheckButton name="GF_LogShowFiltered" inherits="GF_AbstractLabelCheckButton">
 								<Anchors>
 									<Anchor point="LEFT" relativeTo="GF_LogShowGroupsTextLabel" relativePoint="RIGHT">
+										<Offset>
+											<AbsDimension x="0" y="0"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnClick>			
+										GF_SavedVariables.logshowfiltered = this:GetChecked();
+										GF_DisplayLog()
+									</OnClick>
+									<OnEnter>
+										GF_ShowTooltip(this);
+									</OnEnter>
+									<OnLeave>
+										GameTooltip:Hide();
+									</OnLeave>
+									<OnLoad>
+										getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_FILTERED);
+										getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()+5);
+										getglobal(this:GetName().."TextLabel"):SetPoint("LEFT", "GF_LogShowFiltered", "RIGHT", 0, 0);
+									</OnLoad>
+								</Scripts>							
+							</CheckButton>
+							<CheckButton name="GF_LogShowChat" inherits="GF_AbstractLabelCheckButton">
+								<Anchors>
+									<Anchor point="LEFT" relativeTo="GF_LogShowFilteredTextLabel" relativePoint="RIGHT">
 										<Offset>
 											<AbsDimension x="0" y="0"/>
 										</Offset>
@@ -2767,11 +2844,32 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>							
 							</CheckButton>
+							<CheckButton name="GF_LogHideMainFrame" inherits="GF_AbstractLabelCheckButton">
+								<Anchors>
+									<Anchor point="RIGHT" relativePoint="LEFT">
+										<Offset>
+											<AbsDimension x="2" y="50"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										GF_SavedVariables.loghidemainframe = this:GetChecked();
+										GF_ToggleHideMainFrame()
+									</OnClick>
+									<OnEnter>
+										GF_ShowTooltip(this);
+									</OnEnter>
+									<OnLeave>
+										GameTooltip:Hide();
+									</OnLeave>
+								</Scripts>							
+							</CheckButton>
 							<CheckButton name="GF_LogShowEditBox" inherits="GF_AbstractLabelCheckButton">
 								<Anchors>
-									<Anchor point="BOTTOM" relativeTo="GF_LogUpButton" relativePoint="TOP">
+									<Anchor point="TOP" relativeTo="GF_LogHideMainFrame" relativePoint="BOTTOM">
 										<Offset>
-											<AbsDimension x="0" y="5"/>
+											<AbsDimension x="0" y="-50"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -2823,18 +2921,23 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnEscapePressed>
 								</Scripts>				
 							</EditBox>
-							<CheckButton name="GF_LogHideMainFrame" inherits="GF_AbstractLabelCheckButton">
+							<CheckButton name="GF_LogShowWhisperHistory" inherits="GF_AbstractLabelCheckButton">
 								<Anchors>
-									<Anchor point="BOTTOM" relativeTo="GF_LogShowEditBox" relativePoint="TOP">
+									<Anchor point="TOPRIGHT" relativeTo="GF_LogFrame" relativePoint="TOPRIGHT">
 										<Offset>
-											<AbsDimension x="0" y="5"/>
+											<AbsDimension x="0" y="-46"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										GF_SavedVariables.loghidemainframe = this:GetChecked();
-										GF_ToggleHideMainFrame()
+										if GF_WhisperHistoryButtonLog:IsShown() then
+											GF_LogFrameInternalFrame:SetWidth(640)
+											GF_WhisperHistoryButtonLog:Hide()
+										else
+											GF_LogFrameInternalFrame:SetWidth(568)
+											GF_WhisperHistoryButtonLog:Show()
+										end
 									</OnClick>
 									<OnEnter>
 										GF_ShowTooltip(this);
@@ -2844,12 +2947,87 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLeave>
 								</Scripts>							
 							</CheckButton>
+							<Frame name = "GF_WhisperHistoryButtonLog" hidden="true">
+								<Size>
+									<AbsDimension x="100" y="435"/>
+								</Size>
+								<Anchors>
+									<Anchor point="TOPRIGHT">
+										<Offset>
+											<AbsDimension x="0" y="0"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Frames>	
+									<Button name="GF_WhisperHistoryButton0" inherits="GF_AbstractGrayButton" id="0" text="GF_LOG_SHOWLOG">
+										<Size>
+											<AbsDimension x="100" y="32"/>
+										</Size>
+										<Scripts>							
+											<OnLoad>
+												this:Show()
+												this:LockHighlight()
+											</OnLoad>
+										</Scripts>							
+									</Button>
+									<Button name="GF_WhisperHistoryButton1" inherits="GF_AbstractGrayButton" id="1"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton0" relativePoint="BOTTOM"/></Anchors></Button>
+									<Button name="GF_WhisperHistoryButton2" inherits="GF_AbstractGrayButton" id="2"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton1" relativePoint="BOTTOM"/></Anchors></Button>
+									<Button name="GF_WhisperHistoryButton3" inherits="GF_AbstractGrayButton" id="3"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton2" relativePoint="BOTTOM"/></Anchors></Button>
+									<Button name="GF_WhisperHistoryButton4" inherits="GF_AbstractGrayButton" id="4"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton3" relativePoint="BOTTOM"/></Anchors></Button>
+									<Button name="GF_WhisperHistoryButton5" inherits="GF_AbstractGrayButton" id="5"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton4" relativePoint="BOTTOM"/></Anchors></Button>
+									<Button name="GF_WhisperHistoryButton6" inherits="GF_AbstractGrayButton" id="6"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton5" relativePoint="BOTTOM"/></Anchors></Button>
+									<Button name="GF_WhisperHistoryButton7" inherits="GF_AbstractGrayButton" id="7"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton6" relativePoint="BOTTOM"/></Anchors></Button>
+									<Button name="GF_WhisperHistoryButton8" inherits="GF_AbstractGrayButton" id="8"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton7" relativePoint="BOTTOM"/></Anchors></Button>
+									<Button name="GF_WhisperHistoryButton9" inherits="GF_AbstractGrayButton" id="9"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton8" relativePoint="BOTTOM"/></Anchors></Button>
+									<Button name="GF_WhisperHistoryButton10" inherits="GF_AbstractGrayButton" id="10"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton9" relativePoint="BOTTOM"/></Anchors></Button>
+									<Button name="GF_WhisperHistoryButton11" inherits="GF_AbstractGrayButton" id="11"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton10" relativePoint="BOTTOM"/></Anchors></Button>
+									<Button name="GF_WhisperHistoryButton12" inherits="GF_AbstractGrayButton" id="12"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton11" relativePoint="BOTTOM"/></Anchors></Button>
+									<Button name="GF_WhisperHistoryButton13" inherits="GF_AbstractGrayButton" id="13"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton12" relativePoint="BOTTOM"/></Anchors></Button>
+									<Button name="GF_WhisperHistoryButton14" inherits="GF_AbstractGrayButton" id="14"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton13" relativePoint="BOTTOM"/></Anchors></Button>
+									<Button name="GF_WhisperHistoryButton15" inherits="GF_AbstractGrayButton" id="15"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton14" relativePoint="BOTTOM"/></Anchors></Button>
+									<Button name="GF_WhisperHistoryButton16" inherits="GF_AbstractGrayButton" id="16"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton15" relativePoint="BOTTOM"/></Anchors></Button>
+									<Button name="GF_WhisperHistoryButton17" inherits="GF_AbstractGrayButton" id="17"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton16" relativePoint="BOTTOM"/></Anchors></Button>
+									<Button name="GF_WhisperHistoryButton18" inherits="GF_AbstractGrayButton" id="18"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton17" relativePoint="BOTTOM"/></Anchors></Button>
+									<Button name="GF_WhisperHistoryButton19" inherits="GF_AbstractGrayButton" id="19"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton18" relativePoint="BOTTOM"/></Anchors></Button>
+									<Button name="GF_WhisperHistoryButton20" inherits="GF_AbstractGrayButton" id="20"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton19" relativePoint="BOTTOM"/></Anchors></Button>
+
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton1" inherits="GF_AbstractSmallCheckButton" id="1">
+										<Anchors>
+											<Anchor point="RIGHT" relativeTo="GF_WhisperHistoryButton1"  relativePoint="LEFT">
+												<Offset>
+													<AbsDimension x="0" y="0"/>
+												</Offset>
+											</Anchor>
+										</Anchors>
+									</CheckButton>
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton2" inherits="GF_AbstractSmallCheckButton" id="2"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton1" relativePoint="BOTTOM"/></Anchors></CheckButton>
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton3" inherits="GF_AbstractSmallCheckButton" id="3"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton2" relativePoint="BOTTOM"/></Anchors></CheckButton>
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton4" inherits="GF_AbstractSmallCheckButton" id="4"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton3" relativePoint="BOTTOM"/></Anchors></CheckButton>
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton5" inherits="GF_AbstractSmallCheckButton" id="5"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton4" relativePoint="BOTTOM"/></Anchors></CheckButton>
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton6" inherits="GF_AbstractSmallCheckButton" id="6"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton5" relativePoint="BOTTOM"/></Anchors></CheckButton>
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton7" inherits="GF_AbstractSmallCheckButton" id="7"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton6" relativePoint="BOTTOM"/></Anchors></CheckButton>
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton8" inherits="GF_AbstractSmallCheckButton" id="8"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton7" relativePoint="BOTTOM"/></Anchors></CheckButton>
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton9" inherits="GF_AbstractSmallCheckButton" id="9"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton8" relativePoint="BOTTOM"/></Anchors></CheckButton>
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton10" inherits="GF_AbstractSmallCheckButton" id="10"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton9" relativePoint="BOTTOM"/></Anchors></CheckButton>
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton11" inherits="GF_AbstractSmallCheckButton" id="11"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton10" relativePoint="BOTTOM"/></Anchors></CheckButton>
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton12" inherits="GF_AbstractSmallCheckButton" id="12"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton11" relativePoint="BOTTOM"/></Anchors></CheckButton>
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton13" inherits="GF_AbstractSmallCheckButton" id="13"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton12" relativePoint="BOTTOM"/></Anchors></CheckButton>
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton14" inherits="GF_AbstractSmallCheckButton" id="14"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton13" relativePoint="BOTTOM"/></Anchors></CheckButton>
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton15" inherits="GF_AbstractSmallCheckButton" id="15"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton14" relativePoint="BOTTOM"/></Anchors></CheckButton>
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton16" inherits="GF_AbstractSmallCheckButton" id="16"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton15" relativePoint="BOTTOM"/></Anchors></CheckButton>
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton17" inherits="GF_AbstractSmallCheckButton" id="17"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton16" relativePoint="BOTTOM"/></Anchors></CheckButton>
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton18" inherits="GF_AbstractSmallCheckButton" id="18"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton17" relativePoint="BOTTOM"/></Anchors></CheckButton>
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton19" inherits="GF_AbstractSmallCheckButton" id="19"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton18" relativePoint="BOTTOM"/></Anchors></CheckButton>
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton20" inherits="GF_AbstractSmallCheckButton" id="20"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton19" relativePoint="BOTTOM"/></Anchors></CheckButton>
+								</Frames>
+							</Frame>
 						</Frames>			
 					</Frame>
 				</Frames>
 				<Scripts>
 					<OnLoad>	
 						GF_LogFrameInternalFrameTitle:SetText(GF_LOG_AND_MONITOR);
+						GF_LogFrameInternalFrameTitle:SetPoint("TOPLEFT", GF_LogFrame, "TOPLEFT", 25,-52);
 					</OnLoad>
 				</Scripts>								
 			</Frame>
@@ -3483,6 +3661,15 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				tinsert(UISpecialFrames,this:GetName());
 				this:SetAlpha( 0.85 );
 		    </OnLoad>
+		    <OnHide>
+				GF_LFGSize:Hide()
+				GF_LFGLFM:Hide()
+				GF_LFGDungeon:Hide()
+				GF_LFGRaid:Hide()
+				GF_LFGRole:Hide()
+				GF_LFGWhoClass:Hide()
+				GF_SearchList:Hide()
+		    </OnHide>
 	  	</Scripts>				
 	</Frame>
 	<Frame name="GF_SneakyFrame"  frameStrata="BACKGROUND" parent="UIParent">	
