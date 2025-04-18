@@ -63,7 +63,7 @@ GF_SHOW_OTHER			= "Show Other";
 GF_SHOW_LFM				= "Show LFM";
 GF_SHOW_LFG				= "Show LFG";
 GF_CLEAR				= "Clear"
-GF_RESULTS_FOUND 		= "Found:"; -- Shows number of groups on list
+GF_FOUND 				= "Found: "; -- Shows number of groups on list
 GF_PAGE 				= "PAGE"; -- Label for pages of groups.
 
 -- Settings tab buttons and texts
@@ -169,12 +169,12 @@ GF_NO_MORE_PLAYERS_NEEDED	= "No more players needed."; -- "Your group is full. L
 
 -- Common text
 GF_SECONDS					= " seconds"
-GF_MIN						= "min"
-GF_MINUTE					= "minute"
-GF_MINUTES					= "minutes"
+GF_MIN						= " min"
+GF_MINUTE					= " minute"
+GF_MINUTES					= " minutes"
 GF_NOW_AFK					= "You are now AFK"; -- The text the client receives when it goes afk(used to turn off announce).
 GF_TIME_AGO					= " ago"; -- Label for righttext on group list, showing how many minutes ago group was found
-GF_TIME_LEFT				= "Found "; -- Text for righttext on group list, "Found ## minutes ago"
+GF_TIME_JUST_NOW			= "Just now"; -- Text for righttext on group list, "Found ## minutes ago"
 
 -- Things currently unused
 GF_CONVERTING_TO_PARTY		= "Converting group..."; -- Internal message when you hit convert to party button

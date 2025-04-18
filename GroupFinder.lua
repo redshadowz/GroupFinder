@@ -58,40 +58,39 @@
 	loghidemainframe			= false,
 	logshowwhisperwindow		= true,
 };
-
 GF_RealmName							= GetRealmName();
 local GF_MaxEntriesPerRealmOnPrune			= 1000;
 local GF_WhoCooldownTime					= 10;
-local GF_NextAvailableWhoTime 				= 0;
-local GF_UrgentWhoRequest 					= nil;
-local GF_UrgentWhoRequestSaved					= nil;
+local GF_NextAvailableWhoTime				= 0;
+local GF_UrgentWhoRequest					= nil;
+local GF_UrgentWhoRequestSaved				= nil;
 local GF_WhoQueue							= {};
 GF_WhoTable									= {};
 GF_WhoTable[GF_RealmName]					= {};
 GF_ClassWhoTable							= {};
-local GF_ClassWhoQueue 						= {};
-local GF_ClassWhoMatchingResults 			= 0;
+local GF_ClassWhoQueue						= {};
+local GF_ClassWhoMatchingResults			= 0;
 local GF_GetClassWhoState					= 1;
 local GF_GetWhoLevel						= 0;
-local GF_GetWhoParams 						= {};
+local GF_GetWhoParams						= {};
 local GF_GetWhoLevelRange					= 3;
 local GF_GetWhoResetTimer					= 900;
 local GF_LFGInviteTime						= {};
 local GF_RequestInviteTime					= {};
 
-GF_MessageList 								= {};
-GF_MessageList[GF_RealmName] 				= {};
-GF_BlackList 								= {};
+GF_MessageList								= {};
+GF_MessageList[GF_RealmName]				= {};
+GF_BlackList								= {};
 GF_BlackList[GF_RealmName]					= {};
-GF_FilteredResultsList		 				= {};
-GF_ResultsListOffset 						= 0;
-GF_BlackListOffset 							= 0;
+GF_FilteredResultsList						= {};
+GF_ResultsListOffset						= 0;
+GF_BlackListOffset							= 0;
 GF_NumLFGSearchButtons						= 0;
 GF_LogHistory								= {};
 GF_LogHistory[GF_RealmName]					= {};
 
-local GF_OnStartupRunOnce 					= true;
-local GF_OnStartupQueueURequest 			= nil;
+local GF_OnStartupRunOnce					= true;
+local GF_OnStartupQueueURequest			= nil;
 local GF_AddonWhoDataToBeSentBuffer			= {};
 local GF_AddonAllNamesForResponseToLogin	= {};
 local GF_AddonNamesToBeSentAsARequest		= {};
@@ -101,60 +100,30 @@ local GF_AddonGroupDataToBeSentBuffer		= {};
 local GF_AddonMakeAListOfGroup7sForSending	= nil;
 local GF_AddonListOfGuildiesWithAddon		= {};
 
-GF_AutoAnnounceTimer 						= nil;
+GF_AutoAnnounceTimer						= nil;
 local GF_WasPartyLeaderBefore				= nil;
-local GF_PlayersCurrentlyInGroup 			= {};
+local GF_PlayersCurrentlyInGroup			= {};
 local GF_FriendsAndGuildies					= {};
 local GF_CurrentNumFriends					= 0;
 local GF_CurrentNumGuildies					= 0;
-local GF_UpdateTicker 						= 0;
+local GF_UpdateTicker						= 0;
 local GF_TimeTillNextBroadcast				= 10;
 local GF_UpdateAndRequestTimer				= 2;
-local GF_RequestWhoDataPeriodicallyTimer 	= 30;
-GF_PlayerMessages 							= {};
-GF_IncomingMessagePrune		 				= 0;
+local GF_RequestWhoDataPeriodicallyTimer	= 30;
+GF_PlayerMessages							= {};
+GF_IncomingMessagePrune						= 0;
 local GF_PreviousMessage					= {};
 local GF_MiniMapMessages					= { 0,0,0,0,0,0 };
-local GF_LogMessageCodes					= {};
+local GF_LogMessageCodes = { GF_BLOCKED_GROUPS, GF_BLOCKED_NEW, GF_BLOCKED_CHAT, GF_BLOCKED_TRADES, GF_BLOCKED_POLITICS, GF_LOOT_MESSAGE, GF_BLOCKED_SPAM, GF_BLACKLIST_MESSAGE, GF_BLOCKED_BELOWLEVEL, "", GF_BLOCKED_FILTER, GF_LOG_ME }
 
 local GF_WhisperLogCurrentButtonID			= 0;
 GF_WhisperLogList							= {}
 GF_WhisperLogData							= {}
 
-local GF_Classes							= {};
-local GF_ClassColors						= {};
-GF_ClassColors[GF_PRIEST]					= "ffffff";
-GF_ClassColors[GF_MAGE]						= "68ccef";
-GF_ClassColors[GF_WARLOCK]					= "9382c9";
-GF_ClassColors[GF_DRUID]					= "ff7c0a";
-GF_ClassColors[GF_HUNTER]					= "aad372";
-GF_ClassColors[GF_ROGUE]					= "fff468";
-GF_ClassColors[GF_WARRIOR]					= "c69b6d";
-GF_ClassColors[GF_PALADIN]					= "f48cba";
-GF_ClassColors[GF_SHAMAN]					= "f48cba";
-
-GF_Classes = { GF_PRIEST, GF_MAGE, GF_WARLOCK, GF_DRUID, GF_HUNTER, GF_ROGUE, GF_WARRIOR, }
-GF_Classes[GF_PRIEST] 	= 1;
-GF_Classes[GF_MAGE] 	= 2;
-GF_Classes[GF_WARLOCK] 	= 3;
-GF_Classes[GF_DRUID] 	= 4;
-GF_Classes[GF_HUNTER] 	= 5;
-GF_Classes[GF_ROGUE] 	= 6;
-GF_Classes[GF_WARRIOR] 	= 7;
-GF_Classes[GF_PALADIN] 	= 8;
-GF_Classes[GF_SHAMAN] 	= 8;
-GF_Classes["PRIEST"] 	= GF_PRIEST;
-GF_Classes["MAGE"] 		= GF_MAGE;
-GF_Classes["WARLOCK"] 	= GF_WARLOCK;
-GF_Classes["DRUID"] 	= GF_DRUID;
-GF_Classes["HUNTER"] 	= GF_HUNTER;
-GF_Classes["ROGUE"] 	= GF_ROGUE;
-GF_Classes["WARRIOR"] 	= GF_WARRIOR;
-GF_Classes["PALADIN"] 	= GF_PALADIN;
-GF_Classes["SHAMAN"] 	= GF_SHAMAN;
-
-GF_LogMessageCodes = { GF_BLOCKED_GROUPS, GF_BLOCKED_NEW, GF_BLOCKED_CHAT, GF_BLOCKED_TRADES, GF_BLOCKED_POLITICS, GF_LOOT_MESSAGE, GF_BLOCKED_SPAM, GF_BLACKLIST_MESSAGE, GF_BLOCKED_BELOWLEVEL, "", GF_BLOCKED_FILTER, GF_LOG_ME }
-
+local GF_Classes							= { [GF_PRIEST]="PRIEST",[GF_MAGE]="MAGE",[GF_WARLOCK]="WARLOCK",[GF_DRUID]="DRUID",[GF_HUNTER]="HUNTER",[GF_ROGUE]="ROGUE",[GF_WARRIOR]="WARRIOR",[GF_PALADIN]="PALADIN",[GF_SHAMAN]="SHAMAN",
+												["PRIEST"]=GF_PRIEST,["MAGE"]=GF_MAGE,["WARLOCK"]=GF_WARLOCK,["DRUID"]=GF_DRUID,["HUNTER"]=GF_HUNTER,["ROGUE"]=GF_ROGUE,["WARRIOR"]=GF_WARRIOR,["PALADIN"]=GF_PALADIN,["SHAMAN"]=GF_SHAMAN }
+local GF_ClassColors						= {	["PRIEST"]="ffffff",["MAGE"]="68ccef",["WARLOCK"]="9382c9",["DRUID"]="ff7c0a",["HUNTER"]="aad372",["ROGUE"]="fff468",["WARRIOR"]="c69b6d",["PALADIN"]="f48cba",["SHAMAN"]="f48cba" }
+local GF_ClassIDs = { "PRIEST", "MAGE", "WARLOCK", "DRUID", "HUNTER", "ROGUE", "WARRIOR", "PALADIN", "SHAMAN", ["PRIEST"]=1,["MAGE"]=2,["WARLOCK"]=3,["DRUID"]=4,["HUNTER"]=5,["ROGUE"]=6,["WARRIOR"]=7,["PALADIN"]=8,["SHAMAN"]=9 }
 local ThingsToHide = { "GF_GroupsInChatCheckButton", "GF_GroupsNewOnlyCheckButton", "GF_GroupsInMinimapCheckButton", "GF_ShowChatCheckButton", "GF_ShowTradesCheckButton", "GF_ShowLootCheckButton", "GF_FrameShowPoliticsCheckButton",
 "GF_FrameUseWhoOnGroupsCheckButton", "GF_SearchListDropdown", "GF_GroupsFrameDescriptionEditBox", "GF_AutoFilterCheckButton", "GF_PlaySoundOnResultsCheckButton", "GF_GroupsFrameShowDungeonCheckButton", "GF_GroupsFrameShowRaidCheckButton",
 "GF_GroupsFrameShowQuestCheckButton", "GF_GroupsFrameShowOtherCheckButton", "GF_GroupsFrameShowLFMCheckButton", "GF_GroupsFrameShowLFGCheckButton", "GF_ShowSearchButton", "GF_SettingsFrameButton", "GF_ShowBlacklistButton", "GF_LogFrameButton",
@@ -162,9 +131,9 @@ local ThingsToHide = { "GF_GroupsInChatCheckButton", "GF_GroupsNewOnlyCheckButto
 "GF_LogShowSpam", "GF_LogShowBlacklist", "GF_LogShowBelowLevel", "GF_MainFrameCloseButton" }
 
 function GF_OnLoad()
-	SlashCmdList["GroupFinderCOMMAND"] = GF_SlashHandler; --Register Slash Command
+	SlashCmdList["GroupFinderCOMMAND"] = GF_SlashHandler;
 	SLASH_GroupFinderCOMMAND1 = "/gf";
-	this:RegisterEvent("CHAT_MSG_SYSTEM"); --Register Event Listeners
+	this:RegisterEvent("CHAT_MSG_SYSTEM");
 	this:RegisterEvent("CHAT_MSG_ADDON");
 	this:RegisterEvent("PARTY_LEADER_CHANGED");
 	this:RegisterEvent("PARTY_MEMBERS_CHANGED");
@@ -223,7 +192,7 @@ function GF_OnLoad()
 		local foundUrgentWhoSentFlags;
 		for i=1, GetNumWhoResults() do
 			local name,guild,level,_,class = GetWhoInfo(i);
-			GF_WhoTable[GF_RealmName][name] = { time(), level, class, guild };
+			GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], guild }; GF_WhoTable[GF_RealmName][name].t = time();
 			if GF_UrgentWhoRequestSaved and GF_UrgentWhoRequestSaved == name then foundUrgentWhoSentFlags = true; end
 		end
 		if not (event == "WHO_LIST_UPDATE" and not foundUrgentWhoSentFlags) then
@@ -292,8 +261,8 @@ function GF_AddMessage(arg1,arg2,arg8,arg9)
 		local channellist = { GetChatWindowChannels(i) };
 		for j=1, getn(channellist) do
 			if string.find(arg9,channellist[j]) then
-				if GF_WhoTable[GF_RealmName][arg2] then
-					getglobal("ChatFrame"..i):AddMessage("["..arg8..". "..string.upper(string.sub(arg9,1,1))..string.lower(string.sub(arg9,2)).."] ".."|cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][arg2][3]] or "ffffff").."[|Hplayer:"..arg2.."|h"..arg2..", "..GF_WhoTable[GF_RealmName][arg2][2].."|h|r]: "..arg1, 1, 192/255, 192/255) 
+				if GF_WhoTable[GF_RealmName][arg2] and GF_WhoTable[GF_RealmName][arg2][1] then
+					getglobal("ChatFrame"..i):AddMessage("["..arg8..". "..string.upper(string.sub(arg9,1,1))..string.lower(string.sub(arg9,2)).."] ".."|cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][arg2][2]] or "ffffff").."[|Hplayer:"..arg2.."|h"..arg2..", "..GF_WhoTable[GF_RealmName][arg2][1].."|h|r]: "..arg1, 1, 192/255, 192/255) 
 				else
 					getglobal("ChatFrame"..i):AddMessage("["..arg8..". "..string.upper(string.sub(arg9,1,1))..string.lower(string.sub(arg9,2)).."] ".."|cff".."9d9d9d".."[|Hplayer:"..arg2.."|h"..arg2.."|h|r]: "..arg1,  1, 192/255, 192/255);
 				end
@@ -304,8 +273,8 @@ end
 function GF_AddLogMessage(arg1,filteredChat,add,arg2,arg8,arg9)
 	if add then
 		arg9 = string.gsub(arg9, " - .*", "")
-		if GF_WhoTable[GF_RealmName][arg2] then 
-			arg1 = "["..date("%H:%M").."] "..GF_LogMessageCodes[filteredChat].."["..arg8..". "..string.upper(string.sub(arg9,1,1))..string.lower(string.sub(arg9,2)).."] ".."|cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][arg2][3]] or "9d9d9d").."[|Hplayer:"..arg2.."|h"..arg2..", "..GF_WhoTable[GF_RealmName][arg2][2].."|h|r]: "..arg1
+		if GF_WhoTable[GF_RealmName][arg2] and GF_WhoTable[GF_RealmName][arg2][1] then 
+			arg1 = "["..date("%H:%M").."] "..GF_LogMessageCodes[filteredChat].."["..arg8..". "..string.upper(string.sub(arg9,1,1))..string.lower(string.sub(arg9,2)).."] ".."|cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][arg2][2]] or "9d9d9d").."[|Hplayer:"..arg2.."|h"..arg2..", "..GF_WhoTable[GF_RealmName][arg2][1].."|h|r]: "..arg1
 		else
 			arg1 = "["..date("%H:%M").."] "..GF_LogMessageCodes[filteredChat].."["..arg8..". "..string.upper(string.sub(arg9,1,1))..string.lower(string.sub(arg9,2)).."] ".."|cff".."9d9d9d".."[|Hplayer:"..arg2.."|h"..arg2.."|h|r]: "..arg1
 		end
@@ -416,7 +385,7 @@ function GF_SendWhoIfNameInQueue()
 					GF_LFGGetWhoButton:SetText(GF_GET_WHO.." - "..GF_ClassWhoMatchingResults);
 				end
 			elseif GF_WhoQueue[1] then
-				if GF_WhoTable[GF_RealmName][GF_WhoQueue[1]] and GF_WhoTable[GF_RealmName][GF_WhoQueue[1]][1] + 259200 > time() and not GF_AddonNamesToBeSentAsARequest[GF_WhoQueue[1]] then -- 3 days
+				if GF_GetWhoData(GF_WhoQueue[1]) and GF_WhoTable[GF_RealmName][GF_WhoQueue[1]].t + 259200 > time() and not GF_AddonNamesToBeSentAsARequest[GF_WhoQueue[1]] then -- 3 days
 					table.remove(GF_WhoQueue, 1);
 					return;
 				end
@@ -431,16 +400,14 @@ end
 function GF_WhoListUpdated()
 	for i=1, GetNumWhoResults() do
 		local name, guild, level, race, class, zone = GetWhoInfo(i);
-		GF_WhoTable[GF_RealmName][name] = { time(), level, class, guild };
+		GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], guild }; GF_WhoTable[GF_RealmName][name].t = time()
 		if not GF_ClassWhoRequest then GF_AddonAllNamesForResponseToLogin[name] = true; end
-		if GF_ClassWhoRequest and not GF_ClassWhoTable[name] and not GF_PlayersCurrentlyInGroup[name] and class == GF_GetWhoParams[1] and level >= GF_GetWhoParams[2]-GF_GetWhoLevelRange and level <= GF_GetWhoParams[2]+GF_GetWhoLevelRange
-		and (not GF_GetWhoParams[3] or (GF_GetWhoParams[3] and not GF_IsFoundClassWhoPlayerInADungeonOrPvP(zone))) then
-			GF_ClassWhoTable[name] = { time()-GF_GetWhoResetTimer, level, class, zone }
+		if GF_ClassWhoRequest and not GF_ClassWhoTable[name] and not GF_PlayersCurrentlyInGroup[name] and level >= GF_GetWhoParams[1]-GF_GetWhoLevelRange and level <= GF_GetWhoParams[1]+GF_GetWhoLevelRange
+		and class == GF_GetWhoParams[2] and (not GF_GetWhoParams[3] or (GF_GetWhoParams[3] and not GF_IsFoundClassWhoPlayerInADungeonOrPvP(zone))) then
+			GF_ClassWhoTable[name] = { level, class, zone, time()-GF_GetWhoResetTimer }
 			GF_ClassWhoMatchingResults = GF_ClassWhoMatchingResults + 1
 		end
-		if GF_UrgentWhoRequestSaved == name then GF_UrgentWhoRequestSaved = nil; end
 	end
-
 	if GF_ClassWhoRequest then
 		if not GF_ClassWhoQueue[1] then
 			if GetNumWhoResults() >= 49 then
@@ -478,36 +445,6 @@ function GF_GetPositionInWhoQueue(name)
 	end
 	return
 end
-function GF_PruneTheWhoTable()
-	local tempwhotable = {}
-	for realmname,_ in GF_WhoTable do
-		for i=1, getn(GF_MessageList[realmname]) do
-			if GF_MessageList[realmname][i].who then
-				tempwhotable[GF_MessageList[realmname][i].op] = { GF_MessageList[realmname][i].who[1],GF_MessageList[realmname][i].who[2],GF_MessageList[realmname][i].who[3],GF_MessageList[realmname][i].who[4] };
-			end
-		end
-		
-		local length = 0;
-		for name, whoData in GF_WhoTable[realmname] do
-			if whoData[1] + 2592000 > time() or (whoData[2] ~= 60 and whoData[1] + 86400 > time()) then -- 60*60*24*30 = 30 days for level 60's... one day for under 60
-				tempwhotable[name] = whoData
-			end
-			length = length + 1;
-			if length == GF_MaxEntriesPerRealmOnPrune then break end
-		end
-		if length == GF_MaxEntriesPerRealmOnPrune then GF_WhoTable[realmname] = tempwhotable; end
-	end
-
-	tempwhotable = {}
-	if GF_ClassWhoTable then
-		for name, whoData in GF_ClassWhoTable do
-			if whoData and whoData[1] + 3600 > time() then -- 60*60 - 1 hour
-				tempwhotable[name] = whoData
-			end
-		end
-	end
-	GF_ClassWhoTable = tempwhotable;
-end
 function GF_CheckForAnnounce()
 	if GF_AutoAnnounceTimer then
 		GF_AutoAnnounceTimer = GF_AutoAnnounceTimer + 1;
@@ -538,18 +475,12 @@ function GF_CheckForBroadCast()
 		GF_TimeTillNextBroadcast = 4;
 		local counter = 0;
 		for n,entry in pairs(GF_AddonGroupDataToBeSentBuffer) do
-			if entry.who and (entry.type == "D" or entry.type == "R") and entry.time + 900 > time() then
-				local c = GF_Classes[entry.who[3]] or 7
-				local t = entry.time
-				local y = entry.type
-				local d = entry.dlevel or 60
-				local n = entry.op
-				local l = entry.who[2] or 60
-				local g = entry.who[4] or ""
-				local r = entry.who[1] or time()
-				local s = string.gsub(string.gsub(entry.message, "|c(%w+)|H(.+):(.+)|h(.+)|h|r", "%4"),":","")
-				SendAddonMessage("GF", c..t..y..d..n..l..g..r..":"..s, "GUILD");
-				if GF_GetNumGroupMembers() > 1 or GetNumRaidMembers() > 1 then SendAddonMessage("GF", c..t..y..d..n..l..g..r..":"..s, "PARTY"); end
+			if entry.who and (entry.type == "D" or entry.type == "R") and entry.t + 900 > time() then
+				if entry.who[3] == "" then entry.who[3] = "Z" end
+				SendAddonMessage("GF", GF_ClassIDs[entry.who[2]]..entry.type..entry.t..entry.dlevel..entry.op..entry.who[1]..entry.who[3]..GF_WhoTable[GF_RealmName][entry.op].t..":"..entry.message, "GUILD");
+				if GF_GetNumGroupMembers() > 1 then
+					SendAddonMessage("GF", GF_ClassIDs[entry.who[2]]..entry.type..entry.t..entry.dlevel..entry.op..entry.who[1]..entry.who[3]..GF_WhoTable[GF_RealmName][entry.op].t..":"..entry.message, "PARTY");
+				end
 				counter = counter + 1
 				if counter == 10 then break end
 			end
@@ -564,7 +495,7 @@ function GF_CheckForBroadCast()
 				end
 			end
 			SendAddonMessage("GF", addonsendstring, "GUILD");
-			if GF_GetNumGroupMembers() > 0 or GetNumRaidMembers() > 1 then SendAddonMessage("GF", addonsendstring, "PARTY"); end
+			if GF_GetNumGroupMembers() > 0 then SendAddonMessage("GF", addonsendstring, "PARTY"); end
 			GF_OnStartupQueueURequest = nil;
 		end
 		addonsendstring = "W"
@@ -573,7 +504,7 @@ function GF_CheckForBroadCast()
 				if w then addonsendstring = addonsendstring..":"..n end
 				if string.len(addonsendstring) > 240 then break end
 			end
-			if string.len(addonsendstring) > 1 then SendAddonMessage("GF", addonsendstring, "GUILD"); if GF_GetNumGroupMembers() > 0 or GetNumRaidMembers() > 1 then SendAddonMessage("GF", addonsendstring, "PARTY"); end end
+			if string.len(addonsendstring) > 1 then SendAddonMessage("GF", addonsendstring, "GUILD"); if GF_GetNumGroupMembers() > 0 then SendAddonMessage("GF", addonsendstring, "PARTY"); end end
 			GF_AddonMakeAResponseToLoginList = nil;
 		end
 		addonsendstring = "R"
@@ -582,15 +513,15 @@ function GF_CheckForBroadCast()
 			if GF_AddonNamesToBeSentAsARequest then GF_AddonNamesToBeSentAsARequest[n] = nil; end
 			if string.len(addonsendstring) > 240 then break end
 		end
-		if string.len(addonsendstring) > 1 then SendAddonMessage("GF", addonsendstring, "GUILD");  if GF_GetNumGroupMembers() > 0 or GetNumRaidMembers() > 1 then SendAddonMessage("GF", addonsendstring, "PARTY"); end end
+		if string.len(addonsendstring) > 1 then SendAddonMessage("GF", addonsendstring, "GUILD");  if GF_GetNumGroupMembers() > 0 then SendAddonMessage("GF", addonsendstring, "PARTY"); end end
 		addonsendstring = ""
 		for n,w in pairs(GF_AddonWhoDataToBeSentBuffer) do
-			if w[4] == "" then w[4] = "<>" end
-			if w then addonsendstring = addonsendstring..":"..GF_Classes[w[3]]..n..w[2]..w[4]..w[1] end
+			if w[3] == "" then w[3] = "Z" end
+			if w then addonsendstring = addonsendstring..":"..w[1]..n..GF_ClassIDs[w[2]]..w[3]..w.t end
 			if GF_AddonWhoDataToBeSentBuffer[n] then GF_AddonWhoDataToBeSentBuffer[n] = nil; end
 			if string.len(addonsendstring) > 202 then break end
 		end
-		if string.len(addonsendstring) > 1 then SendAddonMessage("GF", addonsendstring, "GUILD");  if GF_GetNumGroupMembers() > 0 or GetNumRaidMembers() > 1 then SendAddonMessage("GF", addonsendstring, "PARTY"); end end
+		if string.len(addonsendstring) > 1 then SendAddonMessage("GF", addonsendstring, "GUILD");  if GF_GetNumGroupMembers() > 0 then SendAddonMessage("GF", addonsendstring, "PARTY"); end end
 	end
 end
 function GF_UpdateGroupsFrame()
@@ -687,29 +618,30 @@ function GF_LoadSettings()
 	getglobal(GF_LFGSizeDropdown:GetName().."TextLabel"):SetText(GF_SavedVariables.lfgsize);
 	getglobal(GF_LFGWhoClassDropdown:GetName().."TextLabel"):SetText(GF_SavedVariables.lfgwhisperclass);
 
-	if UnitFactionGroup("player") == "Alliance" then GF_Classes[8] = GF_PALADIN; else GF_Classes[8] = GF_SHAMAN; end			
-	
 	GF_BUTTONS_LIST["LFGLFM"][2] = { GF_TRIGGER_LIST.CLASSES[UnitClass("player")][1].." "..UnitClass("player").." LFG", 1, 60, }
 	GF_BUTTONS_LIST["LFGLFM"][3] = { GF_TRIGGER_LIST.CLASSES[UnitClass("player")][2].." "..UnitClass("player").." LFG", 1, 60, }
 	GF_BUTTONS_LIST["LFGLFM"][4] = { GF_TRIGGER_LIST.CLASSES[UnitClass("player")][3].." "..UnitClass("player").." LFG", 1, 60, }
 	GF_BUTTONS_LIST["LFGLFM"][5] = { UnitClass("player").." LFG", 1, 60, }
-
 	if not GF_MessageList[GF_RealmName] then GF_MessageList[GF_RealmName] = {}; end
 	if not GF_BlackList[GF_RealmName] then GF_BlackList[GF_RealmName] = {}; end
-	if not GF_WhoTable[GF_RealmName] then GF_WhoTable[GF_RealmName] = {} end
 	if not GF_LogHistory[GF_RealmName] then GF_LogHistory[GF_RealmName] = {} end
-	if not GF_WhoTable[GF_RealmName][UnitName("player")] then GF_WhoTable[GF_RealmName][UnitName("player")] = { time()+60*60*24*14, UnitLevel("player"), UnitClass("player"), "" }; end --14 days for pruning
-	if GF_WhoTable[GF_RealmName][UnitName("player")][1] < time() then GF_PruneTheWhoTable(); end
-
-	GF_UpdateMinimapIcon();
+	if not GF_WhoTable then	GF_WhoTable = {} end if not GF_WhoTable[GF_RealmName] then GF_WhoTable[GF_RealmName] = {} end if not GF_WhoTable[GF_RealmName]["LOADED"] then GF_WhoTable[GF_RealmName]["LOADED"] = {} end
+	if (not GF_WhoTable[GF_RealmName]["LOADED"][UnitName("player")] or GF_WhoTable[GF_RealmName]["LOADED"][UnitName("player")] < time()) and IsAddOnLoaded("pfUI") then -- Reload PFUI data once a month
+		for name, whodata in pfUI_playerDB do
+			GF_WhoTable[GF_RealmName][name] = { whodata.level, whodata.class, whodata.guild }
+			GF_WhoTable[GF_RealmName][name].t = time() - 21601
+		end
+		GF_WhoTable[GF_RealmName]["LOADED"][UnitName("player")] = time() + 2592000; -- 30 days
+	end
 	GF_MainFrame:SetAlpha(GF_FrameTransparencySlider:GetValue());
 	GF_MainFrame:SetScale(GF_UIScaleSlider:GetValue());
 	if GF_SavedVariables.MainFrameXPos then GF_MainFrame:SetPoint("TOPLEFT",UIParent,"TOPLEFT", GF_SavedVariables.MainFrameXPos, GF_SavedVariables.MainFrameYPos) else GF_SavedVariables.MainFrameXPos = 0 GF_SavedVariables.MainFrameXPos = 0 end
 	if GF_SavedVariables.loghidemainframe then GF_MainFrame:Show() GF_ToggleHideMainFrame() end
-	GF_ToggleWhisperFrame()
-	GF_DisplayLog()
+	GF_UpdateMinimapIcon()
 	GF_UpdateFriendsAndGuildiesList()
+	GF_ToggleWhisperFrame()
 	GF_WhisperHistoryUpdateFrame()
+	GF_DisplayLog()
 
 	if (GF_RealmName == "Nordanaar" or GF_RealmName == "Tel'Abim") then GF_AddTurtleWoWDungeonsRaids(); GF_WhoCooldownTime = 30; end
 end
@@ -812,7 +744,7 @@ function GF_ParseIncomingAddonMessages(arg2)
 			GF_AddonOPSentNamesOnLogin[w] = true;
 		end
 		for n,w in pairs(GF_WhoTable[GF_RealmName]) do
-			if not GF_AddonWhoDataToBeSentBuffer[n] and w[1] + 900 > time() then GF_AddonAllNamesForResponseToLogin[n] = true; end -- Sends only names from the last 15 minutes
+			if not GF_AddonWhoDataToBeSentBuffer[n] and w.t + 900 > time() then GF_AddonAllNamesForResponseToLogin[n] = true; end -- Sends only names from the last 15 minutes
 		end
 		GF_TimeTillNextBroadcast = (math.random(60))/3; -- Assuming up to 333ms lag
 		GF_AddonMakeAResponseToLoginList = true;
@@ -825,13 +757,14 @@ function GF_ParseIncomingAddonMessages(arg2)
 		end
 	elseif string.sub(arg2,1,1) == "R" then -- (To Everyone) Sent as a reply to "W". Sends a list of names from the "W" message that you don't have information for(up to 240 characters).
 		for sentname in string.gfind(arg2, ":(%w+)") do
-			if GF_WhoTable[GF_RealmName][sentname] then GF_AddonWhoDataToBeSentBuffer[sentname] = GF_WhoTable[GF_RealmName][sentname]; end
+			if GF_WhoTable[GF_RealmName][sentname] and GF_WhoTable[GF_RealmName][sentname][1] then GF_AddonWhoDataToBeSentBuffer[sentname] = GF_WhoTable[GF_RealmName][sentname]; end
 			GF_AddonNamesToBeSentAsARequest[sentname] = nil
 		end
 	elseif string.sub(arg2,1,1) == ":" then -- (To Everyone) This is the who data from the names requested in "R".
 		for sentclass,sentname,sentlevel,sentguild, sentrecordedtime in string.gfind(arg2, ":(%d)([a-zA-Z]+)(%d+)([a-zA-Z%s<>]+)(%d+)") do
+			if sentguild == "Z" then sentguild = "" end
 			if not GF_WhoTable[GF_RealmName][sentname] then
-				GF_WhoTable[GF_RealmName][sentname] = { tonumber(sentrecordedtime), tonumber(sentlevel), GF_Classes[tonumber(sentclass)], string.gsub(sentguild,"[<>]", "") };
+				GF_WhoTable[GF_RealmName][sentname] = { tonumber(sentlevel), GF_ClassIDs[tonumber(sentclass)], sentguild }; GF_WhoTable[GF_RealmName][sentname].t = tonumber(sentrecordedtime);
 			end
 			GF_AddonAllNamesForResponseToLogin[sentname] = nil;
 			GF_AddonNamesToBeSentAsARequest[sentname] = nil;
@@ -839,8 +772,9 @@ function GF_ParseIncomingAddonMessages(arg2)
 		end
 	elseif string.len(arg2) > 2 then -- (To Everyone) This is the full group information. Which is sent separately from the who data.
 		for sentclass, senttime,senttype,sentdlevel, sentname, sentplevel, sentguild, sentrecordedtime, message in string.gfind(arg2, "(%d)(%d+)([a-zA-Z])(%d+)([a-zA-Z]+)(%d+)([a-zA-Z%s<>]+)(%d+):(.+)") do
-			if not GF_WhoTable[GF_RealmName][sentname] or tonumber(sentrecordedtime) > GF_WhoTable[GF_RealmName][sentname][1] then
-				GF_WhoTable[GF_RealmName][sentname] = { tonumber(sentrecordedtime), tonumber(sentplevel), GF_Classes[tonumber(sentclass)], string.gsub(sentguild,"[<>]", "") };
+			if sentguild == "Z" then sentguild = "" end
+			if not GF_WhoTable[GF_RealmName][sentname] or tonumber(sentrecordedtime) > GF_WhoTable[GF_RealmName][sentname].t then
+				GF_WhoTable[GF_RealmName][sentname] = { tonumber(sentplevel), GF_ClassIDs[tonumber(sentclass)], string.gsub(sentguild,"", "") }; GF_WhoTable[GF_RealmName][sentname].t = tonumber(sentrecordedtime);
 			end
 
 			local entry = {};
@@ -849,7 +783,7 @@ function GF_ParseIncomingAddonMessages(arg2)
 			entry.type = senttype;
 			entry.dlevel = tonumber(sentdlevel)
 			entry.who = GF_WhoTable[GF_RealmName][sentname];
-			entry.time = tonumber(senttime);
+			entry.t = tonumber(senttime);
 			
 			for i = 1, getn(GF_MessageList[GF_RealmName]) do
 				if GF_MessageList[GF_RealmName][i].op and GF_MessageList[GF_RealmName][i].op == sentname then
@@ -859,7 +793,7 @@ function GF_ParseIncomingAddonMessages(arg2)
 			end
 			if getn(GF_MessageList[GF_RealmName]) > 0 then
 				for i = 1, getn(GF_MessageList[GF_RealmName]) do
-					if entry.time > GF_MessageList[GF_RealmName][i].time then
+					if entry.t > GF_MessageList[GF_RealmName][i].t then
 						table.insert(GF_MessageList[GF_RealmName], i, entry);
 						break;
 					end
@@ -883,17 +817,9 @@ function GF_BindKey(bindKey, bindName)
 		end
 		if not foundIKey then SetBinding(bindKey,"GF_SHOW_FRAME"); end
 	end
-
 end
 function GF_GetWhoData(arg2,groupfound)
-	if string.find(arg2," ") then return end
-	if not GF_WhoTable[GF_RealmName][arg2] then 
-		if IsAddOnLoaded("pfUI") then
-			local whodata = pfUI_playerDB[arg2]
-			if whodata and whodata.level and whodata.class and whodata.guild then GF_WhoTable[GF_RealmName][arg2] = { time() - 21601, whodata.level, GF_Classes[whodata.class], whodata.guild }; end -- 6 hours + 1 second
-		end
-	end
-	if (not GF_WhoTable[GF_RealmName][arg2] or GF_WhoTable[GF_RealmName][arg2][1] < time() - 259200) and GF_SavedVariables.usewhoongroups and (groupfound or not GF_SavedVariables.showoriginalchat) then -- 3 days
+	if (not GF_WhoTable[GF_RealmName][arg2] or GF_WhoTable[GF_RealmName][arg2].t < time() - 259200) and GF_SavedVariables.usewhoongroups and (groupfound or not GF_SavedVariables.showoriginalchat) then -- 3 days
 		GF_AddNameToWhoQueue(arg2,groupfound)
 	else
 		return GF_WhoTable[GF_RealmName][arg2]
@@ -907,8 +833,8 @@ function GF_GetTime(colon)
 end
 function GF_EntryMatchesGroupFilterCriteria(entry)
 	if GF_SavedVariables.searchtext == "" and GF_SavedVariables.searchbuttonstext == "" and ((GF_SavedVariables.showdungeons and entry.type == "D") or (GF_SavedVariables.showraids and entry.type == "R") or (GF_SavedVariables.showquests and entry.type == "Q") or (GF_SavedVariables.showother and entry.type == "N"))
-	and ((GF_SavedVariables.showlfg and entry.lfg) or (GF_SavedVariables.showlfm and not entry.lfg)) and (not GF_SavedVariables.autofilter or (entry.who and (entry.who[2] >= UnitLevel("player")-GF_SavedVariables.autofilterlevelvar
-	and entry.who[2] <= UnitLevel("player")+GF_SavedVariables.autofilterlevelvar)) or (entry.dlevel and entry.dlevel >= UnitLevel("player")-3 and entry.dlevel <= UnitLevel("player")+3)) then
+	and ((GF_SavedVariables.showlfg and entry.lfg) or (GF_SavedVariables.showlfm and not entry.lfg)) and (not GF_SavedVariables.autofilter or (entry.who and (entry.who[1] >= UnitLevel("player")-GF_SavedVariables.autofilterlevelvar
+	and entry.who[1] <= UnitLevel("player")+GF_SavedVariables.autofilterlevelvar)) or (entry.dlevel and entry.dlevel >= UnitLevel("player")-3 and entry.dlevel <= UnitLevel("player")+3)) then
 		return true;
 	end
 	if (GF_SavedVariables.searchtext ~= "" or GF_SavedVariables.searchbuttonstext ~= "") and GF_SearchMessageForTextString(string.lower(entry.message).." ", string.lower(GF_SavedVariables.searchtext).."/"..GF_SavedVariables.searchbuttonstext) then
@@ -924,9 +850,8 @@ function GF_ApplyFiltersToGroupList()
 	for i=1, getn(GF_MessageList[GF_RealmName]) do
 		local entry = GF_MessageList[GF_RealmName][i];
 		if entry then
-			if (entry.time + GF_SavedVariables.grouplistingduration*60) > time() then
+			if (entry.t + GF_SavedVariables.grouplistingduration*60) > time() then
 				if GF_EntryMatchesGroupFilterCriteria(entry) then
-					entry.elapsed = ceil((time() - entry.time)/60);
 					table.insert(GF_FilteredResultsList, entry);
 				end
 			else
@@ -943,7 +868,7 @@ function GF_UpdateResults()
 	local groupListLength = getn(GF_FilteredResultsList);
 	GF_MinimapIconTextLabel:SetText(groupListLength);
 	GF_MinimapIconTextLabel:Show();
-	GF_ResultsLabel:SetText(GF_RESULTS_FOUND.." "..groupListLength.." / "..getn(GF_MessageList[GF_RealmName]));
+	GF_ResultsLabel:SetText(GF_FOUND..groupListLength.." / "..getn(GF_MessageList[GF_RealmName]));
 	GF_PageLabel:Show();
 
 	local cpage = floor(GF_ResultsListOffset / 20);
@@ -959,33 +884,21 @@ function GF_UpdateResults()
 				local entry = GF_FilteredResultsList[index+GF_ResultsListOffset];
 				if GF_PlayersCurrentlyInGroup[entry.op] or GF_FriendsAndGuildies[entry.op] then getglobal(c.."NameLabel"):SetTextColor(255,215,0,1); else getglobal(c.."NameLabel"):SetTextColor(0.75,0.75,1,1); end
 
-				local rightText = "";
-				if entry.elapsed then
-					if entry.elapsed > 1 then rightText = GF_TIME_LEFT..entry.elapsed.." "..GF_MINUTES..GF_TIME_AGO;
-					else rightText = GF_TIME_LEFT..entry.elapsed.." "..GF_MINUTE..GF_TIME_AGO; end
-				else
-					rightText = entry.time;
-				end
-				getglobal(c.."MoreRightLabel"):SetText(rightText);
+				if floor((time() - entry.t)/60) > 1 then getglobal(c.."MoreRightLabel"):SetText(GF_FOUND..floor((time() - entry.t)/60)..GF_MINUTES..GF_TIME_AGO);
+				elseif floor((time() - entry.t)/60) == 1 then getglobal(c.."MoreRightLabel"):SetText(GF_FOUND..floor((time() - entry.t)/60)..GF_MINUTE..GF_TIME_AGO);
+				else getglobal(c.."MoreRightLabel"):SetText(GF_FOUND..GF_TIME_JUST_NOW); end
 				
-				local mainText = "";
-				local moreText = "";
-				if entry.who and entry.who[3] and entry.who[2] and entry.who[2] ~= 0 then
-					if entry.who[4] == "<>" then
-						moreText = "Level "..entry.who[2].." "..entry.who[3];
-					else
-						moreText = "Level "..entry.who[2].." "..entry.who[3]..", "..entry.who[4];
-					end
-					mainText = mainText.."|cff"..(GF_ClassColors[entry.who[3]] or "ffffff")..entry.op.."|r: "..entry.message;
+				if entry.who then
+					getglobal(c.."NameLabel"):SetText("|cff"..(GF_ClassColors[entry.who[2]] or "ffffff")..entry.op.."|r: "..entry.message);
+					getglobal(c.."MoreLabel"):SetText("Level "..entry.who[1].." "..GF_Classes[entry.who[2]].." "..entry.who[3]);
 				else
-					mainText = mainText..entry.op..": "..entry.message;
+					getglobal(c.."NameLabel"):SetText(entry.op..": "..entry.message);
+					getglobal(c.."MoreLabel"):SetText("");
 				end
-				getglobal(c.."NameLabel"):SetText(mainText);
-				getglobal(c.."MoreLabel"):SetText(moreText);
 				getglobal(c):Show();
 
-				if (not GF_SavedVariables.usewhoongroups or (entry.whoAttempts and entry.whoAttempts > 2)) and not (GF_WhoTable[GF_RealmName][entry.op] and GF_WhoTable[GF_RealmName][entry.op][1] and
-				GF_WhoTable[GF_RealmName][entry.op][1] + 259200 > time()) and not GF_GetPositionInWhoQueue(entry.op, GF_WhoQueue) then getglobal(c.."GroupWhoButton"):Show(); else getglobal(c.."GroupWhoButton"):Hide(); end
+				if (not GF_SavedVariables.usewhoongroups or (entry.whoAttempts and entry.whoAttempts > 2)) and not (GF_WhoTable[GF_RealmName][entry.op] and GF_WhoTable[GF_RealmName][entry.op].t and
+				GF_WhoTable[GF_RealmName][entry.op].t + 259200 > time()) and not GF_GetPositionInWhoQueue(entry.op, GF_WhoQueue) then getglobal(c.."GroupWhoButton"):Show(); else getglobal(c.."GroupWhoButton"):Hide(); end
 				
 				getglobal(c.."LFGInviteButton"):Hide();
 				getglobal(c.."LFMWhisperRequestInviteButton"):Hide();
@@ -1046,7 +959,7 @@ function GF_LFMWhisperRequestInviteButton(frame,id)
 	GF_RequestInviteTime[GF_FilteredResultsList[id].op] = time() + 120
 	getglobal(frame:GetName().."LFMWhisperRequestInviteButton"):Hide();
 end
-function GF_WhisperHistoryButtonPressed(id) -- Change highlight.. clear the log and add the whisper entries GF_WhisperHistoryDisplayLog()
+function GF_WhisperHistoryButtonPressed(id)
 	if id == GF_WhisperLogCurrentButtonID then return end
 	getglobal("GF_WhisperHistoryButton"..GF_WhisperLogCurrentButtonID):UnlockHighlight()
 	getglobal("GF_WhisperHistoryButton"..id):LockHighlight()
@@ -1056,16 +969,16 @@ function GF_WhisperHistoryButtonPressed(id) -- Change highlight.. clear the log 
 	GF_WhisperLogCurrentButtonID = id;
 	if id == 0 then GF_DisplayLog() else GF_WhisperHistoryDisplayLog(getglobal("GF_WhisperHistoryButton"..id):GetText()) end
 end
-function GF_WhisperReceivedAddToWhisperHistoryList(message,name,sent)
+function GF_WhisperReceivedAddToWhisperHistoryList(message,name,sent) -- TODO not sure
 	if not GF_WhisperLogData[name] then
 		GF_WhisperLogData[name] = {}
-		if GF_FriendsAndGuildies[name] then	GF_WhisperLogData[name].priority = true; end
+		if GF_FriendsAndGuildies[name] then GF_WhisperLogData[name].priority = true; end
 	end
 	if sent then
 		message = "|cffff80ff["..date("%m/%d").."] ["..date("%H:%M").."]|r ".."[To] ".."|cff"..GF_ClassColors[UnitClass("player")].."[|Hplayer:"..UnitName("player").."|h"..UnitName("player")..", "..UnitLevel("player").."|h|r]: "..message
 	else
-		if GF_WhoTable[GF_RealmName][name] then 
-			message = "|cffff80ff["..date("%m/%d").."] ["..date("%H:%M").."]|r ".."[From] ".."|cff"..GF_ClassColors[GF_WhoTable[GF_RealmName][name][3]].."[|Hplayer:"..name.."|h"..name..", "..GF_WhoTable[GF_RealmName][name][2].."|h|r]: "..message
+		if GF_WhoTable[GF_RealmName][name] and GF_WhoTable[GF_RealmName][name][1] then 
+			message = "|cffff80ff["..date("%m/%d").."] ["..date("%H:%M").."]|r ".."[From] ".."|cff"..GF_ClassColors[GF_WhoTable[GF_RealmName][name][2]].."[|Hplayer:"..name.."|h"..name..", "..GF_WhoTable[GF_RealmName][name][1].."|h|r]: "..message
 		else
 			message = "|cffff80ff["..date("%m/%d").."] ["..date("%H:%M").."]|r ".."[From] ".."|cff".."9d9d9d".."[|Hplayer:"..name.."|h"..name.."|h|r]: "..message
 		end
@@ -1202,10 +1115,13 @@ function GF_DeletePlayer(id)
 	GF_UpdateBlackListItems()
 end
 function GF_ToggleGetWho()
+	for name,whoData in GF_ClassWhoTable do -- prune entries more than an hour old
+		if whoData and whoData[4] + 3600 < time() then GF_ClassWhoTable[name] = nil	end
+	end
 	if not GF_ClassWhoRequest then
 		GF_GetWhoLevel = GF_FindDungeonLevel()
 		if GF_GetWhoLevel then
-			GF_GetWhoClassLevelList(GF_SavedVariables.lfgwhisperclass, GF_GetWhoLevel, true)
+			GF_GetWhoClassLevelList(GF_GetWhoLevel, GF_SavedVariables.lfgwhisperclass, true)
 		else
 			DEFAULT_CHAT_FRAME:AddMessage("GF: "..GF_NO_WHISPER_DUNGEON, 1, 1, 0.5);
 		end
@@ -1214,7 +1130,7 @@ function GF_ToggleGetWho()
 		GF_LFGGetWhoButton:SetText(GF_GET_WHO.." - "..GF_ClassWhoMatchingResults);
 	end
 end
-function GF_GetWhoClassLevelList(class,level,excludedungeonspvp)
+function GF_GetWhoClassLevelList(level,class,excludedungeonspvp)
 	local tempClassWhoTable = {}
 	for name,entry in pairs(GF_ClassWhoTable) do
 		if entry[1] + GF_GetWhoResetTimer < time() then tempClassWhoTable[name] = entry end
@@ -1224,12 +1140,12 @@ function GF_GetWhoClassLevelList(class,level,excludedungeonspvp)
 	GF_ClassWhoRequest = true;
 	GF_ClassWhoMatchingResults = 0;
 	GF_LFGGetWhoButton:SetText(GF_STOP_WHO);
-	GF_GetWhoParams = { class, level, excludedungeonspvp, };
+	GF_GetWhoParams = { level, class, excludedungeonspvp, };
 	GF_ClassWhoQueue = {}
 	GF_GetClassWhoState = 1;
-	GF_CreateGetWhoQueueList(class,level)
+	GF_CreateGetWhoQueueList(level,class)
 end
-function GF_CreateGetWhoQueueList(class,level)
+function GF_CreateGetWhoQueueList(level,class)
 	local minlevel = level-GF_GetWhoLevelRange
 	local maxlevel = level+GF_GetWhoLevelRange
 	if level > 60 then
@@ -1313,9 +1229,9 @@ function GF_GetWhoSendWhisperToAvailablePlayer()
 	elseif string.len(whispermessage) > 5 then
 		GF_GetWhoLevel = GF_FindDungeonLevel() or 60;
 		for k,v in pairs(GF_ClassWhoTable) do
-			if GF_ClassWhoTable[k][1] < time()-GF_GetWhoResetTimer then
-				if GF_ClassWhoTable[k][2] >= GF_GetWhoLevel-GF_GetWhoLevelRange and GF_ClassWhoTable[k][2] <= GF_GetWhoLevel+GF_GetWhoLevelRange and GF_ClassWhoTable[k][3] == GF_SavedVariables.lfgwhisperclass then
-					GF_ClassWhoTable[k][1] = time()
+			if GF_ClassWhoTable[k][4] < time()-GF_GetWhoResetTimer then
+				if GF_ClassWhoTable[k][1] >= GF_GetWhoLevel-GF_GetWhoLevelRange and GF_ClassWhoTable[k][1] <= GF_GetWhoLevel+GF_GetWhoLevelRange and GF_ClassWhoTable[k][2] == GF_SavedVariables.lfgwhisperclass then
+					GF_ClassWhoTable[k][4] = time()
 					GF_ClassWhoMatchingResults = GF_ClassWhoMatchingResults - 1;
 					GF_LFGGetWhoButton:SetText(GF_GET_WHO.." - "..GF_ClassWhoMatchingResults);
 					GF_ClassWhoRequest = nil;
@@ -1604,15 +1520,16 @@ function GF_CheckForGroups(arg1,arg2,event)
 		elseif GF_SavedVariables.playsounds then
 			PlaySoundFile( "Sound\\Interface\\PickUp\\PutDownRing.wav" );
 		end
+		if event ~= "CHAT_MSG_CHANNEL" then foundInGroup = nil end
 	end
 	return GF_CheckForSpam(arg1,arg2,foundInGroup) or foundInGroup;
 end
 function GF_CheckForSpam(arg1,arg2,foundInGroup)
-	if not GF_PlayersCurrentlyInGroup[arg2] and not GF_FriendsAndGuildies[arg2] then											-- Block if below level
-		if (GF_WhoTable[GF_RealmName][arg2] and tonumber(GF_WhoTable[GF_RealmName][arg2][2]) < GF_SavedVariables.blockmessagebelowlevel) and GF_WhoTable[GF_RealmName][arg2][1] + 21600 > time() then
+	if not GF_PlayersCurrentlyInGroup[arg2] and not GF_FriendsAndGuildies[arg2] then
+		if (GF_WhoTable[GF_RealmName][arg2] and tonumber(GF_WhoTable[GF_RealmName][arg2][1]) < GF_SavedVariables.blockmessagebelowlevel) and GF_WhoTable[GF_RealmName][arg2].t + 21600 > time() then
 			return 9;
 		end
-		if GF_SavedVariables.spamfilter and (not foundInGroup or string.len(arg1) > 50) then									-- Block chat spam
+		if GF_SavedVariables.spamfilter and (not foundInGroup or string.len(arg1) > 50) then
 			if GF_IncomingMessagePrune < time() then
 				local tempplayermessages = {}
 				for name,_ in GF_PlayerMessages do
@@ -1629,9 +1546,9 @@ function GF_CheckForSpam(arg1,arg2,foundInGroup)
 			else
 				if string.find(arg1,GF_PlayerMessages[arg2][2],1,true) and string.find(arg1,GF_PlayerMessages[arg2][3],1,true) then -- Found Spammer
 					if GF_SavedVariables.autoblacklist and not GF_BlackList[GF_RealmName][arg2] and string.len(arg1) > 120 then
-						if GF_WhoTable[GF_RealmName][arg2] and GF_WhoTable[GF_RealmName][arg2][1] + 21600 > time() then
-							if tonumber(GF_WhoTable[GF_RealmName][arg2][2]) <= GF_SavedVariables.autoblacklistminlevel then
-								table.insert(GF_BlackList[GF_RealmName], 1, { arg2, "("..GF_WhoTable[GF_RealmName][arg2][2]..") "..arg1 })
+						if GF_WhoTable[GF_RealmName][arg2] and GF_WhoTable[GF_RealmName][arg2].t + 21600 > time() then
+							if tonumber(GF_WhoTable[GF_RealmName][arg2][1]) <= GF_SavedVariables.autoblacklistminlevel then
+								table.insert(GF_BlackList[GF_RealmName], 1, { arg2, "("..GF_WhoTable[GF_RealmName][arg2][1]..") "..arg1 })
 								GF_BlackList[GF_RealmName][arg2] = true;
 								GF_UpdateBlackListItems()
 								return 8;
@@ -1659,7 +1576,7 @@ function GF_CheckForSpam(arg1,arg2,foundInGroup)
 	end
 end
 function GF_CheckForTradesAndChat(arg1,event)
-	if not event == "CHAT_MSG_CHANNEL" then return nil,arg1 end
+	if event ~= "CHAT_MSG_CHANNEL" then return nil,arg1 end
 	for i=1, getn(GF_TRIGGER_LIST.TRADE[1]) do
 		if string.find(string.lower(arg1), GF_TRIGGER_LIST.TRADE[1][i]) then
 			return 4;
@@ -1717,8 +1634,8 @@ function GF_ShowGroupsOnMinimap(arg1,arg2)
 	end
 	for i=1, 6 do
 		if GF_MiniMapMessages[i] < time() then
-			if GF_WhoTable[GF_RealmName][arg2] then 
-				getglobal("GF_MinimapMessageFrameA"..i):AddMessage("|cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][arg2][3]] or "ffffff").."|Hplayer:"..arg2.."|h "..arg2..", "..GF_WhoTable[GF_RealmName][arg2][2].." "..GF_WhoTable[GF_RealmName][arg2][3].."|h|r", 1, 0.8, 0);
+			if GF_WhoTable[GF_RealmName][arg2] and GF_WhoTable[GF_RealmName][arg2][1] then 
+				getglobal("GF_MinimapMessageFrameA"..i):AddMessage("|cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][arg2][2]] or "ffffff").."|Hplayer:"..arg2.."|h "..arg2..", "..GF_WhoTable[GF_RealmName][arg2][1].." "..GF_WhoTable[GF_RealmName][arg2][2].."|h|r", 1, 0.8, 0);
 			else
 				getglobal("GF_MinimapMessageFrameA"..i):AddMessage("|cff".."ffffff".."|Hplayer:"..arg2.."|h "..arg2.."|h|r", 1, 0.8, 0);
 			end
@@ -1738,12 +1655,12 @@ function GF_GetGroupInformation(arg1,arg2)
 	entry.type = gtype;
 	entry.dlevel = glevel;
 	entry.who = GF_WhoTable[GF_RealmName][arg2];
-	entry.time = time()
+	entry.t = time()
 	entry.lfg = isLFG
 
 	for i = 1, getn(GF_MessageList[GF_RealmName]) do
 		if arg2 == GF_MessageList[GF_RealmName][i].op then
-			if GF_SavedVariables.showgroupsnewonly and GF_MessageList[GF_RealmName][i].time + GF_SavedVariables.showgroupsnewonlytime*60 < time() then table.remove(GF_MessageList[GF_RealmName], i); return 2, entry; end
+			if GF_SavedVariables.showgroupsnewonly and GF_MessageList[GF_RealmName][i].t + GF_SavedVariables.showgroupsnewonlytime*60 < time() then table.remove(GF_MessageList[GF_RealmName], i); return 2, entry; end
 			table.remove(GF_MessageList[GF_RealmName], i);
 			break;
 		end
@@ -1757,7 +1674,7 @@ function GF_SearchMessageForGroup(arg1,filterLevel)
 	local foundClass = 0
 	local gtype = "N"
 	local isLFG = nil
-	local instancelevel;
+	local instancelevel = 60
 	local counter = 0;
 	for _,word in GF_TRIGGER_LIST.IGNORE do
 		if string.find(arg1, word) then return end
@@ -1798,7 +1715,6 @@ function GF_SearchMessageForGroup(arg1,filterLevel)
 				end
 			end
 		end
-		if instancelevel then break end
 	end
 	for _,class in GF_TRIGGER_LIST.CLASSES do 
 		for _,word in class do
