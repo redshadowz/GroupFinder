@@ -1,7 +1,7 @@
 # GroupFinder
-Group finder Addon for Vanilla Wow 1.12.1 based on the CallToArms addon(with Turtle WoW support).  
+Update 4/18/2025: I mostly was trying to revamp the "log" window and clean up the interface. I was also adding a log for whispers. I plan on adding one for guild messages(or for both guild and whispers). I added more minimap message frames(6). And I'm trying to make it where the chat and or group frame can basically be see-through and click-through so you can still play the game with them showing(this option is a small indescript button on the left side of the log). It always amazes me how even when I think I'm done, I end up coming up with another 20 things I want to change/add. I have another dozen things to do again. I'll update in the next few days.     
 
-Update 4/17/2025: My apologies. There were all kinds of problems. Probably shouldn't have even uploaded in the state it was in. I fixed just about everything I possibly could. Added a lot of new stuff. Mostly centering around the log.  
+Group finder Addon for Vanilla Wow 1.12.1 based on the CallToArms addon(with Turtle WoW support).  
 
 The goal of this addon was to find groups without needing to sift through endless chat spam. I tried to make this addon as intuitive as possible, but it's probably pretty intimidating at first glance. Lots of checkboxes. Lots of edit boxes. Lots of dropdowns. I put as much as possible on the front page because the original CallToArms addon had too many pages to flip through and too many useless features.  
 
