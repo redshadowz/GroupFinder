@@ -45,6 +45,7 @@
 	MainFrameUIScale			= 1,
 	MainFrameXPos				= nil,
 	MainFrameYPos				= nil,
+	showwhisperlogs				= false,
 	logshowgroup				= true,
 	logshowfiltered				= true,
 	logshowchat					= true,
@@ -55,7 +56,7 @@
 	logshowblacklist			= true,
 	logshowbelowlevel			= true,
 	loghidemainframe			= false,
-	logshowwhisperwindow		= false,
+	logshowwhisperwindow		= true,
 };
 
 GF_RealmName							= GetRealmName();
@@ -663,22 +664,22 @@ end
 function GF_LoadSettings()
 	local SliderVariablesToSet = { GF_SavedVariables.MinimapArcOffset, GF_SavedVariables.MinimapRadiusOffset, GF_SavedVariables.MinimapMsgArcOffset, GF_SavedVariables.MinimapMsgRadiusOffset, GF_SavedVariables.FilterLevel, GF_SavedVariables.MainFrameUIScale,
 	GF_SavedVariables.MainFrameTransparency, GF_SavedVariables.spamfilterduration,GF_SavedVariables.autoblacklistminlevel,GF_SavedVariables.blockmessagebelowlevel,GF_SavedVariables.grouplistingduration,GF_SavedVariables.autofilterlevelvar,
-	GF_SavedVariables.showgroupsnewonlytime, GF_SavedVariables.announcetimer/60 }
+	GF_SavedVariables.showgroupsnewonlytime, GF_SavedVariables.announcetimer/60, }
 	local SliderNames = { "GF_MinimapArcSlider", "GF_MinimapRadiusSlider", "GF_MinimapMsgArcSlider", "GF_MinimapMsgRadiusSlider", "GF_FilterLevelSlider", "GF_UIScaleSlider", "GF_FrameTransparencySlider", "GF_FrameSpamFilterDurationSlider",
-	"GF_FrameSpamBlacklistMinLevelSlider", "GF_FrameBlockMessagesBelowLevelSlider", "GF_GroupListingDurationSlider", "GF_AutoFilterLevelSlider", "GF_GroupNewTimeoutSlider", "GF_FrameAnnounceTimerSlider" }
+	"GF_FrameSpamBlacklistMinLevelSlider", "GF_FrameBlockMessagesBelowLevelSlider", "GF_GroupListingDurationSlider", "GF_AutoFilterLevelSlider", "GF_GroupNewTimeoutSlider", "GF_FrameAnnounceTimerSlider", }
 	for i=1, 14 do getglobal(SliderNames[i]):SetValue(SliderVariablesToSet[i]) end
 	
 	local CheckButtonVariablesToSet = { GF_SavedVariables.showgroupsinchat, GF_SavedVariables.showgroupsinminimap, GF_SavedVariables.showgroupsnewonly, GF_SavedVariables.showchattexts, GF_SavedVariables.showtradestexts, GF_SavedVariables.showloottexts,
 	GF_SavedVariables.autofilter, GF_SavedVariables.showtranslate, GF_SavedVariables.showdungeons, GF_SavedVariables.showraids, GF_SavedVariables.showquests, GF_SavedVariables.showother, GF_SavedVariables.showlfm, GF_SavedVariables.showlfg,
 	GF_SavedVariables.logshowgroup, GF_SavedVariables.logshowfiltered, GF_SavedVariables.logshowchat, GF_SavedVariables.logshowtrades, GF_SavedVariables.logshowpolitics, GF_SavedVariables.logshowloot, GF_SavedVariables.logshowspam,
 	GF_SavedVariables.logshowblacklist, GF_SavedVariables.logshowbelowlevel, GF_SavedVariables.loghidemainframe, GF_SavedVariables.joinworld, GF_SavedVariables.showoriginalchat, GF_SavedVariables.usewhoongroups, GF_SavedVariables.errorfilter,
-	GF_SavedVariables.showpolitics, GF_SavedVariables.spamfilter, GF_SavedVariables.autoblacklist, GF_SavedVariables.playsounds, GF_SavedVariables.lfgauto}
+	GF_SavedVariables.showpolitics, GF_SavedVariables.spamfilter, GF_SavedVariables.autoblacklist, GF_SavedVariables.playsounds, GF_SavedVariables.lfgauto, GF_SavedVariables.showwhisperlogs,}
 	
 	local CheckButtonNames = { "GF_GroupsInChatCheckButton", "GF_GroupsInMinimapCheckButton", "GF_GroupsNewOnlyCheckButton", "GF_ShowChatCheckButton", "GF_ShowTradesCheckButton", "GF_ShowLootCheckButton", "GF_AutoFilterCheckButton", "GF_GroupsFrameShowTranslateCheckButton",
 	"GF_GroupsFrameShowDungeonCheckButton", "GF_GroupsFrameShowRaidCheckButton", "GF_GroupsFrameShowQuestCheckButton", "GF_GroupsFrameShowOtherCheckButton", "GF_GroupsFrameShowLFMCheckButton", "GF_GroupsFrameShowLFGCheckButton", "GF_LogShowGroups",
 	"GF_LogShowFiltered", "GF_LogShowChat", "GF_LogShowTrades", "GF_LogShowPolitics", "GF_LogShowLoot", "GF_LogShowSpam", "GF_LogShowBlacklist", "GF_LogShowBelowLevel", "GF_LogHideMainFrame", "GF_FrameJoinWorldCheckButton",	"GF_FrameShowOriginalChatCheckButton",
-	"GF_FrameUseWhoOnGroupsCheckButton", "GF_FrameErrorFilterCheckButton", "GF_FrameShowPoliticsCheckButton", "GF_FrameSpamFilterCheckButton", "GF_FrameAutoBlacklistCheckButton", "GF_PlaySoundOnResultsCheckButton", "GF_GroupAutoCheckButton",}
-	for i=1, 33 do getglobal(CheckButtonNames[i]):SetChecked(CheckButtonVariablesToSet[i]) end
+	"GF_FrameUseWhoOnGroupsCheckButton", "GF_FrameErrorFilterCheckButton", "GF_FrameShowPoliticsCheckButton", "GF_FrameSpamFilterCheckButton", "GF_FrameAutoBlacklistCheckButton", "GF_PlaySoundOnResultsCheckButton", "GF_GroupAutoCheckButton", "GF_LogShowWhisperHistory", }
+	for i=1, 34 do getglobal(CheckButtonNames[i]):SetChecked(CheckButtonVariablesToSet[i]) end
 	
 	local TextToSet = { GF_FilterLevelNotes[GF_SavedVariables.FilterLevel], GF_SavedVariables.searchtext, GF_SavedVariables.searchlfgtext, GF_SavedVariables.searchlfgwhispertext }
 	local TextNames = { "GF_FilterLevelSliderNote", "GF_GroupsFrameDescriptionEditBox", "GF_LFGDescriptionEditBox", "GF_LFGWhoWhisperEditBox" }
@@ -704,12 +705,22 @@ function GF_LoadSettings()
 	GF_MainFrame:SetAlpha(GF_FrameTransparencySlider:GetValue());
 	GF_MainFrame:SetScale(GF_UIScaleSlider:GetValue());
 	if GF_SavedVariables.MainFrameXPos then GF_MainFrame:SetPoint("TOPLEFT",UIParent,"TOPLEFT", GF_SavedVariables.MainFrameXPos, GF_SavedVariables.MainFrameYPos) else GF_SavedVariables.MainFrameXPos = 0 GF_SavedVariables.MainFrameXPos = 0 end
-	GF_ToggleHideMainFrame()
+	if GF_SavedVariables.loghidemainframe then GF_MainFrame:Show() GF_ToggleHideMainFrame() end
+	GF_ToggleWhisperFrame()
 	GF_DisplayLog()
 	GF_UpdateFriendsAndGuildiesList()
 	GF_WhisperHistoryUpdateFrame()
 
 	if (GF_RealmName == "Nordanaar" or GF_RealmName == "Tel'Abim") then GF_AddTurtleWoWDungeonsRaids(); GF_WhoCooldownTime = 30; end
+end
+function GF_ToggleWhisperFrame()
+	if GF_SavedVariables.showwhisperlogs then
+		GF_LogFrameInternalFrame:SetWidth(568)
+		GF_WhisperHistoryButtonLog:Show()
+	else
+		GF_LogFrameInternalFrame:SetWidth(640)
+		GF_WhisperHistoryButtonLog:Hide()
+	end
 end
 function GF_ToggleHideMainFrame()
 	if GF_SavedVariables.loghidemainframe then
@@ -732,7 +743,7 @@ function GF_ToggleHideMainFrame()
 			if word == "GF_MainFrame" then UISpecialFrames[id] = nil break end
 		end
 	else
-		for i=1, 35 do
+		for i=1, 37 do
 			getglobal(ThingsToHide[i]):Show()
 		end
 		GF_MainFrame:SetAlpha(GF_SavedVariables.MainFrameTransparency)
@@ -744,7 +755,7 @@ function GF_ToggleHideMainFrame()
 		GF_LogFrameInternalFrame:SetBackdropColor(.14,.14,.14,1)
 		GF_LogEditBox:SetPoint("BOTTOMLEFT",0,-50)
 		GF_LogEditBox:SetPoint("BOTTOMRIGHT",0,-70)
-		tinsert(UISpecialFrames,GF_MainFrame);
+		tinsert(UISpecialFrames,GF_MainFrame:GetName())
 	end
 end
 function GF_GetNumGroupMembers()
@@ -1594,7 +1605,6 @@ function GF_CheckForGroups(arg1,arg2,event)
 			PlaySoundFile( "Sound\\Interface\\PickUp\\PutDownRing.wav" );
 		end
 	end
-	if event == "CHAT_MSG_SAY" or event == "CHAT_MSG_YELL" then foundInGroup = nil end
 	return GF_CheckForSpam(arg1,arg2,foundInGroup) or foundInGroup;
 end
 function GF_CheckForSpam(arg1,arg2,foundInGroup)
@@ -1615,7 +1625,7 @@ function GF_CheckForSpam(arg1,arg2,foundInGroup)
 			end
 			local sniprandom = math.random(4+string.len(arg1)/4)
 			if not GF_PlayerMessages[arg2] then
-				GF_PlayerMessages[arg2] = { [1] = time(), [2] = string.sub(arg1,sniprandom,math.floor(sniprandom*3) + 8), [3] = string.sub(arg1,sniprandom,math.floor(sniprandom*3) + 12) }
+				GF_PlayerMessages[arg2] = { [1] = time(), [2] = string.sub(arg1,sniprandom,math.floor(sniprandom*3) + 8), [3] = "ZZZzzz123654" }
 			else
 				if string.find(arg1,GF_PlayerMessages[arg2][2],1,true) and string.find(arg1,GF_PlayerMessages[arg2][3],1,true) then -- Found Spammer
 					if GF_SavedVariables.autoblacklist and not GF_BlackList[GF_RealmName][arg2] and string.len(arg1) > 120 then
@@ -1648,7 +1658,8 @@ function GF_CheckForSpam(arg1,arg2,foundInGroup)
 		end
 	end
 end
-function GF_CheckForTradesAndChat(arg1)
+function GF_CheckForTradesAndChat(arg1,event)
+	if not event == "CHAT_MSG_CHANNEL" then return nil,arg1 end
 	for i=1, getn(GF_TRIGGER_LIST.TRADE[1]) do
 		if string.find(string.lower(arg1), GF_TRIGGER_LIST.TRADE[1][i]) then
 			return 4;
@@ -1671,7 +1682,7 @@ function GF_FindGroupsAndDisplayCustomChatMessages(event,arg1,arg2,arg9)
 		elseif event == "CHAT_MSG_SYSTEM" then
 			return GF_CheckErrorFilter(arg1), GF_CleanUpMessagesOfBadLinks(arg1);
 		end
-	elseif arg2 == UnitName("player") then 
+	elseif arg2 == UnitName("player") then
 		if event == "CHAT_MSG_CHANNEL" and (not GF_PreviousMessage[arg2] or not (GF_PreviousMessage[arg2][1] == arg1 and GF_PreviousMessage[arg2][2] > time())) then
 			GF_PreviousMessage[arg2] = {arg1,time() + .1, nil}
 			return 12,arg1
@@ -1686,7 +1697,7 @@ function GF_FindGroupsAndDisplayCustomChatMessages(event,arg1,arg2,arg9)
 	elseif not GF_PreviousMessage[arg2] or not (GF_PreviousMessage[arg2][1] == arg1 and GF_PreviousMessage[arg2][2] > time())then
 		GF_PreviousMessage[arg2] = {arg1,time() + 60, nil} -- [1]arg1... [2]time of last message... [3]whether to block message
 		arg1 = GF_CleanUpMessagesOfBadLinks(arg1)
-		return GF_CheckForPoliticsAndPreviousBlacklistSpam(arg1,arg2) or GF_CheckForGroups(arg1,arg2,event) or GF_CheckForTradesAndChat(arg1), arg1;
+		return GF_CheckForPoliticsAndPreviousBlacklistSpam(arg1,arg2) or GF_CheckForGroups(arg1,arg2,event) or GF_CheckForTradesAndChat(arg1,event), arg1;
 	else
 		return 10, arg1;
 	end
@@ -1711,7 +1722,7 @@ function GF_ShowGroupsOnMinimap(arg1,arg2)
 			else
 				getglobal("GF_MinimapMessageFrameA"..i):AddMessage("|cff".."ffffff".."|Hplayer:"..arg2.."|h "..arg2.."|h|r", 1, 0.8, 0);
 			end
-			getglobal("GF_MinimapMessageFrameB"..i):AddMessage("|cff".."bbffbb"..arg1.. "|r", 1, 0.8, 0);
+			getglobal("GF_MinimapMessageFrameB"..i):AddMessage("|cff".."bbffbb"..string.sub(arg1,1,120).. "|r", 1, 0.8, 0);
 			GF_MiniMapMessages[i] = time() + 20;
 			return
 		end
@@ -1732,7 +1743,7 @@ function GF_GetGroupInformation(arg1,arg2)
 
 	for i = 1, getn(GF_MessageList[GF_RealmName]) do
 		if arg2 == GF_MessageList[GF_RealmName][i].op then
-			if GF_MessageList[GF_RealmName][i].time + GF_SavedVariables.showgroupsnewonlytime*60 < time() then return 2, entry; end
+			if GF_SavedVariables.showgroupsnewonly and GF_MessageList[GF_RealmName][i].time + GF_SavedVariables.showgroupsnewonlytime*60 < time() then table.remove(GF_MessageList[GF_RealmName], i); return 2, entry; end
 			table.remove(GF_MessageList[GF_RealmName], i);
 			break;
 		end
