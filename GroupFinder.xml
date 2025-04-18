@@ -2477,12 +2477,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				<Frames>
 					<Frame name="$parentInternalFrame" inherits="GF_OptionFrameBoxTemplate">
 						<Size>
-							<AbsDimension x="640" y="435"/>
+							<AbsDimension x="669" y="435"/>
 						</Size>
 						<Anchors>
 							<Anchor point="TOPLEFT">
 								<Offset>
-									<AbsDimension x="32" y="-64"/>
+									<AbsDimension x="29" y="-64"/>
 								</Offset>
 							</Anchor>
 						</Anchors>
@@ -2855,7 +2855,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Anchors>
 									<Anchor point="RIGHT" relativePoint="LEFT">
 										<Offset>
-											<AbsDimension x="2" y="50"/>
+											<AbsDimension x="3" y="50"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -3240,7 +3240,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnLoad>
-										getglobal(this:GetName().."Text"):SetText(GF_SPAM_FILTER_TIMER.." -"..this:GetValue()..GF_MINUTES);
+										getglobal(this:GetName().."Text"):SetText(GF_SPAM_FILTER_TIMER.." - "..this:GetValue()..GF_MINUTES);
 										getglobal(this:GetName().."High"):SetText("60");
 										getglobal(this:GetName().."Low"):SetText("1");
 										this:SetMinMaxValues(1,60);
@@ -3248,7 +3248,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 									<OnValueChanged>
 										GF_SavedVariables.spamfilterduration = this:GetValue();
-										getglobal(this:GetName().."Text"):SetText(GF_SPAM_FILTER_TIMER.." -"..this:GetValue()..GF_MINUTES);
+										getglobal(this:GetName().."Text"):SetText(GF_SPAM_FILTER_TIMER.." - "..this:GetValue()..GF_MINUTES);
 									</OnValueChanged>
 								</Scripts>
 							</Slider>
@@ -3329,7 +3329,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnLoad>
-										getglobal(this:GetName().."Text"):SetText(GF_GROUP_LIST_DURATION.." -"..this:GetValue()..GF_MINUTES);
+										getglobal(this:GetName().."Text"):SetText(GF_GROUP_LIST_DURATION.." - "..this:GetValue()..GF_MINUTES);
 										getglobal(this:GetName().."High"):SetText("60");
 										getglobal(this:GetName().."Low"):SetText("2");
 										this:SetMinMaxValues(2,60);
@@ -3337,7 +3337,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 									<OnValueChanged>
 										GF_SavedVariables.grouplistingduration = this:GetValue();
-										getglobal(this:GetName().."Text"):SetText(GF_GROUP_LIST_DURATION.." -"..this:GetValue()..GF_MINUTES);
+										getglobal(this:GetName().."Text"):SetText(GF_GROUP_LIST_DURATION.." - "..this:GetValue()..GF_MINUTES);
 									</OnValueChanged>
 								</Scripts>
 							</Slider>
@@ -3379,7 +3379,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnLoad>
-										getglobal(this:GetName().."Text"):SetText(GF_NEW_GROUP_TIMEOUT.." -"..this:GetValue()..GF_MINUTES);
+										getglobal(this:GetName().."Text"):SetText(GF_NEW_GROUP_TIMEOUT.." - "..this:GetValue()..GF_MINUTES);
 										getglobal(this:GetName().."High"):SetText("30");
 										getglobal(this:GetName().."Low"):SetText("1");
 										this:SetMinMaxValues(1,30);
@@ -3387,7 +3387,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 									<OnValueChanged>
 										GF_SavedVariables.showgroupsnewonlytime = this:GetValue();
-										getglobal(this:GetName().."Text"):SetText(GF_NEW_GROUP_TIMEOUT.." -"..this:GetValue()..GF_MINUTES);
+										getglobal(this:GetName().."Text"):SetText(GF_NEW_GROUP_TIMEOUT.." - "..this:GetValue()..GF_MINUTES);
 									</OnValueChanged>
 								</Scripts>
 							</Slider>

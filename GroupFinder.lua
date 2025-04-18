@@ -151,7 +151,7 @@ function GF_OnLoad()
 		if not filteredChat then
 			old_ChatFrame_OnEvent(event);
 		else
-			if filteredChat ~= 10 then -- [1]Group,[2]New,[3]Chat,[4]Trades,[5]Politics,[6]Loot,[7]Spam,[8]Blacklist,[9]BelowLvl, [11]FilteredGroup, [12]Myself
+			if filteredChat ~= 99 then -- [1]Group,[2]New,[3]Chat,[4]Trades,[5]Politics,[6]Loot,[7]Spam,[8]Blacklist,[9]BelowLvl, [11]FilteredGroup, [12]Myself
 				if arg2 == "" then arg2 = "SYSTEM" end
 				if not GF_PreviousMessage[arg2][3] or GF_PreviousMessage[arg2][3] == 1 then
 					if filteredChat == 12 or ((GF_SavedVariables.showgroupsinchat or GF_SavedVariables.showgroupsinminimap) and (filteredChat == 1 or filteredChat == 2)) or (GF_SavedVariables.showgroupsnewonly and filteredChat == 2) or (GF_SavedVariables.showchattexts and filteredChat == 3)
@@ -238,7 +238,7 @@ function GF_OnLoad()
 	end
 end
 function GF_SendMessageFromLogEditBox()
-	if not GFSendMessageFromLogEditBoxIsAWhisper() then
+	if not GF_SendMessageFromLogEditBoxIsAWhisper() then
 		if GF_WhisperLogCurrentButtonID == 0 then
 			SendChatMessage(GF_LogEditBox:GetText(), "CHANNEL", nil, GetChannelName(GF_CHANNEL_NAME));
 		else
@@ -247,7 +247,7 @@ function GF_SendMessageFromLogEditBox()
 		GF_LogEditBox:SetText("")
 	end
 end
-function GFSendMessageFromLogEditBoxIsAWhisper()
+function GF_SendMessageFromLogEditBoxIsAWhisper()
 	for name,message in string.gfind(GF_LogEditBox:GetText(), "/w%s([a-zA-Z][a-zA-Z]+)%s(.*)") do
 		SendChatMessage(message,"WHISPER",nil,name)
 		GF_LogEditBox:SetText("")
@@ -645,12 +645,12 @@ function GF_LoadSettings()
 
 	if (GF_RealmName == "Nordanaar" or GF_RealmName == "Tel'Abim") then GF_AddTurtleWoWDungeonsRaids(); GF_WhoCooldownTime = 30; end
 end
-function GF_ToggleWhisperFrame()
+function GF_ToggleWhisperFrame() -- TODO The hideframe size will change by which buttons are pressed.
 	if GF_SavedVariables.showwhisperlogs then
 		GF_LogFrameInternalFrame:SetWidth(568)
 		GF_WhisperHistoryButtonLog:Show()
 	else
-		GF_LogFrameInternalFrame:SetWidth(640)
+		GF_LogFrameInternalFrame:SetWidth(669)
 		GF_WhisperHistoryButtonLog:Hide()
 	end
 end
@@ -889,8 +889,10 @@ function GF_UpdateResults()
 				else getglobal(c.."MoreRightLabel"):SetText(GF_FOUND..GF_TIME_JUST_NOW); end
 				
 				if entry.who then
+					local bottomtext;
+					if entry.who[3] ~= "" then bottomtext = ", " else bottomtext = "" end
 					getglobal(c.."NameLabel"):SetText("|cff"..(GF_ClassColors[entry.who[2]] or "ffffff")..entry.op.."|r: "..entry.message);
-					getglobal(c.."MoreLabel"):SetText("Level "..entry.who[1].." "..GF_Classes[entry.who[2]].." "..entry.who[3]);
+					getglobal(c.."MoreLabel"):SetText("Level "..entry.who[1].." "..GF_Classes[entry.who[2]]..bottomtext..entry.who[3]);
 				else
 					getglobal(c.."NameLabel"):SetText(entry.op..": "..entry.message);
 					getglobal(c.."MoreLabel"):SetText("");
@@ -975,7 +977,7 @@ function GF_WhisperReceivedAddToWhisperHistoryList(message,name,sent) -- TODO no
 		if GF_FriendsAndGuildies[name] then GF_WhisperLogData[name].priority = true; end
 	end
 	if sent then
-		message = "|cffff80ff["..date("%m/%d").."] ["..date("%H:%M").."]|r ".."[To] ".."|cff"..GF_ClassColors[UnitClass("player")].."[|Hplayer:"..UnitName("player").."|h"..UnitName("player")..", "..UnitLevel("player").."|h|r]: "..message
+		message = "|cffff80ff["..date("%m/%d").."] ["..date("%H:%M").."]|r ".."[To] ".."|cff"..GF_ClassColors[GF_WhoTable[GF_RealmName][UnitName("player")][2]].."[|Hplayer:"..UnitName("player").."|h"..UnitName("player")..", "..UnitLevel("player").."|h|r]: "..message
 	else
 		if GF_WhoTable[GF_RealmName][name] and GF_WhoTable[GF_RealmName][name][1] then 
 			message = "|cffff80ff["..date("%m/%d").."] ["..date("%H:%M").."]|r ".."[From] ".."|cff"..GF_ClassColors[GF_WhoTable[GF_RealmName][name][2]].."[|Hplayer:"..name.."|h"..name..", "..GF_WhoTable[GF_RealmName][name][1].."|h|r]: "..message
@@ -1509,7 +1511,7 @@ function GF_CheckForPoliticsAndPreviousBlacklistSpam(arg1,arg2)
 		end
 	end
 end
-function GF_CheckForGroups(arg1,arg2,event)
+function GF_CheckForGroups(arg1,arg2,event) -- TODO Add a type for non-channel? Say/Yell/Guild? Otherwise won't show on logs.
 	local whoData = GF_GetWhoData(arg2,foundInGroup)
 	local foundInGroup,entry = GF_GetGroupInformation(arg1,arg2);
 	if foundInGroup then
@@ -1526,7 +1528,7 @@ function GF_CheckForGroups(arg1,arg2,event)
 end
 function GF_CheckForSpam(arg1,arg2,foundInGroup)
 	if not GF_PlayersCurrentlyInGroup[arg2] and not GF_FriendsAndGuildies[arg2] then
-		if (GF_WhoTable[GF_RealmName][arg2] and tonumber(GF_WhoTable[GF_RealmName][arg2][1]) < GF_SavedVariables.blockmessagebelowlevel) and GF_WhoTable[GF_RealmName][arg2].t + 21600 > time() then
+		if (GF_WhoTable[GF_RealmName][arg2] and tonumber(GF_WhoTable[GF_RealmName][arg2][1]) < GF_SavedVariables.blockmessagebelowlevel) and GF_WhoTable[GF_RealmName][arg2].t + 21600 > time() then -- Block lowlevel
 			return 9;
 		end
 		if GF_SavedVariables.spamfilter and (not foundInGroup or string.len(arg1) > 50) then
@@ -1544,10 +1546,10 @@ function GF_CheckForSpam(arg1,arg2,foundInGroup)
 			if not GF_PlayerMessages[arg2] then
 				GF_PlayerMessages[arg2] = { [1] = time(), [2] = string.sub(arg1,sniprandom,math.floor(sniprandom*3) + 8), [3] = "ZZZzzz123654" }
 			else
-				if string.find(arg1,GF_PlayerMessages[arg2][2],1,true) and string.find(arg1,GF_PlayerMessages[arg2][3],1,true) then -- Found Spammer
+				if string.find(arg1,GF_PlayerMessages[arg2][2],1,true) and string.find(arg1,GF_PlayerMessages[arg2][3],1,true) then 																-- Found Spammer
 					if GF_SavedVariables.autoblacklist and not GF_BlackList[GF_RealmName][arg2] and string.len(arg1) > 120 then
 						if GF_WhoTable[GF_RealmName][arg2] and GF_WhoTable[GF_RealmName][arg2].t + 21600 > time() then
-							if tonumber(GF_WhoTable[GF_RealmName][arg2][1]) <= GF_SavedVariables.autoblacklistminlevel then
+							if tonumber(GF_WhoTable[GF_RealmName][arg2][1]) <= GF_SavedVariables.autoblacklistminlevel then																			-- Blacklist if below level filter
 								table.insert(GF_BlackList[GF_RealmName], 1, { arg2, "("..GF_WhoTable[GF_RealmName][arg2][1]..") "..arg1 })
 								GF_BlackList[GF_RealmName][arg2] = true;
 								GF_UpdateBlackListItems()
@@ -1566,7 +1568,7 @@ function GF_CheckForSpam(arg1,arg2,foundInGroup)
 						end
 						return 7
 					end
-				elseif string.find(arg1,string.sub(arg1,1,20),21, true) then -- Repeating the same message more than once
+				elseif string.find(arg1,string.sub(arg1,1,20),21, true) then 																														-- Repeating text in the same message
 					return 7
 				end
 				table.insert(GF_PlayerMessages[arg2],2, string.sub(arg1,math.floor(sniprandom/4),math.floor(sniprandom/4) + 50))
@@ -1590,7 +1592,7 @@ function GF_CheckForTradesAndChat(arg1,event)
 	end
 	return 3;
 end
-function GF_FindGroupsAndDisplayCustomChatMessages(event,arg1,arg2,arg9)
+function GF_FindGroupsAndDisplayCustomChatMessages(event,arg1,arg2,arg9) -- TODO add guild filtering support.
 	if not arg1 or not arg2 or not arg9 or event == "CHAT_MSG_WHISPER_INFORM" then
 		return nil,arg1;
 	elseif arg2 == "" then
@@ -1616,7 +1618,7 @@ function GF_FindGroupsAndDisplayCustomChatMessages(event,arg1,arg2,arg9)
 		arg1 = GF_CleanUpMessagesOfBadLinks(arg1)
 		return GF_CheckForPoliticsAndPreviousBlacklistSpam(arg1,arg2) or GF_CheckForGroups(arg1,arg2,event) or GF_CheckForTradesAndChat(arg1,event), arg1;
 	else
-		return 10, arg1;
+		return 99, arg1;
 	end
 end
 function GF_CleanUpMessagesOfBadLinks(arg1)
