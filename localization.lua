@@ -526,20 +526,10 @@ GF_ErrorFilters = {
 	[8]	= "is under attack!",
 }
 GF_LootFilters = {
-	[1]	= "Your share of the loot is", --always filter these
-	[2]	= "You loot",
-	[3]	= "Greed Roll",
-	[4]	= "Need Roll",
-	[5]	= "You have selected",
-	[6]	= "You passed on",
-	[7] = "experience",
-	[8] = "reputation",
-	[9] = "You have been awarded ",
-	[10]= "9d9d9d", -- grey quality filter
-
-	[11]= "has selected", -- filter these if green quality or lower
-	[12]= "passed on",
-	[13]= "won",
+	[1] = " has selected ", -- filter these if green quality or lower
+	[2] = " passed on: ",
+	[3] = " won: ",
+	
 }
 local GF_TurtleTriggerListDungeons = {
 		["CRESCENTGROVE"]	= { 36, "crescent", "grove", "cg", },
