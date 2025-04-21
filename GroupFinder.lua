@@ -624,7 +624,7 @@ function GF_OnEvent(event)
 			local _,_,groupSize = tonumber(string.find(GF_SavedVariables.lfgsize, "(%d+)"))
 			if groupSize and GF_GetNumGroupMembers() >= groupSize then GF_TurnOffAnnounce(GF_NO_MORE_PLAYERS_NEEDED) end
 		end
-		if GF_SavedVariables.lfgauto then GF_FixLFGStrings() end
+		if GF_SavedVariables.lfgauto then GF_FixLFGStrings(true) end
 		GF_UpdatePlayersInGroupList()
 	elseif (event == "GUILD_ROSTER_UPDATE" and GetNumGuildMembers() ~= GF_CurrentNumGuildies) then 
 		GF_UpdateGuildiesList()
@@ -1491,80 +1491,86 @@ function GF_FindDungeonLevel()
 		end
     end
 end
-function GF_FixLFGStrings()
-	local foundLFM;
-	local foundDungeonRaid = {}
-	local foundRoles = {}
-	local foundStartOfText;
-	local endOfFilter = 0
-	local _,_,maxGroupSize = string.find(GF_SavedVariables.lfgsize, "(%d+)")
+function GF_FixLFGStrings(lfmOnly)
 	GF_SavedVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText()
 	GF_SavedVariables.searchlfgtext = gsub(GF_SavedVariables.searchlfgtext, "LF%d+M", "LFM")
-
-	for i=1,getn(GF_BUTTONS_LIST.LFGLFM) do
-		foundStartOfText = string.find(GF_SavedVariables.searchlfgtext, GF_BUTTONS_LIST.LFGLFM[i][1])
-		if foundStartOfText then
-			if i == 1 then
-				foundLFM = 1
-			elseif not foundLFM then
-				foundLFM = GF_BUTTONS_LIST.LFGLFM[i][1];
+	local _,_,maxGroupSize = string.find(GF_SavedVariables.lfgsize, "(%d+)")
+	if not lfmOnly then
+		local foundLFM;
+		local foundDungeonRaid = {}
+		local foundRoles = {}
+		local foundStartOfText;
+		local endOfFilter = 0
+		for i=1,getn(GF_BUTTONS_LIST.LFGLFM) do
+			foundStartOfText = string.find(GF_SavedVariables.searchlfgtext, GF_BUTTONS_LIST.LFGLFM[i][1])
+			if foundStartOfText then
+				if i == 1 then
+					foundLFM = 1
+				elseif not foundLFM then
+					foundLFM = GF_BUTTONS_LIST.LFGLFM[i][1];
+				end
+				if foundStartOfText + string.len(GF_BUTTONS_LIST.LFGLFM[i][1])-1 > endOfFilter then endOfFilter = foundStartOfText + string.len(GF_BUTTONS_LIST.LFGLFM[i][1])-1 end
 			end
-			if foundStartOfText + string.len(GF_BUTTONS_LIST.LFGLFM[i][1])-1 > endOfFilter then endOfFilter = foundStartOfText + string.len(GF_BUTTONS_LIST.LFGLFM[i][1])-1 end
 		end
-	end
-	for i=1,getn(GF_BUTTONS_LIST.LFGRole) do
-		foundStartOfText = string.find(GF_SavedVariables.searchlfgtext, GF_BUTTONS_LIST.LFGRole[i][1])
-		if foundStartOfText then
-			if foundStartOfText + string.len(GF_BUTTONS_LIST.LFGRole[i][1])-1 > endOfFilter then endOfFilter = foundStartOfText + string.len(GF_BUTTONS_LIST.LFGRole[i][1])-1 end
-			table.insert(foundRoles,GF_BUTTONS_LIST.LFGRole[i][1]);
+		for i=1,getn(GF_BUTTONS_LIST.LFGRole) do
+			foundStartOfText = string.find(GF_SavedVariables.searchlfgtext, GF_BUTTONS_LIST.LFGRole[i][1])
+			if foundStartOfText then
+				if foundStartOfText + string.len(GF_BUTTONS_LIST.LFGRole[i][1])-1 > endOfFilter then endOfFilter = foundStartOfText + string.len(GF_BUTTONS_LIST.LFGRole[i][1])-1 end
+				table.insert(foundRoles,GF_BUTTONS_LIST.LFGRole[i][1]);
+			end
 		end
-    end
-	for i=1,getn(GF_BUTTONS_LIST.LFGDungeon) do
-		foundStartOfText = string.find(GF_SavedVariables.searchlfgtext, GF_BUTTONS_LIST.LFGDungeon[i][1]) or string.find(GF_SavedVariables.searchlfgtext, GF_BUTTONS_LIST.LFGDungeon[i][4])
-		if foundStartOfText then
-			if foundStartOfText + string.len(GF_BUTTONS_LIST.LFGDungeon[i][1])-1 > endOfFilter then endOfFilter = foundStartOfText + string.len(GF_BUTTONS_LIST.LFGDungeon[i][1])-1 end
-			maxGroupSize = 5;
-			table.insert(foundDungeonRaid,GF_BUTTONS_LIST.LFGDungeon[i][1]);
+		for i=1,getn(GF_BUTTONS_LIST.LFGDungeon) do
+			foundStartOfText = string.find(GF_SavedVariables.searchlfgtext, GF_BUTTONS_LIST.LFGDungeon[i][1]) or string.find(GF_SavedVariables.searchlfgtext, GF_BUTTONS_LIST.LFGDungeon[i][4])
+			if foundStartOfText then
+				if foundStartOfText + string.len(GF_BUTTONS_LIST.LFGDungeon[i][1])-1 > endOfFilter then endOfFilter = foundStartOfText + string.len(GF_BUTTONS_LIST.LFGDungeon[i][1])-1 end
+				maxGroupSize = 5;
+				table.insert(foundDungeonRaid,GF_BUTTONS_LIST.LFGDungeon[i][1]);
+			end
 		end
-	end
-	for i=1,getn(GF_BUTTONS_LIST.LFGRaid) do
-		foundStartOfText = string.find(GF_SavedVariables.searchlfgtext, GF_BUTTONS_LIST.LFGRaid[i][1]) or string.find(GF_SavedVariables.searchlfgtext, GF_BUTTONS_LIST.LFGRaid[i][4])
-		if foundStartOfText then
-			if foundStartOfText + string.len(GF_BUTTONS_LIST.LFGRaid[i][1])-1 > endOfFilter then endOfFilter = foundStartOfText + string.len(GF_BUTTONS_LIST.LFGRaid[i][1])-1 end
-			maxGroupSize = GF_BUTTONS_LIST.LFGRaid[i][7];
-			table.insert(foundDungeonRaid,GF_BUTTONS_LIST.LFGRaid[i][1]);
+		for i=1,getn(GF_BUTTONS_LIST.LFGRaid) do
+			foundStartOfText = string.find(GF_SavedVariables.searchlfgtext, GF_BUTTONS_LIST.LFGRaid[i][1]) or string.find(GF_SavedVariables.searchlfgtext, GF_BUTTONS_LIST.LFGRaid[i][4])
+			if foundStartOfText then
+				if foundStartOfText + string.len(GF_BUTTONS_LIST.LFGRaid[i][1])-1 > endOfFilter then endOfFilter = foundStartOfText + string.len(GF_BUTTONS_LIST.LFGRaid[i][1])-1 end
+				maxGroupSize = GF_BUTTONS_LIST.LFGRaid[i][7];
+				table.insert(foundDungeonRaid,GF_BUTTONS_LIST.LFGRaid[i][1]);
+			end
 		end
-	end
-	local newText = ""
-	if foundLFM == 1 then
-		if GF_SavedVariables.lfgauto then
-			newText = "LF"..maxGroupSize-GF_GetNumGroupMembers().."M"
+		local newText = ""
+		if foundLFM == 1 then
+			if GF_SavedVariables.lfgauto then
+				newText = "LF"..maxGroupSize-GF_GetNumGroupMembers().."M"
+			else
+				newText = "LFM"
+			end
+			if strlen(newText) > 0 and getn(foundDungeonRaid) > 0 then newText = newText.." for " else newText = newText.." " end
+			for i=1, getn(foundDungeonRaid) do
+				newText = newText..foundDungeonRaid[i].."/"
+			end
+			if strlen(newText) > 0 and getn(foundRoles) > 0 then newText = newText.." need " else newText = newText.." " end
+			for i=1, getn(foundRoles) do
+				newText = newText..foundRoles[i].."/"
+			end
 		else
-			newText = "LFM"
+			if foundLFM or getn(foundRoles) > 0 then newText = UnitLevel("player").." " end
+			for i=1, getn(foundRoles) do
+				newText = newText..foundRoles[i].."/"
+			end
+			if foundLFM then
+				newText = " "..newText.." "..foundLFM
+			end
+			if strlen(newText) > 0 and getn(foundDungeonRaid) > 0 then newText = newText.." for " else newText = newText.." " end
+			for i=1, getn(foundDungeonRaid) do
+				newText = newText..foundDungeonRaid[i].."/"
+			end
 		end
-		if strlen(newText) > 0 and getn(foundDungeonRaid) > 0 then newText = newText.." for " else newText = newText.." " end
-		for i=1, getn(foundDungeonRaid) do
-			newText = newText..foundDungeonRaid[i].."/"
-		end
-		if strlen(newText) > 0 and getn(foundRoles) > 0 then newText = newText.." need " else newText = newText.." " end
-		for i=1, getn(foundRoles) do
-			newText = newText..foundRoles[i].."/"
-		end
+		GF_SavedVariables.searchlfgtext = gsub(gsub(gsub(gsub(gsub(gsub(newText..string.sub(GF_SavedVariables.searchlfgtext, endOfFilter+1), "[/ ]+$", ""), "^%s+", ""), "/%s+"," "),"%s/", ""),"//+", ""),"%s%s+", " ")
+		getglobal(GF_LFGDescriptionEditBox:GetName()):SetText(GF_SavedVariables.searchlfgtext);
 	else
-		if foundLFM or getn(foundRoles) > 0 then newText = UnitLevel("player").." " end
-		for i=1, getn(foundRoles) do
-			newText = newText..foundRoles[i].."/"
-		end
-		if foundLFM then
-			newText = " "..newText.." "..foundLFM
-		end
-		if strlen(newText) > 0 and getn(foundDungeonRaid) > 0 then newText = newText.." for " else newText = newText.." " end
-		for i=1, getn(foundDungeonRaid) do
-			newText = newText..foundDungeonRaid[i].."/"
+		if GF_SavedVariables.lfgauto and string.find(string.upper(GF_SavedVariables.searchlfgtext), "LF%d+M") then
+			local newText = "LF"..maxGroupSize-GF_GetNumGroupMembers().."M"
+			getglobal(GF_LFGDescriptionEditBox:GetName()):SetText(gsub(GF_SavedVariables.searchlfgtext, "[LFlf]+%d+[Mm]", newText))
 		end
 	end
-	GF_SavedVariables.searchlfgtext = gsub(gsub(gsub(gsub(gsub(gsub(newText..string.sub(GF_SavedVariables.searchlfgtext, endOfFilter+1), "[/ ]+$", ""), "^%s+", ""), "/%s+"," "),"%s/", ""),"//+", ""),"%s%s+", " ")
-	getglobal(GF_LFGDescriptionEditBox:GetName()):SetText(GF_SavedVariables.searchlfgtext);
 end
 function GF_CreateSearchDropdownButton(id, parent)
 	local button = CreateFrame("CheckButton", parent:GetName()..id, parent, "GF_AbstractLabelCheckButtonClick")
