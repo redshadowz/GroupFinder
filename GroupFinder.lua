@@ -117,7 +117,7 @@ GF_PlayerMessages							= {};
 GF_IncomingMessagePrune						= 0;
 local GF_PreviousMessage					= {};
 local GF_MiniMapMessages					= { 0,0,0,0,0,0 };
-local GF_LogMessageCodes = { GF_BLOCKED_GROUPS, GF_BLOCKED_NEW, GF_BLOCKED_CHAT, GF_BLOCKED_TRADES, GF_BLOCKED_POLITICS, GF_LOOT_MESSAGE, GF_BLOCKED_SPAM, GF_BLACKLIST_MESSAGE, GF_BLOCKED_BELOWLEVEL, "", GF_BLOCKED_FILTER, GF_LOG_ME }
+local GF_LogMessageCodes = { GF_BLOCKED_GROUPS, GF_BLOCKED_NEW, GF_BLOCKED_CHAT, GF_BLOCKED_TRADES, GF_BLOCKED_POLITICS, GF_LOOT_MESSAGE, GF_BLOCKED_SPAM, GF_BLACKLIST_MESSAGE, GF_BLOCKED_BELOWLEVEL, GF_LOG_ME, GF_BLOCKED_FILTER }
 local GF_ChatType							= 0; -- [1]Say[2]Yell[3]Whisper[4]Raid[5]Guild,
 local GF_WhisperLogCurrentButtonID			= 0;
 GF_WhisperLogData							= {}
@@ -301,7 +301,9 @@ function GF_AddLogMessage(arg1,filteredChat,add,arg2,arg8,arg9,event)
 		if GF_LootFilter[event] then
 			arg1 = "|cff"..GF_TextColors[event].."["..date("%H:%M").."] "..GF_LogMessageCodes[filteredChat]..": "..arg1.."|r"
 		elseif event ~= "CHAT_MSG_CHANNEL" and GF_TextColors[event] then
-			if GF_WhoTable[GF_RealmName][arg2] and GF_WhoTable[GF_RealmName][arg2][1] and arg2 ~= UnitName("player") then 
+			if arg2 == UnitName("player") then
+				arg1 = "|cff"..GF_TextColors[event].."["..date("%H:%M").."] "..GF_LogMessageCodes[filteredChat].."|r|cff"..(GF_ClassColors[GF_Classes[UnitClass("player")]] or "9d9d9d").."[|Hplayer:"..arg2.."|h"..arg2..", "..UnitLevel("player").."|h|r]:|cff"..GF_TextColors[event]..arg1.."|r"
+			elseif GF_WhoTable[GF_RealmName][arg2] and GF_WhoTable[GF_RealmName][arg2][1] then 
 				arg1 = "|cff"..GF_TextColors[event].."["..date("%H:%M").."] "..GF_LogMessageCodes[filteredChat].."|r|cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][arg2][2]] or "9d9d9d").."[|Hplayer:"..arg2.."|h"..arg2..", "..GF_WhoTable[GF_RealmName][arg2][1].."|h|r]:|cff"..GF_TextColors[event]..arg1.."|r"
 			else
 				arg1 = "|cff"..GF_TextColors[event].."["..date("%H:%M").."] "..GF_LogMessageCodes[filteredChat].."|r|cff9d9d9d[|Hplayer:"..arg2.."|h"..arg2.."|h|r]:|cff"..GF_TextColors[event]..arg1.."|r"
@@ -1813,8 +1815,8 @@ function GF_FindGroupsAndDisplayCustomChatMessages(event,arg1,arg2,arg9)
 		end
 		return nil,arg1;
 	elseif arg2 == UnitName("player") then
-		if not GF_PreviousMessage[arg2] then
-			GF_PreviousMessage[arg2] = true
+		if not GF_PreviousMessage[arg2] or not (GF_PreviousMessage[arg2][1] == arg1 and GF_PreviousMessage[arg2][2] > time()) then
+			GF_PreviousMessage[arg2] = {arg1,time() + .1, nil}
 			GF_AddLogMessage(arg1,10,true,arg2,arg8,arg9,event)
 		end
 		return nil,arg1
