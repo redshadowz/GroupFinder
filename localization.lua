@@ -21,6 +21,8 @@ GF_40_MAN				= " 40-man";
 -- Binding Names
 BINDING_HEADER_GF_MAIN_HEADER	= "Group Finder"; -- Main window title
 BINDING_NAME_GF_SHOW_FRAME		= "Toggle Main Window"; -- Bindings Name
+BINDING_NAME_GF_SHOW_LOG		= "Toggle Log Window";
+BINDING_NAME_GF_SHOW_GROUP		= "Toggle Group Window";
 
 -- Main window common buttons and texts
 GF_MAIN_HEADER	 		= "Group Finder"; -- Main window title
@@ -51,6 +53,7 @@ GF_LOG_SPAM				= "Spam"
 GF_LOG_BLACKLIST		= "Blacklist"
 GF_LOG_BELOWLEVEL		= "Level"
 GF_LOG_SHOWLOG			= "Show Log"
+GF_LOG_GUILDWHISPERS	= "Guild+Whisper"
 
 -- Search related buttons and texts
 GF_KEYWORDS_DROPDOWN_DESCR= "Keywords:"; -- Label to the left of the GF_GroupsFrameDescriptionEditBox on group frame
@@ -276,7 +279,10 @@ GF_FrameShowPoliticsCheckButton = {
 
 GF_LogShowGroups = {
 	tooltip1 		= "Show Groups",
-	tooltip2 		= "Logs will include [G] Groups [N] New Groups, [F] Groups that don't match your filters." },
+	tooltip2 		= "Logs will include [G] Groups and [N] New Groups." },
+GF_LogShowFiltered = {
+	tooltip1 		= "Show Filtered",
+	tooltip2 		= "Logs will include [F] Chat Messages." },
 GF_LogShowChat = {
 	tooltip1 		= "Show Chat",
 	tooltip2 		= "Logs will include [C] Chat Messages." },
@@ -305,9 +311,12 @@ GF_LogShowEditBox = {
 GF_LogHideMainFrame = {
 	tooltip1 		= "Toggles hiding Main Window",
 	tooltip2 		= "Hides the main window, most buttons, and makes this frame click-through." },
+GF_LogHideMainFrameHeight = {
+	tooltip1 		= "Toggles entry display height",
+	tooltip2 		= "Reduces the height of the group list and log." },
 GF_LogShowWhisperHistory = {
-	tooltip1 		= "Toggles the Whisper History Window",
-	tooltip2 		= "This will show your whisper history(when I get done programming it)." },
+	tooltip1 		= "Toggles the Guild/Whisper History Window",
+	tooltip2 		= "This shows a list of recent whisper and guild activity." },
 };
 GF_TRIGGER_LIST = {
 	["LFM"] = { "lf%s", "lf%d", "lfm", "flm", "lf.m", "lf..m", "looking for more", "need more", "looking for .* more", "need %d* dps","need %d* heal", "need %d* tank", "need heal", "need tank", "need dps",

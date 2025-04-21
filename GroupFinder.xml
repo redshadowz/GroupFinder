@@ -733,7 +733,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 		</OnDragStop>
 		</Scripts>
 	</Button>
-	<Frame name="GF_MainFrame" movable="true" toplevel="true" enableMouse="true" hidden="true" frameStrata="DIALOG" parent="UIParent">
+	<Frame name="GF_MainFrame" movable="true" toplevel="true" enableMouse="true" hidden="true" frameStrata="MEDIUM" parent="UIParent">
 		<Size>
 			<AbsDimension x="700" y="500"/>
 		</Size>
@@ -885,15 +885,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						GF_SavedVariables.showgroupsinchat = this:GetChecked();
 						GF_SavedVariables.showgroupsnewonly = GF_GroupsNewOnlyCheckButton:SetChecked(false);
 					</OnClick>
-					<OnEnter>
-						GF_ShowTooltip(this);
-					</OnEnter>
-					<OnLeave>
-						GameTooltip:Hide();
-					</OnLeave>
 					<OnLoad>
 						getglobal(this:GetName().."TextLabel"):SetText(GF_CHAT);
-						getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()+5);
+						getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()*1.1);
 						getglobal(this:GetName().."TextLabel"):SetPoint("LEFT", "GF_GroupsInChatCheckButton", "RIGHT", 0, 0);
 					</OnLoad>
 				</Scripts>
@@ -919,7 +913,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLeave>
 					<OnLoad>
 						getglobal(this:GetName().."TextLabel"):SetText(GF_NEW_ONLY);
-						getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()+5);
+						getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()*1.1);
 						getglobal(this:GetName().."TextLabel"):SetPoint("LEFT", "GF_GroupsNewOnlyCheckButton", "RIGHT", 0, 0);
 					</OnLoad>
 				</Scripts>
@@ -944,7 +938,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLeave>
 					<OnLoad>
 						getglobal(this:GetName().."TextLabel"):SetText(GF_MINIMAP);
-						getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()+5);
+						getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()*1.1);
 						getglobal(this:GetName().."TextLabel"):SetPoint("LEFT", "GF_GroupsInMinimapCheckButton", "RIGHT", 0, 0);
 					</OnLoad>
 				</Scripts>
@@ -969,7 +963,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLeave>
 					<OnLoad>
 						getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_CHAT);
-						getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()+5);
+						getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()*1.1);
 						getglobal(this:GetName().."TextLabel"):SetPoint("LEFT", "GF_ShowChatCheckButton", "RIGHT", 0, 0);
 					</OnLoad>
 				</Scripts>
@@ -994,7 +988,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLeave>
 					<OnLoad>
 						getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_TRADES);
-						getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()+5);
+						getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()*1.1);
 						getglobal(this:GetName().."TextLabel"):SetPoint("LEFT", "GF_ShowTradesCheckButton", "RIGHT", 0, 0);
 					</OnLoad>
 				</Scripts>
@@ -1019,7 +1013,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLeave>
 					<OnLoad>
 						getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_LOOT);
-						getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()+5);
+						getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()*1.1);
 						getglobal(this:GetName().."TextLabel"):SetPoint("LEFT", "GF_ShowLootCheckButton", "RIGHT", 0, 0);
 					</OnLoad>
 				</Scripts>
@@ -1044,7 +1038,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnClick>
 					<OnLoad>
 						getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_POLITICS);
-						getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()+5);
+						getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()*1.1);
 						getglobal(this:GetName().."TextLabel"):SetPoint("LEFT", "GF_FrameShowPoliticsCheckButton", "RIGHT", 0, 0);
 					</OnLoad>
 				</Scripts>
@@ -1204,7 +1198,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLeave>
 					<OnLoad>
 						getglobal(this:GetName().."TextLabel"):SetText(GF_AUTO_FILTER);
-						getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()+10);
+						getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()*1.1);
 						getglobal(this:GetName().."TextLabel"):SetPoint("LEFT", "GF_AutoFilterCheckButton", "RIGHT", 0, 0);
 					</OnLoad>
 				</Scripts>
@@ -1229,7 +1223,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnClick>
 					<OnLoad>
 						getglobal(this:GetName().."TextLabel"):SetText(GF_PLAY_SOUND);
-						getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()+5);
+						getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()*1.1);
 						getglobal(this:GetName().."TextLabel"):SetPoint("LEFT", "GF_PlaySoundOnResultsCheckButton", "RIGHT", 0, 0);
 					</OnLoad>
 				</Scripts>
@@ -1255,7 +1249,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLeave>
 					<OnLoad>
 						getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_DUNGEONS);
-						getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()+5);
+						getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()*1.1);
 						getglobal(this:GetName().."TextLabel"):SetPoint("LEFT", "GF_GroupsFrameShowDungeonCheckButton", "RIGHT", 0, 0);
 					</OnLoad>
 				</Scripts>
@@ -1281,7 +1275,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLeave>
 					<OnLoad>
 						getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_RAIDS);
-						getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()+5);
+						getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()*1.1);
 						getglobal(this:GetName().."TextLabel"):SetPoint("LEFT", "GF_GroupsFrameShowRaidCheckButton", "RIGHT", 0, 0);
 					</OnLoad>
 				</Scripts>
@@ -1307,7 +1301,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLeave>
 					<OnLoad>
 						getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_QUESTS);
-						getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()+5);
+						getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()*1.1);
 						getglobal(this:GetName().."TextLabel"):SetPoint("LEFT", "GF_GroupsFrameShowQuestCheckButton", "RIGHT", 0, 0);
 					</OnLoad>
 				</Scripts>
@@ -1333,7 +1327,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLeave>
 					<OnLoad>
 						getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_OTHER);
-						getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()+5);
+						getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()*1.1);
 						getglobal(this:GetName().."TextLabel"):SetPoint("LEFT", "GF_GroupsFrameShowOtherCheckButton", "RIGHT", 0, 0);
 					</OnLoad>
 				</Scripts>
@@ -1359,7 +1353,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLeave>
 					<OnLoad>
 						getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_LFM);
-						getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()+5);
+						getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()*1.1);
 						getglobal(this:GetName().."TextLabel"):SetPoint("LEFT", "GF_GroupsFrameShowLFMCheckButton", "RIGHT", 0, 0);
 					</OnLoad>
 				</Scripts>
@@ -1385,9 +1379,39 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLeave>
 					<OnLoad>
 						getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_LFG);
-						getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()+5);
+						getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()*1.1);
 						getglobal(this:GetName().."TextLabel"):SetPoint("LEFT", "GF_GroupsFrameShowLFGCheckButton", "RIGHT", 0, 0);
 					</OnLoad>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="GF_LogHideMainFrame" inherits="GF_AbstractLabelCheckButton">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="8" y="-80"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						GF_SavedVariables.loghidemainframe = this:GetChecked();
+						GF_ToggleHideMainFrame()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="GF_LogHideMainFrameHeight" inherits="GF_AbstractLabelCheckButton">
+				<Anchors>
+					<Anchor point="TOP" relativeTo="GF_LogHideMainFrame" relativePoint="BOTTOM">
+						<Offset>
+							<AbsDimension x="0" y="-20"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						GF_SavedVariables.loghidemainframeheight = this:GetChecked();
+						GF_ToggleHideMainFrameHeight()
+					</OnClick>
 				</Scripts>
 			</CheckButton>
 			<Button name="GF_ShowSearchButton" inherits="GF_CharacterFrameTabButtonTemplate" text="GF_FIND_PLAYERS_AND_GROUPS">
@@ -1404,7 +1428,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						GF_LogFrame:Hide();
 						GF_SettingsFrame:Hide();
 						GF_BlackListFrame:Hide();
-						GF_UpdateBlackListItems();	
+						GF_UpdateBlackListItems();
+						GF_SavedVariables.loghidemainframelogdef = nil;
 					</OnClick>
 				</Scripts>
 			</Button>
@@ -1458,7 +1483,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						GF_LogFrame:Show();
 						GF_SettingsFrame:Hide();
 						GF_BlackListFrame:Hide();
-						GF_UpdateBlackListItems();	
+						GF_UpdateBlackListItems();
+						GF_SavedVariables.loghidemainframelogdef = true;
 					</OnClick>
 				</Scripts>
 			</Button>
@@ -1519,12 +1545,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</Button>
 			<Frame name="GF_GroupsFrame">
 				<Size>
-					<AbsDimension x="660" y="380"/>
+					<AbsDimension x="645" y="380"/>
 				</Size>
 				<Anchors>
-					<Anchor point="TOP">
+					<Anchor point="TOPLEFT">
 						<Offset>
-							<AbsDimension x="0" y="-65"/>
+							<AbsDimension x="25" y="-65"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -1742,7 +1768,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLeave>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_LFM_LFG);
-										getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()+5);
+										getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()*1.1);
 										getglobal(this:GetName().."TextLabel"):SetPoint("LEFT", "GF_LFGLFMDropdown", "RIGHT", 0, 0);
 									</OnLoad>
 								</Scripts>
@@ -1810,7 +1836,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLeave>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_DUNGEON);
-										getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()+5);
+										getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()*1.1);
 										getglobal(this:GetName().."TextLabel"):SetPoint("LEFT", "GF_LFGDungeonDropdown", "RIGHT", 0, 0);
 									</OnLoad>
 								</Scripts>
@@ -1878,7 +1904,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLeave>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_RAID);
-										getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()+5);
+										getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()*1.1);
 										getglobal(this:GetName().."TextLabel"):SetPoint("LEFT", "GF_LFGRaidDropdown", "RIGHT", 0, 0);
 									</OnLoad>
 								</Scripts>
@@ -1946,7 +1972,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLeave>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_ROLE);
-										getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()+5);
+										getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()*1.1);
 										getglobal(this:GetName().."TextLabel"):SetPoint("LEFT", "GF_LFGRoleDropdown", "RIGHT", 0, 0);
 									</OnLoad>
 								</Scripts>
@@ -2005,7 +2031,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnClick>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_AUTO);
-										getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()+5);
+										getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()*1.1);
 										getglobal(this:GetName().."TextLabel"):SetPoint("LEFT", "GF_GroupAutoCheckButton", "RIGHT", 0, 0);
 									</OnLoad>
 								</Scripts>
@@ -2168,7 +2194,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLeave>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_SavedVariables.lfgwhisperclass);
-										getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()+5);
+										getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()*1.1);
 										getglobal(this:GetName().."TextLabel"):SetPoint("LEFT", "GF_LFGWhoClassDropdown", "RIGHT", 0, 0);
 									</OnLoad>
 								</Scripts>
@@ -2630,15 +2656,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										GF_SavedVariables.logshowgroup = this:GetChecked();
 										GF_DisplayLog()
 									</OnClick>
-									<OnEnter>
-										GF_ShowTooltip(this);
-									</OnEnter>
-									<OnLeave>
-										GameTooltip:Hide();
-									</OnLeave>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_GROUP);
-										getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()+5);
+										getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()*1.1);
 										getglobal(this:GetName().."TextLabel"):SetPoint("LEFT", "GF_LogShowGroups", "RIGHT", 0, 1);
 									</OnLoad>
 								</Scripts>
@@ -2656,15 +2676,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										GF_SavedVariables.logshowfiltered = this:GetChecked();
 										GF_DisplayLog()
 									</OnClick>
-									<OnEnter>
-										GF_ShowTooltip(this);
-									</OnEnter>
-									<OnLeave>
-										GameTooltip:Hide();
-									</OnLeave>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_FILTERED);
-										getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()+5);
+										getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()*1.1);
 										getglobal(this:GetName().."TextLabel"):SetPoint("LEFT", "GF_LogShowFiltered", "RIGHT", 0, 0);
 									</OnLoad>
 								</Scripts>
@@ -2682,15 +2696,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										GF_SavedVariables.logshowchat = this:GetChecked();
 										GF_DisplayLog()
 									</OnClick>
-									<OnEnter>
-										GF_ShowTooltip(this);
-									</OnEnter>
-									<OnLeave>
-										GameTooltip:Hide();
-									</OnLeave>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_CHAT);
-										getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()+5);
+										getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()*1.1);
 										getglobal(this:GetName().."TextLabel"):SetPoint("LEFT", "GF_LogShowChat", "RIGHT", 0, 0);
 									</OnLoad>
 								</Scripts>
@@ -2708,15 +2716,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										GF_SavedVariables.logshowtrades = this:GetChecked();
 										GF_DisplayLog()
 									</OnClick>
-									<OnEnter>
-										GF_ShowTooltip(this);
-									</OnEnter>
-									<OnLeave>
-										GameTooltip:Hide();
-									</OnLeave>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_TRADES);
-										getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()+5);
+										getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()*1.1);
 										getglobal(this:GetName().."TextLabel"):SetPoint("LEFT", "GF_LogShowTrades", "RIGHT", 0, 0);
 									</OnLoad>
 								</Scripts>
@@ -2734,15 +2736,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										GF_SavedVariables.logshowpolitics = this:GetChecked();
 										GF_DisplayLog()
 									</OnClick>
-									<OnEnter>
-										GF_ShowTooltip(this);
-									</OnEnter>
-									<OnLeave>
-										GameTooltip:Hide();
-									</OnLeave>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_POLITICS);
-										getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()+5);
+										getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()*1.1);
 										getglobal(this:GetName().."TextLabel"):SetPoint("LEFT", "GF_LogShowPolitics", "RIGHT", 0, 0);
 									</OnLoad>
 								</Scripts>
@@ -2760,15 +2756,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										GF_SavedVariables.logshowloot = this:GetChecked();
 										GF_DisplayLog()
 									</OnClick>
-									<OnEnter>
-										GF_ShowTooltip(this);
-									</OnEnter>
-									<OnLeave>
-										GameTooltip:Hide();
-									</OnLeave>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_LOOT);
-										getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()+5);
+										getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()*1.1);
 										getglobal(this:GetName().."TextLabel"):SetPoint("LEFT", "GF_LogShowLoot", "RIGHT", 0, 0);
 									</OnLoad>
 								</Scripts>
@@ -2786,15 +2776,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										GF_SavedVariables.logshowspam = this:GetChecked();
 										GF_DisplayLog()
 									</OnClick>
-									<OnEnter>
-										GF_ShowTooltip(this);
-									</OnEnter>
-									<OnLeave>
-										GameTooltip:Hide();
-									</OnLeave>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_SPAM);
-										getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()+5);
+										getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()*1.1);
 										getglobal(this:GetName().."TextLabel"):SetPoint("LEFT", "GF_LogShowSpam", "RIGHT", 0, 0);
 									</OnLoad>
 								</Scripts>
@@ -2812,15 +2796,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										GF_SavedVariables.logshowblacklist = this:GetChecked();
 										GF_DisplayLog()
 									</OnClick>
-									<OnEnter>
-										GF_ShowTooltip(this);
-									</OnEnter>
-									<OnLeave>
-										GameTooltip:Hide();
-									</OnLeave>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_BLACKLIST);
-										getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()+5);
+										getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()*1.1);
 										getglobal(this:GetName().."TextLabel"):SetPoint("LEFT", "GF_LogShowBlacklist", "RIGHT", 0, 0);
 									</OnLoad>
 								</Scripts>
@@ -2838,45 +2816,18 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										GF_SavedVariables.logshowbelowlevel = this:GetChecked();
 										GF_DisplayLog()
 									</OnClick>
-									<OnEnter>
-										GF_ShowTooltip(this);
-									</OnEnter>
-									<OnLeave>
-										GameTooltip:Hide();
-									</OnLeave>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_BELOWLEVEL);
-										getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()+5);
+										getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()*1.1);
 										getglobal(this:GetName().."TextLabel"):SetPoint("LEFT", "GF_LogShowBelowLevel", "RIGHT", 0, 0);
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_LogHideMainFrame" inherits="GF_AbstractLabelCheckButton">
-								<Anchors>
-									<Anchor point="RIGHT" relativePoint="LEFT">
-										<Offset>
-											<AbsDimension x="3" y="50"/>
-										</Offset>
-									</Anchor>
-								</Anchors>
-								<Scripts>
-									<OnClick>
-										GF_SavedVariables.loghidemainframe = this:GetChecked();
-										GF_ToggleHideMainFrame()
-									</OnClick>
-									<OnEnter>
-										GF_ShowTooltip(this);
-									</OnEnter>
-									<OnLeave>
-										GameTooltip:Hide();
-									</OnLeave>
-								</Scripts>
-							</CheckButton>
 							<CheckButton name="GF_LogShowEditBox" inherits="GF_AbstractLabelCheckButton">
 								<Anchors>
-									<Anchor point="TOP" relativeTo="GF_LogHideMainFrame" relativePoint="BOTTOM">
+									<Anchor point="BOTTOM" relativeTo="GF_LogUpButton" relativePoint="TOP">
 										<Offset>
-											<AbsDimension x="0" y="-50"/>
+											<AbsDimension x="0" y="5"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -2884,12 +2835,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									<OnClick>
 										if GF_LogEditBox:IsShown() then GF_LogEditBox:Hide() else GF_LogEditBox:Show() end
 									</OnClick>
-									<OnEnter>
-										GF_ShowTooltip(this);
-									</OnEnter>
-									<OnLeave>
-										GameTooltip:Hide();
-									</OnLeave>
 								</Scripts>
 							</CheckButton>
 							<EditBox name="GF_LogEditBox" inherits="GF_AbstractEditBox" letters="250" hidden="true">
@@ -2941,12 +2886,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										GF_SavedVariables.showwhisperlogs = this:GetChecked();
 										GF_ToggleWhisperFrame()
 									</OnClick>
-									<OnEnter>
-										GF_ShowTooltip(this);
-									</OnEnter>
-									<OnLeave>
-										GameTooltip:Hide();
-									</OnLeave>
 								</Scripts>
 							</CheckButton>
 							<Frame name = "GF_WhisperHistoryButtonLog" hidden="true">
@@ -2972,7 +2911,19 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											</OnLoad>
 										</Scripts>
 									</Button>
-									<Button name="GF_WhisperHistoryButton1" inherits="GF_AbstractGrayButton" id="1"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton0" relativePoint="BOTTOM"/></Anchors></Button>
+									<Button name="GF_WhisperHistoryButton1" inherits="GF_AbstractGrayButton" id="1" text="GF_LOG_GUILDWHISPERS">
+										<Size>
+											<AbsDimension x="100" y="32"/>
+										</Size>
+										<Anchors>
+											<Anchor point="TOP" relativeTo="GF_WhisperHistoryButton0" relativePoint="BOTTOM"/>
+										</Anchors>
+										<Scripts>
+											<OnLoad>
+												this:Show()
+											</OnLoad>
+										</Scripts>
+									</Button>
 									<Button name="GF_WhisperHistoryButton2" inherits="GF_AbstractGrayButton" id="2"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton1" relativePoint="BOTTOM"/></Anchors></Button>
 									<Button name="GF_WhisperHistoryButton3" inherits="GF_AbstractGrayButton" id="3"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton2" relativePoint="BOTTOM"/></Anchors></Button>
 									<Button name="GF_WhisperHistoryButton4" inherits="GF_AbstractGrayButton" id="4"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton3" relativePoint="BOTTOM"/></Anchors></Button>
@@ -2993,16 +2944,15 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									<Button name="GF_WhisperHistoryButton19" inherits="GF_AbstractGrayButton" id="19"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton18" relativePoint="BOTTOM"/></Anchors></Button>
 									<Button name="GF_WhisperHistoryButton20" inherits="GF_AbstractGrayButton" id="20"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton19" relativePoint="BOTTOM"/></Anchors></Button>
 
-									<CheckButton name="GF_WhisperHistoryButtonCheckButton1" inherits="GF_AbstractSmallCheckButton" id="1">
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton2" inherits="GF_AbstractSmallCheckButton" id="2">
 										<Anchors>
-											<Anchor point="RIGHT" relativeTo="GF_WhisperHistoryButton1"  relativePoint="LEFT">
+											<Anchor point="RIGHT" relativeTo="GF_WhisperHistoryButton2"  relativePoint="LEFT">
 												<Offset>
 													<AbsDimension x="0" y="0"/>
 												</Offset>
 											</Anchor>
 										</Anchors>
 									</CheckButton>
-									<CheckButton name="GF_WhisperHistoryButtonCheckButton2" inherits="GF_AbstractSmallCheckButton" id="2"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton1" relativePoint="BOTTOM"/></Anchors></CheckButton>
 									<CheckButton name="GF_WhisperHistoryButtonCheckButton3" inherits="GF_AbstractSmallCheckButton" id="3"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton2" relativePoint="BOTTOM"/></Anchors></CheckButton>
 									<CheckButton name="GF_WhisperHistoryButtonCheckButton4" inherits="GF_AbstractSmallCheckButton" id="4"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton3" relativePoint="BOTTOM"/></Anchors></CheckButton>
 									<CheckButton name="GF_WhisperHistoryButtonCheckButton5" inherits="GF_AbstractSmallCheckButton" id="5"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton4" relativePoint="BOTTOM"/></Anchors></CheckButton>
@@ -3082,12 +3032,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</Anchor>
 								</Anchors>
 								<Scripts>
-									<OnEnter>
-										GF_ShowTooltip(this);
-									</OnEnter>
-									<OnLeave>
-										GameTooltip:Hide();
-									</OnLeave>
 									<OnClick>
 										GF_SavedVariables.joinworld = this:GetChecked();
 										if GF_SavedVariables.joinworld then GF_JoinWorld(); else LeaveChannelByName(GF_CHANNEL_NAME) end
@@ -3108,12 +3052,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</Anchor>
 								</Anchors>
 								<Scripts>
-									<OnEnter>
-										GF_ShowTooltip(this);
-									</OnEnter>
-									<OnLeave>
-										GameTooltip:Hide();
-									</OnLeave>
 									<OnClick>
 										GF_SavedVariables.spamfilter = this:GetChecked();
 										if not GF_SavedVariables.spamfilter then
@@ -3137,12 +3075,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</Anchor>
 								</Anchors>
 								<Scripts>
-									<OnEnter>
-										GF_ShowTooltip(this);
-									</OnEnter>
-									<OnLeave>
-										GameTooltip:Hide();
-									</OnLeave>
 									<OnClick>
 										GF_SavedVariables.errorfilter = this:GetChecked();
 									</OnClick>
@@ -3162,12 +3094,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</Anchor>
 								</Anchors>
 								<Scripts>
-									<OnEnter>
-										GF_ShowTooltip(this);
-									</OnEnter>
-									<OnLeave>
-										GameTooltip:Hide();
-									</OnLeave>
 									<OnClick>
 										GF_SavedVariables.autoblacklist = this:GetChecked();
 									</OnClick>
@@ -3210,12 +3136,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										GF_SavedVariables.showtranslate = this:GetChecked();
 										GF_ApplyFiltersToGroupList();
 									</OnClick>
-									<OnEnter>
-										GF_ShowTooltip(this);
-									</OnEnter>
-									<OnLeave>
-										GameTooltip:Hide();
-									</OnLeave>
 									<OnLoad>
 										if GF_TranslateMessage then
 											getglobal(this:GetName().."TextLabel"):SetWidth(100);

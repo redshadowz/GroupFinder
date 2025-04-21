@@ -2,4 +2,6 @@
 	<Binding name="GF_SHOW_FRAME" header="GF_MAIN_HEADER">
 		GF_ToggleMainFrame();
 	</Binding>
+	<Binding name="GF_SHOW_GROUP">GF_ToggleMainFrame(1);</Binding>
+	<Binding name="GF_SHOW_LOG">GF_ToggleMainFrame(2);</Binding>
 </Bindings>
