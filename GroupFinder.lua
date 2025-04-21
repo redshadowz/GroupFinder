@@ -1491,9 +1491,8 @@ function GF_FindDungeonLevel()
 		end
     end
 end
-function GF_FixLFGStrings(lfmOnly)
+function GF_FixLFGStrings(lfmOnly) -- /script GF_FixLFGStrings(true)
 	GF_SavedVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText()
-	GF_SavedVariables.searchlfgtext = gsub(GF_SavedVariables.searchlfgtext, "LF%d+M", "LFM")
 	local _,_,maxGroupSize = string.find(GF_SavedVariables.lfgsize, "(%d+)")
 	if not lfmOnly then
 		local foundLFM;
@@ -1501,6 +1500,7 @@ function GF_FixLFGStrings(lfmOnly)
 		local foundRoles = {}
 		local foundStartOfText;
 		local endOfFilter = 0
+		GF_SavedVariables.searchlfgtext = gsub(GF_SavedVariables.searchlfgtext, "[LFlf]+%d+[Mm]", "LFM")
 		for i=1,getn(GF_BUTTONS_LIST.LFGLFM) do
 			foundStartOfText = string.find(GF_SavedVariables.searchlfgtext, GF_BUTTONS_LIST.LFGLFM[i][1])
 			if foundStartOfText then
@@ -1566,9 +1566,10 @@ function GF_FixLFGStrings(lfmOnly)
 		GF_SavedVariables.searchlfgtext = gsub(gsub(gsub(gsub(gsub(gsub(newText..string.sub(GF_SavedVariables.searchlfgtext, endOfFilter+1), "[/ ]+$", ""), "^%s+", ""), "/%s+"," "),"%s/", ""),"//+", ""),"%s%s+", " ")
 		getglobal(GF_LFGDescriptionEditBox:GetName()):SetText(GF_SavedVariables.searchlfgtext);
 	else
-		if GF_SavedVariables.lfgauto and string.find(string.upper(GF_SavedVariables.searchlfgtext), "LF%d+M") then
+		if GF_SavedVariables.lfgauto and (string.find(string.upper(GF_SavedVariables.searchlfgtext), "LF%d+M") or string.find(string.upper(GF_SavedVariables.searchlfgtext), "LFM")) then
+			GF_SavedVariables.searchlfgtext = gsub(GF_SavedVariables.searchlfgtext, "[Ll[Ff]+%d+[Mm]", "LFM")
 			local newText = "LF"..maxGroupSize-GF_GetNumGroupMembers().."M"
-			getglobal(GF_LFGDescriptionEditBox:GetName()):SetText(gsub(GF_SavedVariables.searchlfgtext, "[LFlf]+%d+[Mm]", newText))
+			getglobal(GF_LFGDescriptionEditBox:GetName()):SetText(gsub(GF_SavedVariables.searchlfgtext, "[Ll][Ff][Mm]", newText))
 		end
 	end
 end
