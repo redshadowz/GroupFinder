@@ -601,8 +601,9 @@ local GF_TurtleGroupButtonsListDungeons = { -- header, min to show, max to show,
 		[7] = { "Emerald Sanctum", 60, 60, "sanctum", "Emerald Sanctum", 63, },
 }
 local GF_TurtleGroupButtonsListRaids = {
-		[1] = { "Lower Karazhan", 1, 60, "kara10", "Lower Karazhan", 63, 10, },
-		[2] = { "Upper Karazhan", 1, 60, "kara40", "Upper Karazhan", 63, 40, },
+		[1] = { "Upper Karazhan", 1, 60, "kara40", "Upper Karazhan", 63, 40, },
+		[2] = { "Lower Karazhan", 1, 60, "kara10", "Lower Karazhan", 63, 10, },
+		[3] = { "AQ15", 1, 60, "aq15", "Ruins of Ahn'Qiraj", 63, 20, },
 }
 local GF_TurtleSearchListNew40RaidString = { "40-man Raids", 60, 60, "mc ", "molten core", "rag ","ragnaros", "blackwing", "bwl", " nef ", "nefari", "aq40", "cthun", "aq 40", "naxx", " ony", "onyxia", "qiraj",
 											"kara40", "upper kara", "k40", "concavius", "ostarius", "nerub", "reaver", }
@@ -619,8 +620,7 @@ function GF_AddTurtleWoWDungeonsRaids()
 	end
 	GF_BUTTONS_LIST.SearchList[27] = GF_TurtleSearchListNew40RaidString;
 	GF_BUTTONS_LIST.SearchList[28] = GF_TurtleSearchListNew20RaidString;
-	GF_BUTTONS_LIST.LFGRaid[7] = { "AQ15", 1, 60, "aq15", "Ruins of Ahn'Qiraj", 63, 20, }
-
+	--GF_BUTTONS_LIST.LFGRaid[7] = { "AQ15", 1, 60, "aq15", "Ruins of Ahn'Qiraj", 63, 20, }
 	for i=1, getn(GF_TurtleSearchList) do
 		table.insert(GF_BUTTONS_LIST.SearchList, 27, GF_TurtleSearchList[i]);
 	end
