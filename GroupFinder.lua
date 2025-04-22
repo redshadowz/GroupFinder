@@ -1841,12 +1841,12 @@ function GF_FindGroupsAndDisplayCustomChatMessages(event,arg1,arg2,arg9)-- GF_Pr
 		return true,arg1
 	elseif GF_LootFilter[event] then
 		GF_AddLogMessage(arg1,6,true,arg2,arg8,arg9,event)
-		if not GF_SavedVariables.showloottexts and (event ~= "CHAT_MSG_LOOT" or not GF_BypassLootFilter(arg1)) then
-			GF_PreviousMessage[arg2] = {arg1,time() + .1, nil}
-			return nil,arg1;
-		else
+		if GF_SavedVariables.showloottexts or (event == "CHAT_MSG_LOOT" and GF_BypassLootFilter(arg1)) then
 			GF_PreviousMessage[arg2] = {arg1,time() + .1, true}
 			return true, arg1
+		else
+			GF_PreviousMessage[arg2] = {arg1,time() + .1, nil}
+			return nil,arg1;
 		end
 	elseif event == "CHAT_MSG_SYSTEM" then
 		if GF_SavedVariables.errorfilter and GF_CheckErrorFilter(arg1) then
