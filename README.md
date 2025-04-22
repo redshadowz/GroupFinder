@@ -1,8 +1,6 @@
 # GroupFinder
 Update 4/22/2025: Rofl... Alright, I rewrote how the chat is processed. Then I worked on the data sharing. It's pretty cool now.
 
-PS: I was sitting around messing with the addon and I cranked down the transparency to like 50% and I could see through it pretty well, and thought it would be cool if you could just leave it up while leveling but clickthrough so it wouldn't interfere with the game. Same with the log frame. Which was turned into a hideable and filterable chatframe. So I added a couple of buttons on the left side of the frame that will hide the frames. And I added some bindings for the group frame and log frame(Shift-G and Shift-L). I also added a Guild and Whisper History. And better PFUI interaction. And UIScaling. And an invite/request invite button. And more minimap frames. And better Group-making. Maybe now I can actually level.  
-
 Group finder Addon for Vanilla Wow 1.12.1 based on the CallToArms addon(with Turtle WoW support).  
 
 The goal of this addon was to find groups without needing to sift through endless chat spam. I tried to make this addon as intuitive as possible, but it's probably pretty intimidating at first glance. Lots of checkboxes. Lots of edit boxes. Lots of dropdowns. I put as much as possible on the front page because the original CallToArms addon had too many pages to flip through and too many useless features.  
