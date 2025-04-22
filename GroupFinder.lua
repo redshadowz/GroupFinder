@@ -159,7 +159,7 @@ function GF_OnLoad()
 	function ChatFrame_OnEvent(event) -- arg1(message), arg2(sender), arg4("Channel#." "(City/Trade)" "channelName"), arg5, (nameOfPlayerWhoLooted), arg7(zoneChannel#), arg8(channel#), arg9("City/Trade" "channelName")
 		local display,newMessage = GF_FindGroupsAndDisplayCustomChatMessages(event,arg1,arg2,arg9)
 		if display then
-			if arg1 then arg1 = GF_CleanUpMessagesOfBadLinks(newMessage); end
+			--if arg1 then arg1 = GF_CleanUpMessagesOfBadLinks(newMessage); end
 			old_ChatFrame_OnEvent(event);
 		end
 	end
@@ -1851,7 +1851,7 @@ function GF_FindGroupsAndDisplayCustomChatMessages(event,arg1,arg2,arg9)-- GF_Pr
 		return true,arg1
 	else
 		local logType = GF_CheckForPoliticsAndPreviousBlacklistSpam(arg1,arg2) or GF_CheckForGroups(arg1,arg2,event) or GF_CheckForTradesAndChat(arg1,event);
-		GF_AddLogMessage(arg1,logType,true,arg2,arg8,arg9,event)
+		GF_AddLogMessage(GF_CleanUpMessagesOfBadLinks(arg1),logType,true,arg2,arg8,arg9,event)
 		if GF_ChatCheckFilters(logType,arg1,event) then
 			if GF_SavedVariables.showoriginalchat or event ~= "CHAT_MSG_CHANNEL" then
 				GF_PreviousMessage[arg2] = {arg1,time() + 60,true}
