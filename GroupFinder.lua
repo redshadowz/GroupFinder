@@ -1175,7 +1175,7 @@ function GF_WhisperHistoryButtonPressed(id)
 	end
 end
 function GF_WhisperReceivedAddToWhisperHistoryList(message,name,event)
-	if name == UnitName("player") then return end
+	if name == UnitName("player") and (event == "CHAT_MSG_WHISPER_INFORM" or event == "CHAT_MSG_WHISPER") then return end
 	if not GF_WhisperLogData[GF_RealmName][name] then
 		GF_WhisperLogData[GF_RealmName][name] = {}
 		if GF_Friends[name] then GF_WhisperLogData[GF_RealmName][name].priority = true; end

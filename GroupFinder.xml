@@ -2866,10 +2866,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										this:ClearFocus();
 									</OnTabPressed>
 									<OnEnterPressed>
+										if this:GetText() == "" then this:ClearFocus(); end
 										GF_SendMessageFromLogEditBox()
 									</OnEnterPressed>
 									<OnEscapePressed>
 										this:ClearFocus();
+										this:SetText("")
 									</OnEscapePressed>
 								</Scripts>
 							</EditBox>
