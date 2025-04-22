@@ -2663,29 +2663,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_LogShowFiltered" inherits="GF_AbstractLabelCheckButton">
-								<Anchors>
-									<Anchor point="LEFT" relativeTo="GF_LogShowGroupsTextLabel" relativePoint="RIGHT">
-										<Offset>
-											<AbsDimension x="0" y="0"/>
-										</Offset>
-									</Anchor>
-								</Anchors>
-								<Scripts>
-									<OnClick>
-										GF_SavedVariables.logshowfiltered = this:GetChecked();
-										GF_DisplayLog()
-									</OnClick>
-									<OnLoad>
-										getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_FILTERED);
-										getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()*1.1);
-										getglobal(this:GetName().."TextLabel"):SetPoint("LEFT", "GF_LogShowFiltered", "RIGHT", 0, 0);
-									</OnLoad>
-								</Scripts>
-							</CheckButton>
 							<CheckButton name="GF_LogShowChat" inherits="GF_AbstractLabelCheckButton">
 								<Anchors>
-									<Anchor point="LEFT" relativeTo="GF_LogShowFilteredTextLabel" relativePoint="RIGHT">
+									<Anchor point="LEFT" relativeTo="GF_LogShowGroupsTextLabel" relativePoint="RIGHT">
 										<Offset>
 											<AbsDimension x="0" y="0"/>
 										</Offset>
@@ -2723,29 +2703,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_LogShowPolitics" inherits="GF_AbstractLabelCheckButton">
-								<Anchors>
-									<Anchor point="LEFT" relativeTo="GF_LogShowTradesTextLabel" relativePoint="RIGHT">
-										<Offset>
-											<AbsDimension x="0" y="0"/>
-										</Offset>
-									</Anchor>
-								</Anchors>
-								<Scripts>
-									<OnClick>
-										GF_SavedVariables.logshowpolitics = this:GetChecked();
-										GF_DisplayLog()
-									</OnClick>
-									<OnLoad>
-										getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_POLITICS);
-										getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()*1.1);
-										getglobal(this:GetName().."TextLabel"):SetPoint("LEFT", "GF_LogShowPolitics", "RIGHT", 0, 0);
-									</OnLoad>
-								</Scripts>
-							</CheckButton>
 							<CheckButton name="GF_LogShowLoot" inherits="GF_AbstractLabelCheckButton">
 								<Anchors>
-									<Anchor point="LEFT" relativeTo="GF_LogShowPoliticsTextLabel" relativePoint="RIGHT">
+									<Anchor point="LEFT" relativeTo="GF_LogShowTradesTextLabel" relativePoint="RIGHT">
 										<Offset>
 											<AbsDimension x="0" y="0"/>
 										</Offset>
@@ -2763,9 +2723,49 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_LogShowSpam" inherits="GF_AbstractLabelCheckButton">
+							<CheckButton name="GF_LogShowFiltered" inherits="GF_AbstractLabelCheckButton">
 								<Anchors>
 									<Anchor point="LEFT" relativeTo="GF_LogShowLootTextLabel" relativePoint="RIGHT">
+										<Offset>
+											<AbsDimension x="0" y="0"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										GF_SavedVariables.logshowfiltered = this:GetChecked();
+										GF_DisplayLog()
+									</OnClick>
+									<OnLoad>
+										getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_FILTERED);
+										getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()*1.1);
+										getglobal(this:GetName().."TextLabel"):SetPoint("LEFT", "GF_LogShowFiltered", "RIGHT", 0, 0);
+									</OnLoad>
+								</Scripts>
+							</CheckButton>
+							<CheckButton name="GF_LogShowPolitics" inherits="GF_AbstractLabelCheckButton">
+								<Anchors>
+									<Anchor point="LEFT" relativeTo="GF_LogShowFilteredTextLabel" relativePoint="RIGHT">
+										<Offset>
+											<AbsDimension x="0" y="0"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										GF_SavedVariables.logshowpolitics = this:GetChecked();
+										GF_DisplayLog()
+									</OnClick>
+									<OnLoad>
+										getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_POLITICS);
+										getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()*1.1);
+										getglobal(this:GetName().."TextLabel"):SetPoint("LEFT", "GF_LogShowPolitics", "RIGHT", 0, 0);
+									</OnLoad>
+								</Scripts>
+							</CheckButton>
+							<CheckButton name="GF_LogShowSpam" inherits="GF_AbstractLabelCheckButton">
+								<Anchors>
+									<Anchor point="LEFT" relativeTo="GF_LogShowPoliticsTextLabel" relativePoint="RIGHT">
 										<Offset>
 											<AbsDimension x="0" y="0"/>
 										</Offset>
@@ -2902,7 +2902,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Frames>
 									<Button name="GF_WhisperHistoryButton0" inherits="GF_AbstractGrayButton" id="0" text="GF_LOG_SHOWLOG">
 										<Size>
-											<AbsDimension x="100" y="32"/>
+											<AbsDimension x="100" y="26"/>
 										</Size>
 										<Scripts>
 											<OnLoad>
@@ -2913,7 +2913,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</Button>
 									<Button name="GF_WhisperHistoryButton1" inherits="GF_AbstractGrayButton" id="1" text="GF_LOG_GUILDWHISPERS">
 										<Size>
-											<AbsDimension x="100" y="32"/>
+											<AbsDimension x="100" y="26"/>
 										</Size>
 										<Anchors>
 											<Anchor point="TOP" relativeTo="GF_WhisperHistoryButton0" relativePoint="BOTTOM"/>
@@ -2979,7 +2979,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				<Scripts>
 					<OnLoad>
 						GF_LogFrameInternalFrameTitle:SetText(GF_LOG_AND_MONITOR);
-						GF_LogFrameInternalFrameTitle:SetPoint("TOPLEFT", GF_LogFrame, "TOPLEFT", 25,-52);
+						GF_LogFrameInternalFrameTitle:SetPoint("TOPLEFT", GF_LogFrame, "TOPLEFT", 33,-52);
 					</OnLoad>
 				</Scripts>
 			</Frame>
