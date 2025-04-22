@@ -194,7 +194,7 @@ function GF_OnLoad()
 			GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], guild, time() };
 			if GF_UrgentWhoRequestSaved and GF_UrgentWhoRequestSaved == name then foundUrgentWhoSentFlags = true; end
 		end
-		if not (event == "WHO_LIST_UPDATE" and not foundUrgentWhoSentFlags) or WhoFrame:IsVisible() then
+		if WhoFrame:IsVisible() or (event ~= "WHO_LIST_UPDATE" or foundUrgentWhoSentFlags) then
 			old_FriendsFrame_OnEvent(event);
 		end
 	end
@@ -294,7 +294,7 @@ function GF_AddLogMessage(arg1,filteredChat,add,arg2,arg8,arg9,event)
 		elseif event ~= "CHAT_MSG_CHANNEL" and GF_TextColors[event] then
 			if arg2 == UnitName("player") then
 				arg1 = "|cff"..GF_TextColors[event].."["..date("%H:%M").."] "..GF_LogMessageCodes[filteredChat].."|r|cff"..(GF_ClassColors[GF_Classes[UnitClass("player")]] or "9d9d9d").."[|Hplayer:"..arg2.."|h"..arg2..", "..UnitLevel("player").."|h|r]: |cff"..GF_TextColors[event]..arg1.."|r"
-			elseif GF_WhoTable[GF_RealmName][arg2] and GF_WhoTable[GF_RealmName][arg2][1] then 
+			elseif GF_WhoTable[GF_RealmName][arg2] then 
 				arg1 = "|cff"..GF_TextColors[event].."["..date("%H:%M").."] "..GF_LogMessageCodes[filteredChat].."|r|cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][arg2][2]] or "9d9d9d").."[|Hplayer:"..arg2.."|h"..arg2..", "..GF_WhoTable[GF_RealmName][arg2][1].."|h|r]: |cff"..GF_TextColors[event]..arg1.."|r"
 			else
 				arg1 = "|cff"..GF_TextColors[event].."["..date("%H:%M").."] "..GF_LogMessageCodes[filteredChat].."|r|cff9d9d9d[|Hplayer:"..arg2.."|h"..arg2.."|h|r]: |cff"..GF_TextColors[event]..arg1.."|r"
@@ -303,7 +303,7 @@ function GF_AddLogMessage(arg1,filteredChat,add,arg2,arg8,arg9,event)
 			arg9 = arg8..". "..string.upper(string.sub(arg9,1,1))..string.lower(string.sub(string.gsub(arg9, " - .*", ""),2))
 			if arg2 == UnitName("player") then 
 				arg1 = "["..date("%H:%M").."] "..GF_LogMessageCodes[filteredChat].."["..arg9.."] ".."|cff"..(GF_ClassColors[GF_Classes[UnitClass("player")]] or "9d9d9d").."[|Hplayer:"..arg2.."|h"..arg2..", "..UnitLevel("player").."|h|r]: "..arg1
-			elseif GF_WhoTable[GF_RealmName][arg2] and GF_WhoTable[GF_RealmName][arg2][1] then 
+			elseif GF_WhoTable[GF_RealmName][arg2] then 
 				arg1 = "["..date("%H:%M").."] "..GF_LogMessageCodes[filteredChat].."["..arg9.."] ".."|cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][arg2][2]] or "9d9d9d").."[|Hplayer:"..arg2.."|h"..arg2..", "..GF_WhoTable[GF_RealmName][arg2][1].."|h|r]: "..arg1
 			else
 				arg1 = "["..date("%H:%M").."] "..GF_LogMessageCodes[filteredChat].."["..arg9.."] ".."|cff9d9d9d[|Hplayer:"..arg2.."|h"..arg2.."|h|r]: "..arg1
@@ -696,7 +696,7 @@ function GF_LoadSettings()
 		table.insert(GF_WhisperLogData[GF_RealmName], "Guild")
 	end
 	if GF_WhoTable[GF_RealmName]["LOADED"][UnitName("player")][4] < time() then
-		GF_PruneTheWhoTable()
+		--GF_PruneTheWhoTable()
 		if IsAddOnLoaded("pfUI") then
 			for name, whodata in pfUI_playerDB do
 				if not GF_WhoTable[GF_RealmName][name] then
