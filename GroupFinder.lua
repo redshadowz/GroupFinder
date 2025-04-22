@@ -102,6 +102,7 @@ local GF_AddonGroupDataToBeSentBuffer		= {};
 local GF_AddonMakeAListOfGroupsForSending	= nil;
 local GF_AddonListOfGuildiesWithAddon		= {};
 local GF_AddonTimeSinceLastUpdate			= 0;
+local GF_AddonTimeSinceLastRequest			= 0;
 
 GF_AutoAnnounceTimer						= nil;
 local GF_WasPartyLeaderBefore				= nil;
@@ -111,7 +112,7 @@ local GF_Guildies							= {};
 local GF_CurrentNumFriends					= 0;
 local GF_CurrentNumGuildies					= 0;
 local GF_UpdateTicker						= 0;
-local GF_TimeTillNextBroadcast				= 1;
+local GF_TimeTillNextBroadcast				= 5;
 local GF_UpdateAndRequestTimer				= 2;
 local GF_RequestWhoDataPeriodicallyTimer	= 30;
 GF_PlayerMessages							= {};
@@ -159,7 +160,6 @@ function GF_OnLoad()
 	function ChatFrame_OnEvent(event) -- arg1(message), arg2(sender), arg4("Channel#." "(City/Trade)" "channelName"), arg5, (nameOfPlayerWhoLooted), arg7(zoneChannel#), arg8(channel#), arg9("City/Trade" "channelName")
 		local display,newMessage = GF_FindGroupsAndDisplayCustomChatMessages(event,arg1,arg2,arg9)
 		if display then
-			--if arg1 then arg1 = GF_CleanUpMessagesOfBadLinks(newMessage); end
 			old_ChatFrame_OnEvent(event);
 		end
 	end
@@ -167,7 +167,7 @@ function GF_OnLoad()
 	function SendChatMessage(arg1,arg2,arg3,arg4) -- arg1(message), arg2(chatType(WHISPER/GUILD/CHANNEL/SAY/PARTYETC)), arg3(language), arg4(targetname(or channelname)));
 		if arg2 == "WHISPER" then 
 			arg4 = string.upper(string.sub(arg4,1,1))..string.lower(string.sub(arg4,2))
-			table.insert(GF_MyWhispers,1, { arg1,arg4 })
+			table.insert(GF_MyWhispers,{arg1,arg4})
 		end
 		old_SendChatMessage(arg1, arg2, arg3, arg4)
 	end
@@ -443,7 +443,8 @@ function GF_WhoListUpdated()
 	for i=1, GetNumWhoResults() do
 		local name, guild, level, race, class, zone = GetWhoInfo(i);
 		GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], guild }; GF_WhoTable[GF_RealmName][name][4] = time()
-		if not GF_ClassWhoRequest then GF_AddonAllNamesForResponseToLogin[name] = true; end
+		GF_AddonWhoDataToBeSentBuffer[name] = GF_WhoTable[GF_RealmName][name]
+		GF_TimeTillNextBroadcast = 1;
 		if GF_ClassWhoRequest and not GF_ClassWhoTable[name] and not GF_PlayersCurrentlyInGroup[name] and level >= GF_GetWhoParams[1]-GF_GetWhoLevelRange and level <= GF_GetWhoParams[1]+GF_GetWhoLevelRange
 		and class == GF_GetWhoParams[2] and (not GF_GetWhoParams[3] or (GF_GetWhoParams[3] and not GF_IsFoundClassWhoPlayerInADungeonOrPvP(zone))) then
 			GF_ClassWhoTable[name] = { level, class, zone, time()-GF_GetWhoResetTimer }
@@ -520,9 +521,7 @@ function GF_CheckForBroadCast()
 			if entry.who and (entry.type == "D" or entry.type == "R") and entry.t + 900 > time() then
 				if entry.who[3] == "" then entry.who[3] = "Z" end
 				SendAddonMessage("GF", GF_ClassIDs[entry.who[2]]..entry.t..entry.type..entry.dlevel..entry.op..entry.who[1]..entry.who[3]..entry.who[4]..":"..entry.message, "GUILD");
-				if GF_GetNumGroupMembers() > 1 then
-					SendAddonMessage("GF", GF_ClassIDs[entry.who[2]]..entry.t..entry.type..entry.dlevel..entry.op..entry.who[1]..entry.who[3]..entry.who[4]..":"..entry.message, "PARTY");
-				end
+				if not GetGuildInfo("player") and GF_GetNumGroupMembers() > 0 then SendAddonMessage("GF", GF_ClassIDs[entry.who[2]]..entry.t..entry.type..entry.dlevel..entry.op..entry.who[1]..entry.who[3]..entry.who[4]..":"..entry.message, "PARTY"); end
 				counter = counter + 1
 				if counter == 10 then break end
 			end
@@ -536,7 +535,7 @@ function GF_CheckForBroadCast()
 					addonsendstring = addonsendstring..":"..GF_MessageList[GF_RealmName][j].op
 					if string.len(addonsendstring) > 240 then
 						SendAddonMessage("GF", addonsendstring, "GUILD");
-						if GF_GetNumGroupMembers() > 0 then SendAddonMessage("GF", addonsendstring, "PARTY"); end
+						if not GetGuildInfo("player") and GF_GetNumGroupMembers() > 0 then SendAddonMessage("GF", addonsendstring, "PARTY"); end
 						addonsendstring = "U";
 						counter = counter + 1;
 						break
@@ -546,7 +545,7 @@ function GF_CheckForBroadCast()
 			end
 			if counter == 0 or string.len(addonsendstring) > 1 then 
 				SendAddonMessage("GF", addonsendstring, "GUILD");
-				if GF_GetNumGroupMembers() > 0 then SendAddonMessage("GF", addonsendstring, "PARTY"); end
+				if not GetGuildInfo("player") and GF_GetNumGroupMembers() > 0 then SendAddonMessage("GF", addonsendstring, "PARTY"); end
 			end
 			GF_OnStartupQueueURequest = nil;
 		end
@@ -557,7 +556,7 @@ function GF_CheckForBroadCast()
 				GF_AddonAllNamesForResponseToLogin[name] = nil;
 				if string.len(addonsendstring) > 240 then break end
 			end
-			if string.len(addonsendstring) > 1 then SendAddonMessage("GF", addonsendstring, "GUILD"); if GF_GetNumGroupMembers() > 0 then SendAddonMessage("GF", addonsendstring, "PARTY"); end end
+			if string.len(addonsendstring) > 1 then SendAddonMessage("GF", addonsendstring, "GUILD"); if not GetGuildInfo("player") and GF_GetNumGroupMembers() > 0 then SendAddonMessage("GF", addonsendstring, "PARTY"); end end
 			GF_AddonMakeAResponseToLoginList = nil;
 		end
 		addonsendstring = "R"
@@ -566,7 +565,7 @@ function GF_CheckForBroadCast()
 			GF_AddonNamesToBeSentAsARequest[name] = nil;
 			if string.len(addonsendstring) > 240 then break end
 		end
-		if string.len(addonsendstring) > 1 then SendAddonMessage("GF", addonsendstring, "GUILD");  if GF_GetNumGroupMembers() > 0 then SendAddonMessage("GF", addonsendstring, "PARTY"); end end
+		if string.len(addonsendstring) > 1 then SendAddonMessage("GF", addonsendstring, "GUILD");  if not GetGuildInfo("player") and GF_GetNumGroupMembers() > 0 then SendAddonMessage("GF", addonsendstring, "PARTY"); end end
 		addonsendstring = ""
 		for name,whodata in pairs(GF_AddonWhoDataToBeSentBuffer) do
 			if whodata then
@@ -576,7 +575,7 @@ function GF_CheckForBroadCast()
 				if string.len(addonsendstring) > 202 then break end
 			end
 		end
-		if string.len(addonsendstring) > 1 then SendAddonMessage("GF", addonsendstring, "GUILD");  if GF_GetNumGroupMembers() > 0 then SendAddonMessage("GF", addonsendstring, "PARTY"); end end
+		if string.len(addonsendstring) > 1 then SendAddonMessage("GF", addonsendstring, "GUILD");  if not GetGuildInfo("player") and GF_GetNumGroupMembers() > 0 then SendAddonMessage("GF", addonsendstring, "PARTY"); end end
 	end
 end
 function GF_UpdateGroupsFrame()
@@ -601,11 +600,16 @@ end
 function GF_RequestAdditionalWhoDataUpdates()
 	GF_RequestWhoDataPeriodicallyTimer = GF_RequestWhoDataPeriodicallyTimer - 1;
 	if GF_RequestWhoDataPeriodicallyTimer < 0 then
-		GF_RequestWhoDataPeriodicallyTimer = 30;
+		GF_RequestWhoDataPeriodicallyTimer = 300;
 		for i=1, GetNumGuildMembers() do
 			local name = GetGuildRosterInfo(i)
 			if name and GF_AddonListOfGuildiesWithAddon[name] then
-				GF_AddonMakeAResponseToLoginList = true;
+				for i=1, getn(GF_MessageList[GF_RealmName]) do
+					if not GF_MessageList[GF_RealmName][i].who then GF_AddonNamesToBeSentAsARequest[GF_MessageList[GF_RealmName][i].op] = true end
+				end
+				for i=1, getn(GF_WhoQueue) do
+					GF_AddonNamesToBeSentAsARequest[GF_WhoQueue[i]] = true
+				end
 				GF_TimeTillNextBroadcast = 0;
 				break
 			end
@@ -879,6 +883,7 @@ function GF_UpdatePlayersInGroupList()
 	end	
 end
 function GF_UpdateFriendsList()
+	GF_CurrentNumFriends = GetNumFriends();
 	GF_Friends = {};
 	for i=1, GetNumFriends() do
 		local name,level,class = GetFriendInfo(i)
@@ -891,6 +896,7 @@ function GF_UpdateFriendsList()
 	end
 end
 function GF_UpdateGuildiesList()
+	GF_CurrentNumGuildies = GetNumGuildMembers();
 	GF_Guildies = {};
 	for i=1, GetNumGuildMembers() do
 		local name,_,_,level,class = GetGuildRosterInfo(i)
@@ -932,7 +938,8 @@ function GF_ParseIncomingAddonMessages(arg2)
 			end
 			GF_AddonTimeSinceLastUpdate = time()
 		end
-		GF_TimeTillNextBroadcast = (math.random(60))/3; -- Assuming up to 333ms lag
+		GF_TimeTillNextBroadcast = (math.random(90))/3; -- Assuming up to 333ms lag
+		GF_RequestWhoDataPeriodicallyTimer = 60;
 		GF_AddonMakeAResponseToLoginList = true;
 		GF_AddonMakeAListOfGroupsForSending = true;
 		GF_UpdateAndRequestTimer = 0;
@@ -1171,6 +1178,7 @@ function GF_WhisperHistoryButtonPressed(id)
 	end
 end
 function GF_WhisperReceivedAddToWhisperHistoryList(message,name,event)
+	if name == UnitName("player") then return end
 	if not GF_WhisperLogData[GF_RealmName][name] then
 		GF_WhisperLogData[GF_RealmName][name] = {}
 		if GF_Friends[name] then GF_WhisperLogData[GF_RealmName][name].priority = true; end
@@ -1733,6 +1741,11 @@ function GF_CheckForGroups(arg1,arg2,event)
 			foundInGroup = 11;
 		elseif GF_SavedVariables.playsounds then
 			PlaySoundFile( "Sound\\Interface\\PickUp\\PutDownRing.wav" );
+		end
+		for i=1, getn(GF_TRIGGER_LIST.TRADE[2]) do
+			if string.find(string.lower(arg1), GF_TRIGGER_LIST.TRADE[2][i]) and string.find(string.lower(arg1),"lf ") then
+				foundInGroup = nil;
+			end
 		end
 	end
 	return GF_CheckForSpam(arg1,arg2,foundInGroup) or foundInGroup;
