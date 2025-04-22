@@ -1,5 +1,5 @@
 # GroupFinder
-Update 4/20/2025: Alright, hopefully everything is working. I added a lot of stuff. Although most isn't immediately obvious.
+Update 4/22/2025: Rofl...
 
 PS: I was sitting around messing with the addon and I cranked down the transparency to like 50% and I could see through it pretty well, and thought it would be cool if you could just leave it up while leveling but clickthrough so it wouldn't interfere with the game. Same with the log frame. Which was turned into a hideable and filterable chatframe. So I added a couple of buttons on the left side of the frame that will hide the frames. And I added some bindings for the group frame and log frame(Shift-G and Shift-L). I also added a Guild and Whisper History. And better PFUI interaction. And UIScaling. And an invite/request invite button. And more minimap frames. And better Group-making. Maybe now I can actually level.  
 
