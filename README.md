@@ -1,5 +1,5 @@
 # GroupFinder
-Update 4/22/2025: Rofl... Alright, I rewrote how the chat is processed. Then I worked on the data sharing. It's pretty cool now.
+Update 4/22/2025: Rofl... Alright, I rewrote how the chat is processed. Then I worked on the data sharing. Which is disabled because I realized that "time" is different for every computer.
 
 Group finder Addon for Vanilla Wow 1.12.1 based on the CallToArms addon(with Turtle WoW support).  
 
