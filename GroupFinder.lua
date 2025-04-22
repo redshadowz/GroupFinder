@@ -144,6 +144,7 @@ local ThingsToHide = { "GF_GroupsInChatCheckButton", "GF_GroupsNewOnlyCheckButto
 function GF_OnLoad()
 	SlashCmdList["GroupFinderCOMMAND"] = GF_SlashHandler;
 	SLASH_GroupFinderCOMMAND1 = "/gf";
+	SLASH_GroupFinderCOMMAND2 = "/groupfinder";
 	this:RegisterEvent("CHAT_MSG_SYSTEM");
 	this:RegisterEvent("CHAT_MSG_ADDON");
 	this:RegisterEvent("PARTY_LEADER_CHANGED");
@@ -337,12 +338,8 @@ function GF_SlashHandler(msg)
 	if string.lower(msg) == "reset" then
 		GF_MainFrame:ClearAllPoints()
 		GF_MainFrame:SetPoint("CENTER", UIParent, "CENTER",0,0)
-	elseif string.lower(msg) == "help" then
-		DEFAULT_CHAT_FRAME:AddMessage("'Reset' to reset screen position", 1, 1, 0.5)
-	elseif GF_MainFrame:IsVisible() then
-		GF_MainFrame:Hide();
 	else
-		GF_MainFrame:Show();
+		DEFAULT_CHAT_FRAME:AddMessage("'/gf reset' to reset screen position", 1, 1, 0.5)
 	end
 end
 function GF_ToggleMainFrame(tab)
