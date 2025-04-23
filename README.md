@@ -1,6 +1,4 @@
 # GroupFinder
-Update 4/22/2025: Rofl... Alright, I rewrote how the chat is processed. Then I worked on the data sharing. I "tried" to create a "universal time" based on your computer's "date" vs the server game time. There are plenty of failsafes in place to prevent issues, but I don't know how well it actually works since I don't have a computer in Europe to test it with. Works great in terms of my second client sharing data with myself. Uses guild or party channel only though.
-
 Group finder Addon for Vanilla Wow 1.12.1 based on the CallToArms addon(with Turtle WoW support).  
 
 The goal of this addon was to find groups without needing to sift through endless chat spam. I tried to make this addon as intuitive as possible, but it's probably pretty intimidating at first glance. Lots of checkboxes. Lots of edit boxes. Lots of dropdowns. I put as much as possible on the front page because the original CallToArms addon had too many pages to flip through and too many useless features.  
@@ -44,10 +42,10 @@ The 'Get Who' and 'Invite' Edit Box is for whispering people who match the selec
 4) Press the 'Invite' button to whisper someone on the 'Get Who' list. The number of players available is shown on the 'Get Who' button.  
 Note: Will not message the same person more than once every 15 minutes.  
 
+I made significant changes to the "Log". It now has filters for the type of message and a Guild/Whisper log.  
+The Groups page and logs page now have an "overlay" mode(buttons in the topleft corner).  
+There are many other things I did as well. Including a data-sharing algorithm(shares with guild/party).  
+
 PS: I made the 'Group Maker' for my niece. She hated finding groups for low-level dungeons. I tried to get her to /whisper people in her level range, but it was too much work for her.  
-
-PS: I made the Chat Filtering because Everlook was absolutely filled to the brim with gold-sellers and other spammers. I personally turn off 'Show groups in Chat' and toggle 'Show groups in Minimap' to turn World into a chatroom.
-
-PS: With the Chat Filters, you can make 'World' channel into groups-only, or chat-only. So if you don't like what people are talking about in World Chat, you can still see the groups(or vice-versa).  
-
-PS: By default, the groupfinder will be bound to button "I". It will not override your current bindings.
+PS: I made the Chat Filtering because Everlook was absolutely filled to the brim with gold-sellers and other spammers.  
+PS: By default, the groupfinder will be bound to button "I". It will not override your current bindings. Added "Shift-L" for the Log and "Shift-G" for groups.  
