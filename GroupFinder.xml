@@ -3521,7 +3521,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnLoad>
-										getglobal(this:GetName().."Text"):SetText(GF_ICON_TEXT.." - "..GF_ADJUST_ANGLE.." - "..this:GetValue());
+										getglobal(this:GetName().."Text"):SetText(GF_MINIMAP_GROUP_TEXT.." - "..GF_ADJUST_ANGLE.." - "..this:GetValue());
 										getglobal(this:GetName().."High"):SetText("360");
 										getglobal(this:GetName().."Low"):SetText("0");
 										this:SetMinMaxValues(0,360);
@@ -3529,7 +3529,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 									<OnValueChanged>
 										GF_SavedVariables.MinimapMsgArcOffset = this:GetValue();
-										getglobal(this:GetName().."Text"):SetText(GF_ICON_TEXT.." - "..GF_ADJUST_ANGLE.." - "..this:GetValue());
+										getglobal(this:GetName().."Text"):SetText(GF_MINIMAP_GROUP_TEXT.." - "..GF_ADJUST_ANGLE.." - "..this:GetValue());
 										GF_UpdateMinimapIcon();
 									</OnValueChanged>
 								</Scripts>
@@ -3547,7 +3547,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnLoad>
-										getglobal(this:GetName().."Text"):SetText(GF_ICON_TEXT.." - "..GF_ADJUST_RADIUS.." - "..this:GetValue());
+										getglobal(this:GetName().."Text"):SetText(GF_MINIMAP_TEXT.." - "..GF_ADJUST_RADIUS.." - "..this:GetValue());
 										getglobal(this:GetName().."High"):SetText("160");
 										getglobal(this:GetName().."Low"):SetText("0");
 										this:SetMinMaxValues(0,160);
@@ -3555,7 +3555,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 									<OnValueChanged>
 										GF_SavedVariables.MinimapMsgRadiusOffset = this:GetValue();
-										getglobal(this:GetName().."Text"):SetText(GF_ICON_TEXT.." - "..GF_ADJUST_RADIUS.." - "..this:GetValue());
+										getglobal(this:GetName().."Text"):SetText(GF_MINIMAP_TEXT.." - "..GF_ADJUST_RADIUS.." - "..this:GetValue());
 										GF_UpdateMinimapIcon();
 									</OnValueChanged>
 								</Scripts>
@@ -3565,7 +3565,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Frames>    
 				<Scripts>
 					<OnLoad>
-						GF_SettingsFrameMinimapSettingsTitle:SetText(GF_MINIMAP_ICON_SETTINGS);
+						GF_SettingsFrameMinimapSettingsTitle:SetText(GF_MINIMAP_SETTINGS);
 						GF_SettingsFrameLFxSettingsTitle:SetText(GF_DISPLAY_SETTINGS);
 						GF_SettingsFrameChatSettingsTitle:SetText(GF_CHAT_SETTINGS);
 						GF_SettingsFrameOtherSettingsTitle:SetText(GF_OTHER_SETTINGS);

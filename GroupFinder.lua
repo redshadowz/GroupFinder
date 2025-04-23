@@ -1413,21 +1413,21 @@ function GF_CreateGetWhoQueueList(level,class)
 		table.insert(GF_ClassWhoQueue, "c-"..class.." "..level.."-"..maxlevel);
 	elseif GF_GetClassWhoState == 3 or (GF_GetClassWhoState == 2 and (level == maxlevel)) then
 		if UnitFactionGroup("player") == "Alliance" then
-			if (GF_RealmName == "Nordanaar" or GF_RealmName == "Tel'Abim") and GF_DoesClassMatchRace(class, "High Elf") then
-				table.insert(GF_ClassWhoQueue, "c-"..class.." "..minlevel .."-"..maxlevel.." ".."r-\"High Elf\"");
+			if (GF_RealmName == "Nordanaar" or GF_RealmName == "Tel'Abim") and GF_DoesClassMatchRace(class, GF_HIGH_ELF) then
+				table.insert(GF_ClassWhoQueue, "c-"..class.." "..minlevel .."-"..maxlevel.." ".."r-\""..GF_HIGH_ELF.."\"");
 			end
-			if GF_DoesClassMatchRace(class, "Dwarf") then table.insert(GF_ClassWhoQueue, "c-"..class.." "..minlevel .."-"..maxlevel.." ".."r-\"Dwarf\""); end
-			if GF_DoesClassMatchRace(class, "Gnome") then table.insert(GF_ClassWhoQueue, "c-"..class.." "..minlevel .."-"..maxlevel.." ".."r-\"Gnome\""); end
-			if GF_DoesClassMatchRace(class, "Night Elf") then table.insert(GF_ClassWhoQueue, "c-"..class.." "..minlevel .."-"..maxlevel.." ".."r-\"Night Elf\""); end
-			if GF_DoesClassMatchRace(class, "Human") then table.insert(GF_ClassWhoQueue, "c-"..class.." "..minlevel .."-"..maxlevel.." ".."r-\"Human\""); end
+			if GF_DoesClassMatchRace(class, GF_GNOME) then table.insert(GF_ClassWhoQueue, "c-"..class.." "..minlevel .."-"..maxlevel.." ".."r-\""..GF_GNOME.."\""); end
+			if GF_DoesClassMatchRace(class, GF_DWARF) then table.insert(GF_ClassWhoQueue, "c-"..class.." "..minlevel .."-"..maxlevel.." ".."r-\""..GF_DWARF.."\""); end
+			if GF_DoesClassMatchRace(class, GF_NIGHT_ELF) then table.insert(GF_ClassWhoQueue, "c-"..class.." "..minlevel .."-"..maxlevel.." ".."r-\""..GF_NIGHT_ELF.."\""); end
+			if GF_DoesClassMatchRace(class, GF_HUMAN) then table.insert(GF_ClassWhoQueue, "c-"..class.." "..minlevel .."-"..maxlevel.." ".."r-\""..GF_HUMAN.."\""); end
 		else
-			if (GF_RealmName == "Nordanaar" or GF_RealmName == "Tel'Abim") and GF_DoesClassMatchRace(class, "Goblin") then
-				table.insert(GF_ClassWhoQueue, "c-"..class.." "..minlevel .."-"..maxlevel.." ".."r-\"Goblin\"");
+			if (GF_RealmName == "Nordanaar" or GF_RealmName == "Tel'Abim") and GF_DoesClassMatchRace(class, GF_GOBLIN) then
+				table.insert(GF_ClassWhoQueue, "c-"..class.." "..minlevel .."-"..maxlevel.." ".."r-\""..GF_GOBLIN.."\"");
 			end
-			if GF_DoesClassMatchRace(class, "Tauren") then table.insert(GF_ClassWhoQueue, "c-"..class.." "..minlevel .."-"..maxlevel.." ".."r-\"Tauren\""); end
-			if GF_DoesClassMatchRace(class, "Troll") then table.insert(GF_ClassWhoQueue, "c-"..class.." "..minlevel .."-"..maxlevel.." ".."r-\"Troll\""); end
-			if GF_DoesClassMatchRace(class, "Orc") then table.insert(GF_ClassWhoQueue, "c-"..class.." "..minlevel .."-"..maxlevel.." ".."r-\"Orc\""); end
-			if GF_DoesClassMatchRace(class, "Undead") then table.insert(GF_ClassWhoQueue, "c-"..class.." "..minlevel .."-"..maxlevel.." ".."r-\"Undead\""); end
+			if GF_DoesClassMatchRace(class, GF_TAUREN) then table.insert(GF_ClassWhoQueue, "c-"..class.." "..minlevel .."-"..maxlevel.." ".."r-\""..GF_TAUREN.."\""); end
+			if GF_DoesClassMatchRace(class, GF_TROLL) then table.insert(GF_ClassWhoQueue, "c-"..class.." "..minlevel .."-"..maxlevel.." ".."r-\""..GF_TROLL.."\""); end
+			if GF_DoesClassMatchRace(class, GF_ORC) then table.insert(GF_ClassWhoQueue, "c-"..class.." "..minlevel .."-"..maxlevel.." ".."r-\""..GF_ORC.."\""); end
+			if GF_DoesClassMatchRace(class, GF_UNDEAD) then table.insert(GF_ClassWhoQueue, "c-"..class.." "..minlevel .."-"..maxlevel.." ".."r-\""..GF_UNDEAD.."\""); end
 		end
 		GF_GetClassWhoState = 3
 	elseif GF_GetClassWhoState == 4 then
@@ -1440,25 +1440,25 @@ function GF_CreateGetWhoQueueList(level,class)
 end
 function GF_DoesClassMatchRace(class, race)
 	if (GF_RealmName == "Nordanaar" or GF_RealmName == "Tel'Abim") then
-		if (class == "Druid") and (race == "Night Elf" or race == "Tauren") then return true
-		elseif (class == "Hunter") and (race == "Human" or race == "Night Elf" or race == "Dwarf" or race == "Gnome" or race == "Undead" or race == "Orc" or race == "Troll" or race == "Tauren" or race == "High Elf" or race == "Goblin") then return true
-		elseif (class == "Mage") and (race == "Human" or race == "Dwarf" or race == "Gnome" or race == "Undead" or race == "Orc" or race == "Troll" or race == "High Elf" or race == "Goblin") then return true
-		elseif (class == "Paladin") and (race == "Human" or race == "Dwarf" or race == "High Elf") then return true
-		elseif (class == "Priest") and (race == "Human" or race == "Night Elf" or race == "Dwarf" or race == "Undead" or race == "Troll" or race == "High Elf") then return true
-		elseif (class == "Rogue") and (race == "Human" or race == "Night Elf" or race == "Dwarf" or race == "Gnome" or race == "Undead" or race == "Orc" or race == "Troll" or race == "High Elf" or race == "Goblin") then return true
-		elseif (class == "Shaman") and (race == "Orc" or race == "Troll" or race == "Tauren") then return true
-		elseif (class == "Warlock") and (race == "Human" or race == "Gnome" or race == "Undead" or race == "Orc" or race == "Troll" or race == "Goblin") then return true
-		elseif (class == "Warrior") and (race == "Human" or race == "Night Elf" or race == "Dwarf" or race == "Gnome" or race == "Undead" or race == "Orc" or race == "Troll" or race == "Tauren" or race == "High Elf" or race == "Goblin") then return true end
+		if (class == GF_DRUID) and (race == GF_NIGHT_ELF or race == GF_TAUREN) then return true
+		elseif (class == GF_HUNTER) and (race == GF_HUMAN or race == GF_NIGHT_ELF or race == GF_DWARF or race == GF_GNOME or race == GF_UNDEAD or race == GF_ORC or race == GF_TROLL or race == GF_TAUREN or race == GF_HIGH_ELF or race == GF_GOBLIN) then return true
+		elseif (class == GF_MAGE) and (race == GF_HUMAN or race == GF_DWARF or race == GF_GNOME or race == GF_UNDEAD or race == GF_ORC or race == GF_TROLL or race == GF_HIGH_ELF or race == GF_GOBLIN) then return true
+		elseif (class == GF_PALADIN) and (race == GF_HUMAN or race == GF_DWARF or race == GF_HIGH_ELF) then return true
+		elseif (class == GF_PRIEST) and (race == GF_HUMAN or race == GF_NIGHT_ELF or race == GF_DWARF or race == GF_UNDEAD or race == GF_TROLL or race == GF_HIGH_ELF) then return true
+		elseif (class == GF_ROGUE) and (race == GF_HUMAN or race == GF_NIGHT_ELF or race == GF_DWARF or race == GF_GNOME or race == GF_UNDEAD or race == GF_ORC or race == GF_TROLL or race == GF_HIGH_ELF or race == GF_GOBLIN) then return true
+		elseif (class == GF_SHAMAN) and (race == GF_ORC or race == GF_TROLL or race == GF_TAUREN) then return true
+		elseif (class == GF_WARLOCK) and (race == GF_HUMAN or race == GF_GNOME or race == GF_UNDEAD or race == GF_ORC or race == GF_TROLL or race == GF_GOBLIN) then return true
+		elseif (class == GF_WARRIOR) and (race == GF_HUMAN or race == GF_NIGHT_ELF or race == GF_DWARF or race == GF_GNOME or race == GF_UNDEAD or race == GF_ORC or race == GF_TROLL or race == GF_TAUREN or race == GF_HIGH_ELF or race == GF_GOBLIN) then return true end
 	else
-		if (class == "Druid") and (race == "Night Elf" or race == "Tauren") then return true
-		elseif (class == "Hunter") and (race == "Night Elf" or race == "Dwarf" or race == "Orc" or race == "Troll" or race == "Tauren") then return true
-		elseif (class == "Mage") and (race == "Human" or race == "Gnome" or race == "Undead" or race == "Troll") then return true
-		elseif (class == "Paladin") and (race == "Human" or race == "Dwarf") then return true
-		elseif (class == "Priest") and (race == "Human" or race == "Night Elf" or race == "Dwarf" or race == "Undead" or race == "Troll") then return true
-		elseif (class == "Rogue") and (race == "Human" or race == "Night Elf" or race == "Dwarf" or race == "Gnome" or race == "Undead" or race == "Orc" or race == "Troll") then return true
-		elseif (class == "Shaman") and (race == "Orc" or race == "Troll" or race == "Tauren") then return true
-		elseif (class == "Warlock") and (race == "Human" or race == "Gnome" or race == "Undead" or race == "Orc") then return true
-		elseif (class == "Warrior") and (race == "Human" or race == "Night Elf" or race == "Dwarf" or race == "Gnome" or race == "Undead" or race == "Orc" or race == "Troll" or race == "Tauren") then return true end
+		if (class == GF_DRUID) and (race == GF_NIGHT_ELF or race == GF_TAUREN) then return true
+		elseif (class == GF_HUNTER) and (race == GF_NIGHT_ELF or race == GF_DWARF or race == GF_ORC or race == GF_TROLL or race == GF_TAUREN) then return true
+		elseif (class == GF_MAGE) and (race == GF_HUMAN or race == GF_GNOME or race == GF_UNDEAD or race == GF_TROLL) then return true
+		elseif (class == GF_PALADIN) and (race == GF_HUMAN or race == GF_DWARF) then return true
+		elseif (class == GF_PRIEST) and (race == GF_HUMAN or race == GF_NIGHT_ELF or race == GF_DWARF or race == GF_UNDEAD or race == GF_TROLL) then return true
+		elseif (class == GF_ROGUE) and (race == GF_HUMAN or race == GF_NIGHT_ELF or race == GF_DWARF or race == GF_GNOME or race == GF_UNDEAD or race == GF_ORC or race == GF_TROLL) then return true
+		elseif (class == GF_SHAMAN) and (race == GF_ORC or race == GF_TROLL or race == GF_TAUREN) then return true
+		elseif (class == GF_WARLOCK) and (race == GF_HUMAN or race == GF_GNOME or race == GF_UNDEAD or race == GF_ORC) then return true
+		elseif (class == GF_WARRIOR) and (race == GF_HUMAN or race == GF_NIGHT_ELF or race == GF_DWARF or race == GF_GNOME or race == GF_UNDEAD or race == GF_ORC or race == GF_TROLL or race == GF_TAUREN) then return true end
 	end
 end
 function GF_IsFoundClassWhoPlayerInADungeonOrPvP(zone)

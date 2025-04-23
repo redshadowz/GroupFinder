@@ -11,6 +11,15 @@ GF_WARRIOR	       		= "Warrior";
 GF_PALADIN	       		= "Paladin";
 GF_SHAMAN				= "Shaman";
 
+GF_HUMAN				= "Human";
+GF_NIGHT_ELF			= "Night Elf";
+GF_DWARF				= "Dwarf";
+GF_GNOME				= "Gnome";
+GF_ORC					= "Orc";
+GF_UNDEAD				= "Undead";
+GF_TROLL				= "Troll";
+GF_TAUREN				= "Tauren";
+
 GF_5_MAN				= " 5-man";
 GF_10_MAN				= " 10-man";
 GF_15_MAN				= " 15-man";
@@ -73,12 +82,13 @@ GF_PAGE 				= "PAGE"; -- Label for pages of groups.
 GF_LOG					= "    Log    "; -- Label for Log tab
 GF_SETTINGS				= "Settings"; -- Label for Settings tab
 GF_BLACK_LIST			= "Blacklist"; -- Label for Blacklist tab
-GF_MINIMAP_ICON_SETTINGS= "Minimap icon settings"; -- Label for minimap section of Settings tab
+GF_MINIMAP_SETTINGS		= "Minimap settings"; -- Label for minimap section of Settings tab
 GF_CHAT_SETTINGS		= "Chat settings"; -- Label for minimap section of Settings tab
 GF_DISPLAY_SETTINGS		= "Display settings"; -- Label for filter section of Settings tab
 GF_OTHER_SETTINGS		= "Other settings"; -- Label for minimap section of Settings tab
 GF_ICON					= "Minimap icon"; -- Label for Minimap adjust icon adjust/radius
-GF_ICON_TEXT			= "Icon text"; -- Label for Minimap adjust icon text adjust/radius
+GF_MINIMAP_GROUP_TEXT	= "Minimap group text"; -- Label for Minimap adjust icon text adjust/radius
+GF_MINIMAP_TEXT			= "Minimap text"; -- Label for Minimap adjust icon text adjust/radius
 GF_ADJUST_ANGLE			= "Adjust angle"; -- Label for Minimap adjust icon adjust/radius
 GF_ADJUST_RADIUS		= "Adjust radius"; -- Label for Minimap adjust icon text adjust/radius
 GF_ADJUST_TRANSPARENCY	= "Adjust window transparency"; -- Label for adjust transparency on Settings tab
@@ -540,6 +550,10 @@ GF_LootFilters = {
 	[3] = " won: ",
 	
 }
+
+-- Turtle additions
+GF_HIGH_ELF				= "High Elf";
+GF_GOBLIN				= "Goblin";
 local GF_TurtleTriggerListDungeons = {
 		["CRESCENTGROVE"]	= { 36, "crescent", "grove", "cg", },
 		["GILNEASCITY"] 	= { 47, "gilneas", "gc", },
