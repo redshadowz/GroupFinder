@@ -3253,9 +3253,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									<OnLoad>
 										getglobal(this:GetName().."Text"):SetText(GF_GROUP_LIST_DURATION.." - "..this:GetValue()..GF_MINUTES);
 										getglobal(this:GetName().."High"):SetText("60");
-										getglobal(this:GetName().."Low"):SetText("2");
-										this:SetMinMaxValues(2,60);
-										this:SetValueStep(1);
+										getglobal(this:GetName().."Low"):SetText("15");
+										this:SetMinMaxValues(15,60);
+										this:SetValueStep(15);
 									</OnLoad>
 									<OnValueChanged>
 										GF_SavedVariables.grouplistingduration = this:GetValue();
