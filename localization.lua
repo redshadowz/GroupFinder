@@ -346,7 +346,7 @@ GF_TRIGGER_LIST = {
 		["TANK"] = 		{ "Z", "Z", "Z", "tank", " tanks", },
 		["DAMAGE"] = 	{ "Z", "Z", "Z", "damage", "dps", "dmg", "deeps", "range", "melee", "caster", },
 	},
-	["IGNORE"] = { "channel", "lol", "lmao", "lmfao", "rofl", "wts", "wtb", "stfu", "ignore", "noob", "website", "http", "progression",
+	["IGNORE"] = { "channel", "lol", "lmao", "lmfao", "rofl", "wts", "wtb", "stfu", "ignore", "noob", "website", "http", "progression", "pwb",
 				"nub", "n00b", "recruit", "trogdoor", "raid times", "raiding times", "dedicated", "lockbox", "lfw", "cod", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday", "sign up", "server time", },
 	["SPAM"] = { "l f m", "h e a l", "n o s t", "please come to web", "c o m", "n 0 s t", "level service", "c o m", },
 	["POLITICS"] = { "jews", "hitler", "stalin", "kike", "nazi", "supremacist", "racism", "gas chamber", "pedo", "pedophile", "biden", "trump", "pelosi", "semiti", "tranny", "trannies",
