@@ -955,7 +955,7 @@ function GF_ParseIncomingAddonMessages(arg2)
 	elseif string.sub(arg2,1,1) == ":" then -- (To Everyone) This is the who data from the names requested in "R".
 		for sentlevel,sentname,sentclass,sentguild,sentrecordedtime in string.gfind(arg2, ":(%d+)([a-zA-Z]+)(%d)([a-zA-Z%s]+)(%d+)") do
 			if sentguild == "Z" then sentguild = "" end
-			if not GF_WhoTable[GF_RealmName][sentname] or tonumber(sentrecordedtime) > GF_WhoTable[GF_RealmName][sentname][4] then
+			if tonumber(sentrecordedtime) < GF_GetStandardizedTime() and (not GF_WhoTable[GF_RealmName][sentname] or tonumber(sentrecordedtime) > GF_WhoTable[GF_RealmName][sentname][4]) then
 				GF_WhoTable[GF_RealmName][sentname] = { tonumber(sentlevel), GF_ClassIDs[tonumber(sentclass)], sentguild, tonumber(sentrecordedtime) }
 			end
 			GF_AddonAllNamesForResponseToLogin[sentname] = nil;
@@ -964,35 +964,37 @@ function GF_ParseIncomingAddonMessages(arg2)
 		end
 	elseif string.len(arg2) > 2 then -- (To Everyone) This is the full group information. Which is sent separately from the who data.
 		for sentclass,senttime,senttype,sentdlevel,sentname,sentplevel,sentguild,sentrecordedtime,message in string.gfind(arg2, "(%d)(%d+)([a-zA-Z])(%d+)([a-zA-Z]+)(%d+)([a-zA-Z%s]+)(%d+):(.+)") do
-			if sentguild == "Z" then sentguild = "" end
-			if not GF_WhoTable[GF_RealmName][sentname] or tonumber(sentrecordedtime) > GF_WhoTable[GF_RealmName][sentname][4] then
-				GF_WhoTable[GF_RealmName][sentname] = { tonumber(sentplevel), GF_ClassIDs[tonumber(sentclass)], string.gsub(sentguild,"", "") }; GF_WhoTable[GF_RealmName][sentname][4] = tonumber(sentrecordedtime);
-			end
-
-			local entry = {};
-			entry.op = sentname;
-			entry.message = message;
-			entry.type = senttype;
-			entry.dlevel = tonumber(sentdlevel)
-			entry.who = GF_WhoTable[GF_RealmName][sentname];
-			entry.t = tonumber(senttime);
-			
-			for i = 1, getn(GF_MessageList[GF_RealmName]) do
-				if GF_MessageList[GF_RealmName][i].op and GF_MessageList[GF_RealmName][i].op == sentname then
-					table.remove(GF_MessageList[GF_RealmName], i);
-					break;
+			if tonumber(sentrecordedtime) < GF_GetStandardizedTime() then
+				if sentguild == "Z" then sentguild = "" end
+				if not GF_WhoTable[GF_RealmName][sentname] or tonumber(sentrecordedtime) > GF_WhoTable[GF_RealmName][sentname][4] then
+					GF_WhoTable[GF_RealmName][sentname] = { tonumber(sentplevel), GF_ClassIDs[tonumber(sentclass)], string.gsub(sentguild,"", "") }; GF_WhoTable[GF_RealmName][sentname][4] = tonumber(sentrecordedtime);
 				end
-			end
-			if getn(GF_MessageList[GF_RealmName]) > 0 then
+
+				local entry = {};
+				entry.op = sentname;
+				entry.message = message;
+				entry.type = senttype;
+				entry.dlevel = tonumber(sentdlevel)
+				entry.who = GF_WhoTable[GF_RealmName][sentname];
+				entry.t = tonumber(senttime);
+			
 				for i = 1, getn(GF_MessageList[GF_RealmName]) do
-					if entry.t > GF_MessageList[GF_RealmName][i].t then
-						table.insert(GF_MessageList[GF_RealmName], i, entry);
+					if GF_MessageList[GF_RealmName][i].op and GF_MessageList[GF_RealmName][i].op == sentname then
+						table.remove(GF_MessageList[GF_RealmName], i);
 						break;
 					end
-					if i == getn(GF_MessageList[GF_RealmName]) then table.insert(GF_MessageList[GF_RealmName], i + 1, entry); end
 				end
-			else
-				table.insert(GF_MessageList[GF_RealmName], 1, entry);	
+				if getn(GF_MessageList[GF_RealmName]) > 0 then
+					for i = 1, getn(GF_MessageList[GF_RealmName]) do
+						if entry.t > GF_MessageList[GF_RealmName][i].t then
+							table.insert(GF_MessageList[GF_RealmName], i, entry);
+							break;
+						end
+						if i == getn(GF_MessageList[GF_RealmName]) then table.insert(GF_MessageList[GF_RealmName], i + 1, entry); end
+					end
+				else
+					table.insert(GF_MessageList[GF_RealmName], 1, entry);	
+				end
 			end
 			GF_AddonGroupDataToBeSentBuffer[sentname] = nil;
 		end
