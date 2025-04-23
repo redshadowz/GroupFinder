@@ -1,5 +1,5 @@
 # GroupFinder
-Update 4/22/2025: Rofl... Alright, I rewrote how the chat is processed. Then I worked on the data sharing. Which is disabled because I realized that "time" is different for every computer.
+Update 4/22/2025: Rofl... Alright, I rewrote how the chat is processed. Then I worked on the data sharing. I "tried" to create a "universal time" based on your computer's "date" vs the server game time. There are plenty of failsafes in place to prevent issues, but I don't know how well it actually works since I don't have a computer in Europe to test it with. Works great in terms of my second client sharing data with myself. Uses guild or party channel only though.
 
 Group finder Addon for Vanilla Wow 1.12.1 based on the CallToArms addon(with Turtle WoW support).  
 
