@@ -102,7 +102,7 @@ local GF_AddonGroupDataToBeSentBuffer		= {};
 local GF_AddonMakeAListOfGroupsForSending	= nil;
 local GF_AddonListOfGuildiesWithAddon		= {};
 local GF_AddonTimeSinceLastUpdate			= 0;
-local GF_AddonTimeSinceLastRequest			= 0;
+local GF_AddonNamesFromWhoSinceLoggedOn		= {};
 
 GF_AutoAnnounceTimer						= nil;
 local GF_WasPartyLeaderBefore				= nil;
@@ -188,13 +188,15 @@ function GF_OnLoad()
 	end
 	local old_FriendsFrame_OnEvent = FriendsFrame_OnEvent;
 	function FriendsFrame_OnEvent(...)
-		local foundUrgentWhoSentFlags;
-		for i=1, GetNumWhoResults() do
-			local name,guild,level,_,class = GetWhoInfo(i);
-			GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], guild, GF_GetStandardizedTime() };
-			if GF_UrgentWhoRequestSaved and GF_UrgentWhoRequestSaved == name then foundUrgentWhoSentFlags = true; end
-		end
-		if WhoFrame:IsVisible() or (event ~= "WHO_LIST_UPDATE" or foundUrgentWhoSentFlags) then
+		if event == "WHO_LIST_UPDATE" then
+			for i=1, GetNumWhoResults() do
+				local name,guild,level,_,class = GetWhoInfo(i);
+				GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], guild, GF_GetStandardizedTime() };
+				if GF_IsGuildieUsingAddon() then GF_AddonWhoDataToBeSentBuffer[name] = GF_WhoTable[GF_RealmName][name] end
+				GF_AddonNamesFromWhoSinceLoggedOn[name] = true;
+				if WhoFrame:IsVisible() or GF_UrgentWhoRequestSaved == name then old_FriendsFrame_OnEvent(event); end
+			end
+		else
 			old_FriendsFrame_OnEvent(event);
 		end
 	end
@@ -440,7 +442,8 @@ function GF_WhoListUpdated()
 	for i=1, GetNumWhoResults() do
 		local name, guild, level, race, class, zone = GetWhoInfo(i);
 		GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], guild, GF_GetStandardizedTime() }
-		GF_AddonWhoDataToBeSentBuffer[name] = GF_WhoTable[GF_RealmName][name]
+		if GF_IsGuildieUsingAddon() then GF_AddonWhoDataToBeSentBuffer[name] = GF_WhoTable[GF_RealmName][name] end
+		GF_AddonNamesFromWhoSinceLoggedOn[name] = true;
 		GF_TimeTillNextBroadcast = 1;
 		if GF_ClassWhoRequest and not GF_ClassWhoTable[name] and not GF_PlayersCurrentlyInGroup[name] and level >= GF_GetWhoParams[1]-GF_GetWhoLevelRange and level <= GF_GetWhoParams[1]+GF_GetWhoLevelRange
 		and class == GF_GetWhoParams[2] and (not GF_GetWhoParams[3] or (GF_GetWhoParams[3] and not GF_IsFoundClassWhoPlayerInADungeonOrPvP(zone))) then
@@ -598,19 +601,20 @@ function GF_RequestAdditionalWhoDataUpdates()
 	GF_RequestWhoDataPeriodicallyTimer = GF_RequestWhoDataPeriodicallyTimer - 1;
 	if GF_RequestWhoDataPeriodicallyTimer < 0 then
 		GF_RequestWhoDataPeriodicallyTimer = 300;
-		for i=1, GetNumGuildMembers() do
-			local name = GetGuildRosterInfo(i)
-			if name and GF_AddonListOfGuildiesWithAddon[name] then
-				for i=1, getn(GF_MessageList[GF_RealmName]) do
-					if not GF_MessageList[GF_RealmName][i].who then GF_AddonNamesToBeSentAsARequest[GF_MessageList[GF_RealmName][i].op] = true end
-				end
-				for i=1, getn(GF_WhoQueue) do
-					GF_AddonNamesToBeSentAsARequest[GF_WhoQueue[i]] = true
-				end
-				GF_TimeTillNextBroadcast = 0;
-				break
+		if GF_IsGuildieUsingAddon() then
+			for i=1, getn(GF_MessageList[GF_RealmName]) do
+				if not GF_MessageList[GF_RealmName][i].who then GF_AddonNamesToBeSentAsARequest[GF_MessageList[GF_RealmName][i].op] = true end
 			end
+			for i=1, getn(GF_WhoQueue) do
+				GF_AddonNamesToBeSentAsARequest[GF_WhoQueue[i]] = true
+			end
+			GF_TimeTillNextBroadcast = 0;
 		end
+	end
+end
+function GF_IsGuildieUsingAddon()
+	for name in GF_AddonListOfGuildiesWithAddon do
+		if GF_Guildies[name] then return true end
 	end
 end
 function GF_OnEvent(event)
@@ -641,7 +645,13 @@ function GF_OnEvent(event)
 		GF_LoadSettings()
 		GF_UpdateBlackListItems(); 
 		GF_ApplyFiltersToGroupList()	
-		if not GF_SavedVariables.addonsendtimeout or GF_SavedVariables.addonsendtimeout + 300 < time() then GF_SavedVariables.addonsendtimeout = time(); GF_OnStartupQueueURequest = true; end
+		if not GF_SavedVariables.addonsendtimeout or GF_SavedVariables.addonsendtimeout + 300 < time() then
+			GF_SavedVariables.addonsendtimeout = time();
+			GF_OnStartupQueueURequest = true;
+		else
+			if GetGuildInfo("player") then SendAddonMessage("GF", "Z", "GUILD");
+			elseif GF_GetNumGroupMembers() > 0 then SendAddonMessage("GF", "Z", "PARTY"); end
+		end
 		GF_BindKey("I", "GF_SHOW_FRAME")
 		GF_BindKey("SHIFT-G", "GF_SHOW_GROUP")
 		GF_BindKey("SHIFT-L", "GF_SHOW_LOG")
@@ -926,18 +936,21 @@ function GF_ParseIncomingAddonMessages(arg2)
 --I receive your "W" and cross out the names I already have, then I send a request(R) with the list of names I want.
 --You send the full information for the names I requested(and will repeatedly send until all the names are sent, checking off any info sent by others).
 --When I /who, the name is added to the "W" broadcast list. This list is resent every 30 seconds.
-	--print(arg2)
 	if string.sub(arg2,1,1) == "U" then -- (From OP) Sent on login with a list of names from OP's group list(up to 240 characters).
 		for name in string.gfind(string.sub(arg2,3), "(%w+)") do
 			GF_AddonOPSentNamesOnLogin[name] = true;
 		end
 		if GF_AddonTimeSinceLastUpdate + 60 < time() then
-			for name,whodata in pairs(GF_WhoTable[GF_RealmName]) do
-				if not GF_AddonOPSentNamesOnLogin[name] and not GF_AddonWhoDataToBeSentBuffer[name] and whodata[4] and whodata[4] + 15 > GF_GetStandardizedTime() then GF_AddonAllNamesForResponseToLogin[name] = true; end -- Sends only names from the last 15 minutes
+			for name in GF_AddonNamesFromWhoSinceLoggedOn do
+				if not GF_AddonOPSentNamesOnLogin[name] and not GF_AddonWhoDataToBeSentBuffer[name] and GF_WhoTable[GF_RealmName][name][4] + 15 > GF_GetStandardizedTime() then
+					GF_AddonAllNamesForResponseToLogin[name] = true;
+				else
+					GF_AddonNamesFromWhoSinceLoggedOn[name] = nil
+				end
 			end
 			GF_AddonTimeSinceLastUpdate = time()
 		end
-		GF_TimeTillNextBroadcast = (math.random(90))/3; -- Assuming up to 333ms lag
+		GF_TimeTillNextBroadcast = (math.random(90))/3; -- Assuming up to 333ms lag, up to 100 different random slots for responses. To keep down on the spam.
 		GF_RequestWhoDataPeriodicallyTimer = 60;
 		GF_AddonMakeAResponseToLoginList = true;
 		GF_AddonMakeAListOfGroupsForSending = true;
@@ -955,7 +968,7 @@ function GF_ParseIncomingAddonMessages(arg2)
 	elseif string.sub(arg2,1,1) == ":" then -- (To Everyone) This is the who data from the names requested in "R".
 		for sentlevel,sentname,sentclass,sentguild,sentrecordedtime in string.gfind(arg2, ":(%d+)([a-zA-Z]+)(%d)([a-zA-Z%s]+)(%d+)") do
 			if sentguild == "Z" then sentguild = "" end
-			if tonumber(sentrecordedtime) < GF_GetStandardizedTime() and (not GF_WhoTable[GF_RealmName][sentname] or tonumber(sentrecordedtime) > GF_WhoTable[GF_RealmName][sentname][4]) then
+			if tonumber(sentrecordedtime) <= GF_GetStandardizedTime() and (not GF_WhoTable[GF_RealmName][sentname] or tonumber(sentrecordedtime) > GF_WhoTable[GF_RealmName][sentname][4]) then
 				GF_WhoTable[GF_RealmName][sentname] = { tonumber(sentlevel), GF_ClassIDs[tonumber(sentclass)], sentguild, tonumber(sentrecordedtime) }
 			end
 			GF_AddonAllNamesForResponseToLogin[sentname] = nil;
@@ -964,7 +977,7 @@ function GF_ParseIncomingAddonMessages(arg2)
 		end
 	elseif string.len(arg2) > 2 then -- (To Everyone) This is the full group information. Which is sent separately from the who data.
 		for sentclass,senttime,senttype,sentdlevel,sentname,sentplevel,sentguild,sentrecordedtime,message in string.gfind(arg2, "(%d)(%d+)([a-zA-Z])(%d+)([a-zA-Z]+)(%d+)([a-zA-Z%s]+)(%d+):(.+)") do
-			if tonumber(sentrecordedtime) < GF_GetStandardizedTime() then
+			if tonumber(sentrecordedtime) <= GF_GetStandardizedTime() then
 				if sentguild == "Z" then sentguild = "" end
 				if not GF_WhoTable[GF_RealmName][sentname] or tonumber(sentrecordedtime) > GF_WhoTable[GF_RealmName][sentname][4] then
 					GF_WhoTable[GF_RealmName][sentname] = { tonumber(sentplevel), GF_ClassIDs[tonumber(sentclass)], string.gsub(sentguild,"", "") }; GF_WhoTable[GF_RealmName][sentname][4] = tonumber(sentrecordedtime);
