@@ -1826,7 +1826,7 @@ function GF_CheckForTradesAndChat(arg1,event)
 	return 3;
 end
 function GF_FindGroupsAndDisplayCustomChatMessages(event,arg1,arg2,arg9)-- GF_PreviousMessage = [1] arg1/message, [2] time of last message + timeout, [3] isMessageShown(on next cycle)
-	if not arg1 or not arg2 or not arg9 or not GF_TextColors[event] then
+	if not arg9 or string.lower(arg9) == "lft" or not arg1 or not arg2 or not GF_TextColors[event] then
 		return true;
 	elseif GF_PreviousMessage[arg2] and GF_PreviousMessage[arg2][1] == arg1 and GF_PreviousMessage[arg2][2] > time() then
 		if GF_PreviousMessage[arg2][3] then return true; end
