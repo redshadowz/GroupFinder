@@ -753,6 +753,7 @@ function GF_UpdateGroupsFrame()
 		end
 		GF_AddonMakeAListOfGroupsForSending = nil;
 		GF_AddonOPSentNamesOnLogin = {}
+		referenceDate = GF_GetBaselineDate()
 	end
 end
 
@@ -1048,7 +1049,6 @@ function GF_LoadSettings()
 	GF_WhisperHistoryUpdateFrame()
 	GF_DisplayLog()
 	GF_PruneTheClassWhoTable()
-	referenceDate = GF_GetBaselineDate()
 	
 	if (GF_RealmName == "Nordanaar" or GF_RealmName == "Tel'Abim") then GF_AddTurtleWoWDungeonsRaids(); GF_WhoCooldownTime = 30; end
 end
