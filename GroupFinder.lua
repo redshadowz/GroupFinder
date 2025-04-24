@@ -1754,11 +1754,11 @@ function GF_FindGroupsAndDisplayCustomChatMessages(event,arg1,arg2,arg9) -- Chat
 	elseif GF_PreviousMessage[arg2] and GF_PreviousMessage[arg2][1] == arg1 and GF_PreviousMessage[arg2][2] > time() then
 		if GF_PreviousMessage[arg2][3] then return true; end
 	elseif event == "CHAT_MSG_WHISPER" then
-		GF_PreviousMessage[arg2] = {arg1,time() + .1, true}
+		GF_PreviousMessage[arg2] = {arg1,time() + .25, true}
 		GF_WhisperReceivedAddToWhisperHistoryList(arg1,arg2,event)
 		return true;
 	elseif event == "CHAT_MSG_WHISPER_INFORM" then
-		GF_PreviousMessage[arg2] = {arg1,time() + .1, true}
+		GF_PreviousMessage[arg2] = {arg1,time() + .25, true}
 		for i=1, getn(GF_MyWhispers) do
 			if arg1 == GF_MyWhispers[i][1] then
 				GF_WhisperReceivedAddToWhisperHistoryList(arg1,GF_MyWhispers[i][2],event)
@@ -1768,20 +1768,20 @@ function GF_FindGroupsAndDisplayCustomChatMessages(event,arg1,arg2,arg9) -- Chat
 		end
 		return true;
 	elseif (event == "CHAT_MSG_GUILD") then
-		GF_PreviousMessage[arg2] = {arg1,time() + .1, true}
+		GF_PreviousMessage[arg2] = {arg1,time() + .25, true}
 		GF_WhisperReceivedAddToWhisperHistoryList(arg1,arg2,event)
 		return true;
 	elseif arg2 == UnitName("player") then
-		GF_PreviousMessage[arg2] = {arg1,time() + .1, true}
+		GF_PreviousMessage[arg2] = {arg1,time() + .25, true}
 		GF_AddLogMessage(arg1,10,true,arg2,arg8,arg9,event)
 		return true;
 	elseif GF_LootFilter[event] then
 		GF_AddLogMessage(arg1,6,true,arg2,arg8,arg9,event)
 		if GF_SavedVariables.showloottexts or (event == "CHAT_MSG_LOOT" and GF_BypassLootFilter(arg1)) then
-			GF_PreviousMessage[arg2] = {arg1,time() + .1, true}
+			GF_PreviousMessage[arg2] = {arg1,time() + .25, true}
 			return true;
 		else
-			GF_PreviousMessage[arg2] = {arg1,time() + .1, nil}
+			GF_PreviousMessage[arg2] = {arg1,time() + .25, nil}
 			return nil;
 		end
 	elseif event == "CHAT_MSG_SYSTEM" then
