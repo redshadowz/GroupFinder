@@ -410,7 +410,7 @@ function GF_UpdateMinimapIcon()
 	GF_MinimapMessageFrameA6:SetPoint(relativepos, "Minimap", relativepos,xpos,ypos+210*directionMultiplier);
 end
 
-function GF_GetBaselineDate() -- Basic Functions
+function GF_GetBaselineDate() -- Basic Functions /script print(GF_GetBaselineDate())  /script print(GF_GetStandardizedTime())
 	local serverHours, serverMinutes = GetGameTime() -- 00-23, 0-59
 	local dateHours = tonumber(date("%H"))
 	local dateMinutes = tonumber(date("%M"))
@@ -461,7 +461,7 @@ end
 function GF_GetStandardizedTime()
 	local ghour, gminute = GetGameTime();
 	if lastTimeHour > ghour or (ghour == 0 and lastTimeHour ~= 0) then
-		referenceDate, referenceOffset = GF_GetBaselineDate()
+		referenceDate = GF_GetBaselineDate()
 		lastTimeHour = ghour;
 	end
 	if GetCurrentMapContinent() == 1 then -- If I'm in Kalimdor
@@ -847,6 +847,7 @@ function GF_ParseIncomingAddonMessages(msg)
 --I receive your "W" and cross out the names I already have, then I send a request(R) with the list of names I want.
 --You send the full information for the names I requested(and will repeatedly send until all the names are sent, checking off any info sent by others).
 --When I /who, the name is added to the "W" broadcast list. This list is resent every 30 seconds.
+	--print(msg)
 	if string.sub(msg,1,1) == "U" then -- (From OP) Sent on login with a list of names from OP's group list(up to 240 characters).
 		for name in string.gfind(string.sub(msg,3), "(%w+)") do
 			GF_AddonOPSentNamesOnLogin[name] = true;
@@ -1035,7 +1036,7 @@ function GF_LoadSettings()
 	GF_MainFrame:SetAlpha(GF_FrameTransparencySlider:GetValue());
 	GF_MainFrame:SetScale(GF_UIScaleSlider:GetValue());
 	if GF_SavedVariables.MainFrameXPos then GF_MainFrame:SetPoint("TOPLEFT",UIParent,"TOPLEFT", GF_SavedVariables.MainFrameXPos, GF_SavedVariables.MainFrameYPos) else GF_SavedVariables.MainFrameXPos = 0 GF_SavedVariables.MainFrameXPos = 0 end
-	if GF_SavedVariables.loghidemainframe then GF_MainFrame:Show() GF_ToggleHideMainFrame() end
+	if GF_SavedVariables.loghidemainframe then GF_MainFrame:Show() GF_ToggleHideMainFrame() else GF_SavedVariables.loghidemainframelogdef = nil; end
 	GF_ToggleHideMainFrameHeight()
 	GF_UpdateMinimapIcon()
 	GF_UpdateFriendsList()
@@ -1044,7 +1045,8 @@ function GF_LoadSettings()
 	GF_WhisperHistoryUpdateFrame()
 	GF_DisplayLog()
 	GF_PruneTheClassWhoTable()
-
+	referenceDate = GF_GetBaselineDate()
+	
 	if (GF_RealmName == "Nordanaar" or GF_RealmName == "Tel'Abim") then GF_AddTurtleWoWDungeonsRaids(); GF_WhoCooldownTime = 30; end
 end
 function GF_JoinWorld(show)
