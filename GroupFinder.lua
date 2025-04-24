@@ -736,6 +736,7 @@ end
 function GF_UpdateGroupsFrame()
 	GF_UpdateAndRequestTimer = GF_UpdateAndRequestTimer - 1;
 	if GF_UpdateAndRequestTimer < 0 then
+		referenceDate = GF_GetBaselineDate()
 		GF_UpdateAndRequestTimer = 30;
 		GF_ApplyFiltersToGroupList()
 		for i=1, getn(GF_MessageList[GF_RealmName]) do
@@ -753,7 +754,6 @@ function GF_UpdateGroupsFrame()
 		end
 		GF_AddonMakeAListOfGroupsForSending = nil;
 		GF_AddonOPSentNamesOnLogin = {}
-		referenceDate = GF_GetBaselineDate()
 	end
 end
 
