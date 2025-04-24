@@ -61,8 +61,6 @@
 	loghidemainframelogdef		= false,
 };
 GF_RealmName								= GetRealmName();
-local referenceDate							= nil;
-local lastTimeHour							= 99;
 local GF_MaxEntriesPerRealmOnPrune			= 20000;
 local GF_WhoCooldownTime					= 10;
 local GF_NextAvailableWhoTime				= 0;
@@ -245,7 +243,7 @@ function GF_SlashHandler(msg)
 end
 function GF_GameTooltip_OnShow()
 	if UnitIsPlayer("mouseover") and UnitIsFriend("player","mouseover") then
-		GF_WhoTable[GF_RealmName][UnitName("mouseover")] = { UnitLevel("mouseover"), GF_Classes[UnitClass("mouseover")], GetGuildInfo("mouseover") or "", GF_GetStandardizedTime() }
+		GF_WhoTable[GF_RealmName][UnitName("mouseover")] = { UnitLevel("mouseover"), GF_Classes[UnitClass("mouseover")], GetGuildInfo("mouseover") or "", time() }
 	end
 	if old_GameTooltip_OnShow then old_GameTooltip_OnShow(event) end
 end
@@ -408,78 +406,6 @@ function GF_UpdateMinimapIcon()
 	GF_MinimapMessageFrameA4:SetPoint(relativepos, "Minimap", relativepos,xpos,ypos+126*directionMultiplier);
 	GF_MinimapMessageFrameA5:SetPoint(relativepos, "Minimap", relativepos,xpos,ypos+168*directionMultiplier);
 	GF_MinimapMessageFrameA6:SetPoint(relativepos, "Minimap", relativepos,xpos,ypos+210*directionMultiplier);
-end
-
-function GF_GetBaselineDate() -- Basic Functions /script print(GF_GetBaselineDate())  /script print(GF_GetStandardizedTime())
-	local serverHours, serverMinutes = GetGameTime() -- 00-23, 0-59
-	local dateHours = tonumber(date("%H"))
-	local dateMinutes = tonumber(date("%M"))
-	local dateDays = tonumber(date("%d"))
-	if GetCurrentMapContinent() == 1 then -- If I'm in Kalimdor, adjust hours by 12.
-		if serverHours > 12 then
-			serverHours = serverHours - 12
-		else
-			serverHours = serverHours + 12
-		end
-	end
-	if dateMinutes > 50 and serverMinutes < 10 then -- If I'm 1:59 and the server is 2:01 then add 1 hour(2:59) then subtract (59-1 = 58).. giving 2:01
-		dateHours = dateHours + 1
-	elseif dateMinutes < 10 and serverMinutes > 50 then -- If I'm 2:01 and the server is 1:59 then subtract 1 hour(1:01) and add (59-1 = 58).. giving 1:59
-		dateHours = dateHours - 1
-	end
--- Now I have the adjusted minutes, now I need to fix the hours/days
-	if dateHours > 23 then
-		dateDays = dateDays + 1
-		dateHours = 0;
-	elseif dateHours < 0 then
-		dateDays = dateDays - 1
-		dateHours = 23;
-	end
--- now I've fixed the days and hours... I now have the localized time that I logged on. I need to establish the offset.
-	local localizedHourOffset;
-	if serverHours - dateHours >= 0 then -- If I'm 12 hours ahead of the server.. then it is 12 PM for me(12) and 12 AM(0) for the server... I need to subtract 12 hours... There is no 12 hours behind.
-		if serverHours - dateHours < 12 then
-			localizedHourOffset = (serverHours - dateHours) -- I'm behind the server time and the server hasn't rolled over... Add the difference(ex. 8 - 3 = 5 * 60 = 300 minutes)
-		else
-			localizedHourOffset = ((serverHours - dateHours)-24) -- I'm ahead of the server and the server hasn't rolled over but I have... Subtract the difference(ex. 23 - 4 = 19, 19-24 = -5 * 60 = -300 minutes)
-		end
-	else
-		if serverHours - dateHours < -12 then -- I'm hour 23 and server is 4 on the next day... so it is at 28th hour... so I need to add 5 hours
-			localizedHourOffset = (24+(serverHours - dateHours)) -- I'm behind the server time and the server has rolled over but I haven't... Add the difference(ex. 4 - 23 = -19, 24 - 19 = 5 * 60 = 300 minutes)
-		else
-			localizedHourOffset = (serverHours - dateHours) -- I'm ahead of the server and I haven't rolled over..  Subtract the difference(ex. 3 - 8 = -5, -5 * 60 = -300 minutes)
-		end
-	end
--- Now I have the offset, I need to check if the day is still the same day. If not, add/subtract a day.
-	if dateHours + localizedHourOffset > 23 then
-		dateDays = dateDays + 1
-	elseif dateHours + localizedHourOffset < 0 then
-		dateDays = dateDays - 1
-	end
-	return (date("%y")-25)*525600+(GF_DaysBeforeMonth[tonumber(date("%m"))]+dateDays)*1440;
-end
-function GF_GetStandardizedTime()
-	local ghour, gminute = GetGameTime();
-	if lastTimeHour > ghour or (ghour == 0 and lastTimeHour ~= 0) then
-		referenceDate = GF_GetBaselineDate()
-		lastTimeHour = ghour;
-	end
-	if GetCurrentMapContinent() == 1 then -- If I'm in Kalimdor
-		if ghour > 11 then
-			ghour = (ghour - 12)
-		else
-			ghour = (ghour + 12)
-		end
-	end
-	return referenceDate + ghour*60 + gminute
-end
-function GF_GetWhoData(arg2,groupfound)
-	if (not GF_WhoTable[GF_RealmName][arg2] or GF_WhoTable[GF_RealmName][arg2][4]  + 86400 < GF_GetStandardizedTime() or (GF_WhoTable[GF_RealmName][arg2][1] < 60 and GF_WhoTable[GF_RealmName][arg2][4]  + 1440 < GF_GetStandardizedTime()))
-	and(GF_SavedVariables.usewhoongroups and (groupfound or not GF_SavedVariables.showoriginalchat)) then -- If level 60, get new whodata after 60 days(for guild name changes). If below level 60, get new data every 24 hours.
-		GF_AddNameToWhoQueue(arg2,groupfound)
-	else
-		return GF_WhoTable[GF_RealmName][arg2]
-	end
 end
 
 function GF_SendMessageFromLogEditBox() -- Chat and Log-related functions
@@ -649,7 +575,7 @@ function GF_SendWhoIfNameInQueue()
 					GF_LFGGetWhoButton:SetText(GF_GET_WHO.." - "..GF_ClassWhoMatchingResults);
 				end
 			elseif GF_WhoQueue[1] then
-				if (GF_WhoTable[GF_RealmName][GF_WhoQueue[1]] and GF_WhoTable[GF_RealmName][GF_WhoQueue[1]][4] + 1440 > GF_GetStandardizedTime()) or GF_AddonNamesToBeSentAsARequest[GF_WhoQueue[1]] then
+				if (GF_WhoTable[GF_RealmName][GF_WhoQueue[1]] and GF_WhoTable[GF_RealmName][GF_WhoQueue[1]][4] + 86400 > time()) or GF_AddonNamesToBeSentAsARequest[GF_WhoQueue[1]] then
 					table.remove(GF_WhoQueue, 1);
 					return;
 				end
@@ -663,11 +589,11 @@ end
 function GF_WhoListUpdated()
 	for i=1, GetNumWhoResults() do
 		local name, guild, level, race, class, zone = GetWhoInfo(i);
-		GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], guild, GF_GetStandardizedTime() }
+		GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], guild, time() }
 		GF_AddonWhoDataToBeSentBuffer[name] = GF_WhoTable[GF_RealmName][name]
 		GF_AddonNamesFromWhoSinceLoggedOn[name] = true;
 		if GF_IsFriendGuildieUsingAddon() then GF_AddonNeedToBroadcastSomething = true; end
-		GF_TimeTillNextBroadcast = (math.random(2))/3;
+		GF_TimeTillNextBroadcast = 0;
 		if GF_ClassWhoRequest and not GF_ClassWhoTable[name] and not GF_PlayersCurrentlyInGroup[name] and level >= GF_GetWhoParams[1]-GF_GetWhoLevelRange and level <= GF_GetWhoParams[1]+GF_GetWhoLevelRange
 		and class == GF_GetWhoParams[2] and (not GF_GetWhoParams[3] or (GF_GetWhoParams[3] and not GF_IsFoundClassWhoPlayerInADungeonOrPvP(zone))) then
 			GF_ClassWhoTable[name] = { level, class, zone, time()-GF_GetWhoResetTimer }
@@ -709,6 +635,14 @@ function GF_GetPositionInWhoQueue(name)
 		end
 	end
 end
+function GF_GetWhoData(arg2,groupfound)
+	if (not GF_WhoTable[GF_RealmName][arg2] or GF_WhoTable[GF_RealmName][arg2][4] + 5184000 < time() or (GF_WhoTable[GF_RealmName][arg2][1] < 60 and GF_WhoTable[GF_RealmName][arg2][4]  + 86400 < time()))
+	and(GF_SavedVariables.usewhoongroups and (groupfound or not GF_SavedVariables.showoriginalchat)) then -- If level 60, get new whodata after 60 days(for guild name changes). If below level 60, get new data every 24 hours.
+		GF_AddNameToWhoQueue(arg2,groupfound)
+	else
+		return GF_WhoTable[GF_RealmName][arg2]
+	end
+end
 function GF_CheckForAnnounce()
 	if GF_AutoAnnounceTimer then
 		GF_AutoAnnounceTimer = GF_AutoAnnounceTimer + 1;
@@ -736,7 +670,6 @@ end
 function GF_UpdateGroupsFrame()
 	GF_UpdateAndRequestTimer = GF_UpdateAndRequestTimer - 1;
 	if GF_UpdateAndRequestTimer < 0 then
-		referenceDate = GF_GetBaselineDate()
 		GF_UpdateAndRequestTimer = 30;
 		GF_ApplyFiltersToGroupList()
 		for i=1, getn(GF_MessageList[GF_RealmName]) do
@@ -781,7 +714,7 @@ function GF_CheckForBroadCast()
 			GF_AddonNeedToBroadcastSomething = nil;
 			local counter = 0;
 			for name,entry in pairs(GF_AddonGroupDataToBeSentBuffer) do
-				if entry.who and (entry.type == "D" or entry.type == "R") and entry.t + 15 > GF_GetStandardizedTime() then
+				if entry.who and (entry.type == "D" or entry.type == "R") and entry.t + 900 > time() then
 					if entry.who[3] == "" then entry.who[3] = "Z" end
 					if GetGuildInfo("player") then SendAddonMessage("GF", GF_ClassIDs[entry.who[2]]..entry.t..entry.type..entry.dlevel..entry.op..entry.who[1]..entry.who[3]..entry.who[4]..":"..entry.message, "GUILD");
 					elseif GF_GetNumGroupMembers() > 0 then SendAddonMessage("GF", GF_ClassIDs[entry.who[2]]..entry.t..entry.type..entry.dlevel..entry.op..entry.who[1]..entry.who[3]..entry.who[4]..":"..entry.message, "PARTY"); end
@@ -800,10 +733,9 @@ function GF_CheckForBroadCast()
 							if GetGuildInfo("player") then SendAddonMessage("GF", addonsendstring, "GUILD"); elseif GF_GetNumGroupMembers() > 0 then SendAddonMessage("GF", addonsendstring, "PARTY"); end
 							addonsendstring = "U";
 							counter = counter + 1;
-							break
+							if counter == 4 then break end
 						end
 					end
-					if counter == 4 then break end
 				end
 				if counter == 0 or string.len(addonsendstring) > 1 then if GetGuildInfo("player") then SendAddonMessage("GF", addonsendstring, "GUILD"); elseif GF_GetNumGroupMembers() > 0 then SendAddonMessage("GF", addonsendstring, "PARTY"); end	end
 				GF_OnStartupQueueURequest = nil;
@@ -855,7 +787,7 @@ function GF_ParseIncomingAddonMessages(msg)
 		end
 		if GF_AddonTimeSinceLastUpdate + 60 < time() then
 			for name in GF_AddonNamesFromWhoSinceLoggedOn do
-				if not GF_AddonOPSentNamesOnLogin[name] and not GF_AddonWhoDataToBeSentBuffer[name] and GF_WhoTable[GF_RealmName][name][4] + 15 > GF_GetStandardizedTime() then
+				if not GF_AddonOPSentNamesOnLogin[name] and not GF_AddonWhoDataToBeSentBuffer[name] and GF_WhoTable[GF_RealmName][name][4] + 900 > time() then
 					GF_AddonAllNamesForResponseToLogin[name] = true;
 				else
 					GF_AddonNamesFromWhoSinceLoggedOn[name] = nil
@@ -863,7 +795,7 @@ function GF_ParseIncomingAddonMessages(msg)
 			end
 			GF_AddonTimeSinceLastUpdate = time()
 		end
-		GF_TimeTillNextBroadcast = (math.random(90))/3; -- Assuming up to 333ms lag, up to 100 different random slots for responses. To keep down on the spam.
+		GF_TimeTillNextBroadcast = (math.random(80))/4; -- Assuming up to 333ms lag, up to 100 different random slots for responses. To keep down on the spam.
 		GF_RequestWhoDataPeriodicallyTimer = 60;
 		GF_AddonMakeAResponseToLoginList = true;
 		GF_AddonMakeAListOfGroupsForSending = true;
@@ -874,18 +806,19 @@ function GF_ParseIncomingAddonMessages(msg)
 			if not GF_WhoTable[GF_RealmName][sentname] then GF_AddonNamesToBeSentAsARequest[sentname] = true end
 			GF_AddonAllNamesForResponseToLogin[sentname] = nil
 		end
+		GF_TimeTillNextBroadcast = (math.random(80))/4;
 		GF_AddonNeedToBroadcastSomething = true;
 	elseif string.sub(msg,1,1) == "R" then -- (To Everyone) Sent as a reply to "W". Sends a list of names from the "W" message that you don't have information for(up to 240 characters).
 		for sentname in string.gfind(msg, ":(%w+)") do
-			if GF_WhoTable[GF_RealmName][sentname] and GF_WhoTable[GF_RealmName][sentname][4] + 1440 > GF_GetStandardizedTime() then GF_AddonWhoDataToBeSentBuffer[sentname] = GF_WhoTable[GF_RealmName][sentname]; end
+			if GF_WhoTable[GF_RealmName][sentname] and GF_WhoTable[GF_RealmName][sentname][4] + 86400 > time() then GF_AddonWhoDataToBeSentBuffer[sentname] = GF_WhoTable[GF_RealmName][sentname]; end
 			GF_AddonNamesToBeSentAsARequest[sentname] = nil
 		end
+		GF_TimeTillNextBroadcast = (math.random(80))/4;
 		GF_AddonNeedToBroadcastSomething = true;
 	elseif string.sub(msg,1,1) == ":" then -- (To Everyone) This is the who data from the names requested in "R".
 		for sentlevel,sentname,sentclass,sentguild,sentrecordedtime in string.gfind(msg, ":(%d+)([a-zA-Z]+)(%d)([a-zA-Z%s]+)(%d+)") do
-			if GF_GetStandardizedTime() < tonumber(sentrecordedtime) then referenceDate = GF_GetBaselineDate() end
 			if sentguild == "Z" then sentguild = "" end
-			if tonumber(sentrecordedtime) <= GF_GetStandardizedTime() and (not GF_WhoTable[GF_RealmName][sentname] or tonumber(sentrecordedtime) > GF_WhoTable[GF_RealmName][sentname][4]) then
+			if tonumber(sentrecordedtime) <= time() and (not GF_WhoTable[GF_RealmName][sentname] or tonumber(sentrecordedtime) > GF_WhoTable[GF_RealmName][sentname][4]) then
 				GF_WhoTable[GF_RealmName][sentname] = { tonumber(sentlevel), GF_ClassIDs[tonumber(sentclass)], sentguild, tonumber(sentrecordedtime) }
 			end
 			GF_AddonAllNamesForResponseToLogin[sentname] = nil;
@@ -894,8 +827,7 @@ function GF_ParseIncomingAddonMessages(msg)
 		end
 	elseif string.len(msg) > 2 then -- (To Everyone) This is the full group information. Which is sent separately from the who data.
 		for sentclass,senttime,senttype,sentdlevel,sentname,sentplevel,sentguild,sentrecordedtime,message in string.gfind(msg, "(%d)(%d+)([a-zA-Z])(%d+)([a-zA-Z]+)(%d+)([a-zA-Z%s]+)(%d+):(.+)") do
-			if GF_GetStandardizedTime() < tonumber(sentrecordedtime) then referenceDate = GF_GetBaselineDate() end
-			if tonumber(sentrecordedtime) <= GF_GetStandardizedTime() then
+			if tonumber(sentrecordedtime) <= time() then
 				if sentguild == "Z" then sentguild = "" end
 				if not GF_WhoTable[GF_RealmName][sentname] or tonumber(sentrecordedtime) > GF_WhoTable[GF_RealmName][sentname][4] then
 					GF_WhoTable[GF_RealmName][sentname] = { tonumber(sentplevel), GF_ClassIDs[tonumber(sentclass)], string.gsub(sentguild,"", "") }; GF_WhoTable[GF_RealmName][sentname][4] = tonumber(sentrecordedtime);
@@ -964,9 +896,10 @@ function GF_OnEvent(event) -- OnEvent, LoadSettings, Bind Keys, Prune Tables
 		GF_LoadSettings()
 		GF_UpdateBlackListItems(); 
 		GF_ApplyFiltersToGroupList()	
-		if not GF_SavedVariables.addonsendtimeout or GF_SavedVariables.addonsendtimeout + 300 < time() then
+		if not GF_SavedVariables.addonsendtimeout or GF_SavedVariables.addonsendtimeout + 900 < time() then
 			GF_SavedVariables.addonsendtimeout = time();
 			GF_OnStartupQueueURequest = true;
+			GF_AddonNeedToBroadcastSomething = true;			
 		else
 			if GetGuildInfo("player") then SendAddonMessage("GF", "Z", "GUILD");
 			elseif GF_GetNumGroupMembers() > 0 then SendAddonMessage("GF", "Z", "PARTY"); end
@@ -1013,11 +946,11 @@ function GF_LoadSettings()
 	if not GF_MessageList[GF_RealmName] then GF_MessageList[GF_RealmName] = {}; end
 	if not GF_BlackList[GF_RealmName] then GF_BlackList[GF_RealmName] = {}; end
 	if not GF_LogHistory[GF_RealmName] then GF_LogHistory[GF_RealmName] = {} end
-	if not GF_WhoTable or not GF_WhoTable[GF_RealmName] or not GF_WhoTable[GF_RealmName]["LOADED"] or not GF_WhoTable[GF_RealmName]["LOADED"][UnitName("player")] or type(GF_WhoTable[GF_RealmName]["LOADED"][UnitName("player")]) ~= "table" or GF_WhoTable[GF_RealmName]["LOADED"][UnitName("player")][4] > 1000000000 then
+	if not GF_WhoTable or not GF_WhoTable[GF_RealmName] or not GF_WhoTable[GF_RealmName]["LOADED"] or not GF_WhoTable[GF_RealmName]["LOADED"][UnitName("player")] or type(GF_WhoTable[GF_RealmName]["LOADED"][UnitName("player")]) ~= "table" then
 		GF_WhoTable = {}
 		GF_WhoTable[GF_RealmName] = {}
 		GF_WhoTable[GF_RealmName]["LOADED"] = {}
-		GF_WhoTable[GF_RealmName]["LOADED"][UnitName("player")] = { UnitLevel("player"), GF_Classes[UnitClass("player")], "", GF_GetStandardizedTime() - 1 }
+		GF_WhoTable[GF_RealmName]["LOADED"][UnitName("player")] = { UnitLevel("player"), GF_Classes[UnitClass("player")], "", time() - 1 }
 		GF_WhisperLogData = {}
 		GF_WhisperLogData[GF_RealmName] = {}
 		GF_WhisperLogData[GF_RealmName]["Guild"] = {""}
@@ -1025,17 +958,17 @@ function GF_LoadSettings()
 		GF_MessageList[GF_RealmName] = {};
 		table.insert(GF_WhisperLogData[GF_RealmName], "Guild")
 	end
-	if GF_WhoTable[GF_RealmName]["LOADED"][UnitName("player")][4] + 10080 < GF_GetStandardizedTime() then -- 7 days
+	if GF_WhoTable[GF_RealmName]["LOADED"][UnitName("player")][4] + 604800 < time() then -- 7 days
 		GF_PruneTheWhoTable()
 		--[[if IsAddOnLoaded("pfUI") then
 			for name, whodata in pfUI_playerDB do
 				if not GF_WhoTable[GF_RealmName][name] then
-					GF_WhoTable[GF_RealmName][name] = { whodata.level, whodata.class, whodata.guild, GF_GetStandardizedTime() - 1441 }
+					GF_WhoTable[GF_RealmName][name] = { whodata.level, whodata.class, whodata.guild, time() - 86401 }
 					if not GF_WhoTable[GF_RealmName][name][3] then GF_WhoTable[GF_RealmName][name][3] = "" end
 				end
 			end
 		end--]]
-		GF_WhoTable[GF_RealmName]["LOADED"][UnitName("player")] = { UnitLevel("player"), GF_Classes[UnitClass("player")], "", GF_GetStandardizedTime() }
+		GF_WhoTable[GF_RealmName]["LOADED"][UnitName("player")] = { UnitLevel("player"), GF_Classes[UnitClass("player")], "", time() }
 	end
 	GF_MainFrame:SetAlpha(GF_FrameTransparencySlider:GetValue());
 	GF_MainFrame:SetScale(GF_UIScaleSlider:GetValue());
@@ -1079,7 +1012,7 @@ end
 function GF_PruneTheWhoTable() -- TODO Prune MessageList, WhisperData... Make an algorithm for displaying all types of messages with colors/timestamps, then make a button to import/purge PFDB
 	for realm,_ in GF_WhoTable do
 		for name, whoData in GF_WhoTable[realm] do
-			if whoData[4] and whoData[4] + 86400 < GF_GetStandardizedTime() then -- 60 days
+			if whoData[4] and whoData[4] + 5184000 < time() then -- 60 days
 				GF_WhoTable[realm][name] = nil;
 			end
 		end
@@ -1127,7 +1060,7 @@ function GF_UpdateFriendsList()
 	for i=1, GetNumFriends() do
 		local name,level,class = GetFriendInfo(i)
 		GF_Friends[name] = true;
-		GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], "", GF_GetStandardizedTime()}
+		GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], "", time()}
 	end
 end
 function GF_UpdateGuildiesList()
@@ -1136,7 +1069,7 @@ function GF_UpdateGuildiesList()
 	for i=1, GetNumGuildMembers() do
 		local name,_,_,level,class = GetGuildRosterInfo(i)
 		GF_Guildies[name] = true;
-		GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], GetGuildInfo("player"), GF_GetStandardizedTime() }
+		GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], GetGuildInfo("player"), time() }
 	end
 end
 function GF_IsFriendGuildieUsingAddon()
@@ -1164,7 +1097,7 @@ function GF_ApplyFiltersToGroupList()
 	for i=1, getn(GF_MessageList[GF_RealmName]) do
 		local entry = GF_MessageList[GF_RealmName][i];
 		if entry then
-			if (entry.t + GF_SavedVariables.grouplistingduration) > GF_GetStandardizedTime() and entry.t <= GF_GetStandardizedTime() then
+			if (entry.t + GF_SavedVariables.grouplistingduration*60) > time() then
 				if GF_EntryMatchesGroupFilterCriteria(entry) then
 					table.insert(GF_FilteredResultsList, entry);
 				end
@@ -1197,8 +1130,8 @@ function GF_UpdateResults()
 				local entry = GF_FilteredResultsList[i+GF_ResultsListOffset];
 				if GF_PlayersCurrentlyInGroup[entry.op] or GF_Friends[entry.op] or GF_Guildies[entry.op] then getglobal(c.."NameLabel"):SetTextColor(255,215,0,1); else getglobal(c.."NameLabel"):SetTextColor(0.75,0.75,1,1); end
 
-				if GF_GetStandardizedTime() - entry.t > 1 then getglobal(c.."MoreRightLabel"):SetText(GF_FOUND..(GF_GetStandardizedTime() - entry.t)..GF_MINUTES..GF_TIME_AGO);
-				elseif GF_GetStandardizedTime() - entry.t == 1 then getglobal(c.."MoreRightLabel"):SetText(GF_FOUND..(GF_GetStandardizedTime() - entry.t)..GF_MINUTE..GF_TIME_AGO);
+				if floor((time() - entry.t)/60) > 1 then getglobal(c.."MoreRightLabel"):SetText(GF_FOUND..floor((time() - entry.t)/60)..GF_MINUTES..GF_TIME_AGO);
+				elseif floor((time() - entry.t)/60) == 1 then getglobal(c.."MoreRightLabel"):SetText(GF_FOUND..floor((time() - entry.t)/60)..GF_MINUTE..GF_TIME_AGO);
 				else getglobal(c.."MoreRightLabel"):SetText(GF_FOUND..GF_TIME_JUST_NOW); end
 				
 				if entry.who then
@@ -1214,7 +1147,7 @@ function GF_UpdateResults()
 					getglobal(c):Show();
 					if not GF_SavedVariables.loghidemainframe then
 						if (not GF_SavedVariables.usewhoongroups or (entry.whoAttempts and entry.whoAttempts > 2)) and not (GF_WhoTable[GF_RealmName][entry.op] and GF_WhoTable[GF_RealmName][entry.op][4] and
-						(GF_WhoTable[GF_RealmName][entry.op][1] < 60 and GF_WhoTable[GF_RealmName][entry.op][4] + 1440 > GF_GetStandardizedTime())) and not GF_GetPositionInWhoQueue(entry.op, GF_WhoQueue) then
+						(GF_WhoTable[GF_RealmName][entry.op][1] < 60 and GF_WhoTable[GF_RealmName][entry.op][4] + 86400 > time())) and not GF_GetPositionInWhoQueue(entry.op, GF_WhoQueue) then
 							getglobal(c.."GroupWhoButton"):Show();
 						else
 							getglobal(c.."GroupWhoButton"):Hide();
@@ -1937,7 +1870,7 @@ function GF_CheckForGroups(arg1,arg2,event)
 end
 function GF_CheckForSpam(arg1,arg2,foundInGroup)
 	if not GF_PlayersCurrentlyInGroup[arg2] and not GF_Friends[arg2] and not GF_Guildies[arg2] then
-		if (GF_WhoTable[GF_RealmName][arg2] and tonumber(GF_WhoTable[GF_RealmName][arg2][1]) < GF_SavedVariables.blockmessagebelowlevel) and GF_WhoTable[GF_RealmName][arg2][4] + 1440 > GF_GetStandardizedTime() then -- Block lowlevel
+		if (GF_WhoTable[GF_RealmName][arg2] and tonumber(GF_WhoTable[GF_RealmName][arg2][1]) < GF_SavedVariables.blockmessagebelowlevel) and GF_WhoTable[GF_RealmName][arg2][4] + 86400 > time() then -- Block lowlevel
 			return 9;
 		end
 		if GF_SavedVariables.spamfilter and (not foundInGroup or string.len(arg1) > 50) then
@@ -1955,7 +1888,7 @@ function GF_CheckForSpam(arg1,arg2,foundInGroup)
 			else
 				if string.find(arg1,GF_PlayerMessages[arg2][2],1,true) and string.find(arg1,GF_PlayerMessages[arg2][3],1,true) then 																-- Found Spammer
 					if GF_SavedVariables.autoblacklist and not GF_BlackList[GF_RealmName][arg2] and string.len(arg1) > 120 then
-						if GF_WhoTable[GF_RealmName][arg2] and GF_WhoTable[GF_RealmName][arg2][4] + 1440 > GF_GetStandardizedTime() then -- Data must be less than a day old to autoblacklist or block lowlevel
+						if GF_WhoTable[GF_RealmName][arg2] and GF_WhoTable[GF_RealmName][arg2][4] + 86400 > time() then -- Data must be less than a day old to autoblacklist or block lowlevel
 							if tonumber(GF_WhoTable[GF_RealmName][arg2][1]) <= GF_SavedVariables.autoblacklistminlevel then																			-- Blacklist if below level filter
 								table.insert(GF_BlackList[GF_RealmName], 1, { arg2, "("..GF_WhoTable[GF_RealmName][arg2][1]..") "..arg1 })
 								GF_BlackList[GF_RealmName][arg2] = true;
@@ -2009,12 +1942,12 @@ function GF_GetGroupInformation(arg1,arg2) -- Searches messages for Groups and s
 	entry.type = gtype;
 	entry.dlevel = glevel;
 	entry.who = GF_WhoTable[GF_RealmName][arg2];
-	entry.t = GF_GetStandardizedTime()
+	entry.t = time()
 	entry.lfg = isLFG
 
 	for i = 1, getn(GF_MessageList[GF_RealmName]) do
 		if arg2 == GF_MessageList[GF_RealmName][i].op then
-			if GF_SavedVariables.showgroupsnewonly and GF_MessageList[GF_RealmName][i].t + GF_SavedVariables.showgroupsnewonlytime < GF_GetStandardizedTime() then table.remove(GF_MessageList[GF_RealmName], i); return 2, entry; end
+			if GF_SavedVariables.showgroupsnewonly and GF_MessageList[GF_RealmName][i].t + GF_SavedVariables.showgroupsnewonlytime*60 < time() then table.remove(GF_MessageList[GF_RealmName], i); return 2, entry; end
 			table.remove(GF_MessageList[GF_RealmName], i);
 			break;
 		end
