@@ -326,7 +326,7 @@ function GF_ToggleHideMainFrame()
 			getglobal("GF_NewItem"..i.."GroupWhoButton"):Hide()
 		end
 		for id, word in UISpecialFrames do
-			if word == "GF_MainFrame" then UISpecialFrames[id] = nil break end
+			if word == "GF_MainFrame" then UISpecialFrames[id] = nil end
 		end
 	else
 		for i=1, 48 do
