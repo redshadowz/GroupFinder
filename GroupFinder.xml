@@ -3531,7 +3531,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										GF_SavedVariables.MinimapMsgArcOffset = this:GetValue();
 										getglobal(this:GetName().."Text"):SetText(GF_MINIMAP_GROUP_TEXT.." - "..GF_ADJUST_ANGLE.." - "..this:GetValue());
 										GF_UpdateMinimapIcon();
-										GF_MinimapMessageFrameA1:AddMessage("|cff".."ffffff"..string.sub("Testing",1,120).. "|r", 1, 0.8, 0);
+										GF_MinimapMessageFrameA1:AddMessage("|cff".."ffffff"..GF_MAIN_HEADER.. "|r", 1, 0.8, 0);
 									</OnValueChanged>
 								</Scripts>
 							</Slider>
@@ -3558,7 +3558,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										GF_SavedVariables.MinimapMsgRadiusOffset = this:GetValue();
 										getglobal(this:GetName().."Text"):SetText(GF_MINIMAP_TEXT.." - "..GF_ADJUST_RADIUS.." - "..this:GetValue());
 										GF_UpdateMinimapIcon();
-										GF_MinimapMessageFrameA1:AddMessage("|cff".."ffffff"..string.sub("Testing",1,120).. "|r", 1, 0.8, 0);
+										GF_MinimapMessageFrameA1:AddMessage("|cff".."ffffff"..GF_MAIN_HEADER.. "|r", 1, 0.8, 0);
 									</OnValueChanged>
 								</Scripts>
 							</Slider>
