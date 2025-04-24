@@ -882,6 +882,7 @@ function GF_ParseIncomingAddonMessages(msg)
 		GF_AddonNeedToBroadcastSomething = true;
 	elseif string.sub(msg,1,1) == ":" then -- (To Everyone) This is the who data from the names requested in "R".
 		for sentlevel,sentname,sentclass,sentguild,sentrecordedtime in string.gfind(msg, ":(%d+)([a-zA-Z]+)(%d)([a-zA-Z%s]+)(%d+)") do
+			if GF_GetStandardizedTime() < tonumber(sentrecordedtime) then referenceDate = GF_GetBaselineDate() end
 			if sentguild == "Z" then sentguild = "" end
 			if tonumber(sentrecordedtime) <= GF_GetStandardizedTime() and (not GF_WhoTable[GF_RealmName][sentname] or tonumber(sentrecordedtime) > GF_WhoTable[GF_RealmName][sentname][4]) then
 				GF_WhoTable[GF_RealmName][sentname] = { tonumber(sentlevel), GF_ClassIDs[tonumber(sentclass)], sentguild, tonumber(sentrecordedtime) }
@@ -892,6 +893,7 @@ function GF_ParseIncomingAddonMessages(msg)
 		end
 	elseif string.len(msg) > 2 then -- (To Everyone) This is the full group information. Which is sent separately from the who data.
 		for sentclass,senttime,senttype,sentdlevel,sentname,sentplevel,sentguild,sentrecordedtime,message in string.gfind(msg, "(%d)(%d+)([a-zA-Z])(%d+)([a-zA-Z]+)(%d+)([a-zA-Z%s]+)(%d+):(.+)") do
+			if GF_GetStandardizedTime() < tonumber(sentrecordedtime) then referenceDate = GF_GetBaselineDate() end
 			if tonumber(sentrecordedtime) <= GF_GetStandardizedTime() then
 				if sentguild == "Z" then sentguild = "" end
 				if not GF_WhoTable[GF_RealmName][sentname] or tonumber(sentrecordedtime) > GF_WhoTable[GF_RealmName][sentname][4] then
