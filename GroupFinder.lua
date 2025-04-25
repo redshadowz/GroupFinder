@@ -56,9 +56,11 @@
 	logshowblacklist			= true,
 	logshowbelowlevel			= true,
 	loghidemainframe			= false,
+	loghideeverything			= false,
 	logshowwhisperwindow		= true,
 	loghidemainframeheight		= false,
 	loghidemainframelogdef		= false,
+	mainframeishidden			= true,
 };
 GF_RealmName								= GetRealmName();
 local GF_MaxEntriesPerRealmOnPrune			= 20000;
@@ -139,7 +141,8 @@ local ThingsToHide = { "GF_GroupsInChatCheckButton", "GF_GroupsNewOnlyCheckButto
 "GF_GroupsFrameShowQuestCheckButton", "GF_GroupsFrameShowOtherCheckButton", "GF_GroupsFrameShowLFMCheckButton", "GF_GroupsFrameShowLFGCheckButton", "GF_ShowSearchButton", "GF_SettingsFrameButton", "GF_ShowBlacklistButton", "GF_LogFrameButton",
 "GF_AnnounceToLFGButton", "GF_ResetLFGDescriptionButton", "GF_LogBottomButton", "GF_LogDownButton", "GF_LogUpButton", "GF_LogShowLoot", "GF_LogShowFiltered", "GF_LogShowPolitics",
 "GF_LogShowSpam", "GF_LogShowBlacklist", "GF_LogShowBelowLevel", "GF_MainFrameCloseButton", "GF_GroupsFrame_ResultsPrev", "GF_GroupsFrame_ResultsNext", "GF_LFGSizeDropdown", "GF_LFGLFMDropdown", "GF_LFGDungeonDropdown", "GF_LFGRaidDropdown",
-"GF_LFGRoleDropdown", "GF_GroupAutoCheckButton", "GF_LFGDescriptionEditBox", "GF_LFGWhisperButton", "GF_LFGWhoWhisperEditBox", "GF_FrameAnnounceTimerSlider", "GF_LFGWhoClassDropdown", "GF_LFGGetWhoButton", }
+"GF_LFGRoleDropdown", "GF_GroupAutoCheckButton", "GF_LFGDescriptionEditBox", "GF_LFGWhisperButton", "GF_LFGWhoWhisperEditBox", "GF_FrameAnnounceTimerSlider", "GF_LFGWhoClassDropdown", "GF_LFGGetWhoButton",
+"GF_LogHideMainFrame", "GF_LogHideMainFrameHeight", "GF_LogShowEditBox", "GF_LogShowWhisperHistory", "GF_LogShowGroups", "GF_LogShowChat", "GF_LogShowTrades", }
 local GF_DaysBeforeMonth = { 0,31,59,90,120,151,181,212,243,273,304,334 }
 
 function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
@@ -237,6 +240,10 @@ function GF_SlashHandler(msg)
 	if string.lower(msg) == "reset" then
 		GF_MainFrame:ClearAllPoints()
 		GF_MainFrame:SetPoint("CENTER", UIParent, "CENTER",0,0)
+		GF_SavedVariables.loghidemainframe = nil;
+		GF_SavedVariables.loghidemainframelogdef = nil;
+		GF_SavedVariables.loghideeverything = nil;
+		GF_ToggleHideMainFrame()
 	else
 		DEFAULT_CHAT_FRAME:AddMessage("'/gf reset' to reset screen position", 1, 1, 0.5)
 	end
@@ -260,7 +267,7 @@ function GF_ShowTooltip()
 end
 function GF_ToggleMainFrame(tab)
 	PlaySound("igCharacterInfoTab");
-	if GF_MainFrame:IsVisible() then GF_MainFrame:Hide(); else GF_MainFrame:Show(); end
+	if GF_MainFrame:IsVisible() then GF_SavedVariables.mainframeishidden = true; GF_MainFrame:Hide(); else GF_SavedVariables.mainframeishidden = nil GF_MainFrame:Show(); end
 	if tab == 1 then -- GroupsFrame
 		GF_GroupsFrame:Show();
 		GF_LogFrame:Hide();
@@ -288,10 +295,16 @@ function GF_ToggleWhisperFrame()
 		GF_WhisperHistoryButtonLog:Hide()
 	end
 end
-function GF_ToggleHideMainFrame()
-	if GF_SavedVariables.loghidemainframe then
-		for i=1, 48 do
-			getglobal(ThingsToHide[i]):Hide()
+function GF_ToggleHideMainFrame(hideEverything)
+	if GF_SavedVariables.loghidemainframe and not GF_SavedVariables.mainframeishidden then
+		if hideEverything then 
+			for i=1, 55 do
+				getglobal(ThingsToHide[i]):Hide()
+			end
+		else
+			for i=1, 48 do
+				getglobal(ThingsToHide[i]):Hide()
+			end
 		end
 		if GF_SavedVariables.loghidemainframelogdef then
 			GF_LogFrame:Show()
@@ -329,7 +342,7 @@ function GF_ToggleHideMainFrame()
 			if word == "GF_MainFrame" then UISpecialFrames[id] = nil end
 		end
 	else
-		for i=1, 48 do
+		for i=1, 55 do
 			getglobal(ThingsToHide[i]):Show()
 		end
 		GF_MainFrame:SetAlpha(GF_SavedVariables.MainFrameTransparency)
@@ -376,6 +389,25 @@ function GF_ToggleHideMainFrameHeight()
 	end
 	GF_ToggleHideMainFrameHeightSetEditBox()
 	GF_UpdateResults()
+end
+function GF_ToggleHideEverything()
+	if not GF_SavedVariables.loghideeverything then
+		GF_SavedVariables.loghideeverything = true
+		GF_SavedVariables.loghidemainframe = true
+		GF_LogHideMainFrame:SetChecked(true)
+		GF_ToggleHideMainFrame(true)
+		GF_SavedVariables.showwhisperlogs = nil
+		GF_WhisperHistoryButtonLog:Hide()
+		GF_LogFrameInternalFrame:SetWidth(350)
+	else
+		GF_SavedVariables.loghideeverything = nil
+		GF_SavedVariables.loghidemainframe = nil
+		GF_LogHideMainFrame:SetChecked(false)
+		GF_ToggleHideMainFrame()
+		GF_SavedVariables.showwhisperlogs = nil
+		GF_WhisperHistoryButtonLog:Hide()
+		GF_LogFrameInternalFrame:SetWidth(669)
+	end
 end
 function GF_ToggleHideMainFrameHeightSetEditBox()
 	if GF_SavedVariables.loghidemainframe or GF_SavedVariables.loghidemainframeheight then
@@ -946,11 +978,10 @@ function GF_LoadSettings()
 	if not GF_MessageList[GF_RealmName] then GF_MessageList[GF_RealmName] = {}; end
 	if not GF_BlackList[GF_RealmName] then GF_BlackList[GF_RealmName] = {}; end
 	if not GF_LogHistory[GF_RealmName] then GF_LogHistory[GF_RealmName] = {} end
-	if not GF_WhoTable or not GF_WhoTable[GF_RealmName] or not GF_WhoTable[GF_RealmName]["LOADED"] or not GF_WhoTable[GF_RealmName]["LOADED"][UnitName("player")] or type(GF_WhoTable[GF_RealmName]["LOADED"][UnitName("player")]) ~= "table" then
+	if not GF_WhoTable or not GF_WhoTable[GF_RealmName] or not GF_WhoTable[GF_RealmName]["LOADED"] or GF_WhoTable[GF_RealmName]["LOADED"][UnitName("player")] then
 		GF_WhoTable = {}
 		GF_WhoTable[GF_RealmName] = {}
-		GF_WhoTable[GF_RealmName]["LOADED"] = {}
-		GF_WhoTable[GF_RealmName]["LOADED"][UnitName("player")] = { UnitLevel("player"), GF_Classes[UnitClass("player")], "", time() - 1 }
+		GF_WhoTable[GF_RealmName]["LOADED"] = { UnitLevel("player"), GF_Classes[UnitClass("player")], "", time() - 1 }
 		GF_WhisperLogData = {}
 		GF_WhisperLogData[GF_RealmName] = {}
 		GF_WhisperLogData[GF_RealmName]["Guild"] = {""}
@@ -958,7 +989,7 @@ function GF_LoadSettings()
 		GF_MessageList[GF_RealmName] = {};
 		table.insert(GF_WhisperLogData[GF_RealmName], "Guild")
 	end
-	if GF_WhoTable[GF_RealmName]["LOADED"][UnitName("player")][4] + 604800 < time() then -- 7 days
+	if GF_WhoTable[GF_RealmName]["LOADED"][4] + 604800 < time() then -- 7 days
 		GF_PruneTheWhoTable()
 		--[[if IsAddOnLoaded("pfUI") then
 			for name, whodata in pfUI_playerDB do
@@ -968,12 +999,13 @@ function GF_LoadSettings()
 				end
 			end
 		end--]]
-		GF_WhoTable[GF_RealmName]["LOADED"][UnitName("player")] = { UnitLevel("player"), GF_Classes[UnitClass("player")], "", time() }
+		GF_WhoTable[GF_RealmName]["LOADED"] = { UnitLevel("player"), GF_Classes[UnitClass("player")], "", time() }
 	end
 	GF_MainFrame:SetAlpha(GF_FrameTransparencySlider:GetValue());
 	GF_MainFrame:SetScale(GF_UIScaleSlider:GetValue());
 	if GF_SavedVariables.MainFrameXPos then GF_MainFrame:SetPoint("TOPLEFT",UIParent,"TOPLEFT", GF_SavedVariables.MainFrameXPos, GF_SavedVariables.MainFrameYPos) else GF_SavedVariables.MainFrameXPos = 0 GF_SavedVariables.MainFrameXPos = 0 end
-	if GF_SavedVariables.loghidemainframe then GF_MainFrame:Show() GF_ToggleHideMainFrame() else GF_SavedVariables.loghidemainframelogdef = nil; end
+	if GF_SavedVariables.loghidemainframe and not GF_SavedVariables.mainframeishidden then GF_MainFrame:Show() if GF_SavedVariables.loghideeverything then GF_ToggleHideMainFrame(true) else GF_ToggleHideMainFrame() end
+	else GF_SavedVariables.loghidemainframe = nil; GF_SavedVariables.loghidemainframelogdef = nil; GF_LogHideMainFrame:SetChecked(false); end
 	GF_ToggleHideMainFrameHeight()
 	GF_UpdateMinimapIcon()
 	GF_UpdateFriendsList()

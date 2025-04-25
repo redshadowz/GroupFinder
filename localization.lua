@@ -198,7 +198,7 @@ GF_GenTooltips = {
 
 GF_MinimapIcon = { 
 	tooltip1 		= "Group Finder", 
-	tooltip2 		= "Left-Click to open. Shift-click to toggle \"Show Chat\". Right-click to toggle \" Show groups in Chat\".", 
+	tooltip2 		= "Left-Click to open. Shift-click to toggle \"Show Chat\". Right-click to toggle \" Show groups in Chat\". Shift-Right Click \"Reduces the width of this frame and hides all buttons\".", 
 	anchor			= "TOPRIGHT",
 	relativePoint	= "TOPLEFT" },
 GF_GroupsInChatCheckButton = { 

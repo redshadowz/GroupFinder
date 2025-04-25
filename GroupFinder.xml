@@ -699,14 +699,18 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						GF_ToggleMainFrame();
 					end
 				else
-					if GF_GroupsInChatCheckButton:GetChecked() then 
-						GF_SavedVariables.showgroupsinchat = nil;
-						DEFAULT_CHAT_FRAME:AddMessage(GF_CHAT_GROUP_OFF)
+					if IsShiftKeyDown() then
+						GF_ToggleHideEverything()
 					else
-						GF_SavedVariables.showgroupsinchat = true;
-						DEFAULT_CHAT_FRAME:AddMessage(GF_CHAT_GROUP_ON)
+						if GF_GroupsInChatCheckButton:GetChecked() then 
+							GF_SavedVariables.showgroupsinchat = nil;
+							DEFAULT_CHAT_FRAME:AddMessage(GF_CHAT_GROUP_OFF)
+						else
+							GF_SavedVariables.showgroupsinchat = true;
+							DEFAULT_CHAT_FRAME:AddMessage(GF_CHAT_GROUP_ON)
+						end
+						GF_GroupsInChatCheckButton:SetChecked(GF_SavedVariables.showgroupsinchat);
 					end
-					GF_GroupsInChatCheckButton:SetChecked(GF_SavedVariables.showgroupsinchat);
 				end
 			</OnClick>
 			<OnEnter>
