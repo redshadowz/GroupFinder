@@ -1204,7 +1204,7 @@ function GF_UpdateResults()
 		end
 	end
 end
-function GF_ListItem_OnMouseUp(frame,id)
+function GF_ListItem_OnMouseUp(id)
 	if (arg1 == "RightButton") then
 		local name = GF_FilteredResultsList[GF_ResultsListOffset + id].op;
 		HideDropDownMenu(1);
