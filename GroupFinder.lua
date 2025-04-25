@@ -1008,8 +1008,6 @@ function GF_LoadSettings()
 	GF_MainFrame:SetAlpha(GF_FrameTransparencySlider:GetValue());
 	GF_MainFrame:SetScale(GF_UIScaleSlider:GetValue());
 	if GF_SavedVariables.MainFrameXPos then GF_MainFrame:SetPoint("TOPLEFT",UIParent,"TOPLEFT", GF_SavedVariables.MainFrameXPos, GF_SavedVariables.MainFrameYPos) else GF_SavedVariables.MainFrameXPos = 0 GF_SavedVariables.MainFrameXPos = 0 end
-	if GF_SavedVariables.loghidemainframe and not GF_SavedVariables.mainframeishidden or GF_SavedVariables.loghideeverything then GF_MainFrame:Show() if GF_SavedVariables.loghideeverything then GF_ToggleHideMainFrame(true) else GF_ToggleHideMainFrame() end
-	else GF_SavedVariables.loghidemainframe = nil; GF_SavedVariables.loghidemainframelogdef = nil; GF_LogHideMainFrame:SetChecked(false); end
 	GF_ToggleHideMainFrameHeight()
 	GF_UpdateMinimapIcon()
 	GF_UpdateFriendsList()
@@ -1018,6 +1016,9 @@ function GF_LoadSettings()
 	GF_WhisperHistoryUpdateFrame()
 	GF_DisplayLog()
 	GF_PruneTheClassWhoTable()
+
+	if GF_SavedVariables.loghidemainframe and not GF_SavedVariables.mainframeishidden or GF_SavedVariables.loghideeverything then GF_MainFrame:Show() if GF_SavedVariables.loghideeverything then GF_ToggleHideMainFrame(true) else GF_ToggleHideMainFrame() end
+	else GF_SavedVariables.loghidemainframe = nil; GF_SavedVariables.loghidemainframelogdef = nil; GF_LogHideMainFrame:SetChecked(false); end
 	
 	if (GF_RealmName == "Nordanaar" or GF_RealmName == "Tel'Abim") then GF_AddTurtleWoWDungeonsRaids(); GF_WhoCooldownTime = 30; end
 end
