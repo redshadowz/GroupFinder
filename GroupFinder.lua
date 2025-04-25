@@ -241,6 +241,7 @@ function GF_SlashHandler(msg)
 		GF_MainFrame:ClearAllPoints()
 		GF_MainFrame:SetPoint("CENTER", UIParent, "CENTER",0,0)
 		GF_SavedVariables.loghidemainframe = nil;
+		GF_LogHideMainFrame:SetChecked(false)
 		GF_SavedVariables.loghidemainframelogdef = nil;
 		GF_SavedVariables.loghideeverything = nil;
 		GF_ToggleHideMainFrame()
@@ -283,6 +284,7 @@ function GF_ToggleMainFrame(tab)
 		if not GF_SavedVariables.loghidemainframelogdef then GF_MainFrame:Show(); end
 		GF_SavedVariables.loghidemainframelogdef = true;
 	end
+	if GF_SavedVariables.loghideeverything then GF_SavedVariables.loghideeverything = nil; GF_SavedVariables.loghidemainframe = nil; GF_LogHideMainFrame:SetChecked(false) end
 	GF_ToggleHideMainFrame()
 	GF_SearchList:Hide();
 end
@@ -296,7 +298,8 @@ function GF_ToggleWhisperFrame()
 	end
 end
 function GF_ToggleHideMainFrame(hideEverything)
-	if GF_SavedVariables.loghidemainframe and not GF_SavedVariables.mainframeishidden then
+	if GF_MainFrame:IsVisible() then GF_SavedVariables.mainframeishidden = nil; else GF_SavedVariables.mainframeishidden = true; end
+	if GF_SavedVariables.loghidemainframe and not GF_SavedVariables.mainframeishidden or hideEverything then
 		if hideEverything then 
 			for i=1, 55 do
 				getglobal(ThingsToHide[i]):Hide()
@@ -305,6 +308,10 @@ function GF_ToggleHideMainFrame(hideEverything)
 			for i=1, 48 do
 				getglobal(ThingsToHide[i]):Hide()
 			end
+			for i=49, 55 do
+				getglobal(ThingsToHide[i]):Show()
+			end
+			GF_LogFrameInternalFrameTitle:SetText(GF_LOG_AND_MONITOR);
 		end
 		if GF_SavedVariables.loghidemainframelogdef then
 			GF_LogFrame:Show()
@@ -333,10 +340,11 @@ function GF_ToggleHideMainFrame(hideEverything)
 		GF_GroupsFrame_Results:EnableMouse(false)
 		for i=1, 20 do
 			getglobal("GF_NewItem"..i):SetAlpha(GF_SavedVariables.MainFrameTransparency)
-			getglobal("GF_NewItem"..i):EnableMouse(false)
 			getglobal("GF_NewItem"..i.."LFGInviteButton"):Hide()
 			getglobal("GF_NewItem"..i.."LFMWhisperRequestInviteButton"):Hide()
 			getglobal("GF_NewItem"..i.."GroupWhoButton"):Hide()
+			if hideEverything then getglobal("GF_NewItem"..i):SetWidth(350) else getglobal("GF_NewItem"..i):SetWidth(652) end
+			getglobal("GF_NewItem"..i):EnableMouse(false)
 		end
 		for id, word in UISpecialFrames do
 			if word == "GF_MainFrame" then UISpecialFrames[id] = nil end
@@ -358,8 +366,10 @@ function GF_ToggleHideMainFrame(hideEverything)
 		for i=1, 20 do
 			getglobal("GF_NewItem"..i):SetAlpha(GF_SavedVariables.MainFrameTransparency)
 			getglobal("GF_NewItem"..i):EnableMouse(true)
+			getglobal("GF_NewItem"..i):SetWidth(652)
 		end
 	end
+	if GF_SavedVariables.loghideeverything then GF_LogFrameInternalFrame:SetWidth(350) else GF_LogFrameInternalFrame:SetWidth(669) end
 	GF_ToggleHideMainFrameHeightSetEditBox()
 	GF_UpdateResults()
 end
@@ -374,7 +384,7 @@ function GF_ToggleHideMainFrameHeight()
 				getglobal("GF_NewItem"..i):SetAlpha(0)
 				getglobal("GF_NewItem"..i.."AuxFrameLeft"):Hide()
 			end
-			if GF_SavedVariables.loghidemainframe then getglobal("GF_NewItem"..i):EnableMouse(false) else getglobal("GF_NewItem"..i):EnableMouse(true) end
+			if GF_SavedVariables.loghidemainframe or GF_SavedVariables.loghideeverything then getglobal("GF_NewItem"..i):EnableMouse(false) else getglobal("GF_NewItem"..i):EnableMouse(true) end
 		end
 	else
 		GF_LogFrameInternalFrame:SetHeight(435)
@@ -384,7 +394,7 @@ function GF_ToggleHideMainFrameHeight()
 			getglobal("GF_NewItem"..i):Show()
 			getglobal("GF_NewItem"..i.."AuxFrameLeft"):Show()
 			getglobal("GF_NewItem"..i):SetAlpha(GF_SavedVariables.MainFrameTransparency)
-			if GF_SavedVariables.loghidemainframe then getglobal("GF_NewItem"..i):EnableMouse(false) else getglobal("GF_NewItem"..i):EnableMouse(true) end
+			if GF_SavedVariables.loghidemainframe or GF_SavedVariables.loghideeverything then getglobal("GF_NewItem"..i):EnableMouse(false) else getglobal("GF_NewItem"..i):EnableMouse(true) end
 		end
 	end
 	GF_ToggleHideMainFrameHeightSetEditBox()
@@ -393,20 +403,14 @@ end
 function GF_ToggleHideEverything()
 	if not GF_SavedVariables.loghideeverything then
 		GF_SavedVariables.loghideeverything = true
-		GF_SavedVariables.loghidemainframe = true
-		GF_LogHideMainFrame:SetChecked(true)
-		GF_ToggleHideMainFrame(true)
 		GF_SavedVariables.showwhisperlogs = nil
 		GF_WhisperHistoryButtonLog:Hide()
-		GF_LogFrameInternalFrame:SetWidth(350)
+		GF_ToggleHideMainFrame(true)
 	else
 		GF_SavedVariables.loghideeverything = nil
-		GF_SavedVariables.loghidemainframe = nil
-		GF_LogHideMainFrame:SetChecked(false)
-		GF_ToggleHideMainFrame()
 		GF_SavedVariables.showwhisperlogs = nil
 		GF_WhisperHistoryButtonLog:Hide()
-		GF_LogFrameInternalFrame:SetWidth(669)
+		GF_ToggleHideMainFrame()
 	end
 end
 function GF_ToggleHideMainFrameHeightSetEditBox()
@@ -1004,7 +1008,7 @@ function GF_LoadSettings()
 	GF_MainFrame:SetAlpha(GF_FrameTransparencySlider:GetValue());
 	GF_MainFrame:SetScale(GF_UIScaleSlider:GetValue());
 	if GF_SavedVariables.MainFrameXPos then GF_MainFrame:SetPoint("TOPLEFT",UIParent,"TOPLEFT", GF_SavedVariables.MainFrameXPos, GF_SavedVariables.MainFrameYPos) else GF_SavedVariables.MainFrameXPos = 0 GF_SavedVariables.MainFrameXPos = 0 end
-	if GF_SavedVariables.loghidemainframe and not GF_SavedVariables.mainframeishidden then GF_MainFrame:Show() if GF_SavedVariables.loghideeverything then GF_ToggleHideMainFrame(true) else GF_ToggleHideMainFrame() end
+	if GF_SavedVariables.loghidemainframe and not GF_SavedVariables.mainframeishidden or GF_SavedVariables.loghideeverything then GF_MainFrame:Show() if GF_SavedVariables.loghideeverything then GF_ToggleHideMainFrame(true) else GF_ToggleHideMainFrame() end
 	else GF_SavedVariables.loghidemainframe = nil; GF_SavedVariables.loghidemainframelogdef = nil; GF_LogHideMainFrame:SetChecked(false); end
 	GF_ToggleHideMainFrameHeight()
 	GF_UpdateMinimapIcon()
@@ -1177,7 +1181,7 @@ function GF_UpdateResults()
 				end
 				if not GF_SavedVariables.loghidemainframeheight or i < 14 then
 					getglobal(c):Show();
-					if not GF_SavedVariables.loghidemainframe then
+					if not GF_SavedVariables.loghidemainframe and not GF_SavedVariables.loghideeverything then
 						if (not GF_SavedVariables.usewhoongroups or (entry.whoAttempts and entry.whoAttempts > 2)) and not (GF_WhoTable[GF_RealmName][entry.op] and GF_WhoTable[GF_RealmName][entry.op][4] and
 						(GF_WhoTable[GF_RealmName][entry.op][1] < 60 and GF_WhoTable[GF_RealmName][entry.op][4] + 86400 > time())) and not GF_GetPositionInWhoQueue(entry.op, GF_WhoQueue) then
 							getglobal(c.."GroupWhoButton"):Show();
