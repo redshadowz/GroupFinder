@@ -1399,7 +1399,6 @@ function GF_UpdateBlackListItems() -- Blacklist functions
 				getglobal(c):Hide();
 			end
 		end
-		i = i + 1;
 	end
 end
 function GF_ShowBlackListFrame()
