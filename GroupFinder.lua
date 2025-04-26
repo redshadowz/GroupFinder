@@ -376,7 +376,17 @@ function GF_ToggleHideMainFrame(hideEverything)
 			getglobal("GF_NewItem"..i.."LFGInviteButton"):Hide()
 			getglobal("GF_NewItem"..i.."LFMWhisperRequestInviteButton"):Hide()
 			getglobal("GF_NewItem"..i.."GroupWhoButton"):Hide()
-			if hideEverything then getglobal("GF_NewItem"..i):SetWidth(350) else getglobal("GF_NewItem"..i):SetWidth(652) end
+			if hideEverything then
+				if GF_MainFrame:GetRight() > ((GetScreenWidth() * UIParent:GetEffectiveScale()) / 2) then
+					if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",330,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",330,0) end
+				else
+					if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",0,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",0,0) end
+				end
+				getglobal("GF_NewItem"..i):SetWidth(350)
+			else
+				if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",0,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",0,0) end
+				getglobal("GF_NewItem"..i):SetWidth(652)
+			end
 			getglobal("GF_NewItem"..i):EnableMouse(false)
 		end
 		for id, word in UISpecialFrames do
@@ -397,12 +407,20 @@ function GF_ToggleHideMainFrame(hideEverything)
 		GF_GroupsFrame_Results:EnableMouse(true)
 		tinsert(UISpecialFrames,GF_MainFrame:GetName())
 		for i=1, 20 do
+			if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",0,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",0,0) end
 			getglobal("GF_NewItem"..i):SetAlpha(GF_SavedVariables.MainFrameTransparency)
 			getglobal("GF_NewItem"..i):EnableMouse(true)
+			getglobal("GF_NewItem"..i):SetPoint("LEFT",0,0)
 			getglobal("GF_NewItem"..i):SetWidth(652)
 		end
 	end
-	if GF_SavedVariables.loghideeverything then GF_LogFrameInternalFrame:SetWidth(350) else GF_LogFrameInternalFrame:SetWidth(669) end
+	if GF_SavedVariables.loghideeverything then
+		if GF_MainFrame:GetRight() > ((GetScreenWidth() * UIParent:GetEffectiveScale()) / 2) then GF_LogFrameInternalFrame:SetPoint("TOPLEFT",350,-64) else GF_LogFrameInternalFrame:SetPoint("TOPLEFT",29,-64) end
+		GF_LogFrameInternalFrame:SetWidth(350)
+	else
+		GF_LogFrameInternalFrame:SetPoint("TOPLEFT",29,-64)
+		GF_LogFrameInternalFrame:SetWidth(669)
+	end
 	GF_ToggleHideMainFrameHeightSetEditBox()
 	GF_UpdateResults()
 end
