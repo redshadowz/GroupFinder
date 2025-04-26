@@ -20,12 +20,12 @@ GF_UNDEAD				= "Undead";
 GF_TROLL				= "Troll";
 GF_TAUREN				= "Tauren";
 
-GF_5_MAN				= " 5-man";
-GF_10_MAN				= " 10-man";
-GF_15_MAN				= " 15-man";
-GF_20_MAN				= " 20-man";
-GF_25_MAN				= " 25-man";
-GF_40_MAN				= " 40-man";
+GF_5_MAN				= "5-man";
+GF_10_MAN				= "10-man";
+GF_15_MAN				= "15-man";
+GF_20_MAN				= "20-man";
+GF_25_MAN				= "25-man";
+GF_40_MAN				= "40-man";
 
 -- Binding Names
 BINDING_HEADER_GF_MAIN_HEADER	= "Group Finder"; -- Main window title
@@ -79,7 +79,7 @@ GF_FOUND 				= "Found: "; -- Shows number of groups on list
 GF_PAGE 				= "PAGE"; -- Label for pages of groups.
 
 -- Settings tab buttons and texts
-GF_LOG					= "    Log    "; -- Label for Log tab
+GF_LOG					= "   Log   "; -- Label for Log tab
 GF_SETTINGS				= "Settings"; -- Label for Settings tab
 GF_BLACK_LIST			= "Blacklist"; -- Label for Blacklist tab
 GF_MINIMAP_SETTINGS		= "Minimap settings"; -- Label for minimap section of Settings tab
@@ -92,8 +92,6 @@ GF_MINIMAP_TEXT			= "Minimap text"; -- Label for Minimap adjust icon text adjust
 GF_ADJUST_ANGLE			= "Adjust angle"; -- Label for Minimap adjust icon adjust/radius
 GF_ADJUST_RADIUS		= "Adjust radius"; -- Label for Minimap adjust icon text adjust/radius
 GF_ADJUST_TRANSPARENCY	= "Adjust window transparency"; -- Label for adjust transparency on Settings tab
-GF_ADJUST_UISCALE		= "Adjust window scale"; -- Label for adjust transparency on Settings tab
-GF_UISCALE_UPDATE		= "Update"; -- Label for update UIScale
 
 GF_ADJUST_FILTER_LEVEL	= "Group Filtering"; -- Label for Filter slider on Settings tab
 GF_FilterLevelNotes = {};
@@ -102,11 +100,11 @@ GF_FilterLevelNotes[2] = "Requires two triggers";
 GF_FilterLevelNotes[3] = "Requires three triggers";
 
 GF_USE_WHO_ON_GROUPS		= "Auto /Who"
-GF_JOIN_WORLD				= " Join World channel"
-GF_SHOW_ORIGINAL_CHAT		= " Show Unformatted Chat"
-GF_ERROR_FILTER				= " Enable Error Filtering"
-GF_SPAM_FILTER				= " Enable Spam Filtering"
-GF_AUTO_BLACKLIST			= " Enable Auto Blacklist"
+GF_JOIN_WORLD				= "Join World channel"
+GF_SHOW_ORIGINAL_CHAT		= "Show Unformatted Chat"
+GF_ERROR_FILTER				= "Enable Error Filtering"
+GF_SPAM_FILTER				= "Enable Spam Filtering"
+GF_AUTO_BLACKLIST			= "Enable Auto Blacklist"
 GF_SPAM_FILTER_TIMER		= "Spam flag clear time"
 GF_BLACKLIST_MINLEVEL		= "Auto Blacklist maximum level"
 GF_BLOCK_BELOW_LEVEL		= "Block messages below level"
@@ -116,10 +114,10 @@ GF_NEW_GROUP_TIMEOUT		= "Flagged as new listing"
 
 -- LFG related buttons and texts
 GF_AUTO						= "Auto"
-GF_LFM_LFG					= " LFM/LFG"
-GF_DUNGEON					= " Dungeon"
-GF_RAID						= " Raid"
-GF_ROLE						= " Role"
+GF_LFM_LFG					= "LFM/LFG"
+GF_DUNGEON					= "Dungeon"
+GF_RAID						= "Raid"
+GF_ROLE						= "Role"
 GF_TANK						= "Tank"
 GF_HEALER					= "Healer"
 GF_DPS						= "DPS"

@@ -129,7 +129,6 @@ function GF_LoadVariables()
 			MinimapMsgArcOffset			= 345,
 			MinimapMsgRadiusOffset		= 90,
 			MainFrameTransparency		= 0.85,
-			MainFrameUIScale			= 1,
 			MainFrameXPos				= nil,
 			MainFrameYPos				= nil,
 			showwhisperlogs				= false,
@@ -377,7 +376,7 @@ function GF_ToggleHideMainFrame(hideEverything)
 			getglobal("GF_NewItem"..i.."LFMWhisperRequestInviteButton"):Hide()
 			getglobal("GF_NewItem"..i.."GroupWhoButton"):Hide()
 			if hideEverything then
-				if GF_MainFrame:GetRight() > ((GetScreenWidth() * UIParent:GetEffectiveScale()) / 2) then
+				if GF_MainFrame:GetCenter()*UIParent:GetEffectiveScale() > (GetScreenWidth() * UIParent:GetEffectiveScale()) / 2 then
 					if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",330,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",330,0) end
 				else
 					if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",0,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",0,0) end
@@ -414,9 +413,11 @@ function GF_ToggleHideMainFrame(hideEverything)
 			getglobal("GF_NewItem"..i):SetWidth(652)
 		end
 	end
-	if GF_SavedVariables.loghideeverything then
-		if GF_MainFrame:GetRight() > ((GetScreenWidth() * UIParent:GetEffectiveScale()) / 2) then GF_LogFrameInternalFrame:SetPoint("TOPLEFT",350,-64) else GF_LogFrameInternalFrame:SetPoint("TOPLEFT",29,-64) end
+	if hideEverything then
+		if GF_MainFrame:GetCenter()*UIParent:GetEffectiveScale() > (GetScreenWidth() * UIParent:GetEffectiveScale()) / 2 then GF_LogFrameInternalFrame:SetPoint("TOPLEFT",350,-64) else GF_LogFrameInternalFrame:SetPoint("TOPLEFT",29,-64) end
 		GF_LogFrameInternalFrame:SetWidth(350)
+		GF_SavedVariables.showwhisperlogs = false;
+		GF_LogShowWhisperHistory:SetChecked(false)
 	else
 		GF_LogFrameInternalFrame:SetPoint("TOPLEFT",29,-64)
 		GF_LogFrameInternalFrame:SetWidth(669)
@@ -440,7 +441,7 @@ function GF_ToggleHideMainFrameHeight()
 		end
 	else
 		GF_ResultsListOffsetSize = 20
-		GF_LogFrameInternalFrame:SetHeight(435)
+		GF_LogFrameInternalFrame:SetHeight(440)
 		GF_LogEditBox:SetPoint("BOTTOMLEFT",0,-50)
 		GF_LogEditBox:SetPoint("BOTTOMRIGHT",0,-70)
 		for i=1, 20 do
@@ -1004,12 +1005,12 @@ function GF_OnEvent(event) -- OnEvent, LoadSettings, Bind Keys, Prune Tables
 	end
 end
 function GF_LoadSettings()
-	local SliderVariablesToSet = { GF_SavedVariables.MinimapArcOffset, GF_SavedVariables.MinimapRadiusOffset, GF_SavedVariables.MinimapMsgArcOffset, GF_SavedVariables.MinimapMsgRadiusOffset, GF_SavedVariables.FilterLevel, GF_SavedVariables.MainFrameUIScale,
+	local SliderVariablesToSet = { GF_SavedVariables.MinimapArcOffset, GF_SavedVariables.MinimapRadiusOffset, GF_SavedVariables.MinimapMsgArcOffset, GF_SavedVariables.MinimapMsgRadiusOffset, GF_SavedVariables.FilterLevel,
 	GF_SavedVariables.MainFrameTransparency, GF_SavedVariables.spamfilterduration,GF_SavedVariables.autoblacklistminlevel,GF_SavedVariables.blockmessagebelowlevel,GF_SavedVariables.grouplistingduration,GF_SavedVariables.autofilterlevelvar,
 	GF_SavedVariables.showgroupsnewonlytime, GF_SavedVariables.announcetimer/60, }
-	local SliderNames = { "GF_MinimapArcSlider", "GF_MinimapRadiusSlider", "GF_MinimapMsgArcSlider", "GF_MinimapMsgRadiusSlider", "GF_FilterLevelSlider", "GF_UIScaleSlider", "GF_FrameTransparencySlider", "GF_FrameSpamFilterDurationSlider",
+	local SliderNames = { "GF_MinimapArcSlider", "GF_MinimapRadiusSlider", "GF_MinimapMsgArcSlider", "GF_MinimapMsgRadiusSlider", "GF_FilterLevelSlider", "GF_FrameTransparencySlider", "GF_FrameSpamFilterDurationSlider",
 	"GF_FrameSpamBlacklistMinLevelSlider", "GF_FrameBlockMessagesBelowLevelSlider", "GF_GroupListingDurationSlider", "GF_AutoFilterLevelSlider", "GF_GroupNewTimeoutSlider", "GF_FrameAnnounceTimerSlider", }
-	for i=1, 14 do getglobal(SliderNames[i]):SetValue(SliderVariablesToSet[i]) end
+	for i=1, 13 do getglobal(SliderNames[i]):SetValue(SliderVariablesToSet[i]) end
 	
 	local CheckButtonVariablesToSet = { GF_SavedVariables.showgroupsinchat, GF_SavedVariables.showgroupsinminimap, GF_SavedVariables.showgroupsnewonly, GF_SavedVariables.showchattexts, GF_SavedVariables.showtradestexts, GF_SavedVariables.showloottexts,
 	GF_SavedVariables.autofilter, GF_SavedVariables.showtranslate, GF_SavedVariables.showdungeons, GF_SavedVariables.showraids, GF_SavedVariables.showquests, GF_SavedVariables.showother, GF_SavedVariables.showlfm, GF_SavedVariables.showlfg,
@@ -1023,9 +1024,9 @@ function GF_LoadSettings()
 	"GF_FrameUseWhoOnGroupsCheckButton", "GF_FrameErrorFilterCheckButton", "GF_FrameShowPoliticsCheckButton", "GF_FrameSpamFilterCheckButton", "GF_FrameAutoBlacklistCheckButton", "GF_PlaySoundOnResultsCheckButton", "GF_GroupAutoCheckButton", "GF_LogShowWhisperHistory", "GF_LogHideMainFrameHeight", }
 	for i=1, 35 do getglobal(CheckButtonNames[i]):SetChecked(CheckButtonVariablesToSet[i]) end
 	
-	local TextToSet = { GF_FilterLevelNotes[GF_SavedVariables.FilterLevel], GF_SavedVariables.searchtext, GF_SavedVariables.searchlfgtext, GF_SavedVariables.searchlfgwhispertext }
-	local TextNames = { "GF_FilterLevelSliderNote", "GF_GroupsFrameDescriptionEditBox", "GF_LFGDescriptionEditBox", "GF_LFGWhoWhisperEditBox" }
-	for i=1, 4 do getglobal(TextNames[i]):SetText(TextToSet[i]) end
+	local TextToSet = { GF_SavedVariables.searchtext, GF_SavedVariables.searchlfgtext, GF_SavedVariables.searchlfgwhispertext }
+	local TextNames = { "GF_GroupsFrameDescriptionEditBox", "GF_LFGDescriptionEditBox", "GF_LFGWhoWhisperEditBox" }
+	for i=1, 3 do getglobal(TextNames[i]):SetText(TextToSet[i]) end
 	getglobal(GF_LFGSizeDropdown:GetName().."TextLabel"):SetText(GF_SavedVariables.lfgsize);
 	getglobal(GF_LFGWhoClassDropdown:GetName().."TextLabel"):SetText(GF_SavedVariables.lfgwhisperclass);
 
@@ -1034,7 +1035,6 @@ function GF_LoadSettings()
 	GF_BUTTONS_LIST["LFGLFM"][4] = { GF_TRIGGER_LIST.CLASSES[UnitClass("player")][3].." "..UnitClass("player").." LFG", 1, 60, }
 	GF_BUTTONS_LIST["LFGLFM"][5] = { UnitClass("player").." LFG", 1, 60, }
 	GF_MainFrame:SetAlpha(GF_FrameTransparencySlider:GetValue());
-	GF_MainFrame:SetScale(GF_UIScaleSlider:GetValue());
 	if GF_SavedVariables.MainFrameXPos then GF_MainFrame:SetPoint("TOPLEFT",UIParent,"TOPLEFT", GF_SavedVariables.MainFrameXPos, GF_SavedVariables.MainFrameYPos) else GF_SavedVariables.MainFrameXPos = 0 GF_SavedVariables.MainFrameXPos = 0 end
 	GF_ToggleHideMainFrameHeight()
 	GF_UpdateMinimapIcon()
@@ -1157,7 +1157,6 @@ function GF_ApplyFiltersToGroupList()
 	GF_SavedVariables.searchtext = GF_GroupsFrameDescriptionEditBox:GetText()
 	GF_SavedVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText()
 
-	if GetMouseFocus() and GetMouseFocus():GetName() and (string.find(GetMouseFocus():GetName(), "GroupWhoButton") or string.find(GetMouseFocus():GetName(), "LFGInviteButton") or string.find(GetMouseFocus():GetName(), "LFMWhisperRequestInviteButton")) then return end
 	GF_FilteredResultsList = {};
 	for i=1, getn(GF_MessageList[GF_RealmName]) do
 		local entry = GF_MessageList[GF_RealmName][i];
@@ -1725,18 +1724,17 @@ function GF_ShowDropdownList(bframe)
 					button:SetChecked(false)
 				end
 			elseif bframe == "LFGWhoClass" then
-				if string.find(GF_SavedVariables.lfgwhisperclass, dtable[1]) then
+				if GF_SavedVariables.lfgwhisperclass == dtable[1] then
 					button:SetChecked(true)
 				else
 					button:SetChecked(false)
 				end
 			elseif bframe == "LFGSize" then
-				if string.find(GF_SavedVariables.lfgsize, dtable[1]) then
+				if GF_SavedVariables.lfgsize == dtable[1] then
 					button:SetChecked(true)
 				else
 					button:SetChecked(false)
 				end
-
 			else
 				if dtable[1] == GF_CLEAR then
 					button:SetChecked(true)
