@@ -1,67 +1,4 @@
-﻿GF_SavedVariables = {
-	joinworld					= true,
-	addonsendtimeout			= 0,
-	showoriginalchat			= false;
-	usewhoongroups				= true;
-	showpolitics				= true;
-	blockmessagebelowlevel		= 1;
-	grouplistingduration		= 30,
-	showgroupsinchat			= true,
-	showgroupsinminimap			= false,
-	showgroupsnewonly			= false,
-	showgroupsnewonlytime		= 3,
-	showchattexts				= true,
-	showtradestexts				= true,
-	showloottexts				= true;
-	errorfilter					= false,
-	spamfilter					= true,
-	spamfilterduration			= 5,
-	autoblacklist				= true,
-	autoblacklistminlevel		= 12,
-	playsounds					= false,
-	autofilter					= false,
-	autofilterlevelvar			= 6,
-	showtranslate				= true,
-	showdungeons				= true,
-	showraids					= true,
-	showquests					= true,
-	showother					= true,
-	showlfm						= true,
-	showlfg						= true,
-	searchtext					= "",
-	searchbuttonstext			= "",
-	searchlfgtext				= "",
-	searchlfgwhispertext		= "",
-	lfgwhisperclass				= GF_WARRIOR,
-	announcetimer				= 300,
-	lfgauto						= false,
-	lfgsize						= GF_5_MAN,
-	FilterLevel					= 2,
-	MinimapArcOffset			= 282,
-	MinimapRadiusOffset			= 84,
-	MinimapMsgArcOffset			= 345,
-	MinimapMsgRadiusOffset		= 90,
-	MainFrameTransparency		= 0.85,
-	MainFrameUIScale			= 1,
-	MainFrameXPos				= nil,
-	MainFrameYPos				= nil,
-	showwhisperlogs				= false,
-	logshowgroup				= true,
-	logshowfiltered				= true,
-	logshowchat					= true,
-	logshowtrades				= true,
-	logshowpolitics				= true,
-	logshowloot					= true,
-	logshowspam					= true,
-	logshowblacklist			= true,
-	logshowbelowlevel			= true,
-	loghidemainframe			= false,
-	loghideeverything			= false,
-	logshowwhisperwindow		= true,
-	loghidemainframeheight		= false,
-	loghidemainframelogdef		= false,
-	mainframeishidden			= true,
-};
+﻿GF_SavedVariables = {}
 GF_RealmName								= GetRealmName();
 local GF_MaxEntriesPerRealmOnPrune			= 20000;
 local GF_WhoCooldownTime					= 10;
@@ -88,6 +25,7 @@ GF_BlackList								= {};
 GF_BlackList[GF_RealmName]					= {};
 GF_FilteredResultsList						= {};
 GF_ResultsListOffset						= 0;
+GF_ResultsListOffsetSize					= 20;
 GF_BlackListOffset							= 0;
 GF_NumLFGSearchButtons						= 0;
 GF_LogHistory								= {};
@@ -144,6 +82,101 @@ local ThingsToHide = { "GF_GroupsInChatCheckButton", "GF_GroupsNewOnlyCheckButto
 "GF_LFGRoleDropdown", "GF_GroupAutoCheckButton", "GF_LFGDescriptionEditBox", "GF_LFGWhisperButton", "GF_LFGWhoWhisperEditBox", "GF_FrameAnnounceTimerSlider", "GF_LFGWhoClassDropdown", "GF_LFGGetWhoButton",
 "GF_LogHideMainFrame", "GF_LogHideMainFrameHeight", "GF_LogShowEditBox", "GF_LogShowWhisperHistory", "GF_LogShowGroups", "GF_LogShowChat", "GF_LogShowTrades", }
 local GF_DaysBeforeMonth = { 0,31,59,90,120,151,181,212,243,273,304,334 }
+
+function GF_LoadVariables()
+	if not GF_SavedVariables.loghidemainframeheight == nil then
+		GF_SavedVariables = {
+			joinworld					= true,
+			addonsendtimeout			= 0,
+			showoriginalchat			= false;
+			usewhoongroups				= true;
+			showpolitics				= true;
+			blockmessagebelowlevel		= 1;
+			grouplistingduration		= 30,
+			showgroupsinchat			= true,
+			showgroupsinminimap			= false,
+			showgroupsnewonly			= false,
+			showgroupsnewonlytime		= 3,
+			showchattexts				= true,
+			showtradestexts				= true,
+			showloottexts				= true;
+			errorfilter					= false,
+			spamfilter					= true,
+			spamfilterduration			= 5,
+			autoblacklist				= true,
+			autoblacklistminlevel		= 12,
+			playsounds					= false,
+			autofilter					= false,
+			autofilterlevelvar			= 6,
+			showtranslate				= true,
+			showdungeons				= true,
+			showraids					= true,
+			showquests					= true,
+			showother					= true,
+			showlfm						= true,
+			showlfg						= true,
+			searchtext					= "",
+			searchbuttonstext			= "",
+			searchlfgtext				= "",
+			searchlfgwhispertext		= "",
+			lfgwhisperclass				= GF_WARRIOR,
+			announcetimer				= 300,
+			lfgauto						= false,
+			lfgsize						= GF_5_MAN,
+			FilterLevel					= 2,
+			MinimapArcOffset			= 282,
+			MinimapRadiusOffset			= 84,
+			MinimapMsgArcOffset			= 345,
+			MinimapMsgRadiusOffset		= 90,
+			MainFrameTransparency		= 0.85,
+			MainFrameUIScale			= 1,
+			MainFrameXPos				= nil,
+			MainFrameYPos				= nil,
+			showwhisperlogs				= false,
+			logshowgroup				= true,
+			logshowfiltered				= true,
+			logshowchat					= true,
+			logshowtrades				= true,
+			logshowpolitics				= true,
+			logshowloot					= true,
+			logshowspam					= true,
+			logshowblacklist			= true,
+			logshowbelowlevel			= true,
+			loghidemainframe			= false,
+			loghideeverything			= false,
+			logshowwhisperwindow		= true,
+			loghidemainframeheight		= false,
+			loghidemainframelogdef		= false,
+			mainframeishidden			= true,
+		};
+	end
+	if not GF_MessageList[GF_RealmName] then GF_MessageList[GF_RealmName] = {}; end
+	if not GF_BlackList[GF_RealmName] then GF_BlackList[GF_RealmName] = {}; end
+	if not GF_LogHistory[GF_RealmName] then GF_LogHistory[GF_RealmName] = {} end
+	if not GF_WhoTable or not GF_WhoTable[GF_RealmName] or not GF_WhoTable[GF_RealmName]["LOADED"] or GF_WhoTable[GF_RealmName]["LOADED"][UnitName("player")] then
+		GF_WhoTable = {}
+		GF_WhoTable[GF_RealmName] = {}
+		GF_WhoTable[GF_RealmName]["LOADED"] = { UnitLevel("player"), GF_Classes[UnitClass("player")], "", time() - 1 }
+		GF_WhisperLogData = {}
+		GF_WhisperLogData[GF_RealmName] = {}
+		GF_WhisperLogData[GF_RealmName]["Guild"] = {""}
+		GF_MessageList = {};
+		GF_MessageList[GF_RealmName] = {};
+		table.insert(GF_WhisperLogData[GF_RealmName], "Guild")
+	end
+	if GF_WhoTable[GF_RealmName]["LOADED"][4] + 604800 < time() then -- 7 days
+		GF_PruneTheWhoTable()
+		--[[if IsAddOnLoaded("pfUI") then
+			for name, whodata in pfUI_playerDB do
+				if not GF_WhoTable[GF_RealmName][name] then
+					GF_WhoTable[GF_RealmName][name] = { whodata.level, whodata.class, whodata.guild, time() - 86401 }
+					if not GF_WhoTable[GF_RealmName][name][3] then GF_WhoTable[GF_RealmName][name][3] = "" end
+				end
+			end
+		end--]]
+		GF_WhoTable[GF_RealmName]["LOADED"] = { UnitLevel("player"), GF_Classes[UnitClass("player")], "", time() }
+	end
+end
 
 function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 	SlashCmdList["GroupFinderCOMMAND"] = GF_SlashHandler;
@@ -375,6 +408,7 @@ function GF_ToggleHideMainFrame(hideEverything)
 end
 function GF_ToggleHideMainFrameHeight()
 	if GF_SavedVariables.loghidemainframeheight then
+		GF_ResultsListOffsetSize = 12
 		GF_LogFrameInternalFrame:SetHeight(218)
 		GF_LogEditBox:SetPoint("BOTTOMLEFT",0,-20)
 		GF_LogEditBox:SetPoint("BOTTOMRIGHT",0,-40)
@@ -387,6 +421,7 @@ function GF_ToggleHideMainFrameHeight()
 			if GF_SavedVariables.loghidemainframe or GF_SavedVariables.loghideeverything then getglobal("GF_NewItem"..i):EnableMouse(false) else getglobal("GF_NewItem"..i):EnableMouse(true) end
 		end
 	else
+		GF_ResultsListOffsetSize = 20
 		GF_LogFrameInternalFrame:SetHeight(435)
 		GF_LogEditBox:SetPoint("BOTTOMLEFT",0,-50)
 		GF_LogEditBox:SetPoint("BOTTOMRIGHT",0,-70)
@@ -929,6 +964,7 @@ function GF_OnEvent(event) -- OnEvent, LoadSettings, Bind Keys, Prune Tables
 		GF_JoinWorld()
 	elseif event == "PLAYER_ENTERING_WORLD" and GF_OnStartupRunOnce then
 		GF_OnStartupRunOnce = false;
+		GF_LoadVariables()
 		GF_LoadSettings()
 		GF_UpdateBlackListItems(); 
 		GF_ApplyFiltersToGroupList()	
@@ -979,32 +1015,6 @@ function GF_LoadSettings()
 	GF_BUTTONS_LIST["LFGLFM"][3] = { GF_TRIGGER_LIST.CLASSES[UnitClass("player")][2].." "..UnitClass("player").." LFG", 1, 60, }
 	GF_BUTTONS_LIST["LFGLFM"][4] = { GF_TRIGGER_LIST.CLASSES[UnitClass("player")][3].." "..UnitClass("player").." LFG", 1, 60, }
 	GF_BUTTONS_LIST["LFGLFM"][5] = { UnitClass("player").." LFG", 1, 60, }
-	if not GF_MessageList[GF_RealmName] then GF_MessageList[GF_RealmName] = {}; end
-	if not GF_BlackList[GF_RealmName] then GF_BlackList[GF_RealmName] = {}; end
-	if not GF_LogHistory[GF_RealmName] then GF_LogHistory[GF_RealmName] = {} end
-	if not GF_WhoTable or not GF_WhoTable[GF_RealmName] or not GF_WhoTable[GF_RealmName]["LOADED"] or GF_WhoTable[GF_RealmName]["LOADED"][UnitName("player")] then
-		GF_WhoTable = {}
-		GF_WhoTable[GF_RealmName] = {}
-		GF_WhoTable[GF_RealmName]["LOADED"] = { UnitLevel("player"), GF_Classes[UnitClass("player")], "", time() - 1 }
-		GF_WhisperLogData = {}
-		GF_WhisperLogData[GF_RealmName] = {}
-		GF_WhisperLogData[GF_RealmName]["Guild"] = {""}
-		GF_MessageList = {};
-		GF_MessageList[GF_RealmName] = {};
-		table.insert(GF_WhisperLogData[GF_RealmName], "Guild")
-	end
-	if GF_WhoTable[GF_RealmName]["LOADED"][4] + 604800 < time() then -- 7 days
-		GF_PruneTheWhoTable()
-		--[[if IsAddOnLoaded("pfUI") then
-			for name, whodata in pfUI_playerDB do
-				if not GF_WhoTable[GF_RealmName][name] then
-					GF_WhoTable[GF_RealmName][name] = { whodata.level, whodata.class, whodata.guild, time() - 86401 }
-					if not GF_WhoTable[GF_RealmName][name][3] then GF_WhoTable[GF_RealmName][name][3] = "" end
-				end
-			end
-		end--]]
-		GF_WhoTable[GF_RealmName]["LOADED"] = { UnitLevel("player"), GF_Classes[UnitClass("player")], "", time() }
-	end
 	GF_MainFrame:SetAlpha(GF_FrameTransparencySlider:GetValue());
 	GF_MainFrame:SetScale(GF_UIScaleSlider:GetValue());
 	if GF_SavedVariables.MainFrameXPos then GF_MainFrame:SetPoint("TOPLEFT",UIParent,"TOPLEFT", GF_SavedVariables.MainFrameXPos, GF_SavedVariables.MainFrameYPos) else GF_SavedVariables.MainFrameXPos = 0 GF_SavedVariables.MainFrameXPos = 0 end
@@ -1144,7 +1154,7 @@ function GF_ApplyFiltersToGroupList()
 			end
 		end
 	end	
-	if floor(GF_ResultsListOffset/20) > floor(getn(GF_FilteredResultsList)/20) then GF_ResultsListOffset = GF_ResultsListOffset - 20 end
+	if floor(GF_ResultsListOffset/GF_ResultsListOffsetSize) > floor(getn(GF_FilteredResultsList)/GF_ResultsListOffsetSize) then GF_ResultsListOffset = GF_ResultsListOffset - GF_ResultsListOffsetSize end
 	GF_UpdateResults();
 end
 function GF_UpdateResults()
@@ -1154,10 +1164,10 @@ function GF_UpdateResults()
 	GF_ResultsLabel:SetText(GF_FOUND..groupListLength.." / "..getn(GF_MessageList[GF_RealmName]));
 	GF_PageLabel:Show();
 
-	local cpage = floor(GF_ResultsListOffset / 20);
-	local tpage = floor(groupListLength / 20);
-	if cpage == 0 or cpage <= GF_ResultsListOffset / 20 then cpage = cpage + 1; end
-	if tpage == 0 or tpage < groupListLength / 20 then tpage = tpage + 1; end
+	local cpage = floor(GF_ResultsListOffset / GF_ResultsListOffsetSize);
+	local tpage = floor(groupListLength / GF_ResultsListOffsetSize);
+	if cpage == 0 or cpage <= GF_ResultsListOffset / GF_ResultsListOffsetSize then cpage = cpage + 1; end
+	if tpage == 0 or tpage < groupListLength / GF_ResultsListOffsetSize then tpage = tpage + 1; end
 	GF_PageLabel:SetText(GF_PAGE.." "..cpage.." / "..tpage);
 
 	for i=1, 20 do
@@ -1369,7 +1379,6 @@ function GF_WhisperHistoryPriorityListCheckButtonPressed(id,name,priority)
 end
 
 function GF_UpdateBlackListItems() -- Blacklist functions
-	local index = 1;
 	local groupListLength = getn(GF_BlackList[GF_RealmName]);
 
 	local cpage = floor(GF_BlackListOffset / 20);
@@ -1378,19 +1387,19 @@ function GF_UpdateBlackListItems() -- Blacklist functions
 	if tpage == 0 or tpage < groupListLength / 20 then tpage = tpage + 1; end
 	GF_BlackListFramePageLabel:SetText(GF_PAGE.." "..cpage.." / "..tpage);
 	GF_BlackListFramePageLabel:Show();
-	while index < 20+1 do
-		local c = "GF_BlackListItem"..index;
+	for i=1, 20 do
+		local c = "GF_BlackListItem"..i;
 		if getglobal(c) then
-			if index+GF_BlackListOffset <= groupListLength then 
-				getglobal(c.."NameLabel"):SetText(GF_BlackList[GF_RealmName][GF_BlackListOffset+index][1]);
+			if i+GF_BlackListOffset <= groupListLength then 
+				getglobal(c.."NameLabel"):SetText(GF_BlackList[GF_RealmName][GF_BlackListOffset+i][1]);
 				getglobal(c.."NoteLabel"):SetTextColor(1, 1, 1);
-				getglobal(c.."NoteLabel"):SetText(GF_BlackList[GF_RealmName][GF_BlackListOffset+index][2]);
+				getglobal(c.."NoteLabel"):SetText(GF_BlackList[GF_RealmName][GF_BlackListOffset+i][2]);
 				getglobal(c):Show();
 			else
 				getglobal(c):Hide();
 			end
 		end
-		index = index + 1;
+		i = i + 1;
 	end
 end
 function GF_ShowBlackListFrame()

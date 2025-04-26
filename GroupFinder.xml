@@ -1418,6 +1418,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					<OnClick>
 						GF_SavedVariables.loghidemainframeheight = this:GetChecked();
 						GF_ToggleHideMainFrameHeight()
+						GF_ResultsListOffset = 0;
+						GF_UpdateResults()
 					</OnClick>
 				</Scripts>
 			</CheckButton>
@@ -1649,7 +1651,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Scripts>
 									<OnClick>
 										if GF_ResultsListOffset >0 then
-											GF_ResultsListOffset = GF_ResultsListOffset - 20;
+											GF_ResultsListOffset = GF_ResultsListOffset - GF_ResultsListOffsetSize;
 											GF_UpdateResults();
 										end
 									</OnClick>
@@ -1672,8 +1674,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if getn(GF_FilteredResultsList) >GF_ResultsListOffset + 20 then
-											GF_ResultsListOffset = GF_ResultsListOffset + 20;
+										if getn(GF_FilteredResultsList) >GF_ResultsListOffset + GF_ResultsListOffsetSize then
+											GF_ResultsListOffset = GF_ResultsListOffset + GF_ResultsListOffsetSize;
 											GF_UpdateResults();
 										end
 									</OnClick>
@@ -1707,7 +1709,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLeave>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_SavedVariables.lfgsize);
-										getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()+10);
+										getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()*1.1);
 										getglobal(this:GetName().."TextLabel"):SetPoint("LEFT", "GF_LFGSizeDropdown", "RIGHT", 0, 0);
 									</OnLoad>
 								</Scripts>
@@ -2988,8 +2990,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				<Scripts>
 					<OnLoad>
 						GF_LogFrameInternalFrameTitle:SetText(GF_LOG_AND_MONITOR);
-						GF_LogFrameInternalFrameTitle:SetWidth(string.len(GF_LOG_AND_MONITOR)*5*1.1);
-						GF_LogFrameInternalFrameTitle:SetPoint("TOPLEFT", GF_LogFrame, "TOPLEFT", 33,-52);
+						GF_LogFrameInternalFrameTitle:SetWidth(string.len(GF_LOG_AND_MONITOR)*6*1.1);
+						GF_LogFrameInternalFrameTitle:SetPoint("TOPLEFT", GF_LogFrame, "TOPLEFT", 30,-52);
 					</OnLoad>
 				</Scripts>
 			</Frame>
@@ -3413,6 +3415,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</Anchor>
 								</Anchors>
 								<Scripts>
+									<OnLoad>
+										getglobal(this:GetName().."TextLabel"):SetWidth(getglobal(this:GetName().."TextLabel"):GetStringWidth()*1.1);
+									</OnLoad>
 									<OnEnter>
 										GF_ShowTooltip(this);
 									</OnEnter>
