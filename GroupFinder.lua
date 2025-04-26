@@ -321,12 +321,14 @@ function GF_ToggleMainFrame(tab)
 	GF_SearchList:Hide();
 end
 function GF_ToggleWhisperFrame()
-	if GF_SavedVariables.showwhisperlogs then
-		GF_LogFrameInternalFrame:SetWidth(568)
-		GF_WhisperHistoryButtonLog:Show()
-	else
-		GF_LogFrameInternalFrame:SetWidth(669)
-		GF_WhisperHistoryButtonLog:Hide()
+	if not GF_SavedVariables.loghideeverything then
+		if GF_SavedVariables.showwhisperlogs then
+			GF_LogFrameInternalFrame:SetWidth(568)
+			GF_WhisperHistoryButtonLog:Show()
+		else
+			GF_LogFrameInternalFrame:SetWidth(669)
+			GF_WhisperHistoryButtonLog:Hide()
+		end
 	end
 end
 function GF_ToggleHideMainFrame(hideEverything)
@@ -423,6 +425,7 @@ function GF_ToggleHideMainFrame(hideEverything)
 		GF_LogFrameInternalFrame:SetWidth(669)
 	end
 	GF_ToggleHideMainFrameHeightSetEditBox()
+	GF_ToggleWhisperFrame()
 	GF_UpdateResults()
 end
 function GF_ToggleHideMainFrameHeight()
@@ -1040,7 +1043,6 @@ function GF_LoadSettings()
 	GF_UpdateMinimapIcon()
 	GF_UpdateFriendsList()
 	GF_UpdateGuildiesList()
-	GF_ToggleWhisperFrame()
 	GF_WhisperHistoryUpdateFrame()
 	GF_DisplayLog()
 	GF_PruneTheClassWhoTable()
@@ -1336,10 +1338,14 @@ function GF_WhisperReceivedAddToWhisperHistoryList(message,name,event)
 			message = "|cff"..GF_TextColors[event].."["..date("%m/%d").."] ["..date("%H:%M").."] ".."[From] ".."|r|cff".."9d9d9d".."[|Hplayer:"..name.."|h"..name.."|h|r]: |cff"..GF_TextColors[event]..message.."|r"
 		end
 	elseif event == "CHAT_MSG_GUILD" or event == "CHAT_MSG_OFFICER" then
+		local guildName = ""
+		for word in string.gfind(GetGuildInfo("player"), "(%w+)") do
+			guildName = guildName..string.upper(string.sub(word,1,1))
+		end
 		if GF_WhoTable[GF_RealmName][name] and GF_WhoTable[GF_RealmName][name][1] then 
-			message = "|cff"..GF_TextColors[event].."["..date("%m/%d").."] ["..date("%H:%M").."] ".."|r|cff"..GF_ClassColors[GF_WhoTable[GF_RealmName][name][2]].."[|Hplayer:"..name.."|h"..name..", "..GF_WhoTable[GF_RealmName][name][1].."|h|r]: |cff"..GF_TextColors[event]..message.."|r"
+			message = "|cff"..GF_TextColors[event].."["..date("%m/%d").."] ["..date("%H:%M").."] ["..guildName.."] |r|cff"..GF_ClassColors[GF_WhoTable[GF_RealmName][name][2]].."[|Hplayer:"..name.."|h"..name..", "..GF_WhoTable[GF_RealmName][name][1].."|h|r]: |cff"..GF_TextColors[event]..message.."|r"
 		else
-			message = "|cff"..GF_TextColors[event].."["..date("%m/%d").."] ["..date("%H:%M").."] ".."|r|cff".."9d9d9d".."[|Hplayer:"..name.."|h"..name.."|h|r]: |cff"..GF_TextColors[event]..message.."|r"
+			message = "|cff"..GF_TextColors[event].."["..date("%m/%d").."] ["..date("%H:%M").."] ["..guildName.."] |r|cff".."9d9d9d".."[|Hplayer:"..name.."|h"..name.."|h|r]: |cff"..GF_TextColors[event]..message.."|r"
 		end
 		table.insert(GF_WhisperLogData[GF_RealmName]["Guild"],1,message)
 		if getn(GF_WhisperLogData[GF_RealmName]["Guild"]) > 100 then table.remove(GF_WhisperLogData[GF_RealmName]["Guild"],101) end
@@ -2110,5 +2116,11 @@ function GF_SearchMessageForTextString(msg,textstring)
 end
 
 function print(msg) -- I added this only temporarily so I could work on the addon without having to turn on other addons(reload faster)
-	DEFAULT_CHAT_FRAME:AddMessage(msg, 1, 1, 0.5);
+	if not msg then
+		DEFAULT_CHAT_FRAME:AddMessage("nil", 1, 1, 0.5);
+	elseif type(msg) == "table" then
+		DEFAULT_CHAT_FRAME:AddMessage("table", 1, 1, 0.5);
+	else
+		DEFAULT_CHAT_FRAME:AddMessage(msg, 1, 1, 0.5);
+	end
 end
