@@ -1124,8 +1124,10 @@ function GF_UpdateFriendsList()
 	GF_Friends = {};
 	for i=1, GetNumFriends() do
 		local name,level,class = GetFriendInfo(i)
-		GF_Friends[name] = true;
-		GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], "", time()}
+		if name then 
+			GF_Friends[name] = true;
+			GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], "", time()}
+		end
 	end
 end
 function GF_UpdateGuildiesList()
@@ -1133,8 +1135,10 @@ function GF_UpdateGuildiesList()
 	GF_Guildies = {};
 	for i=1, GetNumGuildMembers() do
 		local name,_,_,level,class = GetGuildRosterInfo(i)
-		GF_Guildies[name] = true;
-		GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], GetGuildInfo("player"), time() }
+		if name then 
+			GF_Guildies[name] = true;
+			GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], GetGuildInfo("player"), time() }
+		end
 	end
 end
 function GF_IsFriendGuildieUsingAddon()
