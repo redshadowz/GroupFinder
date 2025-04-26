@@ -2,7 +2,7 @@
 C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 	<Script file="localization.lua"/>
 	<Script file="GroupFinder.lua"/>
-	<Button name="GF_AbstractGrayButton" inherits="UIPanelButtonGrayTemplate" hidden="true" virtual="true">
+	<Button name="GF_GrayButton_Whisper" inherits="UIPanelButtonGrayTemplate" hidden="true" virtual="true">
 		<NormalText inherits="GameFontHighlightSmall"/>
 		<DisabledText inherits="GameFontDisableSmall"/>
 		<HighlightText inherits="GameFontHighlightSmall"/>
@@ -25,7 +25,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 	<FontString name="GF_TitleFont" inherits="GameFontNormal" virtual="true">
 		<Color r="0.9" g="0.9" b="0.9"/>
 	</FontString>
-	<CheckButton name="GF_AbstractSmallCheckButton" inherits="UICheckButtonTemplate" hidden="true" virtual="true">
+	<CheckButton name="GF_SmallCheckButton_Whisper" inherits="UICheckButtonTemplate" hidden="true" virtual="true">
 		<Size>
 			<AbsDimension x="20" y="20"/>
 		</Size>
@@ -96,7 +96,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 		</Layers>
 		<FontString inherits="ChatFontNormal"/>
 	</EditBox>
-	<Button name="GF_AbstractButton" inherits="UIPanelButtonTemplate" virtual="true">
+	<Button name="GF_ButtonTemplate" inherits="UIPanelButtonTemplate" virtual="true">
 		<Size x="24" y="24"/>
 		<Layers>
 			<Layer level="OVERLAY">
@@ -133,7 +133,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</OnCLick>
 		</Scripts>
 	</Button>
-	<CheckButton name="GF_AbstractLabelCheckButton" inherits="UICheckButtonTemplate" virtual="true">
+	<CheckButton name="GF_CheckButtonTemplate_Label" inherits="UICheckButtonTemplate" virtual="true">
 		<Size>
 			<AbsDimension x="24" y="24"/>
 		</Size>
@@ -169,7 +169,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</OnClick>
 		</Scripts>
 	</CheckButton>
-	<CheckButton name="GF_AbstractLabelCheckButtonClick" inherits="GF_AbstractLabelCheckButton" virtual="true">
+	<CheckButton name="GF_GF_CheckButtonTemplate_Label_Click" inherits="GF_CheckButtonTemplate_Label" virtual="true">
 		<Scripts>
 			<OnClick>
 				if string.find(this:GetName(),"LFG") or string.find(this:GetName(),"SearchList") then
@@ -189,7 +189,15 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</OnClick>
 		</Scripts>
 	</CheckButton>
-	<Frame name="GF_AbstractWindow" virtual="true">
+	<Frame name="GF_OptionFrameBoxTemplate" inherits="OptionFrameBoxTemplate" virtual="true">
+		<Scripts>
+			<OnLoad>
+				this:SetBackdropBorderColor(0.4, 0.4, 0.4);
+				this:SetBackdropColor(0.15, 0.15, 0.15);
+			</OnLoad>
+		</Scripts>
+	</Frame>
+	<Frame name="GF_DialogFrameTemplate_Blacklist" toplevel="true" enableMouse="true" frameStrata="DIALOG" virtual="true">
 		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
 			<BackgroundInsets>
 				<AbsInset left="11" right="12" top="12" bottom="11"/>
@@ -201,16 +209,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				<AbsValue val="32"/>
 			</EdgeSize>
 		</Backdrop>
-	</Frame>
-	<Frame name="GF_OptionFrameBoxTemplate" inherits="OptionFrameBoxTemplate" virtual="true">
-		<Scripts>
-			<OnLoad>
-				this:SetBackdropBorderColor(0.4, 0.4, 0.4);
-				this:SetBackdropColor(0.15, 0.15, 0.15);
-			</OnLoad>
-		</Scripts>
-	</Frame>
-	<Frame name="GF_AbstractDialogFrame" inherits="GF_AbstractWindow" toplevel="true" enableMouse="true" frameStrata="DIALOG" virtual="true">
 		<Size>
 			<AbsDimension x="320" y="240"/>
 		</Size>
@@ -280,7 +278,10 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnEscapePressed>
 				</Scripts>
 			</EditBox>
-			<Button name="$parentOkButton" inherits="GF_AbstractButton">
+			<Button name="$parentOkButton" inherits="GF_ButtonTemplate">
+				<Size>
+					<AbsDimension x="80" y="32"/>
+				</Size>
 				<Anchors>
 					<Anchor point="BOTTOMRIGHT">
 						<Offset>
@@ -294,7 +295,10 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnClick>
 				</Scripts>
 			</Button>
-			<Button name="$parentCloseButton" inherits="GF_AbstractButton" text="GF_CANCEL">
+			<Button name="$parentCloseButton" inherits="GF_ButtonTemplate" text="GF_CANCEL">
+				<Size>
+					<AbsDimension x="80" y="32"/>
+				</Size>
 				<Anchors>
 					<Anchor point="BOTTOMLEFT">
 						<Offset>
@@ -433,7 +437,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnMouseUp>
 				</Scripts>
 			</Frame>
-			<Button name="$parentGroupWhoButton" inherits="GF_AbstractButton" text="GF_WHO" hidden="true">
+			<Button name="$parentGroupWhoButton" inherits="GF_ButtonTemplate" text="GF_WHO" hidden="true">
 				<Anchors>
 					<Anchor point="TOPRIGHT">
 						<Offset>
@@ -450,7 +454,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnClick>
 				</Scripts>
 			</Button>
-			<Button name="$parentLFGInviteButton" inherits="GF_AbstractButton" text="GF_INVITE" hidden="true">
+			<Button name="$parentLFGInviteButton" inherits="GF_ButtonTemplate" text="GF_INVITE" hidden="true">
 				<Anchors>
 					<Anchor point="RIGHT" relativeTo="$parentGroupWhoButton" relativePoint="LEFT">
 						<Offset>
@@ -467,7 +471,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnClick>
 				</Scripts>
 			</Button>
-			<Button name="$parentLFMWhisperRequestInviteButton" inherits="GF_AbstractButton" text="GF_REQUEST" hidden="true">
+			<Button name="$parentLFMWhisperRequestInviteButton" inherits="GF_ButtonTemplate" text="GF_REQUEST" hidden="true">
 				<Anchors>
 					<Anchor point="RIGHT" relativeTo="$parentGroupWhoButton" relativePoint="LEFT">
 						<Offset>
@@ -547,7 +551,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</Layer>
 		</Layers>
 		<Frames>
-			<Button name="$parentDeleteButton" inherits="GF_AbstractButton" text="GF_DELETE">
+			<Button name="$parentDeleteButton" inherits="GF_ButtonTemplate" text="GF_DELETE">
 				<Size>
 					<AbsDimension x="50" y="18"/>
 				</Size>
@@ -714,7 +718,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			<OnEnter>
 				GF_ShowTooltip(this);
 			</OnEnter>
-		<OnMouseUp></OnMouseUp>
 			<OnLeave>
 				GameTooltip:Hide();
 			</OnLeave>
@@ -723,16 +726,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				this:RegisterForClicks("LeftButtonUp","RightButtonUp")
 				this:Show();
 			</OnLoad>
-			<OnEvent>
-			</OnEvent>
-			<OnUpdate>
-			</OnUpdate>
-		<OnDragStart>
-			this:StartMoving();
-		</OnDragStart>
-		<OnDragStop>
-			this:StopMovingOrSizing();
-		</OnDragStop>
+			<OnDragStart>
+				this:StartMoving();
+			</OnDragStart>
+			<OnDragStop>
+				this:StopMovingOrSizing();
+			</OnDragStop>
 		</Scripts>
 	</Button>
 	<Frame name="GF_MainFrame" movable="true" toplevel="true" enableMouse="true" hidden="true" frameStrata="MEDIUM" parent="UIParent">
@@ -868,7 +867,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnClick>
 				</Scripts>
 			</Button>
-			<CheckButton name="GF_GroupsInChatCheckButton" inherits="GF_AbstractLabelCheckButton">
+			<CheckButton name="GF_GroupsInChatCheckButton" inherits="GF_CheckButtonTemplate_Label">
 				<Anchors>
 					<Anchor point="LEFT" relativeTo="GF_ShowGroupsInLabel" relativePoint="RIGHT">
 						<Offset>
@@ -886,7 +885,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="GF_GroupsNewOnlyCheckButton" inherits="GF_AbstractLabelCheckButton">
+			<CheckButton name="GF_GroupsNewOnlyCheckButton" inherits="GF_CheckButtonTemplate_Label">
 				<Anchors>
 					<Anchor point="LEFT" relativeTo="GF_GroupsInChatCheckButtonTextLabel" relativePoint="RIGHT">
 						<Offset>
@@ -904,7 +903,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="GF_GroupsInMinimapCheckButton" inherits="GF_AbstractLabelCheckButton">
+			<CheckButton name="GF_GroupsInMinimapCheckButton" inherits="GF_CheckButtonTemplate_Label">
 				<Anchors>
 					<Anchor point="LEFT" relativeTo="GF_GroupsNewOnlyCheckButtonTextLabel" relativePoint="RIGHT">
 						<Offset>
@@ -921,7 +920,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="GF_ShowChatCheckButton" inherits="GF_AbstractLabelCheckButton">
+			<CheckButton name="GF_ShowChatCheckButton" inherits="GF_CheckButtonTemplate_Label">
 				<Anchors>
 					<Anchor point="TOPRIGHT">
 						<Offset>
@@ -938,7 +937,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="GF_ShowTradesCheckButton" inherits="GF_AbstractLabelCheckButton">
+			<CheckButton name="GF_ShowTradesCheckButton" inherits="GF_CheckButtonTemplate_Label">
 				<Anchors>
 					<Anchor point="LEFT" relativeTo="GF_ShowChatCheckButtonTextLabel" relativePoint="RIGHT">
 						<Offset>
@@ -955,7 +954,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="GF_ShowLootCheckButton" inherits="GF_AbstractLabelCheckButton">
+			<CheckButton name="GF_ShowLootCheckButton" inherits="GF_CheckButtonTemplate_Label">
 				<Anchors>
 					<Anchor point="LEFT" relativeTo="GF_ShowTradesCheckButtonTextLabel" relativePoint="RIGHT">
 						<Offset>
@@ -972,7 +971,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="GF_FrameShowPoliticsCheckButton" inherits="GF_AbstractLabelCheckButton">
+			<CheckButton name="GF_FrameShowPoliticsCheckButton" inherits="GF_CheckButtonTemplate_Label">
 				<Anchors>
 					<Anchor point="TOP" relativeTo="GF_ShowLootCheckButton" relativePoint="BOTTOM">
 						<Offset>
@@ -989,7 +988,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="GF_FrameUseWhoOnGroupsCheckButton" inherits="GF_AbstractLabelCheckButton">
+			<CheckButton name="GF_FrameUseWhoOnGroupsCheckButton" inherits="GF_CheckButtonTemplate_Label">
 				<Anchors>
 					<Anchor point="TOP" relativeTo="GF_FrameShowPoliticsCheckButton" relativePoint="BOTTOM">
 						<Offset>
@@ -1115,7 +1114,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLeave>
 				</Scripts>
 			</Frame>
-			<CheckButton name="GF_AutoFilterCheckButton" inherits="GF_AbstractLabelCheckButton">
+			<CheckButton name="GF_AutoFilterCheckButton" inherits="GF_CheckButtonTemplate_Label">
 				<Anchors>
 					<Anchor point="TOPLEFT">
 						<Offset>
@@ -1133,7 +1132,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="GF_PlaySoundOnResultsCheckButton" inherits="GF_AbstractLabelCheckButton">
+			<CheckButton name="GF_PlaySoundOnResultsCheckButton" inherits="GF_CheckButtonTemplate_Label">
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="GF_AutoFilterCheckButton" relativePoint="BOTTOMLEFT">
 						<Offset>
@@ -1150,7 +1149,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="GF_GroupsFrameShowDungeonCheckButton" inherits="GF_AbstractLabelCheckButton">
+			<CheckButton name="GF_GroupsFrameShowDungeonCheckButton" inherits="GF_CheckButtonTemplate_Label">
 				<Anchors>
 					<Anchor point="LEFT" relativeTo="GF_AutoFilterCheckButtonTextLabel" relativePoint="RIGHT">
 						<Offset>
@@ -1168,7 +1167,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="GF_GroupsFrameShowRaidCheckButton" inherits="GF_AbstractLabelCheckButton">
+			<CheckButton name="GF_GroupsFrameShowRaidCheckButton" inherits="GF_CheckButtonTemplate_Label">
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="GF_GroupsFrameShowDungeonCheckButton" relativePoint="BOTTOMLEFT">
 						<Offset>
@@ -1186,7 +1185,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="GF_GroupsFrameShowQuestCheckButton" inherits="GF_AbstractLabelCheckButton">
+			<CheckButton name="GF_GroupsFrameShowQuestCheckButton" inherits="GF_CheckButtonTemplate_Label">
 				<Anchors>
 					<Anchor point="LEFT" relativeTo="GF_GroupsFrameShowDungeonCheckButtonTextLabel" relativePoint="RIGHT">
 						<Offset>
@@ -1204,7 +1203,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="GF_GroupsFrameShowOtherCheckButton" inherits="GF_AbstractLabelCheckButton">
+			<CheckButton name="GF_GroupsFrameShowOtherCheckButton" inherits="GF_CheckButtonTemplate_Label">
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="GF_GroupsFrameShowQuestCheckButton" relativePoint="BOTTOMLEFT">
 						<Offset>
@@ -1222,7 +1221,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="GF_GroupsFrameShowLFMCheckButton" inherits="GF_AbstractLabelCheckButton">
+			<CheckButton name="GF_GroupsFrameShowLFMCheckButton" inherits="GF_CheckButtonTemplate_Label">
 				<Anchors>
 					<Anchor point="LEFT" relativeTo="GF_GroupsFrameShowQuestCheckButtonTextLabel" relativePoint="RIGHT">
 						<Offset>
@@ -1240,7 +1239,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="GF_GroupsFrameShowLFGCheckButton" inherits="GF_AbstractLabelCheckButton">
+			<CheckButton name="GF_GroupsFrameShowLFGCheckButton" inherits="GF_CheckButtonTemplate_Label">
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="GF_GroupsFrameShowLFMCheckButton" relativePoint="BOTTOMLEFT">
 						<Offset>
@@ -1258,7 +1257,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="GF_LogHideMainFrame" inherits="GF_AbstractLabelCheckButton">
+			<CheckButton name="GF_LogHideMainFrame" inherits="GF_CheckButtonTemplate_Label">
 				<Anchors>
 					<Anchor point="TOPLEFT">
 						<Offset>
@@ -1273,7 +1272,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnClick>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="GF_LogHideMainFrameHeight" inherits="GF_AbstractLabelCheckButton">
+			<CheckButton name="GF_LogHideMainFrameHeight" inherits="GF_CheckButtonTemplate_Label">
 				<Anchors>
 					<Anchor point="TOP" relativeTo="GF_LogHideMainFrame" relativePoint="BOTTOM">
 						<Offset>
@@ -1364,7 +1363,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnClick>
 				</Scripts>
 			</Button>
-			<Button name="GF_AnnounceToLFGButton" inherits="GF_AbstractButton" text="GF_ANNOUNCE_LFG_BTN">
+			<Button name="GF_AnnounceToLFGButton" inherits="GF_ButtonTemplate" text="GF_ANNOUNCE_LFG_BTN">
 				<Size>
 					<AbsDimension x="150" y="22"/>
 				</Size>
@@ -1389,7 +1388,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnClick>
 				</Scripts>
 			</Button>
-			<Button name="GF_ResetLFGDescriptionButton" inherits="GF_AbstractButton" text="GF_RESET">
+			<Button name="GF_ResetLFGDescriptionButton" inherits="GF_ButtonTemplate" text="GF_RESET">
 				<Size>
 					<AbsDimension x="60" y="22"/>
 				</Size>
@@ -1540,7 +1539,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<DisabledTexture file="Interface\Buttons\UI-SpellbookIcon-NextPage-Disabled"/>
 								<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD"/>
 							</Button>
-							<Button name="GF_LFGSizeDropdown" inherits="GF_AbstractButton" topLevel="true" virtual="true">
+							<Button name="GF_LFGSizeDropdown" inherits="GF_ButtonTemplate" topLevel="true" virtual="true">
 								<Anchors>
 									<Anchor point="BOTTOMLEFT" relativeTo="GF_MainFrame" relativePoint="BOTTOMLEFT">
 										<Offset>
@@ -1605,7 +1604,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLeave>
 								</Scripts>
 							</Frame>
-							<Button name="GF_LFGLFMDropdown" inherits="GF_AbstractButton" topLevel="true" virtual="true">
+							<Button name="GF_LFGLFMDropdown" inherits="GF_ButtonTemplate" topLevel="true" virtual="true">
 								<Anchors>
 									<Anchor point="BOTTOMLEFT" relativeTo="GF_MainFrame" relativePoint="BOTTOMLEFT">
 										<Offset>
@@ -1670,7 +1669,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLeave>
 								</Scripts>
 							</Frame>
-							<Button name="GF_LFGDungeonDropdown" inherits="GF_AbstractButton" topLevel="true" virtual="true">
+							<Button name="GF_LFGDungeonDropdown" inherits="GF_ButtonTemplate" topLevel="true" virtual="true">
 								<Anchors>
 									<Anchor point="LEFT" relativeTo="GF_LFGLFMDropdownTextLabel" relativePoint="RIGHT">
 										<Offset>
@@ -1735,7 +1734,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLeave>
 								</Scripts>
 							</Frame>
-							<Button name="GF_LFGRaidDropdown" inherits="GF_AbstractButton" topLevel="true" virtual="true">
+							<Button name="GF_LFGRaidDropdown" inherits="GF_ButtonTemplate" topLevel="true" virtual="true">
 								<Anchors>
 									<Anchor point="LEFT" relativeTo="GF_LFGDungeonDropdownTextLabel" relativePoint="RIGHT">
 										<Offset>
@@ -1800,7 +1799,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLeave>
 								</Scripts>
 							</Frame>
-							<Button name="GF_LFGRoleDropdown" inherits="GF_AbstractButton" topLevel="true" virtual="true">
+							<Button name="GF_LFGRoleDropdown" inherits="GF_ButtonTemplate" topLevel="true" virtual="true">
 								<Anchors>
 									<Anchor point="LEFT" relativeTo="GF_LFGRaidDropdownTextLabel" relativePoint="RIGHT">
 										<Offset>
@@ -1865,7 +1864,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLeave>
 								</Scripts>
 							</Frame>
-							<CheckButton name="GF_GroupAutoCheckButton" inherits="GF_AbstractLabelCheckButton">
+							<CheckButton name="GF_GroupAutoCheckButton" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="BOTTOM" relativeTo="GF_LFGSizeDropdown" relativePoint="TOP">
 										<Offset>
@@ -1915,7 +1914,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnEscapePressed>
 								</Scripts>
 							</EditBox>
-							<Button name="GF_LFGWhisperButton" inherits="GF_AbstractButton" text="GF_INVITE">
+							<Button name="GF_LFGWhisperButton" inherits="GF_ButtonTemplate" text="GF_INVITE">
 								<Size>
 									<AbsDimension x="55" y="22"/>
 								</Size>
@@ -2008,7 +2007,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnValueChanged>
 								</Scripts>
 							</Slider>
-							<Button name="GF_LFGWhoClassDropdown" inherits="GF_AbstractButton" topLevel="true" virtual="true">
+							<Button name="GF_LFGWhoClassDropdown" inherits="GF_ButtonTemplate" topLevel="true" virtual="true">
 								<Anchors>
 									<Anchor point="RIGHT" relativeTo="$parentPrev" relativePoint="LEFT">
 										<Offset>
@@ -2073,7 +2072,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLeave>
 								</Scripts>
 							</Frame>
-							<Button name="GF_LFGGetWhoButton" inherits="GF_AbstractButton" text="GF_GET_WHO">
+							<Button name="GF_LFGGetWhoButton" inherits="GF_ButtonTemplate" text="GF_GET_WHO">
 								<Size>
 									<AbsDimension x="90" y="24"/>
 								</Size>
@@ -2195,7 +2194,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						<DisabledTexture file="Interface\Buttons\UI-SpellbookIcon-NextPage-Disabled"/>
 						<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD"/>
 					</Button>
-					<Frame name="GF_AddPlayerFrame" inherits="GF_AbstractDialogFrame" hidden="true">
+					<Frame name="GF_AddPlayerFrame" inherits="GF_DialogFrameTemplate_Blacklist" hidden="true">
 						<Scripts>
 							<OnLoad>
 								GF_AddPlayerFrameHeadingLabel:SetText(GF_ADD_PLAYER);
@@ -2205,7 +2204,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							</OnLoad>
 						</Scripts>
 					</Frame>
-					<Button name="GF_AddPlayerButton" inherits="GF_AbstractButton" text="GF_ADD_PLAYER">
+					<Button name="GF_AddPlayerButton" inherits="GF_ButtonTemplate" text="GF_ADD_PLAYER">
 						<Size>
 							<AbsDimension x="80" y="32"/>
 						</Size>
@@ -2450,7 +2449,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</Shadow>
 								</FontString>
 							</ScrollingMessageFrame>
-							<CheckButton name="GF_LogShowGroups" inherits="GF_AbstractLabelCheckButton">
+							<CheckButton name="GF_LogShowGroups" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="LEFT" relativeTo="GF_LogFrameInternalFrameTitle" relativePoint="RIGHT">
 										<Offset>
@@ -2468,7 +2467,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_LogShowChat" inherits="GF_AbstractLabelCheckButton">
+							<CheckButton name="GF_LogShowChat" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="LEFT" relativeTo="GF_LogShowGroupsTextLabel" relativePoint="RIGHT">
 										<Offset>
@@ -2486,7 +2485,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_LogShowTrades" inherits="GF_AbstractLabelCheckButton">
+							<CheckButton name="GF_LogShowTrades" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="LEFT" relativeTo="GF_LogShowChatTextLabel" relativePoint="RIGHT">
 										<Offset>
@@ -2504,7 +2503,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_LogShowLoot" inherits="GF_AbstractLabelCheckButton">
+							<CheckButton name="GF_LogShowLoot" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="LEFT" relativeTo="GF_LogShowTradesTextLabel" relativePoint="RIGHT">
 										<Offset>
@@ -2522,7 +2521,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_LogShowFiltered" inherits="GF_AbstractLabelCheckButton">
+							<CheckButton name="GF_LogShowFiltered" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="LEFT" relativeTo="GF_LogShowLootTextLabel" relativePoint="RIGHT">
 										<Offset>
@@ -2540,7 +2539,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_LogShowPolitics" inherits="GF_AbstractLabelCheckButton">
+							<CheckButton name="GF_LogShowPolitics" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="LEFT" relativeTo="GF_LogShowFilteredTextLabel" relativePoint="RIGHT">
 										<Offset>
@@ -2558,7 +2557,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_LogShowSpam" inherits="GF_AbstractLabelCheckButton">
+							<CheckButton name="GF_LogShowSpam" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="LEFT" relativeTo="GF_LogShowPoliticsTextLabel" relativePoint="RIGHT">
 										<Offset>
@@ -2576,7 +2575,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_LogShowBlacklist" inherits="GF_AbstractLabelCheckButton">
+							<CheckButton name="GF_LogShowBlacklist" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="LEFT" relativeTo="GF_LogShowSpamTextLabel" relativePoint="RIGHT">
 										<Offset>
@@ -2594,7 +2593,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_LogShowBelowLevel" inherits="GF_AbstractLabelCheckButton">
+							<CheckButton name="GF_LogShowBelowLevel" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="LEFT" relativeTo="GF_LogShowBlacklistTextLabel" relativePoint="RIGHT">
 										<Offset>
@@ -2612,7 +2611,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_LogShowEditBox" inherits="GF_AbstractLabelCheckButton">
+							<CheckButton name="GF_LogShowEditBox" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="BOTTOM" relativeTo="GF_LogUpButton" relativePoint="TOP">
 										<Offset>
@@ -2664,7 +2663,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnEscapePressed>
 								</Scripts>
 							</EditBox>
-							<CheckButton name="GF_LogShowWhisperHistory" inherits="GF_AbstractLabelCheckButton">
+							<CheckButton name="GF_LogShowWhisperHistory" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="TOPRIGHT" relativeTo="GF_LogFrame" relativePoint="TOPRIGHT">
 										<Offset>
@@ -2691,7 +2690,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</Anchor>
 								</Anchors>
 								<Frames>
-									<Button name="GF_WhisperHistoryButton0" inherits="GF_AbstractGrayButton" id="0" text="GF_LOG_SHOWLOG">
+									<Button name="GF_WhisperHistoryButton0" inherits="GF_GrayButton_Whisper" id="0" text="GF_LOG_SHOWLOG">
 										<Size>
 											<AbsDimension x="100" y="26"/>
 										</Size>
@@ -2702,7 +2701,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											</OnLoad>
 										</Scripts>
 									</Button>
-									<Button name="GF_WhisperHistoryButton1" inherits="GF_AbstractGrayButton" id="1" text="GF_LOG_GUILDWHISPERS">
+									<Button name="GF_WhisperHistoryButton1" inherits="GF_GrayButton_Whisper" id="1" text="GF_LOG_GUILDWHISPERS">
 										<Size>
 											<AbsDimension x="100" y="26"/>
 										</Size>
@@ -2715,27 +2714,27 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											</OnLoad>
 										</Scripts>
 									</Button>
-									<Button name="GF_WhisperHistoryButton2" inherits="GF_AbstractGrayButton" id="2"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton1" relativePoint="BOTTOM"/></Anchors></Button>
-									<Button name="GF_WhisperHistoryButton3" inherits="GF_AbstractGrayButton" id="3"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton2" relativePoint="BOTTOM"/></Anchors></Button>
-									<Button name="GF_WhisperHistoryButton4" inherits="GF_AbstractGrayButton" id="4"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton3" relativePoint="BOTTOM"/></Anchors></Button>
-									<Button name="GF_WhisperHistoryButton5" inherits="GF_AbstractGrayButton" id="5"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton4" relativePoint="BOTTOM"/></Anchors></Button>
-									<Button name="GF_WhisperHistoryButton6" inherits="GF_AbstractGrayButton" id="6"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton5" relativePoint="BOTTOM"/></Anchors></Button>
-									<Button name="GF_WhisperHistoryButton7" inherits="GF_AbstractGrayButton" id="7"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton6" relativePoint="BOTTOM"/></Anchors></Button>
-									<Button name="GF_WhisperHistoryButton8" inherits="GF_AbstractGrayButton" id="8"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton7" relativePoint="BOTTOM"/></Anchors></Button>
-									<Button name="GF_WhisperHistoryButton9" inherits="GF_AbstractGrayButton" id="9"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton8" relativePoint="BOTTOM"/></Anchors></Button>
-									<Button name="GF_WhisperHistoryButton10" inherits="GF_AbstractGrayButton" id="10"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton9" relativePoint="BOTTOM"/></Anchors></Button>
-									<Button name="GF_WhisperHistoryButton11" inherits="GF_AbstractGrayButton" id="11"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton10" relativePoint="BOTTOM"/></Anchors></Button>
-									<Button name="GF_WhisperHistoryButton12" inherits="GF_AbstractGrayButton" id="12"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton11" relativePoint="BOTTOM"/></Anchors></Button>
-									<Button name="GF_WhisperHistoryButton13" inherits="GF_AbstractGrayButton" id="13"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton12" relativePoint="BOTTOM"/></Anchors></Button>
-									<Button name="GF_WhisperHistoryButton14" inherits="GF_AbstractGrayButton" id="14"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton13" relativePoint="BOTTOM"/></Anchors></Button>
-									<Button name="GF_WhisperHistoryButton15" inherits="GF_AbstractGrayButton" id="15"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton14" relativePoint="BOTTOM"/></Anchors></Button>
-									<Button name="GF_WhisperHistoryButton16" inherits="GF_AbstractGrayButton" id="16"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton15" relativePoint="BOTTOM"/></Anchors></Button>
-									<Button name="GF_WhisperHistoryButton17" inherits="GF_AbstractGrayButton" id="17"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton16" relativePoint="BOTTOM"/></Anchors></Button>
-									<Button name="GF_WhisperHistoryButton18" inherits="GF_AbstractGrayButton" id="18"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton17" relativePoint="BOTTOM"/></Anchors></Button>
-									<Button name="GF_WhisperHistoryButton19" inherits="GF_AbstractGrayButton" id="19"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton18" relativePoint="BOTTOM"/></Anchors></Button>
-									<Button name="GF_WhisperHistoryButton20" inherits="GF_AbstractGrayButton" id="20"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton19" relativePoint="BOTTOM"/></Anchors></Button>
+									<Button name="GF_WhisperHistoryButton2" inherits="GF_GrayButton_Whisper" id="2"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton1" relativePoint="BOTTOM"/></Anchors></Button>
+									<Button name="GF_WhisperHistoryButton3" inherits="GF_GrayButton_Whisper" id="3"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton2" relativePoint="BOTTOM"/></Anchors></Button>
+									<Button name="GF_WhisperHistoryButton4" inherits="GF_GrayButton_Whisper" id="4"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton3" relativePoint="BOTTOM"/></Anchors></Button>
+									<Button name="GF_WhisperHistoryButton5" inherits="GF_GrayButton_Whisper" id="5"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton4" relativePoint="BOTTOM"/></Anchors></Button>
+									<Button name="GF_WhisperHistoryButton6" inherits="GF_GrayButton_Whisper" id="6"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton5" relativePoint="BOTTOM"/></Anchors></Button>
+									<Button name="GF_WhisperHistoryButton7" inherits="GF_GrayButton_Whisper" id="7"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton6" relativePoint="BOTTOM"/></Anchors></Button>
+									<Button name="GF_WhisperHistoryButton8" inherits="GF_GrayButton_Whisper" id="8"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton7" relativePoint="BOTTOM"/></Anchors></Button>
+									<Button name="GF_WhisperHistoryButton9" inherits="GF_GrayButton_Whisper" id="9"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton8" relativePoint="BOTTOM"/></Anchors></Button>
+									<Button name="GF_WhisperHistoryButton10" inherits="GF_GrayButton_Whisper" id="10"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton9" relativePoint="BOTTOM"/></Anchors></Button>
+									<Button name="GF_WhisperHistoryButton11" inherits="GF_GrayButton_Whisper" id="11"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton10" relativePoint="BOTTOM"/></Anchors></Button>
+									<Button name="GF_WhisperHistoryButton12" inherits="GF_GrayButton_Whisper" id="12"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton11" relativePoint="BOTTOM"/></Anchors></Button>
+									<Button name="GF_WhisperHistoryButton13" inherits="GF_GrayButton_Whisper" id="13"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton12" relativePoint="BOTTOM"/></Anchors></Button>
+									<Button name="GF_WhisperHistoryButton14" inherits="GF_GrayButton_Whisper" id="14"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton13" relativePoint="BOTTOM"/></Anchors></Button>
+									<Button name="GF_WhisperHistoryButton15" inherits="GF_GrayButton_Whisper" id="15"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton14" relativePoint="BOTTOM"/></Anchors></Button>
+									<Button name="GF_WhisperHistoryButton16" inherits="GF_GrayButton_Whisper" id="16"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton15" relativePoint="BOTTOM"/></Anchors></Button>
+									<Button name="GF_WhisperHistoryButton17" inherits="GF_GrayButton_Whisper" id="17"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton16" relativePoint="BOTTOM"/></Anchors></Button>
+									<Button name="GF_WhisperHistoryButton18" inherits="GF_GrayButton_Whisper" id="18"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton17" relativePoint="BOTTOM"/></Anchors></Button>
+									<Button name="GF_WhisperHistoryButton19" inherits="GF_GrayButton_Whisper" id="19"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton18" relativePoint="BOTTOM"/></Anchors></Button>
+									<Button name="GF_WhisperHistoryButton20" inherits="GF_GrayButton_Whisper" id="20"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButton19" relativePoint="BOTTOM"/></Anchors></Button>
 
-									<CheckButton name="GF_WhisperHistoryButtonCheckButton2" inherits="GF_AbstractSmallCheckButton" id="2">
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton2" inherits="GF_SmallCheckButton_Whisper" id="2">
 										<Anchors>
 											<Anchor point="RIGHT" relativeTo="GF_WhisperHistoryButton2"  relativePoint="LEFT">
 												<Offset>
@@ -2744,24 +2743,24 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											</Anchor>
 										</Anchors>
 									</CheckButton>
-									<CheckButton name="GF_WhisperHistoryButtonCheckButton3" inherits="GF_AbstractSmallCheckButton" id="3"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton2" relativePoint="BOTTOM"/></Anchors></CheckButton>
-									<CheckButton name="GF_WhisperHistoryButtonCheckButton4" inherits="GF_AbstractSmallCheckButton" id="4"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton3" relativePoint="BOTTOM"/></Anchors></CheckButton>
-									<CheckButton name="GF_WhisperHistoryButtonCheckButton5" inherits="GF_AbstractSmallCheckButton" id="5"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton4" relativePoint="BOTTOM"/></Anchors></CheckButton>
-									<CheckButton name="GF_WhisperHistoryButtonCheckButton6" inherits="GF_AbstractSmallCheckButton" id="6"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton5" relativePoint="BOTTOM"/></Anchors></CheckButton>
-									<CheckButton name="GF_WhisperHistoryButtonCheckButton7" inherits="GF_AbstractSmallCheckButton" id="7"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton6" relativePoint="BOTTOM"/></Anchors></CheckButton>
-									<CheckButton name="GF_WhisperHistoryButtonCheckButton8" inherits="GF_AbstractSmallCheckButton" id="8"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton7" relativePoint="BOTTOM"/></Anchors></CheckButton>
-									<CheckButton name="GF_WhisperHistoryButtonCheckButton9" inherits="GF_AbstractSmallCheckButton" id="9"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton8" relativePoint="BOTTOM"/></Anchors></CheckButton>
-									<CheckButton name="GF_WhisperHistoryButtonCheckButton10" inherits="GF_AbstractSmallCheckButton" id="10"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton9" relativePoint="BOTTOM"/></Anchors></CheckButton>
-									<CheckButton name="GF_WhisperHistoryButtonCheckButton11" inherits="GF_AbstractSmallCheckButton" id="11"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton10" relativePoint="BOTTOM"/></Anchors></CheckButton>
-									<CheckButton name="GF_WhisperHistoryButtonCheckButton12" inherits="GF_AbstractSmallCheckButton" id="12"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton11" relativePoint="BOTTOM"/></Anchors></CheckButton>
-									<CheckButton name="GF_WhisperHistoryButtonCheckButton13" inherits="GF_AbstractSmallCheckButton" id="13"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton12" relativePoint="BOTTOM"/></Anchors></CheckButton>
-									<CheckButton name="GF_WhisperHistoryButtonCheckButton14" inherits="GF_AbstractSmallCheckButton" id="14"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton13" relativePoint="BOTTOM"/></Anchors></CheckButton>
-									<CheckButton name="GF_WhisperHistoryButtonCheckButton15" inherits="GF_AbstractSmallCheckButton" id="15"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton14" relativePoint="BOTTOM"/></Anchors></CheckButton>
-									<CheckButton name="GF_WhisperHistoryButtonCheckButton16" inherits="GF_AbstractSmallCheckButton" id="16"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton15" relativePoint="BOTTOM"/></Anchors></CheckButton>
-									<CheckButton name="GF_WhisperHistoryButtonCheckButton17" inherits="GF_AbstractSmallCheckButton" id="17"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton16" relativePoint="BOTTOM"/></Anchors></CheckButton>
-									<CheckButton name="GF_WhisperHistoryButtonCheckButton18" inherits="GF_AbstractSmallCheckButton" id="18"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton17" relativePoint="BOTTOM"/></Anchors></CheckButton>
-									<CheckButton name="GF_WhisperHistoryButtonCheckButton19" inherits="GF_AbstractSmallCheckButton" id="19"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton18" relativePoint="BOTTOM"/></Anchors></CheckButton>
-									<CheckButton name="GF_WhisperHistoryButtonCheckButton20" inherits="GF_AbstractSmallCheckButton" id="20"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton19" relativePoint="BOTTOM"/></Anchors></CheckButton>
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton3" inherits="GF_SmallCheckButton_Whisper" id="3"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton2" relativePoint="BOTTOM"/></Anchors></CheckButton>
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton4" inherits="GF_SmallCheckButton_Whisper" id="4"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton3" relativePoint="BOTTOM"/></Anchors></CheckButton>
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton5" inherits="GF_SmallCheckButton_Whisper" id="5"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton4" relativePoint="BOTTOM"/></Anchors></CheckButton>
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton6" inherits="GF_SmallCheckButton_Whisper" id="6"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton5" relativePoint="BOTTOM"/></Anchors></CheckButton>
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton7" inherits="GF_SmallCheckButton_Whisper" id="7"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton6" relativePoint="BOTTOM"/></Anchors></CheckButton>
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton8" inherits="GF_SmallCheckButton_Whisper" id="8"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton7" relativePoint="BOTTOM"/></Anchors></CheckButton>
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton9" inherits="GF_SmallCheckButton_Whisper" id="9"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton8" relativePoint="BOTTOM"/></Anchors></CheckButton>
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton10" inherits="GF_SmallCheckButton_Whisper" id="10"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton9" relativePoint="BOTTOM"/></Anchors></CheckButton>
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton11" inherits="GF_SmallCheckButton_Whisper" id="11"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton10" relativePoint="BOTTOM"/></Anchors></CheckButton>
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton12" inherits="GF_SmallCheckButton_Whisper" id="12"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton11" relativePoint="BOTTOM"/></Anchors></CheckButton>
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton13" inherits="GF_SmallCheckButton_Whisper" id="13"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton12" relativePoint="BOTTOM"/></Anchors></CheckButton>
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton14" inherits="GF_SmallCheckButton_Whisper" id="14"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton13" relativePoint="BOTTOM"/></Anchors></CheckButton>
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton15" inherits="GF_SmallCheckButton_Whisper" id="15"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton14" relativePoint="BOTTOM"/></Anchors></CheckButton>
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton16" inherits="GF_SmallCheckButton_Whisper" id="16"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton15" relativePoint="BOTTOM"/></Anchors></CheckButton>
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton17" inherits="GF_SmallCheckButton_Whisper" id="17"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton16" relativePoint="BOTTOM"/></Anchors></CheckButton>
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton18" inherits="GF_SmallCheckButton_Whisper" id="18"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton17" relativePoint="BOTTOM"/></Anchors></CheckButton>
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton19" inherits="GF_SmallCheckButton_Whisper" id="19"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton18" relativePoint="BOTTOM"/></Anchors></CheckButton>
+									<CheckButton name="GF_WhisperHistoryButtonCheckButton20" inherits="GF_SmallCheckButton_Whisper" id="20"><Anchors><Anchor point="TOP" relativeTo="GF_WhisperHistoryButtonCheckButton19" relativePoint="BOTTOM"/></Anchors></CheckButton>
 								</Frames>
 							</Frame>
 						</Frames>
@@ -2805,7 +2804,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							</Anchor>
 						</Anchors>
 						<Frames>
-							<CheckButton name="GF_FrameJoinWorldCheckButton" inherits="GF_AbstractLabelCheckButton">
+							<CheckButton name="GF_FrameJoinWorldCheckButton" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="TOPLEFT">
 										<Offset>
@@ -2823,7 +2822,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_FrameSpamFilterCheckButton" inherits="GF_AbstractLabelCheckButton">
+							<CheckButton name="GF_FrameSpamFilterCheckButton" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeTo="GF_FrameJoinWorldCheckButton">
 										<Offset>
@@ -2844,7 +2843,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_FrameErrorFilterCheckButton" inherits="GF_AbstractLabelCheckButton">
+							<CheckButton name="GF_FrameErrorFilterCheckButton" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="TOP">
 										<Offset>
@@ -2861,7 +2860,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_FrameAutoBlacklistCheckButton" inherits="GF_AbstractLabelCheckButton">
+							<CheckButton name="GF_FrameAutoBlacklistCheckButton" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeTo="GF_FrameErrorFilterCheckButton">
 										<Offset>
@@ -2878,7 +2877,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_FrameShowOriginalChatCheckButton" inherits="GF_AbstractLabelCheckButton">
+							<CheckButton name="GF_FrameShowOriginalChatCheckButton" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="TOPRIGHT">
 										<Offset>
@@ -2895,7 +2894,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_GroupsFrameShowTranslateCheckButton" inherits="GF_AbstractLabelCheckButton">
+							<CheckButton name="GF_GroupsFrameShowTranslateCheckButton" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeTo="GF_GroupsFrameShowTranslateCheckButton">
 										<Offset>

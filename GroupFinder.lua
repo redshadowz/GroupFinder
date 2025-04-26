@@ -1697,7 +1697,7 @@ function GF_FixLFGStrings(lfmOnly) -- LFG Group Maker Functions
 	end
 end
 function GF_CreateSearchDropdownButton(id, parent)
-	local button = CreateFrame("CheckButton", parent:GetName()..id, parent, "GF_AbstractLabelCheckButtonClick")
+	local button = CreateFrame("CheckButton", parent:GetName()..id, parent, "GF_GF_CheckButtonTemplate_Label_Click")
 	if id == 1 then
 		button:SetPoint("TOPLEFT", parent, "TOPLEFT", 6, -4)
 	else
