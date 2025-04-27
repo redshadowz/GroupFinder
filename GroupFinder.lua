@@ -1283,13 +1283,13 @@ function GF_ResultItem_Hover_Off(frame)
 	getglobal(frame:GetName().."TextureSelectedIcon"):Hide();
 end
 function GF_GetGroupWhoButton(frame,id)
-	GF_AddNameToWhoQueue(GF_FilteredResultsList[id].op,true)
+	GF_AddNameToWhoQueue(GF_FilteredResultsList[GF_ResultsListOffset+id].op,true)
 	getglobal(frame:GetName().."GroupWhoButton"):Hide();
 end
 function GF_LFGInviteButton(frame,id)
-	SendChatMessage(GF_INVITING_FOR..GF_FilteredResultsList[id].message,"WHISPER",nil,GF_FilteredResultsList[id].op)
-	InviteByName(GF_FilteredResultsList[id].op)
-	GF_LFGInviteTime[GF_FilteredResultsList[id].op] = time() + 10
+	SendChatMessage(GF_INVITING_FOR..GF_FilteredResultsList[GF_ResultsListOffset+id].message,"WHISPER",nil,GF_FilteredResultsList[GF_ResultsListOffset+id].op)
+	InviteByName(GF_FilteredResultsList[GF_ResultsListOffset+id].op)
+	GF_LFGInviteTime[GF_FilteredResultsList[GF_ResultsListOffset+id].op] = time() + 10
 	getglobal(frame:GetName().."LFGInviteButton"):Hide();
 end
 function GF_LFMWhisperRequestInviteButton(frame,id)
@@ -1298,8 +1298,8 @@ function GF_LFMWhisperRequestInviteButton(frame,id)
 		_,_,_,_,findSpec = GetTalentInfo(i,GetNumTalents(i));
 		if findSpec > 0 then specName = GF_TRIGGER_LIST.CLASSES[UnitClass("player")][i].." " break end
 	end
-	SendChatMessage("["..UnitLevel("player").." "..specName..UnitClass("player").."] "..GF_INVITE_PLEASE,"WHISPER",nil,GF_FilteredResultsList[id].op)
-	GF_RequestInviteTime[GF_FilteredResultsList[id].op] = time() + 120
+	SendChatMessage("["..UnitLevel("player").." "..specName..UnitClass("player").."] "..GF_INVITE_PLEASE,"WHISPER",nil,GF_FilteredResultsList[GF_ResultsListOffset+id].op)
+	GF_RequestInviteTime[GF_FilteredResultsList[GF_ResultsListOffset+id].op] = time() + 120
 	getglobal(frame:GetName().."LFMWhisperRequestInviteButton"):Hide();
 end
 
