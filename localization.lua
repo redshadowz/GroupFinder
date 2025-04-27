@@ -350,8 +350,8 @@ GF_TRIGGER_LIST = {
 	["POLITICS"] = { "jews", "hitler", "stalin", "kike", "nazi", "supremacist", "racism", "gas chamber", "pedo", "pedophile", "biden", "trump", "pelosi", "semiti", "tranny", "trannies",
 				"6 million", "gorillion", "republican", "democrat", "politic", "bankers", "apartheid", "holocaust", "holohoax", "bigot", "schizo", "jewish", "transgender", "abortion",
 				"sexist", "feminism", "globalist", "racist", "racism", "immigrants", "refugees", "nigger", "chink", "misogyn", "faggot", "negro", "muslim", },
-	["TRADE"] = { "wtb", "wts", "buying", "selling", "wtt", "trading", "lfw", "for sale", " on ah ", " cod ", "summons service", "summon service", "will tip", },
-	["LFTRADE"] = { "jc", "jewel", "enchant", "tailor", "blacksmith", "leatherwork", "engineer", },
+	["TRADE"] = { "wtb", "wts", "buying", "selling", "wtt", "trading", "lfw", "for sale", " on ah ", " cod ", "summons service", "summon service", "will tip", "lockbox", "lock box", },
+	["LFTRADE"] = { "jc", "jewelcrafter", "enchanter", "tailor", "blacksmith", "leatherworker", "engineer", },
 	["RAID"] = { "molten core", " mc ", "ragnaros", " rag ", "blackwing", "bwl", "zulg", " zg", "gurub", "hakkar", "aq20", " ahn", " aq ", "ossir", "aq40", "quiraj",
 				"naxxramas", "naxx", "onyxia", " ony ", "azuregos", "kazzak", "world boss", "lethon", "ysondre", "taerar", "emeris", },
 	["PVP"] = { "premade", " av ", " ab ", "wsg", "warsong", "alterac valley", "arathi basin", "gulch", },
@@ -419,7 +419,7 @@ GF_TRIGGER_LIST = {
 		["INSTANCE"] 		= { 0, "instan[zc]", },
 		["ANYTHING"] 		= { 0, "anything", },
 	},
-}
+}	-- Buttons... (1) The name on the dropdowns. (2/3) Level minimum/maximum for showing on dropdowns. (4) Alternate spelling for LFG FixStrings. (5) The Instance name on the /Who List(to not whisper people already in dungeons). (6) The actual Dungeon Level.
 GF_BUTTONS_LIST = {
 	["SearchList"] = {
 		[1] = { "Ragefire Chasm", 10, 18, "rfc", "ragefire", },

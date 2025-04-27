@@ -558,17 +558,12 @@ function GF_ChatCheckFilters(logType,arg1,event)
 	end
 end
 function GF_CleanUpMessagesOfBadLinks(arg1) -- Removes CLINK and pfQuest/Questie links if not using those addons
-	if not IsAddOnLoaded("pfUI") then 
-		arg1 = gsub(arg1, "{CLINK:item:(%x+):([%d-]-:[%d-]-:[%d-]-:[%d-]-:[%d-]-:[%d-]-:[%d-]-:[%d-]-):([^}]-)}", "|c%1|Hitem:%2|h[%3]|h|r")
-		arg1 = gsub(arg1, "{CLINK:(%x+):([%d-]-:[%d-]-:[%d-]-:[%d-]-):([^}]-)}", "|c%1|Hitem:%2|h[%3]|h|r")
-		arg1 = gsub(arg1, "{CLINK:enchant:(%x+):([%d-]-):([^}]-)}", "|c%1|Henchant:%2|h[%3]|h|r")
-		arg1 = gsub(arg1, "{CLINK:spell:(%x+):([%d-]-):([^}]-)}", "|c%1|Hspell:%2|h[%3]|h|r")
-		arg1 = gsub(arg1, "{CLINK:quest:(%x+):([%d-]-):([%d-]-):([^}]-)}", "|c%1|Hquest:%2:%3|h[%4]|h|r")
-		arg1 = gsub(arg1, "|c%w+|Hquest[0-9a-fA-F:]+|h%[(.-)%]%|h|r", "%1")
-	end
-	if not IsAddOnLoaded("pfQuest") then
-		arg1 = gsub(arg1, "|c.*|Hquest:[%d]+:[-]?[%d]+|h%[(.*)%]|h|r", "%1")
-	end
+	arg1 = gsub(arg1, "{CLINK:item:(%x+):([%d-]-:[%d-]-:[%d-]-:[%d-]-:[%d-]-:[%d-]-:[%d-]-:[%d-]-):([^}]-)}", "|c%1|Hitem:%2|h[%3]|h|r")
+	arg1 = gsub(arg1, "{CLINK:(%x+):([%d-]-:[%d-]-:[%d-]-:[%d-]-):([^}]-)}", "|c%1|Hitem:%2|h[%3]|h|r")
+	arg1 = gsub(arg1, "{CLINK:enchant:(%x+):([%d-]-):([^}]-)}", "|c%1|Henchant:%2|h[%3]|h|r")
+	arg1 = gsub(arg1, "{CLINK:spell:(%x+):([%d-]-):([^}]-)}", "|c%1|Hspell:%2|h[%3]|h|r")
+	arg1 = gsub(arg1, "{CLINK:quest:(%x+):([%d-]-):([%d-]-):([^}]-)}", "|c%1|Hquest:%2:%3|h[%4]|h|r")		
+	--arg1 = gsub(arg1, "|c.*|Hquest:[%d]+:[-]?[%d]+|h%[(.*)%]|h|r", "%1")
 	return arg1
 end
 function GF_ShowGroupsOnMinimap(arg1,arg2)
@@ -1484,7 +1479,7 @@ end
 
 function GF_ToggleGetWho() -- GetWho functions
 	if not GF_ClassWhoRequest then
-		GF_GetWhoLevel = GF_FindDungeonLevel()
+		GF_GetWhoLevel = GF_FindDungeonLevel(string.lower(GF_LFGWhoWhisperEditBox:GetText()),string.lower(GF_LFGDescriptionEditBox:GetText()))
 		if GF_GetWhoLevel then
 			GF_GetWhoClassLevelList(GF_GetWhoLevel, GF_SavedVariables.lfgwhisperclass, true)
 		else
@@ -1589,7 +1584,7 @@ function GF_GetWhoSendWhisperToAvailablePlayer()
 	if whispermessage == "" then
 		DEFAULT_CHAT_FRAME:AddMessage("GF: "..GF_NO_WHISPER_TEXT, 1, 1, 0.5);
 	elseif string.len(whispermessage) > 5 then
-		GF_GetWhoLevel = GF_FindDungeonLevel() or 60;
+		GF_GetWhoLevel = GF_FindDungeonLevel(string.lower(GF_LFGWhoWhisperEditBox:GetText()),string.lower(GF_LFGDescriptionEditBox:GetText())) or 60;
 		for k,v in pairs(GF_ClassWhoTable) do
 			if GF_ClassWhoTable[k][4] < time()-GF_GetWhoResetTimer then
 				if GF_ClassWhoTable[k][1] >= GF_GetWhoLevel-GF_GetWhoLevelRange and GF_ClassWhoTable[k][1] <= GF_GetWhoLevel+GF_GetWhoLevelRange and GF_ClassWhoTable[k][2] == GF_SavedVariables.lfgwhisperclass then
@@ -1608,28 +1603,28 @@ function GF_GetWhoSendWhisperToAvailablePlayer()
 		DEFAULT_CHAT_FRAME:AddMessage("GF: "..GF_WHISPER_TEXT_TOO_SHORT, 1, 1, 0.5);
 	end
 end
-function GF_FindDungeonLevel()
+function GF_FindDungeonLevel(whisperText,lfgText)
 	if GF_LFGWhoWhisperEditBox:GetText() ~= "" then 
 		for _,dtable in pairs(GF_BUTTONS_LIST["LFGDungeon"]) do
-			for w in string.gfind(string.lower(GF_LFGWhoWhisperEditBox:GetText()), string.lower(dtable[1])) do
+			for w in string.gfind(whisperText, string.lower(dtable[1])) do
 				return dtable[6]
 			end
 		end
 	end
 	for _,dtable in pairs(GF_BUTTONS_LIST["LFGDungeon"]) do
-		for w in string.gfind(string.lower(GF_SavedVariables.searchlfgtext), string.lower(dtable[1])) do
+		for w in string.gfind(lfgText, string.lower(dtable[1])) do
 			return dtable[6]
 		end
     end
 	if GF_LFGWhoWhisperEditBox:GetText() ~= "" then 
 		for _,dtable in pairs(GF_BUTTONS_LIST["LFGRaid"]) do
-			for w in string.gfind(string.lower(GF_LFGWhoWhisperEditBox:GetText()), string.lower(dtable[1])) do
+			for w in string.gfind(whisperText, string.lower(dtable[1])) do
 				return dtable[6]
 			end
 		end
 	end
 	for _,dtable in pairs(GF_BUTTONS_LIST["LFGRaid"]) do
-		for w in string.gfind(string.lower(GF_SavedVariables.searchlfgtext), string.lower(dtable[1])) do
+		for w in string.gfind(lfgText, string.lower(dtable[1])) do
 			return dtable[6]
 		end
     end
@@ -1878,7 +1873,7 @@ function GF_FindGroupsAndDisplayCustomChatMessages(event,arg1,arg2,arg9) -- Chat
 		GF_PreviousMessage[arg2] = {arg1,time() + .1,true}
 		return true;
 	else
-		local logType = GF_CheckForPoliticsAndPreviousBlacklistSpam(arg1,arg2) or GF_CheckForGroups(arg1,arg2,event) or 3;
+		local logType = GF_CheckForPoliticsAndPreviousBlacklistSpam(string.lower(arg1),arg2) or GF_CheckForGroups(arg1,arg2,event) or 3;
 		GF_AddLogMessage(GF_CleanUpMessagesOfBadLinks(arg1),logType,true,arg2,arg8,arg9,event)
 		if GF_ChatCheckFilters(logType,arg1,event) then
 			if GF_SavedVariables.showoriginalchat or event ~= "CHAT_MSG_CHANNEL" then
@@ -1914,14 +1909,14 @@ function GF_CheckForPoliticsAndPreviousBlacklistSpam(arg1,arg2)
 		if GF_SavedVariables.spamfilter then
 			if GF_PlayerMessages[arg2] and GF_PlayerMessages[arg2][1] > time() then return 7 end
 			for i=1, getn(GF_TRIGGER_LIST.SPAM) do
-				if string.find(string.lower(arg1), GF_TRIGGER_LIST.SPAM[i]) then
+				if string.find(arg1, GF_TRIGGER_LIST.SPAM[i]) then
 					return 7;
 				end
 			end
 		end
 		if not GF_SavedVariables.showpolitics then
 			for i=1, getn(GF_TRIGGER_LIST.POLITICS) do
-				if string.find(string.lower(arg1), GF_TRIGGER_LIST.POLITICS[i]) then
+				if string.find(arg1, GF_TRIGGER_LIST.POLITICS[i]) then
 					return 5;
 				end
 			end
@@ -1930,18 +1925,8 @@ function GF_CheckForPoliticsAndPreviousBlacklistSpam(arg1,arg2)
 end
 function GF_CheckForGroups(arg1,arg2,event)
 	GF_GetWhoData(arg2,foundInGroup)
-	for i=1, getn(GF_TRIGGER_LIST.TRADE) do
-		if string.find(string.lower(arg1), GF_TRIGGER_LIST.TRADE[i]) then
-			return GF_CheckForSpam(arg1,arg2,foundInGroup) or 4;
-		end
-	end
-	local foundLF = string.find(string.lower(arg1), "lf ") or string.find(string.lower(arg1), "looking") or string.find(string.lower(arg1), "need")
-	for i=1, getn(GF_TRIGGER_LIST.LFTRADE) do
-		if foundLF and string.find(string.lower(arg1), GF_TRIGGER_LIST.LFTRADE[i]) then
-			return GF_CheckForSpam(arg1,arg2,foundInGroup) or 4;
-		end
-	end
-	local foundInGroup,entry = GF_GetGroupInformation(arg1,arg2);
+	if GF_CheckForTrades(string.lower(arg1)) then return GF_CheckForSpam(arg1,arg2,foundInGroup) or 4; end
+	local foundInGroup,entry = GF_GetGroupInformation(GF_CleanUpMessagesOfBadLinks(arg1),arg2);
 	if foundInGroup then
 		table.insert(GF_MessageList[GF_RealmName],1,entry);
 		GF_ApplyFiltersToGroupList()
@@ -1952,6 +1937,19 @@ function GF_CheckForGroups(arg1,arg2,event)
 		end
 	end
 	return GF_CheckForSpam(arg1,arg2,foundInGroup) or foundInGroup;
+end
+function GF_CheckForTrades(arg1)
+	for i=1, getn(GF_TRIGGER_LIST.TRADE) do
+		if string.find(arg1, GF_TRIGGER_LIST.TRADE[i]) then
+			return 4;
+		end
+	end
+	local foundLF = string.find(arg1, "lf ") or string.find(arg1, "looking") or string.find(arg1, "need")
+	for i=1, getn(GF_TRIGGER_LIST.LFTRADE) do
+		if foundLF and string.find(arg1, GF_TRIGGER_LIST.LFTRADE[i]) then
+			return 4;
+		end
+	end
 end
 function GF_CheckForSpam(arg1,arg2,foundInGroup)
 	if not GF_PlayersCurrentlyInGroup[arg2] and not GF_Friends[arg2] and not GF_Guildies[arg2] then
