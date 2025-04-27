@@ -46,4 +46,6 @@ Note: Will not message the same person more than once every 15 minutes.
 
 PS: I made the 'Group Maker' for my niece. She hated finding groups for low-level dungeons. I tried to get her to /whisper people in her level range, but it was too much work for her.  
 PS: I made the Chat Filtering because Everlook was absolutely filled to the brim with gold-sellers and other spammers.  
-PS: By default, the groupfinder will be bound to button "I". It will not override your current bindings. Added "Shift-L" for the Log and "Shift-G" for groups.  
+
+Turtle WoW effectively blocks you from whispering after ~15 whispers.  
+There is also a "hide everything" overlay mode by shift-right clicking the minimap icon.  
