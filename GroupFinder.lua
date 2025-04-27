@@ -1,4 +1,4 @@
-﻿GF_SavedVariables = {}
+﻿GF_SavedVariables 							= {}
 GF_RealmName								= GetRealmName();
 local GF_MaxEntriesPerRealmOnPrune			= 20000;
 local GF_WhoCooldownTime					= 10;
@@ -40,7 +40,7 @@ local GF_AddonMakeAResponseToLoginList		= nil;
 local GF_AddonOPSentNamesOnLogin			= {};
 local GF_AddonGroupDataToBeSentBuffer		= {};
 local GF_AddonMakeAListOfGroupsForSending	= nil;
-local GF_AddonListOfFriendsGuildiesWithAddon		= {};
+local GF_AddonListOfFriendsGuildiesWithAddon= {};
 local GF_AddonTimeSinceLastUpdate			= 0;
 local GF_AddonNamesFromWhoSinceLoggedOn		= {};
 local GF_AddonNeedToBroadcastSomething		= nil;
@@ -81,7 +81,7 @@ local ThingsToHide = { "GF_GroupsInChatCheckButton", "GF_GroupsNewOnlyCheckButto
 "GF_LogShowSpam", "GF_LogShowBlacklist", "GF_LogShowBelowLevel", "GF_MainFrameCloseButton", "GF_GroupsFrame_ResultsPrev", "GF_GroupsFrame_ResultsNext", "GF_LFGSizeDropdown", "GF_LFGLFMDropdown", "GF_LFGDungeonDropdown", "GF_LFGRaidDropdown",
 "GF_LFGRoleDropdown", "GF_GroupAutoCheckButton", "GF_LFGDescriptionEditBox", "GF_LFGWhisperButton", "GF_LFGWhoWhisperEditBox", "GF_FrameAnnounceTimerSlider", "GF_LFGWhoClassDropdown", "GF_LFGGetWhoButton",
 "GF_LogHideMainFrame", "GF_LogHideMainFrameHeight", "GF_LogShowEditBox", "GF_LogShowWhisperHistory", "GF_LogShowGroups", "GF_LogShowChat", "GF_LogShowTrades", }
-local GF_DaysBeforeMonth = { 0,31,59,90,120,151,181,212,243,273,304,334 }
+local GF_DifficultyColors = { ["RED"] = "FF0000", ["ORANGE"] = "FF8040", ["YELLOW"] = "FFFF00", ["GREEN"] = "1eff00", ["GREY"] = "808080" }
 
 function GF_LoadVariables()
 	if not GF_SavedVariables.loghidemainframeheight == nil then
@@ -1001,6 +1001,7 @@ function GF_OnEvent(event) -- OnEvent, LoadSettings, Bind Keys, Prune Tables
 		GF_BindKey("I", "GF_SHOW_FRAME")
 		GF_BindKey("SHIFT-G", "GF_SHOW_GROUP")
 		GF_BindKey("SHIFT-L", "GF_SHOW_LOG")
+		SaveBindings(1)
 	elseif event == "PLAYER_LEAVING_WORLD" then
 		local _,_,_,xpos, ypos = GF_MainFrame:GetPoint()
 		GF_SavedVariables.MainFrameXPos = xpos;
@@ -1194,45 +1195,55 @@ function GF_UpdateResults()
 	GF_PageLabel:SetText(GF_PAGE.." "..cpage.." / "..tpage);
 
 	for i=1, 20 do
-		local c = "GF_NewItem"..i;
-		if getglobal(c) then
+		local nFrame = "GF_NewItem"..i;
+		if getglobal(nFrame) then
 			if i+GF_ResultsListOffset <= groupListLength then 
 				local entry = GF_FilteredResultsList[i+GF_ResultsListOffset];
-				if GF_PlayersCurrentlyInGroup[entry.op] or GF_Friends[entry.op] or GF_Guildies[entry.op] then getglobal(c.."NameLabel"):SetTextColor(255,215,0,1); else getglobal(c.."NameLabel"):SetTextColor(0.75,0.75,1,1); end
+				if GF_PlayersCurrentlyInGroup[entry.op] or GF_Friends[entry.op] or GF_Guildies[entry.op] then getglobal(nFrame.."NameLabel"):SetTextColor(255,215,0,1); else getglobal(nFrame.."NameLabel"):SetTextColor(0.75,0.75,1,1); end
 
-				if floor((time() - entry.t)/60) > 1 then getglobal(c.."MoreRightLabel"):SetText(GF_FOUND..floor((time() - entry.t)/60)..GF_MINUTES..GF_TIME_AGO);
-				elseif floor((time() - entry.t)/60) == 1 then getglobal(c.."MoreRightLabel"):SetText(GF_FOUND..floor((time() - entry.t)/60)..GF_MINUTE..GF_TIME_AGO);
-				else getglobal(c.."MoreRightLabel"):SetText(GF_FOUND..GF_TIME_JUST_NOW); end
-				
+				if floor((time() - entry.t)/60) > 1 then getglobal(nFrame.."MoreRightLabel"):SetText(GF_FOUND..floor((time() - entry.t)/60)..GF_MINUTES..GF_TIME_AGO);
+				elseif floor((time() - entry.t)/60) == 1 then getglobal(nFrame.."MoreRightLabel"):SetText(GF_FOUND..floor((time() - entry.t)/60)..GF_MINUTE..GF_TIME_AGO);
+				else getglobal(nFrame.."MoreRightLabel"):SetText(GF_FOUND..GF_TIME_JUST_NOW); end
+
+				local dungeonLevelDifficulty = "";
+				if entry.dlevel == 0 and entry.who then entry.dlevel = entry.who[1] end
+				if entry.dlevel - UnitLevel("player") > 3 then dungeonLevelDifficulty = "|cff"..GF_DifficultyColors["RED"]
+				elseif entry.dlevel - UnitLevel("player") > 1 then dungeonLevelDifficulty = "|cff"..GF_DifficultyColors["ORANGE"]
+				elseif entry.dlevel - UnitLevel("player") > -1 then dungeonLevelDifficulty = "|cff"..GF_DifficultyColors["YELLOW"]
+				elseif entry.dlevel - UnitLevel("player") > -3 then dungeonLevelDifficulty = "|cff"..GF_DifficultyColors["GREEN"]
+				else dungeonLevelDifficulty = "|cff"..GF_DifficultyColors["GREY"] end
+
+				if entry.dlevel > 60 then dungeonLevelDifficulty = dungeonLevelDifficulty.."[60]|r " else dungeonLevelDifficulty = dungeonLevelDifficulty.."["..entry.dlevel.."]|r " end
 				if entry.who then
 					local bottomtext;
 					if entry.who[3] ~= "" then bottomtext = ", " else bottomtext = "" end
-					getglobal(c.."NameLabel"):SetText("|cff"..(GF_ClassColors[entry.who[2]] or "ffffff")..entry.op.."|r: "..entry.message);
-					getglobal(c.."MoreLabel"):SetText("Level "..entry.who[1].." "..GF_Classes[entry.who[2]]..bottomtext..entry.who[3]);
+					getglobal(nFrame.."NameLabel"):SetText(dungeonLevelDifficulty.."|cff"..(GF_ClassColors[entry.who[2]] or "ffffff")..entry.op.."|r: "..entry.message);
+					getglobal(nFrame.."MoreLabel"):SetText("Level "..entry.who[1].." "..GF_Classes[entry.who[2]]..bottomtext..entry.who[3]);
 				else
-					getglobal(c.."NameLabel"):SetText(entry.op..": "..entry.message);
-					getglobal(c.."MoreLabel"):SetText("");
+					if entry.dlevel == 0 then dungeonLevelDifficulty = "|cff"..GF_DifficultyColors["GREY"].."[NA]|r " end
+					getglobal(nFrame.."NameLabel"):SetText(dungeonLevelDifficulty..entry.op..": "..entry.message);
+					getglobal(nFrame.."MoreLabel"):SetText("");
 				end
 				if not GF_SavedVariables.loghidemainframeheight or i < 14 then
-					getglobal(c):Show();
+					getglobal(nFrame):Show();
 					if not GF_SavedVariables.loghidemainframe and not GF_SavedVariables.loghideeverything then
 						if (not GF_SavedVariables.usewhoongroups or (entry.whoAttempts and entry.whoAttempts > 2)) and not (GF_WhoTable[GF_RealmName][entry.op] and GF_WhoTable[GF_RealmName][entry.op][4] and
 						(GF_WhoTable[GF_RealmName][entry.op][1] < 60 and GF_WhoTable[GF_RealmName][entry.op][4] + 86400 > time())) and not GF_GetPositionInWhoQueue(entry.op, GF_WhoQueue) then
-							getglobal(c.."GroupWhoButton"):Show();
+							getglobal(nFrame.."GroupWhoButton"):Show();
 						else
-							getglobal(c.."GroupWhoButton"):Hide();
+							getglobal(nFrame.."GroupWhoButton"):Hide();
 						end
 					
-						getglobal(c.."LFGInviteButton"):Hide();
-						getglobal(c.."LFMWhisperRequestInviteButton"):Hide();
+						getglobal(nFrame.."LFGInviteButton"):Hide();
+						getglobal(nFrame.."LFMWhisperRequestInviteButton"):Hide();
 						if entry.dlevel and UnitLevel("player") >= entry.dlevel - 3 and UnitLevel("player") <= entry.dlevel + 3 then
-							if not entry.lfg and (not GF_RequestInviteTime[entry.op] or GF_RequestInviteTime[entry.op] < time()) then getglobal(c.."LFMWhisperRequestInviteButton"):Show(); end
-							if entry.lfg and (not GF_LFGInviteTime[entry.op] or GF_LFGInviteTime[entry.op] < time()) then getglobal(c.."LFGInviteButton"):Show(); end
+							if not entry.lfg and (not GF_RequestInviteTime[entry.op] or GF_RequestInviteTime[entry.op] < time()) then getglobal(nFrame.."LFMWhisperRequestInviteButton"):Show(); end
+							if entry.lfg and (not GF_LFGInviteTime[entry.op] or GF_LFGInviteTime[entry.op] < time()) then getglobal(nFrame.."LFGInviteButton"):Show(); end
 						end
 					end
 				end
 			else
-				getglobal(c):Hide();
+				getglobal(nFrame):Hide();
 			end
 		end
 	end
@@ -1867,7 +1878,7 @@ function GF_FindGroupsAndDisplayCustomChatMessages(event,arg1,arg2,arg9) -- Chat
 		GF_PreviousMessage[arg2] = {arg1,time() + .1,true}
 		return true;
 	else
-		local logType = GF_CheckForPoliticsAndPreviousBlacklistSpam(arg1,arg2) or GF_CheckForGroups(arg1,arg2,event) or GF_CheckForTradesAndChat(arg1,event);
+		local logType = GF_CheckForPoliticsAndPreviousBlacklistSpam(arg1,arg2) or GF_CheckForGroups(arg1,arg2,event) or 3;
 		GF_AddLogMessage(GF_CleanUpMessagesOfBadLinks(arg1),logType,true,arg2,arg8,arg9,event)
 		if GF_ChatCheckFilters(logType,arg1,event) then
 			if GF_SavedVariables.showoriginalchat or event ~= "CHAT_MSG_CHANNEL" then
@@ -1921,20 +1932,24 @@ function GF_CheckForGroups(arg1,arg2,event)
 	GF_GetWhoData(arg2,foundInGroup)
 	local foundInGroup,entry = GF_GetGroupInformation(arg1,arg2);
 	if foundInGroup then
-		for i=1, getn(GF_TRIGGER_LIST.TRADE[2]) do
-			if string.find(string.lower(arg1), GF_TRIGGER_LIST.TRADE[2][i]) and string.find(string.lower(arg1),"lf ") then
-				foundInGroup = nil;
-				break
+		for i=1, getn(GF_TRIGGER_LIST.TRADE[1]) do
+			if string.find(string.lower(arg1), GF_TRIGGER_LIST.TRADE[1][i]) then
+				return GF_CheckForSpam(arg1,arg2,foundInGroup) or 4;
 			end
 		end
-		if foundInGroup then
-			table.insert(GF_MessageList[GF_RealmName],1,entry);
-			GF_ApplyFiltersToGroupList()
-			if not GF_EntryMatchesGroupFilterCriteria(entry) then
-				foundInGroup = 11;
-			elseif GF_SavedVariables.playsounds then
-				PlaySoundFile( "Sound\\Interface\\PickUp\\PutDownRing.wav" );
+		local foundLF = string.find(string.lower(arg1), "lf ") or string.find(string.lower(arg1), "looking") or string.find(string.lower(arg1), "need")
+		for i=1, getn(GF_TRIGGER_LIST.TRADE[2]) do
+			if foundLF and string.find(string.lower(arg1), GF_TRIGGER_LIST.TRADE[2][i]) then
+				return GF_CheckForSpam(arg1,arg2,foundInGroup) or 4;
 			end
+		end
+	
+		table.insert(GF_MessageList[GF_RealmName],1,entry);
+		GF_ApplyFiltersToGroupList()
+		if not GF_EntryMatchesGroupFilterCriteria(entry) then
+			foundInGroup = 11;
+		elseif GF_SavedVariables.playsounds then
+			PlaySoundFile( "Sound\\Interface\\PickUp\\PutDownRing.wav" );
 		end
 	end
 	return GF_CheckForSpam(arg1,arg2,foundInGroup) or foundInGroup;
@@ -1988,21 +2003,6 @@ function GF_CheckForSpam(arg1,arg2,foundInGroup)
 		end
 	end
 end
-function GF_CheckForTradesAndChat(arg1,event)
-	for i=1, getn(GF_TRIGGER_LIST.TRADE[1]) do
-		if string.find(string.lower(arg1), GF_TRIGGER_LIST.TRADE[1][i]) then
-			return 4;
-		end
-	end
-	local foundLF = string.find(string.lower(arg1), "lf ") or string.find(string.lower(arg1), "looking") or string.find(string.lower(arg1), "need")
-	for i=1, getn(GF_TRIGGER_LIST.TRADE[2]) do
-		if foundLF and string.find(string.lower(arg1), GF_TRIGGER_LIST.TRADE[2][i]) then
-			return 4;
-		end
-	end
-	return 3;
-end
-
 function GF_GetGroupInformation(arg1,arg2) -- Searches messages for Groups and similiar functions
 	local score, gtype, glevel, isLFG = GF_SearchMessageForGroup(arg1,GF_SavedVariables.FilterLevel);
 	if not score then return end
@@ -2032,7 +2032,7 @@ function GF_SearchMessageForGroup(arg1,filterLevel)
 	local foundClass = 0
 	local gtype = "N"
 	local isLFG = nil
-	local instancelevel = 60
+	local instancelevel = 0
 	local counter = 0;
 	for _,word in GF_TRIGGER_LIST.IGNORE do
 		if string.find(arg1, word) then return end
@@ -2051,11 +2051,17 @@ function GF_SearchMessageForGroup(arg1,filterLevel)
 		end
 	end
 	for _,instance in GF_TRIGGER_LIST.QUEST do
-		for _, word in instance do
-			if string.find(arg1, word) then
-				foundGroup = 1;
-				gtype = "Q"
-				break;
+		counter = 0
+		for _,word in instance do
+			if counter == 0 then
+				counter = counter + 1;
+			else 
+				if string.find(arg1, word) then
+					foundGroup = 1;
+					gtype = "Q"
+					if instance[1] > instancelevel then instancelevel = instance[1]; end
+					break;
+				end
 			end
 		end
 	end
@@ -2068,7 +2074,7 @@ function GF_SearchMessageForGroup(arg1,filterLevel)
 				if string.find(arg1, word) then
 					foundGroup = 1;
 					gtype = "D"
-					instancelevel = instance[1];
+					if instance[1] > instancelevel then instancelevel = instance[1]; end
 					break;
 				end
 			end
