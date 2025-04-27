@@ -350,8 +350,8 @@ GF_TRIGGER_LIST = {
 	["POLITICS"] = { "jews", "hitler", "stalin", "kike", "nazi", "supremacist", "racism", "gas chamber", "pedo", "pedophile", "biden", "trump", "pelosi", "semiti", "tranny", "trannies",
 				"6 million", "gorillion", "republican", "democrat", "politic", "bankers", "apartheid", "holocaust", "holohoax", "bigot", "schizo", "jewish", "transgender", "abortion",
 				"sexist", "feminism", "globalist", "racist", "racism", "immigrants", "refugees", "nigger", "chink", "misogyn", "faggot", "negro", "muslim", },
-	["TRADE"] = { [1] = { "wtb", "wts", "buying", "selling", "wtt", "trading", "lfw", "for sale", " on ah ", " cod ", "summons service", "summon service", "will tip", },
-					[2] = { "jc", "jewel", "enchant", "tailor", "blacksmith", "leatherwork", "engineer", }, },
+	["TRADE"] = { "wtb", "wts", "buying", "selling", "wtt", "trading", "lfw", "for sale", " on ah ", " cod ", "summons service", "summon service", "will tip", },
+	["LFTRADE"] = { "jc", "jewel", "enchant", "tailor", "blacksmith", "leatherwork", "engineer", },
 	["RAID"] = { "molten core", " mc ", "ragnaros", " rag ", "blackwing", "bwl", "zulg", " zg", "gurub", "hakkar", "aq20", " ahn", " aq ", "ossir", "aq40", "quiraj",
 				"naxxramas", "naxx", "onyxia", " ony ", "azuregos", "kazzak", "world boss", "lethon", "ysondre", "taerar", "emeris", },
 	["PVP"] = { "premade", " av ", " ab ", "wsg", "warsong", "alterac valley", "arathi basin", "gulch", },
@@ -556,7 +556,7 @@ GF_HIGH_ELF				= "High Elf";
 GF_GOBLIN				= "Goblin";
 local GF_TurtleTriggerListDungeons = {
 		["CRESCENTGROVE"]	= { 36, "crescent", "grove", " cg ", },
-		["GILNEASCITY"] 	= { 47, "gilneas", " gc ", },
+		["GILNEASCITY"] 	= { 45, "gilneas", " gc ", },
 		["HATEFORGEQUARRY"] = { 55, "hateforge", "quarry", " hf ", },
 		["EMERALDSANCTUM"] 	= { 60, " es ", "sanctum", },
 		["STORMWINDVAULT"] 	= { 60, " sv ", "vault", },
@@ -598,7 +598,7 @@ local GF_TurtleTriggerListQuests = {
 local GF_TurtleTriggerListRaids = { "kara", "k10", "k40", "concavius", "ostarius", "nerub", "reaver", "aq15", }
 local GF_TurtleSearchList = {
 		[1] = { "Crescent Grove", 32, 38, "crescent", "grove", "cg ", },
-		[2] = { "Gilneas City", 43, 50, "gilneas", },
+		[2] = { "Gilneas City", 43, 49, "gilneas", },
 		[3] = { "Hateforge Quarry", 52, 60, "hateforge", "quarry", "hf ", },
 		[4] = { "Stormwind Vault", 58, 60, "vault", "sv ", },
 		[5] = { "Black Morass", 58, 60, "morass", "bm ", },
@@ -607,7 +607,7 @@ local GF_TurtleSearchList = {
 }
 local GF_TurtleGroupButtonsListDungeons = { -- header, min to show, max to show, filter to remove names, filter to remove names, Who list level
 		[1] = { "Crescent Grove", 32, 40, "cg", "Crescent Grove", 33, },
-		[2] = { "Gilneas City", 42, 50, "gilneas", "Gilneas City", 46, },
+		[2] = { "Gilneas City", 42, 49, "gilneas", "Gilneas City", 46, },
 		[3] = { "Hateforge Quarry", 52, 60, "quarry", "Hateforge Quarry", 61, },
 		[4] = { "Stormwind Vault", 58, 60, "vault", "Stormwind Vault", 61, },
 		[5] = { "Black Morass", 58, 60, "morass", "Black Morass", 63, },

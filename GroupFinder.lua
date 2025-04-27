@@ -1930,20 +1930,19 @@ function GF_CheckForPoliticsAndPreviousBlacklistSpam(arg1,arg2)
 end
 function GF_CheckForGroups(arg1,arg2,event)
 	GF_GetWhoData(arg2,foundInGroup)
+	for i=1, getn(GF_TRIGGER_LIST.TRADE) do
+		if string.find(string.lower(arg1), GF_TRIGGER_LIST.TRADE[i]) then
+			return GF_CheckForSpam(arg1,arg2,foundInGroup) or 4;
+		end
+	end
+	local foundLF = string.find(string.lower(arg1), "lf ") or string.find(string.lower(arg1), "looking") or string.find(string.lower(arg1), "need")
+	for i=1, getn(GF_TRIGGER_LIST.LFTRADE) do
+		if foundLF and string.find(string.lower(arg1), GF_TRIGGER_LIST.LFTRADE[i]) then
+			return GF_CheckForSpam(arg1,arg2,foundInGroup) or 4;
+		end
+	end
 	local foundInGroup,entry = GF_GetGroupInformation(arg1,arg2);
 	if foundInGroup then
-		for i=1, getn(GF_TRIGGER_LIST.TRADE[1]) do
-			if string.find(string.lower(arg1), GF_TRIGGER_LIST.TRADE[1][i]) then
-				return GF_CheckForSpam(arg1,arg2,foundInGroup) or 4;
-			end
-		end
-		local foundLF = string.find(string.lower(arg1), "lf ") or string.find(string.lower(arg1), "looking") or string.find(string.lower(arg1), "need")
-		for i=1, getn(GF_TRIGGER_LIST.TRADE[2]) do
-			if foundLF and string.find(string.lower(arg1), GF_TRIGGER_LIST.TRADE[2][i]) then
-				return GF_CheckForSpam(arg1,arg2,foundInGroup) or 4;
-			end
-		end
-	
 		table.insert(GF_MessageList[GF_RealmName],1,entry);
 		GF_ApplyFiltersToGroupList()
 		if not GF_EntryMatchesGroupFilterCriteria(entry) then
