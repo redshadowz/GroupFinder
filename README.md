@@ -42,7 +42,7 @@ The 'Get Who' and 'Invite' Edit Box is for whispering people who match the selec
 4) Press the 'Invite' button to whisper someone on the 'Get Who' list. The number of players available is shown on the 'Get Who' button.  
 Note: Will not message the same person more than once every 15 minutes.  
 
-![Image](https://github.com/user-attachments/assets/b31b1d96-dc7a-45ad-945b-1b18a986b765)  
+![Image](https://github.com/user-attachments/assets/6f264354-cec4-4447-b18f-42bb4bfc19b9)  
 
 PS: I made the 'Group Maker' for my niece. She hated finding groups for low-level dungeons. I tried to get her to /whisper people in her level range, but it was too much work for her.  
 PS: I made the Chat Filtering because Everlook was absolutely filled to the brim with gold-sellers and other spammers.  
