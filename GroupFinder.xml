@@ -2894,9 +2894,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_GroupsFrameShowTranslateCheckButton" inherits="GF_CheckButtonTemplate_Label">
+							<CheckButton name="GF_FrameTreatGuildMessagesAsSpamCheckButton" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="GF_GroupsFrameShowTranslateCheckButton">
+									<Anchor point="TOPLEFT" relativeTo="GF_FrameShowOriginalChatCheckButton">
 										<Offset>
 											<AbsDimension x="0" y="-30"/>
 										</Offset>
@@ -2904,15 +2904,10 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										GF_SavedVariables.showtranslate = this:GetChecked();
-										GF_ApplyFiltersToGroupList();
+										GF_SavedVariables.guildmessagesarespam = this:GetChecked();
 									</OnClick>
 									<OnLoad>
-										if GF_TranslateMessage then
-											getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_TRANSLATE);
-										else
-											GF_GroupsFrameShowTranslateCheckButton:Hide()
-										end
+										getglobal(this:GetName().."TextLabel"):SetText(GF_GUILD_MESSAGES_ARE_SPAM);
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
