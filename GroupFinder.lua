@@ -162,6 +162,7 @@ function GF_LoadVariables()
 		GF_WhisperLogData[GF_RealmName]["Guild"] = {""}
 		GF_MessageList = {};
 		GF_MessageList[GF_RealmName] = {};
+		GF_PlayerMessages = {};
 		table.insert(GF_WhisperLogData[GF_RealmName], "Guild")
 	end
 	if GF_WhoTable[GF_RealmName]["LOADED"][4] + 604800 < time() then -- 7 days
