@@ -1908,7 +1908,7 @@ end
 function GF_CheckForPoliticsAndPreviousBlacklistSpam(arg1,arg2)
 	if not GF_PlayersCurrentlyInGroup[arg2] and not GF_Friends[arg2] and not GF_Guildies[arg2] then
 		if GF_BlackList[GF_RealmName][arg2] then return 8 end
-		if GF_SavedVariables.spamfilter and GF_PlayerMessages[arg2] and GF_PlayerMessages[arg2][1] > time() then return 7 end
+		if GF_SavedVariables.spamfilter and GF_PlayerMessages[arg2] and GF_PlayerMessages[arg2][1] and GF_PlayerMessages[arg2][1] > time() then return 7 end
 		if not GF_SavedVariables.showpolitics then
 			for word in string.gfind(arg1, "(%w+)") do
 				if GF_ONE_WORD_POLITICS[word] then return 5; end
