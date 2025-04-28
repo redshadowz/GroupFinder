@@ -384,10 +384,10 @@ GF_ONE_WORD_QUEST = {
 ["escort"] = 0,["quest"] = 0,["quests"] = 0,["questing"] = 0,
 }
 GF_ONE_WORD_DUNGEON = {
-["ragefire"] = 16,["rfc"] = 16,["deadmines"] = 21,["vancleef"] = 21,["vc"] = 21,["dm"] = 21,["wc"] = 22,["wailing"] = 22,["blackfathom"] = 86,["bfd"] = 28,["shadowfang"] = 26,["sfk"] = 26,["stockade"] = 29,["stockades"] = 29,["stocks"] = 29,
+["ragefire"] = 16,["rfc"] = 16,["deadmine"] = 21,["deadmines"] = 21,["vancleef"] = 21,["vc"] = 21,["dm"] = 21,["wc"] = 22,["wailing"] = 22,["blackfathom"] = 86,["bfd"] = 28,["shadowfang"] = 26,["sfk"] = 26,["stockade"] = 29,["stockades"] = 29,["stocks"] = 29,
 ["gnomer"] = 34,["gnomeregan"] = 34,["kraul"] = 34,["rfk"] = 34,["downs"] = 42,["rfd"] = 42,["smgy"] = 32,["graveyard"] = 32,["library"] = 36,["armory"] = 40,["cathedral"] = 42,["cath"] = 42,["ulda"] = 47,["uldaman"] = 47,["zulfarrak"] = 50,
 ["zf"] = 50,["farrak"] = 50,["mallet"] = 50,["mara"] = 51,["maraudon"] = 51,["princess"] = 51,["st"] = 55,["sunken"] = 55,["atalhakkar"] = 55,["brd"] = 59,["emp"] = 59,["emperor"] = 59,["windsor"] = 56,["jailbreak"] = 56,["angerforge"] = 57,
-["arena"] = 56,["lbrs"] = 60,["dme"] = 58,["dmn"] = 62,["dmt"] = 62,["dmw"] = 62,["scholo"] = 62,["sholo"] = 62,["scholomance"] = 62,["stratholme"] = 62,["baron"] = 62,["ubrs"] = 63,["dungeon"] = 0,["anything"] = 0,
+["arena"] = 56,["lbrs"] = 60,["dme"] = 58,["dmn"] = 62,["dmt"] = 62,["dmw"] = 62,["scholo"] = 62,["sholo"] = 62,["scholomance"] = 62,["strath"] = 62,["stratholme"] = 62,["baron"] = 62,["ubrs"] = 63,["dungeon"] = 0,["anything"] = 0,
 }
 GF_ONE_WORD_RAID = {
 ["mc"] = true,["rag"] = true,["ragnaros"] = true,["blackwing"] = true,["bwl"] = true,["zulgurub"] = true,["zg"] = true,["gurub"] = true,["hakkar"] = true,["aq20"] = true,["aq40"] = true,["ahn"] = true,["qiraj"] = true,
@@ -398,7 +398,7 @@ GF_STRING_FIND_LIST = {
 	["LFM"] = { "lf%d+", "looking for more", "need more", "looking for %a+ more", "need %d* dps","need %d* heal", "need %d* tank", "need heal", "need tank", "need dps", "need range", "need rdps", "need caster", "need melee", "need mdps", "need aoe",
 				"need one", "need two", "need three", "anyone for", "come tank", "come healer", "come dps", "hosting", "ms>os", },
 	["LFG"] = {	"lfg", "looking for group", "anyone for", "want to group", },
-	["GUILD"] = { "wants you", "raiding team", "raid times", "raiding times", "sign up", "server time", "guild bank", "levelers", "leveling guild", "new guild", "new players", "loot council", "consider joining", "raid days", "core team", },
+	["GUILD"] = { "wants you", "raiding team", "raid times", "raiding times", "sign up", "server time", "guild bank", "levelers", "leveling guild", "social guild", "new guild", "new players", "loot council", "consider joining", "raid days", "core team", },
 	["POLITICS"] = { "gas chamber", "6 million", "six million", "misogyn", "nigger", "jew", "semit", "nazi", "republican", "democrat", "politic", "schizo", "immigra", "globali", "femini", },
 	["TRADE"] = { "for sale", " on ah ", "summons service", "summon service", "will tip", "lock box", },
 	["RAID"] = { "molten core",	"world boss", },

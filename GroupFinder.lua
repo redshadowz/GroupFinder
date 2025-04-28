@@ -1956,7 +1956,7 @@ function GF_CheckForSpam(arg1,arg2,foundInGroup)
 		if (GF_WhoTable[GF_RealmName][arg2] and tonumber(GF_WhoTable[GF_RealmName][arg2][1]) < GF_SavedVariables.blockmessagebelowlevel) and GF_WhoTable[GF_RealmName][arg2][4] + 86400 > time() then -- Block lowlevel
 			return 9;
 		end
-		if GF_SavedVariables.guildmessagesarespam and (string.find(string.lower(arg1), "guild") or string.find(string.lower(arg1), "gildia") or string.find(string.lower(arg1), "gilde") or string.find(string.lower(arg1), "recruiting") or string.find(arg1, "%d%d:%d%d")) then
+		if GF_SavedVariables.guildmessagesarespam and not string.find(string.lower(arg1), "lfm") and (string.find(string.lower(arg1), "guild") or string.find(string.lower(arg1), "gildia") or string.find(string.lower(arg1), "gilde") or string.find(string.lower(arg1), "recruiting") or string.find(arg1, "%d%d:%d%d")) then
 			for word in string.gfind(string.lower(arg1), "(%w+)") do
 				if GF_ONE_WORD_GUILD[word] then return 7 end
 			end
