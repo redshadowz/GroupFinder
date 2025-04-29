@@ -626,10 +626,12 @@ end
 function GF_DisplayLog()
 	GF_Log:SetMaxLines(128)
 	local tempHistoryTable = {}
+	local count = 0
 	for i=1, getn(GF_LogHistory[GF_RealmName]) do
 		if GF_LogCheckFilters(GF_LogHistory[GF_RealmName][i][2]) then 
 			table.insert(tempHistoryTable,1,GF_LogHistory[GF_RealmName][i])
-			if i == 128 then break end
+			count = count + 1
+			if count == 128 then break end
 		end
 	end
 	for i=1, getn(tempHistoryTable) do
@@ -1008,11 +1010,12 @@ end
 function GF_LoadSettings()
 	local SliderVariablesToSet = { GF_SavedVariables.MinimapArcOffset, GF_SavedVariables.MinimapRadiusOffset, GF_SavedVariables.MinimapMsgArcOffset, GF_SavedVariables.MinimapMsgRadiusOffset, GF_SavedVariables.FilterLevel,
 	GF_SavedVariables.MainFrameTransparency, GF_SavedVariables.spamfilterduration,GF_SavedVariables.autoblacklistminlevel,GF_SavedVariables.blockmessagebelowlevel,GF_SavedVariables.grouplistingduration,GF_SavedVariables.autofilterlevelvar,
-	GF_SavedVariables.showgroupsnewonlytime, GF_SavedVariables.announcetimer/60, }
+	GF_SavedVariables.showgroupsnewonlytime, }
 	local SliderNames = { "GF_MinimapArcSlider", "GF_MinimapRadiusSlider", "GF_MinimapMsgArcSlider", "GF_MinimapMsgRadiusSlider", "GF_FilterLevelSlider", "GF_FrameTransparencySlider", "GF_FrameSpamFilterDurationSlider",
-	"GF_FrameSpamBlacklistMinLevelSlider", "GF_FrameBlockMessagesBelowLevelSlider", "GF_GroupListingDurationSlider", "GF_AutoFilterLevelSlider", "GF_GroupNewTimeoutSlider", "GF_FrameAnnounceTimerSlider", }
-	for i=1, 13 do getglobal(SliderNames[i]):SetValue(SliderVariablesToSet[i]) end
-	
+	"GF_FrameSpamBlacklistMinLevelSlider", "GF_FrameBlockMessagesBelowLevelSlider", "GF_GroupListingDurationSlider", "GF_AutoFilterLevelSlider", "GF_GroupNewTimeoutSlider", }
+	for i=1, 12 do getglobal(SliderNames[i]):SetValue(SliderVariablesToSet[i]) end
+	if GF_SavedVariables.announcetimer > 600 then GF_FrameAnnounceTimerSlider:SetValue((GF_SavedVariables.announcetimer-600)/300 + 10) else	GF_FrameAnnounceTimerSlider:SetValue(GF_SavedVariables.announcetimer/60)end
+
 	local CheckButtonVariablesToSet = { GF_SavedVariables.showgroupsinchat, GF_SavedVariables.showgroupsinminimap, GF_SavedVariables.showgroupsnewonly, GF_SavedVariables.showchattexts, GF_SavedVariables.showtradestexts, GF_SavedVariables.showloottexts,
 	GF_SavedVariables.autofilter, GF_SavedVariables.guildmessagesarespam, GF_SavedVariables.showdungeons, GF_SavedVariables.showraids, GF_SavedVariables.showquests, GF_SavedVariables.showother, GF_SavedVariables.showlfm, GF_SavedVariables.showlfg,
 	GF_SavedVariables.logshowgroup, GF_SavedVariables.logshowfiltered, GF_SavedVariables.logshowchat, GF_SavedVariables.logshowtrades, GF_SavedVariables.logshowpolitics, GF_SavedVariables.logshowloot, GF_SavedVariables.logshowspam,
@@ -1258,16 +1261,16 @@ function GF_ListItem_OnMouseUp(id)
 		return;
 	end
 end
-function GF_ListItemAuxLeft_ShowTooltip(frame,id)
+function GF_ListItemAuxLeft_ShowTooltip(frame, id)
 	GameTooltip:ClearLines();
 	GameTooltip:SetOwner(this, "ANCHOR_BOTTOMLEFT");
 	GameTooltip:ClearAllPoints();
 	GameTooltip:SetPoint("BOTTOMLEFT", frame:GetName(), "TOPLEFT", 0, 8);
 	
-	if not GF_FilteredResultsList[id] then return; end
+	if not GF_FilteredResultsList[GF_ResultsListOffset+id] then return; end
 	
-	GameTooltip:AddLine(GF_FilteredResultsList[id].op);
-	GameTooltip:AddLine(GF_FilteredResultsList[id].message, 0.9, 0.9, 1.0, 1, 1);
+	--GameTooltip:AddLine(GF_FilteredResultsList[GF_ResultsListOffset+id].op);
+	GameTooltip:AddLine(GF_FilteredResultsList[GF_ResultsListOffset+id].message, 0.9, 0.9, 1.0, 1, 1);
 	GameTooltip:Show();
 end
 function GF_ResultItem_Hover_On(frame,id)
@@ -1830,14 +1833,14 @@ end
 function GF_FindGroupsAndDisplayCustomChatMessages(event,arg1,arg2,arg9) -- Chat Filters and Group Finders
 	if not arg9 or string.lower(arg9) == "lft" or not arg1 or not arg2 or not GF_TextColors[event] then
 		return true;
-	elseif GF_PreviousMessage[arg2] and GF_PreviousMessage[arg2][1] == arg1 and GF_PreviousMessage[arg2][2] > time() then
+	elseif GF_PreviousMessage[arg2] and GF_PreviousMessage[arg2][1] == arg1 and GF_PreviousMessage[arg2][2] > GetTime() then
 		if GF_PreviousMessage[arg2][3] then return true; end
 	elseif event == "CHAT_MSG_WHISPER" then
-		GF_PreviousMessage[arg2] = {arg1,time() + .25, true}
+		GF_PreviousMessage[arg2] = {arg1,GetTime() + .25, true}
 		GF_WhisperReceivedAddToWhisperHistoryList(arg1,arg2,event)
 		return true;
 	elseif event == "CHAT_MSG_WHISPER_INFORM" then
-		GF_PreviousMessage[arg2] = {arg1,time() + .25, true}
+		GF_PreviousMessage[arg2] = {arg1,GetTime() + .25, true}
 		for i=1, getn(GF_MyWhispers) do
 			if arg1 == GF_MyWhispers[i][1] then
 				GF_WhisperReceivedAddToWhisperHistoryList(arg1,GF_MyWhispers[i][2],event)
@@ -1847,47 +1850,47 @@ function GF_FindGroupsAndDisplayCustomChatMessages(event,arg1,arg2,arg9) -- Chat
 		end
 		return true;
 	elseif (event == "CHAT_MSG_GUILD") then
-		GF_PreviousMessage[arg2] = {arg1,time() + .25, true}
+		GF_PreviousMessage[arg2] = {arg1,GetTime() + .25, true}
 		GF_WhisperReceivedAddToWhisperHistoryList(arg1,arg2,event)
 		return true;
 	elseif arg2 == UnitName("player") then
-		GF_PreviousMessage[arg2] = {arg1,time() + .25, true}
+		GF_PreviousMessage[arg2] = {arg1,GetTime() + .25, true}
 		GF_AddLogMessage(arg1,10,true,arg2,arg8,arg9,event)
 		return true;
 	elseif GF_LootFilter[event] then
 		GF_AddLogMessage(arg1,6,true,arg2,arg8,arg9,event)
 		if GF_SavedVariables.showloottexts or (event == "CHAT_MSG_LOOT" and GF_BypassLootFilter(arg1)) then
-			GF_PreviousMessage[arg2] = {arg1,time() + .25, true}
+			GF_PreviousMessage[arg2] = {arg1,GetTime() + .25, true}
 			return true;
 		else
-			GF_PreviousMessage[arg2] = {arg1,time() + .25, nil}
+			GF_PreviousMessage[arg2] = {arg1,GetTime() + .25, nil}
 			return nil;
 		end
 	elseif event == "CHAT_MSG_SYSTEM" then
 		if GF_SavedVariables.errorfilter and GF_CheckErrorFilter(arg1) then
-			GF_PreviousMessage[arg2] = {arg1,time() + .1,nil}
+			GF_PreviousMessage[arg2] = {arg1,GetTime() + .1,nil}
 			return nil;
 		else
-			GF_PreviousMessage[arg2] = {arg1,time() + .1,true}
+			GF_PreviousMessage[arg2] = {arg1,GetTime() + .1,true}
 			return true;
 		end
 	elseif arg2 == "" then
-		GF_PreviousMessage[arg2] = {arg1,time() + .1,true}
+		GF_PreviousMessage[arg2] = {arg1,GetTime() + .1,true}
 		return true;
 	else
-		local logType = GF_CheckForPoliticsAndPreviousBlacklistSpam(string.lower(gsub(arg1, "['-!:.]", "")),arg2) or GF_CheckForGroups(arg1,arg2,event) or 3;
+		local logType = GF_CheckForPreviousBlacklistAndSpam(string.lower(gsub(arg1, "[''-!:.]+", "")),arg2) or GF_CheckForGroups(arg1,arg2) or 3;
 		GF_AddLogMessage(GF_CleanUpMessagesOfBadLinks(arg1),logType,true,arg2,arg8,arg9,event)
 		if GF_ChatCheckFilters(logType,arg1,event) then
 			if GF_SavedVariables.showoriginalchat or event ~= "CHAT_MSG_CHANNEL" then
-				GF_PreviousMessage[arg2] = {arg1,time() + 60,true}
+				GF_PreviousMessage[arg2] = {arg1,GetTime() + 60,true}
 				return true;
 			else
-				GF_PreviousMessage[arg2] = {arg1,time() + 60,nil}
+				GF_PreviousMessage[arg2] = {arg1,GetTime() + 60,nil}
 				GF_AddChannelMessage(arg1,arg2,arg8,arg9)
 				return nil;
 			end
 		else
-			GF_PreviousMessage[arg2] = {arg1,time() + 60,nil}
+			GF_PreviousMessage[arg2] = {arg1,GetTime() + 60,nil}
 			return nil;
 		end
 	end
@@ -1905,25 +1908,16 @@ function GF_CheckErrorFilter(arg1)
 		if string.find(arg1, GF_ErrorFilters[i]) then return true; end
 	end
 end
-function GF_CheckForPoliticsAndPreviousBlacklistSpam(arg1,arg2)
+function GF_CheckForPreviousBlacklistAndSpam(arg1,arg2)
 	if not GF_PlayersCurrentlyInGroup[arg2] and not GF_Friends[arg2] and not GF_Guildies[arg2] then
 		if GF_BlackList[GF_RealmName][arg2] then return 8 end
-		if GF_SavedVariables.spamfilter and GF_PlayerMessages[arg2] and GF_PlayerMessages[arg2][1] and GF_PlayerMessages[arg2][1] > time() then return 7 end
-		if not GF_SavedVariables.showpolitics then
-			for word in string.gfind(arg1, "(%w+)") do
-				if GF_ONE_WORD_POLITICS[word] then return 5; end
-			end
-			for i=1, getn(GF_STRING_FIND_LIST.POLITICS) do
-				if string.find(arg1, GF_STRING_FIND_LIST.POLITICS[i]) then
-					return 5;
-				end
-			end
-		end
+		if GF_SavedVariables.spamfilter and GF_PlayerMessages[arg2] and GF_PlayerMessages[arg2][1] and GF_PlayerMessages[arg2][1] > GetTime() then return 7 end
 	end
 end
-function GF_CheckForGroups(arg1,arg2,event)
+function GF_CheckForGroups(arg1,arg2)
 	GF_GetWhoData(arg2,foundInGroup)
-	if GF_CheckForTrades(string.lower(gsub(arg1, "['-!:.]", ""))) then return GF_CheckForSpam(arg1,arg2,foundInGroup) or 4; end
+	if GF_CheckForTrades(string.lower(gsub(arg1, "[''-!:.]+", ""))) then return GF_CheckForSpam(arg1,arg2,foundInGroup) or 4; end
+	if GF_CheckForPolitics(string.lower(gsub(arg1, "[''-!:.]+", ""))) then return GF_CheckForSpam(arg1,arg2,foundInGroup) or 5; end
 	local foundInGroup,entry = GF_GetGroupInformation(GF_CleanUpMessagesOfBadLinks(arg1),arg2);
 	if foundInGroup then
 		table.insert(GF_MessageList[GF_RealmName],1,entry);
@@ -1945,9 +1939,19 @@ function GF_CheckForTrades(arg1)
 			return 4;
 		end
 	end
-	if string.find(arg1, "lf ") or string.find(arg1, "looking") or string.find(arg1, "need") then
+	if not string.find(arg1, "lfm") and not string.find(arg1, "lf%d+m") and (string.find(arg1, "lf ") or string.find(arg1, "looking") or string.find(arg1, "need")) then
 		for word in string.gfind(arg1, "(%w+)") do
 			if GF_ONE_WORD_LFTRADE[word] then return 4; end
+		end
+	end
+end
+function GF_CheckForPolitics(arg1)
+	for word in string.gfind(arg1, "(%w+)") do
+		if GF_ONE_WORD_POLITICS[word] then return 5; end
+	end
+	for i=1, getn(GF_STRING_FIND_LIST.POLITICS) do
+		if string.find(arg1, GF_STRING_FIND_LIST.POLITICS[i]) then
+			return 5;
 		end
 	end
 end
@@ -1956,26 +1960,31 @@ function GF_CheckForSpam(arg1,arg2,foundInGroup)
 		if (GF_WhoTable[GF_RealmName][arg2] and tonumber(GF_WhoTable[GF_RealmName][arg2][1]) < GF_SavedVariables.blockmessagebelowlevel) and GF_WhoTable[GF_RealmName][arg2][4] + 86400 > time() then -- Block lowlevel
 			return 9;
 		end
-		if GF_SavedVariables.guildmessagesarespam and not string.find(string.lower(arg1), "lfm") and (string.find(string.lower(arg1), "guild") or string.find(string.lower(arg1), "gildia") or string.find(string.lower(arg1), "gilde") or string.find(string.lower(arg1), "recruiting") or string.find(arg1, "%d%d:%d%d")) then
-			for word in string.gfind(string.lower(arg1), "(%w+)") do
-				if GF_ONE_WORD_GUILD[word] then return 7 end
-			end
-			for _,word in GF_STRING_FIND_LIST.GUILD do
+		if GF_SavedVariables.guildmessagesarespam then
+			for _,word in GF_STRING_FIND_LIST.GUILDBLOCKLIST do
 				if string.find(string.lower(arg1), word) then return 7 end
+			end
+			if string.find(string.lower(arg1), "<[a-zA-Z ]+>") or string.find(string.lower(arg1), "guild") or string.find(string.lower(arg1), "gildia") or string.find(string.lower(arg1), "gilde") or string.find(string.lower(arg1), "recruiting") or string.find(string.lower(arg1), "rekrutuje") then
+				for word in string.gfind(string.lower(arg1), "(%w+)") do
+					if GF_ONE_WORD_GUILD[word] then return 7 end
+				end
+				for _,word in GF_STRING_FIND_LIST.GUILD do
+					if string.find(string.lower(arg1), word) then return 7 end
+				end
 			end
 		end
 		if GF_SavedVariables.spamfilter and (not foundInGroup or string.len(arg1) > 50) then
-			if GF_IncomingMessagePrune + 3600 < time() then -- 1 hour
+			if GF_IncomingMessagePrune + 3600 < GetTime() then -- 1 hour
 				for name,_ in GF_PlayerMessages do
-					if GF_PlayerMessages[name][1] < time() then
+					if GF_PlayerMessages[name][1] < GetTime() then
 						GF_PlayerMessages[name] = nil;
 					end
 				end
-				GF_IncomingMessagePrune = time();
+				GF_IncomingMessagePrune = GetTime();
 			end
 			local sniprandom = math.random(4+string.len(arg1)/4)
 			if not GF_PlayerMessages[arg2] then
-				GF_PlayerMessages[arg2] = { [1] = time(), [2] = string.sub(arg1,sniprandom,math.floor(sniprandom*3) + 8), [3] = "ZZZzzz123654" }
+				GF_PlayerMessages[arg2] = { [1] = GetTime(), [2] = string.sub(arg1,sniprandom,math.floor(sniprandom*3) + 8), [3] = "ZZZzzz123654" }
 			else
 				if string.find(arg1,GF_PlayerMessages[arg2][2],1,true) and string.find(arg1,GF_PlayerMessages[arg2][3],1,true) then 																-- Found Spammer
 					if GF_SavedVariables.autoblacklist and not GF_BlackList[GF_RealmName][arg2] and string.len(arg1) > 120 then
@@ -1991,11 +2000,11 @@ function GF_CheckForSpam(arg1,arg2,foundInGroup)
 							if GF_SavedVariables.usewhoongroups then GF_AddNameToWhoQueue(arg2,true); end
 						end
 					end
-					if GF_PlayerMessages[arg2][1] < time() then
-						if GF_PlayerMessages[arg2][1] - GF_SavedVariables.spamfilterduration*60 < time() then
-							GF_PlayerMessages[arg2][1] = time() + GF_SavedVariables.spamfilterduration*60
+					if GF_PlayerMessages[arg2][1] + .1 < GetTime() then
+						if GF_PlayerMessages[arg2][1] - GF_SavedVariables.spamfilterduration*60 < GetTime() then
+							GF_PlayerMessages[arg2][1] = GetTime() + GF_SavedVariables.spamfilterduration*60
 						else
-							GF_PlayerMessages[arg2][1] = GF_PlayerMessages[arg2][1] - time() + GF_SavedVariables.spamfilterduration*60
+							GF_PlayerMessages[arg2][1] = GF_PlayerMessages[arg2][1] - GetTime() + GF_SavedVariables.spamfilterduration*60 -- saved time(100) - current time(120) + -20 + 180 = 160
 						end
 						return 7
 					end
@@ -2031,7 +2040,7 @@ function GF_GetGroupInformation(arg1,arg2) -- Searches messages for Groups and s
 	return 1, entry
 end
 function GF_SearchMessageForGroup(arg1,filterLevel)
-	arg1 = string.lower(" "..gsub(arg1, "['-!:.]", "").." ") -- Added so that I could add spaces to front and back of search terms
+	arg1 = string.lower(" "..gsub(arg1, "[''-!:.]+", "").." ") -- Added so that I could add spaces to front and back of search terms
 	local foundLFMLFG = 0
 	local foundGroup = 0
 	local foundClass = 0
@@ -2039,7 +2048,6 @@ function GF_SearchMessageForGroup(arg1,filterLevel)
 	local isLFG = nil
 	local instancelevel = 0
 	local counter = 0;
-	
 	for word in string.gfind(arg1, "(%w+)") do															-- IGNORE
 		if GF_ONE_WORD_IGNORE[word] or GF_ONE_WORD_GUILD[word] then return end
 	end
