@@ -77,10 +77,10 @@ local GF_LootFilter = { ["CHAT_MSG_MONEY"] = true, ["CHAT_MSG_LOOT"] = true, ["C
 local ThingsToHide = { "GF_GroupsInChatCheckButton", "GF_GroupsNewOnlyCheckButton", "GF_GroupsInMinimapCheckButton", "GF_ShowChatCheckButton", "GF_ShowTradesCheckButton", "GF_ShowLootCheckButton", "GF_FrameShowPoliticsCheckButton",
 "GF_FrameUseWhoOnGroupsCheckButton", "GF_SearchListDropdown", "GF_GroupsFrameDescriptionEditBox", "GF_AutoFilterCheckButton", "GF_PlaySoundOnResultsCheckButton", "GF_GroupsFrameShowDungeonCheckButton", "GF_GroupsFrameShowRaidCheckButton",
 "GF_GroupsFrameShowQuestCheckButton", "GF_GroupsFrameShowOtherCheckButton", "GF_GroupsFrameShowLFMCheckButton", "GF_GroupsFrameShowLFGCheckButton", "GF_ShowSearchButton", "GF_SettingsFrameButton", "GF_ShowBlacklistButton", "GF_LogFrameButton",
-"GF_AnnounceToLFGButton", "GF_ResetLFGDescriptionButton", "GF_LogBottomButton", "GF_LogDownButton", "GF_LogUpButton", "GF_LogShowLoot", "GF_LogShowFiltered", "GF_LogShowPolitics",
+"GF_AnnounceToLFGButton", "GF_ResetLFGDescriptionButton", "GF_LogBottomButton", "GF_LogDownButton", "GF_LogUpButton", "GF_LogShowLoot", "GF_LogShowFiltered",
 "GF_LogShowSpam", "GF_LogShowBlacklist", "GF_LogShowBelowLevel", "GF_MainFrameCloseButton", "GF_GroupsFrame_ResultsPrev", "GF_GroupsFrame_ResultsNext", "GF_LFGSizeDropdown", "GF_LFGLFMDropdown", "GF_LFGDungeonDropdown", "GF_LFGRaidDropdown",
 "GF_LFGRoleDropdown", "GF_GroupAutoCheckButton", "GF_LFGDescriptionEditBox", "GF_LFGWhisperButton", "GF_LFGWhoWhisperEditBox", "GF_FrameAnnounceTimerSlider", "GF_LFGWhoClassDropdown", "GF_LFGGetWhoButton",
-"GF_LogHideMainFrame", "GF_LogHideMainFrameHeight", "GF_LogShowEditBox", "GF_LogShowWhisperHistory", "GF_LogShowGroups", "GF_LogShowChat", "GF_LogShowTrades", }
+"GF_LogHideMainFrame", "GF_LogHideMainFrameHeight", "GF_LogShowEditBox", "GF_LogShowWhisperHistory", "GF_LogShowGroups", "GF_LogShowChat", "GF_LogShowTrades", "GF_LogShowPolitics", }
 local GF_DifficultyColors = { ["RED"] = "FF0000", ["ORANGE"] = "FF8040", ["YELLOW"] = "FFFF00", ["GREEN"] = "1eff00", ["GREY"] = "808080" }
 
 function GF_LoadVariables()
@@ -341,10 +341,10 @@ function GF_ToggleHideMainFrame(hideEverything)
 				getglobal(ThingsToHide[i]):Hide()
 			end
 		else
-			for i=1, 48 do
+			for i=1, 47 do
 				getglobal(ThingsToHide[i]):Hide()
 			end
-			for i=49, 55 do
+			for i=48, 55 do
 				getglobal(ThingsToHide[i]):Show()
 			end
 			GF_LogFrameInternalFrameTitle:SetText(GF_LOG_AND_MONITOR);
@@ -1964,7 +1964,8 @@ function GF_CheckForSpam(arg1,arg2,foundInGroup)
 			for _,word in GF_STRING_FIND_LIST.GUILDBLOCKLIST do
 				if string.find(string.lower(arg1), word) then return 7 end
 			end
-			if string.find(string.lower(arg1), "<[a-zA-Z ]+>") or string.find(string.lower(arg1), "guild") or string.find(string.lower(arg1), "gildia") or string.find(string.lower(arg1), "gilde") or string.find(string.lower(arg1), "recruiting") or string.find(string.lower(arg1), "rekrutuje") then
+			if string.find(string.lower(arg1), "<[a-zA-Z ]+>") or string.find(string.lower(arg1), "guild") or string.find(string.lower(arg1), "gildia") or string.find(string.lower(arg1), "gilde")
+			or string.find(string.lower(arg1), "recruiting") or string.find(string.lower(arg1), "rekrutuje") or string.find(string.lower(arg1), "gildiyu") then
 				for word in string.gfind(string.lower(arg1), "(%w+)") do
 					if GF_ONE_WORD_GUILD[word] then return 7 end
 				end

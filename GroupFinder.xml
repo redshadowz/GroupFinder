@@ -2489,9 +2489,27 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_LogShowTrades" inherits="GF_CheckButtonTemplate_Label">
+							<CheckButton name="GF_LogShowPolitics" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="LEFT" relativeTo="GF_LogShowChatTextLabel" relativePoint="RIGHT">
+										<Offset>
+											<AbsDimension x="0" y="0"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										GF_SavedVariables.logshowpolitics = this:GetChecked();
+										GF_DisplayLog()
+									</OnClick>
+									<OnLoad>
+										getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_POLITICS);
+									</OnLoad>
+								</Scripts>
+							</CheckButton>
+							<CheckButton name="GF_LogShowTrades" inherits="GF_CheckButtonTemplate_Label">
+								<Anchors>
+									<Anchor point="LEFT" relativeTo="GF_LogShowPoliticsTextLabel" relativePoint="RIGHT">
 										<Offset>
 											<AbsDimension x="0" y="0"/>
 										</Offset>
@@ -2543,27 +2561,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_LogShowPolitics" inherits="GF_CheckButtonTemplate_Label">
-								<Anchors>
-									<Anchor point="LEFT" relativeTo="GF_LogShowFilteredTextLabel" relativePoint="RIGHT">
-										<Offset>
-											<AbsDimension x="0" y="0"/>
-										</Offset>
-									</Anchor>
-								</Anchors>
-								<Scripts>
-									<OnClick>
-										GF_SavedVariables.logshowpolitics = this:GetChecked();
-										GF_DisplayLog()
-									</OnClick>
-									<OnLoad>
-										getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_POLITICS);
-									</OnLoad>
-								</Scripts>
-							</CheckButton>
 							<CheckButton name="GF_LogShowSpam" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
-									<Anchor point="LEFT" relativeTo="GF_LogShowPoliticsTextLabel" relativePoint="RIGHT">
+									<Anchor point="LEFT" relativeTo="GF_LogShowFilteredTextLabel" relativePoint="RIGHT">
 										<Offset>
 											<AbsDimension x="0" y="0"/>
 										</Offset>

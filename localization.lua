@@ -347,18 +347,14 @@ GF_ONE_WORD_LFM = {
 ["help"] = true,["lf"] = true,["lfm"] = true,["flm"] = true,
 }
 GF_ONE_WORD_IGNORE = {
-["channel"] = true,["lol"] = true,["lmao"] = true,["rofl"] = true,["stfu"] = true,["ignore"] = true,["noob"] = true,["website"] = true,["http"] = true,["friendship"] = true,["teamwork"] = true,["nub"] = true,["noob"] = true,["noobs"] = true,["lockbox"] = true,
+["channel"] = true,["lol"] = true,["lmao"] = true,["rofl"] = true,["stfu"] = true,["ignore"] = true,["website"] = true,["http"] = true,["friendship"] = true,["teamwork"] = true,["nub"] = true,["noob"] = true,["noobs"] = true,["lockbox"] = true,
 ["lockboxes"] = true,
 }
 GF_ONE_WORD_GUILD = {
 ["progression"] = true,["prog"] = true,["monday"] = true,["tuesday"] = true,["wednesday"] = true,["thursday"] = true,["friday"] = true,["fridays"] = true,["saturday"] = true,["sunday"] = true,["utc"] = true,["dedicated"] = true,["environment"] = true,
 ["mon"] = true,["tue"] = true,["tues"] = true,["thur"] = true,["thurs"] = true,["house"] = true,["membership"] = true,["levelers"] = true,["leveling"] = true,["welcoming"] = true,["lgbt"] = true,["lgbtq"] = true,["ep"] = true,["gp"] = true,["dkp"] = true,
-["polska"] = true,
-["ukrainska"] = true,["fr"] = true,["ru"] = true,["cz"] = true,["sk"] = true,["cesko"] = true,["slovenska"] = true,["msk"] = true,
-["recrute"] = true,["recluta"] = true,
-["progresowania"] = true,["progresar"] = true,
-["komunity"] = true,["komunite"] = true,["comunidad"] = true,
-["deutsche"] = true,["deutschsprachige"] = true,["hispana"] = true,["progreso"] = true,
+["polska"] = true,["ukrainska"] = true,["fr"] = true,["ru"] = true,["cz"] = true,["sk"] = true,["cesko"] = true,["slovenska"] = true,["msk"] = true,["deutsche"] = true,["deutschsprachige"] = true,["hispana"] = true,
+["recrute"] = true,["recluta"] = true,["progresowania"] = true,["progresar"] = true,["progreso"] = true,["komunity"] = true,["komunite"] = true,["comunidad"] = true,
 }
 GF_ONE_WORD_POLITICS = {
 ["judaism"] = true,["kike"] = true,["kikes"] = true,["christianity"] = true,["religion"] = true,["religions"] = true,["religious"] = true,["islam"] = true,["muslim"] = true,["muhammad"] = true,["mohammad"] = true,["mohammed"] = true,["muhammed"] = true,
@@ -406,7 +402,7 @@ GF_STRING_FIND_LIST = {
 	["GUILD"] = { "wants you", "raiding team", "raid times", "raiding times", "guild bank", "social guild", "new guild", "new players", "loot council", "loot system", "consider joining", "raid days", "core team", "welcomes you", "join today", },
 	["GUILDBLOCKLIST"] = {},
 	["POLITICS"] = { "gas chamber", "6 million", "six million", "misogyn", "nigger", "jew", "semit", "nazi", "republican", "democrat", "politic", "schizo", "immigra", "globali", "femini", },
-	["TRADE"] = { "for sale", " on ah ", "summons service", "summon service", "will tip", "will work", "lock box", "key service", },
+	["TRADE"] = { "for sale", " on ah ", "summons service", "summon service", "will tip", "will work", "lock box", "key service", "wannna trade", },
 	["RAID"] = { "molten core",	"world boss", " zg", },
 	["PVP"] = { "alterac valley", "arathi basin", },
 	["QUEST"] = {
@@ -643,7 +639,7 @@ local GF_TURTLE_STRING_FIND_LIST_QUEST = {
 	["TFELWOOD"]		= { 57, "hunt the hunter", },
 	["TBURNINGSTEPPES"]	= { 50, "miners union mutiny", },
 }
-local GF_TURTLE_STRING_FIND_LIST_GUILDBLOCKLIST = { }
+local GF_TURTLE_STRING_FIND_LIST_GUILDBLOCKLIST = {"texas knights", }
 local GF_TurtleSearchList = {
 		[1] = { "Crescent Grove", 32, 38, "crescent", "grove", "cg ", },
 		[2] = { "Gilneas City", 43, 49, "gilneas", },
