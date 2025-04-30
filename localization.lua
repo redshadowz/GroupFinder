@@ -400,7 +400,8 @@ GF_ONE_WORD_QUEST = {
 }
 GF_TWO_WORD_QUEST = {
 ["vyrinsrevenge"] = 20,["lookingfurther"] = 22,["shadowmagic"] = 23,["dragonkinannoyance"] = 25,["bloodfurybloodline"] = 26,["theden"] = 29,["hordepresence"] = 29,["humbertssword"] = 30,["thandolspan"] = 31,["vorrelsrevenge"] = 33,
-["grimtask"] = 34,["preservingknowledge"] = 38,["crushridgewarmongers"] = 40,["brokensigil"] = 40,["thecorrupter"] = 40,["khanhratha"] = 42,["stranglethornfever"] = 45,["mindseye"] = 46,["crackingmaury"] = 44,["bloodsailbuccaneers"] = 45,["brokenalliances"] = 50,
+["grimtask"] = 34,["preservingknowledge"] = 38,["crushridgewarmongers"] = 40,["brokensigil"] = 40,["thecorrupter"] = 40,["tigermastery"] = 37,["panthermastery"] = 40,["raptormastery"] = 43,
+["khanhratha"] = 42,["stranglethornfever"] = 45,["mindseye"] = 46,["crackingmaury"] = 44,["bloodsailbuccaneers"] = 45,["brokenalliances"] = 50,
 ["darkvessels"] = 50,["separationanxiety"] = 50,["cliffgiant"] = 50,["ancientegg"] = 50,["flamescasing"] = 50,["dragonkinmenace"] = 54,["unfinishedbusiness"] = 58,["dearestnatalia"] = 60,["fieldduty"] = 60,["thecalling"] = 60,
 ["indreams"] = 60,["lastbarov"] = 60,["nightmarescorruption"] = 60,["alcazisland"] = 60,["repfarm"] = 0,["reprun"] = 0,
 }
