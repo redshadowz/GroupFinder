@@ -3095,7 +3095,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						<Frames>
 							<Slider name="GF_FilterLevelSlider" inherits="OptionsSliderTemplate">
 								<Size>
-									<AbsDimension x="360" y="16"/>
+									<AbsDimension x="160" y="16"/>
 								</Size>
 								<Anchors>
 									<Anchor point="TOPLEFT">
@@ -3131,6 +3131,47 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnValueChanged>
 								</Scripts>
 							</Slider>
+							<Slider name="GF_UIScaleSlider" inherits="OptionsSliderTemplate">
+								<Size>
+									<AbsDimension x="160" y="16"/>
+								</Size>
+								<Anchors>
+									<Anchor point="TOP">
+										<Offset>
+											<AbsDimension x="0" y="-21" />
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnLoad>
+										getglobal(this:GetName().."High"):SetText("1");
+										getglobal(this:GetName().."Low"):SetText(".8");
+										this:SetMinMaxValues(.8,1);
+										this:SetValueStep(.1);
+									</OnLoad>
+									<OnValueChanged>
+										GF_SavedVariables.MainFrameUIScale = this:GetValue();
+										getglobal(this:GetName().."Text"):SetText(GF_ADJUST_UISCALE.." - "..math.floor(this:GetValue()*10+.5)/10);
+									</OnValueChanged>
+								</Scripts>
+							</Slider>
+							<Button name="GF_UIScaleSliderUpdateButton" inherits="GF_ButtonTemplate" text="GF_UISCALE_UPDATE">
+								<Size>
+									<AbsDimension x="100" y="30"/>
+								</Size>
+								<Anchors>
+									<Anchor point="Top" relativeTo="GF_UIScaleSlider" relativePoint="BOTTOM">
+										<Offset>
+											<AbsDimension x="0" y="0"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										GF_MainFrame:SetScale(GF_SavedVariables.MainFrameUIScale)
+									</OnClick>
+								</Scripts>
+							</Button>
 							<Slider name="GF_FrameTransparencySlider" inherits="OptionsSliderTemplate">
 								<Size>
 									<AbsDimension x="160" y="16"/>
