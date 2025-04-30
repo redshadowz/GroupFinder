@@ -445,16 +445,19 @@ GF_ONE_WORD_TRADE = {
 }
 GF_TWO_WORD_TRADE = {
 ["forsale"] = true,["onah"] = true,["summonsservice"] = true,["summonservice"] = true,["willtip"] = true,["willwork"] = true,["keyservice"] = true,["wannnatrade"] = true,["allrecipes"] = true,["5gsummons"] = true,
-["lfench"] = true,["lfenchanter"] = true,["lfblacksmith"] = true,["lfengineer"] = true,["lftailor"] = true,["lflw"] = true,["lfleatherworker"] = true,["lfjewelcrafter"] = true,["lfcrusader"] = true,["opencommission"] = true,["lockpickingservice"] = true,
-["freelockpick"] = true,["freelockpicking"] = true,["lflockpicker"] = true,["lfweapon"] = true,["attachingbelt"] = true,["openinglockboxes"] = true,
+["lfench"] = true,["lfenchanter"] = true,["lfbs"] = true,["lfblacksmith"] = true,["lfengineer"] = true,["lfeng"] = true,["lftailor"] = true,["lflw"] = true,["lfleatherworker"] = true,["lfjewelcrafter"] = true,["lfjc"] = true,
+["lfcrusader"] = true,["opencommission"] = true,["lockpickingservice"] = true,["freelockpick"] = true,["freelockpicking"] = true,["lflockpicker"] = true,["lfweapon"] = true,["attachingbelt"] = true,["openinglockboxes"] = true,
 }
-
 GF_ONE_WORD_LFTRADE = {
 ["jc"] = true,["jewelcrafter"] = true,["lw"] = true,["leatherworker"] = true,["enchanter"] = true,["tailor"] = true,["blacksmith"] = true,["bs"] = true,["blacksmither"] = true,["engineer"] = true,
 ["hammersmith"] = true,["swordsmith"] = true,["axesmith"] = true,["armorsmith"] = true,["armorsmithing"] = true,["weaponsmith"] = true,["crafter"] = true,["lockbox"] = true,["lockboxes"] = true,["lockpick"] = true,["lockpicking"] = true,
 }
 GF_TWO_WORD_LFTRADE = {
 ["lockbox"] = true,["lockboxes"] = true,["lockpick"] = true,["lockpicking"] = true,
+}
+GF_THREE_WORD_LFTRADE = {
+["portaltodarnassus"] = true,["portaltodarn"] = true,["portaltoironforge"] = true,["portaltoif"] = true,["portaltostormwind"] = true,["portaltosw"] = true,["portaltoundercity"] = true,["portaltouc"] = true,
+["portaltoorgrimmar"] = true,["portaltoorg"] = true,["portaltotb"] = true,["portaltothunder"] = true,["createaportal"] = true,["needaportal"] = true,
 }
 GF_ONE_WORD_LFTRADETRIGGER = {
 ["lf"] = true,["need"] = true,

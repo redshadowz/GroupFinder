@@ -1976,6 +1976,7 @@ function GF_GetTypes(arg1)
 			elseif GF_THREE_WORD_LFG[wordString] then GF_WordList.foundLFG = true
 			elseif GF_THREE_WORD_QUEST[wordString] then GF_WordList.foundQuest = GF_THREE_WORD_QUEST[wordString]
 			elseif GF_THREE_WORD_DUNGEON[wordString] then GF_WordList.foundDungeon = GF_THREE_WORD_DUNGEON[wordString] end
+			elseif GF_THREE_WORD_LFTRADE[word] then GF_WordList.foundLFTrades = true
 		end
 	end
 	for i=1, getn(GF_WordList) do
