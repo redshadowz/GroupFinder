@@ -342,7 +342,7 @@ GF_LFG_SPECS = {
 
 GF_ONE_WORD_IGNORE = {
 ["channel"] = true,["lol"] = true,["lmao"] = true,["rofl"] = true,["stfu"] = true,["ignore"] = true,["website"] = true,["http"] = true,["friendship"] = true,["teamwork"] = true,["nub"] = true,["noob"] = true,["noobs"] = true,["lockbox"] = true,
-["lockboxes"] = true,
+["lockboxes"] = true,["gl"] = true,
 }
 
 GF_ONE_WORD_GUILD = {
@@ -445,7 +445,7 @@ GF_ONE_WORD_TRADE = {
 GF_TWO_WORD_TRADE = {
 ["forsale"] = true,["onah"] = true,["summonsservice"] = true,["summonservice"] = true,["willtip"] = true,["willwork"] = true,["keyservice"] = true,["wannnatrade"] = true,["allrecipes"] = true,["5gsummons"] = true,
 ["lfench"] = true,["lfenchanter"] = true,["lfblacksmith"] = true,["lfengineer"] = true,["lftailor"] = true,["lflw"] = true,["lfleatherworker"] = true,["lfjewelcrafter"] = true,["lfcrusader"] = true,["opencommission"] = true,["lockpickingservice"] = true,
-["freelockpick"] = true,["freelockpicking"] = true,["lflockpicker"] = true,
+["freelockpick"] = true,["freelockpicking"] = true,["lflockpicker"] = true,["lfweapon"] = true,["attachingbelt"] = true,["openinglockboxes"] = true,
 }
 
 GF_ONE_WORD_LFTRADE = {
