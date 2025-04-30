@@ -364,7 +364,7 @@ GF_ONE_WORD_GUILDTRIGGER = {
 ["gildiyu"] = true,
 }
 GF_ONE_WORD_LFM = {
-["help"] = true,["lf"] = true,["lfm"] = true,["flm"] = true,["hosting"] = true,
+["help"] = true,["lf"] = true,["lfm"] = true,["flm"] = true,["hosting"] = true,["rlfm"] = true,
 }
 GF_TWO_WORD_LFM = {
 ["needmore"] = true,["needheal"] = true,["needtank"] = true,["needdps"] = true,["needrange"] = true,["needrdps"] = true,["needcaster"] = true,["needmelee"] = true,["needmdps"] = true,
@@ -382,7 +382,7 @@ GF_ONE_WORD_CLASSES = {
 }
 
 GF_ONE_WORD_LFG = {
-["lfg"] = true,
+["lfg"] = true,["rlfg"] = true,
 }
 GF_TWO_WORD_LFG = {
 ["anyonedoing"] = true,
