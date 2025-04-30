@@ -1213,7 +1213,7 @@ function GF_UpdateResults()
 				if entry.dlevel - UnitLevel("player") > 3 then dungeonLevelDifficulty = "|cff"..GF_DifficultyColors["RED"]
 				elseif entry.dlevel - UnitLevel("player") > 1 then dungeonLevelDifficulty = "|cff"..GF_DifficultyColors["ORANGE"]
 				elseif entry.dlevel - UnitLevel("player") > -1 then dungeonLevelDifficulty = "|cff"..GF_DifficultyColors["YELLOW"]
-				elseif entry.dlevel - UnitLevel("player") > -3 then dungeonLevelDifficulty = "|cff"..GF_DifficultyColors["GREEN"]
+				elseif entry.dlevel - UnitLevel("player") > -4 then dungeonLevelDifficulty = "|cff"..GF_DifficultyColors["GREEN"]
 				else dungeonLevelDifficulty = "|cff"..GF_DifficultyColors["GREY"] end
 
 				if entry.dlevel > 60 then dungeonLevelDifficulty = dungeonLevelDifficulty.."[60]|r " else dungeonLevelDifficulty = dungeonLevelDifficulty.."["..entry.dlevel.."]|r " end
@@ -1881,7 +1881,7 @@ function GF_FindGroupsAndDisplayCustomChatMessages(event,arg1,arg2,arg9) -- Chat
 		GF_PreviousMessage[arg2] = {arg1,GetTime() + .1,true}
 		return true;
 	else
-		local logType = GF_CheckForGroups(arg1,arg2) or 3;
+		local logType = GF_CheckForGroups(arg1,arg2,event) or 3;
 		GF_AddLogMessage(GF_CleanUpMessagesOfBadLinks(arg1),logType,true,arg2,arg8,arg9,event)
 		if GF_ChatCheckFilters(logType,arg1,event) then
 			if GF_SavedVariables.showoriginalchat or event ~= "CHAT_MSG_CHANNEL" then
@@ -1911,11 +1911,11 @@ function GF_CheckErrorFilter(arg1)
 		if string.find(arg1, GF_ErrorFilters[i]) then return true; end
 	end
 end
-function GF_CheckForGroups(arg1,arg2)
+function GF_CheckForGroups(arg1,arg2,event)
 	GF_GetWhoData(arg2,foundInGroup)
 	GF_GetTypes(gsub(string.lower(arg1), "[''-!:.]+", ""))
-
-	if GF_SavedVariables.guildmessagesarespam and GF_WordList.foundGuildTrigger and GF_WordList.foundGuild then return 7
+	
+	if GF_SavedVariables.guildmessagesarespam and event == "CHAT_MSG_CHANNEL" and ((GF_WordList.foundGuildTrigger > 0 and GF_WordList.foundGuild) or GF_WordList.foundGuildTrigger > 1) then return 7
 	elseif GF_WordList.foundTrades or (GF_WordList.foundLFTradesTrigger and GF_WordList.foundLFTrades) then return GF_CheckForSpam(arg1,arg2,foundInGroup) or 4
 	elseif GF_WordList.foundPolitics then return GF_CheckForSpam(arg1,arg2,foundInGroup) or 5
 	elseif GF_WordList.foundIgnore then return GF_CheckForSpam(arg1,arg2,foundInGroup) or 3 end
@@ -1933,13 +1933,13 @@ function GF_CheckForGroups(arg1,arg2)
 	return GF_CheckForSpam(arg1,arg2,foundInGroup) or foundInGroup;
 end
 function GF_GetTypes(arg1)
-	GF_WordList = { foundIgnore = nil,foundGuild = nil,foundGuildTrigger = nil,foundLFM = nil,foundLFG = nil,foundClass = nil,foundQuest = nil,foundDungeon = nil,foundRaid = nil,foundTrades = nil,foundLFTrades = nil,foundLFTradesTrigger = nil,foundPolitics = nil,foundPvP = nil }
+	GF_WordList = { foundIgnore = nil,foundGuild = nil,foundGuildTrigger = 0,foundLFM = nil,foundLFG = nil,foundClass = nil,foundQuest = nil,foundDungeon = nil,foundRaid = nil,foundTrades = nil,foundLFTrades = nil,foundLFTradesTrigger = nil,foundPolitics = nil,foundPvP = nil }
 	local wordString;
 	for word in string.gfind(arg1, "(%w+)") do
 		table.insert(GF_WordList, word)
 		if GF_ONE_WORD_IGNORE[word] then GF_WordList.foundIgnore = true
 		elseif GF_ONE_WORD_GUILD[word] then GF_WordList.foundGuild = true
-		elseif GF_ONE_WORD_GUILDTRIGGER[word] then GF_WordList.foundGuildTrigger = true
+		elseif GF_ONE_WORD_GUILDTRIGGER[word] then GF_WordList.foundGuildTrigger = GF_WordList.foundGuildTrigger + 1
 		elseif GF_ONE_WORD_LFM[word] then GF_WordList.foundLFM = true
 		elseif GF_ONE_WORD_LFG[word] then GF_WordList.foundLFG = true
 		elseif GF_ONE_WORD_CLASSES[word] then GF_WordList.foundClass = GF_ONE_WORD_CLASSES[word]
@@ -1963,6 +1963,8 @@ function GF_GetTypes(arg1)
 			elseif GF_TWO_WORD_DUNGEON[wordString] then GF_WordList.foundDungeon = GF_TWO_WORD_DUNGEON[wordString]
 			elseif GF_TWO_WORD_RAID[wordString] then GF_WordList.foundRaid = GF_TWO_WORD_RAID[wordString]
 			elseif GF_TWO_WORD_TRADE[wordString] then GF_WordList.foundTrades = true
+			elseif GF_TWO_WORD_LFTRADE[word] then GF_WordList.foundLFTrades = true
+			elseif GF_TWO_WORD_LFTRADETRIGGER[word] then GF_WordList.foundLFTradesTrigger = true
 			elseif GF_TWO_WORD_POLITICS[wordString] then GF_WordList.foundPolitics = true
 			elseif GF_TWO_WORD_PVP[wordString] then GF_WordList.foundPvP = true end
 		end
@@ -1982,7 +1984,7 @@ function GF_GetTypes(arg1)
 			if GF_FOUR_WORD_QUEST[wordString] then GF_WordList.foundQuest = GF_FOUR_WORD_QUEST[wordString] end
 		end
 	end
-	if string.find(arg1, "<[a-zA-Z ]+>") then GF_WordList.foundGuildTrigger = true; end
+	if string.find(arg1, "<[a-zA-Z ]+>") then GF_WordList.foundGuildTrigger = GF_WordList.foundGuildTrigger + 1; end
 	if string.find(arg1, "lfm") or string.find(arg1, "lf%d+m") then GF_WordList.foundLFTradesTrigger = nil end
 	for i=1, getn(GF_STRING_FIND_LIST.LFM) do
 		if string.find(arg1, GF_STRING_FIND_LIST.LFM[i]) then GF_WordList.foundLFM = true break end
@@ -1991,7 +1993,7 @@ function GF_GetTypes(arg1)
 		if string.find(arg1, GF_STRING_FIND_LIST.POLITICS[i]) then GF_WordList.foundPolitics = true break end
 	end
 	for i=1, getn(GF_STRING_FIND_LIST.GUILDBLOCKLIST) do
-		if string.find(arg1, GF_STRING_FIND_LIST.GUILDBLOCKLIST[i]) then GF_WordList.foundGuild = true GF_WordList.foundGuildTrigger = true break end
+		if string.find(arg1, GF_STRING_FIND_LIST.GUILDBLOCKLIST[i]) then GF_WordList.foundGuildTrigger = 2 break end
 	end
 end
 function GF_CheckForSpam(arg1,arg2,foundInGroup)
