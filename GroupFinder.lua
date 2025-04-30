@@ -974,8 +974,8 @@ function GF_OnEvent(event) -- OnEvent, LoadSettings, Bind Keys, Prune Tables
 			GF_TurnOffAnnounce(GF_JOINED_GROUP_ANNOUNCE_OFF)
 			GF_WasPartyLeaderBefore = nil;
 		else
-			local _,_,groupSize = tonumber(string.find(GF_SavedVariables.lfgsize, "(%d+)"))
-			if groupSize and GF_GetNumGroupMembers() >= groupSize then GF_TurnOffAnnounce(GF_NO_MORE_PLAYERS_NEEDED) end
+			local groupSize = gsub(GF_SavedVariables.lfgsize, "(%d+)-man", "%1")
+			if groupSize and GF_GetNumGroupMembers() >= tonumber(groupSize) then GF_TurnOffAnnounce(GF_NO_MORE_PLAYERS_NEEDED) end
 		end
 		if GF_SavedVariables.lfgauto then GF_FixLFGStrings(true) end
 		GF_UpdatePlayersInGroupList()
