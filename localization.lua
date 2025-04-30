@@ -349,25 +349,27 @@ GF_ONE_WORD_GUILD = {
 ["progression"] = true,["prog"] = true,["monday"] = true,["tuesday"] = true,["wednesday"] = true,["thursday"] = true,["friday"] = true,["fridays"] = true,["saturday"] = true,["sunday"] = true,["utc"] = true,["dedicated"] = true,["environment"] = true,
 ["mon"] = true,["tue"] = true,["tues"] = true,["thur"] = true,["thurs"] = true,["house"] = true,["membership"] = true,["levelers"] = true,["leveling"] = true,["welcoming"] = true,["lgbt"] = true,["lgbtq"] = true,["ep"] = true,["gp"] = true,["dkp"] = true,
 ["polska"] = true,["ukrainska"] = true,["fr"] = true,["fra"] = true,["ru"] = true,["cz"] = true,["sk"] = true,["cesko"] = true,["slovenska"] = true,["msk"] = true,["deutsche"] = true,["deutschsprachige"] = true,["hispana"] = true,
-["recrute"] = true,["recluta"] = true,["progresowania"] = true,["progresar"] = true,["progreso"] = true,["komunity"] = true,["komunite"] = true,["comunidad"] = true,["kinship"] = true,["magosh"] = true,
+["recrute"] = true,["recluta"] = true,["progresowania"] = true,["progresar"] = true,["progreso"] = true,["komunity"] = true,["komunite"] = true,["comunidad"] = true,["kinship"] = true,["magosh"] = true,["lvlers"] = true,
 }
 GF_TWO_WORD_GUILD = {
 ["wantsyou"] = true,["raidingteam"] = true,["raidtimes"] = true,["raidingtimes"] = true,["guildbank"] = true,["socialguild"] = true,["newguild"] = true,["newplayers"] = true,["newmembers"] = true,["lootcouncil"] = true,["lootsystem"] = true,
-["considerjoining"] = true,["raiddays"] = true,["coreteam"] = true,["welcomesyou"] = true,["jointoday"] = true,
+["considerjoining"] = true,["raiddays"] = true,["coreteam"] = true,["welcomesyou"] = true,["jointoday"] = true,["raidingroster"] = true,["newlyformed"] = true,["goodvibes"] = true,
 }
 GF_ONE_WORD_GUILDTRIGGER = {
 ["guild"] = true,
 ["gildia"] = true,
 ["gilde"] = true,
+["guilde"] = true,
 ["recruiting"] = true,
 ["rekrutuje"] = true,
 ["gildiyu"] = true,
+["recrute"] = true,
 }
 GF_ONE_WORD_LFM = {
-["help"] = true,["lf"] = true,["lfm"] = true,["flm"] = true,["hosting"] = true,["rlfm"] = true,
+["help"] = true,["lf"] = true,["lfm"] = true,["flm"] = true,["hosting"] = true,["rlfm"] = true,["lfgm"] = true,
 }
 GF_TWO_WORD_LFM = {
-["needmore"] = true,["needheal"] = true,["needtank"] = true,["needdps"] = true,["needrange"] = true,["needrdps"] = true,["needcaster"] = true,["needmelee"] = true,["needmdps"] = true,
+["needmore"] = true,["needheal"] = true,["needhealer"] = true,["needtank"] = true,["needdps"] = true,["needrange"] = true,["needrdps"] = true,["needcaster"] = true,["needmelee"] = true,["needmdps"] = true,
 ["needaoe"] = true,["needone"] = true,["needtwo"] = true,["needthree"] = true,["anyonefor"] = true,["cometank"] = true,["comehealer"] = true,["comedps"] = true,["any1for"] = true,
 
 }
@@ -424,7 +426,7 @@ GF_ONE_WORD_DUNGEON = {
 ["bfd"] = 26,["gnomer"] = 32,["gnomeregan"] = 32,["kraul"] = 32,["rfk"] = 32,["downs"] = 40,["rfd"] = 40,["smgy"] = 31,["smlib"] = 35,["smarm"] = 39,["smcath"] = 41,["graveyard"] = 31,["lib"] = 35,["library"] = 35,
 ["armory"] = 39,["cathedral"] = 41,["cath"] = 41,["ulda"] = 46,["uldaman"] = 46,["zulfarrak"] = 48,["zf"] = 48,["farrak"] = 48,["mallet"] = 48,["mara"] = 50,["maraudon"] = 50,["princess"] = 50,["st"] = 54,["sunken"] = 54,
 ["atalhakkar"] = 54,["arena"] = 55,["windsor"] = 55,["jailbreak"] = 55,["angerforge"] = 56,["brd"] = 58,["emp"] = 58,["emperor"] = 58,["attunement"] = 60,["lbrs"] = 60,["dme"] = 57,["dmn"] = 62,["dmt"] = 62,["dmw"] = 62,
-["scholo"] = 62,["sholo"] = 62,["scholo10"] = 62,["scholomance"] = 62,["strath"] = 62,["stratholme"] = 62,["baron"] = 62,["ubrs"] = 63,["rend"] = 63,["valthalak"] = 63,["dungeon"] = 0,["anything"] = 0,
+["scholo"] = 62,["sholo"] = 62,["scholo10"] = 62,["scholomance"] = 62,["strath"] = 62,["stratholme"] = 62,["stratdk"] = 62,["baron"] = 62,["ubrs"] = 63,["rend"] = 63,["valthalak"] = 63,["dungeon"] = 0,["anything"] = 0,
 }
 GF_TWO_WORD_DUNGEON = {
 ["deadmine"] = 21,["deathmine"] = 21,["deadmines"] = 21,["ohbrother"] = 20,["collectingmemories"] = 18,["wailingcaves"] = 22,["wailingcavern"] = 22,["wailingcaverns"] = 22,["smgy"] = 31,["smgraveyard"] = 31,

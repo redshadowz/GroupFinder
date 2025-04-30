@@ -1881,7 +1881,7 @@ function GF_FindGroupsAndDisplayCustomChatMessages(event,arg1,arg2,arg9) -- Chat
 		GF_PreviousMessage[arg2] = {arg1,GetTime() + .1,true}
 		return true;
 	else
-		local logType = GF_CheckForPreviousBlacklistAndSpam(arg2) or GF_CheckForGroups(arg1,arg2) or 3;
+		local logType = GF_CheckForGroups(arg1,arg2) or 3;
 		GF_AddLogMessage(GF_CleanUpMessagesOfBadLinks(arg1),logType,true,arg2,arg8,arg9,event)
 		if GF_ChatCheckFilters(logType,arg1,event) then
 			if GF_SavedVariables.showoriginalchat or event ~= "CHAT_MSG_CHANNEL" then
@@ -1909,12 +1909,6 @@ end
 function GF_CheckErrorFilter(arg1)
 	for i=1, getn(GF_ErrorFilters) do
 		if string.find(arg1, GF_ErrorFilters[i]) then return true; end
-	end
-end
-function GF_CheckForPreviousBlacklistAndSpam(arg2)
-	if not GF_PlayersCurrentlyInGroup[arg2] and not GF_Friends[arg2] and not GF_Guildies[arg2] then
-		if GF_BlackList[GF_RealmName][arg2] then return 8 end
-		if GF_SavedVariables.spamfilter and GF_PlayerMessages[arg2] and GF_PlayerMessages[arg2][1] and GF_PlayerMessages[arg2][1] > GetTime() then return 7 end
 	end
 end
 function GF_CheckForGroups(arg1,arg2)
@@ -2002,9 +1996,9 @@ function GF_GetTypes(arg1)
 end
 function GF_CheckForSpam(arg1,arg2,foundInGroup)
 	if not GF_PlayersCurrentlyInGroup[arg2] and not GF_Friends[arg2] and not GF_Guildies[arg2] then
-		if (GF_WhoTable[GF_RealmName][arg2] and tonumber(GF_WhoTable[GF_RealmName][arg2][1]) < GF_SavedVariables.blockmessagebelowlevel) and GF_WhoTable[GF_RealmName][arg2][4] + 86400 > time() then -- Block lowlevel
-			return 9;
-		end
+		if GF_SavedVariables.spamfilter and GF_PlayerMessages[arg2] and GF_PlayerMessages[arg2][1] and GF_PlayerMessages[arg2][1] > GetTime() then return 7 end
+		if GF_BlackList[GF_RealmName][arg2] then return 8 end
+		if (GF_WhoTable[GF_RealmName][arg2] and tonumber(GF_WhoTable[GF_RealmName][arg2][1]) < GF_SavedVariables.blockmessagebelowlevel) and GF_WhoTable[GF_RealmName][arg2][4] + 86400 > time() then return 9; end  -- Block lowlevel
 		if GF_SavedVariables.spamfilter and (not foundInGroup or string.len(arg1) > 50) then
 			if GF_IncomingMessagePrune + 3600 < GetTime() then -- 1 hour
 				for name,_ in GF_PlayerMessages do
