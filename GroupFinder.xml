@@ -1560,9 +1560,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											GF_LFGSize:Hide()
 										end
 									</OnLeave>
-									<OnLoad>
-										getglobal(this:GetName().."TextLabel"):SetText(GF_SavedVariables.lfgsize);
-									</OnLoad>
 								</Scripts>
 								<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up" setAllPoints="true"/>
 								<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Down" setAllPoints="true"/>
@@ -2032,9 +2029,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											GF_LFGWhoClass:Hide()
 										end
 									</OnLeave>
-									<OnLoad>
-										getglobal(this:GetName().."TextLabel"):SetText(GF_SavedVariables.lfgwhisperclass);
-									</OnLoad>
 								</Scripts>
 								<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up" setAllPoints="true"/>
 								<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Down" setAllPoints="true"/>
@@ -2471,9 +2465,27 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_LogShowChat" inherits="GF_CheckButtonTemplate_Label">
+							<CheckButton name="GF_LogShowFiltered" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="LEFT" relativeTo="GF_LogShowGroupsTextLabel" relativePoint="RIGHT">
+										<Offset>
+											<AbsDimension x="0" y="0"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										GF_SavedVariables.logshowfiltered = this:GetChecked();
+										GF_DisplayLog()
+									</OnClick>
+									<OnLoad>
+										getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_FILTERED);
+									</OnLoad>
+								</Scripts>
+							</CheckButton>
+							<CheckButton name="GF_LogShowChat" inherits="GF_CheckButtonTemplate_Label">
+								<Anchors>
+									<Anchor point="LEFT" relativeTo="GF_LogShowFilteredTextLabel" relativePoint="RIGHT">
 										<Offset>
 											<AbsDimension x="0" y="0"/>
 										</Offset>
@@ -2543,27 +2555,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_LogShowFiltered" inherits="GF_CheckButtonTemplate_Label">
-								<Anchors>
-									<Anchor point="LEFT" relativeTo="GF_LogShowLootTextLabel" relativePoint="RIGHT">
-										<Offset>
-											<AbsDimension x="0" y="0"/>
-										</Offset>
-									</Anchor>
-								</Anchors>
-								<Scripts>
-									<OnClick>
-										GF_SavedVariables.logshowfiltered = this:GetChecked();
-										GF_DisplayLog()
-									</OnClick>
-									<OnLoad>
-										getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_FILTERED);
-									</OnLoad>
-								</Scripts>
-							</CheckButton>
 							<CheckButton name="GF_LogShowSpam" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
-									<Anchor point="LEFT" relativeTo="GF_LogShowFilteredTextLabel" relativePoint="RIGHT">
+									<Anchor point="LEFT" relativeTo="GF_LogShowLootTextLabel" relativePoint="RIGHT">
 										<Offset>
 											<AbsDimension x="0" y="0"/>
 										</Offset>
