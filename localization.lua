@@ -112,7 +112,7 @@ GF_BLACKLIST_MINLEVEL		= "Auto Blacklist maximum level"
 GF_BLOCK_BELOW_LEVEL		= "Block messages below level"
 GF_GROUP_LIST_DURATION		= "Group display time"
 GF_AUTO_FILTER_LEVEL		= "Auto Filter level range"
-GF_NEW_GROUP_TIMEOUT		= "Flagged as new listing"
+GF_NEW_GROUP_TIMEOUT		= "\"New Listing\" duration"
 
 -- LFG related buttons and texts
 GF_AUTO						= "Auto"
