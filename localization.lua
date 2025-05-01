@@ -343,7 +343,7 @@ GF_ONE_WORD_FIX = {
 ["any1"] = "anyone",
 ["healz"] = "heal",["heals"] = "heal",["healer"] = "heal",["healers"] = "heal",
 ["nub"] = "noob",["noobs"] = "noob",["newbs"] = "noob",["newbies"] = "noob",
-["rekrutuje"] = "recruiting",["recrutar"] = "recruiting",["recrute"] = "recruiting",["recluta"] = true,
+["rekrutuje"] = "recruiting",["recrutar"] = "recruiting",["recrute"] = "recruiting",["recluta"] = "recruiting",
 ["gildia"] = "guild",
 ["gilde"] = "guild",["guilde"] = "guild",["gildiyu"] = "guild",["gildenmitglieder"] = "guild",["gildii"] = "guild",
 ["tanks"] = "tank",
