@@ -3151,7 +3151,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										getglobal(this:GetName().."High"):SetText("1");
 										getglobal(this:GetName().."Low"):SetText(".8");
 										this:SetMinMaxValues(.8,1);
-										this:SetValueStep(.1);
+										this:SetValueStep(.2);
 									</OnLoad>
 									<OnValueChanged>
 										GF_SavedVariables.MainFrameUIScale = this:GetValue();
