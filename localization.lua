@@ -398,6 +398,8 @@ GF_TWO_WORD_GUILD = {
 }
 GF_THREE_WORD_GUILD = {
 ["allcurrentcontent"] = 3,
+["allclasseswelcome"] = 3,
+["ourraidteam"] = 3,
 }
 
 GF_ONE_WORD_LFM = {
@@ -411,7 +413,7 @@ GF_TWO_WORD_LFM = {
 ["needrange"] = 2,["comerange"] = 2,["morerange"] = 2,["anyrange"] = 2,
 ["needcaster"] = 2,["comecaster"] = 2,["morecaster"] = 2,["anycaster"] = 2,
 ["needmelee"] = 2,["comemelee"] = 2,["cometank"] = 2,["needaoe"] = 2,
-["anyonefor"] = 2,["anyoneneeds"] = 2,["needmore"] = 2,["moremore"] = 2,
+["anyonefor"] = 2,["anyoneneeds"] = 2,["needmore"] = 2,["moremore"] = 2,["needall"] = 2,
 ["wannahelp"] = 2,["pleasehelp"] = 2,["helpme"] = 2,["anyoneinterested"] = 2,
 }
 GF_THREE_WORD_LFM = {
@@ -455,7 +457,7 @@ GF_TWO_WORD_QUEST = {
 ["indreams"] = 60,["lastbarov"] = 60,["nightmarescorruption"] = 60,["alcazisland"] = 60,["repfarm"] = 0,["reprun"] = 0,
 }
 GF_THREE_WORD_QUEST = {
-["protectingtheherd"] = 12,["battleofhillsbrad"] = 30,["elixirofagony"] = 30,["testofstrength"] = 30,["darkironwar"] = 30,["legendofstalvan"] = 35,["encrustedtailfins"] = 35,["calltoarms"] = 40,["therealthreat"] = 40,
+["protectingtheherd"] = 12,["lochmodanogres"] = 20,["battleofhillsbrad"] = 30,["elixirofagony"] = 30,["testofstrength"] = 30,["darkironwar"] = 30,["legendofstalvan"] = 35,["encrustedtailfins"] = 35,["calltoarms"] = 40,["therealthreat"] = 40,
 ["breakingthekeystone"] = 42,["sigiloftrollbane"] = 42,["biggamehunter"] = 43,["crownofwill"] = 43,["broodofonyxia"] = 45,["summoningtheprincess"] = 50,["setthemablaze"] = 52,
 ["timbermawholdrep"] = 55,["afinalblow"] = 58,["unfinishedgordokbusiness"] = 60,["draconicfordummies"] = 60,["testofskulls"] = 60,["mawofmadness"] = 60,["twilightbattleorders"] = 60,
 }

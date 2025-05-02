@@ -1916,7 +1916,7 @@ function GF_CheckErrorFilter(arg1)
 end
 function GF_CheckForGroups(arg1,arg2,event)
 	GF_GetWhoData(arg2,foundInGroup)
-	GF_GetTypes(gsub(gsub(string.lower(arg1), "[''-!:.]+", ""), "|r", "|"))
+	GF_GetTypes(gsub(gsub(string.lower(arg1), "[''-]+", ""), "|r", "|"))
 	
 	if GF_SavedVariables.guildmessagesarespam and event == "CHAT_MSG_CHANNEL" and GF_MessageData.foundGuild >= 3 then return 7
 	elseif GF_MessageData.foundTrades >= 3 then return GF_CheckForSpam(arg1,arg2,foundInGroup) or 4
@@ -1935,7 +1935,7 @@ function GF_CheckForGroups(arg1,arg2,event)
 	end
 	return GF_CheckForSpam(arg1,arg2,foundInGroup) or foundInGroup;
 end
-function GF_GetTypes(arg1)
+function GF_GetTypes(arg1) -- /script GF_GetTypes("lf crafter")
 	GF_MessageData = { foundIgnore = nil,foundGuild = 0,foundLFM = 0,foundLFG = nil,foundClass = nil,foundQuest = nil,foundDungeon = nil,foundRaid = nil,foundTrades = 0,foundPolitics = nil,foundPvP = nil }
 
 	local wordTable = {}
@@ -1951,9 +1951,9 @@ function GF_GetTypes(arg1)
 		elseif GF_ONE_WORD_QUEST[word] then if GF_MessageData.foundQuest then if GF_ONE_WORD_QUEST[word] > GF_MessageData.foundQuest then GF_MessageData.foundQuest = GF_ONE_WORD_QUEST[word] end else GF_MessageData.foundQuest = GF_ONE_WORD_QUEST[word] end
 		elseif GF_ONE_WORD_DUNGEON[word] then if GF_MessageData.foundDungeon then if GF_ONE_WORD_DUNGEON[word] > GF_MessageData.foundDungeon then GF_MessageData.foundDungeon = GF_ONE_WORD_DUNGEON[word] end else GF_MessageData.foundDungeon = GF_ONE_WORD_DUNGEON[word] end
 		elseif GF_ONE_WORD_RAID[word] then GF_MessageData.foundRaid = GF_ONE_WORD_RAID[word]
-		elseif GF_ONE_WORD_TRADE[word] then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_ONE_WORD_TRADE[word]
 		elseif GF_ONE_WORD_POLITICS[word] then GF_MessageData.foundPolitics = true
 		elseif GF_ONE_WORD_PVP[word] then GF_MessageData.foundPvP = GF_ONE_WORD_PVP[word] end
+		if GF_ONE_WORD_TRADE[word] then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_ONE_WORD_TRADE[word] end
 	end
 	for i=1, getn(wordTable) do
 		if wordTable[i+1] then
@@ -1988,10 +1988,10 @@ function GF_GetTypes(arg1)
 		end
 	end
 	if string.find(arg1, "<[a-zA-Z \&]+>") then GF_MessageData.foundGuild = GF_MessageData.foundGuild + 2; end
-	if string.find(arg1, "lfm") or string.find(arg1, "lf%d+m") then GF_MessageData.foundTrades = 0 end
+	if string.find(arg1, "lfm") then GF_MessageData.foundTrades = 0 end
 	if GF_MessageData.foundLFM < 2 and (string.find(arg1, "anyone?") or string.find(arg1, "any1?")) and string.find(arg1, "hquest") then GF_MessageData.foundLFM = 2 end
 	for i=1, getn(GF_STRING_FIND_LIST.LFM) do
-		if string.find(arg1, GF_STRING_FIND_LIST.LFM[i]) then GF_MessageData.foundLFM = 3 break end
+		if string.find(arg1, GF_STRING_FIND_LIST.LFM[i]) then GF_MessageData.foundLFM = 3 GF_MessageData.foundTrades = 0 break end
 	end
 	for i=1, getn(GF_STRING_FIND_LIST.POLITICS) do
 		if string.find(arg1, GF_STRING_FIND_LIST.POLITICS[i]) then GF_MessageData.foundPolitics = true break end
