@@ -11,6 +11,7 @@ GF_WARRIOR	       		= "Warrior";
 GF_PALADIN	       		= "Paladin";
 GF_SHAMAN				= "Shaman";
 
+-- Race List
 GF_HUMAN				= "Human";
 GF_NIGHT_ELF			= "Night Elf";
 GF_DWARF				= "Dwarf";
@@ -20,6 +21,7 @@ GF_UNDEAD				= "Undead";
 GF_TROLL				= "Troll";
 GF_TAUREN				= "Tauren";
 
+-- Group Size
 GF_5_MAN				= "5-man";
 GF_10_MAN				= "10-man";
 GF_15_MAN				= "15-man";
@@ -52,6 +54,8 @@ GF_CHAT_OFF				= "Chat off"
 GF_CHAT_GROUP_ON		= "Groups in chat, on"
 GF_CHAT_GROUP_OFF		= "Groups in chat, off"
 
+-- Log Filters
+GF_LOG_AND_MONITOR		= "Log Entries"; -- Label at top of Log frame
 GF_LOG_GROUP			= "Group"
 GF_LOG_FILTERED			= "Filtered"
 GF_LOG_CHAT				= "Chat"
@@ -61,10 +65,26 @@ GF_LOG_LOOT				= "Loot"
 GF_LOG_SPAM				= "Spam"
 GF_LOG_BLACKLIST		= "Blacklist"
 GF_LOG_BELOWLEVEL		= "Level"
+
+-- Log Types
+GF_LOGGED_ME					= "[M] "; -- Text added to Log tab when a message is from myself
+GF_LOGGED_GROUPS			= "[G] "; -- Text added to Log tab when a message is a group
+GF_LOGGED_NEW				= "[N] "; -- Text added to Log tab when a message is new
+GF_LOGGED_FILTERED			= "[F] "; -- Text added to Log tab when a message is group that was filtered
+GF_LOGGED_CHAT				= "[C] "; -- Text added to Log tab when a message is chat
+GF_LOGGED_TRADES			= "[T] "; -- Text added to Log tab when a message is trades
+GF_LOGGED_POLITICS			= "[P] "; -- Text added to Log tab when a message is politics
+GF_LOGGED_LOOT				= "[L] "; -- Text added to Log tab when a message is loot/money
+GF_LOGGED_SPAM				= "[S] "; -- Text added to Log tab when a message is spam
+GF_LOGGED_BLACKLIST			= "[B] "; -- Text added to Log tab when a message is blacklist
+GF_LOGGED_BELOWLEVEL		= "[V] "; -- Text added to Log tab when a message is level under threshold
+
+-- Whisper/Guild Log
 GF_LOG_SHOWLOG			= "Show Log"
 GF_LOG_GUILDWHISPERS	= "Guild+Whisper"
+GF_WHISPER_FORMAT		= "Error: Wrong whisper format."
 
--- Search related buttons and texts
+-- Group-related buttons and texts
 GF_KEYWORDS_DROPDOWN_DESCR= "Keywords:"; -- Label to the left of the GF_GroupsFrameDescriptionEditBox on group frame
 GF_AUTO_FILTER			= "Auto Filter";
 GF_SHOW_DUNGEONS		= "Show Dungeons";
@@ -96,86 +116,71 @@ GF_UISCALE_UPDATE		= "Update"; -- Label for update UIScale
 
 GF_ADJUST_FILTER_LEVEL	= "Group Filtering"; -- Label for Filter slider on Settings tab
 GF_FilterLevelNotes = {};
-GF_FilterLevelNotes[1] = "One trigger";
-GF_FilterLevelNotes[2] = "Two triggers";
-GF_FilterLevelNotes[3] = "Three triggers";
+GF_FilterLevelNotes[1] = "Not Strict";
+GF_FilterLevelNotes[2] = "Strict";
+GF_FilterLevelNotes[3] = "Very Strict";
 
-GF_USE_WHO_ON_GROUPS		= "Auto /Who"
-GF_JOIN_WORLD				= "Join World channel"
-GF_SHOW_ORIGINAL_CHAT		= "Show Unformatted Chat"
-GF_ERROR_FILTER				= "Enable Error Filtering"
-GF_SPAM_FILTER				= "Enable Spam Filtering"
-GF_AUTO_BLACKLIST			= "Enable Auto Blacklist"
-GF_GUILD_MESSAGES_ARE_SPAM	= "Guild recruitment is spam"
-GF_SPAM_FILTER_TIMER		= "Spam flag clear time"
-GF_BLACKLIST_MINLEVEL		= "Auto Blacklist maximum level"
-GF_BLOCK_BELOW_LEVEL		= "Block messages below level"
-GF_GROUP_LIST_DURATION		= "Group display time"
-GF_AUTO_FILTER_LEVEL		= "Auto Filter level range"
-GF_NEW_GROUP_TIMEOUT		= "\"New Listing\" duration"
+-- Other Settings
+GF_USE_WHO_ON_GROUPS	= "Auto /Who"
+GF_JOIN_WORLD			= "Join World channel"
+GF_SHOW_ORIGINAL_CHAT	= "Show Unformatted Chat"
+GF_ERROR_FILTER			= "Enable Error Filtering"
+GF_SPAM_FILTER			= "Enable Spam Filtering"
+GF_AUTO_BLACKLIST		= "Enable Auto Blacklist"
+GF_GUILD_MESSAGES_ARE_SPAM= "Guild recruitment is spam"
+GF_SPAM_FILTER_TIMER	= "Spam flag clear time"
+GF_BLACKLIST_MINLEVEL	= "Auto Blacklist maximum level"
+GF_BLOCK_BELOW_LEVEL	= "Block messages below level"
+GF_GROUP_LIST_DURATION	= "Group display time"
+GF_AUTO_FILTER_LEVEL	= "Auto Filter level range"
+GF_NEW_GROUP_TIMEOUT	= "\"New Listing\" duration"
 
--- LFG related buttons and texts
-GF_AUTO						= "Auto"
-GF_LFM_LFG					= "LFM/LFG"
-GF_DUNGEON					= "Dungeon"
-GF_RAID						= "Raid"
-GF_ROLE						= "Role"
-GF_TANK						= "Tank"
-GF_HEALER					= "Healer"
-GF_DPS						= "DPS"
-GF_MELEE					= "Melee"
-GF_RANGE					= "Range"
-GF_CASTER					= "Caster"
-GF_EVERYTHING				= "Everything"
-GF_WHO						= "Who"
-GF_GET_WHO					= "Get Who"
-GF_STOP_WHO					= "Stop Who"
-GF_INVITE					= "Invite"
-GF_REQUEST					= "Request"
-GF_RESET					= "Reset"
-GF_INVITE_PLEASE			= "Invite Please"
-GF_INVITING_FOR				= "Inviting you for: "
+-- Group Maker related buttons and texts
+GF_AUTO					= "Auto"
+GF_LFM_LFG				= "LFM/LFG"
+GF_DUNGEON				= "Dungeon"
+GF_RAID					= "Raid"
+GF_ROLE					= "Role"
+GF_TANK					= "Tank"
+GF_HEALER				= "Healer"
+GF_DPS					= "DPS"
+GF_MELEE				= "Melee"
+GF_RANGE				= "Range"
+GF_CASTER				= "Caster"
+GF_EVERYTHING			= "Everything"
 
-GF_NO_WHISPER_DUNGEON		= "There are no dungeons in the input boxes. I need a dungeon name to know what levels to look for."
-GF_NO_WHISPER_TEXT			= "No valid text to send."
-GF_NO_PLAYERS_TO_WHISPER	= "No players in whisper queue"
-GF_WHISPER_FORMAT			= "Error: Wrong whisper format."
+-- Getwho-related buttons and texts
+GF_WHO					= "Who"
+GF_GET_WHO				= "Get Who"
+GF_STOP_WHO				= "Stop Who"
+GF_INVITE				= "Invite"
+GF_REQUEST				= "Request"
+GF_RESET				= "Reset"
+GF_INVITE_PLEASE		= "Invite Please"
+GF_INVITING_FOR			= "Inviting you for: "
 
--- Other buttons related to blacklist, log, etc
-GF_OK						= "Ok"; -- Popup Dialog Button
-GF_CANCEL 					= "Cancel"; -- Popup Dialog Button
-GF_ENTER_PLAYER_NAME		= "Enter the name of the player to be blacklisted:"; -- Label for blacklist add player popup
-GF_ADD_PLAYER				= "Add player"; -- Blacklist add player button Label
-GF_INVALID_PLAYER_NAME		= " is an invalid player name."; -- Blacklist tried to add invalid player name
-GF_EDIT_PLAYER				= "Edit player information"; -- Blacklist Edit button Label
-GF_NAME						= "Name"; -- Name Label for blacklist list
-GF_DELETE					= "Delete"; -- Blacklist delete button Label
-GF_SAVE						= "Save"; -- Blacklist save button Label
-GF_PLAYER_NOTE				= "Note"; -- Note Label for blacklist list
-GF_DEFAULT_PLAYER_NOTE		= "New player added. Click here to edit this note." -- Default Blacklist note
-GF_LOG_AND_MONITOR			= "Log Entries"; -- Label at top of Log frame
+GF_NO_WHISPER_DUNGEON	= "There are no dungeons in the input boxes. I need a dungeon name to know what levels to look for."
+GF_NO_WHISPER_TEXT		= "No valid text to send."
+GF_NO_PLAYERS_TO_WHISPER= "No players in whisper queue"
 
-GF_LOG_ME					= "[M] "; -- Text added to Log tab when a message is blocked
-GF_BLOCKED_GROUPS			= "[G] "; -- Text added to Log tab when a message is blocked
-GF_BLOCKED_NEW				= "[N] "; -- Text added to Log tab when a message is blocked
-GF_BLOCKED_CHAT				= "[C] "; -- Text added to Log tab when a message is blocked
-GF_BLOCKED_TRADES			= "[T] "; -- Text added to Log tab when a message is blocked
-GF_BLOCKED_POLITICS			= "[P] "; -- Text added to Log tab when a message is blocked
-GF_LOOT_MESSAGE				= "[L] "; -- Text added to Log tab when a message is blocked
-GF_BLOCKED_SPAM				= "[S] "; -- Text added to Log tab when a message is blocked
-GF_BLOCKED_BELOWLEVEL		= "[V] "; -- Text added to Log tab when a message is blocked
-GF_BLOCKED_FILTER			= "[F] "; -- Text added to Log tab when a message is blocked
-GF_BLACKLIST_MESSAGE		= "[B] "; -- Text added to Log tab when a message is blocked
-GF_BLACKLIST_ADDED			= "Blacklist added for "; -- Text added to Log tab when a message is blocked
+-- Blacklist buttons and texts
+GF_OK					= "Ok"; -- Popup Dialog Button
+GF_CANCEL 				= "Cancel"; -- Popup Dialog Button
+GF_ENTER_PLAYER_NAME	= "Enter the name of the player to be blacklisted:"; -- Label for blacklist add player popup
+GF_ADD_PLAYER			= "Add player"; -- Blacklist add player button Label
+GF_INVALID_PLAYER_NAME	= " is an invalid player name."; -- Blacklist tried to add invalid player name
+GF_EDIT_PLAYER			= "Edit player information"; -- Blacklist Edit button Label
+GF_DELETE				= "Delete"; -- Blacklist delete button Label
+GF_DEFAULT_PLAYER_NOTE	= "New player added. Click here to edit this note." -- Default Blacklist note
 
 -- Announce related buttons
 GF_ANNOUNCE_LFG_BTN			= "Announce Group"; -- Label for the group finder announce when turned off
 GF_AUTO_ANNOUNCE_TURNED_ON	= "Auto announce ON."; -- Internal text when I click the announce button to start announcing.
-GF_AUTO_ANNOUNCE_TURNED_OFF= "Auto announce OFF"; -- Internal text when I click the announce button to stop announcing
+GF_AUTO_ANNOUNCE_TURNED_OFF	= "Auto announce OFF"; -- Internal text when I click the announce button to stop announcing
 GF_NOTHING_TO_ANNOUNCE		= "Nothing to announce: Setting auto announce to OFF"; -- If GF_LFGDescriptionEditBox is then can't start announce
-GF_NOTHING_TO_ANNOUNCE2		= "Nothing to announce"; -- If GF_LFGDescriptionEditBox is then can't start announce
+GF_NOTHING_TO_ANNOUNCE2		= "Nothing to announce"; -- If GF_LFGDescriptionEditBox is empty then can't start announce
 GF_SENT 					= "Sent: "
-GF_ANNOUNCED_LFG_EXT		= "Announced LFG message to LookingForGroup channel"; -- Minimap text when your group is announced.
+GF_ANNOUNCED_LFG_EXT		= "Announced LFG message to the LFG channel"; -- Minimap text when your group is announced.
 GF_AFK_ANNOUNCE_OFF			= "You are AFK: Setting auto announce to OFF"; -- Text when announce is on and you are AFK.
 GF_JOINED_GROUP_ANNOUNCE_OFF= "You have joined a group or are no longer leader. LFG Auto announce OFF"; -- Text when announce is on and you join someone else's group
 GF_NO_MORE_PLAYERS_NEEDED	= "No more players needed."; -- "Your group is full. LFG Auto announce OFF"
@@ -188,11 +193,6 @@ GF_MINUTES					= " minutes"
 GF_NOW_AFK					= "You are now AFK"; -- The text the client receives when it goes afk(used to turn off announce).
 GF_TIME_AGO					= " ago"; -- Label for righttext on group list, showing how many minutes ago group was found
 GF_TIME_JUST_NOW			= "Just now"; -- Text for righttext on group list, "Found ## minutes ago"
-
--- Things currently unused
-GF_CONVERTING_TO_PARTY		= "Converting group..."; -- Internal message when you hit convert to party button
-GF_CANNOT_CONVERT_TO_PARTY	= "Cannot convert to party unless raid has 5 members or less"; -- Internal message if you fail to convert to party
-GF_CONVERT_TO_PARTY			= "Convert to party";
 
 GF_GenTooltips = {
 
@@ -356,6 +356,15 @@ GF_ONE_WORD_FIX = {
 ["bs"] = "blacksmith",["blacksmither"] = "blacksmith",["hammersmith"] = "blacksmith",["swordsmith"] = "blacksmith",["axesmith"] = "blacksmith",["armorsmith"] = "blacksmith",["armorsmithing"] = "blacksmith",["weaponsmith"] = "blacksmith",
 ["stam"] = "stamina",["stm"] = "stamina",["int"] = "intellect",["hp"] = "health",["hlth"] = "health",["ench"] = "enchant",["encht"] = "enchant",["glv"] = "gloves",["chst"] = "chest",
 ["brc"] = "bracers",["clk"] = "cloak",["agi"] = "agility",["str"] = "strength",["spir"] = "spirit",
+["drood"] = "druid",["droods"] = "druid",["driud"] = "druid",["druids"] = "druid",
+["hutner"] = "hunter",["hunters"] = "hunters",
+["paly"] = "paladin",["pally"] = "paladin",["pallie"] = "paladin",["pallies"] = "paladin",["healadin"] = "paladin",["paladins"] = "paladin",
+["preist"] = "priest",["priests"] = "priest",["rouge"] = "rogue",
+["rogues"] = "rogue",
+["shammy"] = "shaman",["shammies"] = "shaman",
+["mages"] = "mage",
+["warlocks"] = "warlock",["lock"] = "warlock",["locks"] = "warlock",
+["warriors"] = "warrior",["warior"] = "warrior",["wariors"] = "warrior",
 }
 
 GF_ONE_WORD_IGNORE = {
@@ -368,12 +377,12 @@ GF_ONE_WORD_GUILD = {
 ["house"] = .5,["gbank"] = 1,["tabard"] = 1,
 ["dedicated"] = 1,["environment"] = 1,["membership"] = 1,
 ["progression"] = 1,["prog"] = 1,["dkp"] = 1,
-["utc"] = 1,
+["utc"] = 1,["cet"] = 1,["msk"] = 1,
 ["levelers"] = 1,["lvlers"] = 1,["leveling"] = 1,["welcoming"] = 1,
 ["lgbt"] = 1,["lgbtq"] = 1,
-["fr"] = 2,["fra"] = 2,["ru"] = 2,["cz"] = 2,["sk"] = 2,["pl"] = 1,
+["fr"] = 2,["fra"] = 2,["ru"] = 2,["cz"] = 2,["sk"] = 2,["pl"] = 1,["na"] = 1,
 ["polska"] = 1,["ukrainska"] = 1,["cesko"] = 1,["romani"] = 1,["slovenska"] = 1,["brasilia"] = 1,
-["msk"] = 1,["raidov"] = 1,["ishet"] = 1,["novacek"] = 1,
+["raidov"] = 1,["ishet"] = 1,["novacek"] = 1,
 ["deutsche"] = 1,["deutschsprachige"] = 1,["allianz"] = 1,["mitraiden"] = 1,
 ["hispana"] = 1,
 
@@ -392,25 +401,28 @@ GF_THREE_WORD_GUILD = {
 }
 
 GF_ONE_WORD_LFM = {
-["help"] = true,["lf"] = true,["lfm"] = true,["flm"] = true,["hosting"] = true,["forming"] = true,["lfm"] = true,["lfgm"] = true,
+["lf"] = 3,["lfm"] = 3,["lfgm"] = 2,["flm"] = 2,["hosting"] = 2,["forming"] = 2,["starting"] = 2,["help"] = 1,
 }
 GF_TWO_WORD_LFM = {
-["msos"] = true,
-["needheal"] = true,["comeheal"] = true,["moreheal"] = true,
-["needdps"] = true,["comedps"] = true,["moredps"] = true,
-["needtank"] = true,["cometank"] = true,["moretank"] = true,
-["needrange"] = true,["morerange"] = true,
-["needcaster"] = true,["morecaster"] = true,["needmelee"] = true,["needaoe"] = true,
-["anyonefor"] = true,["anyoneneeds"] = true,["needmore"] = true,["moremore"] = true,
+["msos"] = 2,
+["needheal"] = 2,["comeheal"] = 2,["moreheal"] = 2,["anyheal"] = 2,
+["needdamage"] = 2,["comedamage"] = 2,["moredamage"] = 2,["anydamage"] = 2,
+["needtank"] = 2,["cometank"] = 2,["moretank"] = 2,["anytank"] = 2,
+["needrange"] = 2,["comerange"] = 2,["morerange"] = 2,["anyrange"] = 2,
+["needcaster"] = 2,["comecaster"] = 2,["morecaster"] = 2,["anycaster"] = 2,
+["needmelee"] = 2,["comemelee"] = 2,["cometank"] = 2,["needaoe"] = 2,
+["anyonefor"] = 2,["anyoneneeds"] = 2,["needmore"] = 2,["moremore"] = 2,
+["wannahelp"] = 2,["pleasehelp"] = 2,["helpme"] = 2,["anyoneinterested"] = 2,
 }
 GF_THREE_WORD_LFM = {
-["needatank"] = true,["lookingfortank"] = true,["lookingforheal"] = true,["lookingfordps"] = true,["lookingformore"] = true,["anyoneelseneed"] = true,["anyoneelsefor"] = true,["anyoneupfor"] = true,
+["needatank"] = 2,["lookingfortank"] = 2,["lookingforheal"] = 2,["lookingfordamage"] = 2,
+["lookingformore"] = 2,["anyoneelseneed"] = 2,["anyoneelsefor"] = 2,["anyoneupfor"] = 2,
+["onemorespot"] = 2,["twomorespots"] = 2,["threemorespots"] = 2,["ifsomeoneneeds"] = 2,["wanttohelp"] = 2,["ineedhelp"] = 2,
 }
 
 GF_ONE_WORD_CLASSES = {
-["druid"] = 0,["drood"] = 0,["driud"] = 0,["hunter"] = 0,["hutner"] = 0,["mage"] = 0,["pally"] = 0,["paly"] = 0,["pallie"] = 0,["healadin"] = 0,["priest"] = 0,["preist"] = 0,["rogue"] = 0,["rouge"] = 0,
-["shaman"] = 0,["shammy"] = 0,["lock"] = 0,["warlock"] = 0,["warrior"] = 0,["heal"] = 0,["tank"] = 0,["tanks"] = 0,["damage"] = 0,["range"] = 0,
-["melee"] = 0,["caster"] = 0,
+["druid"] = 0,["hunter"] = 0,["mage"] = 0,["paladin"] = 0,["priest"] = 0,["rogue"] = 0,["shaman"] = 0,["warlock"] = 0,["warrior"] = 0,
+["heal"] = 0,["tank"] = 0,["damage"] = 0,["range"] = 0,["melee"] = 0,["caster"] = 0,
 }
 
 GF_ONE_WORD_LFG = {
@@ -479,7 +491,7 @@ GF_TWO_WORD_RAID = {
 }
 
 GF_ONE_WORD_TRADE = {
-["jc"] = .5,["jewelcrafter"] = .5,["lw"] = .5,["leatherworker"] = .5,["enchant"] = .5,["enchanter"] = .5,["henchant"] = .5,["tailor"] = .5,["blacksmith"] = .5,["engineer"] = .5,["alchemist"] = .5,["alchy"] = .5,["hitem"] = .5,
+["jc"] = .5,["jewelcrafter"] = .5,["lw"] = .5,["leatherworker"] = .5,["enchant"] = .5,["chanter"] = .5,["enchanter"] = .5,["henchant"] = .5,["tailor"] = .5,["blacksmith"] = .5,["engineer"] = .5,["alchemist"] = .5,["alchy"] = .5,["hitem"] = .5,
 ["crafter"] = 1,["need"] = 1,
 ["lockbox"] = 2,["lockboxes"] = 2,["lockpick"] = 2,["lockpicking"] = 2,["buying"] = 2,["selling"] = 2,["trading"] = 2,
 ["lf"] = 2.5,

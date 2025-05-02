@@ -59,7 +59,8 @@ GF_PlayerMessages							= {};
 GF_IncomingMessagePrune						= 0;
 local GF_PreviousMessage					= {};
 local GF_MiniMapMessages					= { 0,0,0,0,0,0 };
-local GF_LogMessageCodes = { GF_BLOCKED_GROUPS, GF_BLOCKED_NEW, GF_BLOCKED_CHAT, GF_BLOCKED_TRADES, GF_BLOCKED_POLITICS, GF_LOOT_MESSAGE, GF_BLOCKED_SPAM, GF_BLACKLIST_MESSAGE, GF_BLOCKED_BELOWLEVEL, GF_LOG_ME, GF_BLOCKED_FILTER }
+local GF_LogMessageCodes = { GF_LOGGED_GROUPS, GF_LOGGED_NEW, GF_LOGGED_CHAT, GF_LOGGED_TRADES, GF_LOGGED_POLITICS, GF_LOGGED_LOOT, GF_LOGGED_SPAM, GF_LOGGED_BLACKLIST, GF_LOGGED_BELOWLEVEL, GF_LOGGED_ME, GF_LOGGED_FILTERED }
+
 local GF_WhisperLogCurrentButtonID			= 0;
 GF_WhisperLogData							= {}
 GF_WhisperLogData[GF_RealmName]				= {}
@@ -1935,7 +1936,7 @@ function GF_CheckForGroups(arg1,arg2,event)
 	return GF_CheckForSpam(arg1,arg2,foundInGroup) or foundInGroup;
 end
 function GF_GetTypes(arg1)
-	GF_MessageData = { foundIgnore = nil,foundGuild = 0,foundLFM = nil,foundLFG = nil,foundClass = nil,foundQuest = nil,foundDungeon = nil,foundRaid = nil,foundTrades = 0,foundPolitics = nil,foundPvP = nil }
+	GF_MessageData = { foundIgnore = nil,foundGuild = 0,foundLFM = 0,foundLFG = nil,foundClass = nil,foundQuest = nil,foundDungeon = nil,foundRaid = nil,foundTrades = 0,foundPolitics = nil,foundPvP = nil }
 
 	local wordTable = {}
 	local wordString;
@@ -1944,11 +1945,11 @@ function GF_GetTypes(arg1)
 		table.insert(wordTable, word)
 		if GF_ONE_WORD_IGNORE[word] then GF_MessageData.foundIgnore = true
 		elseif GF_ONE_WORD_GUILD[word] then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_ONE_WORD_GUILD[word]
-		elseif GF_ONE_WORD_LFM[word] then GF_MessageData.foundLFM = true
+		elseif GF_ONE_WORD_LFM[word] then if GF_ONE_WORD_LFM[word] > GF_MessageData.foundLFM then GF_MessageData.foundLFM = GF_ONE_WORD_LFM[word] end
 		elseif GF_ONE_WORD_LFG[word] then GF_MessageData.foundLFG = true
 		elseif GF_ONE_WORD_CLASSES[word] then GF_MessageData.foundClass = GF_ONE_WORD_CLASSES[word]
-		elseif GF_ONE_WORD_QUEST[word] then if GF_MessageData.foundQuest and GF_ONE_WORD_QUEST[word] > GF_MessageData.foundQuest then GF_MessageData.foundQuest = GF_ONE_WORD_QUEST[word] else GF_MessageData.foundQuest = GF_ONE_WORD_QUEST[word] end
-		elseif GF_ONE_WORD_DUNGEON[word] then if GF_MessageData.foundDungeon and GF_ONE_WORD_DUNGEON[word] > GF_MessageData.foundDungeon then GF_MessageData.foundDungeon = GF_ONE_WORD_DUNGEON[word] else GF_MessageData.foundQuest = GF_ONE_WORD_DUNGEON[word] end
+		elseif GF_ONE_WORD_QUEST[word] then if GF_MessageData.foundQuest then if GF_ONE_WORD_QUEST[word] > GF_MessageData.foundQuest then GF_MessageData.foundQuest = GF_ONE_WORD_QUEST[word] end else GF_MessageData.foundQuest = GF_ONE_WORD_QUEST[word] end
+		elseif GF_ONE_WORD_DUNGEON[word] then if GF_MessageData.foundDungeon then if GF_ONE_WORD_DUNGEON[word] > GF_MessageData.foundDungeon then GF_MessageData.foundDungeon = GF_ONE_WORD_DUNGEON[word] end else GF_MessageData.foundDungeon = GF_ONE_WORD_DUNGEON[word] end
 		elseif GF_ONE_WORD_RAID[word] then GF_MessageData.foundRaid = GF_ONE_WORD_RAID[word]
 		elseif GF_ONE_WORD_TRADE[word] then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_ONE_WORD_TRADE[word]
 		elseif GF_ONE_WORD_POLITICS[word] then GF_MessageData.foundPolitics = true
@@ -1959,10 +1960,10 @@ function GF_GetTypes(arg1)
 			wordString = wordTable[i]..wordTable[i+1]
 			if GF_ONE_WORD_IGNORE[wordString] then GF_MessageData.foundIgnore = true
 			elseif GF_TWO_WORD_GUILD[wordString] then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_TWO_WORD_GUILD[wordString]
-			elseif GF_TWO_WORD_LFM[wordString] then GF_MessageData.foundLFM = true
+			elseif GF_TWO_WORD_LFM[wordString] then if GF_TWO_WORD_LFM[wordString] > GF_MessageData.foundLFM then GF_MessageData.foundLFM = GF_TWO_WORD_LFM[wordString] end
 			elseif GF_TWO_WORD_LFG[wordString] then GF_MessageData.foundLFG = true
-			elseif GF_TWO_WORD_QUEST[wordString] then if GF_MessageData.foundQuest and GF_TWO_WORD_QUEST[wordString] > GF_MessageData.foundQuest then GF_MessageData.foundQuest = GF_TWO_WORD_QUEST[wordString] else GF_MessageData.foundQuest = GF_TWO_WORD_QUEST[wordString] end
-			elseif GF_TWO_WORD_DUNGEON[wordString] then if GF_MessageData.foundDungeon and GF_TWO_WORD_DUNGEON[wordString] > GF_MessageData.foundDungeon then GF_MessageData.foundDungeon = GF_TWO_WORD_DUNGEON[wordString] else GF_MessageData.foundQuest = GF_TWO_WORD_DUNGEON[wordString] end
+			elseif GF_TWO_WORD_QUEST[wordString] then if GF_MessageData.foundQuest then if GF_TWO_WORD_QUEST[wordString] > GF_MessageData.foundQuest then GF_MessageData.foundQuest = GF_TWO_WORD_QUEST[wordString] end else GF_MessageData.foundQuest = GF_TWO_WORD_QUEST[wordString] end
+			elseif GF_TWO_WORD_DUNGEON[wordString] then if GF_MessageData.foundDungeon then if GF_TWO_WORD_DUNGEON[wordString] > GF_MessageData.foundDungeon then GF_MessageData.foundDungeon = GF_TWO_WORD_DUNGEON[wordString] end else GF_MessageData.foundDungeon = GF_TWO_WORD_DUNGEON[wordString] end
 			elseif GF_TWO_WORD_RAID[wordString] then GF_MessageData.foundRaid = GF_TWO_WORD_RAID[wordString]
 			elseif GF_TWO_WORD_TRADE[wordString] then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_TWO_WORD_TRADE[wordString]
 			elseif GF_TWO_WORD_POLITICS[wordString] then GF_MessageData.foundPolitics = true
@@ -1973,24 +1974,24 @@ function GF_GetTypes(arg1)
 		if wordTable[i+2] then
 			wordString = wordTable[i]..wordTable[i+1]..wordTable[i+2]
 			if GF_THREE_WORD_GUILD[wordString] then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_THREE_WORD_GUILD[wordString]
-			elseif GF_THREE_WORD_LFM[wordString] then GF_MessageData.foundLFM = true
+			elseif GF_THREE_WORD_LFM[wordString] then if GF_THREE_WORD_LFM[wordString] > GF_MessageData.foundLFM then GF_MessageData.foundLFM = GF_THREE_WORD_LFM[wordString] end
 			elseif GF_THREE_WORD_LFG[wordString] then GF_MessageData.foundLFG = true
-			elseif GF_THREE_WORD_QUEST[wordString] then if GF_MessageData.foundQuest and GF_THREE_WORD_QUEST[wordString] > GF_MessageData.foundQuest then GF_MessageData.foundQuest = GF_THREE_WORD_QUEST[wordString] else GF_MessageData.foundQuest = GF_THREE_WORD_QUEST[wordString] end
-			elseif GF_THREE_WORD_DUNGEON[wordString] then if GF_MessageData.foundDungeon and GF_THREE_WORD_DUNGEON[wordString] > GF_MessageData.foundDungeon then GF_MessageData.foundDungeon = GF_THREE_WORD_DUNGEON[wordString] else GF_MessageData.foundQuest = GF_THREE_WORD_DUNGEON[wordString] end
+			elseif GF_THREE_WORD_QUEST[wordString] then if GF_MessageData.foundQuest then if GF_THREE_WORD_QUEST[wordString] > GF_MessageData.foundQuest then GF_MessageData.foundQuest = GF_THREE_WORD_QUEST[wordString] end else GF_MessageData.foundQuest = GF_THREE_WORD_QUEST[wordString] end
+			elseif GF_THREE_WORD_DUNGEON[wordString] then if GF_MessageData.foundDungeon then if GF_THREE_WORD_DUNGEON[wordString] > GF_MessageData.foundDungeon then GF_MessageData.foundDungeon = GF_THREE_WORD_DUNGEON[wordString] end else GF_MessageData.foundDungeon = GF_THREE_WORD_DUNGEON[wordString] end
 			elseif GF_THREE_WORD_TRADE[wordString] then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_THREE_WORD_TRADE[wordString] end
 		end
 	end
 	for i=1, getn(wordTable) do
 		if wordTable[i+3] then
 			wordString = wordTable[i]..wordTable[i+1]..wordTable[i+2]..wordTable[i+3]
-			if GF_FOUR_WORD_QUEST[wordString] then if GF_MessageData.foundQuest and GF_FOUR_WORD_QUEST[wordString] > GF_MessageData.foundQuest then GF_MessageData.foundQuest = GF_FOUR_WORD_QUEST[wordString] else GF_MessageData.foundQuest = GF_FOUR_WORD_QUEST[wordString] end end
+			if GF_FOUR_WORD_QUEST[wordString] then if GF_MessageData.foundQuest then if GF_FOUR_WORD_QUEST[wordString] > GF_MessageData.foundQuest then GF_MessageData.foundQuest = GF_FOUR_WORD_QUEST[wordString] end else GF_MessageData.foundQuest = GF_FOUR_WORD_QUEST[wordString] end end
 		end
 	end
 	if string.find(arg1, "<[a-zA-Z \&]+>") then GF_MessageData.foundGuild = GF_MessageData.foundGuild + 2; end
 	if string.find(arg1, "lfm") or string.find(arg1, "lf%d+m") then GF_MessageData.foundTrades = 0 end
-	if (string.find(arg1, "anyone?") or string.find(arg1, "any1?")) and string.find(arg1, "hquest") then GF_MessageData.foundLFM = true end
+	if GF_MessageData.foundLFM < 2 and (string.find(arg1, "anyone?") or string.find(arg1, "any1?")) and string.find(arg1, "hquest") then GF_MessageData.foundLFM = 2 end
 	for i=1, getn(GF_STRING_FIND_LIST.LFM) do
-		if string.find(arg1, GF_STRING_FIND_LIST.LFM[i]) then GF_MessageData.foundLFM = true break end
+		if string.find(arg1, GF_STRING_FIND_LIST.LFM[i]) then GF_MessageData.foundLFM = 3 break end
 	end
 	for i=1, getn(GF_STRING_FIND_LIST.POLITICS) do
 		if string.find(arg1, GF_STRING_FIND_LIST.POLITICS[i]) then GF_MessageData.foundPolitics = true break end
@@ -2048,9 +2049,9 @@ function GF_CheckForSpam(arg1,arg2,foundInGroup)
 end
 
 function GF_GetGroupInformation(arg1,arg2) -- Searches messages for Groups and similiar functions
-	if (GF_SavedVariables.FilterLevel == 1 and (GF_MessageData.foundLFM or GF_MessageData.foundLFG))
-	or (GF_SavedVariables.FilterLevel == 2 and (GF_MessageData.foundLFM or GF_MessageData.foundLFG) and (GF_MessageData.foundRaid or GF_MessageData.foundDungeon or GF_MessageData.foundQuest or GF_MessageData.foundPvP or GF_MessageData.foundClass))
-	or (GF_SavedVariables.FilterLevel == 3 and (GF_MessageData.foundLFM or GF_MessageData.foundLFG) and (GF_MessageData.foundRaid or GF_MessageData.foundDungeon or GF_MessageData.foundQuest or GF_MessageData.foundPvP) and (GF_MessageData.foundClass)) then
+	if (GF_SavedVariables.FilterLevel == 1 and (GF_MessageData.foundLFM >=1 or GF_MessageData.foundLFG))
+	or (GF_SavedVariables.FilterLevel == 2 and (GF_MessageData.foundLFM >=2 or GF_MessageData.foundLFG) and (GF_MessageData.foundRaid or GF_MessageData.foundDungeon or GF_MessageData.foundQuest or GF_MessageData.foundPvP or GF_MessageData.foundClass))
+	or (GF_SavedVariables.FilterLevel == 3 and (GF_MessageData.foundLFM >=3 or GF_MessageData.foundLFG) and (GF_MessageData.foundRaid or GF_MessageData.foundDungeon or GF_MessageData.foundQuest or GF_MessageData.foundPvP or GF_MessageData.foundClass)) then
 	else return end
 
 	local entry = {};

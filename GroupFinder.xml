@@ -538,12 +538,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</FontString>
 				<FontString inherits="GameFontNormalSmall" name="$parentNoteLabel" justifyH="LEFT">
 					<Size>
-						<AbsDimension x="450" y="18"/>
+						<AbsDimension x="485" y="18"/>
 					</Size>
 					<Anchors>
 						<Anchor point="LEFT">
 							<Offset>
-								<AbsDimension x="100" y="0"/>
+								<AbsDimension x="85" y="0"/>
 							</Offset>
 						</Anchor>
 					</Anchors>
@@ -2232,7 +2232,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Anchors>
 						<Layers>
 							<Layer level="ARTWORK">
-								<FontString name="$parentTitleLabel" justifyH="LEFT" inherits="GameFontNormalSmall" nonspacewrap="false" text="GF_PLAYER_NOTE">
+								<FontString name="$parentTitleLabel" justifyH="LEFT" inherits="GameFontNormalSmall" nonspacewrap="false">
 									<Anchors>
 										<Anchor point="TOPLEFT">
 											<Offset>
