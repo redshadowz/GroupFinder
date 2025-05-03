@@ -343,7 +343,7 @@ GF_ONE_WORD_FIX = {
 ["healz"] = "heal",["heals"] = "heal",["healer"] = "heal",["healers"] = "heal",["dmg"] = "damage",["dps"] = "damage",["deeps"] = "damage",["tanks"] = "tank",["mt"] = "tank",["ot"] = "tank",
 ["ranged"] = "range",["rdps"] = "range",["casters"] = "caster",["melees"] = "melee",["mdps"] = "melee",
 ["nub"] = "noob",["noobs"] = "noob",["newbs"] = "noob",["newbies"] = "noob",["moar"] = "more",
-["rekrutuje"] = "recruiting",["recrutar"] = "recruiting",["recrute"] = "recruiting",["recruting"] = "recruiting",["recluta"] = "recruiting",["recrutando"] = "recruiting",
+["rekrutuje"] = "recruiting",["recrutar"] = "recruiting",["recrute"] = "recruiting",["recruting"] = "recruiting",["recuiting"] = "recruiting",["recluta"] = "recruiting",["recrutando"] = "recruiting",
 ["gildia"] = "guild",["gilde"] = "guild",["guilde"] = "guild",["gildiyu"] = "guild",["gildenmitglieder"] = "guild",["gildii"] = "guild",
 ["hquest"] = "quest",["quests"] = "quest",["questing"] = "quest",
 ["bs"] = "blacksmith",["blacksmither"] = "blacksmith",["hammersmith"] = "blacksmith",["swordsmith"] = "blacksmith",["axesmith"] = "blacksmith",["armorsmith"] = "blacksmith",["armorsmithing"] = "blacksmith",["weaponsmith"] = "blacksmith",
@@ -706,7 +706,7 @@ GF_GOBLIN				= "Goblin";
 local GF_TURTLE_ONE_WORD_GUILD = {
 }
 local GF_TURTLE_TWO_WORD_GUILD = {
-["mixed pickles"] = 3,["texasknights"] = 3,["texasknlghts"] = 3,["potatooverlords"] = 3,["slightlyturtle"] = 3,["silentvigils"] = 3,
+["mixed pickles"] = 3,["texasknights"] = 3,["texasknlghts"] = 3,["potatooverlords"] = 3,["slightlyturtle"] = 3,
 }
 local GF_TURTLE_THREE_WORD_GUILD = {
 ["doiswrynn"] = 3,["wesmokefelweed"] = 3,["localnicecrew"] = 3,
