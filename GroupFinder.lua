@@ -1086,7 +1086,7 @@ end
 function GF_PruneTheWhoTable() -- TODO Prune MessageList/WhisperData/GF_LogHistory
 	for realm,_ in GF_WhoTable do
 		for name, whoData in GF_WhoTable[realm] do
-			if whoData[4] and whoData[4] + 7776000 < time() then -- Keep WhoData for 90 days
+			if whoData[4] and whoData[4] + 5184000 < time() then -- Keep WhoData for 60 days
 				GF_WhoTable[realm][name] = nil;
 			end
 		end
@@ -1915,7 +1915,7 @@ function GF_CheckErrorFilter(arg1)
 	end
 end
 function GF_CheckForGroups(arg1,arg2,event)
-	GF_GetTypes(gsub(gsub(gsub(gsub(string.lower(arg1),".gg/%w+", ""), "|c.*|(%w+)[%d:]+|h", " %1"), "|h|r", " "),"[''\-]", ""))
+	GF_GetTypes(gsub(gsub(gsub(gsub(string.lower(arg1),".gg/%w+", ""), "|cff%w+|(%w+)[%d:]+|h", " %1 "), "|h|r", " "),"[''\-]", ""))
 	if GF_SavedVariables.guildmessagesarespam and event == "CHAT_MSG_CHANNEL" and GF_MessageData.foundGuild >= 3 then return 7
 	elseif GF_MessageData.foundTrades >= 3 then return GF_CheckForSpam(arg1,arg2) or 4
 	elseif GF_MessageData.foundPolitics then return GF_CheckForSpam(arg1,arg2) or 5
@@ -1983,12 +1983,13 @@ function GF_GetTypes(arg1)
 	for i=1, getn(wordTable) do
 		if wordTable[i+3] then
 			wordString = wordTable[i]..wordTable[i+1]..wordTable[i+2]..wordTable[i+3]
-			if GF_FOUR_WORD_QUEST[wordString] then if GF_MessageData.foundQuest then if GF_FOUR_WORD_QUEST[wordString] > GF_MessageData.foundQuest then GF_MessageData.foundQuest = GF_FOUR_WORD_QUEST[wordString] end else GF_MessageData.foundQuest = GF_FOUR_WORD_QUEST[wordString] end end
+			if GF_FOUR_WORD_GUILD[wordString] then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_FOUR_WORD_GUILD[wordString]
+			elseif GF_FOUR_WORD_QUEST[wordString] then if GF_MessageData.foundQuest then if GF_FOUR_WORD_QUEST[wordString] > GF_MessageData.foundQuest then GF_MessageData.foundQuest = GF_FOUR_WORD_QUEST[wordString] end else GF_MessageData.foundQuest = GF_FOUR_WORD_QUEST[wordString] end end
 		end
 	end
 	if string.find(arg1, "<[a-zA-Z \&]+>") then GF_MessageData.foundGuild = GF_MessageData.foundGuild + 2; end
 	if string.find(arg1, "k10") or string.find(arg1, "k10") then GF_MessageData.foundRaid = 64 end
-	if GF_MessageData.foundLFM < 2 and (string.find(arg1, "anyone?") or string.find(arg1, "any1?")) and string.find(arg1, "hquest") then GF_MessageData.foundLFM = 2 end
+	if GF_MessageData.foundLFM < 2 and (string.find(arg1, "anyone\?") or string.find(arg1, "any1\?")) and string.find(arg1, "hquest") then GF_MessageData.foundLFM = 2 end
 	if GF_MessageData.foundTradesExclusion then GF_MessageData.foundTrades = 0 end
 	for i=1, getn(GF_STRING_FIND_LIST.LFM) do
 		if string.find(arg1, GF_STRING_FIND_LIST.LFM[i]) then GF_MessageData.foundLFM = 3 GF_MessageData.foundTrades = 0 break end
