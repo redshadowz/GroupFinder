@@ -370,7 +370,7 @@ GF_ONE_WORD_FIX = {
 ["elites"] = "elite",["leet"] = "elite",["hinterland"] = "hinterlands",
 ["raids"] = "raid",["raiding"] = "raid",
 ["times"] = "time",
-["lockboxes"] = "lockbox",["lockpick"] = "lockbox",["lockpicking"] = "lockbox",["lockpicker"] = "lockbox",
+["lockboxes"] = "lockbox",["lockpick"] = "lockbox",["lockpicking"] = "lockbox",["lockpicker"] = "lockbox",["locboxes"] = "lockbox",["locbox"] = "lockbox",
 } -- ["hosting"] = "lfm",["forming"] = "lfm",["starting"] = "lfm",
 GF_TWO_WORD_FIX = {
 ["lockboxes"] = "lockbox",["lockpick"] = "lockbox",["lockpicking"] = "lockbox",["lockpicker"] = "lockbox",
