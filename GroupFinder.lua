@@ -1956,7 +1956,7 @@ function GF_GetTypes(arg1)
 	end
 	for i=1, getn(wordTable) do
 		if wordTable[i+1] then
-			wordString = wordTable[i]..wordTable[i+1]
+			if GF_TWO_WORD_FIX[wordTable[i]..wordTable[i+1]] then wordString = GF_TWO_WORD_FIX[wordTable[i]..wordTable[i+1]] else wordString = wordTable[i]..wordTable[i+1] end
 			if GF_ONE_WORD_IGNORE[wordString] then GF_MessageData.foundIgnore = true
 			elseif GF_TWO_WORD_GUILD[wordString] then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_TWO_WORD_GUILD[wordString]
 			elseif GF_TWO_WORD_LFM[wordString] then if GF_TWO_WORD_LFM[wordString] > GF_MessageData.foundLFM then GF_MessageData.foundLFM = GF_TWO_WORD_LFM[wordString] end
@@ -1987,6 +1987,7 @@ function GF_GetTypes(arg1)
 			elseif GF_FOUR_WORD_QUEST[wordString] then if GF_MessageData.foundQuest then if GF_FOUR_WORD_QUEST[wordString] > GF_MessageData.foundQuest then GF_MessageData.foundQuest = GF_FOUR_WORD_QUEST[wordString] end else GF_MessageData.foundQuest = GF_FOUR_WORD_QUEST[wordString] end end
 		end
 	end
+	if string.find(arg1, "%d+g") then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 2 end
 	if string.find(arg1, "<[a-zA-Z \&]+>") then GF_MessageData.foundGuild = GF_MessageData.foundGuild + 2; end
 	if string.find(arg1, "k10") or string.find(arg1, "k10") then GF_MessageData.foundRaid = 64 end
 	if GF_MessageData.foundLFM < 2 and (string.find(arg1, "anyone\?") or string.find(arg1, "any1\?")) and string.find(arg1, "hquest") then GF_MessageData.foundLFM = 2 end
