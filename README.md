@@ -1,8 +1,7 @@
 # GroupFinder
 Group finder Addon for Vanilla Wow 1.12.1 based on the CallToArms addon(with Turtle WoW support).  
 
-Update: I added a "Guild recruitment is spam" checkbox in options. It will be checked automatically if you are already in a guild. It makes the addon treat all guild recruitment messages as spam.  
-Update: I've gotten the chat parsing up to like 99.5% accurate. Let me know if you see something that sneaks through.  
+Update: I'm working  on categorizing/eliminating all spam. I'm at like 99.9% now. The good news is that I had over 200 "groups" in my listings(60 minutes) on Sunday afternoon 5/4/2025. And all of them were legit groups. If I could read "LFT" channel. There would be hundreds more. Maybe I'll try again.  
 
 The goal of this addon was to find groups without needing to sift through endless chat spam. I tried to make this addon as intuitive as possible, but it's probably pretty intimidating at first glance. Lots of checkboxes. Lots of edit boxes. Lots of dropdowns. I put as much as possible on the front page because the original CallToArms addon had too many pages to flip through and too many useless features.  
 
