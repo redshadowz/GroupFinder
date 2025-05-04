@@ -1377,7 +1377,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				<Scripts>
 					<OnClick>
 						if GF_AutoAnnounceTimer then
-							GF_TurnOffAnnounce()
+							GF_TurnOffAnnounce(GF_AUTO_ANNOUNCE_TURNED_OFF)
 						else
 							if GF_LFGDescriptionEditBox:GetText() ~= "" then
 								GF_TurnOnAnnounce()
@@ -2458,7 +2458,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Scripts>
 									<OnClick>
 										GF_SavedVariables.logshowgroup = this:GetChecked();
-										GF_DisplayLog()
+										if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 									</OnClick>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_GROUP);
@@ -2476,7 +2476,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Scripts>
 									<OnClick>
 										GF_SavedVariables.logshowfiltered = this:GetChecked();
-										GF_DisplayLog()
+										if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 									</OnClick>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_FILTERED);
@@ -2494,7 +2494,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Scripts>
 									<OnClick>
 										GF_SavedVariables.logshowchat = this:GetChecked();
-										GF_DisplayLog()
+										if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 									</OnClick>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_CHAT);
@@ -2512,7 +2512,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Scripts>
 									<OnClick>
 										GF_SavedVariables.logshowpolitics = this:GetChecked();
-										GF_DisplayLog()
+										if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 									</OnClick>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_POLITICS);
@@ -2530,7 +2530,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Scripts>
 									<OnClick>
 										GF_SavedVariables.logshowtrades = this:GetChecked();
-										GF_DisplayLog()
+										if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 									</OnClick>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_TRADES);
@@ -2548,7 +2548,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Scripts>
 									<OnClick>
 										GF_SavedVariables.logshowloot = this:GetChecked();
-										GF_DisplayLog()
+										if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 									</OnClick>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_LOOT);
@@ -2566,7 +2566,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Scripts>
 									<OnClick>
 										GF_SavedVariables.logshowspam = this:GetChecked();
-										GF_DisplayLog()
+										if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 									</OnClick>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_SPAM);
@@ -2584,7 +2584,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Scripts>
 									<OnClick>
 										GF_SavedVariables.logshowblacklist = this:GetChecked();
-										GF_DisplayLog()
+										if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 									</OnClick>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_BLACKLIST);
@@ -2602,7 +2602,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Scripts>
 									<OnClick>
 										GF_SavedVariables.logshowbelowlevel = this:GetChecked();
-										GF_DisplayLog()
+										if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 									</OnClick>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_BELOWLEVEL);
