@@ -108,7 +108,7 @@ function GF_LoadVariables()
 			autoblacklistminlevel		= 12,
 			playsounds					= false,
 			autofilter					= false,
-			autofilterlevelvar			= 6,
+			autofilterlevelvar			= 5,
 			showdungeons				= true,
 			showraids					= true,
 			showquests					= true,
@@ -1039,6 +1039,7 @@ function GF_LoadSettings()
 	local TextToSet = { GF_SavedVariables.searchtext, GF_SavedVariables.searchlfgtext, GF_SavedVariables.searchlfgwhispertext }
 	local TextNames = { "GF_GroupsFrameDescriptionEditBox", "GF_LFGDescriptionEditBox", "GF_LFGWhoWhisperEditBox" }
 	for i=1, 3 do getglobal(TextNames[i]):SetText(TextToSet[i]) end
+	if GF_SavedVariables.searchbuttonstext ~= "" then GF_SearchListDropdown:LockHighlight() end
 	getglobal(GF_LFGSizeDropdown:GetName().."TextLabel"):SetText(GF_SavedVariables.lfgsize);
 	getglobal(GF_LFGWhoClassDropdown:GetName().."TextLabel"):SetText(GF_SavedVariables.lfgwhisperclass);
 
@@ -1160,9 +1161,9 @@ function GF_IsFriendGuildieUsingAddon()
 end
 
 function GF_EntryMatchesGroupFilterCriteria(entry) -- GroupsFrame functions
-	if GF_SavedVariables.searchtext == "" and GF_SavedVariables.searchbuttonstext == "" and ((GF_SavedVariables.showdungeons and entry.type == "D") or (GF_SavedVariables.showraids and entry.type == "R") or (GF_SavedVariables.showquests and entry.type == "Q") or (GF_SavedVariables.showother and entry.type == "N"))
-	and ((GF_SavedVariables.showlfg and entry.lfg) or (GF_SavedVariables.showlfm and not entry.lfg)) and (not GF_SavedVariables.autofilter or (entry.who and (entry.who[1] >= UnitLevel("player")-GF_SavedVariables.autofilterlevelvar
-	and entry.who[1] <= UnitLevel("player")+GF_SavedVariables.autofilterlevelvar)) or (entry.dlevel and entry.dlevel >= UnitLevel("player")-3 and entry.dlevel <= UnitLevel("player")+3)) then
+	if GF_SavedVariables.searchtext == "" and GF_SavedVariables.searchbuttonstext == "" and ((GF_SavedVariables.showlfg and entry.lfg) or (GF_SavedVariables.showlfm and not entry.lfg)) 
+	and ((GF_SavedVariables.showdungeons and entry.type == "D") or (GF_SavedVariables.showraids and entry.type == "R") or (GF_SavedVariables.showquests and entry.type == "Q") or (GF_SavedVariables.showother and entry.type == "N"))
+	and (not GF_SavedVariables.autofilter or (entry.dlevel and entry.dlevel >= UnitLevel("player")-GF_SavedVariables.autofilterlevelvar and entry.dlevel <= UnitLevel("player")+GF_SavedVariables.autofilterlevelvar)) then
 		return true;
 	end
 	if (GF_SavedVariables.searchtext ~= "" or GF_SavedVariables.searchbuttonstext ~= "") and GF_SearchMessageForTextString(string.lower(entry.message).." ", string.lower(GF_SavedVariables.searchtext).."/"..GF_SavedVariables.searchbuttonstext) then
@@ -1803,6 +1804,7 @@ function GF_AddRemoveSearch(bframe,entryname,add)
 				end
 			end
 		end
+		if GF_SavedVariables.searchbuttonstext == "" then GF_SearchListDropdown:UnlockHighlight() else GF_SearchListDropdown:LockHighlight() end
 		GF_ApplyFiltersToGroupList();
 	else
 		for i=1, getn(GF_BUTTONS_LIST[bframe]) do
@@ -1918,7 +1920,8 @@ function GF_CheckErrorFilter(arg1)
 	end
 end
 function GF_CheckForGroups(arg1,arg2,event)
-	GF_GetTypes(gsub(gsub(gsub(gsub(string.lower(arg1),".gg/%w+", ""), "|cff%w+|(%w+)[%d:]+|h", " %1 "), "|h|r", " "),"['']", ""))
+	if GF_BlackList[GF_RealmName][arg2] and not GF_PlayersCurrentlyInGroup[arg2] and not GF_Friends[arg2] and not GF_Guildies[arg2] then return 8 end
+	GF_GetTypes(gsub(gsub(gsub(gsub(gsub(string.lower(arg1),".gg/%w+", ""), "|cff%w+|(%w+)[%d:]+|h", " %1 "), "|h|r", " "),"['']", ""),"any?1","anyone"))
 	if GF_SavedVariables.guildmessagesarespam and event == "CHAT_MSG_CHANNEL" and GF_MessageData.foundGuild >= 3 then return 7
 	elseif GF_MessageData.foundTrades >= 3 then return GF_CheckForSpam(arg1,arg2) or 4
 	elseif GF_MessageData.foundPolitics then return GF_CheckForSpam(arg1,arg2) or 5
@@ -1995,12 +1998,9 @@ function GF_GetTypes(arg1)
 	end
 	if string.find(arg1, " %d+g") then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 2 end
 	if string.find(arg1, "<[a-zA-Z \&]+>") then GF_MessageData.foundGuild = GF_MessageData.foundGuild + 2; end
-	if string.find(arg1, "k10") or string.find(arg1, "k10") then GF_MessageData.foundRaid = 64 end
-	if GF_MessageData.foundLFM < 2 and (string.find(arg1, "anyone\?") or string.find(arg1, "any1\?")) and string.find(arg1, "hquest") then GF_MessageData.foundLFM = 2 end
-	if GF_MessageData.foundTradesExclusion then GF_MessageData.foundTrades = 0 end
-	for i=1, getn(GF_STRING_FIND_LIST.LFM) do
-		if string.find(arg1, GF_STRING_FIND_LIST.LFM[i]) then GF_MessageData.foundLFM = 3 GF_MessageData.foundTrades = 0 break end
-	end
+	if string.find(arg1, "k10") or string.find(arg1, "k40") then GF_MessageData.foundRaid = 64 end
+	if GF_MessageData.foundLFM < 2 and string.find(arg1, "anyone%?") and string.find(arg1, "hquest") then GF_MessageData.foundLFM = 2 end
+	if GF_MessageData.foundTradesExclusion or GF_MessageData.foundLFM > 3 then GF_MessageData.foundTrades = 0 end
 	for i=1, getn(GF_STRING_FIND_LIST.POLITICS) do
 		if string.find(arg1, GF_STRING_FIND_LIST.POLITICS[i]) then GF_MessageData.foundPolitics = true break end
 	end
@@ -2012,7 +2012,6 @@ function GF_GetTypes(arg1)
 end
 function GF_CheckForSpam(arg1,arg2,foundInGroup)
 	if not GF_PlayersCurrentlyInGroup[arg2] and not GF_Friends[arg2] and not GF_Guildies[arg2] then
-		if GF_BlackList[GF_RealmName][arg2] then return 8 end
 		if (GF_WhoTable[GF_RealmName][arg2] and tonumber(GF_WhoTable[GF_RealmName][arg2][1]) < GF_SavedVariables.blockmessagebelowlevel) and GF_WhoTable[GF_RealmName][arg2][4] + 86400 > time() then return 9; end  -- Block lowlevel
 		if GF_SavedVariables.spamfilter then
 			if GF_PlayerMessages[arg2] and GF_PlayerMessages[arg2][1] and GF_PlayerMessages[arg2][1] > GetTime() then return 7 end
