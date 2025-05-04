@@ -365,17 +365,19 @@ GF_ONE_WORD_FIX = {
 ["mages"] = "mage",
 ["warlocks"] = "warlock",["lock"] = "warlock",["locks"] = "warlock",
 ["warriors"] = "warrior",["warior"] = "warrior",["wariors"] = "warrior",
-["lfgm"] = "lfm",["flm"] = "lfm",["ldg"] = "lfm",["lfp"] = "lfm",["fg"] = "lfg",["grp"] = "group",["opeining"] = "opening",
+["lfgm"] = "lfm",["flm"] = "lfm",["ldg"] = "lfm",["lfp"] = "lfm",["fg"] = "lfg",["lofg"] = "lfg",["grp"] = "group",["opeining"] = "opening",
 ["needs"] = "need",["yours"] = "your",
 ["progresowania"] = "progression",["progresar"] = "progression",["progreso"] = "progression",["progresshez"] = "progression",["prog"] = "progression",["progress"] = "progression",
 ["komunity"] = "community",["komunite"] = "community",["komunita"] = "community",["comunidad"] = "community",["comunidade"] = "community",["companheiros"] = "community",["kinship"] = "community",
 ["anyonw"] = "anyone",["port"] = "portal",["vaults"] = "vault",["transmut"] = "transmute",["transmutes"] = "transmute",["arcanite"] = "arcane",["summ"] = "summon",["summons"] = "summon",["summoning"] = "summon",
-["sw"] = "stormwind",["darn"] = "darnassus",["uc"] = "undercity",["org"] = "orgrimmar",["tb"] = "thunderbluff",
+["sw"] = "stormwind",["darn"] = "darnassus",["uc"] = "undercity",["org"] = "orgrimmar",["og"] = "orgrimmar",["tb"] = "thunderbluff",
 ["raids"] = "raid",["raiding"] = "raid",
-["times"] = "time",["services"] = "service",["lst"] = "last",
+["times"] = "time",["services"] = "service",["lst"] = "last",["dung"] = "dungeon",
 ["working"] = "work",["tips"] = "tip",["tips"] = "tip",["crafter"] = "craft",["crafting"] = "craft",["stealthie"] = "stealth",["stealthy"] = "stealth",["bracers"] = "bracer",["buckles"] = "buckle",["gems"] = "gem",
 ["lockboxes"] = "lockbox",["lockpick"] = "lockbox",["lockpicking"] = "lockbox",["lockpicker"] = "lockbox",["locboxes"] = "lockbox",["locbox"] = "lockbox",["lockboxs"] = "lockbox",["boxes"] = "lockbox",
-["skullls"] = "skulls",["lvrs"] = "lbrs",["lvrs"] = "lbrs",["elites"] = "elite",["leet"] = "elite",["hinterland"] = "hinterlands",["walling"] = "wailing",["que"] = "queue",["rpd"] = "rfd",
+["skullls"] = "skulls",["lvrs"] = "lbrs",["lvrs"] = "lbrs",["elites"] = "elite",["leet"] = "elite",["hinterland"] = "hinterlands",["walling"] = "wailing",["que"] = "queue",["rpd"] = "rfd",["doin"] = "doing",["morben"] = "morbent",["rfch"] = "rfc",
+["letherworker"] = "leatherworker",["jeweler"] = "jewelcrafter",["jewlerer"] = "jewelcrafter",["firey"] = "fiery",
+["stratholm"] = "stratholme",["srat"] = "strat",
 } -- ["hosting"] = "lfm",["forming"] = "lfm",["starting"] = "lfm",
 GF_TWO_WORD_FIX = {
 ["lockboxes"] = "lockbox",["lockpick"] = "lockbox",["lockpicking"] = "lockbox",["lockpicker"] = "lockbox",
@@ -391,7 +393,7 @@ GF_ONE_WORD_GUILD = {
 ["house"] = .5,["gbank"] = 1,["tabard"] = 1,
 ["dedicated"] = 1,["environment"] = 1,["membership"] = 1,["community"] = 1,["progression"] = 1,
 ["dkp"] = 1,
-["utc"] = 1,["cet"] = 1,["msk"] = 1,
+["utc"] = 1,["cet"] = 1,["msk"] = 1,["est"] = 1,
 ["levelers"] = 1,["lvlers"] = 1,["leveling"] = 1,["lvling"] = 1,["welcoming"] = 1,
 ["lgbt"] = 1,["lgbtq"] = 1,
 ["fr"] = 2,["fra"] = 2,["ru"] = 2,["cz"] = 2,["sk"] = 2,["pl"] = 1,["na"] = 1,["au"] = 1,["ua"] = 1,["uhr"] = 1,["rus"] = 1,
@@ -438,7 +440,7 @@ GF_TWO_WORD_LFM = {
 }
 GF_THREE_WORD_LFM = {
 ["needatank"] = 2,["lookingfortank"] = 4,["lookingforheal"] = 4,["lookingfordamage"] = 4,["damagelookingfor"] = 4,["heallookingfor"] = 4,["tanklookingfor"] = 4,["lookingforstealth"] = 2,["needastealth"] = 2,["needsomeonestealth"] = 2,
-["lookingformore"] = 2,["anyoneelseneed"] = 2,["anyoneelsefor"] = 2,["anyoneupfor"] = 2,["anyonewannado"] = 2,["anyothersfor"] = 2,
+["lookingformore"] = 2,["anyoneelseneed"] = 2,["anyoneelsefor"] = 2,["anyoneupfor"] = 2,["anyonewannado"] = 2,["anyothersfor"] = 2,["anyupfor"] = 2,
 ["ifsomeoneneed"] = 2,["wanttohelp"] = 2,["ineedhelp"] = 2,["someonewantsto"] = 2,["someonewannafarm"] = 2,
 ["needsomeheal"] = 2,["needsomedamage"] = 2,["needsomerandomdamage"] = 2,["needsometank"] = 2,["roomformore"] = 2,
 ["tankdamagefor"] = 2,["tankhealfor"] = 2,["healtankfor"] = 2,["healdamagefor"] = 2,["damagehealfor"] = 2,["damagetankfor"] = 2,
@@ -446,7 +448,7 @@ GF_THREE_WORD_LFM = {
 ["onlyneedtank"] = 2,["onlyneedheal"] = 2,["onlyneeddamage"] = 2,
 ["needlastheal"] = 2,["needlastdamage"] = 2,["needlasttank"] = 2,
 ["groupforelite"] = 2,["moreforquest"] = 3,
-["srmsos"] = 2,
+["srmsos"] = 2,["spotleftfor"] = 2,["moreneededfor"] = 2,
 ["lookingfordruid"] = 2,["lookingforhunter"] = 2,["lookingformage"] = 2,["lookingforpaladin"] = 2,["lookingforpriest"] = 2,["lookingforrogue"] = 2,["lookingforshaman"] = 2,["lookingforwarlock"] = 2,["lookingforwarrior"] = 2,
 }
 GF_FOUR_WORD_LFM = {
@@ -493,6 +495,7 @@ GF_THREE_WORD_QUEST = {
 ["protectingtheherd"] = 12,["lochmodanogres"] = 20,["battleofhillsbrad"] = 30,["elixirofagony"] = 30,["testofstrength"] = 30,["darkironwar"] = 30,["legendofstalvan"] = 35,["encrustedtailfins"] = 35,["calltoarms"] = 40,["therealthreat"] = 40,
 ["arathielitequest"] = 40,["elitequestarathi"] = 40,["breakingthekeystone"] = 42,["sigiloftrollbane"] = 42,["biggamehunter"] = 43,["crownofwill"] = 43,["broodofonyxia"] = 45,["summontheprincess"] = 50,["setthemablaze"] = 52,
 ["timbermawholdrep"] = 55,["afinalblow"] = 58,["unfinishedgordokbusiness"] = 60,["mawofmadness"] = 60,["twilightbattleorders"] = 60,["kingsofflame"] = 60,["testofskulls"] = 62,["draconicfordummies"] = 64,
+["cenarioncombatbadge"] = 60,
 }
 GF_FOUR_WORD_QUEST = {
 ["brideoftheembalmer"] = 32,["curseofthetides"] = 40,["attackonthetower"] = 40,["downthescarletpath"] = 40,["nameofthelight"] = 40,["handandtheheart"] = 44,["tremorsoftheearth"] = 50,["messageinabottle"] = 51,
@@ -507,10 +510,11 @@ GF_ONE_WORD_DUNGEON = {
 ["scholo"] = 62,["sholo"] = 62,["scholo10"] = 62,["scholomance"] = 62,["strath"] = 62,["stratholme"] = 62,["stratdk"] = 62,["baron"] = 62,["ubrs"] = 63,["rend"] = 63,["valthalak"] = 63,["dungeon"] = 0,["anything"] = 0,
 }
 GF_TWO_WORD_DUNGEON = {
-["deadmine"] = 21,["deathmine"] = 21,["deadmines"] = 21,["ohbrother"] = 20,["collectingmemories"] = 18,["wailingcaves"] = 22,["wailingcavern"] = 22,["wailingcaverns"] = 22,["smgy"] = 31,["smgraveyard"] = 31,["scarletgraveyard"] = 31,
+["orgrimmardungeon"] = 16,["deadmine"] = 21,["deathmine"] = 21,["deadmines"] = 21,["ohbrother"] = 20,["collectingmemories"] = 18,["wailingcaves"] = 22,["wailingcavern"] = 22,["wailingcaverns"] = 22,["smgy"] = 31,["smgraveyard"] = 31,["scarletgraveyard"] = 31,
 ["monasterygraveyard"] = 31,["smarm"] = 39,["smarms"] = 39,["smarmory"] = 35,["monasteryarm"] = 39,["monasteryarms"] = 39,["monasteryarmory"] = 39,["smfull"] = 40,["smquestrun"] = 40,["blackrockdepths"] = 58,
 ["lavarun"] = 58,["brdquestrun"] = 58,["mothersmilk"] = 60,["warlordscommand"] = 60,["lowerspire"] = 60,["upperspire"] = 63,["lowerblackrock"] = 60,["upperblackrock"] = 63,["dme"] = 57,["dmn"] = 62,["dmt"] = 62,["dmw"] = 62,["mauleast"] = 57,
 ["maulnorth"] = 62,["maultribute"] = 62,["maulwest"] = 62,["eastdm"] = 57,["northdm"] = 62,["westdm"] = 62,["udstrat"] = 62,["livestrat"] = 62,["stratlive"] = 62,["stratud"] = 62,["udside"] = 62,["liveside"] = 62,["thechallenge"] = 62,
+["stratscarlet"] = 62,["stratholmescarlet"] = 62,
 }
 GF_THREE_WORD_DUNGEON = {
 ["anunholyalliance"] = 36,["smquestrun"] = 40,["corruptionofearth"] = 51,["crumpledupnote"] = 55,["brdquestrun"] = 58,["thewhitestag"] = 62,
@@ -534,7 +538,7 @@ GF_ONE_WORD_TRADE = {
 ["lf"] = 2.5,["wtb"] = 3,["wts"] = 3,["wtt"] = 3,["lfw"] = 3,["tipping"] = 3,["ltb"] = 3,["lts"] = 3,["lfc"] = 3,
 }
 GF_TWO_WORD_TRADE = {
-["enchantcloak"] = .5,["enchantchest"] = .5,["enchantbracer"] = .5,["enchantweapon"] = .5,["enchant2h"] = .5,["enchantshield"] = .5,["enchantgloves"] = .5,["enchantboots"] = .5,["auctionhouse"] = 1,
+["enchantcloak"] = .5,["enchantchest"] = .5,["enchantbracer"] = .5,["enchantweapon"] = .5,["enchanth"] = .5,["enchantshield"] = .5,["enchantgloves"] = .5,["enchantboots"] = .5,["auctionhouse"] = 1,
 ["blacksmith"] = .5,
 ["lockbox"] = 2,
 ["lfsummon"] = 3,
@@ -542,9 +546,9 @@ GF_TWO_WORD_TRADE = {
 ["lookingfor"] = 2.5,
 ["anyoneselling"] = 2.5,["forsale"] = 3,["onah"] = 3,["summonservice"] = 3,["willtip"] = 3,["willwork"] = 3,["keyservice"] = 3,["wannnatrade"] = 3,["allrecipes"] = 3,["gsummon"] = 3,
 ["lfench"] = 3,["lfenchant"] = 3,["lfbs"] = 3,["lfblacksmith"] = 3,["lfengineer"] = 3,["lfeng"] = 3,["lftailor"] = 3,["lflw"] = 3,["lfleatherworker"] = 3,
-["lfcrusader"] = 3,["opencommission"] = 3,["freelockbox"] = 2,["lflockbox"] = 2,["lfweapon"] = 3,["openinglockbox"] = 2,["sellingsummon"] = 3,["cloakall"] = 3,["enchantservice"] = 3,["lockboxservice"] = 3,
+["lfcrusader"] = 3,["opencommission"] = 3,["freelockbox"] = 2,["lflockbox"] = 2,["lfweapon"] = 3,["openinglockbox"] = 2,["sellingsummon"] = 3,["sellinghitem"] = 3,["cloakall"] = 3,["enchantservice"] = 3,["lockboxservice"] = 3,
 ["allstats"] = .5,["ridingskill"] = .5,["attachinghitem"] = 3,["spelldamage"] = .5,["spellpower"] = 1,["healpower"] = 1,["minorspeed"] = .5,["minorspeed"] = .5,["strengthbracer"] = .5,["staminabracer"] = .5,["agilitygloves"] = .5,["agilityboots"] = .5,
-["transmutearcane"] = 1,["arcanetransmute"] = 1,
+["transmutearcane"] = 1,["arcanetransmute"] = 1,["enchanterinorgrimmar"] = 2.5,
 }
 GF_THREE_WORD_TRADE = {
 ["darnassusportal"] = 2,["portaltodarnassus"] = 2,["ironforgeportal"] = 2,["ifportal"] = 2,["portaltoironforge"] = 2,["portaltoif"] = 2,["stormwindportal"] = 2,["portaltostormwind"] = 2,
@@ -552,7 +556,7 @@ GF_THREE_WORD_TRADE = {
 ["createaportal"] = 2,["needaportal"] = 2,["createaportal"] = 2,["needaportal"] = 2,["freehyjalsummon"] = 2,["openingalllockbox"] = 3,
 ["yourmatstip"] = 3,["workfortip"] = 3,["blacksmithattachhitem"] = 3,["someonetoattach"] = 3,["movespeedboots"] = 1,["movementspeedboots"] = 1,["minorspeedboots"] = 1,["cananyoneapply"] = 2,["arcanebartransmute"] = 1,
 ["wanttobuy"] = 3,["wanttosell"] = 3,["wanttotrade"] = 3,["lookingforwork"] = 3,["lookingtobuy"] = 3,["lookingtosell"] = 3,["lookingforcraft"] = 3,
-["doubleyourgold"] = 1.5,["tripleyourgold"] = 1.5,["applymithrilspurs"] = 2.5,["sellingslotbags"] = 3,["openingyourlockboxes"] = 3,
+["doubleyourgold"] = 1.5,["tripleyourgold"] = 1.5,["applymithrilspurs"] = 2.5,["sellingslotbags"] = 3,["openingyourlockbox"] = 3,
 }
 GF_TRADE_EXCLUSION = {
 ["tank"] = true,["range"] = true,["melee"] = true,["hr"] = true,["ms"] = true,["os"] = true,["lfm"] = true,["lfg"] = true,["group"] = true,["party"] = true,
@@ -758,7 +762,7 @@ local GF_TURTLE_THREE_WORD_DUNGEON = {
 ["cavernsoftime"] = 62,
 }
 local GF_TURTLE_ONE_WORD_RAID = {
-["k10"] = 64,["k40"] = 64,["kara"] = 64,["karazhan"] = 64,["khara"] = 64,["concavius"] = 64,["ostarius"] = 64,["nerub"] = 64,["reaver"] = 64,
+["k10"] = 64,["k40"] = 64,["kara"] = 64,["karazhan"] = 64,["khara"] = 64,["lkh"] = 64,["ukh"] = 64,["concavius"] = 64,["ostarius"] = 64,["nerub"] = 64,["reaver"] = 64,
 }
 local GF_TURTLE_ONE_WORD_TRADE = {
 ["jc"] = .5,["jwc"] = .5,["jewelcrafter"] = .5,["gem"] = .5,
@@ -768,7 +772,7 @@ local GF_TURTLE_TWO_WORD_TRADE = {
 }
 local GF_TURTLE_THREE_WORD_TRADE = {
 ["winterspringportal"] = 2,["portaltowinterspring"] = 2,["swampportal"] = 2,["portaltoswamp"] = 2,["theramoreportal"] = 2,["portaltotheramore"] = 2,["alahthalasportal"] = 2,["portaltoat"] = 2,["portaltoalahthalas"] = 2,["summontohyjal"] = 3,
-["attachingbeltbuckle"] = 3,["intellectbeltbuckle"] = 2,["hordeoralliance"] = 1,["lfagilitywaist"] = 3,["lfintellectwaist"] = 3,
+["attachingbeltbuckle"] = 3,["intellectbeltbuckle"] = 2,["intellecttobelt"] = 2,["hordeoralliance"] = 1,["lfagilitywaist"] = 3,["lfintellectwaist"] = 3,["jcwithhitem"] = 3,
 }
 local GF_TURTLE_STRING_FIND_LIST_GUILDBLOCKLIST = { }
 local GF_TurtleSearchList = {
