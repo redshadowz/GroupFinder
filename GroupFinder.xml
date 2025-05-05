@@ -701,18 +701,14 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						GF_ToggleMainFrame();
 					end
 				else
-					if IsShiftKeyDown() then
-						GF_ToggleHideEverything()
+					if GF_GroupsInChatCheckButton:GetChecked() then 
+						GF_SavedVariables.showgroupsinchat = nil;
+						DEFAULT_CHAT_FRAME:AddMessage(GF_CHAT_GROUP_OFF)
 					else
-						if GF_GroupsInChatCheckButton:GetChecked() then 
-							GF_SavedVariables.showgroupsinchat = nil;
-							DEFAULT_CHAT_FRAME:AddMessage(GF_CHAT_GROUP_OFF)
-						else
-							GF_SavedVariables.showgroupsinchat = true;
-							DEFAULT_CHAT_FRAME:AddMessage(GF_CHAT_GROUP_ON)
-						end
-						GF_GroupsInChatCheckButton:SetChecked(GF_SavedVariables.showgroupsinchat);
+						GF_SavedVariables.showgroupsinchat = true;
+						DEFAULT_CHAT_FRAME:AddMessage(GF_CHAT_GROUP_ON)
 					end
+					GF_GroupsInChatCheckButton:SetChecked(GF_SavedVariables.showgroupsinchat);
 				end
 			</OnClick>
 			<OnEnter>
@@ -971,7 +967,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="GF_FrameShowPoliticsCheckButton" inherits="GF_CheckButtonTemplate_Label">
+			<CheckButton name="GF_ShowGuildsCheckButton" inherits="GF_CheckButtonTemplate_Label">
 				<Anchors>
 					<Anchor point="TOP" relativeTo="GF_ShowLootCheckButton" relativePoint="BOTTOM">
 						<Offset>
@@ -981,16 +977,16 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						GF_SavedVariables.showpolitics = this:GetChecked();
+						GF_SavedVariables.showguilds = this:GetChecked();
 					</OnClick>
 					<OnLoad>
-						getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_POLITICS);
+						getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_GUILDS);
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
 			<CheckButton name="GF_FrameUseWhoOnGroupsCheckButton" inherits="GF_CheckButtonTemplate_Label">
 				<Anchors>
-					<Anchor point="TOP" relativeTo="GF_FrameShowPoliticsCheckButton" relativePoint="BOTTOM">
+					<Anchor point="TOP" relativeTo="GF_ShowGuildsCheckButton" relativePoint="BOTTOM">
 						<Offset>
 							<AbsDimension x="0" y="6"/>
 						</Offset>
@@ -1008,7 +1004,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			<Button name="GF_SearchListDropdown" topLevel="true" virtual="true">
 				<Size x="24" y="24"/>
 				<Anchors>
-					<Anchor point="RIGHT" relativeTo="GF_FrameShowPoliticsCheckButton" relativePoint="LEFT">
+					<Anchor point="RIGHT" relativeTo="GF_ShowGuildsCheckButton" relativePoint="LEFT">
 						<Offset>
 							<AbsDimension x="0" y="-8"/>
 						</Offset>
@@ -1257,35 +1253,97 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="GF_LogHideMainFrame" inherits="GF_CheckButtonTemplate_Label">
+			<Button name="GF_HideMainFrameLeft">
+				<Size>
+					<AbsDimension x="26" y="26"/>
+				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT">
 						<Offset>
-							<AbsDimension x="7" y="-80"/>
+							<AbsDimension x="6" y="-64"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						GF_SavedVariables.loghidemainframe = this:GetChecked();
-						GF_ToggleHideMainFrame()
+						if GF_SavedVariables.mainframestatus == 1 then
+							GF_SavedVariables.mainframestatus = 0
+							GF_ToggleMainFrame(3)
+						else	
+							if GF_SavedVariables.mainframestatus == 0 then
+								local _,_,_,xpos, ypos = GF_MainFrame:GetPoint()
+								GF_SavedVariables.MainFrameXPos = xpos
+								GF_SavedVariables.MainFrameYPos = ypos
+							end
+							GF_SavedVariables.mainframestatus = 1;
+							GF_ToggleMainFrame(3)
+						end
+					</OnClick>
+				</Scripts>
+				<NormalTexture file="Interface\Buttons\UI-SpellbookIcon-PrevPage-Up"/>
+				<PushedTexture file="Interface\Buttons\UI-SpellbookIcon-PrevPage-Down"/>
+				<DisabledTexture file="Interface\Buttons\UI-SpellbookIcon-PrevPage-Disabled"/>
+				<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD"/>
+			</Button>
+			<Button name="GF_HideMainFrameRight">
+				<Size>
+					<AbsDimension x="26" y="26"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOP" relativeTo="GF_HideMainFrameLeft" relativePoint="BOTTOM">
+						<Offset>
+							<AbsDimension x="0" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						if GF_SavedVariables.mainframestatus == 2 then
+							GF_SavedVariables.mainframestatus = 0
+							GF_ToggleMainFrame(3)
+						else	
+							if GF_SavedVariables.mainframestatus == 0 then
+								local _,_,_,xpos, ypos = GF_MainFrame:GetPoint()
+								GF_SavedVariables.MainFrameXPos = xpos
+								GF_SavedVariables.MainFrameYPos = ypos
+							end
+							GF_SavedVariables.mainframestatus = 2;
+							GF_ToggleMainFrame(3)
+						end
+					</OnClick>
+				</Scripts>
+				<NormalTexture file="Interface\Buttons\UI-SpellbookIcon-NextPage-Up"/>
+				<PushedTexture file="Interface\Buttons\UI-SpellbookIcon-NextPage-Down"/>
+				<DisabledTexture file="Interface\Buttons\UI-SpellbookIcon-NextPage-Disabled"/>
+				<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD"/>
+			</Button>
+			<CheckButton name="GF_HideMainFrameHeight" inherits="GF_CheckButtonTemplate_Label" hidden="true">
+				<Anchors>
+					<Anchor point="TOP" relativeTo="GF_HideMainFrameRight" relativePoint="BOTTOM">
+						<Offset>
+							<AbsDimension x="0" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+							GF_SavedVariables.mainframeheight = this:GetChecked();
+							GF_ToggleMainFrame(3)
 					</OnClick>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="GF_LogHideMainFrameHeight" inherits="GF_CheckButtonTemplate_Label">
+			<CheckButton name="GF_HideMainFrameWidth" inherits="GF_CheckButtonTemplate_Label" hidden="true">
 				<Anchors>
-					<Anchor point="TOP" relativeTo="GF_LogHideMainFrame" relativePoint="BOTTOM">
+					<Anchor point="TOP" relativeTo="GF_HideMainFrameHeight" relativePoint="BOTTOM">
 						<Offset>
-							<AbsDimension x="0" y="-20"/>
+							<AbsDimension x="0" y="0"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						GF_SavedVariables.loghidemainframeheight = this:GetChecked();
-						GF_ToggleHideMainFrameHeight()
-						GF_ResultsListOffset = 0;
-						GF_UpdateResults()
+							GF_SavedVariables.mainframewidth = this:GetChecked();
+							GF_ToggleMainFrame(3)
 					</OnClick>
 				</Scripts>
 			</CheckButton>
@@ -1304,7 +1362,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						GF_SettingsFrame:Hide();
 						GF_BlackListFrame:Hide();
 						GF_UpdateBlackListItems();
-						GF_SavedVariables.loghidemainframelogdef = nil;
+						GF_SavedVariables.mainframelogisopen = nil;
 					</OnClick>
 				</Scripts>
 			</Button>
@@ -1359,7 +1417,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						GF_SettingsFrame:Hide();
 						GF_BlackListFrame:Hide();
 						GF_UpdateBlackListItems();
-						GF_SavedVariables.loghidemainframelogdef = true;
+						GF_SavedVariables.mainframelogisopen = true;
 					</OnClick>
 				</Scripts>
 			</Button>
@@ -2276,7 +2334,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										GF_BlackListItemEditFrame:Hide()
 									</OnEnterPressed>
 									<OnEscapePressed>
-										GF_BlackListItemSaveChanges()
 										this:ClearFocus();
 										GF_BlackListItemEditFrame:Hide()
 									</OnEscapePressed>
@@ -2501,27 +2558,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_LogShowPolitics" inherits="GF_CheckButtonTemplate_Label">
-								<Anchors>
-									<Anchor point="LEFT" relativeTo="GF_LogShowChatTextLabel" relativePoint="RIGHT">
-										<Offset>
-											<AbsDimension x="0" y="0"/>
-										</Offset>
-									</Anchor>
-								</Anchors>
-								<Scripts>
-									<OnClick>
-										GF_SavedVariables.logshowpolitics = this:GetChecked();
-										if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
-									</OnClick>
-									<OnLoad>
-										getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_POLITICS);
-									</OnLoad>
-								</Scripts>
-							</CheckButton>
 							<CheckButton name="GF_LogShowTrades" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
-									<Anchor point="LEFT" relativeTo="GF_LogShowPoliticsTextLabel" relativePoint="RIGHT">
+									<Anchor point="LEFT" relativeTo="GF_LogShowChatTextLabel" relativePoint="RIGHT">
 										<Offset>
 											<AbsDimension x="0" y="0"/>
 										</Offset>
@@ -2609,58 +2648,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_LogShowEditBox" inherits="GF_CheckButtonTemplate_Label">
-								<Anchors>
-									<Anchor point="BOTTOM" relativeTo="GF_LogUpButton" relativePoint="TOP">
-										<Offset>
-											<AbsDimension x="0" y="5"/>
-										</Offset>
-									</Anchor>
-								</Anchors>
-								<Scripts>
-									<OnClick>
-										if GF_LogEditBox:IsShown() then GF_LogEditBox:Hide() else GF_LogEditBox:Show() end
-									</OnClick>
-								</Scripts>
-							</CheckButton>
-							<EditBox name="GF_LogEditBox" inherits="GF_AbstractEditBox" letters="250" hidden="true">
-								<Anchors>
-									<Anchor point="BOTTOMLEFT">
-										<Offset>
-											<AbsDimension x="0" y="-50"/>
-										</Offset>
-									</Anchor>
-									<Anchor point="BOTTOMRIGHT">
-										<Offset>
-											<AbsDimension x="0" y="-70"/>
-										</Offset>
-									</Anchor>
-								</Anchors>
-								<FontString inherits="ChatFontNormal"/>
-								<Scripts>
-									<OnEnter>
-										GF_ShowTooltip(this);
-									</OnEnter>
-									<OnLeave>
-										GameTooltip:Hide();
-									</OnLeave>
-									<OnLoad>
-										this:SetTextInsets(4,0,0,0);
-										this:SetWidth(120);
-									</OnLoad>
-									<OnTabPressed>
-										this:ClearFocus();
-									</OnTabPressed>
-									<OnEnterPressed>
-										if this:GetText() == "" then this:ClearFocus(); end
-										GF_SendMessageFromLogEditBox()
-									</OnEnterPressed>
-									<OnEscapePressed>
-										this:ClearFocus();
-										this:SetText("")
-									</OnEscapePressed>
-								</Scripts>
-							</EditBox>
 							<CheckButton name="GF_LogShowWhisperHistory" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="TOPRIGHT" relativeTo="GF_LogFrame" relativePoint="TOPRIGHT">
@@ -2669,10 +2656,23 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Offset>
 									</Anchor>
 								</Anchors>
+								<Layers>
+									<Layer level="OVERLAY">
+										<FontString inherits="GF_TitleFont" name="GF_LogShowWhisperHistoryLabel" text="GF_LOG_WHISPERLOG">
+											<Anchors>
+												<Anchor point="RIGHT">
+													<Offset>
+														<AbsDimension x="-28" y="0"/>
+													</Offset>
+												</Anchor>
+											</Anchors>
+										</FontString>
+									</Layer>
+								</Layers>
 								<Scripts>
 									<OnClick>
 										GF_SavedVariables.showwhisperlogs = this:GetChecked();
-										GF_ToggleWhisperFrame()
+										GF_UpdateWhisperFrame()
 									</OnClick>
 								</Scripts>
 							</CheckButton>
@@ -2889,23 +2889,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnClick>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_ORIGINAL_CHAT);
-									</OnLoad>
-								</Scripts>
-							</CheckButton>
-							<CheckButton name="GF_FrameTreatGuildMessagesAsSpamCheckButton" inherits="GF_CheckButtonTemplate_Label">
-								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="GF_FrameShowOriginalChatCheckButton">
-										<Offset>
-											<AbsDimension x="0" y="-30"/>
-										</Offset>
-									</Anchor>
-								</Anchors>
-								<Scripts>
-									<OnClick>
-										GF_SavedVariables.guildmessagesarespam = this:GetChecked();
-									</OnClick>
-									<OnLoad>
-										getglobal(this:GetName().."TextLabel"):SetText(GF_GUILD_MESSAGES_ARE_SPAM);
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
