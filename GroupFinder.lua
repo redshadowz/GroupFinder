@@ -61,7 +61,7 @@ GF_PlayerMessages							= {};
 GF_IncomingMessagePrune						= 0;
 local GF_PreviousMessage					= {};
 local GF_MiniMapMessages					= { 0,0,0,0,0,0 };
-local GF_LogMessageCodes = { GF_LOGGED_GROUPS, GF_LOGGED_NEW, GF_LOGGED_CHAT, GF_LOGGED_TRADES, "", GF_LOGGED_LOOT, GF_LOGGED_SPAM, GF_LOGGED_BLACKLIST, GF_LOGGED_BELOWLEVEL, GF_LOGGED_ME, GF_LOGGED_FILTERED }
+local GF_LogMessageCodes = { GF_LOGGED_GROUPS, GF_LOGGED_NEW, GF_LOGGED_FILTERED, GF_LOGGED_CHAT, GF_LOGGED_TRADES, GF_LOGGED_LOOT, GF_LOGGED_SPAM, GF_LOGGED_BLACKLIST, GF_LOGGED_BELOWLEVEL, GF_LOGGED_ME,  }
 
 GF_WhisperLogCurrentButtonID				= 0;
 GF_WhisperLogData							= {}
@@ -154,26 +154,26 @@ function GF_LoadVariables()
 		end
 
 		if not GF_SavedVariables.mainframestatus then GF_SavedVariables.mainframestatus = 0 end -- status is 0(normal), 1(left), or 2(right)... save window position and restore
-		if not GF_SavedVariables.mainframewidth then GF_SavedVariables.mainframewidth = false end -- need to change to height
-		if not GF_SavedVariables.mainframeheight then GF_SavedVariables.mainframeheight = false end -- need to change to width
+		if not GF_SavedVariables.mainframeheight then GF_SavedVariables.mainframeheight = false end
+		if not GF_SavedVariables.mainframewidth then GF_SavedVariables.mainframewidth = false end
 		if not GF_SavedVariables.mainframelogisopen then GF_SavedVariables.mainframelogisopen = false end -- whether it was last opened to logs or to group frame, for reloading
 		if not GF_SavedVariables.mainframeishidden then GF_SavedVariables.mainframeishidden = true end -- if not hidden on login, show
 
 		if not GF_SavedVariables.logshowwhisperwindow then GF_SavedVariables.logshowwhisperwindow = true end
 		if not GF_SavedVariables.version then GF_SavedVariables.version = GF_CurrentVersion end
 
+		if not GF_MessageList then GF_MessageList = {} end
 		if not GF_MessageList[GF_RealmName] then GF_MessageList[GF_RealmName] = {}; end
+		if not GF_BlackList then GF_BlackList = {}; end
 		if not GF_BlackList[GF_RealmName] then GF_BlackList[GF_RealmName] = {}; end
 		if not GF_LogHistory[GF_RealmName] then GF_LogHistory[GF_RealmName] = {} end
 		if not GF_WhoTable then GF_WhoTable = {} end
 		if not GF_WhoTable[GF_RealmName] then GF_WhoTable[GF_RealmName] = {} end
 		if not GF_WhoTable[GF_RealmName]["LOADED"] then GF_WhoTable[GF_RealmName]["LOADED"] = { UnitLevel("player"), GF_Classes[UnitClass("player")], "", time() - 1 } end
-		if not GF_WhisperLogData then GF_WhisperLogData = {} table.insert(GF_WhisperLogData[GF_RealmName], "Guild") end
-		if not GF_WhisperLogData[GF_RealmName] then GF_WhisperLogData[GF_RealmName] = {} end
+		if not GF_WhisperLogData then GF_WhisperLogData = {} end
+		if not GF_WhisperLogData[GF_RealmName] then GF_WhisperLogData[GF_RealmName] = {} table.insert(GF_WhisperLogData[GF_RealmName], "Guild") end
 		if not GF_WhisperLogData[GF_RealmName]["Guild"] then GF_WhisperLogData[GF_RealmName]["Guild"] = {""} end
 		
-		if not GF_MessageList then GF_MessageList = {} end
-		if not GF_MessageList[GF_RealmName] then GF_MessageList[GF_RealmName] = {} end
 		if not GF_PreviousMessage then GF_PreviousMessage = {} end
 		if not GF_PlayerMessages then GF_PlayerMessages = {} end
 	end
@@ -339,6 +339,7 @@ function GF_ToggleMainFrame(tab)
 	GF_UpdateMainFramePosition()
 	GF_UpdateMainFrame()
 	GF_UpdateWhisperFrame()
+	GF_UpdateResults()
 end
 function GF_UpdateWhisperFrame()
 	if GF_SavedVariables.mainframestatus == 0 then
@@ -436,8 +437,6 @@ function GF_UpdateMainFrame()
 				getglobal("GF_NewItem"..i):EnableMouse(false)
 			end
 		end
--- Need to show the height/width buttons and set their alpha.
--- Need to move all the buttons to the right side
 		for id, word in UISpecialFrames do
 			if word == "GF_MainFrame" then UISpecialFrames[id] = nil end
 		end
@@ -459,13 +458,8 @@ function GF_UpdateMainFrame()
 
 		GF_GroupsFrame:EnableMouse(true)
 		GF_GroupsFrame_Results:EnableMouse(true)
-		--for i=1, 20 do
-			--getglobal("GF_NewItem"..i):SetAlpha(GF_SavedVariables.MainFrameTransparency)
-			--getglobal("GF_NewItem"..i):EnableMouse(true)
-		--end
 		tinsert(UISpecialFrames,GF_MainFrame:GetName())
 	end
-	GF_UpdateResults()
 end
 function GF_UpdateMinimapIcon()
 	local relativepos;
@@ -489,15 +483,6 @@ function GF_UpdateMinimapIcon()
 	GF_MinimapMessageFrameA6:SetPoint(relativepos, "Minimap", relativepos,xpos,ypos+210*directionMultiplier);
 end
 
-function GF_AddMessage(arg1,arg2,event)
-	if arg2 == UnitName("player") then
-		arg1 = "|cff"..GF_TextColors[event].."["..date("%H:%M").."] ".."|r|cff"..(GF_ClassColors[GF_Classes[UnitClass("player")]] or "9d9d9d").."[|Hplayer:"..arg2.."|h"..arg2..", "..UnitLevel("player").."]|h|r: |cff"..GF_TextColors[event]..arg1.."|r"
-	elseif GF_WhoTable[GF_RealmName][arg2] then 
-		arg1 = "|cff"..GF_TextColors[event].."["..date("%H:%M").."] ".."|r|cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][arg2][2]] or "9d9d9d").."[|Hplayer:"..arg2.."|h"..arg2..", "..GF_WhoTable[GF_RealmName][arg2][1].."]|h|r: |cff"..GF_TextColors[event]..arg1.."|r"
-	else
-		arg1 = "|cff"..GF_TextColors[event].."["..date("%H:%M").."] ".."|r|cff9d9d9d[|Hplayer:"..arg2.."|h"..arg2.."]|h|r: |cff"..GF_TextColors[event]..arg1.."|r"
-	end
-end
 function GF_AddChannelMessage(arg1,arg2,arg8,arg9)
 	arg9 = string.gsub(arg9, " - .*", "")
 	for i=1,NUM_CHAT_WINDOWS do
@@ -521,7 +506,7 @@ function GF_ChatCheckFilters(logType,arg1,event)
 	elseif (logType == 1 or logType == 2) then 
 		if GF_SavedVariables.showgroupsinminimap then GF_ShowGroupsOnMinimap(arg1,arg2) end
 		if GF_SavedVariables.showgroupsinchat or (logType == 2 and GF_SavedVariables.showgroupsnewonly) then return true end
-	elseif (logType == 3 and GF_SavedVariables.showchattexts) or (logType == 4 and GF_SavedVariables.showtradestexts) then
+	elseif (logType == 4 and GF_SavedVariables.showchattexts) or (logType == 5 and GF_SavedVariables.showtradestexts) then
 		return true
 	end
 end
@@ -585,9 +570,9 @@ function GF_AddLogMessage(arg1,filteredChat,add,arg2,arg8,arg9,event)
 	end
 end
 function GF_LogCheckFilters(filteredChat) -- [1]Group,[2]New,[3]Chat,[4]Trades,[6]Loot,[7]Spam,[8]Blacklist,[9]BelowLvl,[10]Myself,[11]FilteredGroup
-	if (filteredChat == 10 or (GF_SavedVariables.logshowgroup and (filteredChat == 1 or filteredChat == 2)) or (GF_SavedVariables.logshowchat and filteredChat == 3)
-	or (GF_SavedVariables.logshowtrades and filteredChat == 4) or (GF_SavedVariables.logshowloot and filteredChat == 6) or (GF_SavedVariables.logshowspam and filteredChat == 7)
-	or (GF_SavedVariables.logshowblacklist and filteredChat == 8) or (GF_SavedVariables.logshowbelowlevel and filteredChat == 9) or (GF_SavedVariables.logshowfiltered and filteredChat == 11)) then return true end;
+	if (filteredChat == 10 or (GF_SavedVariables.logshowgroup and (filteredChat == 1 or filteredChat == 2)) or (GF_SavedVariables.logshowfiltered and filteredChat == 3)
+	or (GF_SavedVariables.logshowchat and filteredChat == 4) or (GF_SavedVariables.logshowtrades and filteredChat == 5) or (GF_SavedVariables.logshowloot and filteredChat == 6)
+	or (GF_SavedVariables.logshowspam and filteredChat == 7) or (GF_SavedVariables.logshowblacklist and filteredChat == 8) or (GF_SavedVariables.logshowbelowlevel and filteredChat == 9)) then return true end;
 end
 function GF_DisplayLog()
 	GF_Log:SetMaxLines(128)
@@ -1860,7 +1845,7 @@ function GF_FindGroupsAndDisplayCustomChatMessages(event,arg1,arg2,arg9) -- Chat
 		GF_PreviousMessage[arg2] = {arg1,GetTime() + .1,true}
 		return true;
 	else
-		local logType = GF_CheckForGroups(arg1,arg2,event) or 3;
+		local logType = GF_CheckForGroups(arg1,arg2,event) or 4;
 		GF_AddLogMessage(GF_CleanUpMessagesOfBadLinks(arg1),logType,true,arg2,arg8,arg9,event)
 		if GF_ChatCheckFilters(logType,arg1,event) then
 			if GF_SavedVariables.showoriginalchat or event ~= "CHAT_MSG_CHANNEL" then
@@ -1894,8 +1879,8 @@ function GF_CheckForGroups(arg1,arg2,event)
 	if GF_BlackList[GF_RealmName][arg2] and not GF_PlayersCurrentlyInGroup[arg2] and not GF_Friends[arg2] and not GF_Guildies[arg2] then return 8 end
 	GF_GetTypes(gsub(gsub(gsub(gsub(gsub(string.lower(arg1),".gg/%w+", ""), "|cff%w+|(%w+)[%d:]+|h", " %1 "), "|h|r", " "),"['']", ""),"any?1","anyone"))
 	if not GF_SavedVariables.showguilds and event == "CHAT_MSG_CHANNEL" and GF_MessageData.foundGuild >= 3 then return 7
-	elseif GF_MessageData.foundTrades >= 3 then return GF_CheckForSpam(arg1,arg2) or 4
-	elseif GF_MessageData.foundIgnore then return GF_CheckForSpam(arg1,arg2) or 3 end
+	elseif GF_MessageData.foundTrades >= 3 then return GF_CheckForSpam(arg1,arg2) or 5
+	elseif GF_MessageData.foundIgnore then return GF_CheckForSpam(arg1,arg2) or 4 end
 
 	local foundInGroup,entry = GF_GetGroupInformation(GF_CleanUpMessagesOfBadLinks(arg1),arg2);
 	GF_GetWhoData(arg2,foundInGroup)
@@ -1903,7 +1888,7 @@ function GF_CheckForGroups(arg1,arg2,event)
 		table.insert(GF_MessageList[GF_RealmName],1,entry);
 		GF_ApplyFiltersToGroupList()
 		if not GF_EntryMatchesGroupFilterCriteria(entry) then
-			foundInGroup = 11;
+			foundInGroup = 3;
 		elseif GF_SavedVariables.playsounds then
 			PlaySoundFile( "Sound\\Interface\\PickUp\\PutDownRing.wav" );
 		end
@@ -2037,7 +2022,14 @@ function GF_GetGroupInformation(arg1,arg2) -- Searches messages for Groups and s
 
 	for i = 1, getn(GF_MessageList[GF_RealmName]) do
 		if arg2 == GF_MessageList[GF_RealmName][i].op then
-			if GF_SavedVariables.showgroupsnewonly and GF_MessageList[GF_RealmName][i].t + GF_SavedVariables.showgroupsnewonlytime*60 < time() then table.remove(GF_MessageList[GF_RealmName], i); return 2, entry; end
+			if GF_SavedVariables.showgroupsnewonly then
+				if GF_MessageList[GF_RealmName][i].t + GF_SavedVariables.showgroupsnewonlytime*60 > time() then
+					entry.t = GF_MessageList[GF_RealmName][i].t
+				else
+					table.remove(GF_MessageList[GF_RealmName], i);
+					return 2, entry;
+				end
+			end
 			table.remove(GF_MessageList[GF_RealmName], i);
 			break;
 		end
