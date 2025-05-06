@@ -177,7 +177,7 @@ function GF_LoadVariables()
 		if not GF_PlayerMessages then GF_PlayerMessages = {} end
 	end
 
-	if GF_WhoTable[GF_RealmName]["LOADED"][4] + 86400 < time() then -- 24 hours
+	if GF_WhoTable[GF_RealmName]["LOADED"][4] + 86400 < time() then -- Prune the WhoTable once per day
 		GF_WhoTable[GF_RealmName]["LOADED"] = { UnitLevel("player"), GF_Classes[UnitClass("player")], "", time() }
 		GF_PruneTheWhoTable()
 	end
