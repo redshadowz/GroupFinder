@@ -995,6 +995,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				<Scripts>
 					<OnClick>
 						GF_SavedVariables.usewhoongroups = this:GetChecked();
+						GF_UpdateResults()
 					</OnClick>
 					<OnLoad>
 						getglobal(this:GetName().."TextLabel"):SetText(GF_USE_WHO_ON_GROUPS);
@@ -1245,8 +1246,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Anchors>
 				<Scripts>
 					<OnClick>
-							GF_SavedVariables.showlfg = this:GetChecked();
-							GF_ApplyFiltersToGroupList();
+						GF_SavedVariables.showlfg = this:GetChecked();
+						GF_ApplyFiltersToGroupList();
 					</OnClick>
 					<OnLoad>
 						getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_LFG);

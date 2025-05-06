@@ -4,9 +4,8 @@ GF_SavedVariables 							= {}
 GF_RealmName								= GetRealmName();
 local GF_WhoCooldownTime					= 10;
 local GF_NextAvailableWhoTime				= 0;
-local GF_UrgentWhoRequest					= nil;
-local GF_UrgentWhoRequestSaved				= nil;
-local GF_WhoQueue							= {};
+local GF_UrgentWhoRequest					= {};
+GF_WhoQueue							= {};
 GF_WhoTable									= {};
 GF_WhoTable[GF_RealmName]					= {};
 GF_ClassWhoTable							= {};
@@ -155,7 +154,7 @@ function GF_LoadVariables()
 
 		if not GF_SavedVariables.mainframestatus then GF_SavedVariables.mainframestatus = 0 end -- status is 0(normal), 1(left), or 2(right)... save window position and restore
 		if not GF_SavedVariables.mainframeheight then GF_SavedVariables.mainframeheight = false end
-		if not GF_SavedVariables.mainframewidth then GF_SavedVariables.mainframewidth = false end
+		if not GF_SavedVariables.mainframewidth then GF_SavedVariables.mainframewidth = true end
 		if not GF_SavedVariables.mainframelogisopen then GF_SavedVariables.mainframelogisopen = false end -- whether it was last opened to logs or to group frame, for reloading
 		if not GF_SavedVariables.mainframeishidden then GF_SavedVariables.mainframeishidden = true end -- if not hidden on login, show
 
@@ -228,13 +227,7 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 	end
 	local old_FriendsFrame_OnEvent = FriendsFrame_OnEvent;
 	function FriendsFrame_OnEvent(...)
-		if event == "WHO_LIST_UPDATE" then
-			for i=1, GetNumWhoResults() do
-				if WhoFrame:IsVisible() or GF_UrgentWhoRequestSaved == GetWhoInfo(i) then GF_UrgentWhoRequestSaved = nil; old_FriendsFrame_OnEvent(event); end
-			end
-		else
-			old_FriendsFrame_OnEvent(event);
-		end
+		if event ~= "WHO_LIST_UPDATE" or (event == "WHO_LIST_UPDATE" and WhoFrame:IsVisible()) then old_FriendsFrame_OnEvent(event); end
 	end
 	local old_SetItemRef = SetItemRef;
 	function SetItemRef(link,text,button)
@@ -242,7 +235,16 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 			local name = strsub(gsub(link, "([^%s]*)%s+([^%s]*)", "%2"),8);
 			if name and strlen(name) > 0 then 
 				if IsShiftKeyDown() and button == "LeftButton" and not ChatFrameEditBox:IsVisible() then
-					GF_UrgentWhoRequest = name;
+					for i=1, getn(GF_UrgentWhoRequest) do
+						if GF_UrgentWhoRequest[i] == name then table.remove(GF_UrgentWhoRequest, i) break end
+					end
+					if GF_NextAvailableWhoTime + 1 > time() then 
+						DEFAULT_CHAT_FRAME:AddMessage(GF_SENDING_WHO_FOR..name.." - "..math.ceil(GF_NextAvailableWhoTime - time() + getn(GF_UrgentWhoRequest) * 30)..GF_SECONDS, 1, 1, 0.5);
+					else
+						DEFAULT_CHAT_FRAME:AddMessage(GF_SENDING_WHO_FOR..name, 1, 1, 0.5);
+					end
+					table.insert(GF_UrgentWhoRequest,name);
+					GF_UrgentWhoRequest[name] = time();
 					return;
 				end
 				if IsControlKeyDown() and button == "LeftButton" then
@@ -458,6 +460,9 @@ function GF_UpdateMainFrame()
 
 		GF_GroupsFrame:EnableMouse(true)
 		GF_GroupsFrame_Results:EnableMouse(true)
+		for i=1, 20 do
+			getglobal("GF_NewItem"..i):EnableMouse(true)
+		end
 		tinsert(UISpecialFrames,GF_MainFrame:GetName())
 	end
 end
@@ -543,7 +548,7 @@ end
 function GF_AddLogMessage(arg1,filteredChat,add,arg2,arg8,arg9,event)
 	if add then
 		if GF_LootFilter[event] then
-			arg1 = "|cff"..GF_TextColors[event].."["..date("%H:%M").."] "..GF_LogMessageCodes[filteredChat]..": "..arg1.."|r"
+			arg1 = "|cff"..GF_TextColors[event].."["..date("%H:%M").."] "..GF_LogMessageCodes[filteredChat]..arg1.."|r"
 		elseif event ~= "CHAT_MSG_CHANNEL" and GF_TextColors[event] then
 			if arg2 == UnitName("player") then
 				arg1 = "|cff"..GF_TextColors[event].."["..date("%H:%M").."] "..GF_LogMessageCodes[filteredChat].."|r|cff"..(GF_ClassColors[GF_Classes[UnitClass("player")]] or "9d9d9d").."[|Hplayer:"..arg2.."|h"..arg2..", "..UnitLevel("player").."]|h|r: |cff"..GF_TextColors[event]..arg1.."|r"
@@ -602,12 +607,11 @@ function GF_OnUpdate() -- OnUpdate, SendWho, WhoListUpdated, Announce, Broadcast
 end
 function GF_SendWhoIfNameInQueue()
 	if GF_NextAvailableWhoTime < time() then
-		if GF_UrgentWhoRequest then
+		if GF_UrgentWhoRequest[1] then
 			SetWhoToUI(0);
-			SendWho("n-"..GF_UrgentWhoRequest);
-			GF_UrgentWhoRequestSaved = GF_UrgentWhoRequest;
-			GF_UrgentWhoRequest = nil;
-		elseif not FriendsFrame:IsVisible() then
+			SendWho("n-"..GF_UrgentWhoRequest[1]);
+			table.remove(GF_UrgentWhoRequest,1);
+		elseif not WhoFrame:IsVisible() then
 			if GF_ClassWhoRequest then
 				if GF_ClassWhoQueue[1] then
 					SetWhoToUI(1);
@@ -617,13 +621,15 @@ function GF_SendWhoIfNameInQueue()
 					GF_ClassWhoRequest = nil
 					GF_LFGGetWhoButton:SetText(GF_GET_WHO.." - "..GF_ClassWhoMatchingResults);
 				end
-			elseif GF_WhoQueue[1] then
+			elseif GF_SavedVariables.usewhoongroups and GF_WhoQueue[1] then
 				if (GF_WhoTable[GF_RealmName][GF_WhoQueue[1]] and GF_WhoTable[GF_RealmName][GF_WhoQueue[1]][4] + 86400 > time()) or GF_AddonNamesToBeSentAsARequest[GF_WhoQueue[1]] then
+					GF_WhoQueue[GF_WhoQueue[1]] = nil
 					table.remove(GF_WhoQueue, 1);
 					return;
 				end
 				SetWhoToUI(1);
 				SendWho("n-"..GF_WhoQueue[1]);
+				GF_WhoQueue[GF_WhoQueue[1]] = nil
 				table.remove(GF_WhoQueue, 1);
 			end
 		end
@@ -635,6 +641,7 @@ function GF_WhoListUpdated()
 		GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], guild, time() }
 		GF_AddonWhoDataToBeSentBuffer[name] = GF_WhoTable[GF_RealmName][name]
 		GF_AddonNamesFromWhoSinceLoggedOn[name] = true;
+		if GF_UrgentWhoRequest[name] then GF_UrgentWhoRequest[name] = nil; GF_UpdateAndRequestTimer = 0 end
 		if GF_IsFriendGuildieUsingAddon() then GF_AddonNeedToBroadcastSomething = true; end
 		GF_TimeTillNextBroadcast = 0;
 		if GF_ClassWhoRequest and not GF_ClassWhoTable[name] and not GF_PlayersCurrentlyInGroup[name] and level >= GF_GetWhoParams[1]-GF_GetWhoLevelRange and level <= GF_GetWhoParams[1]+GF_GetWhoLevelRange
@@ -661,26 +668,21 @@ function GF_WhoListUpdated()
 	SetWhoToUI(0);
 end
 function GF_AddNameToWhoQueue(name,addToTopOfList)
-	if not GF_GetPositionInWhoQueue(name,GF_WhoQueue) then
-		if addToTopOfList then
-			table.insert(GF_WhoQueue, 1, name);
-		else
-			table.insert(GF_WhoQueue, name);
-		end
-		GF_UpdateAndRequestTimer = GF_NextAvailableWhoTime - time()
-		return true
+	for i=1, getn(GF_WhoQueue) do
+		if GF_WhoQueue[i] == name then return end
 	end
-end
-function GF_GetPositionInWhoQueue(name)
-	for position, pname in GF_WhoQueue do
-		if pname == name then
-			return position;
-		end
+	if addToTopOfList then
+		table.insert(GF_WhoQueue, 1, name);
+		GF_WhoQueue[name] = time()
+	else
+		table.insert(GF_WhoQueue, name);
+		GF_WhoQueue[name] = time()
 	end
+	GF_UpdateAndRequestTimer = GF_NextAvailableWhoTime - time()
 end
 function GF_GetWhoData(arg2,groupfound)
-	if (not GF_WhoTable[GF_RealmName][arg2] or GF_WhoTable[GF_RealmName][arg2][4] + 5184000 < time() or (GF_WhoTable[GF_RealmName][arg2][1] < 60 and GF_WhoTable[GF_RealmName][arg2][4]  + 86400 < time()))
-	and(GF_SavedVariables.usewhoongroups and (groupfound or not GF_SavedVariables.showoriginalchat)) then -- If level 60, get new whodata after 60 days(for guild name changes). If below level 60, get new data every 24 hours.
+	if GF_SavedVariables.usewhoongroups and (not GF_WhoQueue[name] or GF_WhoQueue[name] + 60 < time()) and (groupfound or not GF_SavedVariables.showoriginalchat)
+	and (not GF_WhoTable[GF_RealmName][arg2] or GF_WhoTable[GF_RealmName][arg2][4] + 2592000 < time() or (GF_WhoTable[GF_RealmName][arg2][1] < 60 and GF_WhoTable[GF_RealmName][arg2][4]  + 86400 < time())) then -- If level 60, get new whodata after 60 days(for guild name changes). If below level 60, get new data every 24 hours.
 		GF_AddNameToWhoQueue(arg2,groupfound)
 	else
 		return GF_WhoTable[GF_RealmName][arg2]
@@ -717,13 +719,12 @@ function GF_UpdateGroupsFrame()
 	GF_UpdateAndRequestTimer = GF_UpdateAndRequestTimer - 1;
 	if GF_UpdateAndRequestTimer < 0 then
 		GF_UpdateAndRequestTimer = 30;
-		GF_ApplyFiltersToGroupList()
 		for i=1, getn(GF_MessageList[GF_RealmName]) do
 			if not GF_MessageList[GF_RealmName][i].who then
-				GF_MessageList[GF_RealmName][i].whoAttempts = GF_MessageList[GF_RealmName][i].whoAttempts or 0;
-				GF_MessageList[GF_RealmName][i].who = GF_WhoTable[GF_RealmName][GF_MessageList[GF_RealmName][i].op];
-				if GF_SavedVariables.usewhoongroups and not GF_MessageList[GF_RealmName][i].who and GF_MessageList[GF_RealmName][i].whoAttempts < 3 then
-					if GF_AddNameToWhoQueue(GF_MessageList[GF_RealmName][i].op, true) then GF_MessageList[GF_RealmName][i].whoAttempts = GF_MessageList[GF_RealmName][i].whoAttempts + 1; end
+				if GF_WhoTable[GF_RealmName][GF_MessageList[GF_RealmName][i].op] then
+					GF_MessageList[GF_RealmName][i].who = GF_WhoTable[GF_RealmName][GF_MessageList[GF_RealmName][i].op];
+				elseif GF_SavedVariables.usewhoongroups and not GF_WhoQueue[GF_MessageList[GF_RealmName][i].op] then
+					GF_AddNameToWhoQueue(GF_MessageList[GF_RealmName][i].op, true)
 				end
 			end
 			if GF_AddonMakeAListOfGroupsForSending and not GF_AddonOPSentNamesOnLogin[GF_MessageList[GF_RealmName][i].op] then
@@ -733,6 +734,7 @@ function GF_UpdateGroupsFrame()
 		end
 		GF_AddonMakeAListOfGroupsForSending = nil;
 		GF_AddonOPSentNamesOnLogin = {}
+		GF_ApplyFiltersToGroupList()
 	end
 end
 
@@ -1184,8 +1186,8 @@ function GF_UpdateResults()
 				if (not GF_SavedVariables.mainframeheight or GF_SavedVariables.mainframestatus == 0) or i < 14 then
 					getglobal(nFrame):Show();
 					if GF_SavedVariables.mainframestatus == 0 then
-						if (not GF_SavedVariables.usewhoongroups or (entry.whoAttempts and entry.whoAttempts > 2)) and not (GF_WhoTable[GF_RealmName][entry.op] and GF_WhoTable[GF_RealmName][entry.op][4] and
-						(GF_WhoTable[GF_RealmName][entry.op][1] < 60 and GF_WhoTable[GF_RealmName][entry.op][4] + 86400 > time())) and not GF_GetPositionInWhoQueue(entry.op, GF_WhoQueue) then
+						if not GF_SavedVariables.usewhoongroups and not GF_UrgentWhoRequest[entry.op] and (not GF_WhoTable[GF_RealmName][entry.op]
+						or (GF_WhoTable[GF_RealmName][entry.op][1] < 60 and GF_WhoTable[GF_RealmName][entry.op][4] + 86400 < time())) then
 							getglobal(nFrame.."GroupWhoButton"):Show();
 						else
 							getglobal(nFrame.."GroupWhoButton"):Hide();
@@ -1260,8 +1262,16 @@ function GF_ResultItem_Hover_Off(frame)
 	getglobal(frame:GetName().."TextureSelectedIcon"):Hide();
 end
 function GF_GetGroupWhoButton(frame,id)
-	GF_AddNameToWhoQueue(GF_FilteredResultsList[GF_ResultsListOffset+id].op,true)
-	getglobal(frame:GetName().."GroupWhoButton"):Hide();
+	if not GF_UrgentWhoRequest[GF_FilteredResultsList[GF_ResultsListOffset+id].op] then
+		if GF_NextAvailableWhoTime + 1 > time() then 
+			DEFAULT_CHAT_FRAME:AddMessage(GF_SENDING_WHO_FOR..GF_FilteredResultsList[GF_ResultsListOffset+id].op.." - "..math.ceil(GF_NextAvailableWhoTime - time() + getn(GF_UrgentWhoRequest) * 30)..GF_SECONDS, 1, 1, 0.5);
+		else
+			DEFAULT_CHAT_FRAME:AddMessage(GF_SENDING_WHO_FOR..GF_FilteredResultsList[GF_ResultsListOffset+id].op, 1, 1, 0.5);
+		end
+		table.insert(GF_UrgentWhoRequest, GF_FilteredResultsList[GF_ResultsListOffset+id].op);
+		GF_UrgentWhoRequest[GF_FilteredResultsList[GF_ResultsListOffset+id].op] = time()
+		getglobal(frame:GetName().."GroupWhoButton"):Hide();
+	end
 end
 function GF_LFGInviteButton(frame,id)
 	SendChatMessage(GF_INVITING_FOR..GF_FilteredResultsList[GF_ResultsListOffset+id].message,"WHISPER",nil,GF_FilteredResultsList[GF_ResultsListOffset+id].op)
@@ -1834,7 +1844,19 @@ function GF_FindGroupsAndDisplayCustomChatMessages(event,arg1,arg2,arg9) -- Chat
 			return nil;
 		end
 	elseif event == "CHAT_MSG_SYSTEM" then
-		if GF_SavedVariables.errorfilter and GF_CheckErrorFilter(arg1) then
+		if string.find(arg1, GF_WHO_MSG_SYSTEM) then
+			for i=1, GetNumWhoResults() do
+				local name,guild,level,_,class = GetWhoInfo(i);
+				GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], guild, time() }
+				GF_AddonWhoDataToBeSentBuffer[name] = GF_WhoTable[GF_RealmName][name]
+				GF_AddonNamesFromWhoSinceLoggedOn[name] = true;
+				if GF_UrgentWhoRequest[name] then GF_UrgentWhoRequest[name] = nil; GF_UpdateAndRequestTimer = 0 end
+				if GF_IsFriendGuildieUsingAddon() then GF_AddonNeedToBroadcastSomething = true; end
+				GF_TimeTillNextBroadcast = 0;
+			end
+			GF_PreviousMessage[arg2] = {arg1,GetTime() + .1,nil}
+			return true
+		elseif GF_SavedVariables.errorfilter and GF_CheckErrorFilter(arg1) then
 			GF_PreviousMessage[arg2] = {arg1,GetTime() + .1,nil}
 			return nil;
 		else
@@ -1863,12 +1885,22 @@ function GF_FindGroupsAndDisplayCustomChatMessages(event,arg1,arg2,arg9) -- Chat
 	end
 end
 function GF_BypassLootFilter(arg1)
-	if not string.find(arg1, "9d9d9d") then -- Non-grey item will not be filtered
-		for i=1, getn(GF_LootFilters) do
-			if string.find(arg1, "1eff00") and string.find(arg1, GF_LootFilters[i]) then return end -- Except green items that match my filters
+	if string.find(arg1, "9d9d9d") then
+		return
+	elseif string.find(arg1, "1eff00") then
+		for i=1, getn(GF_LootFilters["GREEN"]) do
+			if string.find(arg1, GF_LootFilters["GREEN"][i]) then return end
 		end
-		return true
+	elseif string.find(arg1, "0070dd") then 
+		for i=1, getn(GF_LootFilters["BLUE"]) do
+			if string.find(arg1, GF_LootFilters["BLUE"][i]) then return end
+		end
+	elseif string.find(arg1, "a335ee") then
+		for i=1, getn(GF_LootFilters["PURPLE"]) do
+			if string.find(arg1, GF_LootFilters["PURPLE"][i]) then return end
+		end
 	end
+	return true
 end
 function GF_CheckErrorFilter(arg1)
 	for i=1, getn(GF_ErrorFilters) do
@@ -1989,7 +2021,7 @@ function GF_CheckForSpam(arg1,arg2,foundInGroup)
 							end
 						else
 							GF_WhoTable[GF_RealmName][arg2] = nil;
-							if GF_SavedVariables.usewhoongroups then GF_AddNameToWhoQueue(arg2,true); end
+							if GF_SavedVariables.usewhoongroups and not GF_WhoQueue[name] then GF_AddNameToWhoQueue(arg2,true); end
 						end
 					end
 					GF_PlayerMessages[arg2][1] = GF_PlayerMessages[arg2][1] + GF_SavedVariables.spamfilterduration*60

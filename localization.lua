@@ -157,6 +157,9 @@ GF_RESET				= "Reset"
 GF_INVITE_PLEASE		= "Invite Please"
 GF_INVITING_FOR			= "Inviting you for: "
 
+GF_SENDING_WHO_FOR		= "Sending who request for: "
+GF_WHO_MSG_SYSTEM		= "%d+ players? total"
+
 GF_NO_WHISPER_DUNGEON	= "There are no dungeons in the input boxes. I need a dungeon name to know what levels to look for."
 GF_NO_WHISPER_TEXT		= "No valid text to send."
 GF_NO_PLAYERS_TO_WHISPER= "No players in whisper queue"
@@ -347,7 +350,7 @@ GF_ONE_WORD_FIX = {
 ["lfgm"] = "lfm",["flm"] = "lfm",["ldg"] = "lfm",["lfp"] = "lfm",["fg"] = "lfg",["lofg"] = "lfg",["flg"] = "lfg",["lgf"] = "lfg",["grp"] = "group",
 ["hquest"] = "quest",["quests"] = "quest",["questing"] = "quest",
 ["vaults"] = "vault",["skullls"] = "skulls",["lvrs"] = "lbrs",["lvrs"] = "lbrs",["elites"] = "elite",["leet"] = "elite",["hinterland"] = "hinterlands",["walling"] = "wailing",["rpd"] = "rfd",["doin"] = "doing",["morben"] = "morbent",["rfch"] = "rfc",
-["stratholm"] = "stratholme",["strath"] = "stratholme",["srat"] = "stratholme",["sholo"] = "scholomance",["sholomance"] = "scholomance",["brda"] = "brd",["boot"] = "boots",["ladin"] = "ladim",
+["stratholm"] = "stratholme",["strath"] = "stratholme",["srat"] = "stratholme",["sholo"] = "scholomance",["sholomance"] = "scholomance",["brda"] = "brd",["boot"] = "boots",["ladin"] = "ladim",["karul"] = "kraul",
 
 ["bs"] = "blacksmith",["blacksmither"] = "blacksmith",["hammersmith"] = "blacksmith",["swordsmith"] = "blacksmith",["axesmith"] = "blacksmith",["armorsmith"] = "blacksmith",["armorsmithing"] = "blacksmith",["weaponsmith"] = "blacksmith",
 ["ench"] = "enchant",["encht"] = "enchant",["enchants"] = "enchant",["chanter"] = "enchant",["enchanter"] = "enchant",["enchanting"] = "enchant",["henchant"] = "enchant",["encahnter"] = "enchant",
@@ -371,7 +374,7 @@ GF_ONE_WORD_FIX = {
 ["warlocks"] = "warlock",["lock"] = "warlock",["locks"] = "warlock",
 ["warriors"] = "warrior",["warior"] = "warrior",["wariors"] = "warrior",
 
-["rekrutuje"] = "recruiting",["recrutar"] = "recruiting",["recrute"] = "recruiting",["recruting"] = "recruiting",["recuiting"] = "recruiting",["recluta"] = "recruiting",["recrutando"] = "recruiting",["recrutando"] = "recruitiing",
+["rekrutuje"] = "recruiting",["recrutar"] = "recruiting",["recrute"] = "recruiting",["recruting"] = "recruiting",["recuiting"] = "recruiting",["recluta"] = "recruiting",["recrutando"] = "recruiting",
 ["guilds"] = "guild",["gildia"] = "guild",["gilde"] = "guild",["guilde"] = "guild",["gildiyu"] = "guild",["gildenmitglieder"] = "guild",["gildii"] = "guild",["gildiya"] = "guild",["gild"] = "guild",
 ["progresowania"] = "progression",["progresar"] = "progression",["progreso"] = "progression",["progresshez"] = "progression",["prog"] = "progression",["progress"] = "progression",
 ["komunity"] = "community",["komunite"] = "community",["komunita"] = "community",["comunidad"] = "community",["comunidade"] = "community",["companheiros"] = "community",["kinship"] = "community",
@@ -427,7 +430,7 @@ GF_FOUR_WORD_GUILD = {
 }
 
 GF_ONE_WORD_LFM = {
-["lf"] = 3,["lfm"] = 4,["lft"] = 2,["lftank"] = 3,["lfdamage"] = 3,["lfheal"] = 3,
+["lf"] = 3,["lfm"] = 4,["lft"] = 2,["wtj"] = 2,["lftank"] = 3,["lfdamage"] = 3,["lfheal"] = 3,
 }
 GF_TWO_WORD_LFM = {
 ["lfm"] = 4,["msos"] = 2,["lfdamage"] = 4,["lfheal"] = 4,["lftank"] = 4,
@@ -465,7 +468,8 @@ GF_THREE_WORD_LFM = {
 GF_FOUR_WORD_LFM = {
 ["tankanddamagefor"] = 2,["tankandhealfor"] = 2,["healandtankfor"] = 2,["healanddamagefor"] = 2,["damageandhealfor"] = 2,["damageandtankfor"] = 2,
 ["lookingforatank"] = 2,["lookingforaheal"] = 2,["lookingforadamage"] = 2,["needsomerandomdamage"] = 2,
-["anyonewanttorun"] = 2,
+["anyonewanttorun"] = 2,["anyonewanttojoin"] = 2,
+["helpwithaquest"] = 2,
 }
 
 GF_ONE_WORD_CLASSES = {
@@ -517,12 +521,12 @@ GF_ONE_WORD_DUNGEON = {
 ["ragefire"] = 16,["rfc"] = 16,["deadmine"] = 21,["deadmines"] = 21,["deathmine"] = 21,["deathmines"] = 21,["vancleef"] = 21,["vc"] = 21,["dm"] = 21,["wc"] = 22,["shadowfang"] = 25,["sfk"] = 25,["stockade"] = 26,["stockades"] = 26,["stocks"] = 26,
 ["blackfathom"] = 26,["bfd"] = 26,["gnomer"] = 32,["gnomeregan"] = 32,["kraul"] = 32,["rfk"] = 32,["downs"] = 40,["rfd"] = 40,["smgy"] = 31,["smgraveyard"] = 31,["lib"] = 35,["library"] = 35,["smlib"] = 35,["smarm"] = 39,["smcath"] = 41,
 ["armory"] = 39,["cathedral"] = 41,["cath"] = 41,["ulda"] = 46,["uldaman"] = 46,["zulfarrak"] = 48,["zf"] = 48,["farak"] = 48,["farrak"] = 48,["mallet"] = 48,["mara"] = 50,["maraudon"] = 50,["princess"] = 50,["st"] = 54,["sunken"] = 54,
-["atalhakkar"] = 54,["arena"] = 55,["windsor"] = 55,["jailbreak"] = 55,["angerforge"] = 56,["brd"] = 58,["emp"] = 58,["emperor"] = 58,["attunement"] = 60,["lbrs"] = 60,["dme"] = 57,["dmn"] = 62,["dmt"] = 62,["dmw"] = 62,["diremaul"] = 60,
+["atalhakkar"] = 54,["arena"] = 55,["windsor"] = 55,["jailbreak"] = 56,["angerforge"] = 56,["brd"] = 58,["emp"] = 58,["emperor"] = 58,["attunement"] = 60,["lbrs"] = 60,["dme"] = 57,["dmn"] = 62,["dmt"] = 62,["dmw"] = 62,["diremaul"] = 60,
 ["scholo"] = 62,["sholo"] = 62,["scholomance"] = 62,["stratholme"] = 62,["stratdk"] = 62,["baron"] = 62,["ubrs"] = 63,["rend"] = 63,["valthalak"] = 63,["sm"] = 0,["dungeon"] = 0,["anything"] = 0,
 }
 GF_TWO_WORD_DUNGEON = {
 ["orgrimmardungeon"] = 16,["deadmine"] = 21,["deathmine"] = 21,["deadmines"] = 21,["ohbrother"] = 20,["collectingmemories"] = 18,["wailingcaves"] = 22,["wailingcavern"] = 22,["wailingcaverns"] = 22,["smgy"] = 31,["smgraveyard"] = 31,["scarletgraveyard"] = 31,
-["monasterygraveyard"] = 31,["smarm"] = 39,["smarms"] = 39,["smarmory"] = 35,["monasteryarm"] = 39,["monasteryarms"] = 39,["monasteryarmory"] = 39,["smfull"] = 40,["smquestrun"] = 40,["blackrockdepths"] = 58,
+["monasterygraveyard"] = 31,["smarm"] = 39,["smarms"] = 39,["smarmory"] = 35,["monasteryarm"] = 39,["monasteryarms"] = 39,["monasteryarmory"] = 39,["smfull"] = 40,["smquestrun"] = 40,["jailbreak"] = 56,["blackrockdepths"] = 58,
 ["lavarun"] = 58,["brdquestrun"] = 58,["mothersmilk"] = 60,["warlordscommand"] = 60,["lowerspire"] = 60,["upperspire"] = 63,["lowerblackrock"] = 60,["upperblackrock"] = 63,["dme"] = 57,["dmn"] = 62,["dmt"] = 62,["dmw"] = 62,["mauleast"] = 57,
 ["maulnorth"] = 62,["maultribute"] = 62,["maulwest"] = 62,["eastdm"] = 57,["northdm"] = 62,["westdm"] = 62,["dmwest"] = 62,["dmeast"] = 62,["dmnorth"] = 62,["dmtribute"] = 62,["thechallenge"] = 62,
 ["livestrat"] = 62,["stratlive"] = 62,["liveside"] = 62,["stratscarlet"] = 62,
@@ -554,7 +558,7 @@ GF_ONE_WORD_TRADE = {
 GF_TWO_WORD_TRADE = {
 ["lookingfor"] = 2.5,["lfweapon"] = 3,["lfcrusader"] = 3,["lfsummon"] = 3,["buyingsummon"] = 3,
 ["sellingsummon"] = 3,["sellinghitem"] = 3,["anyoneselling"] = 2.5,["forsale"] = 3,["onah"] = 3,["inah"] = 2,["auctionhouse"] = 1,
-["willtip"] = 3,["willpay"] = 2,["willwork"] = 3,
+["willtip"] = 3,["cantip"] = 3,["willpay"] = 2,["willwork"] = 3,
 ["havemats"] = 1,["yourmats"] = 3,["wannnatrade"] = 3,["attachinghitem"] = 3,
 
 ["lfalchemist"] = 3,["lfenchant"] = 3,["lfbs"] = 3,["lfblacksmith"] = 3,["lfengineer"] = 3,["lftailor"] = 3,["lflw"] = 3,["lfleatherworker"] = 3,["blacksmith"] = .5,["needenchant"] = 2,
@@ -578,7 +582,7 @@ GF_THREE_WORD_TRADE = {
 ["undercityportal"] = 2,["portaltoundercity"] = 2,["orgrimmarportal"] = 2,["portaltoorgrimmar"] = 2,["thunderbluffportal"] = 2,["portaltothunderbluff"] = 2,["portaltothunder"] = 2,
 
 ["blacksmithattachhitem"] = 3,["someonetoattach"] = 3,["cananyoneapply"] = 2,["applyspurs"] = 2.5,
-["openingalllockbox"] = 3,["openinghitemlockbox"] = 3,["openhitemlockbox"] = 3,["openingyourlockbox"] = 3,["alllockboxes"] = 3,
+["openingalllockbox"] = 3,["openinghitemlockbox"] = 3,["openhitemlockbox"] = 3,["openingyourlockbox"] = 3,["alllockboxes"] = 3,["cananyoneopen"] = 2,
 ["movespeedboots"] = 1,["movementspeedboots"] = 1,["minorspeedboots"] = 1,
 
 ["doubleyourgold"] = 1.5,["tripleyourgold"] = 1.5,
@@ -735,10 +739,21 @@ GF_ErrorFilters = {
 	[8]	= "Discord",
 }
 GF_LootFilters = {
-	[1] = " has selected ", -- filter these if green quality or lower
-	[2] = " passed on: ",
-	[3] = " won: ",
-	
+["GREEN"] = {
+	[1] = " selected greed for: ", -- filter these if green quality or lower
+	[2] = " selected need for: ",
+	[3] = " passed on: ",
+	[4] = "greed roll ",
+	[5] = "need roll ",
+},
+["BLUE"] = {
+	[1] = "greed roll ",
+	[2] = "need roll ",
+},
+["PURPLE"] = {
+	[1] = "greed roll ",
+	[2] = "need roll ",
+},
 }
 
 -- Turtle additions
