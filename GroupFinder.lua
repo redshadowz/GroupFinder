@@ -87,6 +87,7 @@ local GF_DifficultyColors = { ["RED"] = "FF0000", ["ORANGE"] = "FF8040", ["YELLO
 
 function GF_LoadVariables()
 	if not GF_SavedVariables.version or GF_SavedVariables.version < GF_CurrentVersion then
+		GF_SavedVariables.version = GF_CurrentVersion
 		if not GF_SavedVariables.addonsendtimeout then GF_SavedVariables.addonsendtimeout = 0 end
 
 		if not GF_SavedVariables.showgroupsinchat then GF_SavedVariables.showgroupsinchat = true end
@@ -159,7 +160,6 @@ function GF_LoadVariables()
 		if not GF_SavedVariables.mainframeishidden then GF_SavedVariables.mainframeishidden = true end -- if not hidden on login, show
 
 		if not GF_SavedVariables.logshowwhisperwindow then GF_SavedVariables.logshowwhisperwindow = true end
-		if not GF_SavedVariables.version then GF_SavedVariables.version = GF_CurrentVersion end
 
 		if not GF_MessageList then GF_MessageList = {} end
 		if not GF_MessageList[GF_RealmName] then GF_MessageList[GF_RealmName] = {}; end
@@ -181,6 +181,7 @@ function GF_LoadVariables()
 		GF_WhoTable[GF_RealmName]["LOADED"] = { UnitLevel("player"), GF_Classes[UnitClass("player")], "", time() }
 		GF_PruneTheWhoTable()
 	end
+	GF_LogHistory[GF_RealmName].lastLogin = time()
 end
 
 function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
@@ -1036,7 +1037,7 @@ function GF_BindKey(bindKey, bindName)
 		if not foundIKey then SetBinding(bindKey,bindName); end
 	end
 end
-function GF_PruneTheWhoTable() -- TODO Prune MessageList/GF_LogHistory
+function GF_PruneTheWhoTable()
 	for realm,_ in GF_WhoTable do
 		for name, whoData in GF_WhoTable[realm] do
 			if whoData[4] and ((whoData[1] == 60 and whoData[4] + 2592000 < time()) or (whoData[1] < 60 and whoData[4] + 172800 < time())) then -- Keep WhoData for 30 days for 60's. two days for under 60.
@@ -1050,7 +1051,22 @@ function GF_PruneTheWhoTable() -- TODO Prune MessageList/GF_LogHistory
 			whisperLogNames[GF_WhisperLogData[realm][i]] = true
 		end
 		for name,_ in GF_WhisperLogData[realm] do
-			if not whisperLogNames[name] then GF_WhisperLogData[realm][name] = nil end
+			if type(name) == "string" and name ~= "Guild" and not whisperLogNames[name] then GF_WhisperLogData[realm][name] = nil end
+		end
+	end
+	for realm,_ in GF_MessageList do
+		for i=1, getn(GF_MessageList[realm]) do
+			if GF_MessageList[realm][i] then
+				if GF_MessageList[realm][i].t + 3600 < time() then
+					table.remove(GF_MessageList[realm], i);
+					i = i - 1;
+				end
+			end
+		end
+	end
+	for realm,_ in GF_LogHistory do
+		if not GF_LogHistory[realm].lastLogin or GF_LogHistory[realm].lastLogin + 2592000 < time() then
+			GF_LogHistory[realm] = {}
 		end
 	end
 end
@@ -1129,7 +1145,7 @@ function GF_ApplyFiltersToGroupList()
 					table.insert(GF_FilteredResultsList, entry);
 				end
 			else
-				table.remove(GF_MessageList[GF_RealmName] , i);
+				table.remove(GF_MessageList[GF_RealmName], i);
 				i = i - 1;
 			end
 		end
@@ -2019,7 +2035,7 @@ function GF_GetTypes(arg1)
 			end
 		end
 	end
-	if string.find(arg1, " %d+g") or string.find(arg1, "[%d%s]+gold") then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 2 end
+	if string.find(arg1, "[%s(]%d+g") or string.find(arg1, "[%d%s]+gold") then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 2 end
 	if string.find(arg1, "<[a-zA-Z0-9%& ]+>") then GF_MessageData.foundGuild = GF_MessageData.foundGuild + 2; end
 	if string.find(arg1, "k10") or string.find(arg1, "k40") then GF_MessageData.foundRaid = 64 end
 	if GF_MessageData.foundLFM < 2 and string.find(arg1, "anyone%?") and string.find(arg1, "hquest") then GF_MessageData.foundLFM = 2 end
