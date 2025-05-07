@@ -1326,15 +1326,15 @@ function GF_WhisperReceivedAddToWhisperHistoryList(message,name,event)
 	end
 	if event == "CHAT_MSG_WHISPER_INFORM" then
 		if GF_WhoTable[GF_RealmName][name] and GF_WhoTable[GF_RealmName][name][1] then 
-			message = "|cff"..GF_TextColors[event].."["..date("%m/%d").." "..date("%H:%M").."] ".."[To] ".."|r|cff"..GF_ClassColors[GF_WhoTable[GF_RealmName][name][2]].."[|Hplayer:"..name.."|h"..name..", "..GF_WhoTable[GF_RealmName][name][1].."]:|h|r |cff"..GF_TextColors[event]..message.."|r"
+			message = "|cff"..GF_TextColors[event].."["..date("%m/%d").."] ["..date("%H:%M").."] ".."[To] ".."|r|cff"..GF_ClassColors[GF_WhoTable[GF_RealmName][name][2]].."[|Hplayer:"..name.."|h"..name..", "..GF_WhoTable[GF_RealmName][name][1].."]:|h|r |cff"..GF_TextColors[event]..message.."|r"
 		else
-			message = "|cff"..GF_TextColors[event].."["..date("%m/%d").." "..date("%H:%M").."] ".."[To] ".."|r|cff".."9d9d9d".."[|Hplayer:"..name.."|h"..name.."]:|h|r |cff"..GF_TextColors[event]..message.."|r"
+			message = "|cff"..GF_TextColors[event].."["..date("%m/%d").."] ["..date("%H:%M").."] ".."[To] ".."|r|cff".."9d9d9d".."[|Hplayer:"..name.."|h"..name.."]:|h|r |cff"..GF_TextColors[event]..message.."|r"
 		end
 	elseif event == "CHAT_MSG_WHISPER" then
 		if GF_WhoTable[GF_RealmName][name] and GF_WhoTable[GF_RealmName][name][1] then 
-			message = "|cff"..GF_TextColors[event].."["..date("%m/%d").." "..date("%H:%M").."] ".."[From] ".."|r|cff"..GF_ClassColors[GF_WhoTable[GF_RealmName][name][2]].."[|Hplayer:"..name.."|h"..name..", "..GF_WhoTable[GF_RealmName][name][1].."]:|h|r |cff"..GF_TextColors[event]..message.."|r"
+			message = "|cff"..GF_TextColors[event].."["..date("%m/%d").."] ["..date("%H:%M").."] ".."[From] ".."|r|cff"..GF_ClassColors[GF_WhoTable[GF_RealmName][name][2]].."[|Hplayer:"..name.."|h"..name..", "..GF_WhoTable[GF_RealmName][name][1].."]:|h|r |cff"..GF_TextColors[event]..message.."|r"
 		else
-			message = "|cff"..GF_TextColors[event].."["..date("%m/%d").." "..date("%H:%M").."] ".."[From] ".."|r|cff".."9d9d9d".."[|Hplayer:"..name.."|h"..name.."]:|h|r |cff"..GF_TextColors[event]..message.."|r"
+			message = "|cff"..GF_TextColors[event].."["..date("%m/%d").."] ["..date("%H:%M").."] ".."[From] ".."|r|cff".."9d9d9d".."[|Hplayer:"..name.."|h"..name.."]:|h|r |cff"..GF_TextColors[event]..message.."|r"
 		end
 	elseif event == "CHAT_MSG_GUILD" or event == "CHAT_MSG_OFFICER" then
 		local guildName = ""
@@ -1342,9 +1342,9 @@ function GF_WhisperReceivedAddToWhisperHistoryList(message,name,event)
 			guildName = guildName..string.upper(string.sub(word,1,1))
 		end
 		if GF_WhoTable[GF_RealmName][name] and GF_WhoTable[GF_RealmName][name][1] and GF_WhoTable[GF_RealmName][name][2] then 
-			message = "|cff"..GF_TextColors[event].."["..date("%m/%d").." "..date("%H:%M").."] ["..guildName.."] |r|cff"..GF_ClassColors[GF_WhoTable[GF_RealmName][name][2]].."[|Hplayer:"..name.."|h"..name..", "..GF_WhoTable[GF_RealmName][name][1].."]:|h|r |cff"..GF_TextColors[event]..message.."|r"
+			message = "|cff"..GF_TextColors[event].."["..date("%m/%d").."] ["..date("%H:%M").."] ["..guildName.."] |r|cff"..GF_ClassColors[GF_WhoTable[GF_RealmName][name][2]].."[|Hplayer:"..name.."|h"..name..", "..GF_WhoTable[GF_RealmName][name][1].."]:|h|r |cff"..GF_TextColors[event]..message.."|r"
 		else
-			message = "|cff"..GF_TextColors[event].."["..date("%m/%d").." "..date("%H:%M").."] ["..guildName.."] |r|cff".."9d9d9d".."[|Hplayer:"..name.."|h"..name.."]:|h|r |cff"..GF_TextColors[event]..message.."|r"
+			message = "|cff"..GF_TextColors[event].."["..date("%m/%d").."] ["..date("%H:%M").."] ["..guildName.."] |r|cff".."9d9d9d".."[|Hplayer:"..name.."|h"..name.."]:|h|r |cff"..GF_TextColors[event]..message.."|r"
 		end
 		table.insert(GF_WhisperLogData[GF_RealmName]["Guild"],1,message)
 		if getn(GF_WhisperLogData[GF_RealmName]["Guild"]) > 128 then table.remove(GF_WhisperLogData[GF_RealmName]["Guild"],129) end
@@ -1847,7 +1847,7 @@ function GF_FindGroupsAndDisplayCustomChatMessages(event,arg1,arg2,arg9) -- Chat
 			end
 		end
 		return true;
-	elseif (event == "CHAT_MSG_GUILD") then
+	elseif (event == "CHAT_MSG_GUILD" or event == "CHAT_MSG_OFFICER") then
 		GF_PreviousMessage[arg2] = {arg1,GetTime() + .25, true}
 		GF_WhisperReceivedAddToWhisperHistoryList(arg1,arg2,event)
 		return true;
@@ -1929,6 +1929,7 @@ function GF_CheckErrorFilter(arg1)
 	end
 end
 function GF_CheckForGroups(arg1,arg2,event)
+	if event ~= "CHAT_MSG_SAY" and event ~= "CHAT_MSG_YELL" and event ~= "CHAT_MSG_CHANNEL" then return 4 end
 	if GF_BlackList[GF_RealmName][arg2] and not GF_PlayersCurrentlyInGroup[arg2] and not GF_Friends[arg2] and not GF_Guildies[arg2] then return 8 end
 	GF_GetTypes(gsub(gsub(gsub(gsub(gsub(string.lower(arg1),".gg/%w+", ""), "|cff%w+|(%w+)[%d:]+|h", " %1 "), "|h|r", " "),"['']", ""),"any?1","anyone"))
 	if not GF_SavedVariables.showguilds and event == "CHAT_MSG_CHANNEL" and GF_MessageData.foundGuild >= 3 then return 7
@@ -1970,7 +1971,7 @@ function GF_GetTypes(arg1)
 		end
 	end
 	for i=1, getn(wordTable) do
-		if GF_ONE_WORD_QUEST[wordTable[i]] or GF_ONE_WORD_DUNGEON[wordTable[i]] or GF_ONE_WORD_RAID[wordTable[i]] then
+		if GF_ONE_WORD_QUEST[wordTable[i]] or GF_ONE_WORD_DUNGEON[wordTable[i]] or GF_ONE_WORD_RAID[wordTable[i]] or GF_ONE_WORD_PVP[wordTable[i]] then
 			if (wordTable[i+1] and (wordTable[i]..wordTable[i+1] == wordTable[i]..GF_ANYONE or wordTable[i]..wordTable[i+1] == wordTable[i]..GF_HELP or wordTable[i]..wordTable[i+1] == wordTable[i]..GF_GROUP or wordTable[i]..wordTable[i+1] == wordTable[i]..GF_QUEUE))
 			or (wordTable[i-1] and (wordTable[i-1]..wordTable[i] == GF_ANYONE..wordTable[i] or wordTable[i-1]..wordTable[i] == GF_HELP..wordTable[i] or wordTable[i-1]..wordTable[i] == GF_GROUP..wordTable[i] or wordTable[i-1]..wordTable[i] == GF_QUEUE..wordTable[i]))
 			or (wordTable[i-2] and (wordTable[i-2]..wordTable[i-1]..wordTable[i] == GF_ANYONE..GF_QUEST..wordTable[i] or wordTable[i-2]..wordTable[i-1]..wordTable[i] == GF_LOOKING..GF_FOR..wordTable[i] or wordTable[i-2]..wordTable[i-1]..wordTable[i] == GF_QUEUE..GF_FOR..wordTable[i])) then
@@ -1991,9 +1992,9 @@ function GF_GetTypes(arg1)
 			elseif GF_TWO_WORD_DUNGEON[wordString] then if GF_MessageData.foundDungeon then if GF_TWO_WORD_DUNGEON[wordString] > GF_MessageData.foundDungeon then GF_MessageData.foundDungeon = GF_TWO_WORD_DUNGEON[wordString] end else GF_MessageData.foundDungeon = GF_TWO_WORD_DUNGEON[wordString] end
 			elseif GF_TWO_WORD_RAID[wordString] then GF_MessageData.foundRaid = GF_TWO_WORD_RAID[wordString]
 			elseif GF_TWO_WORD_TRADE[wordString] then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_TWO_WORD_TRADE[wordString]
-			elseif GF_TWO_WORD_PVP[wordString] then GF_MessageData.foundPvP = true end
+			elseif GF_TWO_WORD_PVP[wordString] then GF_MessageData.foundPvP = GF_TWO_WORD_PVP[word] end
 
-			if (GF_TWO_WORD_QUEST[wordString] or GF_TWO_WORD_DUNGEON[wordString] or GF_TWO_WORD_RAID[wordString]) then
+			if (GF_TWO_WORD_QUEST[wordString] or GF_TWO_WORD_DUNGEON[wordString] or GF_TWO_WORD_RAID[wordString] or GF_TWO_WORD_PVP[wordString]) then
 				if (wordTable[i+2] and (wordString..wordTable[i+2] == wordString..GF_ANYONE or wordString..wordTable[i+2] == wordString..GF_HELP or wordString..wordTable[i+2] == wordString..GF_GROUP or wordString..wordTable[i+2] == wordString..GF_QUEUE))
 				or (wordTable[i-1] and (wordTable[i-1]..wordString == GF_ANYONE..wordString or wordTable[i-1]..wordString == GF_HELP..wordString or wordTable[i-1]..wordString == GF_GROUP..wordString or wordTable[i-1]..wordString == GF_QUEUE..wordString))
 				or (wordTable[i-2] and (wordTable[i-2]..wordTable[i-1]..wordString == GF_ANYONE..GF_QUEST..wordString or wordTable[i-2]..wordTable[i-1]..wordString == GF_LOOKING..GF_FOR..wordString or wordTable[i-2]..wordTable[i-1]..wordString == GF_QUEUE..GF_FOR..wordString)) then
@@ -2035,7 +2036,7 @@ function GF_GetTypes(arg1)
 			end
 		end
 	end
-	if string.find(arg1, "[%s(]%d+g") or string.find(arg1, "[%d%s]+gold") then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 2 end
+	if string.find(arg1, "[%s(]%d+g") or string.find(arg1, "%d%s?+gold") then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 2 end
 	if string.find(arg1, "<[a-zA-Z0-9%& ]+>") then GF_MessageData.foundGuild = GF_MessageData.foundGuild + 2; end
 	if string.find(arg1, "k10") or string.find(arg1, "k40") then GF_MessageData.foundRaid = 64 end
 	if GF_MessageData.foundLFM < 2 and string.find(arg1, "anyone%?") and string.find(arg1, "hquest") then GF_MessageData.foundLFM = 2 end
