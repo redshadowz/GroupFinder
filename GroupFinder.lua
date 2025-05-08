@@ -72,9 +72,9 @@ local GF_Classes							= { [GF_PRIEST]="PRIEST",[GF_MAGE]="MAGE",[GF_WARLOCK]="W
 												["PRIEST"]=GF_PRIEST,["MAGE"]=GF_MAGE,["WARLOCK"]=GF_WARLOCK,["DRUID"]=GF_DRUID,["HUNTER"]=GF_HUNTER,["ROGUE"]=GF_ROGUE,["WARRIOR"]=GF_WARRIOR,["PALADIN"]=GF_PALADIN,["SHAMAN"]=GF_SHAMAN }
 local GF_ClassColors						= {	["PRIEST"]="ffffff",["MAGE"]="68ccef",["WARLOCK"]="9382c9",["DRUID"]="ff7c0a",["HUNTER"]="aad372",["ROGUE"]="fff468",["WARRIOR"]="c69b6d",["PALADIN"]="f48cba",["SHAMAN"]="0070dd" }
 local GF_ClassIDs = { "PRIEST", "MAGE", "WARLOCK", "DRUID", "HUNTER", "ROGUE", "WARRIOR", "PALADIN", "SHAMAN", ["PRIEST"]=1,["MAGE"]=2,["WARLOCK"]=3,["DRUID"]=4,["HUNTER"]=5,["ROGUE"]=6,["WARRIOR"]=7,["PALADIN"]=8,["SHAMAN"]=9 }
-local GF_TextColors = { ["CHAT_MSG_SYSTEM"] = "ffff00", ["CHAT_MSG_SAY"] = "ffffff", ["CHAT_MSG_YELL"] = "ff4040", ["CHAT_MSG_CHANNEL"] = "ffc0c0", ["CHAT_MSG_PARTY"] = "aaaaff", ["CHAT_MSG_RAID"] = "ff7f00", ["CHAT_MSG_RAID_LEADER"] = "ff4809",
-["CHAT_MSG_RAID_WARNING"] = "ff4800", ["CHAT_MSG_GUILD"] = "40ff40", ["CHAT_MSG_OFFICER"] = "40c040", ["CHAT_MSG_WHISPER"] = "ff80ff", ["CHAT_MSG_WHISPER_INFORM"] = "ff80ff", ["CHAT_MSG_BATTLEGROUND"] = "ff7f00",
-["CHAT_MSG_BATTLEGROUND_LEADER"] = "ffdbb7", ["CHAT_MSG_LOOT"] = "00aa00", ["CHAT_MSG_MONEY"] = "ffff00", ["CHAT_MSG_COMBAT_FACTION_CHANGE"] = "8080ff", ["CHAT_MSG_COMBAT_XP_GAIN"] = "6f6fff", ["CHAT_MSG_COMBAT_HONOR_GAIN"] = "e0ca0a" }
+local GF_TextColors = { ["CHAT_MSG_SYSTEM"] = "ffff00", ["CHAT_MSG_SAY"] = "ffffff", ["CHAT_MSG_YELL"] = "ff4040", ["CHAT_MSG_CHANNEL"] = "ffc0c0", ["CHAT_MSG_GUILD"] = "40ff40", ["CHAT_MSG_OFFICER"] = "40c040", ["CHAT_MSG_WHISPER"] = "ff80ff",
+["CHAT_MSG_WHISPER_INFORM"] = "ff80ff", ["CHAT_MSG_LOOT"] = "00aa00", ["CHAT_MSG_MONEY"] = "ffff00", ["CHAT_MSG_COMBAT_FACTION_CHANGE"] = "8080ff", ["CHAT_MSG_COMBAT_XP_GAIN"] = "6f6fff", ["CHAT_MSG_COMBAT_HONOR_GAIN"] = "e0ca0a", ["CHAT_MSG_MONSTER_EMOTE"] = "ff8040" }
+-- ["CHAT_MSG_PARTY"] = "aaaaff", ["CHAT_MSG_RAID"] = "ff7f00", ["CHAT_MSG_RAID_LEADER"] = "ff4809", ["CHAT_MSG_RAID_WARNING"] = "ff4800",  ["CHAT_MSG_BATTLEGROUND"] = "ff7f00",["CHAT_MSG_BATTLEGROUND_LEADER"] = "ffdbb7",
 local GF_LootFilter = { ["CHAT_MSG_MONEY"] = true, ["CHAT_MSG_LOOT"] = true, ["CHAT_MSG_COMBAT_FACTION_CHANGE"] = true, ["CHAT_MSG_COMBAT_XP_GAIN"] = true, ["CHAT_MSG_COMBAT_HONOR_GAIN"] = true }
 local ThingsToHide = { "GF_GroupsInChatCheckButton", "GF_GroupsNewOnlyCheckButton", "GF_GroupsInMinimapCheckButton", "GF_ShowChatCheckButton", "GF_ShowTradesCheckButton", "GF_ShowLootCheckButton", "GF_ShowGuildsCheckButton",
 "GF_FrameUseWhoOnGroupsCheckButton", "GF_SearchListDropdown", "GF_GroupsFrameDescriptionEditBox", "GF_AutoFilterCheckButton", "GF_PlaySoundOnResultsCheckButton", "GF_GroupsFrameShowDungeonCheckButton", "GF_GroupsFrameShowRaidCheckButton",
@@ -130,7 +130,7 @@ function GF_LoadVariables()
 		if not GF_SavedVariables.joinworld then GF_SavedVariables.joinworld = true end
 		if not GF_SavedVariables.spamfilter then GF_SavedVariables.spamfilter = true end
 		if not GF_SavedVariables.spamfilterduration then GF_SavedVariables.spamfilterduration = 3 end
-		if not GF_SavedVariables.errorfilter then GF_SavedVariables.errorfilter = false end
+		if not GF_SavedVariables.systemfilter then GF_SavedVariables.systemfilter = false end
 		if not GF_SavedVariables.autoblacklist then GF_SavedVariables.autoblacklist = true end
 		if not GF_SavedVariables.autoblacklistminlevel then GF_SavedVariables.autoblacklistminlevel = 12 end
 		if not GF_SavedVariables.showoriginalchat then GF_SavedVariables.showoriginalchat = false end
@@ -980,13 +980,13 @@ function GF_LoadSettings()
 	local CheckButtonVariablesToSet = { GF_SavedVariables.showgroupsinchat, GF_SavedVariables.showgroupsinminimap, GF_SavedVariables.showgroupsnewonly, GF_SavedVariables.showchattexts, GF_SavedVariables.showtradestexts, GF_SavedVariables.showloottexts,
 	GF_SavedVariables.autofilter, GF_SavedVariables.showdungeons, GF_SavedVariables.showraids, GF_SavedVariables.showquests, GF_SavedVariables.showother, GF_SavedVariables.showlfm, GF_SavedVariables.showlfg,
 	GF_SavedVariables.logshowgroup, GF_SavedVariables.logshowfiltered, GF_SavedVariables.logshowchat, GF_SavedVariables.logshowtrades, GF_SavedVariables.logshowloot, GF_SavedVariables.logshowspam,
-	GF_SavedVariables.logshowblacklist, GF_SavedVariables.logshowbelowlevel, GF_SavedVariables.joinworld, GF_SavedVariables.showoriginalchat, GF_SavedVariables.usewhoongroups, GF_SavedVariables.errorfilter,
+	GF_SavedVariables.logshowblacklist, GF_SavedVariables.logshowbelowlevel, GF_SavedVariables.joinworld, GF_SavedVariables.showoriginalchat, GF_SavedVariables.usewhoongroups, GF_SavedVariables.systemfilter,
 	GF_SavedVariables.showguilds, GF_SavedVariables.spamfilter, GF_SavedVariables.autoblacklist, GF_SavedVariables.playsounds, GF_SavedVariables.lfgauto, GF_SavedVariables.showwhisperlogs, GF_SavedVariables.mainframeheight, GF_SavedVariables.mainframewidth }
 	
 	local CheckButtonNames = { "GF_GroupsInChatCheckButton", "GF_GroupsInMinimapCheckButton", "GF_GroupsNewOnlyCheckButton", "GF_ShowChatCheckButton", "GF_ShowTradesCheckButton", "GF_ShowLootCheckButton", "GF_AutoFilterCheckButton",
 	"GF_GroupsFrameShowDungeonCheckButton", "GF_GroupsFrameShowRaidCheckButton", "GF_GroupsFrameShowQuestCheckButton", "GF_GroupsFrameShowOtherCheckButton", "GF_GroupsFrameShowLFMCheckButton", "GF_GroupsFrameShowLFGCheckButton", "GF_LogShowGroups",
 	"GF_LogShowFiltered", "GF_LogShowChat", "GF_LogShowTrades", "GF_LogShowLoot", "GF_LogShowSpam", "GF_LogShowBlacklist", "GF_LogShowBelowLevel", "GF_FrameJoinWorldCheckButton",	"GF_FrameShowOriginalChatCheckButton","GF_FrameUseWhoOnGroupsCheckButton",
-	"GF_FrameErrorFilterCheckButton", "GF_ShowGuildsCheckButton", "GF_FrameSpamFilterCheckButton", "GF_FrameAutoBlacklistCheckButton", "GF_PlaySoundOnResultsCheckButton", "GF_GroupAutoCheckButton", "GF_LogShowWhisperHistory", "GF_HideMainFrameHeight", "GF_HideMainFrameWidth", }
+	"GF_FrameSystemFilterCheckButton", "GF_ShowGuildsCheckButton", "GF_FrameSpamFilterCheckButton", "GF_FrameAutoBlacklistCheckButton", "GF_PlaySoundOnResultsCheckButton", "GF_GroupAutoCheckButton", "GF_LogShowWhisperHistory", "GF_HideMainFrameHeight", "GF_HideMainFrameWidth", }
 	for i=1, 33 do getglobal(CheckButtonNames[i]):SetChecked(CheckButtonVariablesToSet[i]) end
 	
 	local TextToSet = { GF_SavedVariables.searchtext, GF_SavedVariables.searchlfgtext, GF_SavedVariables.searchlfgwhispertext }
@@ -1829,7 +1829,7 @@ function GF_AddRemoveSearch(bframe,entryname,add)
 end
 
 function GF_FindGroupsAndDisplayCustomChatMessages(event,arg1,arg2,arg9) -- Chat Filters and Group Finders
-	if not arg9 or string.lower(arg9) == "lft" or not arg1 or not arg2 or not GF_TextColors[event] then
+	if not GF_TextColors[event] or not arg9 or string.lower(arg9) == "lft" or not arg1 or not arg2 then
 		return true;
 	elseif GF_PreviousMessage[arg2] and GF_PreviousMessage[arg2][1] == arg1 and GF_PreviousMessage[arg2][2] > GetTime() then
 		if GF_PreviousMessage[arg2][3] then return true; end
@@ -1864,6 +1864,14 @@ function GF_FindGroupsAndDisplayCustomChatMessages(event,arg1,arg2,arg9) -- Chat
 			GF_PreviousMessage[arg2] = {arg1,GetTime() + .25, nil}
 			return nil;
 		end
+	elseif event == "CHAT_MSG_MONSTER_EMOTE" then
+		if GF_SavedVariables.systemfilter and GF_CheckMonsterEmoteFilter(arg1) then
+			GF_PreviousMessage[arg2] = {arg1,GetTime() + .1,nil}
+			return nil;
+		else
+			GF_PreviousMessage[arg2] = {arg1,GetTime() + .1,true}
+			return true;
+		end
 	elseif event == "CHAT_MSG_SYSTEM" then
 		if string.find(arg1, GF_WHO_MSG_SYSTEM) then
 			for i=1, GetNumWhoResults() do
@@ -1877,7 +1885,7 @@ function GF_FindGroupsAndDisplayCustomChatMessages(event,arg1,arg2,arg9) -- Chat
 			end
 			GF_PreviousMessage[arg2] = {arg1,GetTime() + .1,nil}
 			return true
-		elseif GF_SavedVariables.errorfilter and GF_CheckErrorFilter(arg1) then
+		elseif GF_SavedVariables.systemfilter and GF_CheckSystemMessageFilter(arg1) then
 			GF_PreviousMessage[arg2] = {arg1,GetTime() + .1,nil}
 			return nil;
 		else
@@ -1923,9 +1931,14 @@ function GF_BypassLootFilter(arg1)
 	end
 	return true
 end
-function GF_CheckErrorFilter(arg1)
-	for i=1, getn(GF_ErrorFilters) do
-		if string.find(arg1, GF_ErrorFilters[i]) then return true; end
+function GF_CheckSystemMessageFilter(arg1)
+	for i=1, getn(GF_SystemMessageFilters) do
+		if string.find(arg1, GF_SystemMessageFilters[i]) then return true; end
+	end
+end
+function GF_CheckMonsterEmoteFilter(arg1)
+	for i=1, getn(GF_MonsterEmoteFilters) do
+		if string.find(arg1, GF_MonsterEmoteFilters[i]) then return true; end
 	end
 end
 function GF_CheckForGroups(arg1,arg2,event)

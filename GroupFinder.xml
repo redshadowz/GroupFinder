@@ -2842,7 +2842,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_FrameErrorFilterCheckButton" inherits="GF_CheckButtonTemplate_Label">
+							<CheckButton name="GF_FrameSystemFilterCheckButton" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="TOP">
 										<Offset>
@@ -2852,16 +2852,16 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										GF_SavedVariables.errorfilter = this:GetChecked();
+										GF_SavedVariables.systemfilter = this:GetChecked();
 									</OnClick>
 									<OnLoad>
-										getglobal(this:GetName().."TextLabel"):SetText(GF_ERROR_FILTER);
+										getglobal(this:GetName().."TextLabel"):SetText(GF_SYSTEM_FILTER);
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
 							<CheckButton name="GF_FrameAutoBlacklistCheckButton" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="GF_FrameErrorFilterCheckButton">
+									<Anchor point="TOPLEFT" relativeTo="GF_FrameSystemFilterCheckButton">
 										<Offset>
 											<AbsDimension x="0" y="-30"/>
 										</Offset>
