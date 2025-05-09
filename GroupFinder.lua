@@ -526,22 +526,22 @@ function GF_CleanUpMessagesOfBadLinks(arg1) -- Removes CLINK and pfQuest/Questie
 	return arg1
 end
 function GF_ShowGroupsOnMinimap(arg1,arg2)
-	if GF_MiniMapMessages[1] > time() and GF_MiniMapMessages[2] > time() and GF_MiniMapMessages[3] > time() and GF_MiniMapMessages[4] > time() and GF_MiniMapMessages[5] > time() and GF_MiniMapMessages[6] > time() then
-		local lowest = time()
+	if GF_MiniMapMessages[1] > GetTime() and GF_MiniMapMessages[2] > GetTime() and GF_MiniMapMessages[3] > GetTime() and GF_MiniMapMessages[4] > GetTime() and GF_MiniMapMessages[5] > GetTime() and GF_MiniMapMessages[6] > GetTime() then
+		local lowest = { GetTime()+20, 0 }
 		for i=1, 6 do
-			if GF_MiniMapMessages[i] < lowest then lowest = i end
+			if GF_MiniMapMessages[i] < lowest[1] then lowest[1] = GF_MiniMapMessages[i]; lowest[2] = i; end
 		end
-		GF_MiniMapMessages[lowest] = 0;
+		GF_MiniMapMessages[lowest[2]] = 0;
 	end
 	for i=1, 6 do
-		if GF_MiniMapMessages[i] < time() then
+		if GF_MiniMapMessages[i] < GetTime() then
 			if GF_WhoTable[GF_RealmName][arg2] and GF_WhoTable[GF_RealmName][arg2][1] then 
 				getglobal("GF_MinimapMessageFrameA"..i):AddMessage("|cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][arg2][2]] or "ffffff").."|Hplayer:"..arg2.."|h "..arg2..", "..GF_WhoTable[GF_RealmName][arg2][1].." "..GF_WhoTable[GF_RealmName][arg2][2].."|h|r", 1, 0.8, 0);
 			else
 				getglobal("GF_MinimapMessageFrameA"..i):AddMessage("|cff".."ffffff".."|Hplayer:"..arg2.."|h "..arg2.."|h|r", 1, 0.8, 0);
 			end
-			getglobal("GF_MinimapMessageFrameB"..i):AddMessage("|cff".."bbffbb"..string.sub(gsub(gsub(gsub(string.lower(arg1),".gg/%w+", ""), "|cff%w+|(%w+)[%d:]+|h", " %1 "), "|h|r", " "),1,110).. "|r", 1, 0.8, 0);
-			GF_MiniMapMessages[i] = time() + 20;
+			getglobal("GF_MinimapMessageFrameB"..i):AddMessage("|cff".."bbffbb"..string.sub(gsub(arg1, "|c.*|Hquest:[%d]+:[-]?[%d]+|h%[(.*)%]|h|r", "\[%1\]"),1,110).. "|r", 1, 0.8, 0);
+			GF_MiniMapMessages[i] = GetTime() + 20;
 			return
 		end
 	end
@@ -2084,7 +2084,7 @@ function GF_GetTypes(arg1,showScore)
 		end
 	end
 	if string.find(arg1, "k10") or string.find(arg1, "k40") then GF_MessageData.foundRaid = 64 GF_MessageData.foundFlags = "kara" end
-	if GF_MessageData.foundLFM < 2 and string.find(arg1, "anyone%?") and string.find(arg1, "hquest") then GF_MessageData.foundLFM = 2 end
+	if GF_MessageData.foundLFM < 2 and ((string.find(arg1, "anyone%?") and string.find(arg1, "hquest")) or string.find(arg1, "%d+\=%d+")) then GF_MessageData.foundLFM = 2 end
 	
 	if string.find(arg1, "[ (]%d+g") or string.find(arg1, "%d%s?+gold") then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 2 end
 	if GF_MessageData.foundTradesExclusion or GF_MessageData.foundLFM > 3 then GF_MessageData.foundTrades = 0 end
