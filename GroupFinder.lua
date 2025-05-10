@@ -317,6 +317,11 @@ function GF_ToggleMainFrame(tab)
 	GF_SearchList:Hide();
 	PlaySound("igCharacterInfoTab");
 	if GF_MainFrame:IsVisible() and tab ~= 3 and (not tab or (tab == 2 and GF_SavedVariables.mainframelogisopen) or (tab == 1 and not GF_SavedVariables.mainframelogisopen)) then
+		if GF_SavedVariables.mainframestatus == 0 then 
+			local _,_,_,xpos, ypos = GF_MainFrame:GetPoint()
+			GF_SavedVariables.MainFrameXPos = xpos
+			GF_SavedVariables.MainFrameYPos = ypos
+		end
 		GF_MainFrame:Hide(); 
 		GF_SavedVariables.mainframeishidden = true;
 		GF_SavedVariables.mainframestatus = 0;
@@ -1002,7 +1007,7 @@ function GF_LoadSettings()
 	GF_BUTTONS_LIST["LFGLFM"][5] = { UnitClass("player").." LFG", 1, 60, }
 	GF_MainFrame:SetAlpha(GF_FrameTransparencySlider:GetValue());
 	GF_MainFrame:SetScale(GF_UIScaleSlider:GetValue());
-	if GF_SavedVariables.MainFrameXPos then GF_MainFrame:SetPoint("TOPLEFT",UIParent,"TOPLEFT", GF_SavedVariables.MainFrameXPos, GF_SavedVariables.MainFrameYPos) else GF_SavedVariables.MainFrameXPos = 0 GF_SavedVariables.MainFrameXPos = 0 end
+	if GF_SavedVariables.MainFrameXPos then GF_MainFrame:SetPoint("TOPLEFT",UIParent,"TOPLEFT", GF_SavedVariables.MainFrameXPos, GF_SavedVariables.MainFrameYPos) end
 	if GF_SavedVariables.mainframestatus ~= 0 and not GF_SavedVariables.mainframeishidden then GF_ToggleMainFrame() end
 	GF_UpdateMinimapIcon()
 	GF_UpdateFriendsList()
@@ -1866,10 +1871,10 @@ function GF_FindGroupsAndDisplayCustomChatMessages(event,arg1,arg2,arg9) -- Chat
 		end
 	elseif event == "CHAT_MSG_MONSTER_EMOTE" then
 		if GF_SavedVariables.systemfilter and GF_CheckMonsterEmoteFilter(arg1) then
-			GF_PreviousMessage[arg2] = {arg1,GetTime() + .1,nil}
+			GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,nil}
 			return nil;
 		else
-			GF_PreviousMessage[arg2] = {arg1,GetTime() + .1,true}
+			GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,true}
 			return true;
 		end
 	elseif event == "CHAT_MSG_SYSTEM" then
@@ -1883,17 +1888,17 @@ function GF_FindGroupsAndDisplayCustomChatMessages(event,arg1,arg2,arg9) -- Chat
 				if GF_IsFriendGuildieUsingAddon() then GF_AddonNeedToBroadcastSomething = true; end
 				GF_TimeTillNextBroadcast = 0;
 			end
-			GF_PreviousMessage[arg2] = {arg1,GetTime() + .1,nil}
+			GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,nil}
 			return true
 		elseif GF_SavedVariables.systemfilter and GF_CheckSystemMessageFilter(arg1) then
-			GF_PreviousMessage[arg2] = {arg1,GetTime() + .1,nil}
+			GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,nil}
 			return nil;
 		else
-			GF_PreviousMessage[arg2] = {arg1,GetTime() + .1,true}
+			GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,true}
 			return true;
 		end
 	elseif arg2 == "" then
-		GF_PreviousMessage[arg2] = {arg1,GetTime() + .1,true}
+		GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,true}
 		return true;
 	else
 		local logType = GF_CheckForGroups(arg1,arg2,event) or 4;
@@ -1901,15 +1906,15 @@ function GF_FindGroupsAndDisplayCustomChatMessages(event,arg1,arg2,arg9) -- Chat
 		GF_AddLogMessage(GF_CleanUpMessagesOfBadLinks(arg1),logType,true,arg2,arg8,arg9,event)
 		if GF_Guildies[arg2] or GF_Friends[arg2] or GF_PlayersCurrentlyInGroup[arg2] or GF_ChatCheckFilters(logType,arg1,event) then
 			if GF_SavedVariables.showoriginalchat or (event ~= "CHAT_MSG_CHANNEL") then
-				GF_PreviousMessage[arg2] = {arg1,GetTime() + GF_SavedVariables.spamfilterduration*60,true}
+				GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,true}
 				return true;
 			else
-				GF_PreviousMessage[arg2] = {arg1,GetTime() + GF_SavedVariables.spamfilterduration*60,nil}
+				GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,nil}
 				GF_AddChannelMessage(arg1,arg2,arg8,arg9)
 				return nil;
 			end
 		else
-			GF_PreviousMessage[arg2] = {arg1,GetTime() + GF_SavedVariables.spamfilterduration*60,nil}
+			GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,nil}
 			return nil;
 		end
 	end
@@ -1949,7 +1954,7 @@ function GF_CheckForGroups(arg1,arg2,event)
 -- "Say" messages will always be displayed unless flagged as spam.
 -- "Yell" and "Channel" messages will only display if allowed.
 	if GF_BlackList[GF_RealmName][arg2] and not GF_PlayersCurrentlyInGroup[arg2] and not GF_Friends[arg2] and not GF_Guildies[arg2] then return 8 end
-	GF_GetTypes(gsub(gsub(gsub(gsub(gsub(string.lower(arg1),".gg/%w+", ""), "|cff%w+|(%w+)[%d:]+|h", " %1 "), "|h|r", " "),"['']", ""),"any?1","anyone"))
+	GF_GetTypes(gsub(gsub(gsub(gsub(gsub(gsub(string.lower(arg1),".gg/%w+", ""), "|cff%w+|(%w+)[%d:]+|h", " %1 "), "|h|r", " "),"['']", ""),"any? ?1","anyone"),"g2g","gtg"))
 	if not GF_SavedVariables.showguilds and GF_MessageData.foundGuild >= 3 and (event == "CHAT_MSG_CHANNEL" or event == "CHAT_MSG_YELL") then return 7
 	elseif GF_MessageData.foundTrades >= 3 then return GF_CheckForSpam(arg1,arg2) or 5
 	elseif GF_MessageData.foundIgnore and GF_MessageData.foundLFM < 4 then return GF_CheckForSpam(arg1,arg2) or 4 end
@@ -1998,13 +2003,10 @@ function GF_GetTypes(arg1,showScore)
 			wordTable[i+1] = ""
 		end
 		if GF_ONE_WORD_QUEST[wordTable[i]] or GF_ONE_WORD_DUNGEON[wordTable[i]] or GF_ONE_WORD_RAID[wordTable[i]] or GF_ONE_WORD_PVP[wordTable[i]] then
-			if (wordTable[i+1] and (wordTable[i]..wordTable[i+1] == wordTable[i]..GF_ANYONE or wordTable[i]..wordTable[i+1] == wordTable[i]..GF_HELP or wordTable[i]..wordTable[i+1] == wordTable[i]..GF_GROUP or wordTable[i]..wordTable[i+1] == wordTable[i]..GF_QUEUE
-			or wordTable[i]..wordTable[i+1] == wordTable[i]..GF_LHEAL or wordTable[i]..wordTable[i+1] == wordTable[i]..GF_LDAMAGE or wordTable[i]..wordTable[i+1] == wordTable[i]..GF_LTANK))
-			or (wordTable[i-1] and (wordTable[i-1]..wordTable[i] == GF_ANYONE..wordTable[i] or wordTable[i-1]..wordTable[i] == GF_HELP..wordTable[i] or wordTable[i-1]..wordTable[i] == GF_GROUP..wordTable[i] or wordTable[i-1]..wordTable[i] == GF_QUEUE..wordTable[i]
-			or wordTable[i-1]..wordTable[i] == GF_LHEAL..wordTable[i] or wordTable[i-1]..wordTable[i] == GF_LDAMAGE..wordTable[i] or wordTable[i-1]..wordTable[i] == GF_LTANK..wordTable[i]))
-			or (wordTable[i-2] and (wordTable[i-2]..wordTable[i-1]..wordTable[i] == GF_ANYONE..GF_QUEST..wordTable[i] or wordTable[i-2]..wordTable[i-1]..wordTable[i] == GF_LOOKING..GF_FOR..wordTable[i] or wordTable[i-2]..wordTable[i-1]..wordTable[i] == GF_QUEUE..GF_FOR..wordTable[i]
-			or wordTable[i-2]..wordTable[i-1]..wordTable[i] == GF_LHEAL..GF_FOR..wordTable[i] or wordTable[i-2]..wordTable[i-1]..wordTable[i] == GF_LDAMAGE..GF_FOR..wordTable[i] or wordTable[i-2]..wordTable[i-1]..wordTable[i] == GF_LTANK..GF_FOR..wordTable[i])) then
-			if GF_MessageData.foundLFM < 2 then GF_MessageData.foundLFM = 2 end end
+			for words,_ in GF_LFM_ONE_AFTER do if wordTable[i+1] and wordTable[i]..wordTable[i+1] == wordTable[i]..words then GF_MessageData.foundLFM = 2 end end
+			for words,_ in GF_LFM_ONE_BEFORE do if wordTable[i-1] and wordTable[i-1]..wordTable[i] == words..wordTable[i] then GF_MessageData.foundLFM = 2 end end
+			for words,_ in GF_LFM_TWO_AFTER do if wordTable[i+2] and wordTable[i]..wordTable[i+1]..wordTable[i+2] == wordTable[i]..words then GF_MessageData.foundLFM = 2 end end
+			for words,_ in GF_LFM_TWO_BEFORE do if wordTable[i-2] and wordTable[i-2]..wordTable[i-1]..wordTable[i] == words..wordTable[i] then GF_MessageData.foundLFM = 2 end end
 		end
 	end
 	for i=1, getn(wordTable) do
@@ -2026,13 +2028,10 @@ function GF_GetTypes(arg1,showScore)
 			elseif GF_TRADE_TWO_WORD_EXCLUSION[wordString] then GF_MessageData.foundTradesExclusion = true end
 
 			if (GF_TWO_WORD_QUEST[wordString] or GF_TWO_WORD_DUNGEON[wordString] or GF_TWO_WORD_RAID[wordString] or GF_TWO_WORD_PVP[wordString]) then
-				if (wordTable[i+2] and (wordString..wordTable[i+2] == wordString..GF_ANYONE or wordString..wordTable[i+2] == wordString..GF_HELP or wordString..wordTable[i+2] == wordString..GF_GROUP or wordString..wordTable[i+2] == wordString..GF_QUEUE
-				or wordString..wordTable[i+2] == wordString..GF_LHEAL or wordString..wordTable[i+2] == wordString..GF_LDAMAGE or wordString..wordTable[i+2] == wordString..GF_LTANK))
-				or (wordTable[i-1] and (wordTable[i-1]..wordString == GF_ANYONE..wordString or wordTable[i-1]..wordString == GF_HELP..wordString or wordTable[i-1]..wordString == GF_GROUP..wordString or wordTable[i-1]..wordString == GF_QUEUE..wordString
-				or wordTable[i-1]..wordString == GF_LHEAL..wordString or wordTable[i-1]..wordString == GF_LDAMAGE..wordString or wordTable[i-1]..wordString == GF_LTANK..wordString))
-				or (wordTable[i-2] and (wordTable[i-2]..wordTable[i-1]..wordString == GF_ANYONE..GF_QUEST..wordString or wordTable[i-2]..wordTable[i-1]..wordString == GF_LOOKING..GF_FOR..wordString or wordTable[i-2]..wordTable[i-1]..wordString == GF_QUEUE..GF_FOR..wordString
-				or wordTable[i-2]..wordTable[i-1]..wordString == GF_LHEAL..GF_FOR..wordString or wordTable[i-2]..wordTable[i-1]..wordString == GF_LDAMAGE..GF_FOR..wordString or wordTable[i-2]..wordTable[i-1]..wordString == GF_LTANK..GF_FOR..wordString)) then
-				if GF_MessageData.foundLFM < 2 then GF_MessageData.foundLFM = 2 end end
+				for words,_ in GF_LFM_ONE_AFTER do if wordTable[i+2] and wordString..wordTable[i+2] == wordString..words then GF_MessageData.foundLFM = 2 end end
+				for words,_ in GF_LFM_ONE_BEFORE do if wordTable[i-1] and wordTable[i-1]..wordString == words..wordString then GF_MessageData.foundLFM = 2 end end
+				for words,_ in GF_LFM_TWO_AFTER do if wordTable[i+3] and wordString..wordTable[i+2]..wordTable[i+3] == wordString..words then GF_MessageData.foundLFM = 2 end end
+				for words,_ in GF_LFM_TWO_BEFORE do if wordTable[i-2] and wordTable[i-2]..wordTable[i-1]..wordString == words..wordString then GF_MessageData.foundLFM = 2 end end
 			end
 		end
 	end
@@ -2052,13 +2051,10 @@ function GF_GetTypes(arg1,showScore)
 			end
 
 			if (GF_THREE_WORD_QUEST[wordString] or GF_THREE_WORD_DUNGEON[wordString]) then
-				if (wordTable[i+3] and (wordString..wordTable[i+3] == wordString..GF_ANYONE or wordString..wordTable[i+3] == wordString..GF_HELP or wordString..wordTable[i+3] == wordString..GF_GROUP or wordString..wordTable[i+3] == wordString..GF_QUEUE
-				or wordString..wordTable[i+3] == wordString..GF_LHEAL or wordString..wordTable[i+3] == wordString..GF_LDAMAGE or wordString..wordTable[i+3] == wordString..GF_LTANK))
-				or (wordTable[i-1] and (wordTable[i-1]..wordString == GF_ANYONE..wordString or wordTable[i-1]..wordString == GF_HELP..wordString or wordTable[i-1]..wordString == GF_GROUP..wordString or wordTable[i-1]..wordString == GF_QUEUE..wordString
-				or wordTable[i-1]..wordString == GF_LHEAL..wordString or wordTable[i-1]..wordString == GF_LDAMAGE..wordString or wordTable[i-1]..wordString == GF_LTANK..wordString))
-				or (wordTable[i-2] and (wordTable[i-2]..wordTable[i-1]..wordString == GF_ANYONE..GF_QUEST..wordString or wordTable[i-2]..wordTable[i-1]..wordString == GF_LOOKING..GF_FOR..wordString or wordTable[i-2]..wordTable[i-1]..wordString == GF_QUEUE..GF_FOR..wordString
-				or wordTable[i-2]..wordTable[i-1]..wordString == GF_LHEAL..GF_FOR..wordString or wordTable[i-2]..wordTable[i-1]..wordString == GF_LDAMAGE..GF_FOR..wordString or wordTable[i-2]..wordTable[i-1]..wordString == GF_LTANK..GF_FOR..wordString)) then
-				if GF_MessageData.foundLFM < 2 then GF_MessageData.foundLFM = 2 end end
+				for words,_ in GF_LFM_ONE_AFTER do if wordTable[i+3] and wordString..wordTable[i+3] == wordString..words then GF_MessageData.foundLFM = 2 end end
+				for words,_ in GF_LFM_ONE_BEFORE do if wordTable[i-1] and wordTable[i-1]..wordString == words..wordString then GF_MessageData.foundLFM = 2 end end
+				for words,_ in GF_LFM_TWO_AFTER do if wordTable[i+4] and wordString..wordTable[i+3]..wordTable[i+4] == wordString..words then GF_MessageData.foundLFM = 2 end end
+				for words,_ in GF_LFM_TWO_BEFORE do if wordTable[i-2] and wordTable[i-2]..wordTable[i-1]..wordString == words..wordString then GF_MessageData.foundLFM = 2 end end
 			end
 		end
 	end
@@ -2073,13 +2069,10 @@ function GF_GetTypes(arg1,showScore)
 			elseif GF_FOUR_WORD_DUNGEON[wordString] then if GF_MessageData.foundDungeon then if GF_FOUR_WORD_DUNGEON[wordString] > GF_MessageData.foundDungeon then GF_MessageData.foundDungeon = GF_FOUR_WORD_DUNGEON[wordString] end else GF_MessageData.foundDungeon = GF_FOUR_WORD_DUNGEON[wordString] end end
 
 			if (GF_FOUR_WORD_QUEST[wordString] or GF_FOUR_WORD_DUNGEON[wordString]) then
-				if (wordTable[i+4] and (wordString..wordTable[i+4] == wordString..GF_ANYONE or wordString..wordTable[i+4] == wordString..GF_HELP or wordString..wordTable[i+4] == wordString..GF_GROUP or wordString..wordTable[i+4] == wordString..GF_QUEUE
-				or wordString..wordTable[i+4] == wordString..GF_LHEAL or wordString..wordTable[i+4] == wordString..GF_LDAMAGE or wordString..wordTable[i+4] == wordString..GF_LTANK))
-				or (wordTable[i-1] and (wordTable[i-1]..wordString == GF_ANYONE..wordString or wordTable[i-1]..wordString == GF_HELP..wordString or wordTable[i-1]..wordString == GF_GROUP..wordString or wordTable[i-1]..wordString == GF_QUEUE..wordString
-				or wordTable[i-1]..wordString == GF_LHEAL..wordString or wordTable[i-1]..wordString == GF_LDAMAGE..wordString or wordTable[i-1]..wordString == GF_LTANK..wordString))
-				or (wordTable[i-2] and (wordTable[i-2]..wordTable[i-1]..wordString == GF_ANYONE..GF_QUEST..wordString or wordTable[i-2]..wordTable[i-1]..wordString == GF_LOOKING..GF_FOR..wordString or wordTable[i-2]..wordTable[i-1]..wordString == GF_QUEUE..GF_FOR..wordString
-				or wordTable[i-2]..wordTable[i-1]..wordString == GF_LHEAL..GF_FOR..wordString or wordTable[i-2]..wordTable[i-1]..wordString == GF_LDAMAGE..GF_FOR..wordString or wordTable[i-2]..wordTable[i-1]..wordString == GF_LTANK..GF_FOR..wordString)) then
-				if GF_MessageData.foundLFM < 2 then GF_MessageData.foundLFM = 2 end end
+				for words,_ in GF_LFM_ONE_AFTER do if wordTable[i+4] and wordString..wordTable[i+4] == wordString..words then GF_MessageData.foundLFM = 2 end end
+				for words,_ in GF_LFM_ONE_BEFORE do if wordTable[i-1] and wordTable[i-1]..wordString == words..wordString then GF_MessageData.foundLFM = 2 end end
+				for words,_ in GF_LFM_TWO_AFTER do if wordTable[i+5] and wordString..wordTable[i+4]..wordTable[i+5] == wordString..words then GF_MessageData.foundLFM = 2 end end
+				for words,_ in GF_LFM_TWO_BEFORE do if wordTable[i-2] and wordTable[i-2]..wordTable[i-1]..wordString == words..wordString then GF_MessageData.foundLFM = 2 end end
 			end
 		end
 	end
@@ -2160,7 +2153,7 @@ function GF_GetGroupInformation(arg1,arg2) -- Searches messages for Groups and s
 	local entry = {};
 	entry.op = arg2;
 	entry.message = arg1;
-	if GF_MessageData.foundRaid then entry.type = "R" elseif GF_MessageData.foundDungeon then entry.type = "D" elseif GF_MessageData.foundQuest then entry.type = "Q" else entry.type = "N" end
+	if GF_MessageData.foundRaid then entry.type = "R" elseif GF_MessageData.foundDungeon and (not GF_MessageData.foundQuest or GF_MessageData.foundDungeon ~= 0) then entry.type = "D" elseif GF_MessageData.foundQuest then entry.type = "Q" else entry.type = "N" end
 	entry.dlevel = GF_MessageData.foundRaid or GF_MessageData.foundDungeon or GF_MessageData.foundQuest or GF_MessageData.foundPvP or GF_MessageData.foundClass or 0;
 	entry.who = GF_WhoTable[GF_RealmName][arg2];
 	entry.t = time()
