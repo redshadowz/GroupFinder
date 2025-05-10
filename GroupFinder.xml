@@ -2051,9 +2051,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Layers>
 								<Scripts>
 									<OnLoad>
-										getglobal(this:GetName().."High"):SetText("60");
+										getglobal(this:GetName().."High"):SetText("30");
 										getglobal(this:GetName().."Low"):SetText("2");
-										this:SetMinMaxValues(2,20);
+										this:SetMinMaxValues(2,14);
 										this:SetValueStep(1);
 									</OnLoad>
 									<OnValueChanged>
@@ -2890,6 +2890,23 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnClick>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_ORIGINAL_CHAT);
+									</OnLoad>
+								</Scripts>
+							</CheckButton>
+							<CheckButton name="GF_FrameAlwaysShowGuildCheckButton" inherits="GF_CheckButtonTemplate_Label">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GF_FrameShowOriginalChatCheckButton">
+										<Offset>
+											<AbsDimension x="0" y="-30"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										GF_SavedVariables.alwaysshowguild = this:GetChecked();
+									</OnClick>
+									<OnLoad>
+										getglobal(this:GetName().."TextLabel"):SetText(GF_ALWAYS_SHOW_GUILD);
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
