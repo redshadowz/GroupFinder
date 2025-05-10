@@ -1132,7 +1132,7 @@ function GF_EntryMatchesGroupFilterCriteria(entry) -- GroupsFrame functions
 	and (not GF_SavedVariables.autofilter or (entry.dlevel and entry.dlevel >= UnitLevel("player")-GF_SavedVariables.autofilterlevelvar and entry.dlevel <= UnitLevel("player")+GF_SavedVariables.autofilterlevelvar)) then
 		return true;
 	end
-	if (GF_SavedVariables.searchtext ~= "" or GF_SavedVariables.searchbuttonstext ~= "") and GF_SearchMessageForTextString(string.lower(entry.message).." ", string.lower(GF_SavedVariables.searchtext),entry,GF_SavedVariables.searchbuttonstext) then
+	if (GF_SavedVariables.searchtext ~= "" or GF_SavedVariables.searchbuttonstext ~= "") and GF_SearchMessageForTextString(string.lower(entry.message).." ",string.lower(GF_SavedVariables.searchtext).."/",entry,GF_SavedVariables.searchbuttonstext) then
 		return true;
 	end
 end
@@ -1972,7 +1972,7 @@ function GF_CheckForGroups(arg1,arg2,event)
 	end
 	return GF_CheckForSpam(arg1,arg2,foundInGroup) or foundInGroup;
 end
-function GF_GetTypes(arg1,showScore)
+function GF_GetTypes(arg1)
 	GF_MessageData = { foundIgnore = nil,foundGuild = 0,foundLFM = 0,foundLFG = nil,foundClass = nil,foundQuest = nil,foundDungeon = nil,foundRaid = nil,foundTrades = 0,foundTradesExclusion = nil,foundPvP = nil,foundFlags = "" }
 	local wordTable = {}
 	local wordString;
@@ -2089,14 +2089,6 @@ function GF_GetTypes(arg1,showScore)
 		for i=1, getn(GF_STRING_FIND_LIST.GUILDBLOCKLIST) do
 			if string.find(arg1, GF_STRING_FIND_LIST.GUILDBLOCKLIST[i]) then GF_MessageData.foundGuild = 3 break end
 		end
-	end
-
-	if showScore == true then -- TODO remove this when done testing
-		for i=1, getn(wordTable) do
-			print(wordTable[i])
-		end
-		print(GF_MessageData.foundLFM)
-		print(GF_MessageData.foundTrades)
 	end
 end
 function GF_CheckForSpam(arg1,arg2,foundInGroup)
