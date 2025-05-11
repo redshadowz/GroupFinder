@@ -291,7 +291,7 @@ GF_FrameShowOriginalChatCheckButton = {
 	tooltip2 		= "When checked, chat messages will be shown in their original format instead of with class colors/levels. In addition, \"/auto Who\" will no longer search names from chat(search groups only)." },
 GF_FrameAlwaysShowGuildCheckButton = {
 	tooltip1 		= "Always Show Guild/Friends",
-	tooltip2 		= "When checked, messages from guildies/friends/party members will always be shown. Ignoring chat filters." },
+	tooltip2 		= "When checked, \"channel\" and \"yell\" messages from guildies/friends/party members will always be shown. Ignoring chat filters." },
 
 GF_LogShowGroups = {
 	tooltip1 		= "Show Groups",
@@ -340,7 +340,7 @@ GF_LFG_SPECS = {
 	["Warrior"] = 	{ "Arms", "Fury", "Prot", },
 }
 GF_ONE_WORD_SKIP = {
-["one"] = 1,["two"] = 2,["three"] = 3,["four"] = 4,["five"] = 5,["six"] = 6,["seven"] = 7,["eight"] = 8,["nine"] = 9,["x"] = true,["v"] = true,["ii"] = true,["iii"] = true,["iv"] = true,["v"] = true,["vi"] = true,["vii"] = true,["viii"] = true,["ix"] = true,
+["one"] = 1,["two"] = 2,["three"] = 3,["four"] = 4,["five"] = 5,["six"] = 6,["seven"] = 7,["eight"] = 8,["nine"] = 9,["x"] = true,["ii"] = true,["iii"] = true,["iv"] = true,["vi"] = true,["vii"] = true,["viii"] = true,["ix"] = true,
 ["thorium"] = true,["strongiron"] = true,["mithril"] = true,["steel"] = true,["reinforced"] = true,["heavybronze"] = true,["ornatebronze"] = true,
 }
 GF_ONE_WORD_FIX = {
@@ -361,7 +361,8 @@ GF_ONE_WORD_FIX = {
 ["walling"] = "wailing",["rpd"] = "rfd",["doin"] = "doing",["morben"] = "morbent",["rfch"] = "rfc",["sk"] = "sfk",
 ["stratholm"] = "stratholme",["strath"] = "stratholme",["srat"] = "stratholme",["sholo"] = "scholomance",["sholomance"] = "scholomance",["brda"] = "brd",["boot"] = "boots",["ladin"] = "ladim",["karul"] = "kraul",["sunkent"] = "sunken",
 ["ubers"] = "ubrs",["onyx"] = "onyxia",["onyxias"] = "onyxia",["karazan"] = "karazhan",["uld"] = "uldaman",["mauls"] = "maul",["onixia"] = "onyxia",["hyial"] = "hyjal",["hatforge"] = "hateforge",["hategorhe"] = "hateforge",
-["blackfathome"] = "blackfathom",["living"] = "live",["crypts"] = "crypt",["gileas"] = "gilneas",["gilenas"] = "gilneas",["gineas"] = "gilneas",["glineas"] = "gilneas",["urbs"] = "ubrs",["caf"] = "cath",["catehdral"] = "cath",["armoury"] = "armory",
+["blackfathome"] = "blackfathom",["living"] = "live",["crypts"] = "crypt",["gileas"] = "gilneas",["gilenas"] = "gilneas",["gineas"] = "gilneas",["gilnease"] = "gilneas",["glineas"] = "gilneas",
+["urbs"] = "ubrs",["caf"] = "cath",["catehdral"] = "cath",["armoury"] = "armory",
 ["stockades"] = "stockade",["stockede"] = "stockade",["stocks"] = "stock",["librery"] = "library",["ulduman"] = "uldaman",["cresent"] = "crescent",["cavs"] = "caverns",["cavern"] = "caverns",["cave"] = "caverns",["caves"] = "caverns",
 ["stormgarde"] = "stromgarde",["stormgard"] = "stromgarde",["stormgard"] = "stromgarde",
 
@@ -945,7 +946,7 @@ local GF_TURTLE_ONE_WORD_DUNGEON = {
 ["crypt"] = 63,["karacrypt"] = 63,["karacrypts"] = 63,["es"] = 63,["sanctum"] = 63,
 }
 local GF_TURTLE_TWO_WORD_DUNGEON = {
-["dragonmawretreat"] = 30,["gilcity"] = 48,["hateforge"] = 56,["swv"] = 62,
+["dragonmawretreat"] = 30,["gilcity"] = 48,["hateforge"] = 56,["stormwindv"] = 62,
 }
 local GF_TURTLE_THREE_WORD_DUNGEON = {
 ["rothlenfamilybrooch"] = 60,["cavernsoftime"] = 62,["thewhitestag"] = 62,["theprisonsbindings"] = 62,
