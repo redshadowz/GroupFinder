@@ -161,22 +161,21 @@ function GF_LoadVariables()
 		if not GF_SavedVariables.mainframeishidden then GF_SavedVariables.mainframeishidden = true end -- if not hidden on login, show
 
 		if not GF_SavedVariables.logshowwhisperwindow then GF_SavedVariables.logshowwhisperwindow = true end
-
-		if not GF_MessageList then GF_MessageList = {} end
-		if not GF_MessageList[GF_RealmName] then GF_MessageList[GF_RealmName] = {}; end
-		if not GF_BlackList then GF_BlackList = {}; end
-		if not GF_BlackList[GF_RealmName] then GF_BlackList[GF_RealmName] = {}; end
-		if not GF_LogHistory[GF_RealmName] then GF_LogHistory[GF_RealmName] = {} end
-		if not GF_WhoTable then GF_WhoTable = {} end
-		if not GF_WhoTable[GF_RealmName] then GF_WhoTable[GF_RealmName] = {} end
-		if not GF_WhoTable[GF_RealmName]["LOADED"] then GF_WhoTable[GF_RealmName]["LOADED"] = { UnitLevel("player"), GF_Classes[UnitClass("player")], "", time() - 1 } end
-		if not GF_WhisperLogData then GF_WhisperLogData = {} end
-		if not GF_WhisperLogData[GF_RealmName] then GF_WhisperLogData[GF_RealmName] = {} table.insert(GF_WhisperLogData[GF_RealmName], "Guild") end
-		if not GF_WhisperLogData[GF_RealmName]["Guild"] then GF_WhisperLogData[GF_RealmName]["Guild"] = {""} end
-		
-		if not GF_PreviousMessage then GF_PreviousMessage = {} end
-		if not GF_PlayerMessages then GF_PlayerMessages = {} end
 	end
+	if not GF_MessageList then GF_MessageList = {} end
+	if not GF_MessageList[GF_RealmName] then GF_MessageList[GF_RealmName] = {}; end
+	if not GF_BlackList then GF_BlackList = {}; end
+	if not GF_BlackList[GF_RealmName] then GF_BlackList[GF_RealmName] = {}; end
+	if not GF_LogHistory[GF_RealmName] then GF_LogHistory[GF_RealmName] = {} end
+	if not GF_WhoTable then GF_WhoTable = {} end
+	if not GF_WhoTable[GF_RealmName] then GF_WhoTable[GF_RealmName] = {} end
+	if not GF_WhoTable[GF_RealmName]["LOADED"] then GF_WhoTable[GF_RealmName]["LOADED"] = { UnitLevel("player"), GF_Classes[UnitClass("player")], "", time() - 1 } end
+	if not GF_WhisperLogData then GF_WhisperLogData = {} end
+	if not GF_WhisperLogData[GF_RealmName] then GF_WhisperLogData[GF_RealmName] = {} table.insert(GF_WhisperLogData[GF_RealmName], "Guild") end
+	if not GF_WhisperLogData[GF_RealmName]["Guild"] then GF_WhisperLogData[GF_RealmName]["Guild"] = {""} end
+		
+	if not GF_PreviousMessage then GF_PreviousMessage = {} end
+	if not GF_PlayerMessages then GF_PlayerMessages = {} end
 
 	if GF_WhoTable[GF_RealmName]["LOADED"][4] + 86400 < time() then -- Prune the WhoTable once per day
 		GF_WhoTable[GF_RealmName]["LOADED"] = { UnitLevel("player"), GF_Classes[UnitClass("player")], "", time() }
