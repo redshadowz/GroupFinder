@@ -1205,7 +1205,7 @@ function GF_UpdateResults()
 					getglobal(nFrame):Show();
 					if GF_SavedVariables.mainframestatus == 0 then
 						if not GF_SavedVariables.usewhoongroups and not GF_UrgentWhoRequest[entry.op] and (not GF_WhoTable[GF_RealmName][entry.op]
-						or (GF_WhoTable[GF_RealmName][entry.op][1] < 60 and GF_WhoTable[GF_RealmName][entry.op][4] + 86400 < time())) then
+						or (GF_WhoTable[GF_RealmName][entry.op][1] < 60 and GF_WhoTable[GF_RealmName][entry.op][4] + 21600 < time())) then
 							getglobal(nFrame.."GroupWhoButton"):Show();
 						else
 							getglobal(nFrame.."GroupWhoButton"):Hide();
@@ -1921,22 +1921,13 @@ function GF_FindGroupsAndDisplayCustomChatMessages(event,arg1,arg2,arg9) -- Chat
 	end
 end
 function GF_BypassLootFilter(arg1)
-	if string.find(arg1, "9d9d9d") then
-		return
-	elseif string.find(arg1, "1eff00") then
-		for i=1, getn(GF_LootFilters.GREEN) do
-			if string.find(arg1, GF_LootFilters.GREEN[i]) then return end
+	if not string.find(arg1, "9d9d9d") then -- Grey 
+		for i=1, getn(GF_LootFilters) do
+			if string.find(arg1, "1eff00") and string.find(arg1, GF_LootFilters[i]) then return end -- Except green items that match the filters
+			if i < 3 and string.find(arg1, GF_LootFilters[i]) then return end -- Other items only hide greed/need rolls.
 		end
-	elseif string.find(arg1, "0070dd") then 
-		for i=1, getn(GF_LootFilters.BLUE) do
-			if string.find(arg1, GF_LootFilters.BLUE[i]) then return end
-		end
-	elseif string.find(arg1, "a335ee") then
-		for i=1, getn(GF_LootFilters.PURPLE) do
-			if string.find(arg1, GF_LootFilters.PURPLE[i]) then return end
-		end
+		return true
 	end
-	return true
 end
 function GF_CheckSystemMessageFilter(arg1)
 	for i=1, getn(GF_SystemMessageFilters) do
@@ -2066,6 +2057,7 @@ function GF_GetTypes(arg1)
 				if GF_MessageData.foundGuild < 100 then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_FOUR_WORD_GUILD[wordString]
 				elseif GF_MessageData.foundGuild > 100 and GF_FOUR_WORD_GUILD[wordString] < 100 then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_FOUR_WORD_GUILD[wordString] end
 			elseif GF_FOUR_WORD_LFM[wordString] then if GF_FOUR_WORD_LFM[wordString] > GF_MessageData.foundLFM then GF_MessageData.foundLFM = GF_FOUR_WORD_LFM[wordString] end
+			elseif GF_FOUR_WORD_LFG[wordString] then GF_MessageData.foundLFG = true
 			elseif GF_FOUR_WORD_QUEST[wordString] then if GF_MessageData.foundQuest then if GF_FOUR_WORD_QUEST[wordString] > GF_MessageData.foundQuest then GF_MessageData.foundQuest = GF_FOUR_WORD_QUEST[wordString] end else GF_MessageData.foundQuest = GF_FOUR_WORD_QUEST[wordString] end
 			elseif GF_FOUR_WORD_DUNGEON[wordString] then if GF_MessageData.foundDungeon then if GF_FOUR_WORD_DUNGEON[wordString] > GF_MessageData.foundDungeon then GF_MessageData.foundDungeon = GF_FOUR_WORD_DUNGEON[wordString] end else GF_MessageData.foundDungeon = GF_FOUR_WORD_DUNGEON[wordString] end end
 
@@ -2146,7 +2138,12 @@ function GF_GetGroupInformation(arg1,arg2) -- Searches messages for Groups and s
 	local entry = {};
 	entry.op = arg2;
 	entry.message = arg1;
-	if GF_MessageData.foundRaid then entry.type = "R" elseif GF_MessageData.foundDungeon and (not GF_MessageData.foundQuest or GF_MessageData.foundDungeon ~= 0) then entry.type = "D" elseif GF_MessageData.foundQuest then entry.type = "Q" else entry.type = "N" end
+	if GF_MessageData.foundRaid then entry.type = "R"
+	elseif GF_MessageData.foundDungeon and (not GF_MessageData.foundQuest or GF_MessageData.foundDungeon ~= 0 or GF_MessageData.foundQuest == 0) then entry.type = "D"
+	elseif GF_MessageData.foundQuest then entry.type = "Q"
+	else entry.type = "N" end
+	if GF_MessageData.foundDungeon and GF_MessageData.foundQuest and GF_MessageData.foundDungeon == 0 and GF_MessageData.foundQuest > 0 then GF_MessageData.foundDungeon = nil end
+	
 	entry.dlevel = GF_MessageData.foundRaid or GF_MessageData.foundDungeon or GF_MessageData.foundQuest or GF_MessageData.foundPvP or GF_MessageData.foundClass or 0;
 	entry.who = GF_WhoTable[GF_RealmName][arg2];
 	entry.t = time()
