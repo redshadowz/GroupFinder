@@ -5,7 +5,7 @@ GF_RealmName								= GetRealmName();
 local GF_WhoCooldownTime					= 10;
 local GF_NextAvailableWhoTime				= 0;
 local GF_UrgentWhoRequest					= {};
-GF_WhoQueue							= {};
+GF_WhoQueue									= {};
 GF_WhoTable									= {};
 GF_WhoTable[GF_RealmName]					= {};
 GF_ClassWhoTable							= {};
@@ -247,8 +247,7 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 					table.insert(GF_UrgentWhoRequest,name);
 					GF_UrgentWhoRequest[name] = time();
 					return;
-				end
-				if IsControlKeyDown() and button == "LeftButton" then
+				elseif IsControlKeyDown() and button == "LeftButton" then
 					for i=1, GetNumRaidMembers() do
 						if UnitName("raid"..i) == name then
 							TargetUnit("raid"..i);
