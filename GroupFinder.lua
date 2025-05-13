@@ -2140,10 +2140,10 @@ function GF_GetGroupInformation(arg1,arg2) -- Searches messages for Groups and s
 	entry.op = arg2;
 	entry.message = arg1;
 	if GF_MessageData.foundRaid then entry.type = "R"
-	elseif GF_MessageData.foundDungeon and (not GF_MessageData.foundQuest or GF_MessageData.foundDungeon ~= 0 or GF_MessageData.foundQuest == 0) then entry.type = "D"
+	elseif GF_MessageData.foundDungeon and (not GF_MessageData.foundQuest or GF_MessageData.foundQuest == 0 or GF_MessageData.foundDungeon >= GF_MessageData.foundQuest) then entry.type = "D"
 	elseif GF_MessageData.foundQuest then entry.type = "Q"
 	else entry.type = "N" end
-	if GF_MessageData.foundDungeon and GF_MessageData.foundQuest and GF_MessageData.foundDungeon == 0 and GF_MessageData.foundQuest > 0 then GF_MessageData.foundDungeon = nil end
+	if GF_MessageData.foundQuest and GF_MessageData.foundDungeon and GF_MessageData.foundQuest > GF_MessageData.foundDungeon then GF_MessageData.foundDungeon = nil GF_MessageData.foundFlags = "" end
 	
 	entry.dlevel = GF_MessageData.foundRaid or GF_MessageData.foundDungeon or GF_MessageData.foundQuest or GF_MessageData.foundPvP or GF_MessageData.foundClass or 0;
 	entry.t = time()

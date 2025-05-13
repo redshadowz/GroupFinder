@@ -400,7 +400,7 @@ GF_ONE_WORD_FIX = {
 ["stockades"] = "stockade",["stockede"] = "stockade",["stocks"] = "stock",["stonks"] = "stock",
 ["blackfathome"] = "blackfathom",["blackfatom"] = "blackfathom",["bd"] = "bfd",["bdf"] = "bfd",
 ["sk"] = "sfk",
-["gnooner"] = "gnomeregan",["gnomregan"] = "gnomeregan",["gnomregen"] = "gnomeregan",["gnomergan"] = "gnomeregan",
+["gnooner"] = "gnomeregan",["gnomregan"] = "gnomeregan",["gnomregen"] = "gnomeregan",["gnomergan"] = "gnomeregan",["gnomeragen"] = "gnomeregan",
 ["razorfren"] = "razorfen",["karul"] = "kraul",["rpd"] = "rfd",
 ["smg"] = "smgy",["graveryard"] = "smgy",["smgraveyard"] = "smgy",["monastary"] = "monastery",["libary"] = "library",["librery"] = "library",["libray"] = "library",
 ["smarms"] = "smarm",["smarmory"] = "smarm",["sma"] = "smarm",["armoty"] = "armory",["armoury"] = "armory",["arms"] = "arm",["armz"] = "arm",["armzs"] = "arm",
@@ -410,7 +410,8 @@ GF_ONE_WORD_FIX = {
 ["marudon"] = "maraudon",["maradon"] = "maraudon",["maura"] = "mara",["mauradon"] = "maraudon",["maurodon"] = "maraudon",["maurdon"] = "maraudon",
 ["sunkent"] = "sunken",["sunkn"] = "sunken",
 ["windsor"] = "jailbreak",["emp"] = "emperor",["emperer"] = "emperor",["emporer"] = "emperor",["angerforge"] = "brd",["angerfod"] = "brd",["vaul"] = "vault",["brda"] = "brd",["brdd"] = "brd",
-["strartholme"] = "stratholme",["stratholm"] = "stratholme",["strath"] = "stratholme",["srat"] = "stratholme",["straholme"] = "stratholme",["stratdk"] = "udstrat",["srtatholme"] = "stratholme",["living"] = "live",
+["strartholme"] = "stratholme",["stratholm"] = "stratholme",["strath"] = "stratholme",["srat"] = "stratholme",["straholme"] = "stratholme",["stratdk"] = "udstrat",["stratud"] = "udstrat",
+["srtatholme"] = "stratholme",["stratlive"] = "livestrat",["living"] = "live",
 ["sholo"] = "scholo",["sholomance"] = "scholomance",["scolomance"] = "scholomance",["scolo"] = "scholo",["krastinovs"] = "krastinov",
 ["diremail"] = "diremaul",["mauls"] = "maul",["trib"] = "tribute",
 ["lvrs"] = "lbrs",["lvrs"] = "lbrs",["lbrd"] = "lbrs",
@@ -464,7 +465,7 @@ GF_ONE_WORD_IGNORE = {
 }
 GF_TWO_WORD_IGNORE = {
 ["doesnobody"] = true,["bestchoice"] = true,["lockbox"] = true,["burningcrusade"] = true,["magewater"] = true,["magefood"] = true,["splitsecond"] = true,["thatguy"] = true,["howcome"] = true,["helpsummon"] = true,["havequestions"] = true,
-["raidingguild"] = true,["ourranks"] = true,["stoppingme"] = true,["tellme"] = true,["questionfor"] = true,["thoseguys"] = true,["wasdoing"] = true,["doyou"] = true,["hereor"] = true,["putoff"] = true,["tolearn"] = true,
+["raidingguild"] = true,["ourranks"] = true,["stoppingme"] = true,["tellme"] = true,["questionfor"] = true,["thoseguys"] = true,["wasdoing"] = true,["doyou"] = true,["hereor"] = true,["putoff"] = true,["tolearn"] = true,["quickquestion"] = true,
 }
 
 GF_ONE_WORD_GUILD = {
@@ -492,7 +493,7 @@ GF_TWO_WORD_GUILD = {
 
 ["currentlyprogressing"] = 1.5,["clearingcontent"] = 1,["turtlecontent"] = 1,["lowercontent"] = .5,["firstrun"] = 1,
 ["wantsyou"] = 2,["welcomesyou"] = 2,["welcometo"] = 1,["adultswelcome"] = .5,["raiderswelcome"] = .5,
-["enjoyleveling"] = 1,["leveltogether"] = 1,["alliancelevelers"] = 1,["hordelevelers"] = 1,
+["enjoyleveling"] = 1,["casualleveling"] = 1,["leveltogether"] = 1,["groupquest"] = .5,["alliancelevelers"] = 1,["hordelevelers"] = 1,
 
 ["weeklyevents"] = .5,["weekdayraid"] = 1,["raidday"] = .5,["raidtime"] = 2,["inweek"] = 1,["aweek"] = 1,["everyweek"] = .5,["allraids"] = .5,
 ["newplayers"] = 2,["newmembers"] = 1.5,["newlyformed"] = 2,["seriousmembers"] = .5,["veteranplayers"] = 1,["casualfriendly"] = 1,
@@ -554,7 +555,7 @@ GF_THREE_WORD_LFM = {
 ["tankdamagefor"] = 2,["tankhealfor"] = 2,["healtankfor"] = 2,["healdamagefor"] = 2,["damagehealfor"] = 2,["damagetankfor"] = 2,
 ["lookingfordruid"] = 2,["lookingforhunter"] = 2,["lookingformage"] = 2,["lookingforpaladin"] = 2,["lookingforpriest"] = 2,["lookingforrogue"] = 2,["lookingforshaman"] = 2,["lookingforwarlock"] = 2,["lookingforlock"] = 2,["lookingforwarrior"] = 2,
 
-["anyoneelseneed"] = 2,["anyonealsoneed"] = 2,["anyoneelsefor"] = 2,["anyoneelsedoing"] = 2,["anyoneelsequest"] = 2,["anyoneupfor"] = 2,["anyonewannado"] = 2,["anyonewannajoin"] = 2,["anyothersfor"] = 2,["anyupfor"] = 2,["anyonehelpwith"] = 2,
+["anyoneelseneed"] = 2,["anyonealsoneed"] = 2,["anyoneelsefor"] = 2,["anyoneelsedoing"] = 2,["anyoneelsequest"] = 2,["anyoneupfor"] = 2,["anyonewannado"] = 2,["anyonewannajoin"] = 2,["anyothersfor"] = 2,["anyupfor"] = 2,["anyonehelpwith"] = 2,["anyonetodo"] = 2,
 ["anygroupfor"] = 2,["anygroupdoing"] = 2,["anygroupneed"] = 2,["anypartyneed"] = 2,["anydungeonneed"] = 2,["anyallianceneed"] = 2,["anyhordeneed"] = 2,
 ["anyforquest"] = 2,["allianceforquest"] = 2,["hordeforquest"] = 2,
 
@@ -573,6 +574,7 @@ GF_THREE_WORD_LFM = {
 GF_FOUR_WORD_LFM = {
 ["tankanddamagefor"] = 2,["tankandhealfor"] = 2,["healandtankfor"] = 2,["healanddamagefor"] = 2,["damageandhealfor"] = 2,["damageandtankfor"] = 2,
 ["lookingforatank"] = 3,["lookingforaheal"] = 3,["lookingforadamage"] = 3,["needsomerandomdamage"] = 2,
+["healmissingthengo"] = 2,["tankmissingthengo"] = 2,["damagemissingthengo"] = 2,
 ["anyonewanttorun"] = 2,["anyonewanttojoin"] = 2,["ifyouwannajoin"] = 2,["anyonethatcanhelp"] = 2,["anyonewhocanhelp"] = 2,["anygroupsgoingfor"] = 2,["anyoneneedingtodo"] = 2,
 ["anyonedowntohelp"] = 2,["helpwithaquest"] = 2,["comewithmequest"] = 2,["caretohelpwith"] = 2,["helpmeoutwith"] = 2,
 
@@ -635,6 +637,7 @@ GF_LFM_TWO_BEFORE = {
 ["hostinga"] = true,
 ["forminga"] = true,
 ["startinga"] = true,
+["letsdo"] = true,
 }
 
 GF_ONE_WORD_CLASSES = {
@@ -691,17 +694,17 @@ GF_TWO_WORD_QUEST = {
 ["doctorweavil"] = 64,["eliteq"] = 0,["combattask"] = 60,["combatbadge"] = 60,["badgefarm"] = 60,["repfarm"] = 0,["argentdawnrepfarm"] = 60,["argentrepfarm"] = 60,["cenarionrepfarm"] = 60,["ccrepfarm"] = 60,["bossfarm"] = 0,
 }
 GF_THREE_WORD_QUEST = {
-["protectingtheherd"] = 12,["thepeoplesmilitia"] = 17,["lochmodanogres"] = 20,["missinginaction"] = 25,["cullingthethreat"] = 25,["tomeofvalor"] = 25,["thestockaderiots"] = 25,["battleofhillsbrad"] = 30,
+["protectingtheherd"] = 12,["slayingthebeast"] = 16,["thepeoplesmilitia"] = 17,["lochmodanogres"] = 20,["missinginaction"] = 25,["cullingthethreat"] = 25,["tomeofvalor"] = 25,["thestockaderiots"] = 25,["battleofhillsbrad"] = 30,
 ["elixirofagony"] = 30,["testofstrength"] = 30,["darkironwar"] = 30,["prisonbreakin"] = 34,["grimeencrustedring"] = 34,["thegrandbetrayal"] = 35,["legendofstalvan"] = 35,["encrustedtailfins"] = 35,["calltoarms"] = 40,
 ["therealthreat"] = 40,["calltoarms"] = 40,["elitequestarathi"] = 40,["breakingthekeystone"] = 42,["sigiloftrollbane"] = 42,["bringthelight"] = 42,["bringtheend"] = 42,["biggamehunter"] = 43,
 ["crownofwill"] = 43,["crackingmaurysfoot"] = 44,["broodofonyxia"] = 45,["theravenwoodscepter"] = 46,["divinomaticrod"] = 47,["thepariahsinstructions"] = 48,["scepterofcelebras"] = 49,["summontheprincess"] = 50,
 ["intothedepths"] = 51,["setthemablaze"] = 52,["jammalantheprophet"] = 53,["lostthunderbrewrecipe"] = 55,["heartofthemountain"] = 55,["timbermawholdrep"] = 55,["thefinaltablets"] = 58,["afinalblow"] = 58,
 ["putherdown"] = 59,["dreadsteedofxoroth"] = 60,["unfinishedgordokbusiness"] = 60,["mawofmadness"] = 60,["avastyeadmiral"] = 60,["twilightbattleorders"] = 60,
 ["kingsofflame"] = 60,["sealofascension"] = 60,["theactiveagent"] = 60,["barovfamilyfortune"] = 60,["theprincesssaved"] = 60,["ofloveandfamily"] = 60,["thegreatfrassiabi"] = 60,["dukeofcynders"] = 60,
-["theeasternplagues"] = 60,["huntingforectoplasm"] = 60,["testofskulls"] = 62,["draconicfordummies"] = 64,
+["theeasternplagues"] = 60,["huntingforectoplasm"] = 60,["testofskulls"] = 62,["draconicfordummies"] = 64,["silithushighcouncil"] = 64,
 }
 GF_FOUR_WORD_QUEST = {
-["thecoastisntclear"] = 19,["thetestofrighteousness"] = 22,["thetowerofalthalaxx"] = 24,["howlinginthehills"] = 25,["thetomeofvalor"] = 25,["kingofthefoulweald"] = 26,["looktothestars"] = 30,["brideoftheembalmer"] = 32,
+["thecoastisntclear"] = 19,["thetestofrighteousness"] = 22,["possiblebutnotprobable"] = 24,["thetowerofalthalaxx"] = 24,["howlinginthehills"] = 25,["thetomeofvalor"] = 25,["kingofthefoulweald"] = 26,["looktothestars"] = 30,["brideoftheembalmer"] = 32,
 ["curseofthetides"] = 40,["downthescarletpath"] = 40,["attackonthetower"] = 40,["intothescarletmonastery"] = 42,["oftheblackdragon"] = 43,["anambassadorofevil"] = 44,["handandtheheart"] = 44,["tiaraofthedeep"] = 46,["tremorsoftheearth"] = 50,
 ["jobopeningguardcaptain"] = 51,["messageinabottle"] = 51,["secretofthecircle"] = 51,["dangeroustogoalone"] = 56,["nameofthebeast"] = 58,["unitingtheshatteredamulet"] = 60,["luckbewithyou"] = 60,["ordermustberestored"] = 63,["theisleofdread"] = 64,
 ["pathoftherighteous"] = 64,["onlyonemayrise"] = 64,["broodofnozdormurepfarm"] = 64,
@@ -712,13 +715,13 @@ GF_ONE_WORD_DUNGEON = {
 ["kraul"] = 32,["rfk"] = 32,["razorfenkraul"] = 32,["downs"] = 40,["rfd"] = 40,["razorfendowns"] = 40,["smgy"] = 31,["lib"] = 35,["library"] = 35,["smlib"] = 35,["smarm"] = 39,["armory"] = 39,["smcath"] = 40,["cathedral"] = 40,["smfull"] = 41,
 ["ulda"] = 46,["uldaman"] = 46,["zf"] = 48,["zulfarrak"] = 48,["mallet"] = 50,["mara"] = 50,["maraudon"] = 50,["princess"] = 50,["st"] = 54,["sunken"] = 54,["sunkentemple"] = 54,["atalhakkar"] = 54,["arena"] = 55,
 ["brd"] = 58,["jailbreak"] = 58,["emperor"] = 58,["attunement"] = 60,["lbrs"] = 60,["dme"] = 57,["dmn"] = 62,["dmt"] = 62,["dmw"] = 62,["dmeast"] = 62,["dmnorth"] = 62,["dmtrib"] = 62,["dmtribute"] = 62,["dmwest"] = 62,
-["scholo"] = 62,["scholomance"] = 62,["stratholme"] = 61,["baron"] = 62,["udstrat"] = 62,["stratud"] = 62,["livestrat"] = 62,["stratlive"] = 62,["stratrep"] = 62,["ubrs"] = 63,["rend"] = 63,["valthalak"] = 63,
+["scholo"] = 62,["scholomance"] = 62,["stratholme"] = 61,["baron"] = 62,["udstrat"] = 62,["livestrat"] = 62,["stratrep"] = 62,["ubrs"] = 63,["rend"] = 63,["valthalak"] = 63,
 ["sm"] = 0,["razorfen"] = 0,["dungeon"] = 0,["diremaul"] = 0,["blackrock"] = 0,
 }
 GF_TWO_WORD_DUNGEON = {
 ["ragefirechasm"] = 16,["deadmines"] = 21,["wailingcaverns"] = 22,["razorfenkraul"] = 32,["razorfendowns"] = 40,["smgy"] = 31,["smlib"] = 35,["smarm"] = 39,["smcath"] = 40,["smfull"] = 41,["smquestrun"] = 41,["zulfarrak"] = 48,
 ["sunkentemple"] = 54,["atalhakkar"] = 54,["jailbreak"] = 58,["lowerblackrock"] = 60,["upperblackrock"] = 63,["dme"] = 57,["dmn"] = 62,["dmt"] = 62,["dmw"] = 62,["dmwest"] = 62,["dmeast"] = 62,["dmnorth"] = 62,["dmtrib"] = 62,["dmtribute"] = 62,
-["diremaulwest"] = 62,["diremauleast"] = 62,["diremaulnorth"] = 62,["diremaultrib"] = 62,["diremaultribute"] = 62,["livestrat"] = 62,["stratrep"] = 62,["argentdawnrepfarm"] = 62,["udstrat"] = 62,["stratud"] = 62,["stratlive"] = 62,
+["diremaulwest"] = 62,["diremauleast"] = 62,["diremaulnorth"] = 62,["diremaultrib"] = 62,["diremaultribute"] = 62,["stratholme"] = 61,["livestrat"] = 62,["udstrat"] = 62,["stratrep"] = 62,["argentdawnrepfarm"] = 62,
 ["drakefireamulet"] = 63,["scarletmonastery"] = 0,["diremaul"] = 0,["foranything"] = 0,
 }
 GF_THREE_WORD_DUNGEON = {
@@ -756,7 +759,7 @@ GF_ONE_WORD_TRADE = {
 GF_TWO_WORD_TRADE = {
 ["lookingfor"] = 102.5,["wannabuy"] = 2.5,["lfweapon"] = 3,["lfcrusader"] = 3,
 ["buyinghitem"] = 2,["sellinghitem"] = 2,["sellinghenchant"] = 2,["anyoneselling"] = 1.5,["forsale"] = 2.5,["onah"] = 2.5,["inah"] = 2.5,["auctionhouse"] = 1,
-["payinggold"] = 1,["payingmoney"] = 1,["smalltip"] = 1,["willtip"] = 3,["cantip"] = 2,["anytip"] = 1,["fortip"] = 1,["tipanything"] = 1,
+["payinggold"] = 1,["payingmoney"] = 1,["smalltip"] = 1,["willtip"] = 3,["cantip"] = 2,["illtip"] = 2,["anytip"] = 1,["fortip"] = 1,["goldtip"] = 1,["tipanything"] = 1,
 ["havemats"] = .5,["gotmats"] = .5,["yourmats"] = 2.5,
 ["gearcrafter"] = 1,["crafterhitem"] = 1,["gethitem"] = 1,
 ["wannatrade"] = 2.5,["wannnatrade"] = 3,
@@ -764,13 +767,13 @@ GF_TWO_WORD_TRADE = {
 
 ["lockbox"] = 1,["freelockbox"] = 2,["lflockbox"] = 2,["lockboxservice"] = 2,["openinglockbox"] = 2,["lflocksmith"] = 2,["pickinglock"] = 1,
 
-["getenchant"] = 1,["withenchant"] = 1,["needenchant"] = 2,["anyenchant"] = 1.5,["enchantservice"] = 3,
+["getenchant"] = 1,["withenchant"] = 1,["needenchant"] = 2,["anyenchant"] = 1.5,["enchantservice"] = 3,["gotenhancement"] = .5,
 ["enchantinorgrimmar"] = 2.5,["enchantinstormwind"] = 2.5,["enchantinironforge"] = 2.5,
 
 ["anyalchemist"] = 1.5,["anyengineer"] = 1.5,["anytailor"] = 1.5,["anyleatherworker"] = 1.5,["anylw"] = 1.5,
 ["lfalchemist"] = 3,["lfenchant"] = 3,["lfengineer"] = 3,["lftailor"] = 3,["lflw"] = 3,["lfleatherworker"] = 3,
 ["blacksmith"] = .5,["lfbs"] = 3,["lfblacksmith"] = 3,["anyblacksmith"] = 1.5,["anybs"] = 1.5,["blacksmithavailable"] = 2,
-["attachinghitem"] = 3,["applyhitem"] = 3,["installhitem"] = 3,["installinghitem"] = 3,
+["attachhitem"] = 1,["attachinghitem"] = 3,["applyhitem"] = 3,["installhitem"] = 3,["installinghitem"] = 3,
 
 ["arcaneresist"] = .5,["fireresist"] = .5,["shadowresist"] = .5,["frostresist"] = .5,["natureresist"] = .5,
 ["enchantcloak"] = .5,["enchantchest"] = .5,["enchantbracer"] = .5,["enchantweapon"] = .5,["enchantshield"] = .5,["enchantgloves"] = .5,["enchantboots"] = .5,
@@ -792,7 +795,7 @@ GF_TWO_WORD_TRADE = {
 ["fullyrestocked"] = 1,["inbulk"] = 1,
 ["openubrs"] = 1.5,
 
-["bestodds"] = 1,
+["bestodds"] = 1,["uncleabe"] = 2,
 }
 GF_THREE_WORD_TRADE = {
 ["wanttobuy"] = 2.5,["wanttosell"] = 2.5,["wanttotrade"] = 2.5,["getyourhitem"] = 1,["getyourhenchant"] = 1,["iwillenchant"] = 2,
@@ -801,7 +804,7 @@ GF_THREE_WORD_TRADE = {
 
 ["whocanenchant"] = 1.5,["anyenchantonline"] = 3,["anyenchantwith"] = 3,
 
-["anyblacksmithavailable"] = 1,["anyblacksmithable"] = 1,["blacksmithattachhitem"] = 3,["someonetoattach"] = 3,["cananyoneapply"] = 2,["cananybodyapply"] = 2,
+["anyblacksmithavailable"] = 1,["anyblacksmithable"] = 1,["anyblacksmitharound"] = 1,["blacksmithattachhitem"] = 3,["someonetoattach"] = 3,["cananyoneapply"] = 2,["cananybodyapply"] = 2,
 ["applyspurs"] = 2.5,["applyahitem"] = 3,["cananyoneattach"] = 3,["cananybodyattach"] = 3,["cansomeoneattach"] = 3,
 ["openingalllockbox"] = 3,["openinghitemlockbox"] = 3,["openhitemlockbox"] = 3,["openyourlockbox"] = 2,["openyourlock"] = 1,["openingyourlockbox"] = 3,
 ["alllockboxes"] = 3,["cananyoneopen"] = 2,["cananybodyopen"] = 2,["needlockboxopened"] = 3,["needhitemlockbox"] = 3,["openalockbox"] = 2,["abletoopen"] = 2,["anyonecanpick"] = 1.5,["someonetoopen"] = 1.5,
@@ -817,18 +820,18 @@ GF_THREE_WORD_TRADE = {
 ["payinggoldsummon"] = 2,["payingmoneysummon"] = 2,["gotasummon"] = 1,["warlocktosummon"] = 1,["locktosummon"] = 1,["summonmeto"] = 2.5,["anysummonin"] = 2.5,
 ["freehyjalsummon"] = 2,["lfhyjalsummon"] = 2,["lfhydraxiansummon"] = 3,["needhyjalsummon"] = 2,["anyhyjalsummon"] = 2,
 
-["sellingslotbags"] = 3,["bagonah"] = 3,
+["sellingslotbags"] = 3,["bagonah"] = 3,["anyoneinstormwind"] = .5,["someoneinstormwind"] = .5,
 ["tomakeme"] = 1,["goodsandservices"] = 1,["offeringubrskey"] = 2,["openforubrs"] = 1.5,
 ["arcanebartransmute"] = 1,["arcanetransmutecd"] = 1,
 
-["doubleyourgold"] = 1.5,["tripleyourgold"] = 1.5,["playsomecasino"] = 2,["testyourluck"] = 3,["tryyourluck"] = 3,["getrichnow"] = 3,["goldforeverybody"] = 3,["gonnaberich"] = 1.5,["toberich"] = 1.5,["atthecasino"] = 1,["winitall"] = 1,
+["doubleyourgold"] = 1.5,["tripleyourgold"] = 1.5,["playsomecasino"] = 2,["testyourluck"] = 3,["tryyourluck"] = 3,["getrichnow"] = 3,["goldforeverybody"] = 3,["gonnaberich"] = 1.5,["atthecasino"] = 1,["winitall"] = 1,
 }
 GF_FOUR_WORD_TRADE = {
-["anyoneneedanysummon"] = 3,["applyashieldspike"] = 3,["applyashieldspike"] = 2.5,["cananyonemakehitem"] = 1,
+["anyoneneedanysummon"] = 3,["applyashieldspike"] = 3,["needaspikeattached"] = 2,["cananyonemakehitem"] = 1,["installthisforme"] = 1,["anyoneabletomake"] = 2,
 
-["agilityonmybelt"] = 1,["agilitytomybelt"] = 1,["intellectonmybelt"] = 1,["intellecttomybelt"] = 1,
+["agilityonmybelt"] = 1,["agilitytomybelt"] = 1,["intellectonmybelt"] = 1,["intellecttomybelt"] = 1,["toimprovemyneck"] = 1,
 
-["fortunefavorsthebold"] = 3,["youtoocanwin"] = 3,["comeandplaynow"] = 3,
+["fortunefavorsthebold"] = 3,["youtoocanwin"] = 3,["comeandplaynow"] = 3,["highestpayoutgiventoday"] = 3,["winsomeeasygold"] = 3,["wantstoberich"] = 1.5,["yourwishcometrue"] = 1,
 }
 GF_TRADE_ONE_WORD_EXCLUSION = {
 ["tank"] = true,["range"] = true,["melee"] = true,
@@ -862,6 +865,7 @@ GF_TRADE_TWO_WORD_EXCLUSION = {
 ["mydad"] = true,["mymom"] = true,["mybrother"] = true,["mysister"] = true,["cousin"] = true,["grandfather"] = true,["grandmother"] = true,
 ["wannawrite"] = true,["justclick"] = true,["ikinda"] = true,["pleasehave"] = true,["pleasebring"] = true,["willneed"] = true,["musthave"] = true,["reallife"] = true,
 }
+
 GF_ONE_WORD_PVP = {
 ["av"] = 60,["ab"] = 0,["wsg"] = 0,["battleground"] = 0,["warsong"] = 0,["premade"] = 0,["bg"] = 0,["pvp"] = 0,
 }
@@ -870,6 +874,7 @@ GF_TWO_WORD_PVP = {
 ["alteracvalley"] = 60,
 ["bloodring"] = 60,
 }
+
 GF_STRING_FIND_LIST = {
 	["LFM"] = {},
 	["GUILDBLOCKLIST"] = {},
@@ -900,7 +905,7 @@ GF_BUTTONS_LIST = {
 		[22] = { "Dire Maul West", 55, 60, "dmw", "dmwest", "diremaul", "diremaulwest"},
 		[23] = { "Dire Maul Tribute", 54, 60, "dmt", "dmtrib", "dmtribute", "diremaul", "diremaultribute" },
 		[24] = { "Scholomance", 55, 60, "scholo", "scholomance", "argentdawnrepfarm" },
-		[25] = { "Stratholme", 55, 60, "stratholme", "udstrat", "stratud", "livestrat", "stratlive", "baron", "stratrep", "argentdawnrepfarm" },
+		[25] = { "Stratholme", 55, 60, "stratholme", "udstrat", "livestrat", "baron", "stratrep", "argentdawnrepfarm" },
 		[26] = { "Upper Blackrock Spire", 55, 60, "ubrs", "upperblackrock", "drakefireamulet", "rend", "valthalak", "forthehorde", },
 		[27] = { "40-man Raids", 58, 60, "mc", "moltencore", "rag", "ragnaros", "ony", "onyxia", "blackwinglair", "bwl", "nefarian", "aq", "ahnqiraj", "cthun", "naxx", "naxxramas", "azuregos", "kazzak", "lethon", "ysondre", "taerar", "emeriss", "worldboss", "lords", },
 		[28] = { "20-man Raids", 58, 60, "zg", "zulgurub", "hakkar", "aq", "ahnqiraj", "ossirian", },
