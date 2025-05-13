@@ -1,7 +1,7 @@
 # GroupFinder
 Group finder Addon for Vanilla Wow 1.12.1 based on the CallToArms addon(with Turtle WoW support).  
   
-Update: Chat-parsing is almost flawless. I redid the "button" searches to be more accurate.  
+Update: The chat filtering will never be perfect, but it's getting closer.  
 
 The goal of this addon is to find groups without needing to sift through endless chat spam. I tried to make this addon as intuitive as possible, but it's probably pretty intimidating at first glance. Lots of checkboxes. Lots of edit boxes. Lots of dropdowns. I put as much as possible on the front page because the original CallToArms addon had too many pages to flip through and too many useless features.  
 
@@ -15,7 +15,7 @@ The goal of this addon is to find groups without needing to sift through endless
 [Show New] - Whether to display 'New' group messages only(default: 3 minutes).  
 [Show Chat] - Whether to display non-group and non-trades messages in chat.  
 [Show Trades] - Whether to display trades in chat(wts/wtb/lfw/buying/selling/etc).  
-[Show Politics] - Whether to display political or offensive messages in chat.  
+[Show Guilds] - Whether to display guild recruitment messages in chat(blocked messages will be logged as "spam").  
 [Show Loots] - This will show/hide chat messages from item rolls, looting of money and grey items, selecting greed/need for uncommon items, and experience/honor/reputation gains.  
 Note: All blocked chat is recorded in the 'Log'.  
 
@@ -30,6 +30,7 @@ Note: All blocked chat is recorded in the 'Log'.
 [Show Original Chat] - This removes all chat formatting(class colors/levels/layout).  
 [Enable Spam Filtering] - The Spam Filter will block repetitive messages.  
 [Enable Auto Blacklist] - Automatically blacklists players who 'spam' if they are below the level threshold(default: level 12).  
+[Always Show Guild/Friends] - All messages from friends/guildies will be displayed. Ignoring chat filters.  
 
 The 'Group Maker' makes it easy to send group messages to world chat...  
 1) Select the dropdown for the Dungeon/Raid.  
@@ -47,4 +48,3 @@ Note: Will not message the same person more than once every 15 minutes.
 ![Image](https://github.com/user-attachments/assets/6f264354-cec4-4447-b18f-42bb4bfc19b9)  
 
 Turtle WoW effectively blocks you from whispering after ~15 whispers.  
-There is also a "hide everything" overlay mode by shift-right clicking the minimap icon.  
