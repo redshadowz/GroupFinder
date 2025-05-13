@@ -26,7 +26,7 @@ Note: All blocked chat is recorded in the 'Log'.
 [Auto /Who] - Whether to automatically '/who' groups/players from chat for their class/level information.  
 
 >[Join World Channel] - Keeps you in the World Channel.  
-[Enable Error Filtering] - This will block server messages related to group invites/declines, quest sharing, and '<name> is under attack!'.  
+[Enable Error Filtering] - This will block server messages related to group invites/declines, quest sharing, and 'attempts to run away in fear' messages.  
 [Show Original Chat] - This removes all chat formatting(class colors/levels/layout).  
 [Enable Spam Filtering] - The Spam Filter will block repetitive messages.  
 [Enable Auto Blacklist] - Automatically blacklists players who 'spam' if they are below the level threshold(default: level 12).  
