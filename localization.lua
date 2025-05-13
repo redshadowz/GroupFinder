@@ -252,8 +252,8 @@ GF_GroupsFrameShowLFGCheckButton = {
 	tooltip2 		= "When checked, results will include all groups flagged with LFG" },
 
 GF_GroupsFrameDescriptionEditBox = { 
-	tooltip1 		= "Search descriptions", 
-	tooltip2 		= "Only groups with matches will be included in the results. Use '/' operator for multiple searches(e.g. dm/ubrs/scholo/etc)" },
+	tooltip1 		= "Search by keywords", 
+	tooltip2 		= "Filters your group list using this text. Separate by commas for multiple searches(e.g. dm, ubrs, scholo, etc)." },
 
 GF_GroupAutoCheckButton = { 
 	tooltip1 		= "Auto-adjust LFM", 
@@ -440,13 +440,14 @@ GF_TWO_WORD_FIX = {
 ["portalot"] = "portalto",["summonot"] = "summonto",["arcbar"] = "arcane",["beltbuckle"] = "beltbuckle",
 
 ["orgrimmardungeon"] = "ragefirechasm",["lfmrc"] = "ragefirechasm",["lfgrc"] = "ragefirechasm",["deadmine"] = "deadmines",["deathmine"] = "deadmines",["deathmines"] = "deadmines",["vancleef"] = "deadmines", -- Dungeons and Groups
-["smg"] = "smgy",["smgrave"] = "smgy",["smgrav"] = "smgy",["smgraveyard"] = "smgy",["monasterygraveyard"] = "smgy",["scarletgraveyard"] = "smgy",["monasterygrave"] = "smgy",
-["monasterygy"] = "smgy",["monasteryarm"] = "smarm",["scarletarm"] = "smarm",["smarmo"] = "smarm",["sma"] = "smarm",
-["blackrockdepths"] = "brd",["lavarun"] = "brd",["brdquestrun"] = "brd",["mothersmilk"] = "brd",
+["smg"] = "smgy",["smgrave"] = "smgy",["smgrav"] = "smgy",["smgraveyard"] = "smgy",["monasterygraveyard"] = "smgy",["scarletgraveyard"] = "smgy",["monasterygrave"] = "smgy",["monagraveyard"] = "smgy",["monagy"] = "smgy",["monasterygy"] = "smgy",
+["monasteryarm"] = "smarm",["scarletarm"] = "smarm",["smarmo"] = "smarm",["sma"] = "smarm",
+["blackrockdeeps"] = "blackrockdepths",["lavarun"] = "blackrockdepths",["mothersmilk"] = "blackrockdepths",
 ["warlordscommand"] = "lowerblackrock",["lowerspire"] = "lowerblackrock",["upperspire"] = "upperblackrock",
 ["mauleast"] = "dme",["maulnorth"] = "dmn",["maultribute"] = "dmt",["maulwest"] = "dmw",["eastdm"] = "dme",["northdm"] = "dmn",["westdm"] = "dmw",
 ["thechallenge"] = "brdquestrun",["golemlord"] = "brdquestrun",
-["stratlive"] = "livestrat",["stralive"] = "livestrat",["startlive"] = "livestrat",["liveside"] = "livestrat",["stratscarlet"] = "livestrat",["lfmstart"] = "stratholme",["lfstart"] = "stratholme",["stratman"] = "stratholme",["argentdawn"] = "argentdawn",
+["stratlive"] = "livestrat",["stralive"] = "livestrat",["startlive"] = "livestrat",["liveside"] = "livestrat",["stratscarlet"] = "livestrat",["lfmstart"] = "stratholme",
+["lfstart"] = "stratholme",["stratman"] = "stratholme",["argentdawn"] = "argentdawn",["forstart"] = "stratholme",["forstrat"] = "stratholme",
 ["stratun"] = "udstrat",["stratundead"] = "udstrat",["stratud"] = "udstrat",["startud"] = "udstrat",["udside"] = "udstrat",["strengthud"] = "udstrat",["farmstrat"] = "stratholme",["lfmstrat"] = "stratholme",["lfstrat"] = "stratholme",
 ["repfarm"] = "repfarm",["repgroup"] = "repfarm",["reprun"] = "repfarm",["repgrind"] = "repfarm",["ccfarm"] = "repfarm",["farmgroup"] = "repfarm",["badgefarm"] = "badgefarm",["badgegroup"] = "badgefarm",
 ["raidboss"] = "worldboss",["worlddragon"] = "worldboss",["allwing"] = "questrun",["questrun"] = "questrun",["fullrun"] = "questrun",
@@ -460,12 +461,13 @@ GF_TWO_WORD_FIX = {
 GF_ONE_WORD_IGNORE = {
 ["channel"] = true,["lol"] = true,["lmao"] = true,["rofl"] = true,["stfu"] = true,["ignore"] = true,["website"] = true,["friendship"] = true,["teamwork"] = true,["lockbox"] = true,["gl"] = true,["talents"] = true,["talents"] = true,["practice"] = true,
 ["bought"] = true,["asked"] = true,["yell"] = true,["fuck"] = true,["dick"] = true,["shit"] = true,["lesbian"] = true,["afk"] = true,["box"] = true,["oranges"] = true,["leveling"] = true,["build"] = true,["week"] = true,
-["losers"] = true,["ruin"] = true,["thought"] = true,["casino"] = true,["spamming"] = true,["kalimdor"] = true,["dumb"] = true,["dumbass"] = true,["retard"] = true,["kalimdor"] = true,["weekday"] = true,["weekdays"] = true,["weekend"] = true,
-["reddit"] = true,["directions"] = true,["pretending"] = true,["advice"] = true,["opinion"] = true,["sorry"] = true,["earlier"] = true,["him"] = true,["her"] = true,["duel"] = true,
+["losers"] = true,["ruin"] = true,["thought"] = true,["casino"] = true,["spamming"] = true,["kalimdor"] = true,["dumb"] = true,["dumbass"] = true,["retard"] = true,["weekday"] = true,["weekdays"] = true,["weekend"] = true,
+["reddit"] = true,["direction"] = true,["directions"] = true,["pretending"] = true,["advice"] = true,["opinion"] = true,["sorry"] = true,["earlier"] = true,["him"] = true,["duel"] = true,["sugardaddy"] = true,["sugarmomma"] = true,
 }
 GF_TWO_WORD_IGNORE = {
 ["doesnobody"] = true,["bestchoice"] = true,["lockbox"] = true,["burningcrusade"] = true,["magewater"] = true,["magefood"] = true,["splitsecond"] = true,["thatguy"] = true,["howcome"] = true,["helpsummon"] = true,["havequestions"] = true,
 ["raidingguild"] = true,["ourranks"] = true,["stoppingme"] = true,["tellme"] = true,["questionfor"] = true,["thoseguys"] = true,["wasdoing"] = true,["doyou"] = true,["hereor"] = true,["putoff"] = true,["tolearn"] = true,["quickquestion"] = true,
+["sugardaddy"] = true,["sugarmomma"] = true,["forgold"] = true,
 }
 
 GF_ONE_WORD_GUILD = {
@@ -491,12 +493,12 @@ GF_TWO_WORD_GUILD = {
 ["lootcouncil"] = 1.5,["lootsystem"] = 1.5,["epgp"] = 1.5,["srms"] = .5,
 ["considerjoining"] = 2,["jointoday"] = 2,["joinus"] = .5,["thenjoin"] = 1,["getinfo"] = 1,
 
-["currentlyprogressing"] = 1.5,["clearingcontent"] = 1,["turtlecontent"] = 1,["lowercontent"] = .5,["firstrun"] = 1,
+["currentlyprogressing"] = 1.5,["clearingcontent"] = 1,["turtlecontent"] = 1,["lowercontent"] = .5,["firstrun"] = 1,["classicexperience"] = .5,["vanillaexperience"] = .5,
 ["wantsyou"] = 2,["welcomesyou"] = 2,["welcometo"] = 1,["adultswelcome"] = .5,["raiderswelcome"] = .5,
 ["enjoyleveling"] = 1,["casualleveling"] = 1,["leveltogether"] = 1,["groupquest"] = .5,["alliancelevelers"] = 1,["hordelevelers"] = 1,
 
 ["weeklyevents"] = .5,["weekdayraid"] = 1,["raidday"] = .5,["raidtime"] = 2,["inweek"] = 1,["aweek"] = 1,["everyweek"] = .5,["allraids"] = .5,
-["newplayers"] = 2,["newmembers"] = 1.5,["newlyformed"] = 2,["seriousmembers"] = .5,["veteranplayers"] = 1,["casualfriendly"] = 1,
+["newplayer"] = .5,["newplayers"] = 2,["newmembers"] = 1.5,["newlyformed"] = 2,["seriousmembers"] = .5,["veteranplayers"] = 1,["casualfriendly"] = 1,
 ["dungeoncrawling"] = 1,["pleasantadventure"] = 2,["goodvibes"] = 2,["pugclears"] = 2,["laidback"] = .5,["personalpractice"] = .5,
 ["warmodeonly"] = .5,["hordeonly"] = .5,["pvpfriendly"] = 1,["pvefriendly"] = 1,
 
@@ -510,7 +512,7 @@ GF_THREE_WORD_GUILD = {
 ["lfcasualguild"] = 3,["lfsocialguild"] = 3,["lfraidguild"] = 3,["lflevelingguild"] = 3,["lflevelguild"] = 3,["lfforguild"] = 3,["lfpvpguild"] = 3,
 ["ourraidteam"] = 3,["finishourcore"] = 3,["lookingtoraid"] = .5,["lookingforraiders"] = .5,
 ["allcurrentcontent"] = 3,["startraidingsoon"] = 1,["startinweek"] = 1,
-["friendsandguildies"] = 1,["easygoingplayers"] = 2,["justgoodraid"] = 3,
+["friendsandguildies"] = 1,["levelwithfriends"] = .5,["easygoingplayers"] = 2,["justgoodraid"] = 3,
 
 ["raidwithus"] = 1.5,["joinourdiscord"] = 1,["jointoaccess"] = 1,["jointhespectacle"] = 1,["joinmyguild"] = 1,["homewithus"] = 1,
 ["allclasseswelcome"] = 3,["allplayerswelcome"] = 1,["forallplayers"] = .5,["everybodyiswelcome"] = 1,["everyoneiswelcome"] = 1,
@@ -559,7 +561,7 @@ GF_THREE_WORD_LFM = {
 ["anygroupfor"] = 2,["anygroupdoing"] = 2,["anygroupneed"] = 2,["anypartyneed"] = 2,["anydungeonneed"] = 2,["anyallianceneed"] = 2,["anyhordeneed"] = 2,
 ["anyforquest"] = 2,["allianceforquest"] = 2,["hordeforquest"] = 2,
 
-["ifsomeoneneed"] = 2,["someonewantsto"] = 2,["someonewannafarm"] = 2,["someoneforquest"] = 2,
+["ifsomeoneneed"] = 2,["someonewantsto"] = 2,["someonewannafarm"] = 2,["someoneforquest"] = 2,["someonetherefor"] = 2,
 ["wannaahelpwith"] = 2,["wanttohelp"] = 2,["wantstohelp"] = 2,["ineedhelp"] = 2,["helpwithquest"] = 2,["willingtohelp"] = 2,["helpoutwith"] = 2,["helpmewith"] = 2,["helpmewit"] = 2,["anyhelpin"] = 2,["anyhelpfor"] = 2,
 ["roomformore"] = 2,["moreneededfor"] = 2,["moreforquest"] = 3,["spotleftfor"] = 2,["slotsforquest"] = 2,["slotforquest"] = 2,
 ["needpeoplefor"] = 2,["morepeoplefor"] = 2,["couldusemore"] = 2,["needmorefor"] = 2,["needallfor"] = 2,["needgroupfor"] = 2,["needpartyfor"] = 2,
@@ -638,6 +640,7 @@ GF_LFM_TWO_BEFORE = {
 ["forminga"] = true,
 ["startinga"] = true,
 ["letsdo"] = true,
+["needall"] = true,
 }
 
 GF_ONE_WORD_CLASSES = {
@@ -686,8 +689,8 @@ GF_TWO_WORD_QUEST = {
 ["theden"] = 29,["hordepresence"] = 29,["hypercapacitorgizmo"] = 30,["hillsbradelite"] = 30,["elitewetlands"] = 30,["wetlandselite"] = 30,["humbertssword"] = 30,["dungarok"] = 30,["theattack"] = 31,["thandolspan"] = 31,
 ["vorrelsrevenge"] = 33,["grimtask"] = 34,["morladim"] = 35,["preservingknowledge"] = 38,["crushridgewarmongers"] = 40,["brokensigil"] = 40,["thecorrupter"] = 40,["tigermastery"] = 37,["arathielite"] = 40,["alteracmountain"] = 40,
 ["thesummon"] = 40,["elitearathi"] = 40,["panthermastery"] = 40,["raptormastery"] = 43,["khanhratha"] = 42,["stranglethornfever"] = 45,["mindseye"] = 46,["crackingmaury"] = 44,["bloodsailbuccaneers"] = 45,["scarabshells"] = 45,["nekrumsmedallion"] = 47,
-["captainschest"] = 47,["jinthaalor"] = 50,["brokenalliances"] = 50,["darkvessels"] = 50,["separationanxiety"] = 50,["cliffgiant"] = 50,["ancientegg"] = 50,["hintelite"] = 50,["hinterlandselite"] = 50,
-["elitehinterlands"] = 50,["flamescasing"] = 50,["commandergorshak"] = 52,["overmasterpyron"] = 52,["ribblyscrewspigot"] = 53,["riftwalkerscane"] = 54,["dragonkinmenace"] = 54,["hurleyblackbreath"] = 55,["grarklorkrub"] = 58,["unfinishedbusiness"] = 58,
+["captainschest"] = 47,["jinthaalor"] = 50,["brokenalliances"] = 50,["darkvessels"] = 50,["separationanxiety"] = 50,["cliffgiant"] = 50,["ancientegg"] = 50,["hintelite"] = 50,["hinterlandselite"] = 50,["elitehinterlands"] = 50,
+["flamescasing"] = 50,["revantuskvillage"] = 51,["commandergorshak"] = 52,["overmasterpyron"] = 52,["ribblyscrewspigot"] = 53,["riftwalkerscane"] = 54,["dragonkinmenace"] = 54,["hurleyblackbreath"] = 55,["grarklorkrub"] = 58,["unfinishedbusiness"] = 58,
 ["dawnsgambit"] = 60,["menethilsgift"] = 60,["maxwellsmission"] = 60,["thearchivist"] = 60,["urokdoomhowl"] = 60,["warlordscommand"] = 60,["doomriggersclasp"] = 60,["plaguedhatchlings"] = 60,["falrinsvendetta"] = 60,
 ["dearestnatalia"] = 60,["fieldduty"] = 60,["targethive"] = 60,["targethiveashi"] = 60,["targethiveregal"] = 60,["targethivezora"] = 60,["scarletsubterfuge"] = 60,["stormwindrendezvous"] = 60,["glyphchasing"] = 62,
 ["thecalling"] = 62,["indreams"] = 62,["lastbarov"] = 62,["hordebarov"] = 62,["alliancebarov"] = 62,["alcazisland"] = 62,["nightmarescorruption"] = 64,["twilightcorrupter"] = 64,
@@ -695,8 +698,8 @@ GF_TWO_WORD_QUEST = {
 }
 GF_THREE_WORD_QUEST = {
 ["protectingtheherd"] = 12,["slayingthebeast"] = 16,["thepeoplesmilitia"] = 17,["lochmodanogres"] = 20,["missinginaction"] = 25,["cullingthethreat"] = 25,["tomeofvalor"] = 25,["thestockaderiots"] = 25,["battleofhillsbrad"] = 30,
-["elixirofagony"] = 30,["testofstrength"] = 30,["darkironwar"] = 30,["prisonbreakin"] = 34,["grimeencrustedring"] = 34,["thegrandbetrayal"] = 35,["legendofstalvan"] = 35,["encrustedtailfins"] = 35,["calltoarms"] = 40,
-["therealthreat"] = 40,["calltoarms"] = 40,["elitequestarathi"] = 40,["breakingthekeystone"] = 42,["sigiloftrollbane"] = 42,["bringthelight"] = 42,["bringtheend"] = 42,["biggamehunter"] = 43,
+["elixirofagony"] = 30,["testofstrength"] = 30,["darkironwar"] = 30,["darkshireelitequest"] = 34,["duskwoodelitequest"] = 34,["prisonbreakin"] = 34,["grimeencrustedring"] = 34,["thegrandbetrayal"] = 35,["legendofstalvan"] = 35,
+["encrustedtailfins"] = 35,["calltoarms"] = 40,["therealthreat"] = 40,["calltoarms"] = 40,["elitequestarathi"] = 40,["breakingthekeystone"] = 42,["sigiloftrollbane"] = 42,["bringthelight"] = 42,["bringtheend"] = 42,["biggamehunter"] = 43,
 ["crownofwill"] = 43,["crackingmaurysfoot"] = 44,["broodofonyxia"] = 45,["theravenwoodscepter"] = 46,["divinomaticrod"] = 47,["thepariahsinstructions"] = 48,["scepterofcelebras"] = 49,["summontheprincess"] = 50,
 ["intothedepths"] = 51,["setthemablaze"] = 52,["jammalantheprophet"] = 53,["lostthunderbrewrecipe"] = 55,["heartofthemountain"] = 55,["timbermawholdrep"] = 55,["thefinaltablets"] = 58,["afinalblow"] = 58,
 ["putherdown"] = 59,["dreadsteedofxoroth"] = 60,["unfinishedgordokbusiness"] = 60,["mawofmadness"] = 60,["avastyeadmiral"] = 60,["twilightbattleorders"] = 60,
@@ -705,9 +708,9 @@ GF_THREE_WORD_QUEST = {
 }
 GF_FOUR_WORD_QUEST = {
 ["thecoastisntclear"] = 19,["thetestofrighteousness"] = 22,["possiblebutnotprobable"] = 24,["thetowerofalthalaxx"] = 24,["howlinginthehills"] = 25,["thetomeofvalor"] = 25,["kingofthefoulweald"] = 26,["looktothestars"] = 30,["brideoftheembalmer"] = 32,
-["curseofthetides"] = 40,["downthescarletpath"] = 40,["attackonthetower"] = 40,["intothescarletmonastery"] = 42,["oftheblackdragon"] = 43,["anambassadorofevil"] = 44,["handandtheheart"] = 44,["tiaraofthedeep"] = 46,["tremorsoftheearth"] = 50,
-["jobopeningguardcaptain"] = 51,["messageinabottle"] = 51,["secretofthecircle"] = 51,["dangeroustogoalone"] = 56,["nameofthebeast"] = 58,["unitingtheshatteredamulet"] = 60,["luckbewithyou"] = 60,["ordermustberestored"] = 63,["theisleofdread"] = 64,
-["pathoftherighteous"] = 64,["onlyonemayrise"] = 64,["broodofnozdormurepfarm"] = 64,
+["curseofthetides"] = 40,["downthescarletpath"] = 40,["attackonthetower"] = 40,["intothescarletmonastery"] = 42,["oftheblackdragon"] = 43,["anambassadorofevil"] = 44,["handandtheheart"] = 44,["tiaraofthedeep"] = 46,
+["tremorsoftheearth"] = 50,["jobopeningguardcaptain"] = 51,["messageinabottle"] = 51,["secretofthecircle"] = 51,["hexxandherminions"] = 51,["dangeroustogoalone"] = 56,["nameofthebeast"] = 58,["unitingtheshatteredamulet"] = 60,
+["luckbewithyou"] = 60,["ordermustberestored"] = 63,["theisleofdread"] = 64,["pathoftherighteous"] = 64,["onlyonemayrise"] = 64,["broodofnozdormurepfarm"] = 64,
 }
 
 GF_ONE_WORD_DUNGEON = {
@@ -720,9 +723,9 @@ GF_ONE_WORD_DUNGEON = {
 }
 GF_TWO_WORD_DUNGEON = {
 ["ragefirechasm"] = 16,["deadmines"] = 21,["wailingcaverns"] = 22,["razorfenkraul"] = 32,["razorfendowns"] = 40,["smgy"] = 31,["smlib"] = 35,["smarm"] = 39,["smcath"] = 40,["smfull"] = 41,["smquestrun"] = 41,["zulfarrak"] = 48,
-["sunkentemple"] = 54,["atalhakkar"] = 54,["jailbreak"] = 58,["lowerblackrock"] = 60,["upperblackrock"] = 63,["dme"] = 57,["dmn"] = 62,["dmt"] = 62,["dmw"] = 62,["dmwest"] = 62,["dmeast"] = 62,["dmnorth"] = 62,["dmtrib"] = 62,["dmtribute"] = 62,
-["diremaulwest"] = 62,["diremauleast"] = 62,["diremaulnorth"] = 62,["diremaultrib"] = 62,["diremaultribute"] = 62,["stratholme"] = 61,["livestrat"] = 62,["udstrat"] = 62,["stratrep"] = 62,["argentdawnrepfarm"] = 62,
-["drakefireamulet"] = 63,["scarletmonastery"] = 0,["diremaul"] = 0,["foranything"] = 0,
+["sunkentemple"] = 54,["atalhakkar"] = 54,["blackrockdepths"] = 58,["jailbreak"] = 58,["brdquestrun"] = 58,["lowerblackrock"] = 60,["upperblackrock"] = 63,["dme"] = 57,["dmn"] = 62,["dmt"] = 62,["dmw"] = 62,
+["dmwest"] = 62,["dmeast"] = 62,["dmnorth"] = 62,["dmtrib"] = 62,["dmtribute"] = 62,["diremaulwest"] = 62,["diremauleast"] = 62,["diremaulnorth"] = 62,["diremaultrib"] = 62,["diremaultribute"] = 62,["stratholme"] = 61,
+["livestrat"] = 62,["udstrat"] = 62,["stratrep"] = 62,["drakefireamulet"] = 63,["scarletmonastery"] = 0,["diremaul"] = 0,["foranything"] = 0,
 }
 GF_THREE_WORD_DUNGEON = {
 ["anunholyalliance"] = 36,["fullscarletrun"] = 40,["corruptionofearth"] = 51,["crumpledupnote"] = 58,["shredofhope"] = 58,["brdquestrun"] = 58,["forthehorde"] = 62,
@@ -898,7 +901,7 @@ GF_BUTTONS_LIST = {
 		[15] = { "Zul'Farrak", 42, 54, "zf", "zulfarrak", "mallet", },
 		[16] = { "Maraudon", 43, 55, "mara", "maraudon", "princess", "corruptionofearth", },
 		[17] = { "Sunken Temple", 47, 58, "st", "sunken", "sunkentemple", "atalhakkar"},
-		[18] = { "Blackrock Depths", 48, 60, "brd", "jailbreak", "arena", "emperor", "attunement", "brdquestrun", "fateofthekingdom", "crumpledupnote", "shredofhope"},
+		[18] = { "Blackrock Depths", 48, 60, "brd", "blackrockdepths", "jailbreak", "arena", "emperor", "attunement", "brdquestrun", "fateofthekingdom", "crumpledupnote", "shredofhope"},
 		[19] = { "Lower Blackrock Spire", 52, 60, "lbrs", "lowerblackrock", },
 		[20] = { "Dire Maul East", 50, 60, "dme", "dmeast", "diremaul", "diremauleast" },
 		[21] = { "Dire Maul North", 54, 60, "dmn", "dmnorth", "diremaul", "diremaulnorth" },

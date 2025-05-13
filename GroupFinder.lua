@@ -1127,7 +1127,7 @@ function GF_EntryMatchesGroupFilterCriteria(entry) -- GroupsFrame functions
 	and (not GF_SavedVariables.autofilter or (entry.dlevel and entry.dlevel >= UnitLevel("player")-GF_SavedVariables.autofilterlevelvar and entry.dlevel <= UnitLevel("player")+GF_SavedVariables.autofilterlevelvar)) then
 		return true;
 	end
-	if (GF_SavedVariables.searchtext ~= "" or GF_SavedVariables.searchbuttonstext ~= "") and GF_SearchMessageForTextString(string.lower(entry.message).." ",string.lower(GF_SavedVariables.searchtext).."/",entry,GF_SavedVariables.searchbuttonstext) then
+	if (GF_SavedVariables.searchtext ~= "" or GF_SavedVariables.searchbuttonstext ~= "") and GF_SearchMessageForTextString(string.lower(entry.message).." ",string.lower(GF_SavedVariables.searchtext)..",",entry,GF_SavedVariables.searchbuttonstext) then
 		return true;
 	end
 end
@@ -2167,7 +2167,7 @@ function GF_GetGroupInformation(arg1,arg2) -- Searches messages for Groups and s
 	return 1, entry
 end
 function GF_SearchMessageForTextString(msg,textstring,entry,buttontext)
-	for w in string.gfind(textstring, "([%w%s]+)/") do
+	for w in string.gfind(textstring, "([%w%s]+),") do
 		if string.find(msg, w) then return true end
 	end
 	for word in string.gfind(buttontext, "(%a+)") do
