@@ -400,7 +400,7 @@ GF_ONE_WORD_FIX = {
 ["stockades"] = "stockade",["stockede"] = "stockade",["stocks"] = "stock",["stonks"] = "stock",
 ["blackfathome"] = "blackfathom",["blackfatom"] = "blackfathom",["bd"] = "bfd",["bdf"] = "bfd",
 ["sk"] = "sfk",
-["gnooner"] = "gnomeregan",["gnomregan"] = "gnomeregan",["gnomregen"] = "gnomeregan",["gnomergan"] = "gnomeregan",["gnomeragen"] = "gnomeregan",
+["gnooner"] = "gnomeregan",["gnomregan"] = "gnomeregan",["gnomregen"] = "gnomeregan",["gnomergan"] = "gnomeregan",["gnomeragen"] = "gnomeregan",["gnomragen"] = "gnomeregan",["gnomregan"] = "gnomeregan",
 ["razorfren"] = "razorfen",["karul"] = "kraul",["rpd"] = "rfd",
 ["smg"] = "smgy",["graveryard"] = "smgy",["smgraveyard"] = "smgy",["monastary"] = "monastery",["monstary"] = "monastery",["monstery"] = "monastery",["libary"] = "library",["librery"] = "library",["libray"] = "library",
 ["smarms"] = "smarm",["smarmory"] = "smarm",["sma"] = "smarm",["armoty"] = "armory",["armoury"] = "armory",["arms"] = "arm",["armz"] = "arm",["armzs"] = "arm",
@@ -719,15 +719,15 @@ GF_ONE_WORD_DUNGEON = {
 ["rfc"] = 16,["ragefire"] = 16,["deadmines"] = 21,["dm"] = 21,["wc"] = 22,["wailingcaverns"] = 22,["blackfathom"] = 26,["bfd"] = 26,["shadowfang"] = 25,["sfk"] = 25,["stock"] = 26,["stockade"] = 26,["gnomer"] = 32,["gnomeregan"] = 32,
 ["kraul"] = 32,["rfk"] = 32,["razorfenkraul"] = 32,["downs"] = 40,["rfd"] = 40,["razorfendowns"] = 40,["smgy"] = 31,["lib"] = 35,["library"] = 35,["smlib"] = 35,["smarm"] = 39,["armory"] = 39,["smcath"] = 40,["cathedral"] = 40,["smfull"] = 41,
 ["ulda"] = 46,["uldaman"] = 46,["zf"] = 48,["zulfarrak"] = 48,["mallet"] = 50,["mara"] = 50,["maraudon"] = 50,["princess"] = 50,["st"] = 54,["sunken"] = 54,["sunkentemple"] = 54,["atalhakkar"] = 54,["arena"] = 55,
-["brd"] = 58,["jailbreak"] = 58,["emperor"] = 58,["attunement"] = 60,["lbrs"] = 60,["dme"] = 57,["dmn"] = 62,["dmt"] = 62,["dmw"] = 62,["dmeast"] = 62,["dmnorth"] = 62,["dmtrib"] = 62,["dmtribute"] = 62,["dmwest"] = 62,
+["brd"] = 58,["jailbreak"] = 58,["emperor"] = 58,["attunement"] = 60,["lbrs"] = 60,["dme"] = 57,["dmn"] = 62,["dmt"] = 62,["dmw"] = 62,["dmeast"] = 57,["dmnorth"] = 62,["dmtrib"] = 62,["dmtribute"] = 62,["dmwest"] = 62,
 ["scholo"] = 62,["scholomance"] = 62,["stratholme"] = 61,["baron"] = 62,["udstrat"] = 62,["livestrat"] = 62,["stratrep"] = 62,["ubrs"] = 63,["rend"] = 63,["valthalak"] = 63,
-["sm"] = 0,["razorfen"] = 0,["dungeon"] = 0,["diremaul"] = 0,["blackrock"] = 0,
+["sm"] = 0,["razorfen"] = 0,["dungeon"] = 0,["diremaul"] = 57,["blackrock"] = 0,
 }
 GF_TWO_WORD_DUNGEON = {
-["ragefirechasm"] = 16,["deadmines"] = 21,["wailingcaverns"] = 22,["razorfenkraul"] = 32,["razorfendowns"] = 40,["smgy"] = 31,["smlib"] = 35,["smarm"] = 39,["smcath"] = 40,["smfull"] = 41,["smquestrun"] = 41,["zulfarrak"] = 48,
+["ragefirechasm"] = 16,["deadmines"] = 21,["wailingcaverns"] = 22,["shadowfang"] = 25,["razorfenkraul"] = 32,["razorfendowns"] = 40,["smgy"] = 31,["smlib"] = 35,["smarm"] = 39,["smcath"] = 40,["smfull"] = 41,["smquestrun"] = 41,["zulfarrak"] = 48,
 ["sunkentemple"] = 54,["atalhakkar"] = 54,["blackrockdepths"] = 58,["jailbreak"] = 58,["brdquestrun"] = 58,["lowerblackrock"] = 60,["upperblackrock"] = 63,["dme"] = 57,["dmn"] = 62,["dmt"] = 62,["dmw"] = 62,
-["dmwest"] = 62,["dmeast"] = 62,["dmnorth"] = 62,["dmtrib"] = 62,["dmtribute"] = 62,["diremaulwest"] = 62,["diremauleast"] = 62,["diremaulnorth"] = 62,["diremaultrib"] = 62,["diremaultribute"] = 62,["stratholme"] = 61,
-["livestrat"] = 62,["udstrat"] = 62,["stratrep"] = 62,["drakefireamulet"] = 63,["scarletmonastery"] = 0,["diremaul"] = 0,["foranything"] = 0,
+["dmwest"] = 62,["dmeast"] = 57,["dmnorth"] = 62,["dmtrib"] = 62,["dmtribute"] = 62,["diremaulwest"] = 62,["diremauleast"] = 57,["diremaulnorth"] = 62,["diremaultrib"] = 62,["diremaultribute"] = 62,["stratholme"] = 61,
+["livestrat"] = 62,["udstrat"] = 62,["stratrep"] = 62,["drakefireamulet"] = 63,["valthalak"] = 63,["scarletmonastery"] = 0,["diremaul"] = 57,["foranything"] = 0,
 }
 GF_THREE_WORD_DUNGEON = {
 ["anunholyalliance"] = 36,["fullscarletrun"] = 40,["corruptionofearth"] = 51,["crumpledupnote"] = 58,["shredofhope"] = 58,["brdquestrun"] = 58,["forthehorde"] = 62,
@@ -763,7 +763,7 @@ GF_ONE_WORD_TRADE = {
 }
 GF_TWO_WORD_TRADE = {
 ["lookingfor"] = 102.5,["wannabuy"] = 2.5,["lfweapon"] = 3,["lfcrusader"] = 3,
-["buyinghitem"] = 2,["sellinghitem"] = 2,["sellinghenchant"] = 2,["anyoneselling"] = 1.5,["forsale"] = 2.5,["onah"] = 2.5,["inah"] = 2.5,["auctionhouse"] = 1,
+["buyinghitem"] = 2,["sellinghitem"] = 2,["sellinghenchant"] = 2,["anyoneselling"] = 1.5,["anyonegot"] = 1.5,["forsale"] = 2.5,["onah"] = 2.5,["inah"] = 2.5,["auctionhouse"] = 1,
 ["payinggold"] = 1,["payingmoney"] = 1,["smalltip"] = 1,["willtip"] = 3,["cantip"] = 2,["illtip"] = 2,["anytip"] = 1,["fortip"] = 1,["goldtip"] = 1,["tipanything"] = 1,
 ["havemats"] = .5,["gotmats"] = .5,["yourmats"] = 2.5,
 ["gearcrafter"] = 1,["crafterhitem"] = 1,["gethitem"] = 1,
@@ -786,13 +786,16 @@ GF_TWO_WORD_TRADE = {
 ["strengthbracer"] = .5,["staminabracer"] = .5,["intellectbracer"] = .5,["agilitygloves"] = .5,["agilityboots"] = .5,["glovesagility"] = .5,["bootsagility"] = .5,["cloakall"] = 3,
 ["allstats"] = .5,["ridingskill"] = .5,["mithrilspurs"] = .5,["spelldamage"] = .5,["spellpower"] = 1,["healpower"] = 1,["minorspeed"] = .5,["shieldspike"] = .5,["majorhealth"] = .5,["majormana"] = .5,["lesserblock"] = .5,["weapondamage"] = .5,
 ["firedamage"] = .5,["frostdamage"] = .5,["shadowdamage"] = .5,["arcanedamage"] = .5,["naturedamage"] = .5,["agilityenchant"] = .5,["strengthenchant"] = .5,["healenchant"] = 1,
+["agilityhead"] = .5,["agilitylegs"] = .5,["strengthhead"] = .5,["strengthlegs"] = .5,["healweapon"] = .5,["damageweapon"] = .5,
 ["transmutearcane"] = 1,["arcanetransmute"] = 1,
 
 ["bankinorgrimmar"] = 2,["orgrimmarbank"] = 2,["banksteps"] = 2,["ahbridge"] = 2,["ifbridge"] = 2,["ahdoor"] = 2,["stormwindbank"] = 2,["outsideah"] = 1,["instormwind"] = .75,
 ["fromstormwind"] = .75,["fromironforge"] = .75,["fromdarnassus"] = .75,["fromorgrimmar"] = .75,["fromundercity"] = .75,["fromthunder"] = .75,
 
-["lfsummon"] = 3,["buyingsummon"] = 3,["buysummon"] = 2,["summonservice"] = 3,["gsummon"] = 3,["offeringsummon"] = 2,["sellingsummon"] = 3,["summonto"] = .5,["offeringtaxi"] = 1,["buyingportal"] = .5,["buyportal"] = .5,["sellportal"] = .5,["sellingportal"] = 1,
-["stormwindportal"] = 2,["darnassusportal"] = 2,["ironforgeportal"] = 2,["ifportal"] = 2,["orgrimmarportal"] = 2,["undercityportal"] = 2,["thunderbluffportal"] = 2,
+["lfsummon"] = 3,["buyingsummon"] = 3,["buysummon"] = 2,["summonservice"] = 3,["gsummon"] = 3,["offeringsummon"] = 2,["sellingsummon"] = 3,["summonto"] = .5,["offeringtaxi"] = 1,
+["moongladesummon"] = .5,["winterspringsummon"] = .5,["hyjalsummon"] = .5,["hydraxiansummon"] = .5,
+["stormwindportal"] = 2,["darnassusportal"] = 2,["ironforgeportal"] = 2,["ifportal"] = 2,["orgrimmarportal"] = 2,["undercityportal"] = 2,["thunderbluffportal"] = 2,["buyingportal"] = .5,["buyportal"] = .5,["sellportal"] = .5,["sellingportal"] = 1,
+["moongladeportal"] = 1,["winterspringportal"] = 1,["hyjalportal"] = 1,["hydraxianportal"] = 1,
 
 ["reasonableprice"] = .5,["foronly"] = 1,
 ["carryservice"] = 3,["keyservice"] = 3,["taxiservice"] = 3,["keyholder"] = 1.5,["healservice"] = 1.5,
@@ -817,22 +820,26 @@ GF_THREE_WORD_TRADE = {
 ["movespeedboots"] = 1,["movementspeedboots"] = 1,["minorspeedboots"] = 1,["msonboots"] = 1,["mstoboots"] = 1,
 ["agilityonhead"] = 1,["agilitytohead"] = 1,["agilityonlegs"] = 1,["agilitytolegs"] = 1,["strengthonhead"] = 1,["strengthtohead"] = 1,["strengthonlegs"] = 1,["strengthtolegs"] = 1,["agilityongloves"] = .5,["agilitytogloves"] = .5,
 ["agilityonboots"] = 1,["agilitytoboots"] = 1,["healtoweapon"] = 1,["damagetoweapon"] = 1,
+["healthonchest"] = 1,["staminaonwrist"] = 1,["agilityoncloak"] = 1,["staminaonboots"] = 1,["strengthonbracer"] = 1,["staminaonbracer"] = 1,["intellectonbracer"] = 1,
+["statsonchest"] = 1,
 
 ["createaportal"] = 2,["needaportal"] = 2,["portalmeto"] = 1,
 ["portaltostormwind"] = 1,["portaltoironforge"] = 1,["portaltoif"] = 1,["portaltodarnassus"] = 1,["portaltoorgrimmar"] = 1,["portaltoundercity"] = 1,["portaltothunderbluff"] = 1,["portaltothunder"] = 1,
 ["buyportalstormwind"] = 1,["buyportalironforge"] = 1,["buyportalif"] = 1,["buyportaldarnassus"] = 1,["buyportalorgrimmar"] = 1,["buyportalundercity"] = 1,["buyportalthunderbluff"] = 1,["buyportalthunder"] = 1,
 
 ["payinggoldsummon"] = 2,["payingmoneysummon"] = 2,["gotasummon"] = 1,["warlocktosummon"] = 1,["locktosummon"] = 1,["summonmeto"] = 2.5,["anysummonin"] = 2.5,
-["freehyjalsummon"] = 2,["lfhyjalsummon"] = 2,["lfhydraxiansummon"] = 3,["needhyjalsummon"] = 2,["anyhyjalsummon"] = 2,
+
 
 ["sellingslotbags"] = 3,["bagonah"] = 3,["anyoneinstormwind"] = .5,["someoneinstormwind"] = .5,
 ["tomakeme"] = 1,["goodsandservices"] = 1,["offeringubrskey"] = 2,["openforubrs"] = 1.5,
 ["arcanebartransmute"] = 1,["arcanetransmutecd"] = 1,
 
 ["doubleyourgold"] = 1.5,["tripleyourgold"] = 1.5,["playsomecasino"] = 2,["testyourluck"] = 3,["tryyourluck"] = 3,["getrichnow"] = 3,["goldforeverybody"] = 3,["gonnaberich"] = 1.5,["atthecasino"] = 1,["winitall"] = 1,
+["freehyjalsummon"] = 1.5,["lfhyjalsummon"] = 1.5,["lfhydraxiansummon"] = 2.5,["needhyjalsummon"] = 1.5,["anyhyjalsummon"] = 1.5,
 }
 GF_FOUR_WORD_TRADE = {
 ["anyoneneedanysummon"] = 3,["applyashieldspike"] = 3,["needaspikeattached"] = 2,["cananyonemakehitem"] = 1,["installthisforme"] = 1,["anyoneabletomake"] = 2,
+["cananyonesummonme"] = 2.25,["cananyoneportalme"] = 2.25,["willanyonesummonme"] = 2.25,["willanyoneportalme"] = 2.25,["cansomeonesummonme"] = 2.25,["cansomeoneportalme"] = 2.25,["willsomeonesummonme"] = 2.25,["willsomeoneportalme"] = 2.25,
 
 ["agilityonmybelt"] = 1,["agilitytomybelt"] = 1,["intellectonmybelt"] = 1,["intellecttomybelt"] = 1,["toimprovemyneck"] = 1,
 
@@ -858,12 +865,9 @@ GF_TRADE_ONE_WORD_EXCLUSION = {
 ["addon"] = true,
 ["inventory"] = true,
 ["empty"] = true,
-["girl"] = true,
-["milf"] = true,
 ["btw"] = true,
-["boy"] = true,
-["dad"] = true,
-["mom"] = true,
+
+["girl"] = true,["boy"] = true,["dad"] = true,["mom"] = true,["he"] = true,["her"] = true,["they"] = true,["milf"] = true,
 }
 GF_TRADE_TWO_WORD_EXCLUSION = {
 ["runme"] = true,["carryme"] = true,["gotroom"] = true,["eachrole"] = true,["tosay"] = true,["wentout"] = true,["findhim"] = true,
