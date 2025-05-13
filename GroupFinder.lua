@@ -2055,7 +2055,11 @@ function GF_GetTypes(arg1)
 			elseif GF_FOUR_WORD_LFM[wordString] then if GF_FOUR_WORD_LFM[wordString] > GF_MessageData.foundLFM then GF_MessageData.foundLFM = GF_FOUR_WORD_LFM[wordString] end
 			elseif GF_FOUR_WORD_LFG[wordString] then GF_MessageData.foundLFG = true
 			elseif GF_FOUR_WORD_QUEST[wordString] then if GF_MessageData.foundQuest then if GF_FOUR_WORD_QUEST[wordString] > GF_MessageData.foundQuest then GF_MessageData.foundQuest = GF_FOUR_WORD_QUEST[wordString] end else GF_MessageData.foundQuest = GF_FOUR_WORD_QUEST[wordString] end
-			elseif GF_FOUR_WORD_DUNGEON[wordString] then if GF_MessageData.foundDungeon then if GF_FOUR_WORD_DUNGEON[wordString] > GF_MessageData.foundDungeon then GF_MessageData.foundDungeon = GF_FOUR_WORD_DUNGEON[wordString] end else GF_MessageData.foundDungeon = GF_FOUR_WORD_DUNGEON[wordString] end end
+			elseif GF_FOUR_WORD_DUNGEON[wordString] then if GF_MessageData.foundDungeon then if GF_FOUR_WORD_DUNGEON[wordString] > GF_MessageData.foundDungeon then GF_MessageData.foundDungeon = GF_FOUR_WORD_DUNGEON[wordString] end else GF_MessageData.foundDungeon = GF_FOUR_WORD_DUNGEON[wordString] end
+			elseif GF_FOUR_WORD_TRADE[wordString] then
+				if GF_MessageData.foundTrades < 100 then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_FOUR_WORD_TRADE[wordString]
+				elseif GF_MessageData.foundTrades > 100 and GF_FOUR_WORD_TRADE[wordString] < 100 then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_FOUR_WORD_TRADE[wordString] end
+			end
 
 			if (GF_FOUR_WORD_QUEST[wordString] or GF_FOUR_WORD_DUNGEON[wordString]) then
 				for words,_ in GF_LFM_ONE_AFTER do if wordTable[i+4] and wordString..wordTable[i+4] == wordString..words then GF_MessageData.foundLFM = 2 end end
