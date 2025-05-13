@@ -47,4 +47,4 @@ Note: Will not message the same person more than once every 15 minutes.
 
 ![Image](https://github.com/user-attachments/assets/6f264354-cec4-4447-b18f-42bb4bfc19b9)  
 
-Turtle WoW effectively blocks you from whispering after ~15 whispers.  
+Note: Turtle WoW only allows a /who every ~30 seconds, and blocks you from whispering to more than ~15 different players within some arbitrary period of time.  
