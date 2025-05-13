@@ -1963,6 +1963,7 @@ function GF_GetTypes(arg1)
 	local wordTable = {}
 	local wordString;
 	if string.sub(arg1,1,3) == "lfm" then table.insert(wordTable, "lfm") arg1 = string.sub(arg1, 4) GF_MessageData.foundLFM = 3
+	elseif string.sub(arg1,1,3) == "lfg" then table.insert(wordTable, "lfg") arg1 = string.sub(arg1, 4) GF_MessageData.foundLFG = true
 	elseif string.sub(arg1,1,2) == "lf" then table.insert(wordTable, "lf") arg1 = string.sub(arg1, 3) GF_MessageData.foundLFM = 2 GF_MessageData.foundTrades = 102.5 end
 	for word in string.gfind(arg1, "(%a+)") do
 		if not GF_ONE_WORD_SKIP[word] then

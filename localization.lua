@@ -419,7 +419,7 @@ GF_ONE_WORD_FIX = {
 ["raids"] = "raid",["raiding"] = "raid",["rading"] = "raid",["dng"] = "dungeon",["dung"] = "dungeon",["bosses"] = "boss",["runs"] = "run",["que"] = "queue",["bgs"] = "bg",["battlegrounds"] = "battleground",["bgs"] = "bg",
 ["repfarm"] = "repfarm",["repgroup"] = "repfarm",["reprun"] = "repfarm",["repgrind"] = "repfarm",["repgrind"] = "repfarm",["ccfarm"] = "repfarm",["farmgroup"] = "repfarm",
 
-["anynbody"] = "anyone",["anybody"] = "anyone",["yours"] = "your",["anyonw"] = "anyone",["anyon"] = "anyone",["onl"] = "only",["forr"] = "for", -- Basic Words
+["anynbody"] = "anyone",["anybody"] = "anyone",["yours"] = "your",["anyonw"] = "anyone",["anyon"] = "anyone",["anyoone"] = "anyone",["onl"] = "only",["forr"] = "for", -- Basic Words
 ["needs"] = "need",["ned"] = "need",["neeed"] = "need",
 ["doin"] = "doing",["wana"] = "wanna",["alla"] = "all",["plz"] = "please",["pls"] = "please",["weeks"] = "week",["times"] = "time",["wings"] = "wing",
 ["nub"] = "noob",["noobs"] = "noob",["newbs"] = "noob",["newbies"] = "noob",
@@ -581,6 +581,8 @@ GF_FOUR_WORD_LFM = {
 
 ["anymoltencorehappening"] = 2,["anyblackwinglairhappening"] = 2,["anyworldbosshappening"] = 2,
 ["anymoltencoregoing"] = 2,["anyblackwinglairgoing"] = 2,["anyworldbossgoing"] = 2,
+
+["getyouraqrepfarm"] = 2,
 }
 
 GF_LFM_ONE_AFTER = {
@@ -795,7 +797,7 @@ GF_TWO_WORD_TRADE = {
 GF_THREE_WORD_TRADE = {
 ["wanttobuy"] = 2.5,["wanttosell"] = 2.5,["wanttotrade"] = 2.5,["getyourhitem"] = 1,["getyourhenchant"] = 1,["iwillenchant"] = 2,
 ["mymatstip"] = 3,["yourmatstip"] = 3,["workfortip"] = 3,["tipanyamount"] = 3,
-["lookingforwork"] = 3,["lookingtobuy"] = 3,["lookingtosell"] = 3,["lookingforcrafter"] = 3,["whocancraft"] = 1.5,["cananyonecraft"] = 2,["cananybodycraft"] = 2,["cansomeonecraft"] = 2,
+["lookingforwork"] = 3,["lookingtobuy"] = 3,["lookingtosell"] = 3,["lookingforcrafter"] = 3,["whocancraft"] = 1.5,["cananyonecraft"] = 2,["cananyonemake"] = 2,["cananybodycraft"] = 2,["cansomeonecraft"] = 2,
 
 ["whocanenchant"] = 1.5,["anyenchantonline"] = 3,["anyenchantwith"] = 3,
 
@@ -806,7 +808,7 @@ GF_THREE_WORD_TRADE = {
 
 ["movespeedboots"] = 1,["movementspeedboots"] = 1,["minorspeedboots"] = 1,["msonboots"] = 1,["mstoboots"] = 1,
 ["agilityonhead"] = 1,["agilitytohead"] = 1,["agilityonlegs"] = 1,["agilitytolegs"] = 1,["strengthonhead"] = 1,["strengthtohead"] = 1,["strengthonlegs"] = 1,["strengthtolegs"] = 1,["agilityongloves"] = .5,["agilitytogloves"] = .5,
-["agilityonboots"] = 1,["agilitytoboots"] = 1,
+["agilityonboots"] = 1,["agilitytoboots"] = 1,["healtoweapon"] = 1,["damagetoweapon"] = 1,
 
 ["createaportal"] = 2,["needaportal"] = 2,["portalmeto"] = 1,
 ["portaltostormwind"] = 1,["portaltoironforge"] = 1,["portaltoif"] = 1,["portaltodarnassus"] = 1,["portaltoorgrimmar"] = 1,["portaltoundercity"] = 1,["portaltothunderbluff"] = 1,["portaltothunder"] = 1,
@@ -822,9 +824,11 @@ GF_THREE_WORD_TRADE = {
 ["doubleyourgold"] = 1.5,["tripleyourgold"] = 1.5,["playsomecasino"] = 2,["testyourluck"] = 3,["tryyourluck"] = 3,["getrichnow"] = 3,["goldforeverybody"] = 3,["gonnaberich"] = 1.5,["toberich"] = 1.5,["atthecasino"] = 1,["winitall"] = 1,
 }
 GF_FOUR_WORD_TRADE = {
-["anyoneneedanysummon"] = 3,["applyashieldspike"] = 3,["applyashieldspike"] = 2.5,
+["anyoneneedanysummon"] = 3,["applyashieldspike"] = 3,["applyashieldspike"] = 2.5,["cananyonemakehitem"] = 1,
 
 ["agilityonmybelt"] = 1,["agilitytomybelt"] = 1,["intellectonmybelt"] = 1,["intellecttomybelt"] = 1,
+
+["fortunefavorsthebold"] = 3,["youtoocanwin"] = 3,["comeandplaynow"] = 3,
 }
 GF_TRADE_ONE_WORD_EXCLUSION = {
 ["tank"] = true,["range"] = true,["melee"] = true,
