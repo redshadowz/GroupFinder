@@ -22,7 +22,7 @@ Note: All blocked chat is recorded in the 'Log'.
 >[Auto Filter] - Whether to only show groups near your level(default: 6 level difference).  
 [Play Sound] - Plays a sound when a group is found.  
 [Show Dungeons/Raids/Quests/Other/LFM/LFG] - To show/hide groups matching your criteria.  
-["Keywords" editbox] - Filters your group list using this text. Use "/" for more than one search. The dropdown box will auto-populate a list of groups based on your level.  
+["Keywords" editbox] - Filters your group list using this text. Separate by commas for multiple searches. The dropdown box will auto-populate a list of groups based on your level.  
 [Auto /Who] - Whether to automatically '/who' groups/players from chat for their class/level information.  
 
 >[Join World Channel] - Keeps you in the World Channel.  
