@@ -2002,6 +2002,21 @@ function GF_GetTypes(arg1)
 		end
 	end
 	for i=1, getn(wordTable) do
+		if wordTable[i+2] and GF_THREE_WORD_FIX[wordTable[i]..wordTable[i+1]..wordTable[i+2]] then
+			wordTable[i] = GF_THREE_WORD_FIX[wordTable[i]..wordTable[i+1]..wordTable[i+2]]
+			wordTable[i+1] = ""
+			wordTable[i+2] = ""
+		end
+	end
+	for i=1, getn(wordTable) do
+		if wordTable[i+3] and GF_FOUR_WORD_FIX[wordTable[i]..wordTable[i+1]..wordTable[i+2]..wordTable[i+3]] then
+			wordTable[i] = GF_FOUR_WORD_FIX[wordTable[i]..wordTable[i+1]..wordTable[i+2]..wordTable[i+3]]
+			wordTable[i+1] = ""
+			wordTable[i+2] = ""
+			wordTable[i+3] = ""
+		end
+	end
+	for i=1, getn(wordTable) do
 		if wordTable[i+1] then
 			wordString = wordTable[i]..wordTable[i+1]
 			if GF_TWO_WORD_IGNORE[wordString] then GF_MessageData.foundIgnore = true
@@ -2094,13 +2109,13 @@ function GF_CheckForSpam(arg1,arg2,foundInGroup)
 		if (GF_WhoTable[GF_RealmName][arg2] and tonumber(GF_WhoTable[GF_RealmName][arg2][1]) < GF_SavedVariables.blockmessagebelowlevel) and GF_WhoTable[GF_RealmName][arg2][4] + 86400 > time() then return 9; end  -- Block lowlevel
 		if GF_SavedVariables.spamfilter then
 			if GF_PlayerMessages[arg2] and GF_PlayerMessages[arg2][1] and GF_PlayerMessages[arg2][1] > GetTime() then return 7 end
-			if GF_IncomingMessagePrune + 3600 < GetTime() then -- 1 hour
+			if GF_IncomingMessagePrune + 3600 < time() then -- 1 hour
 				for name,_ in GF_PlayerMessages do
 					if GF_PlayerMessages[name][1] < GetTime() then
 						GF_PlayerMessages[name] = nil;
 					end
 				end
-				GF_IncomingMessagePrune = GetTime();
+				GF_IncomingMessagePrune = time();
 			end
 			if not GF_PlayerMessages[arg2] then
 				GF_PlayerMessages[arg2] = { [1] = GetTime(), [2] = string.sub(arg1,math.random(math.ceil(string.len(arg1)/4)),math.ceil(string.len(arg1)/4*3 + math.random(math.ceil(string.len(arg1)/4)))), [3] = "ZZZzzz123654" }
