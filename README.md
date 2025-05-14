@@ -43,7 +43,8 @@ The 'Get Who' and 'Invite' Edit Box is for whispering people who match the selec
 2) Press the 'Get Who' button to make a list of all players of the selected class in the level range of the dungeon.  
 3) Type your message in the 'Invite' Edit Box(uses 'Announce' message if blank).  
 4) Press the 'Invite' button to whisper someone on the 'Get Who' list. The number of players available is shown on the 'Get Who' button.  
-Note: Will not message the same person more than once every 15 minutes.  
+Note: Will not message the same person more than once every 15 minutes.
 
+![Image](https://github.com/user-attachments/assets/60b1f80d-0e1c-4a41-b09a-3538056adbbf)  
 
 Note: Turtle WoW only allows a /who every ~30 seconds, and blocks you from whispering to more than ~15 different players within some arbitrary period of time.  
