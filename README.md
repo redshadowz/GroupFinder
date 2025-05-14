@@ -45,6 +45,5 @@ The 'Get Who' and 'Invite' Edit Box is for whispering people who match the selec
 4) Press the 'Invite' button to whisper someone on the 'Get Who' list. The number of players available is shown on the 'Get Who' button.  
 Note: Will not message the same person more than once every 15 minutes.  
 
-![Image](https://github.com/user-attachments/assets/fd3355bf-6441-4845-a95b-ab5c71b96f30)
 
 Note: Turtle WoW only allows a /who every ~30 seconds, and blocks you from whispering to more than ~15 different players within some arbitrary period of time.  
