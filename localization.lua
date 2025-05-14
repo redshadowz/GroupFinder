@@ -946,7 +946,7 @@ GF_TWO_WORD_TRADE = {
 }
 GF_THREE_WORD_TRADE = {
 ["wanttobuy"] = 2.5,["wanttosell"] = 2.5,["wanttotrade"] = 2.5,["getyourhitem"] = 1,["getyourhenchant"] = 1,["iwillenchant"] = 2,
-["mymatstip"] = 3,["yourmatstip"] = 3,["workfortip"] = 3,["tipanyamount"] = 3,
+["mymatstip"] = 3,["yourmatstip"] = 3,["workfortip"] = 3,["tipanyamount"] = 3,["ipaygold"] = 1,["illpaygold"] = 1,
 ["lookingforwork"] = 3,["lookingtobuy"] = 3,["lookingtosell"] = 3,["lookingforcrafter"] = 3,["whocancraft"] = 1.5,["cananyonecraft"] = 2,["cananyonemake"] = 2,
 
 ["whocanenchant"] = 1.5,["anyenchantonline"] = 3,["anyenchantwith"] = 3,
@@ -977,7 +977,7 @@ GF_THREE_WORD_TRADE = {
 ["freehyjalsummon"] = 1.5,["lfhyjalsummon"] = 1.5,["lfhydraxiansummon"] = 2.5,["needhyjalsummon"] = 1.5,["anyhyjalsummon"] = 1.5,
 }
 GF_FOUR_WORD_TRADE = {
-["anyoneneedanysummon"] = 3,["applyashieldspike"] = 3,["needaspikeattached"] = 2,["cananyonemakehitem"] = 1,["installthisforme"] = 1,["anyoneabletomake"] = 2,
+["anyoneneedanysummon"] = 3,["applyashieldspike"] = 3,["needaspikeattached"] = 2,["cananyonemakehitem"] = 1,["installthisforme"] = 1,["anyoneabletomake"] = 2,["iwillpaygold"] = 2,["willipaygold"] = 2,
 ["cananyonesummonme"] = 2.25,["cananyoneportalme"] = 2.25,["willanyonesummonme"] = 2.25,["willanyoneportalme"] = 2.25,
 
 ["openingallyourlockbox"] = 3,
