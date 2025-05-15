@@ -1943,7 +1943,7 @@ function GF_CheckForGroups(arg1,arg2,event)
 -- "Yell" and "Channel" messages will only display if allowed.
 	if GF_BlackList[GF_RealmName][arg2] and not GF_PlayersCurrentlyInGroup[arg2] and not GF_Friends[arg2] and not GF_Guildies[arg2] then return 8 end
 	GF_GetTypes(gsub(gsub(gsub(gsub(gsub(gsub(string.lower(arg1),".gg/%w+", ""), "|cff%w+|(%w+)[%d:]+|h", " %1 "), "|h|r", " "),"['']", ""),"any? ?1","anyone"),"g2g","gtg"))
-	if not GF_SavedVariables.showguilds and not GF_MessageData.foundGuildExclusion and GF_MessageData.foundGuild >= 3 and (event == "CHAT_MSG_CHANNEL" or event == "CHAT_MSG_YELL") then return 7
+	if not GF_SavedVariables.showguilds and GF_MessageData.foundGuild >= 3 and (event == "CHAT_MSG_CHANNEL" or event == "CHAT_MSG_YELL") then return 7
 	elseif GF_MessageData.foundTrades >= 3 then return GF_CheckForSpam(arg1,arg2) or 5
 	elseif GF_MessageData.foundIgnore and GF_MessageData.foundLFM < 4 then return GF_CheckForSpam(arg1,arg2) or 4 end
 
@@ -1961,7 +1961,7 @@ function GF_CheckForGroups(arg1,arg2,event)
 	return GF_CheckForSpam(arg1,arg2,foundInGroup) or foundInGroup;
 end
 function GF_GetTypes(arg1)
-	GF_MessageData = { foundIgnore = nil,foundGuild = 0,foundGuildExclusion = nil,foundLFM = 0,foundLFG = nil,foundClass = nil,foundQuest = nil,foundDungeon = nil,foundRaid = nil,foundTrades = 0,foundTradesExclusion = nil,foundPvP = nil,foundFlags = "" }
+	GF_MessageData = { foundIgnore = nil,foundGuild = 0,foundGuildExclusion = 0,foundLFM = 0,foundLFG = nil,foundClass = nil,foundQuest = nil,foundDungeon = nil,foundRaid = nil,foundTrades = 0,foundTradesExclusion = nil,foundPvP = nil,foundFlags = "" }
 	local wordTable = {}
 	local wordString;
 	if string.sub(arg1,1,3) == "lfm" then table.insert(wordTable, "lfm") arg1 = string.sub(arg1, 4) GF_MessageData.foundLFM = 3
@@ -1975,7 +1975,7 @@ function GF_GetTypes(arg1)
 			elseif GF_ONE_WORD_GUILD[word] then
 				if GF_MessageData.foundGuild < 100 then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_ONE_WORD_GUILD[word]
 				elseif GF_MessageData.foundGuild > 100 and GF_ONE_WORD_GUILD[word] < 100 then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_ONE_WORD_GUILD[word] end
-			elseif GF_GUILD_ONE_WORD_EXCLUSION[word] then GF_MessageData.foundGuildExclusion = true
+			elseif GF_GUILD_ONE_WORD_EXCLUSION[word] then GF_MessageData.foundGuildExclusion = GF_MessageData.foundGuildExclusion + GF_GUILD_ONE_WORD_EXCLUSION[word]
 			elseif GF_ONE_WORD_LFM[word] then if GF_ONE_WORD_LFM[word] > GF_MessageData.foundLFM then GF_MessageData.foundLFM = GF_ONE_WORD_LFM[word] end
 			elseif GF_ONE_WORD_LFG[word] then GF_MessageData.foundLFG = true
 			elseif GF_ONE_WORD_CLASSES[word] then GF_MessageData.foundClass = GF_ONE_WORD_CLASSES[word]
@@ -2023,7 +2023,7 @@ function GF_GetTypes(arg1)
 			elseif GF_TWO_WORD_GUILD[wordString] then
 				if GF_MessageData.foundGuild < 100 then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_TWO_WORD_GUILD[wordString]
 				elseif GF_MessageData.foundGuild > 100 and GF_TWO_WORD_GUILD[wordString] < 100 then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_TWO_WORD_GUILD[wordString] end
-			elseif GF_GUILD_TWO_WORD_EXCLUSION[word] then GF_MessageData.foundGuildExclusion = true
+			elseif GF_GUILD_TWO_WORD_EXCLUSION[wordString] then GF_MessageData.foundGuildExclusion = GF_MessageData.foundGuildExclusion + GF_GUILD_TWO_WORD_EXCLUSION[wordString]
 			elseif GF_TWO_WORD_LFM[wordString] then if GF_TWO_WORD_LFM[wordString] > GF_MessageData.foundLFM then GF_MessageData.foundLFM = GF_TWO_WORD_LFM[wordString] end
 			elseif GF_TWO_WORD_LFG[wordString] then GF_MessageData.foundLFG = true
 			elseif GF_TWO_WORD_QUEST[wordString] then if GF_MessageData.foundQuest then if GF_TWO_WORD_QUEST[wordString] > GF_MessageData.foundQuest then GF_MessageData.foundQuest = GF_TWO_WORD_QUEST[wordString] end else GF_MessageData.foundQuest = GF_TWO_WORD_QUEST[wordString] end
@@ -2098,6 +2098,7 @@ function GF_GetTypes(arg1)
 
 	if string.find(arg1, "<[a-zA-Z0-9%& ]+>") and GF_MessageData.foundGuild < 100 then GF_MessageData.foundGuild = GF_MessageData.foundGuild + 2; end
 	while GF_MessageData.foundGuild > 100 do GF_MessageData.foundGuild = GF_MessageData.foundGuild - 100 end
+	GF_MessageData.foundGuild = GF_MessageData.foundGuild - GF_MessageData.foundGuildExclusion
 	if string.len(arg1) > 60 then
 		for i=1, getn(GF_STRING_FIND_LIST.GUILDBLOCKLIST) do
 			if string.find(arg1, GF_STRING_FIND_LIST.GUILDBLOCKLIST[i]) then GF_MessageData.foundGuild = 3 break end
