@@ -597,7 +597,7 @@ GF_TWO_WORD_GUILD = {
 
 ["currentlyprogressing"] = 1.5,["clearingcontent"] = 1,["turtlecontent"] = 1,["lowercontent"] = .5,["firstrun"] = 1,["classicexperience"] = .5,["vanillaexperience"] = .5,
 ["wantsyou"] = 2,["welcomesyou"] = 2,["welcometo"] = 1,["adultswelcome"] = .5,["raiderswelcome"] = .5,
-["enjoyleveling"] = 1,["casualleveling"] = 1,["leveltogether"] = 1,["groupquest"] = .5,["alliancelevelers"] = 1,["hordelevelers"] = 1,["peopleleveling"] = 1,
+["enjoyleveling"] = 1,["casualleveling"] = 1,["leveltogether"] = 1,["groupquest"] = .5,["alliancelevelers"] = 1,["hordelevelers"] = 1,["peopleleveling"] = 1,["questtogether"] = .5,["newlymade"] = .5,
 
 ["weeklyevents"] = .5,["weekdayraid"] = 1,["raidday"] = .5,["raidtime"] = 2,["inweek"] = 1,["aweek"] = 1,["everyweek"] = .5,["allraids"] = .5,
 ["newplayer"] = .5,["newplayers"] = 2,["newmembers"] = 1.5,["newlyformed"] = 2,["seriousmembers"] = .5,["veteranplayers"] = 1,["casualfriendly"] = 1,
@@ -611,7 +611,7 @@ GF_TWO_WORD_GUILD = {
 ["ukrainianguild"] = 1,["russianguild"] = 1,["czsfk"] = 2,["sfkcz"] = 2,
 }
 GF_THREE_WORD_GUILD = {
-["lfaguild"] = 3,["lfcasualguild"] = 3,["lfsocialguild"] = 3,["lfraidguild"] = 3,["lflevelingguild"] = 3,["lflevelguild"] = 3,["lfforguild"] = 3,["lfpvpguild"] = 3,["lfchillguild"] = 3,["lfhypeguild"] = 3,
+["lfaguild"] = 3,["lfcasualguild"] = 3,["lfsocialguild"] = 3,["lfraidguild"] = 3,["lflevelingguild"] = 3,["lflevelguild"] = 3,["lfforguild"] = 3,["lfpvpguild"] = 3,["lfchillguild"] = 3,["lfhypeguild"] = 3,["lfactiveguild"] = 3,
 ["ourraidteam"] = 3,["finishourcore"] = 3,["lookingtoraid"] = .5,["lookingforraiders"] = .5,
 ["allcurrentcontent"] = 3,["startraidingsoon"] = 1,["startinweek"] = 1,
 ["friendsandguildies"] = 1,["levelwithfriends"] = .5,["liketolevel"] = .5,["easygoingplayers"] = 2,["justgoodraid"] = 3,["helpingeachother"] = 1,
@@ -626,7 +626,7 @@ GF_THREE_WORD_GUILD = {
 ["lffinnishguild"] = 1,["lfgermanguild"] = 1,["lffrenchguild"] = 1,["lfspanishguild"] = 1,["lfpolishguild"] = 1,["lfitalianguild"] = 1,["lfdutchguild"] = 1,
 }
 GF_FOUR_WORD_GUILD = {
-["lookingforaguild"] = 1,["lookingsocialchillguild"] = 1,["startinaweek"] = 1,["nopressurenodrama"] = 3,["lfalevelingguild"] = 1,["lfasocialguild"] = 1,["lfapvpguild"] = 1,["lfaraidguild"] = 1,["lfacasualguild"] = 1,
+["lookingforaguild"] = 1,["lookingsocialchillguild"] = 1,["startinaweek"] = 1,["nopressurenodrama"] = 3,["lfalevelingguild"] = 1,["lfasocialguild"] = 1,["lfapvpguild"] = 1,["lfaraidguild"] = 1,["lfacasualguild"] = 1,["lfnewlymadeguild"] = 1,
 ["lfafinnishguild"] = 1,["lfagermanguild"] = 1,["lfafrenchguild"] = 1,["lfaspanishguild"] = 1,["lfapolishguild"] = 1,["lfaitalianguild"] = 1,["lfadutchguild"] = 1,
 }
 GF_GUILD_ONE_WORD_EXCLUSION = {
