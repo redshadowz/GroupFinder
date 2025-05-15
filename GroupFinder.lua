@@ -2031,7 +2031,7 @@ function GF_GetTypes(arg1)
 				elseif GF_TWO_WORD_TRADE[wordString] then
 					if GF_MessageData.foundTrades < 100 then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_TWO_WORD_TRADE[wordString]
 					elseif GF_MessageData.foundTrades > 100 and GF_TWO_WORD_TRADE[wordString] < 100 then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_TWO_WORD_TRADE[wordString] end
-				elseif GF_TRADE_TWO_WORD_EXCLUSION[wordString] then GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + GF_TRADE_ONE_WORD_EXCLUSION[wordString] end
+				elseif GF_TRADE_TWO_WORD_EXCLUSION[wordString] then GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + GF_TRADE_TWO_WORD_EXCLUSION[wordString] end
 
 				if (GF_TWO_WORD_QUEST[wordString] or GF_TWO_WORD_DUNGEON[wordString] or GF_TWO_WORD_RAID[wordString] or GF_TWO_WORD_PVP[wordString]) then
 					for words,_ in GF_LFM_ONE_AFTER do if wordTable[i+j+1] and wordString..wordTable[i+j+1] == wordString..words then GF_MessageData.foundLFM = 2 end end
