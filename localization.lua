@@ -1248,7 +1248,7 @@ local GF_TURTLE_ONE_WORD_RAID = {
 }
 local GF_TURTLE_ONE_WORD_TRADE = {
 ["jc"] = .5,["jewelcrafter"] = 1,
-["gem"] = .5,["gemstone"] = .5,["beltbuckle"] = 1,
+["beltbuckle"] = 1,
 
 ["hyjal"] = .5,["theramore"] = .25,
 }
