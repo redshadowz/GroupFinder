@@ -623,7 +623,7 @@ GF_TWO_WORD_GUILD = {
 
 -- Four Words
 ["lookingforaguild"] = 1,["lookingsocialchillguild"] = 1,["startinaweek"] = 1,["nopressurenodrama"] = 3,["lfalevelingguild"] = 1,["lfasocialguild"] = 1,["lfapvpguild"] = 1,["lfaraidguild"] = 1,["lfacasualguild"] = 1,["lfnewlymadeguild"] = 1,
-["lfchilllevelingguild"] = 3,
+["lfchilllevelingguild"] = 1,
 ["lfafinnishguild"] = 1,["lfagermanguild"] = 1,["lfafrenchguild"] = 1,["lfaspanishguild"] = 1,["lfapolishguild"] = 1,["lfaitalianguild"] = 1,["lfadutchguild"] = 1,
 }
 GF_GUILD_ONE_WORD_EXCLUSION = {
@@ -994,34 +994,35 @@ GF_TWO_WORD_TRADE = {
 ["fortunefavorsthebold"] = 3,["youtoocanwin"] = 3,["comeandplaynow"] = 3,["highestpayoutgiventoday"] = 3,["winsomeeasygold"] = 3,["wantstoberich"] = 1.5,["yourwishcometrue"] = 1,
 }
 GF_TRADE_ONE_WORD_EXCLUSION = {
-["range"] = true,["melee"] = true,
-["hr"] = true,["ms"] = true,["os"] = true,
-["lfm"] = true,["lfg"] = true,
-["discord"] = true,
-["reserved"] = true,
-["rules"] = true,
-["raidres"] = true,
-["bored"] = true,
-["discord"] = true,
-["recruiting"] = true,
-["quest"] = true,
-["utc"] = true,["cet"] = true,["msk"] = true,["est"] = true,["cst"] = true,
-["cringe"] = true,
-["woah"] = true,
-["homie"] = true,
-["edgy"] = true,
-["addon"] = true,
-["inventory"] = true,
-["empty"] = true,
-["btw"] = true,
+["lfm"] = 1,
+["range"] = 1,["melee"] = 1,
+["hr"] = 1,["ms"] = 1,["os"] = 1,
+["lfm"] = 1,["lfg"] = 1,
+["discord"] = 1,
+["reserved"] = 1,
+["rules"] = 1,
+["raidres"] = 1,
+["bored"] = 1,
+["discord"] = 1,
+["recruiting"] = 1,
+["quest"] = 1,
+["utc"] = 1,["cet"] = 1,["msk"] = 1,["est"] = 1,["cst"] = 1,
+["cringe"] = 1,
+["woah"] = 1,
+["homie"] = 1,
+["edgy"] = 1,
+["addon"] = 1,
+["inventory"] = 1,
+["empty"] = 1,
+["btw"] = 1,
 
-["girl"] = true,["boy"] = true,["dad"] = true,["mom"] = true,["he"] = true,["her"] = true,["they"] = true,["milf"] = true,
+["girl"] = 1,["boy"] = 1,["dad"] = 1,["mom"] = 1,["he"] = 1,["her"] = 1,["they"] = 1,["milf"] = 1,
 }
 GF_TRADE_TWO_WORD_EXCLUSION = {
-["runme"] = true,["carryme"] = true,["gotroom"] = true,["eachrole"] = true,["tosay"] = true,["wentout"] = true,["findhim"] = true,
-["mydad"] = true,["mymom"] = true,["mybrother"] = true,["mysister"] = true,["cousin"] = true,["grandfather"] = true,["grandmother"] = true,
-["wannawrite"] = true,["justclick"] = true,["ikinda"] = true,["pleasehave"] = true,["pleasebring"] = true,["willneed"] = true,["musthave"] = true,["reallife"] = true,
-["weknow"] = true,["thatstuff"] = true,
+["lfm"] = 1,["runme"] = 1,["carryme"] = 1,["gotroom"] = 1,["eachrole"] = 1,["tosay"] = 1,["wentout"] = 1,["findhim"] = 1,
+["mydad"] = 1,["mymom"] = 1,["mybrother"] = 1,["mysister"] = 1,["cousin"] = 1,["grandfather"] = 1,["grandmother"] = 1,
+["wannawrite"] = 1,["justclick"] = 1,["ikinda"] = 1,["pleasehave"] = 1,["pleasebring"] = 1,["willneed"] = 1,["musthave"] = 1,["reallife"] = 1,
+["weknow"] = 1,["thatstuff"] = 1,
 }
 
 GF_ONE_WORD_PVP = {

@@ -1965,7 +1965,7 @@ function GF_CheckForGroups(arg1,arg2,event)
 	return GF_CheckForSpam(arg1,arg2,foundInGroup) or foundInGroup;
 end
 function GF_GetTypes(arg1)
-	GF_MessageData = { foundIgnore = nil,foundGuild = 0,foundGuildExclusion = 0,foundLFM = 0,foundLFG = nil,foundClass = nil,foundQuest = nil,foundDungeon = nil,foundRaid = nil,foundTrades = 0,foundTradesExclusion = nil,foundPvP = nil,foundFlags = "" }
+	GF_MessageData = { foundIgnore = nil,foundGuild = 0,foundGuildExclusion = 0,foundLFM = 0,foundLFG = nil,foundClass = nil,foundQuest = nil,foundDungeon = nil,foundRaid = nil,foundTrades = 0,foundTradesExclusion = 0,foundPvP = nil,foundFlags = "" }
 	local wordTable = {}
 	local wordString;
 	if string.sub(arg1,1,3) == "lfm" then table.insert(wordTable, "lfm") arg1 = string.sub(arg1, 4) GF_MessageData.foundLFM = 3
@@ -1990,7 +1990,7 @@ function GF_GetTypes(arg1)
 			if GF_ONE_WORD_TRADE[word] then
 				if GF_MessageData.foundTrades < 100 then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_ONE_WORD_TRADE[word]
 				elseif GF_MessageData.foundTrades > 100 and GF_ONE_WORD_TRADE[word] < 100 then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_ONE_WORD_TRADE[word] end
-			elseif GF_TRADE_ONE_WORD_EXCLUSION[word] then GF_MessageData.foundTradesExclusion = true end
+			elseif GF_TRADE_ONE_WORD_EXCLUSION[word] then GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + GF_TRADE_ONE_WORD_EXCLUSION[word] end
 		end
 	end
 	for i=1, getn(wordTable) do
@@ -2023,7 +2023,7 @@ function GF_GetTypes(arg1)
 				elseif GF_GUILD_TWO_WORD_EXCLUSION[wordString] then GF_MessageData.foundGuildExclusion = GF_MessageData.foundGuildExclusion + GF_GUILD_TWO_WORD_EXCLUSION[wordString]
 				elseif GF_TWO_WORD_LFM[wordString] then if GF_TWO_WORD_LFM[wordString] > GF_MessageData.foundLFM then GF_MessageData.foundLFM = GF_TWO_WORD_LFM[wordString] end
 				elseif GF_TWO_WORD_LFG[wordString] then GF_MessageData.foundLFG = true
-				elseif GF_ONE_WORD_CLASSES[word] then GF_MessageData.foundClass = GF_ONE_WORD_CLASSES[word]
+				elseif GF_ONE_WORD_CLASSES[wordString] then GF_MessageData.foundClass = GF_ONE_WORD_CLASSES[wordString]
 				elseif GF_TWO_WORD_QUEST[wordString] then if GF_MessageData.foundQuest then if GF_TWO_WORD_QUEST[wordString] > GF_MessageData.foundQuest then GF_MessageData.foundQuest = GF_TWO_WORD_QUEST[wordString] end else GF_MessageData.foundQuest = GF_TWO_WORD_QUEST[wordString] end
 				elseif GF_TWO_WORD_DUNGEON[wordString] then if GF_MessageData.foundDungeon then if GF_TWO_WORD_DUNGEON[wordString] > GF_MessageData.foundDungeon then GF_MessageData.foundDungeon = GF_TWO_WORD_DUNGEON[wordString] GF_MessageData.foundFlags = wordString; end else GF_MessageData.foundDungeon = GF_TWO_WORD_DUNGEON[wordString] GF_MessageData.foundFlags = wordString; end
 				elseif GF_TWO_WORD_RAID[wordString] then GF_MessageData.foundRaid = GF_TWO_WORD_RAID[wordString] GF_MessageData.foundFlags = wordString;
@@ -2031,7 +2031,7 @@ function GF_GetTypes(arg1)
 				elseif GF_TWO_WORD_TRADE[wordString] then
 					if GF_MessageData.foundTrades < 100 then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_TWO_WORD_TRADE[wordString]
 					elseif GF_MessageData.foundTrades > 100 and GF_TWO_WORD_TRADE[wordString] < 100 then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_TWO_WORD_TRADE[wordString] end
-				elseif GF_TRADE_TWO_WORD_EXCLUSION[wordString] then GF_MessageData.foundTradesExclusion = true end
+				elseif GF_TRADE_TWO_WORD_EXCLUSION[wordString] then GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + GF_TRADE_ONE_WORD_EXCLUSION[wordString] end
 
 				if (GF_TWO_WORD_QUEST[wordString] or GF_TWO_WORD_DUNGEON[wordString] or GF_TWO_WORD_RAID[wordString] or GF_TWO_WORD_PVP[wordString]) then
 					for words,_ in GF_LFM_ONE_AFTER do if wordTable[i+j+1] and wordString..wordTable[i+j+1] == wordString..words then GF_MessageData.foundLFM = 2 end end
@@ -2046,8 +2046,9 @@ function GF_GetTypes(arg1)
 	if GF_MessageData.foundLFM < 2 and ((string.find(arg1, "anyone%?") and string.find(arg1, "hquest")) or string.find(arg1, "%d+\=%d+")) then GF_MessageData.foundLFM = 2 end
 	
 	if string.find(arg1, "[ (]%d+g") or string.find(arg1, "%d%s?+gold") then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 2 end
-	if GF_MessageData.foundTradesExclusion or GF_MessageData.foundLFM > 3 then GF_MessageData.foundTrades = 0 end
 	while GF_MessageData.foundTrades > 100 do GF_MessageData.foundTrades = GF_MessageData.foundTrades - 100 end
+	GF_MessageData.foundTrades = GF_MessageData.foundTrades - GF_MessageData.foundTradesExclusion
+
 
 	if string.find(arg1, "<[a-zA-Z0-9%& ]+>") and GF_MessageData.foundGuild < 100 then GF_MessageData.foundGuild = GF_MessageData.foundGuild + 2; end
 	while GF_MessageData.foundGuild > 100 do GF_MessageData.foundGuild = GF_MessageData.foundGuild - 100 end
