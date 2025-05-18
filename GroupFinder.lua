@@ -1980,19 +1980,10 @@ function GF_GetTypes(arg1, showanyway)
 	local wordString;
 	if string.sub(arg1,1,3) == "lfm" then table.insert(wordTable, "lfm") arg1 = string.sub(arg1, 4) GF_MessageData.foundLFM = 3
 	elseif string.sub(arg1,1,3) == "lfg" then table.insert(wordTable, "lfg") arg1 = string.sub(arg1, 4) GF_MessageData.foundLFG = true
-	elseif string.find(arg1, "lf[%s%d]+m") then GF_MessageData.foundLFM = 4 local lfs,lfe = string.find(arg1, "lf[%s%d]+m") if lfs > 1 then arg1 = string.sub(arg1,1,lfs+1)..string.sub(arg1,lfe) else arg1 = "lf"..string.sub(arg1,lfe) end
+	elseif string.find(arg1, "lf[%s%d]+m ") then GF_MessageData.foundLFM = 4 local lfs,lfe = string.find(arg1, "lf[%s%d]+m ") if lfs > 1 then arg1 = string.sub(arg1,1,lfs+1)..string.sub(arg1,lfe) else arg1 = "lf"..string.sub(arg1,lfe) end
 	elseif string.sub(arg1,1,2) == "lf" then table.insert(wordTable, "lf") arg1 = string.sub(arg1, 3) GF_MessageData.foundLFM = 2 GF_MessageData.foundTrades = 102.5 end
 	for word in string.gfind(arg1, "(%a+)") do
 		if not GF_WORD_SKIP[word] then table.insert(wordTable, word) end
-	end
-	for i=1, getn(wordTable) do
-		if GF_LFM_OTHER[wordTable[i]] then GF_MessageData.foundLFM = 3
-		elseif GF_LFG_OTHER[wordTable[i]] then GF_MessageData.foundLFG = true end
-		if wordTable[i+1] then
-			if GF_LFM_OTHER[wordTable[i]..wordTable[i+1]] then GF_MessageData.foundLFM = 3
-			elseif GF_LFG_OTHER[wordTable[i]..wordTable[i+1]] then GF_MessageData.foundLFG = true
-			elseif GF_TRADE_OTHER[wordTable[i]..wordTable[i+1]] then GF_MessageData.foundTrades = 102.5 end
-		end
 	end
 	for j=0,3 do
 		for i=1, getn(wordTable) do
@@ -2003,6 +1994,15 @@ function GF_GetTypes(arg1, showanyway)
 					if j == 1 then wordTable[i+1] = "" elseif j == 2 then wordTable[i+1] = "" wordTable[i+2] = "" elseif j == 3 then wordTable[i+1] = "" wordTable[i+2] = "" wordTable[i+3] = "" end
 				end
 			end
+		end
+	end
+	for i=1, getn(wordTable) do
+		if GF_LFM_OTHER[wordTable[i]] then GF_MessageData.foundLFM = 3
+		elseif GF_LFG_OTHER[wordTable[i]] then GF_MessageData.foundLFG = true end
+		if wordTable[i+1] then
+			if GF_LFM_OTHER[wordTable[i]..wordTable[i+1]] then GF_MessageData.foundLFM = 3
+			elseif GF_LFG_OTHER[wordTable[i]..wordTable[i+1]] then GF_MessageData.foundLFG = true
+			elseif GF_TRADE_OTHER[wordTable[i]..wordTable[i+1]] then GF_MessageData.foundTrades = 102.5 end
 		end
 	end
 	for j=0,3 do
