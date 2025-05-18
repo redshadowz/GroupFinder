@@ -2020,8 +2020,8 @@ function GF_GetTypes(arg1, showanyway)
 				elseif GF_WORD_QUEST[wordString] then if GF_MessageData.foundQuest then if GF_WORD_QUEST[wordString] > GF_MessageData.foundQuest then GF_MessageData.foundQuest = GF_WORD_QUEST[wordString] end else GF_MessageData.foundQuest = GF_WORD_QUEST[wordString] GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1; end
 				elseif GF_WORD_DUNGEON[wordString] then if GF_MessageData.foundDungeon then if GF_WORD_DUNGEON[wordString] > GF_MessageData.foundDungeon then GF_MessageData.foundDungeon = GF_WORD_DUNGEON[wordString] GF_MessageData.foundFlags = wordString; end else GF_MessageData.foundDungeon = GF_WORD_DUNGEON[wordString] GF_MessageData.foundFlags = wordString; GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1; end
 				elseif GF_WORD_RAID[wordString] then GF_MessageData.foundRaid = GF_WORD_RAID[wordString] GF_MessageData.foundFlags = wordString; GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1;
-				elseif GF_WORD_PVP[wordString] then GF_MessageData.foundPvP = GF_WORD_PVP[wordString] GF_MessageData.foundFlags = wordString; GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1;
-				elseif GF_WORD_TRADE[wordString] then
+				elseif GF_WORD_PVP[wordString] then GF_MessageData.foundPvP = GF_WORD_PVP[wordString] GF_MessageData.foundFlags = wordString; GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1; end
+				if GF_WORD_TRADE[wordString] then
 					if GF_MessageData.foundTrades < 100 then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_WORD_TRADE[wordString]
 					elseif GF_MessageData.foundTrades > 100 and GF_WORD_TRADE[wordString] < 100 then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_WORD_TRADE[wordString] end
 				elseif GF_TRADE_WORD_EXCLUSION[wordString] then GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + GF_TRADE_WORD_EXCLUSION[wordString] end
