@@ -687,10 +687,10 @@ GF_WORD_GUILD = {
 ["raidov"] = 1,["ishet"] = 1,["novacek"] = 1,["raidereket"] = 1,["priednuysia"] = 1,["primet"] = 1,["reydinga"] = 1,
 ["deutsche"] = 1,["deutschsprachige"] = 1,["allianz"] = 1,["mitraiden"] = 1,["sucht"] = 1,["raidkader"] = 1,["motivierte"] = 1,["raidtage"] = 1,
 
-["ukrainianguild"] = 1,["russianguild"] = 1,["czsfk"] = 2,["sfkcz"] = 2,["finnishguild"] = 1,
+["ukrainianguild"] = 1,["russianguild"] = 1,["czsfk"] = 2,["sfkcz"] = 2,["finnishguild"] = 1,["indonesiaguild"] = 1,
 ["lffinnishguild"] = 1,["lfgermanguild"] = 1,["lffrenchguild"] = 1,["lfspanishguild"] = 1,["lfpolishguild"] = 1,["lfitalianguild"] = 1,["lfdutchguild"] = 1,["lfoceguild"] = 1,["lfnaguild"] = 1,["lfeuguild"] = 1,
 ["lfafinnishguild"] = 1,["lfagermanguild"] = 1,["lfafrenchguild"] = 1,["lfaspanishguild"] = 1,["lfapolishguild"] = 1,["lfaitalianguild"] = 1,["lfadutchguild"] = 1,
-["needfinnishguild"] = 1,["needgermanguild"] = 1,["needfrenchguild"] = 1,["needspanishguild"] = 1,["needpolishguild"] = 1,["needitalianguild"] = 1,["needdutchguild"] = 1,["needoceguild"] = 1,["neednaguild"] = 1,["needeuguild"] = 1,
+["needfinnishguild"] = 1,["needgermanguild"] = 1,["needfrenchguild"] = 1,["needspanishguild"] = 1,["needpolishguild"] = 1,["needitalianguild"] = 1,["needdutchguild"] = 1,["needoceguild"] = 1,["anyoceguild"] = 1,["neednaguild"] = 1,["needeuguild"] = 1,
 ["needafinnishguild"] = 1,["needagermanguild"] = 1,["needafrenchguild"] = 1,["needaspanishguild"] = 1,["needapolishguild"] = 1,["needaitalianguild"] = 1,["needadutchguild"] = 1,
 
 ["guildespañola"] = 1,["paralacore"] = 1,["aceptamos"] = .5,["limpiandocontenido"] = 1,["sábados"] = .5,["domingos"] = .5,
@@ -746,7 +746,7 @@ GF_WORD_LFM = {
 ["lfm"] = 3,["lf"] = 2,["lft"] = 2,["lfr"] = 2,["wtj"] = 2,
 
 -- Two Words
-["lfdamage"] = 3,["lfheal"] = 3,["lftank"] = 3,["lfot"] = 3,["lfmt"] = 3,["lfofftank"] = 3,["lfmaintank"] = 3,["lftanks"] = 3,["lfdps"] = 3,["lfdd"] = 3,["lfhealer"] = 3,["lfheals"] = 3,["lfmore"] = 3,["lfall"] = 3,
+["lookingfor"] = 2,["lfdamage"] = 3,["lfheal"] = 3,["lftank"] = 3,["lfot"] = 3,["lfmt"] = 3,["lfofftank"] = 3,["lfmaintank"] = 3,["lftanks"] = 3,["lfdps"] = 3,["lfdd"] = 3,["lfhealer"] = 3,["lfheals"] = 3,["lfmore"] = 3,["lfall"] = 3,
 
 ["needheal"] = 2,["comeheal"] = 2,["joinheal"] = 2,["lastheal"] = 2,
 ["needdamage"] = 2,["comedamage"] = 2,["joindamage"] = 2,["lastdamage"] = 2,["needaoe"] = 2,
@@ -796,7 +796,7 @@ GF_WORD_LFM = {
 ["tankanddamagefor"] = 2,["tankandhealfor"] = 2,["healandtankfor"] = 2,["healanddamagefor"] = 2,["damageandhealfor"] = 2,["damageandtankfor"] = 2,
 ["lookingforatank"] = 3,["lookingforaheal"] = 3,["lookingforadamage"] = 3,["needsomerandomdamage"] = 2,
 ["healmissingthengo"] = 2,["tankmissingthengo"] = 2,["damagemissingthengo"] = 2,
-["anyonewanttorun"] = 2,["anyonewanttojoin"] = 2,["ifyouwannajoin"] = 2,["anyonewhocanhelp"] = 2,["anygroupsgoingfor"] = 2,["anyoneneedingtodo"] = 2,
+["anyonewanttorun"] = 2,["anyonewanttojoin"] = 2,["ifyouwannajoin"] = 2,["anyonewhocanhelp"] = 2,["anygroupsgoingfor"] = 2,["anyoneneedingtodo"] = 2,["needtodoquest"] = 2,
 ["anyonedowntohelp"] = 2,["anyonecaretohelp"] = 2,["anyonewanttohelp"] = 2,["anyonethatcanhelp"] = 2,["helpwithaquest"] = 2,["comewithmequest"] = 2,["caretohelpwith"] = 2,["helpmeoutwith"] = 2,
 ["anyonehelpmewith"] = 2,
 
@@ -1055,7 +1055,7 @@ GF_WORD_TRADE = {
 -- Three Words
 ["iseeka"] = 2.5,["iseekan"] = 2.5,["lfasummon"] = 3,["needasummon"] = 2.25,["buyingasummon"] = 3,["buyasummon"] = 2,["offeringasummon"] = 2,["sellingasummon"] = 3,
 ["wanttobuy"] = 2.5,["wanttosell"] = 2.5,["wanttotrade"] = 2.5,["getyourhitem"] = 1,["getyourhenchant"] = 1,["iwillenchant"] = 2,["comegetyour"] = 1,
-["havethemats"] = .5,["gotthemats"] = .5,["mymatstip"] = 3,["yourmatstip"] = 3,["workfortip"] = 3,["tipanyamount"] = 3,["ipaygold"] = 1,["illpaygold"] = 1,["tipisoptional"] = 2,
+["havethemats"] = .5,["gotthemats"] = .5,["mymatstip"] = 3,["yourmatstip"] = 3,["workfortip"] = 3,["tipanyamount"] = 3,["ipaygold"] = 1,["illpaygold"] = 1,["tipisoptional"] = 2,["tipareappreciated"] = 1,
 ["lookingforwork"] = 3,["lookingtobuy"] = 3,["lookingtosell"] = 3,["lookingforcrafter"] = 3,["whocancraft"] = 1.5,["cananyonecraft"] = 2,["cananyonemake"] = 2,["anyoneableto"] = 2,["needcrafterhitem"] = 1,
 ["anyonetomake"] = 1,["anyonetocraft"] = 1,["anyonetosell"] = 1,["anyonetobuy"] = 1,
 
@@ -1110,15 +1110,16 @@ GF_WORD_TRADE = {
 ["anyoneinterestedtobuy"] = 2,["anyoneinterestedtosell"] = 2,["anyoneinterestedinbuying"] = 2,["anyoneinterestedinselling"] = 2,
 
 -- Lockbox
-["freelockbox"] = 2,["lflockbox"] = 2,["lockboxservice"] = 2,["openlockbox"] = 1,["openinglockbox"] = 2,["lflocksmith"] = 2,["unlocklockbox"] = 1,["openinghitem"] = 3,["openhitem"] = 3,
+["freelockbox"] = 2,["lflockbox"] = 2,["lockboxservice"] = 2,["openlockbox"] = 1,["openinglockbox"] = 2,["openlock"] = .5,["openinglock"] = 1,["lflocksmith"] = 2,["unlocklockbox"] = 1,["unlocklock"] = 1,["openinghitem"] = 3,["openhitem"] = 3,
 
-["openalllockbox"] = 3,["openingalllockbox"] = 3,["openyourlockbox"] = 2,["openyourlock"] = 1,["openingyourlockbox"] = 2,["unlockalllockbox"] = 2,["unlockanylockbox"] = 2,["unlockyourlockbox"] = 2,["abletounlock"] = 1.5,
-["alllockboxes"] = 3,["cananyoneopen"] = 2,["abletoopen"] = 2,["needhitem"] = 1,
-["needlockboxopened"] = 3,
-["openalockbox"] = 2,
-["anyonecanpick"] = 1.5,["anyonetoopen"] = 1.5,["anylockboxplease"] = 1,
+["openalllockbox"] = 3,["openingalllockbox"] = 3,["openalllock"] = 1.5,["openingalllock"] = 1.5,["openyourlockbox"] = 2,["openyourlock"] = 1,["openingyourlockbox"] = 2,["openingyourlock"] = 1,
+["unlockalllockbox"] = 2,["unlockanylockbox"] = 2,["unlockyourlockbox"] = 2,["unlockalllock"] = 1,["unlockanylock"] = 1,["unlockyourlock"] = 1,["abletounlock"] = 1.5,
+["alllockbox"] = 1,["alllock"] = .5,["cananyoneopen"] = 2,["abletoopen"] = 2,["needhitem"] = 1,
+["needlockboxopened"] = 3,["needlocklockboxopened"] = 2,
+["openalockbox"] = 2,["openalock"] = 1,
+["anyonecanpick"] = 1.5,["anyonetoopen"] = 1.5,["anylockboxplease"] = 1,["anylocklockboxplease"] = 1,
 
-["openingallyourlockbox"] = 3,["anyonetoopenlockbox"] = 2,["anyonecanopenlockbox"] = 2,["anyonecanopenhitem"] = 2,
+["openingallyourlockbox"] = 2,["anyonetoopenlockbox"] = 2,["anyonecanopenlockbox"] = 2,["openingallyourlock"] = 2,["anyonetoopenlock"] = 2,["anyonecanopenlock"] = 2,["anyonecanopenhitem"] = 2,
 
 ["openhitem"] = 1,
 ["lfroguelockbox"] = 1,
@@ -1410,7 +1411,7 @@ local GF_TURTLE_WORD_TRADE = {
 ["pinkyservice"] = 2,["uncleabe"] = 2,
 
 -- Three Words
-["anyjewelcrafterwith"] = 1,["jewelcrafterwithhitem"] = 3,["allgemavailable"] = 2,["allenchantavailable"] = 2,
+["anyjewelcrafterwith"] = 1,["anyjewelcrafterhere"] = 1.5,["anyjewelcrafteraround"] = 1.5,["jewelcrafterwithhitem"] = 3,["allgemavailable"] = 2,["allenchantavailable"] = 2,
 
 ["lfhitembeltbuckle"] = 3,["intellecttobelt"] = 1,["agilitytobelt"] = 2,["lfagilitywaist"] = 3,["lfagilitybelt"] = 3,["lfintellectwaist"] = 3,["onyourbelt"] = 1,
 ["strengthtoring"] = 1,["agilitytoring"] = 1,["statstoring"] = 1,["strengthtoneck"] = 1,["agilitytoneck"] = 1,["healtoneck"] = 1,["agilitytowrist"] = 1,
