@@ -271,6 +271,13 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 					return;
 				end
 			end
+		elseif strsub(link, 1, 3) == "url" and GF_MainFrame:IsVisible() then
+			if string.len(link) > 4 and string.sub(link,1,4) == "url:" then
+				GF_UrlCopyFrame:Show()
+				GF_UrlCopyFrameEditBox:SetText(string.sub(link,5, string.len(link)))
+				GF_UrlCopyFrameEditBox:HighlightText()
+				return
+			end
 		end
 		old_SetItemRef(link,text,button)
 	end
@@ -555,6 +562,7 @@ function GF_ShowGroupsOnMinimap(arg1,arg2)
 	end
 end
 function GF_AddLogMessage(arg1,filteredChat,add,arg2,arg8,arg9,event)
+	arg1 = gsub(gsub(gsub(gsub(arg1," (www%d-)%.([_A-Za-z0-9-]+)%.(%S+)%s?", "|cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r ")," (%a+)://(%S+)%s?", "|cffccccff|Hurl:%1://%2|h[%1://%2]|h|r ")," (%a+)%.(%a+)/(%S+)%s?", "|cffccccff|Hurl:%1.%2/%3|h[%1.%2/%3]|h|r ")," ([_A-Za-z0-9-]+)%.([_A-Za-z0-9-]+)%.(%S+)%s?", "|cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r ")
 	if add then
 		if GF_LootFilter[event] then
 			arg1 = "|cff"..GF_TextColors[event].."["..date("%H:%M").."] "..GF_LogMessageCodes[filteredChat]..arg1.."|r"
@@ -1326,6 +1334,8 @@ function GF_WhisperHistoryButtonPressed(id,override) -- Whisper/Guild History Fu
 	end
 end
 function GF_WhisperReceivedAddToWhisperHistoryList(message,name,event)
+	message = gsub(gsub(gsub(gsub(message," (www%d-)%.([_A-Za-z0-9-]+)%.(%S+)%s?", "|cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r ")," (%a+)://(%S+)%s?", "|cffccccff|Hurl:%1://%2|h[%1://%2]|h|r ")," (%a+)%.(%a+)/(%S+)%s?", "|cffccccff|Hurl:%1.%2/%3|h[%1.%2/%3]|h|r ")," ([_A-Za-z0-9-]+)%.([_A-Za-z0-9-]+)%.(%S+)%s?", "|cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r ")
+
 	if name == GF_MyName and (event == "CHAT_MSG_WHISPER_INFORM" or event == "CHAT_MSG_WHISPER") then return end
 	if not GF_WhisperLogData[GF_RealmName][name] then
 		GF_WhisperLogData[GF_RealmName][name] = {}
@@ -2001,8 +2011,7 @@ function GF_GetTypes(arg1, showanyway)
 		elseif GF_LFG_OTHER[wordTable[i]] then GF_MessageData.foundLFG = true end
 		if wordTable[i+1] then
 			if GF_LFM_OTHER[wordTable[i]..wordTable[i+1]] then GF_MessageData.foundLFM = 3
-			elseif GF_LFG_OTHER[wordTable[i]..wordTable[i+1]] then GF_MessageData.foundLFG = true
-			elseif GF_TRADE_OTHER[wordTable[i]..wordTable[i+1]] then GF_MessageData.foundTrades = 102.5 end
+			elseif GF_LFG_OTHER[wordTable[i]..wordTable[i+1]] then GF_MessageData.foundLFG = true end
 		end
 	end
 	for j=0,3 do

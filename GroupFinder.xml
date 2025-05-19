@@ -314,6 +314,79 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</Button>
 		</Frames>
 	</Frame>
+	<Frame name="GF_DialogFrameTemplate_UrlCopy" toplevel="true" enableMouse="true" frameStrata="DIALOG" virtual="true">
+		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+			<BackgroundInsets>
+				<AbsInset left="11" right="12" top="12" bottom="11"/>
+			</BackgroundInsets>
+			<TileSize>
+				<AbsValue val="32"/>
+			</TileSize>
+			<EdgeSize>
+				<AbsValue val="32"/>
+			</EdgeSize>
+		</Backdrop>
+		<Size>
+			<AbsDimension x="320" y="60"/>
+		</Size>
+		<Anchors>
+			<Anchor point="CENTER">
+				<Offset>
+					<AbsDimension x="0" y="0"/>
+				</Offset>
+			</Anchor>
+		</Anchors>
+		<Frames>
+			<Button name="$parentCloseButton" inherits="UIPanelCloseButton">
+				<Anchors>
+					<Anchor point="TOPRIGHT">
+						<Offset>
+							<AbsDimension x="3" y="4"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						GF_UrlCopyFrame:Hide();
+					</OnClick>
+				</Scripts>
+			</Button>
+			<EditBox name="$parentEditBox" inherits="GF_AbstractEditBox">
+				<Size>
+					<AbsDimension x="280" y="20"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOP" >
+						<Offset>
+							<AbsDimension x="0" y="-20"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<FontString inherits="ChatFontNormal"/>
+				<Scripts>
+					<OnShow>
+						this:SetFocus();
+						this:HighlightText();
+					</OnShow>
+					<OnLoad>
+						this:SetTextInsets(4,0,0,0);
+					</OnLoad>
+					<OnTabPressed>
+						this:ClearFocus();
+						GF_UrlCopyFrame:Hide();
+					</OnTabPressed>
+					<OnEnterPressed>
+						this:ClearFocus();
+						GF_UrlCopyFrame:Hide();
+					</OnEnterPressed>
+					<OnEscapePressed>
+						this:ClearFocus();
+						GF_UrlCopyFrame:Hide();
+					</OnEscapePressed>
+				</Scripts>
+			</EditBox>
+		</Frames>
+	</Frame>
 	<Frame name="GF_NewItemTemplate" virtual="true">
 		<Size>
 			<AbsDimension x="652" y="18"/>
@@ -633,6 +706,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 	<MessageFrame name="GF_MinimapMessageFrameB5" inherits="GF_MinimapMessageFrameTemplateB"><Anchors><Anchor point="TOP" relativeTo="GF_MinimapMessageFrameA5" relativePoint="BOTTOM"/></Anchors></MessageFrame>
 	<MessageFrame name="GF_MinimapMessageFrameA6" inherits="GF_MinimapMessageFrameTemplateA"></MessageFrame>
 	<MessageFrame name="GF_MinimapMessageFrameB6" inherits="GF_MinimapMessageFrameTemplateB"><Anchors><Anchor point="TOP" relativeTo="GF_MinimapMessageFrameA6" relativePoint="BOTTOM"/></Anchors></MessageFrame>
+
 	<Button name="GF_MinimapIcon" enableMouse="true" frameStrata="LOW" toplevel="true" parent="Minimap">
 		<Size>
 			<AbsDimension x="33" y="33"/>
@@ -3324,6 +3398,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLoad>
 				</Scripts>
 			</Frame>
+			<Frame name="GF_UrlCopyFrame" inherits="GF_DialogFrameTemplate_UrlCopy" hidden="true"></Frame>
 		</Frames>
 		<Scripts>
 			<OnDragStart>
