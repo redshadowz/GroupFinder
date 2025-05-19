@@ -349,6 +349,11 @@ function GF_ToggleMainFrame(tab)
 			GF_SettingsFrame:Hide();
 			GF_SavedVariables.mainframelogisopen = true;
 		end
+		if tab ~= 3 and GF_SavedVariables.mainframestatus == 0 and not GF_SavedVariables.mainframeishidden then
+			local _,_,_,xpos, ypos = GF_MainFrame:GetPoint()
+			GF_SavedVariables.MainFrameXPos = xpos
+			GF_SavedVariables.MainFrameYPos = ypos
+		end
 		GF_MainFrame:Show();
 		GF_SavedVariables.mainframeishidden = nil;
 	end
