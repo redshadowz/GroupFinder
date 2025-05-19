@@ -1458,11 +1458,11 @@ local GF_TURTLE_WORD_QUEST = {
 ["scytheofthegoddess"] = 60,["fateoftheharborage"] = 60,["underthevibrantmoonlight"] = 60,["terrorofthewebweavers"] = 60,["thedepthsofkarazhan"] = 63,
 }
 local GF_TURTLE_WORD_DUNGEON = {
-["crescent"] = 36,["grove"] = 36,["crescentgrove"] = 36,["cg"] = 36,["tcg"] = 36,["gc"] = 48,["gilneas"] = 48,["hateforge"] = 56,["quarry"] = 56,["hq"] = 56,["hfq"] = 56,["sv"] = 62,["swv"] = 62,["vault"] = 62,["morass"] = 62,["bm"] = 62,["cot"] = 62,
-["crypt"] = 63,["karacrypt"] = 63,["es"] = 63,["sanctum"] = 63,
+["crescent"] = 36,["grove"] = 36,["crescentgrove"] = 36,["cg"] = 36,["tcg"] = 36,["gc"] = 48,["gilneas"] = 48,["hateforge"] = 56,["quarry"] = 56,["hq"] = 56,["hf"] = 56,["hfq"] = 56,
+["sv"] = 62,["swv"] = 62,["vault"] = 62,["morass"] = 62,["bm"] = 62,["cot"] = 62,["crypt"] = 63,["karacrypt"] = 63,["es"] = 63,["sanctum"] = 63,
 
 -- Two Words
-["dragonmawretreat"] = 30,["crescentgrove"] = 36,["cg"] = 36,["tcg"] = 36,["gc"] = 48,["gilneascity"] = 48,["hq"] = 56,["hfq"] = 56,["hateforge"] = 56,["sv"] = 62,["swv"] = 62,["stormwindv"] = 62,["blackmorass"] = 62,["bm"] = 62,["cot"] = 62,["es"] = 63,
+["dragonmawretreat"] = 30,["gilneascity"] = 48,["stormwindv"] = 62,["stormwindvault"] = 62,["blackmorass"] = 62,
 
 -- Three Words
 ["cavernsoftime"] = 62,
@@ -1523,7 +1523,7 @@ local GF_TurtleSearchList = {
 		[1] = { "Crescent Grove", 32, 38, "crescent", "grove", "cg", "tcg", "crescentgrove",},
 		[2] = { "Gilneas City", 43, 49, "gilneas", "gc", "gilneascity", },
 		[3] = { "Hateforge Quarry", 52, 60, "hateforge", "quarry", "hq", "hf", "hfq", },
-		[4] = { "Stormwind Vault", 58, 60, "vault", "sv", "swv", "stormwindv" },
+		[4] = { "Stormwind Vault", 58, 60, "vault", "sv", "swv", "stormwindv", "stormwindvault" },
 		[5] = { "Black Morass", 58, 60, "morass", "bm", "blackmorass", "cot", "cavernsoftime", },
 		[6] = { "Karazhan Crypt", 60, 60, "crypt", "karacrypt", },
 		[7] = { "Emerald Sanctum", 60, 60, "sanctum", "es", },
