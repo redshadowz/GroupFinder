@@ -824,7 +824,7 @@ GF_WORD_GUILD = {
 ["yesttutruguild"] = 3,["sucheguild"] = 1,
 }
 GF_GUILD_WORD_EXCLUSION = {
-["today"] = .5,["tonight"] = .5,["hosting"] = .5,["legendaries"] = .5,["mats"] = .5,["bindings"] = .5,["boes"] = .5,["boe"] = .5,
+["today"] = .5,["tonight"] = .5,["host"] = .5,["legendaries"] = .5,["mats"] = .5,["bindings"] = .5,["boes"] = .5,["boe"] = .5,
 
 ["racist"] = 1,
 ["nonwhites"] = 5,
@@ -880,7 +880,7 @@ GF_WORD_LFM = {
 ["lfhelp"] = 2,["wannahelp"] = 2,["pleasehelp"] = 2,["helpplease"] = 2,["helpkill"] = 2,
 ["morespot"] = 2,["morespots"] = 2,["lastspot"] = 2,["spotleft"] = 2,["spotsleft"] = 2,
 
-["formingraid"] = 2,["hostingraid"] = 2,
+["formingraid"] = 2,["hostraid"] = 2,
 ["groupquest"] = 2,["doingquest"] = 2,["anyonequest"] = 2,
 ["summonready"] = 2,["anyoneinterested"] = 2,["msos"] = 2,
 
