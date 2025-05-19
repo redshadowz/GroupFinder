@@ -421,7 +421,8 @@ GF_WORD_FIX = {
 ["stonks"] = "stock",["stockado"] = "stockade",["stockes"] = "stockade",["sotckades"] = "stockade",["stockaded"] = "stockade",["stockates"] = "stockade",
 ["blackfathome"] = "blackfathom",["blackfatom"] = "blackfathom",["blackfanthom"] = "blackfathom",["blackfantom"] = "blackfathom",["bd"] = "bfd",["bdf"] = "bfd",
 ["sk"] = "sfk",["skf"] = "sfk",
-["gnooner"] = "gnomeregan",["gnomregan"] = "gnomeregan",["gnomregen"] = "gnomeregan",["gnomergan"] = "gnomeregan",["gnomeragen"] = "gnomeregan",["gnomragen"] = "gnomeregan",["gnomregan"] = "gnomeregan",["gnomrigan"] = "gnomeregan",["gnomoeregan"] = "gnomeregan",
+["gnooner"] = "gnomeregan",["gnomregan"] = "gnomeregan",["gnomregen"] = "gnomeregan",["gnomergan"] = "gnomeregan",["gnomeragen"] = "gnomeregan",["gnomragen"] = "gnomeregan",
+["gnomregan"] = "gnomeregan",["gnomrigan"] = "gnomeregan",["gnomoeregan"] = "gnomeregan",["gnomereagan"] = "gnomeregan",
 ["razorfren"] = "razorfen",["karul"] = "kraul",["rpd"] = "rfd",
 ["smg"] = "smgy",["graveryard"] = "smgy",["smgraveyard"] = "smgy",["monastary"] = "monastery",["monstary"] = "monastery",["monstery"] = "monastery",["scarlett"] = "scarlet",
 ["libary"] = "library",["librery"] = "library",["libray"] = "library",["sml"] = "smlib",["smlb"] = "smlib",["smliberal"] = "smlib",
@@ -442,7 +443,8 @@ GF_WORD_FIX = {
 ["lvrs"] = "lbrs",["lvrs"] = "lbrs",["lbrd"] = "lbrs",["lbr"] = "lbrs",
 ["ubers"] = "ubrs",["urbs"] = "ubrs",["ubs"] = "ubrs",["uber"] = "ubrs",["ubbrs"] = "ubrs",["ubrd"] = "ubrs",["ubr"] = "ubrs",["valthalaks"] = "valthalak",
 
-["onyixia"] = "onyxia",["onxy"] = "onyxia",["onyx"] = "onyxia",["onyxias"] = "onyxia",["onixia"] = "onyxia",["onixya"] = "onyxia",["ohy"] = "ony",["blw"] = "bwl",["nefarien"] = "nefarian",["nefarion"] = "nefarian",["ossi"] = "ossirian",["nax"] = "naxx", -- Raids
+["onyixia"] = "onyxia",["onxy"] = "onyxia",["onyx"] = "onyxia",["onyxias"] = "onyxia",["onixia"] = "onyxia",["onixya"] = "onyxia",["ohy"] = "ony",["onny"] = "ony",["onyy"] = "ony",["oony"] = "ony", -- Raids
+["blw"] = "bwl",["nefarien"] = "nefarian",["nefarion"] = "nefarian",["ossi"] = "ossirian",["nax"] = "naxx",
 ["raids"] = "raid",["raiding"] = "raid",["rading"] = "raid",["dng"] = "dungeon",["dung"] = "dungeon",["elitue"] = "elite",["bosses"] = "boss",["runs"] = "run",
 ["queueing"] = "queue",["que"] = "queue",["q"] = "queue",["bgs"] = "bg",["battlegrounds"] = "battleground",["bgs"] = "bg",
 ["repfarm"] = "repfarm",["repgroup"] = "repfarm",["reprun"] = "repfarm",["repgrind"] = "repfarm",
@@ -734,14 +736,14 @@ GF_WORD_GUILD = {
 
 -- Foreign
 ["utc"] = .5,["cet"] = .5,["msk"] = 1,["est"] = 1,
-["fr"] = 1,["fra"] = 2,["ru"] = 2,["cz"] = .5,["pl"] = 1,["na"] = 1,["au"] = 1,["ua"] = 1,["uhr"] = 1,["rus"] = 1,["eu"] = .5,
+["fr"] = 1,["fra"] = 2,["ru"] = 2,["cz"] = .5,["pl"] = 1,["na"] = 1,["au"] = 1,["ua"] = 1,["uhr"] = 1,["rus"] = 1,["eu"] = .5,["br"] = .5,
 ["polska"] = 1,["ukrainska"] = 1,["czsk"] = .5,["cesko"] = 1,["romani"] = 1,["slovenska"] = 1,["brasilia"] = 1,["bulgarski"] = 1,["hispana"] = 1,["italiana"] = 1,["magyar"] = 1,["española"] = 1,
 ["raidov"] = 1,["ishet"] = 1,["novacek"] = 1,["raidereket"] = 1,["priednuysia"] = 1,["primet"] = 1,["reydinga"] = 1,
 ["deutsche"] = 1,["deutschsprachige"] = 1,["allianz"] = 1,["mitraiden"] = 1,["sucht"] = 1,["raidkader"] = 1,["motivierte"] = 1,["raidtage"] = 1,
 
 ["ukrainianguild"] = 1,["guildrussian"] = 1,["russianguild"] = 1,["finnishguild"] = 1,["philippineguild"] = 1,["germanguild"] = .5,["anygermanguild"] = 1,
 ["lfukrainianguild"] = 1,["lfrussianguild"] = 1,["lffinnishguild"] = 1,["lfphilippineguild"] = 1,["lfgermanguild"] = 1,["lffrenchguild"] = 1,["lfspanishguild"] = 1,["lfpolishguild"] = 1,["lfitalianguild"] = 1,["lfdutchguild"] = 1,["lfindonesiaguild"] = 1,
-["lfoceguild"] = 1,["lfnaguild"] = 1,["lfeuguild"] = 1,
+["lfoceguild"] = 1,["lfnaguild"] = 1,["lfeuguild"] = 1,["algumaguild"] = 1,
 ["lfafinnishguild"] = 1,["lfagermanguild"] = 1,["lfafrenchguild"] = 1,["lfaspanishguild"] = 1,["lfapolishguild"] = 1,["lfaitalianguild"] = 1,["lfadutchguild"] = 1,
 ["needfinnishguild"] = 1,["needgermanguild"] = 1,["needfrenchguild"] = 1,["needspanishguild"] = 1,["needpolishguild"] = 1,["needitalianguild"] = 1,["needdutchguild"] = 1,["needoceguild"] = 1,["anyoceguild"] = 1,["neednaguild"] = 1,["needeuguild"] = 1,
 ["needafinnishguild"] = 1,["needagermanguild"] = 1,["needafrenchguild"] = 1,["needaspanishguild"] = 1,["needapolishguild"] = 1,["needaitalianguild"] = 1,["needadutchguild"] = 1,
@@ -955,10 +957,10 @@ GF_LFM_TWO_BEFORE = {
 ["takeme"] = true,
 }
 GF_LFM_OTHER = {
-["lfmtribute"] = true,["lfmstrat"] = true,["lfmgy"] = true,["lfmgnome"] = true,["lfmtemple"] = true,
+["lfmtribute"] = true,["lfmstrat"] = true,["lfmstart"] = true,["lfmgy"] = true,["lfmgnome"] = true,["lfmtemple"] = true,
 }
 GF_LFG_OTHER = {
-["lfgtribute"] = true,["lfgstrat"] = true,["lfggy"] = true,["lfggnome"] = true,["lfgtemple"] = true,
+["lfgtribute"] = true,["lfgstrat"] = true,["lfgstart"] = true,["lfggy"] = true,["lfggnome"] = true,["lfgtemple"] = true,
 }
 
 GF_WORD_CLASSES = {

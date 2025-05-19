@@ -1996,6 +1996,14 @@ function GF_GetTypes(arg1, showanyway)
 	for word in string.gfind(arg1, "(%a+)") do
 		if not GF_WORD_SKIP[word] then table.insert(wordTable, word) end
 	end
+	for i=1, getn(wordTable) do
+		if GF_LFM_OTHER[wordTable[i]] then GF_MessageData.foundLFM = 3
+		elseif GF_LFG_OTHER[wordTable[i]] then GF_MessageData.foundLFG = true end
+		if wordTable[i+1] then
+			if GF_LFM_OTHER[wordTable[i]..wordTable[i+1]] then GF_MessageData.foundLFM = 3
+			elseif GF_LFG_OTHER[wordTable[i]..wordTable[i+1]] then GF_MessageData.foundLFG = true end
+		end
+	end
 	for j=0,3 do
 		for i=1, getn(wordTable) do
 			if wordTable[i+j] then
@@ -2005,14 +2013,6 @@ function GF_GetTypes(arg1, showanyway)
 					if j == 1 then wordTable[i+1] = "" elseif j == 2 then wordTable[i+1] = "" wordTable[i+2] = "" elseif j == 3 then wordTable[i+1] = "" wordTable[i+2] = "" wordTable[i+3] = "" end
 				end
 			end
-		end
-	end
-	for i=1, getn(wordTable) do
-		if GF_LFM_OTHER[wordTable[i]] then GF_MessageData.foundLFM = 3
-		elseif GF_LFG_OTHER[wordTable[i]] then GF_MessageData.foundLFG = true end
-		if wordTable[i+1] then
-			if GF_LFM_OTHER[wordTable[i]..wordTable[i+1]] then GF_MessageData.foundLFM = 3
-			elseif GF_LFG_OTHER[wordTable[i]..wordTable[i+1]] then GF_MessageData.foundLFG = true end
 		end
 	end
 	for j=0,3 do
@@ -2072,7 +2072,7 @@ function GF_GetTypes(arg1, showanyway)
 		print(GF_MessageData.foundTradesExclusion)
 		print(GF_MessageData.foundLFM)
 	end
-end -- /script GF_GetTypes("", true)
+end -- /script GF_GetTypes("geared hunter lfg strat scarlet", true)
 function GF_CheckForSpam(arg1,arg2,foundInGroup)
 	if not GF_PlayersCurrentlyInGroup[arg2] and not GF_Friends[arg2] and not GF_Guildies[arg2] then
 		if (GF_WhoTable[GF_RealmName][arg2] and tonumber(GF_WhoTable[GF_RealmName][arg2][1]) < GF_SavedVariables.blockmessagebelowlevel) and GF_WhoTable[GF_RealmName][arg2][4] + 86400 > time() then return 9; end  -- Block lowlevel
@@ -2136,8 +2136,8 @@ function GF_GetGroupInformation(arg1,arg2) -- Searches messages for Groups and s
 	entry.dlevel = GF_MessageData.foundRaid or GF_MessageData.foundDungeon or GF_MessageData.foundQuest or GF_MessageData.foundPvP or GF_MessageData.foundClass or 0;
 	if entry.dlevel == 0 and not GF_WhoTable[GF_RealmName][entry.op] then
 		local number = 0;
-		for num in string.gfind(arg1, "(%d+)[%s\]]?") do
-			if num > number and num > 10 and num < 61 then number = num end
+		for num in string.gfind(arg1, "(%d+)[%s\[\]]?") do
+			if tonumber(num) > number and tonumber(num) > 10 and tonumber(num) < 61 then number = tonumber(num) end
 		end
 		entry.dlevel = number
 	end
