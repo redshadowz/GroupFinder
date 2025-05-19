@@ -631,6 +631,9 @@ GF_WORD_IGNORE = {
 ["likeaids"] = true,
 ["theresno"] = true,
 ["ridofit"] = true,
+["ijustdid"] = true,
+["prolly"] = true,
+["oncooldown"] = true,
 
 -- Three Words
 ["groupaboveyou"] = true,
@@ -736,7 +739,7 @@ GF_WORD_GUILD = {
 ["raidov"] = 1,["ishet"] = 1,["novacek"] = 1,["raidereket"] = 1,["priednuysia"] = 1,["primet"] = 1,["reydinga"] = 1,
 ["deutsche"] = 1,["deutschsprachige"] = 1,["allianz"] = 1,["mitraiden"] = 1,["sucht"] = 1,["raidkader"] = 1,["motivierte"] = 1,["raidtage"] = 1,
 
-["ukrainianguild"] = 1,["guildrussian"] = 1,["russianguild"] = 1,["finnishguild"] = 1,["philippineguild"] = 1,
+["ukrainianguild"] = 1,["guildrussian"] = 1,["russianguild"] = 1,["finnishguild"] = 1,["philippineguild"] = 1,["germanguild"] = .5,["anygermanguild"] = 1,
 ["lfukrainianguild"] = 1,["lfrussianguild"] = 1,["lffinnishguild"] = 1,["lfphilippineguild"] = 1,["lfgermanguild"] = 1,["lffrenchguild"] = 1,["lfspanishguild"] = 1,["lfpolishguild"] = 1,["lfitalianguild"] = 1,["lfdutchguild"] = 1,["lfindonesiaguild"] = 1,
 ["lfoceguild"] = 1,["lfnaguild"] = 1,["lfeuguild"] = 1,
 ["lfafinnishguild"] = 1,["lfagermanguild"] = 1,["lfafrenchguild"] = 1,["lfaspanishguild"] = 1,["lfapolishguild"] = 1,["lfaitalianguild"] = 1,["lfadutchguild"] = 1,
@@ -1110,7 +1113,7 @@ GF_WORD_TRADE = {
 ["reasonableprice"] = .5,["foronly"] = 1,["anymage"] = 1,
 ["carryservice"] = 20,["keyservice"] = 3,["taxiservice"] = 20,["keyholder"] = 1.5,["healservice"] = 20,["bsservice"] = 1.5,["blacksmithservice"] = 1.5,["tankservice"] = 20,
 ["allrecipes"] = 3,["madeby"] = .5,
-["fullyrestocked"] = 1,["inbulk"] = 1,["perstack"] = 1,
+["fullyrestocked"] = 1,["inbulk"] = 1,["perstack"] = 1,["lastcall"] = 1,
 ["openubrs"] = 1.5,
 ["stormwindif"] = .25,["ifstormwind"] = .25,
 ["anyoneinterested"] = 1,
@@ -1209,7 +1212,7 @@ GF_WORD_TRADE = {
 ["openallyourhitem"] = 1,["helpmewithhitem"] = 1,
 ["openallyour"] = 1,
 
-["canopenbox"] = 1.5,["anyonecanopen"] = 1,
+["canopenbox"] = 1.5,["anyonecanopen"] = 1,["lastcallforlockbox"] = 1,
 
 ["canarogue"] = 1,["willarogue"] = 1,["anyonearoundhitem"] = 2,
 ["lfroguetoopen"] = 2,["lfrogueforlockbox"] = 2,["lfrogueforbox"] = 2,["anyrogueforlockbox"] = 2,["anyrogueforbox"] = 2,["needroguetoopen"] = 2,["anyroguecanopen"] = 2,["anyrogueinstormwind"] = 2,["anyrogueopenlockbox"] = 2,
