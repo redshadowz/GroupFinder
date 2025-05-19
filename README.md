@@ -16,7 +16,7 @@ PS: I recommend turning off "Show groups in Chat", "Show Trades", and "Show Guil
 [Show New] - Whether to display 'New' group messages only(default: 3 minutes).  
 [Show Chat] - Whether to display non-group and non-trades messages in chat.  
 [Show Trades] - Whether to display trades in chat(wts/wtb/lfw/buying/selling/etc).  
-[Show Guilds] - Whether to display guild recruitment messages in chat(blocked messages will be logged as "spam").  
+[Show Guilds] - Whether to display guild recruitment messages in chat(blocked messages are logged as "spam").  
 [Show Loots] - This will show/hide chat messages from item rolls, looting of money and grey items, selecting greed/need for uncommon items, and experience/honor/reputation gains.  
 Note: All blocked chat is recorded in the 'Log'.  
 
