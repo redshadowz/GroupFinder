@@ -819,7 +819,7 @@ GF_WORD_GUILD = {
 ["miembrosnuevosenraids"] = 1,
 
 ["deutschsprachigen"] = 1,["joinwelt"] = 1,["fürdendeutschsprachigen"] = 1,["werbeunterbrechung"] = 1,
-["yesttutruguild"] = 3,
+["yesttutruguild"] = 3,["sucheguild"] = 1,
 }
 GF_GUILD_WORD_EXCLUSION = {
 ["today"] = .5,["tonight"] = .5,["hosting"] = .5,["legendaries"] = .5,["mats"] = .5,["bindings"] = .5,["boes"] = .5,["boe"] = .5,
@@ -856,6 +856,9 @@ GF_GUILD_WORD_EXCLUSION = {
 ["hostedby"] = 2,
 ["nohr"] = 1,
 ["freshrun"] = 2,
+
+["gearcheck"] = 1,
+["postyourgear"] = 1,
 }
 
 GF_WORD_LFM = {
