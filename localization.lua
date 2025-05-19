@@ -1191,7 +1191,7 @@ GF_WORD_TRADE = {
 
 -- Lockbox
 ["freelockbox"] = 2,["lflockbox"] = 2,["lockboxservice"] = 2,["openlockbox"] = 1,["openinglockbox"] = 2,["openlock"] = .5,["openinglock"] = 1,["lflocksmith"] = 2,["unlocklockbox"] = 1,["unlocklock"] = 1,["openinghitem"] = 3,["openhitem"] = 3,
-["boxopening"] = 1,["boxopen"] = 1,["lockboxopening"] = 1,["lockboxopeningtime"] = 1,["lockboxtime"] = 1,["itslockboxtime"] = 1,
+["boxopening"] = 1,["boxopen"] = 1,["lockboxopened"] = 1,["lockboxopenedtoday"] = 1,["lockboxopening"] = 1,["lockboxopeningtime"] = 1,["lockboxtime"] = 1,["itslockboxtime"] = 1,
 
 ["openalllockbox"] = 3,["openingalllockbox"] = 3,["openalllock"] = 1.5,["openingalllock"] = 1.5,["openyourlockbox"] = 2,["openyourlock"] = 1,["openingyourlockbox"] = 2,["openingyourlock"] = 1,
 ["unlockalllockbox"] = 2,["unlockanylockbox"] = 2,["unlockyourlockbox"] = 2,["unlockalllock"] = 1,["unlockanylock"] = 1,["unlockyourlock"] = 1,["abletounlock"] = 1.5,
