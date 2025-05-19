@@ -274,7 +274,7 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 		elseif strsub(link, 1, 3) == "url" and GF_MainFrame:IsVisible() then
 			if string.len(link) > 4 and string.sub(link,1,4) == "url:" then
 				GF_UrlCopyFrame:Show()
-				GF_UrlCopyFrameEditBox:SetText(string.sub(link,5, string.len(link)))
+				GF_UrlCopyFrameEditBox:SetText(string.sub(link,5,string.len(link)))
 				GF_UrlCopyFrameEditBox:HighlightText()
 				return
 			end
@@ -562,7 +562,7 @@ function GF_ShowGroupsOnMinimap(arg1,arg2)
 	end
 end
 function GF_AddLogMessage(arg1,filteredChat,add,arg2,arg8,arg9,event)
-	arg1 = gsub(gsub(gsub(gsub(arg1," (www%d-)%.([_A-Za-z0-9-]+)%.(%S+)%s?", "|cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r ")," (%a+)://(%S+)%s?", "|cffccccff|Hurl:%1://%2|h[%1://%2]|h|r ")," (%a+)%.(%a+)/(%S+)%s?", "|cffccccff|Hurl:%1.%2/%3|h[%1.%2/%3]|h|r ")," ([_A-Za-z0-9-]+)%.([_A-Za-z0-9-]+)%.(%S+)%s?", "|cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r ")
+	arg1 = gsub(gsub(gsub(gsub(" "..arg1.." "," (www%d-)%.([_A-Za-z0-9-]+)%.(%S+)%s?", "|cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r ")," (%a+)://(%S+)%s?", "|cffccccff|Hurl:%1://%2|h[%1://%2]|h|r ")," (%a+)%.(%a+)/(%S+)%s?", "|cffccccff|Hurl:%1.%2/%3|h[%1.%2/%3]|h|r ")," ([_A-Za-z0-9-]+)%.([_A-Za-z0-9-]+)%.(%S+)%s?", "|cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r ")
 	if add then
 		if GF_LootFilter[event] then
 			arg1 = "|cff"..GF_TextColors[event].."["..date("%H:%M").."] "..GF_LogMessageCodes[filteredChat]..arg1.."|r"
@@ -1334,7 +1334,7 @@ function GF_WhisperHistoryButtonPressed(id,override) -- Whisper/Guild History Fu
 	end
 end
 function GF_WhisperReceivedAddToWhisperHistoryList(message,name,event)
-	message = gsub(gsub(gsub(gsub(message," (www%d-)%.([_A-Za-z0-9-]+)%.(%S+)%s?", "|cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r ")," (%a+)://(%S+)%s?", "|cffccccff|Hurl:%1://%2|h[%1://%2]|h|r ")," (%a+)%.(%a+)/(%S+)%s?", "|cffccccff|Hurl:%1.%2/%3|h[%1.%2/%3]|h|r ")," ([_A-Za-z0-9-]+)%.([_A-Za-z0-9-]+)%.(%S+)%s?", "|cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r ")
+	message = gsub(gsub(gsub(gsub(" "..message.." "," (www%d-)%.([_A-Za-z0-9-]+)%.(%S+)%s?", "|cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r ")," (%a+)://(%S+)%s?", "|cffccccff|Hurl:%1://%2|h[%1://%2]|h|r ")," (%a+)%.(%a+)/(%S+)%s?", "|cffccccff|Hurl:%1.%2/%3|h[%1.%2/%3]|h|r ")," ([_A-Za-z0-9-]+)%.([_A-Za-z0-9-]+)%.(%S+)%s?", "|cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r ")
 
 	if name == GF_MyName and (event == "CHAT_MSG_WHISPER_INFORM" or event == "CHAT_MSG_WHISPER") then return end
 	if not GF_WhisperLogData[GF_RealmName][name] then
@@ -1992,6 +1992,7 @@ function GF_GetTypes(arg1, showanyway)
 	elseif string.sub(arg1,1,3) == "lfg" then table.insert(wordTable, "lfg") arg1 = string.sub(arg1, 4) GF_MessageData.foundLFG = true
 	elseif string.find(arg1, "lf[%s%d]+m ") then GF_MessageData.foundLFM = 4 local lfs,lfe = string.find(arg1, "lf[%s%d]+m ") if lfs > 1 then arg1 = string.sub(arg1,1,lfs+1)..string.sub(arg1,lfe) else arg1 = "lf"..string.sub(arg1,lfe) end
 	elseif string.sub(arg1,1,2) == "lf" then table.insert(wordTable, "lf") arg1 = string.sub(arg1, 3) GF_MessageData.foundLFM = 2 GF_MessageData.foundTrades = 102.5 end
+	if string.find(arg1, "%d+p") then local lfs,lfe = string.find(arg1, "%d+p") if lfs > 1 then arg1 = string.sub(arg1,1,lfs-1)..string.sub(arg1,lfe+1) else string.sub(arg1,lfe+1) end end
 	for word in string.gfind(arg1, "(%a+)") do
 		if not GF_WORD_SKIP[word] then table.insert(wordTable, word) end
 	end
@@ -2133,6 +2134,13 @@ function GF_GetGroupInformation(arg1,arg2) -- Searches messages for Groups and s
 	if GF_MessageData.foundQuest and GF_MessageData.foundDungeon and GF_MessageData.foundQuest > GF_MessageData.foundDungeon then GF_MessageData.foundDungeon = nil GF_MessageData.foundFlags = "" end
 	
 	entry.dlevel = GF_MessageData.foundRaid or GF_MessageData.foundDungeon or GF_MessageData.foundQuest or GF_MessageData.foundPvP or GF_MessageData.foundClass or 0;
+	if entry.dlevel == 0 and not GF_WhoTable[GF_RealmName][entry.op] then
+		local number = 0;
+		for num in string.gfind(arg1, "(%d+)[%s\]]?") do
+			if num > number and num > 10 and num < 61 then number = num end
+		end
+		entry.dlevel = number
+	end
 	entry.t = time()
 	entry.lfg = GF_MessageData.foundLFG
 	entry.flags = GF_MessageData.foundFlags
