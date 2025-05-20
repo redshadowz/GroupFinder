@@ -2962,7 +2962,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_FrameShowOriginalChatCheckButton" inherits="GF_CheckButtonTemplate_Label">
+							<CheckButton name="GF_FrameShowFormattedChatCheckButton" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="TOPRIGHT">
 										<Offset>
@@ -2972,7 +2972,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										GF_SavedVariables.showoriginalchat = this:GetChecked();
+										GF_SavedVariables.showformattedchat = this:GetChecked();
 									</OnClick>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_ORIGINAL_CHAT);
@@ -2981,7 +2981,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							</CheckButton>
 							<CheckButton name="GF_FrameAlwaysShowGuildCheckButton" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="GF_FrameShowOriginalChatCheckButton">
+									<Anchor point="TOPLEFT" relativeTo="GF_FrameShowFormattedChatCheckButton">
 										<Offset>
 											<AbsDimension x="0" y="-30"/>
 										</Offset>
