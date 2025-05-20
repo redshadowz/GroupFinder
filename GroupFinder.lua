@@ -1988,7 +1988,7 @@ function GF_CheckForGroups(arg1,arg2,event,showanyway)
 		end
 	end
 	return GF_CheckForSpam(arg1,arg2,foundInGroup) or foundInGroup;
-end -- /script GF_CheckForGroups("lf uldaman 1 tank","r","CHAT_MSG_SAY",true) /script GF_CheckForGroups("an1 uldaman","r","CHAT_MSG_SAY",true)
+end -- /script GF_CheckForGroups("run mid level dungeons and sell boe's on ah","r","CHAT_MSG_SAY",true) if showanyway == true then print(wordString) end
 function GF_GetTypes(arg1, showanyway)
 	GF_MessageData = { foundIgnore = nil,foundGuild = 0,foundGuildExclusion = 0,foundLFM = 0,foundLFG = nil,foundClass = nil,foundQuest = nil,foundDungeon = nil,foundRaid = nil,foundTrades = 0,foundTradesExclusion = 0,foundPvP = nil,foundFlags = "" }
 	local wordTable = {}
@@ -2024,7 +2024,7 @@ function GF_GetTypes(arg1, showanyway)
 		for i=1, getn(wordTable) do
 			if wordTable[i+j] then
 				if j == 0 then wordString = wordTable[i] elseif j == 1 then wordString = wordTable[i]..wordTable[i+1] elseif j == 2 then wordString = wordTable[i]..wordTable[i+1]..wordTable[i+2] else wordString = wordTable[i]..wordTable[i+1]..wordTable[i+2]..wordTable[i+3] end
-				if GF_WORD_IGNORE[wordString] then GF_MessageData.foundIgnore = true if showanyway == true then print(wordString) end
+				if GF_WORD_IGNORE[wordString] then GF_MessageData.foundIgnore = true
 				elseif GF_WORD_GUILD[wordString] then
 					if GF_MessageData.foundGuild < 100 then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_WORD_GUILD[wordString]
 					elseif GF_MessageData.foundGuild > 100 and GF_WORD_GUILD[wordString] < 100 then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_WORD_GUILD[wordString] end

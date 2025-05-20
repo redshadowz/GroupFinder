@@ -2228,7 +2228,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						for i = 2, 20 do
 							getglobal("GF_NewItem"..i):SetPoint("TOP", "GF_NewItem"..(i-1), "BOTTOM", 0, 0);
 						end
-						GF_WorldAnnounceMessageTextLabel:SetPoint("BOTTOMLEFT", GF_GroupAutoCheckButtonTextLabel, "TOPRIGHT", 10, 6);
+						GF_WorldAnnounceMessageTextLabel:SetPoint("BOTTOMLEFT", GF_GroupAutoCheckButtonTextLabel, "TOPRIGHT", 10, 7);
 					</OnLoad>
 				</Scripts>
 			</Frame>
