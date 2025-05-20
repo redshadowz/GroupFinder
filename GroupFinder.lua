@@ -1205,6 +1205,8 @@ function GF_UpdateResults()
 				else dungeonLevelDifficulty = "|cff"..GF_DifficultyColors["GREY"] end
 
 				if entry.dlevel > 60 then dungeonLevelDifficulty = dungeonLevelDifficulty.."[60]|r " else dungeonLevelDifficulty = dungeonLevelDifficulty.."["..entry.dlevel.."]|r " end
+				if entry.flags ~= "" then dungeonLevelDifficulty = dungeonLevelDifficulty.."|r|cffffffff["..GF_GROUP_IDS[entry.flags].."]|r "
+				elseif entry.type == "Q" then dungeonLevelDifficulty = dungeonLevelDifficulty.."|r|cffffffff[QUST]|r " end
 				if GF_WhoTable[GF_RealmName][entry.op] then
 					local bottomtext;
 					if GF_WhoTable[GF_RealmName][entry.op][3] ~= "" then bottomtext = ", " else bottomtext = "" end
@@ -1988,7 +1990,7 @@ function GF_CheckForGroups(arg1,arg2,event,showanyway)
 		end
 	end
 	return GF_CheckForSpam(arg1,arg2,foundInGroup) or foundInGroup;
-end -- /script GF_CheckForGroups("LFM Kara10 (scythe hr) 1xsr need 1xMTank rest dps (can summ) Merlots for tanks and mana users-got oranges andd many t3pple in grp ","r","CHAT_MSG_SAY",true) if showanyway == true then print(wordString) end
+end -- /script GF_CheckForGroups(">Summons Service< 5G Taxi to - HYJAL - HYDRAXIAN - DIRE MAUL - STRAT - WINTERSPRING - AQ. Time is money friend!","r","CHAT_MSG_SAY",true) if showanyway == true then print(wordString) end
 function GF_GetTypes(arg1, showanyway)
 	GF_MessageData = { foundIgnore = nil,foundGuild = 0,foundGuildExclusion = 0,foundLFM = 0,foundLFG = nil,foundClass = nil,foundQuest = nil,foundDungeon = nil,foundRaid = nil,foundTrades = 0,foundTradesExclusion = 0,foundPvP = nil,foundFlags = "" }
 	local wordTable = {}
@@ -2035,9 +2037,20 @@ function GF_GetTypes(arg1, showanyway)
 				elseif GF_WORD_QUEST[wordString] then if GF_MessageData.foundQuest then if GF_WORD_QUEST[wordString] > GF_MessageData.foundQuest then GF_MessageData.foundQuest = GF_WORD_QUEST[wordString] end else GF_MessageData.foundQuest = GF_WORD_QUEST[wordString] GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1; end
 				elseif GF_WORD_DUNGEON[wordString] then if GF_MessageData.foundDungeon then if GF_WORD_DUNGEON[wordString] > GF_MessageData.foundDungeon then GF_MessageData.foundDungeon = GF_WORD_DUNGEON[wordString] GF_MessageData.foundFlags = wordString; end else GF_MessageData.foundDungeon = GF_WORD_DUNGEON[wordString] GF_MessageData.foundFlags = wordString; GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1; end
 				elseif GF_WORD_RAID[wordString] then GF_MessageData.foundRaid = GF_WORD_RAID[wordString] GF_MessageData.foundFlags = wordString; GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1;
-				elseif GF_WORD_PVP[wordString] then GF_MessageData.foundPvP = GF_WORD_PVP[wordString] GF_MessageData.foundFlags = wordString; GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1; end
+				elseif GF_WORD_PVP[wordString] then
+					if GF_MessageData.foundPvP then
+						if GF_WORD_PVP[wordString] > GF_MessageData.foundPvP then GF_MessageData.foundPvP = GF_WORD_PVP[wordString] GF_MessageData.foundFlags = wordString; end
+					else
+						GF_MessageData.foundPvP = GF_WORD_PVP[wordString] GF_MessageData.foundFlags = wordString;
+					end
+					if GF_MessageData.foundPvP == 0 then
+						for num in string.gfind(arg1, "(%d+)[%s\[\]\+]?") do
+							if tonumber(num) > GF_MessageData.foundPvP and tonumber(num) > 8 and tonumber(num) < 61 then GF_MessageData.foundPvP = tonumber(num) end
+						end
+					end
+					GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1; end
 				if GF_WORD_TRADE[wordString] then
-				if showanyway == true then print(wordString) end
+					if showanyway == true then print(wordString) end
 					if GF_MessageData.foundTrades < 100 then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_WORD_TRADE[wordString]
 					elseif GF_MessageData.foundTrades > 100 and GF_WORD_TRADE[wordString] < 100 then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_WORD_TRADE[wordString] end
 				elseif GF_TRADE_WORD_EXCLUSION[wordString] then GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + GF_TRADE_WORD_EXCLUSION[wordString] end

@@ -340,6 +340,37 @@ GF_LFG_SPECS = {
 	["Warlock"] = 	{ "Affliction", "Demonology", "Destruction", },
 	["Warrior"] = 	{ "Arms", "Fury", "Prot", },
 }
+GF_GROUP_IDS = {
+["rfc"] = "RFC",["ragefire"] = "RFC",["deadmines"] = "DM",["dm"] = "DM",["wc"] = "WC",["shadowfang"] = "SFK",["sfk"] = "SFK",["blackfathom"] = "BFD",["bfd"] = "BFD",["stock"] = "STCK",["stockade"] = "STCK",["gnomer"] = "GNOM",["gnomeregan"] = "GNOM",
+["kraul"] = "RFK",["rfk"] = "RFK",["downs"] = "RFD",["rfd"] = "RFD",["smgy"] = "GY",["lib"] = "LIB",["library"] = "LIB",["smlib"] = "LIB",["smarm"] = "ARM",["armory"] = "ARM",["smcath"] = "CATH",["cathedral"] = "CATH",["smfull"] = "SM",
+["ulda"] = "ULDA",["uldaman"] = "ULDA",["zf"] = "ZF",["zulfarrak"] = "ZF",["mallet"] = "ZF",["mara"] = "MARA",["maraudon"] = "MARA",["princess"] = "MARA",["st"] = "ST",["sunken"] = "ST",["atalhakar"] = "ST",["arena"] = "BRD",
+["brd"] = "BRD",["jailbreak"] = "BRD",["emperor"] = "BRD",["attunement"] = "BRD",["lbrs"] = "LBRS",["brs"] = "BRS",["dme"] = "DME",["dmn"] = "DMN",["dmt"] = "DMT",["dmw"] = "DMW",["scholomance"] = "SHOL",["stratholme"] = "STRT",["baron"] = "STRT",
+["ubrs"] = "UBRS",["rend"] = "UBRS",["valthalak"] = "UBRS",["sm"] = "SM",["razorfen"] = "RZRF",["dungeon"] = "DNG",["blackrock"] = "BRS",
+
+["ragefirechasm"] = "RFC",["wailingcaverns"] = "WC",["razorfenkraul"] = "RFK",["razorfendowns"] = "RFD",["smquestrun"] = "SMFL",["sunkentemple"] = "ST",["blackrockdepths"] = "BRD",
+["lowerblackrock"] = "LBRS",["dmwest"] = "DMW",["dmeast"] = "DME",["dmnorth"] = "DMN",["dmtrib"] = "DMT",["dmtribute"] = "DMT",
+["diremaulwest"] = "DMW",["diremauleast"] = "DME",["diremaulnorth"] = "DMN",["diremaultrib"] = "DMT",["diremaultribute"] = "DMT",
+["livestrat"] = "LVST",["udstrat"] = "UDST",["stratrep"] = "STRT",["upperblackrock"] = "UBRS",["drakefireamulet"] = "UBRS",["diremaul"] = "DIRE",["scarletmonastery"] = "SM",["foranything"] = "ALL",
+
+["crescent"] = "CG",["grove"] = "CG",["crescentgrove"] = "CG",["cg"] = "CG",["tcg"] = "CG",["gc"] = "GC",["gilneas"] = "GC",["hateforge"] = "HF",["quarry"] = "HF",["hq"] = "HF",["hf"] = "HF",["hfq"] = "HF",
+["sv"] = "SWV",["swv"] = "SWV",["vault"] = "SWV",["morass"] = "COT",["bm"] = "COT",["cot"] = "COT",["crypt"] = "KC",["karacrypt"] = "KC",["es"] = "ES",["sanctum"] = "ES",
+["dragonmawretreat"] = "DR",["gilneascity"] = "GC",["stormwindv"] = "SWV",["stormwindvault"] = "SWV",["blackmorass"] = "COT",
+["cavernsoftime"] = "COT",
+
+["zg"] = "ZG",["zulgurub"] = "ZG",["hakar"] = "ZG",["aq"] = "AQ",["ahnqiraj"] = "AQ",["ossirian"] = "AQ",["cthun"] = "AQ",
+["mc"] = "MC",["moltencore"] = "MC",["rag"] = "MC",["ragnaros"] = "MC",["onyxia"] = "ONY",["ony"] = "ONY",["nef"] = "BWL",["bwl"] = "BWL",["blackwinglair"] = "BWL",["nefarian"] = "BWL",["naxx"] = "NAXX",["naxxramas"] = "NAXX",
+["azuregos"] = "WB",["kazzak"] = "WB",["lethon"] = "WB",["ysondre"] = "WB",["taerar"] = "WB",["emeriss"] = "WB",
+["moltencore"] = "MC",["blackwinglair"] = "BWL",["worldboss"] = "WB",
+
+["kara"] = "KARA",["karazhan"] = "KARA",["concavius"] = "WB",["ostarius"] = "WB",["nerub"] = "WB",["reaver"] = "WB",["clackora"] = "WB",
+
+["av"] = "PVP",["ab"] = "PVP",["wsg"] = "PVP",["battleground"] = "PVP",["warsong"] = "PVP",["premade"] = "PVP",["bg"] = "PVP",["pvp"] = "PVP",
+["arathibasin"] = "PVP",["alteracvalley"] = "PVP",
+
+["bloodring"] = "PVP",
+["sunnygladevalley"] = "PVP",
+["sunnyglade"] = "PVP",
+}
 GF_WORD_SKIP = {
 ["x"] = true,["ii"] = true,["iii"] = true,["iv"] = true,["vi"] = true,["vii"] = true,["viii"] = true,["ix"] = true,
 }
@@ -385,7 +416,7 @@ GF_WORD_FIX = {
 ["boosting"] = "boost",["booster"] = "boost",["boosts"] = "boost",["carrying"] = "carry",["fortunes"] = "fortune",["sercives"] = "service",["sercive"] = "service",["cd"] = "cooldown",
 
 ["sw"] = "stormwind",["tb"] = "thunderbluff",["irongforge"] = "ironforge",["darn"] = "darnassus",["uc"] = "undercity",["undercitry"] = "undercity",["undercirty"] = "undercity",
-["org"] = "orgrimmar",["orgr"] = "orgrimmar",["og"] = "orgrimmar",["ogri"] = "orgrimmar",["orgtimar"] = "orgrimmar",["ogrimmar"] = "orgrimmar",
+["org"] = "orgrimmar",["orgr"] = "orgrimmar",["og"] = "orgrimmar",["ogri"] = "orgrimmar",["orgtimar"] = "orgrimmar",["ogrimmar"] = "orgrimmar",["theramor"] = "theramore",
 
 ["drood"] = "druid",["droods"] = "druid",["driud"] = "druid",["druids"] = "druid",["rdruid"] = "druid",["boomkin"] = "druid",["boomie"] = "druid", -- Classes
 ["hutner"] = "hunter",["hunters"] = "hunters",["bmhunter"] = "hunter",["mmhunter"] = "hunter",
@@ -415,7 +446,7 @@ GF_WORD_FIX = {
 ["elites"] = "elite",["elit"] = "elite",["leet"] = "elite",["leets"] = "elite",["reputation"] = "rep",["reput"] = "rep",["farms"] = "farm",["noz"] = "nozdormu",["rr"] = "redridge",["obsidon"] = "obsidion",
 ["hghlands"] = "highlands",["silithis"] = "silithus",["bagthera"] = "bhagthera",["bajkteera"] = "bhagthera",["jinthalor"] = "jinthaalor",["princes"] = "princess",["tf"] = "thunderfury",["frostmauls"] = "frostmaul",
 
-["rfch"] = "rfc",["rfcd"] = "rfc",["rfchasm"] = "rfc",["rangefire"] = "ragefire",
+["rfch"] = "rfc",["rfcd"] = "rfc",["rfchasm"] = "rfc",["rangefire"] = "ragefire",["rf"] = "rfc",
 ["deadmine"] = "deadmines",["dedmines"] = "deadmines",["dedmine"] = "deadmines",["deathmine"] = "deadmines",["deathmines"] = "deadmines",["vc"] = "deadmines",["vancleef"] = "deadmines",["dms"] = "dm", -- Dungeons and Groups
 ["deaadmines"] = "deadmines",["deammine"] = "deadmines",["deammines"] = "deadmines",["deanmines"] = "deadmines",["deamines"] = "deadmines",
 ["twc"] = "wc",["waling"] = "wailing",["walling"] = "wailing",["vailing"] = "wailing",["cavs"] = "caverns",["cavern"] = "caverns",["cave"] = "caverns",["caves"] = "caverns",["cavers"] = "caverns",["caverne"] = "caverns",
@@ -446,7 +477,7 @@ GF_WORD_FIX = {
 ["ubers"] = "ubrs",["urbs"] = "ubrs",["ubs"] = "ubrs",["uber"] = "ubrs",["ubbrs"] = "ubrs",["ubrd"] = "ubrs",["ubr"] = "ubrs",["valthalaks"] = "valthalak",
 
 ["onyixia"] = "onyxia",["onxy"] = "onyxia",["onyx"] = "onyxia",["onyxias"] = "onyxia",["onixia"] = "onyxia",["onixya"] = "onyxia",["ohy"] = "ony",["onny"] = "ony",["onyy"] = "ony",["oony"] = "ony",["onx"] = "ony",["onxyia"] = "ony",["oni"] = "ony", -- Raids
-["blw"] = "bwl",["nefarien"] = "nefarian",["nefarion"] = "nefarian",["ossi"] = "ossirian",["nax"] = "naxx",
+["blw"] = "bwl",["nefarien"] = "nefarian",["nefarion"] = "nefarian",["ossi"] = "ossirian",["nax"] = "naxx",["taq"] = "aq",
 ["raids"] = "raid",["raiding"] = "raid",["rading"] = "raid",["dng"] = "dungeon",["dung"] = "dungeon",["dungeons"] = "dungeon",["elitue"] = "elite",["bosses"] = "boss",["runs"] = "run",
 ["queueing"] = "queue",["que"] = "queue",["q"] = "queue",["qeue"] = "queue",["queueup"] = "queue",["bgs"] = "bg",["battlegrounds"] = "battleground",["bgs"] = "bg",
 ["repfarm"] = "repfarm",["repgroup"] = "repfarm",["reprun"] = "repfarm",["repgrind"] = "repfarm",
@@ -1133,13 +1164,13 @@ GF_WORD_QUEST = {
 ["whirlwindaxe"] = 40,["whirlwindweapon"] = 40,["arathihighlandselite"] = 40,["alteracmountainelite"] = 40,["arathihighlandsgroup"] = 40,["alteracmountaingroup"] = 40,["breakingthekeystone"] = 42,["sigiloftrollbane"] = 42,
 ["lordalidenperenolde"] = 42,["biggamehunter"] = 43,["crownofwill"] = 43,["crackingmaurysfoot"] = 44,["dustwallowmarshelite"] = 45,["challengeoverlordmokmorok"] = 45,["broodofonyxia"] = 45,["summontheprincess"] = 50,
 ["elitequeuehinterlands"] = 50,["elitequesthinterlands"] = 50,["hinterlandsallianceelite"] = 50,["hinterlandshordeelite"] = 50,["hinterlandsalliancegroup"] = 50,["hinterlandshordegroup"] = 50,
-["trollelite"] = 50,["setthemablaze"] = 52,["muiginandlarion"] = 52,["larionandmuigin"] = 52,["timbermawholdrep"] = 55,["offorgottenmemories"] = 57,["thefinaltablets"] = 58,["afinalblow"] = 58,
+["trollelite"] = 50,["setthemablaze"] = 52,["muiginandlarion"] = 52,["larionandmuigin"] = 52,["pawncapturesqueen"] = 54,["timbermawholdrep"] = 55,["offorgottenmemories"] = 57,["thefinaltablets"] = 58,["afinalblow"] = 58,
 ["whensmokeysings"] = 58,["mawofmadness"] = 60,["avastyeadmiral"] = 60,["thefourdukes"] = 60,["twilightbattleorders"] = 60,["kingsofflame"] = 60,["dukeofcynders"] = 60,["theeasternplagues"] = 60,
 ["huntingforectoplasm"] = 60,["testofskull"] = 62,["draconicfordummies"] = 64,["silithushighcouncil"] = 64,["dukesinsilithus"] = 64,
 
 -- Four Words
 ["warwiththescarletcrusade"] = 12,["therelicsofwakening"] = 17,["ofthekingslands"] = 17,["thecoastisntclear"] = 19,["possiblebutnotprobable"] = 24,["thetowerofalthalaxx"] = 24,["howlinginthehills"] = 25,
-["thetomeofvalor"] = 25,["kingofthefoulweald"] = 26,["looktothestars"] = 30,["fallindemoncanyon"] = 31,["brideoftheembalmer"] = 32,["curseofthetides"] = 40,["attackonthetower"] = 40,
+["thetomeofvalor"] = 25,["kingofthefoulweald"] = 26,["looktothestars"] = 30,["fallindemoncanyon"] = 31,["brideoftheembalmer"] = 32,["curseofthetides"] = 40,["attackonthetower"] = 40,["valleyofspearselite"] = 42,
 ["armyoftheblack"] = 43,["anambassadorofevil"] = 44,["handandtheheart"] = 44,["lardlosthislunch"] = 49,["tremorsoftheearth"] = 50,["jobopeningguardcaptain"] = 51,
 ["messageinabottle"] = 51,["hexxandherminions"] = 51,["warontheshadowsworn"] = 52,["theapesofungoro"] = 55,["dangeroustogoalone"] = 56,["nameofthebeast"] = 58,
 ["unitingtheshatteredamulet"] = 60,["oflightandshadow"] = 60,["luckbewithyou"] = 60,["ordermustberestored"] = 63,["theisleofdread"] = 64,["isleofthedread"] = 64,["pathoftherighteous"] = 64,
