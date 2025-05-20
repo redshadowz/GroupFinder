@@ -459,7 +459,7 @@ GF_WORD_FIX = {
 ["anynbody"] = "anyone",["anybody"] = "anyone",["yours"] = "your",["yer"] = "your",["ya"] = "your",["anyonw"] = "anyone",["anyon"] = "anyone",["anyoone"] = "anyone",["aynone"] = "anyone",["somewho"] = "anyone",["whofor"] = "anyonefor", -- Basic Words
 ["someone"] = "anyone",["somebody"] = "anyone",["sombody"] = "anyone",["anyfor"] = "anyone",["forr"] = "for",["fora"] = "for",["für"] = "for",["onl"] = "only",["git"] = "get",
 ["needs"] = "need",["ned"] = "need",["neeed"] = "need",["want"] = "need",["wants"] = "need",["got"] = "have",
-["available"] = "around",["avail"] = "around",["could"] = "can",["wat"] = "what",["join"] = "join",["joiin"] = "jooin",["joinn"] = "join",
+["available"] = "around",["avail"] = "around",["could"] = "can",["wat"] = "what",["jooin"] = "join",["joiin"] = "join",["joinn"] = "join",["jion"] = "join",
 ["doin"] = "doing",["wana"] = "wanna",["alla"] = "all",["plz"] = "please",["pls"] = "please",["weeks"] = "week",["times"] = "time",["assist"] = "help",["questions"] = "question",["specs"] = "spec",["prot"] = "protection",
 ["nub"] = "noob",["nubs"] = "noob",["noobs"] = "noob",["newbs"] = "noob",["newbies"] = "noob",["noobie"] = "noob",["noobies"] = "noob",["lel"] = "lol",
 ["moar"] = "more",["opeining"] = "opening",["twinks"] = "twink",["lst"] = "last",["taletns"] = "taletns",["badges"] = "badge",["hydrax"] = "hydraxian",["hydraxis"] = "hydraxian",["waterlords"] = "hydraxian",["prio"] = "priority",
@@ -682,6 +682,10 @@ GF_WORD_IGNORE = {
 ["typethat"] = true,
 ["fromsending"] = true,
 ["justfine"] = true,
+["manytwinks"] = true,
+["youwouldntbe"] = true,
+["wouldntbeasking"] = true,
+
 
 ["asferal"] = true,["asboomie"] = true,["asbalance"] = true,["asresto"] = true,["asrestoration"] = true,
 ["asbm"] = true,["asmm"] = true,
@@ -830,7 +834,7 @@ GF_WORD_GUILD = {
 ["lookingformoremembers"] = 2,["lookingformoreplayers"] = 1,["lookingforskilledraiders"] = 2,["lookingfornewraiders"] = 2,["seekingfewgoodplayers"] = 1,["seekingsomegoodplayers"] = 1,
 ["lovetohaveyou"] = 2,["wewillhelpyou"] = .5,
 ["playersofanyclass"] = 1,["playersofallclasses"] = 1,["opentoall"] = 1,["alllevelsarewelcome"] = 1,
-
+["needtojoinguild"] = 2,
 -- Guild Spam that get around my filters
 ["pretendingsocializing"] = .5,["raidmechanic"] = .5,["escapethehellscape"] = .5,
 
@@ -1303,9 +1307,11 @@ GF_WORD_TRADE = {
 ["cananyonesummonme"] = 2.25,["cananyoneportalme"] = 2.25,["willanyonesummonme"] = 2.25,["willanyoneportalme"] = 2.25,["lflocktosummon"] = .25,["lflockforsummon"] = .25,
 
 ["portaltostormwindplease"] = 2,["portaltoironforgeplease"] = 2,["portaltoifplease"] = 2,["portaltodarnassusplease"] = 2,["portaltoorgrimmarplease"] = 2,["portaltoundercityplease"] = 2,["portaltothunderbluffplease"] = 2,["portaltothunderplease"] = 2,
+["portalmetostormwind"] = 2,["portalmetoironforge"] = 2,["portalmetoif"] = 2,["portalmetodarnassus"] = 2,["portalmetoorgrimmar"] = 2,["portalmetoundercity"] = 2,["portalmetothunderbluff"] = 2,["portalmetothunder"] = 2,
 ["summontobarrensplease"] = 2,["summontostonardplease"] = 2,["summontobootybayplease"] = 2,["summontomoongladeplease"] = 2,["summontowinterspringplease"] = 2,["summontodesolaceplease"] = 2,["summontoferalasplease"] = 2,["summontosilithusplease"] = 2,
 ["summontohydraxianplease"] = 2,["summontotanarisplease"] = 2,["summontoeplplease"] = 2,["summontowplplease"] = 2,["summontosmplease"] = 2,["summontoalteracplease"] = 2,["summontoarathiplease"] = 2,["summontobadlandsplease"] = 2,["summontoblastedplease"] = 2,
 ["summontokaraplease"] = 2,
+
 
 ["infrontofbank"] = 2,
 ["iprovideblacksmith"] = 1,["makeitforyou"] = 2,["canigeta"] = 1,
@@ -1645,12 +1651,12 @@ local GF_TURTLE_WORD_TRADE = {
 ["healtoring"] = 1,["naturetoring"] = 1,["shadowtoring"] = 1,["frosttoring"] = 1,["vamptoring"] = 1,["sptoring"] = 1,["staminatoring"] = 1,
 
 ["anyhyjalportal"] = 1,["needhyjalportal"] = 1,["needportalhyjal"] = 1,
-["portaltowinterspring"] = 1,["anywinterspringportal"] = 1,["needwinterspringportal"] = 1,["needportalwinterspring"] = 1,
-["portaltoswamp"] = 1,["anyswampportal"] = 1,["needswampportal"] = 1,["needportalswamp"] = 1,
-["portaltostonard"] = 1,["anystonardportal"] = 1,["needstonardportal"] = 1,["needportalstonard"] = 1,
-["portaltotheramore"] = 1,["anytheramoreportal"] = 1,["needtheramoreportal"] = 1,["needportaltheramore"] = 1,
-["portaltoat"] = 1,["anyatportal"] = 1,["needatportal"] = 1,["needportalat"] = 1,
-["portaltoalahthalas"] = 1,["anyalahthalasportal"] = 1,["needalahthalasportal"] = 1,["needportalalahthalas"] = 1,["needaalahthalasportal"] = 1,
+["portaltowinterspring"] = 1,["portalmetowinterspring"] = 1,["anywinterspringportal"] = 1,["needwinterspringportal"] = 1,["needportalwinterspring"] = 1,
+["portaltoswamp"] = 1,["portalmetoswamp"] = 1,["anyswampportal"] = 1,["needswampportal"] = 1,["needportalswamp"] = 1,
+["portaltostonard"] = 1,["portalmetostonard"] = 1,["anystonardportal"] = 1,["needstonardportal"] = 1,["needportalstonard"] = 1,
+["portaltotheramore"] = 1,["portalmetotheramore"] = 1,["anytheramoreportal"] = 1,["needtheramoreportal"] = 1,["needportaltheramore"] = 1,
+["portaltoat"] = 1,["portalmetoat"] = 1,["anyatportal"] = 1,["needatportal"] = 1,["needportalat"] = 1,
+["portaltoalahthalas"] = 1,["portalmetoalahthalas"] = 1,["anyalahthalasportal"] = 1,["needalahthalasportal"] = 1,["needportalalahthalas"] = 1,["needaalahthalasportal"] = 1,
 
 ["freehyjalsummon"] = 1.5,["lfhyjalsummon"] = 2,["needhyjalsummon"] = 2,["summontohyjal"] = 2.5,["taxitohyjal"] = 2.5,
 ["anyhyjalsummon"] = 2,["anysummonhyjal"] = 2,["anyonehyjalsummon"] = 2,["anyonesummonhyjal"] = 2,
