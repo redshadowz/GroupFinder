@@ -1988,7 +1988,7 @@ function GF_CheckForGroups(arg1,arg2,event,showanyway)
 		end
 	end
 	return GF_CheckForSpam(arg1,arg2,foundInGroup) or foundInGroup;
-end -- /script GF_CheckForGroups("run mid level dungeons and sell boe's on ah","r","CHAT_MSG_SAY",true) if showanyway == true then print(wordString) end
+end -- /script GF_CheckForGroups("mitäämuutamenoatoistaaseksi josontylsää guildespañola complétersonroster","r","CHAT_MSG_SAY",true) if showanyway == true then print(wordString) end
 function GF_GetTypes(arg1, showanyway)
 	GF_MessageData = { foundIgnore = nil,foundGuild = 0,foundGuildExclusion = 0,foundLFM = 0,foundLFG = nil,foundClass = nil,foundQuest = nil,foundDungeon = nil,foundRaid = nil,foundTrades = 0,foundTradesExclusion = 0,foundPvP = nil,foundFlags = "" }
 	local wordTable = {}
