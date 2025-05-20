@@ -1,9 +1,10 @@
 # GroupFinder
 Group finder Addon for Vanilla Wow 1.12.1 based on the CallToArms addon(with Turtle WoW support).  
 
-I hate chat spam, so I made this addon so I never have to see it ever again. I tried to make this addon as intuitive as possible, but it's probably pretty intimidating at first glance. Lots of checkboxes. Lots of edit boxes. Lots of dropdowns. I put as much as possible on the front page because the original CallToArms addon had too many pages to flip through and too many useless features.  
+I hate chat spam, so I made this addon so I never have to see it again. I tried to make this addon as intuitive as possible, but it's probably pretty intimidating at first glance. Lots of checkboxes. Lots of edit boxes. Lots of dropdowns. I put as much as possible on the front page because the original CallToArms addon had too many pages to flip through and too many useless features.  
 
-PS: To people who might be interested in this addon. This isn't just a group finder that parses chat channels. This is a massive chat filtering tool. It identifies group messages, trade messages, guild recruitment messages, and normal chat so you can see only what you want to see(all chat is recorded to an easily accessible/sortable "log").  
+PS: To people who might be interested in this addon. This isn't simply a group finder that searches world chat for groups. This is a massive chat filtering tool. It identifies four types of messages. Group messages. Guild messages. Trades messages. And Chat messages. And then allows you to show/hide them individually(with a sortable chatlog window). This essentially allows you to divide the World channel into four separate channels and see only what you want to see. Along with a group display frame to easily find/filter/search for groups.  
+
 PS: I recommend turning off "Show groups in Chat", "Show Trades", and "Show Guilds". Then turning on "Show groups in Minimap". Then go into the Log frame and uncheck "Group", "Filtered", "Loot", "Spam", "Blacklist", and "Level". So that you can go back and forth between chat and trades. If you're below level 60, turn on "Auto Filter" to only see groups near your level. The default keybinding is "I"(or Shift-G for the groups frame and Shift-L for the Logs frame).  
 
 >[Top] - 'Chat Options'  
