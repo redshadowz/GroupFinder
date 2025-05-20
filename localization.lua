@@ -454,9 +454,11 @@ GF_WORD_FIX = {
 ["farmgroup"] = "repfarm",["farmrun"] = "repfarm",
 ["badgegroup"] = "badgefarm",["badgerun"] = "badgefarm",["badgegrind"] = "badgefarm",
 
+["foran"] = "for",["havea"] = "have",["havean"] = "have",["needa"] = "need",["needan"] = "need",
+
 ["anynbody"] = "anyone",["anybody"] = "anyone",["yours"] = "your",["yer"] = "your",["ya"] = "your",["anyonw"] = "anyone",["anyon"] = "anyone",["anyoone"] = "anyone",["aynone"] = "anyone",["somewho"] = "anyone",["whofor"] = "anyonefor", -- Basic Words
-["someone"] = "anyone",["somebody"] = "anyone",["sombody"] = "anyone",["anyfor"] = "anyone",["anyone"] = "anyone",["forr"] = "for",["fora"] = "for",["foran"] = "for",["für"] = "for",["onl"] = "only",["git"] = "get",
-["needs"] = "need",["needa"] = "need",["needan"] = "need",["ned"] = "need",["neeed"] = "need",["want"] = "need",["wants"] = "need",["got"] = "have",["havea"] = "have",["havean"] = "have",
+["someone"] = "anyone",["somebody"] = "anyone",["sombody"] = "anyone",["anyfor"] = "anyone",["forr"] = "for",["fora"] = "for",["für"] = "for",["onl"] = "only",["git"] = "get",
+["needs"] = "need",["ned"] = "need",["neeed"] = "need",["want"] = "need",["wants"] = "need",["got"] = "have",
 ["available"] = "around",["avail"] = "around",["could"] = "can",["wat"] = "what",["join"] = "join",["joiin"] = "jooin",["joinn"] = "join",
 ["doin"] = "doing",["wana"] = "wanna",["alla"] = "all",["plz"] = "please",["pls"] = "please",["weeks"] = "week",["times"] = "time",["assist"] = "help",["questions"] = "question",["specs"] = "spec",["prot"] = "protection",
 ["nub"] = "noob",["nubs"] = "noob",["noobs"] = "noob",["newbs"] = "noob",["newbies"] = "noob",["noobie"] = "noob",["noobies"] = "noob",["lel"] = "lol",
@@ -1180,8 +1182,8 @@ GF_WORD_TRADE = {
 ["casino"] = 1,["deathroll"] = 1,
 
 -- Two Words
-["lookingfor"] = 102.5,["anyonehave"] = 1,["wannabuy"] = 2.5,["lfweapon"] = .5,["lfcrusader"] = .5,["lfriding"] = .5,["lfarcanum"] = .5,
-["buyinghitem"] = 2,["sellinghitem"] = 2,["sellhitem"] = 2.5,["sellinghenchant"] = 2,["sellhenchant"] = 2,["anyoneselling"] = 1.5,["tosell"] = .5,["tobuy"] = .5,["anyonehave"] = 1.5,["forsale"] = 2.5,["onah"] = 2.5,["inah"] = 2.5,["auctionhouse"] = 1,
+["lookingfor"] = 102.5,["anyonehave"] = 1.5,["wannabuy"] = 2.5,["lfweapon"] = .5,["lfcrusader"] = .5,["lfriding"] = .5,["lfarcanum"] = .5,
+["buyinghitem"] = 2,["sellinghitem"] = 2,["sellhitem"] = 2.5,["sellinghenchant"] = 2,["sellhenchant"] = 2,["anyoneselling"] = 1.5,["tosell"] = .5,["tobuy"] = .5,["forsale"] = 2.5,["onah"] = 2.5,["inah"] = 2.5,["auctionhouse"] = 1,
 ["payinggold"] = 1,["payingmoney"] = 1,["smalltip"] = 1,["willtip"] = 3,["cantip"] = 2,["illtip"] = 2,["anytip"] = 1,["fortip"] = 1,["goldtip"] = 1,["tipanything"] = 1,["tipappreciated"] = 1,
 ["mymats"] = .5,["havemats"] = 1,["yourmats"] = 2.5,
 ["gearcrafter"] = 1,["crafterhitem"] = 1,["gethitem"] = 1,["offercraft"] = 1,["icraft"] = 1,

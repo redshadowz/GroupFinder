@@ -1971,7 +1971,7 @@ function GF_CheckForGroups(arg1,arg2,event,showanyway)
 -- "Say" messages will always be displayed unless flagged as spam.
 -- "Yell" and "Channel" messages will only display if allowed.
 	if GF_BlackList[GF_RealmName][arg2] and not GF_PlayersCurrentlyInGroup[arg2] and not GF_Friends[arg2] and not GF_Guildies[arg2] then return 8 end
-	GF_GetTypes(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(string.lower(" "..arg1.." "),".gg/%w+", ""), "|cff%w+|(%w+)[%d:]+|h", " %1 "), "|h|r", " "),"['']", "")," any? ?1 "," anyone ")," some ?1 "," anyone "),"g2g","gtg"),"k+","k"),showanyway)
+	GF_GetTypes(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(string.lower(" "..arg1.." "),".gg/%w+", ""), "|cff%w+|(%w+)[%d:]+|h", " %1 "), "|h|r", " "),"['']", "")," any? ?1 "," anyone ")," some ?1 "," anyone "),"any one","anyone"),"g2g","gtg"),"k+","k"),showanyway)
 	if not GF_SavedVariables.showguilds and GF_MessageData.foundGuild >= 3 and (event == "CHAT_MSG_CHANNEL" or event == "CHAT_MSG_YELL") then return 7
 	elseif GF_MessageData.foundTrades >= 3 then return GF_CheckForSpam(arg1,arg2) or 5
 	elseif GF_MessageData.foundIgnore and GF_MessageData.foundLFM < 4 then return GF_CheckForSpam(arg1,arg2) or 4 end
@@ -1988,7 +1988,7 @@ function GF_CheckForGroups(arg1,arg2,event,showanyway)
 		end
 	end
 	return GF_CheckForSpam(arg1,arg2,foundInGroup) or foundInGroup;
-end -- /script GF_CheckForGroups("mitäämuutamenoatoistaaseksi josontylsää guildespañola complétersonroster","r","CHAT_MSG_SAY",true) if showanyway == true then print(wordString) end
+end -- /script GF_CheckForGroups("anyone got an extra bag to donate","r","CHAT_MSG_SAY",true) if showanyway == true then print(wordString) end
 function GF_GetTypes(arg1, showanyway)
 	GF_MessageData = { foundIgnore = nil,foundGuild = 0,foundGuildExclusion = 0,foundLFM = 0,foundLFG = nil,foundClass = nil,foundQuest = nil,foundDungeon = nil,foundRaid = nil,foundTrades = 0,foundTradesExclusion = 0,foundPvP = nil,foundFlags = "" }
 	local wordTable = {}
@@ -2022,7 +2022,7 @@ function GF_GetTypes(arg1, showanyway)
 	end
 	for j=0,3 do
 		for i=1, getn(wordTable) do
-			if wordTable[i+j] then
+			if wordTable[i+j] and wordTable[i+j] ~= "" then
 				if j == 0 then wordString = wordTable[i] elseif j == 1 then wordString = wordTable[i]..wordTable[i+1] elseif j == 2 then wordString = wordTable[i]..wordTable[i+1]..wordTable[i+2] else wordString = wordTable[i]..wordTable[i+1]..wordTable[i+2]..wordTable[i+3] end
 				if GF_WORD_IGNORE[wordString] then GF_MessageData.foundIgnore = true
 				elseif GF_WORD_GUILD[wordString] then
@@ -2037,6 +2037,7 @@ function GF_GetTypes(arg1, showanyway)
 				elseif GF_WORD_RAID[wordString] then GF_MessageData.foundRaid = GF_WORD_RAID[wordString] GF_MessageData.foundFlags = wordString; GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1;
 				elseif GF_WORD_PVP[wordString] then GF_MessageData.foundPvP = GF_WORD_PVP[wordString] GF_MessageData.foundFlags = wordString; GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1; end
 				if GF_WORD_TRADE[wordString] then
+				if showanyway == true then print(wordString) end
 					if GF_MessageData.foundTrades < 100 then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_WORD_TRADE[wordString]
 					elseif GF_MessageData.foundTrades > 100 and GF_WORD_TRADE[wordString] < 100 then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_WORD_TRADE[wordString] end
 				elseif GF_TRADE_WORD_EXCLUSION[wordString] then GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + GF_TRADE_WORD_EXCLUSION[wordString] end
