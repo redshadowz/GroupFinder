@@ -557,7 +557,7 @@ GF_WORD_IGNORE = {
 
 
 ["gl"] = true,["friendship"] = true,["teamwork"] = true, -- Guild
-["bought"] = true,["asked"] = true,["lockbox"] = true,["box"] = true,["repairs"] = true,["discount"] = true,["casino"] = true,["oranges"] = true, -- Trades
+["bought"] = true,["asked"] = true,["lockbox"] = true,["box"] = true,["repairs"] = true,["discount"] = true,["casino"] = true, -- Trades
 ["talents"] = true,["build"] = true,["advice"] = true,["opinion"] = true,["direction"] = true,["directions"] = true, -- People asking for help for talents and such
 
 ["afk"] = true,["sorry"] = true,["thought"] = true,["duel"] = true,["yell"] = true,["pretending"] = true,["macro"] = true, -- Other words
@@ -1125,7 +1125,7 @@ GF_WORD_QUEST = {
 ["anunwelcomeguest"] = 24,["bellygrub"] = 24,["bailorsoreshipment"] = 25,["missinginaction"] = 25,["cullingthethreat"] = 25,["tomeofvalor"] = 25,["thecursedcrew"] = 29,["battleofhillsbrad"] = 30,["elixirofagony"] = 30,
 ["testofstrength"] = 30,["darkironwar"] = 30,["darkshireelite"] = 34,["duskwoodelite"] = 34,["darkshiregroup"] = 34,["duskwoodgroup"] = 34,["prisonbreakin"] = 34,["legendofstalvan"] = 35,
 ["encrustedtailfins"] = 35,["thevilereef"] = 37,["ghostoplasm"] = 39,["theperenoldetiara"] = 40,["calltoarms"] = 40,["therealthreat"] = 40,["calltoarms"] = 40,["elitequestarathi"] = 40,
-["whirlwindaxe"] = 40,["arathihighlandselite"] = 40,["alteracmountainelite"] = 40,["arathihighlandsgroup"] = 40,["alteracmountaingroup"] = 40,["breakingthekeystone"] = 42,["sigiloftrollbane"] = 42,
+["whirlwindaxe"] = 40,["whirlwindweapon"] = 40,["arathihighlandselite"] = 40,["alteracmountainelite"] = 40,["arathihighlandsgroup"] = 40,["alteracmountaingroup"] = 40,["breakingthekeystone"] = 42,["sigiloftrollbane"] = 42,
 ["lordalidenperenolde"] = 42,["biggamehunter"] = 43,["crownofwill"] = 43,["crackingmaurysfoot"] = 44,["dustwallowmarshelite"] = 45,["challengeoverlordmokmorok"] = 45,["broodofonyxia"] = 45,["summontheprincess"] = 50,
 ["elitequeuehinterlands"] = 50,["elitequesthinterlands"] = 50,["hinterlandsallianceelite"] = 50,["hinterlandshordeelite"] = 50,["hinterlandsalliancegroup"] = 50,["hinterlandshordegroup"] = 50,
 ["trollelite"] = 50,["setthemablaze"] = 52,["muiginandlarion"] = 52,["larionandmuigin"] = 52,["timbermawholdrep"] = 55,["offorgottenmemories"] = 57,["thefinaltablets"] = 58,["afinalblow"] = 58,
