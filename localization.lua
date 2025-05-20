@@ -420,7 +420,7 @@ GF_WORD_FIX = {
 ["twc"] = "wc",["waling"] = "wailing",["walling"] = "wailing",["vailing"] = "wailing",["cavs"] = "caverns",["cavern"] = "caverns",["cave"] = "caverns",["caves"] = "caverns",["cavers"] = "caverns",["caverne"] = "caverns",
 ["stockades"] = "stockade",["stockede"] = "stockade",["stocakde"] = "stockade",["stokade"] = "stockade",["stokades"] = "stockade",["stocks"] = "stock",
 ["stonks"] = "stock",["stockado"] = "stockade",["stockes"] = "stockade",["sotckades"] = "stockade",["stockaded"] = "stockade",["stockates"] = "stockade",["stocakeds"] = "stockade",
-["blackfathome"] = "blackfathom",["blackfatom"] = "blackfathom",["blackfanthom"] = "blackfathom",["blackfantom"] = "blackfathom",["bd"] = "bfd",["bdf"] = "bfd",["bfg"] = "bfd",
+["blackfathome"] = "blackfathom",["blackfatom"] = "blackfathom",["blackfanthom"] = "blackfathom",["blackfantom"] = "blackfathom",["bd"] = "bfd",["bdf"] = "bfd",["bfg"] = "bfd",["bfc"] = "bfd",
 ["sk"] = "sfk",["skf"] = "sfk",
 ["gnooner"] = "gnomeregan",["gnomregan"] = "gnomeregan",["gnomregen"] = "gnomeregan",["gnomergan"] = "gnomeregan",["gnomeragen"] = "gnomeregan",["gnomragen"] = "gnomeregan",
 ["gnomregan"] = "gnomeregan",["gnomrigan"] = "gnomeregan",["gnomoeregan"] = "gnomeregan",["gnomereagan"] = "gnomeregan",["gnomeragan"] = "gnomeregan",["gnomger"] = "gnomeregan",
@@ -653,11 +653,27 @@ GF_WORD_IGNORE = {
 ["apxlocation"] = true,
 ["approxlocation"] = true,
 ["approximatelocation"] = true,
-
-["isfinetotank"] = true,
-["isgoodtotank"] = true,
-["hourqueue"] = true,
-["timesarerough"] = true,
+["shirt"] = true,
+["createahuman"] = true,
+["createanightelf"] = true,
+["createadwarf"] = true,
+["createagnome"] = true,
+["createahighelf"] = true,
+["createanorc"] = true,
+["createanundead"] = true,
+["createatroll"] = true,
+["createatauren"] = true,
+["createagoblin"] = true,
+["orhuman"] = true,
+["ornightelf"] = true,
+["ordwarf"] = true,
+["orgnome"] = true,
+["orhighelf"] = true,
+["ororc"] = true,
+["orundead"] = true,
+["ortroll"] = true,
+["ortauren"] = true,
+["orgoblin"] = true,
 
 -- Three Words
 ["groupaboveyou"] = true,
@@ -720,6 +736,10 @@ GF_WORD_IGNORE = {
 ["remotelyfair"] = true,
 ["whyisa"] = true,
 ["thishappens"] = true,
+["isfinetotank"] = true,
+["isgoodtotank"] = true,
+["hourqueue"] = true,
+["timesarerough"] = true,
 
 -- Four Words
 ["ineeddruidhelp"] = true,["ineedhunterhelp"] = true,["ineedmagehelp"] = true,["ineedpaladinhelp"] = true,["ineedpriesthelp"] = true,["ineedroguehelp"] = true,["ineedshamanhelp"] = true,["ineedwarriorhelp"] = true,["ineedwarlockhelp"] = true,
@@ -1129,7 +1149,7 @@ GF_WORD_TRADE = {
 ["crusader"] = .5,["lifesteal"] = .5,["sageblade"] = .5,["lionheart"] = .5,["titanic"] = .5,["spelldamage"] = .5,["spellpower"] = 1,["fiery"] = .5,["withfiery"] = .5,["resist"] = .5,["spurs"] = .5,["beastslaying"] = .5,["icy"] = .5,
 ["stats"] = .5,["stamina"] = .25,["strength"] = .25,["agility"] = .25,["spirit"] = .25,["intellect"] = .25,["defense"] = .25,["res"] = .5,["arcanum"] = .5,
 
-["craft"] = .5,["crafter"] = 1,["mats"] = .5,
+["craft"] = .5,["crafter"] = 1,["mats"] = .5,["maker"] = .5,
 ["carry"] = 1,["boost"] = 1,
 ["arcanologist"] = 1.5,
 ["hitem"] = .5,
@@ -1178,7 +1198,7 @@ GF_WORD_TRADE = {
 
 ["reasonableprice"] = .5,["foronly"] = 1,["anymage"] = 1,
 ["carryservice"] = 20,["keyservice"] = 3,["taxiservice"] = 20,["keyholder"] = 1.5,["healservice"] = 20,["bsservice"] = 1.5,["blacksmithservice"] = 1.5,["tankservice"] = 20,
-["allrecipes"] = 3,["madeby"] = .5,
+["allrecipes"] = 3,["madeby"] = .5,["bagmaker"] = .5,["bagcrafter"] = .5,
 ["fullyrestocked"] = 1,["inbulk"] = 1,["perstack"] = 1,["lastcall"] = 1,
 ["openubrs"] = 1.5,
 ["stormwindif"] = .25,["ifstormwind"] = .25,
@@ -1280,7 +1300,9 @@ GF_WORD_TRADE = {
 ["openallyourhitem"] = 1,["helpmewithhitem"] = 1,
 ["openallyour"] = 1,
 
-["canopenbox"] = 1.5,["anyonecanopen"] = 1,["lastcallforlockbox"] = 1,
+["lockboxicanopen"] = 1,["icanopen"] = .5,["canopenbox"] = 1.5,["anyonecanopen"] = 1,["lastcallforlockbox"] = 1,
+
+["levellockbox"] = .5,["lowlevellockbox"] = .5,["midlevellockbox"] = .5,
 
 ["canarogue"] = 1,["willarogue"] = 1,["anyonearoundhitem"] = 2,
 ["lfroguetoopen"] = 2,["lfrogueforlockbox"] = 2,["lfrogueforbox"] = 2,["anyrogueforlockbox"] = 2,["anyrogueforbox"] = 2,["needroguetoopen"] = 2,["anyroguecanopen"] = 2,["anyrogueinstormwind"] = 2,["anyrogueopenlockbox"] = 2,
