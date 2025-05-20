@@ -804,8 +804,13 @@ GF_WORD_GUILD = {
 ["mcprogression"] = 1,["bwlprogression"] = 1,["aqprogression"] = 1,["naxxramasprogression"] = 1,
 
  -- Three Words
-["lfanyguild"] = 3,["isaguild"] = .5,["lookingforguild"] = 3,["lfcasualguild"] = 3,["lfsocialguild"] = 3,["lfraidguild"] = 3,["lflevelingguild"] = 3,["lflevelguild"] = 3,["lfforguild"] = 3,["lfpvpguild"] = 3,["lfgoodguild"] = 3,["lffriendlyguild"] = 3,
-["lfchillguild"] = 3,["lfhypeguild"] = 3,["lfactiveguild"] = 3,["goodlevelingguild"] = .5,["activecasualguild"] = 1,
+["lfanyguild"] = 3,["isaguild"] = .5,["lookingforguild"] = 3,["anyforguild"] = 3,["lfforguild"] = 3,
+
+["anycasualguild"] = 3,["anysocialguild"] = 3,["anyraidguild"] = 3,["anylevelingguild"] = 3,["anylevelguild"] = 3,["anypvpguild"] = 3,["anygoodguild"] = 3,["anyfriendlyguild"] = 3,["anychillguild"] = 3,["anyhypeguild"] = 3,["anyactiveguild"] = 3,
+["lfcasualguild"] = 3,["lfsocialguild"] = 3,["lfraidguild"] = 3,["lflevelingguild"] = 3,["lflevelguild"] = 3,["lfpvpguild"] = 3,["lfgoodguild"] = 3,["lffriendlyguild"] = 3,["lfchillguild"] = 3,["lfhypeguild"] = 3,["lfactiveguild"] = 3,
+
+["goodlevelingguild"] = .5,["beginnerfriendlyguild"] = .5,["activecasualguild"] = 1,
+
 ["ourraidteam"] = 3,["finishourcore"] = 3,["lookingtoraid"] = .5,["lookingforraiders"] = .5,["lfmoremembers"] = 1,["lfskilledraiders"] = 2,
 ["allcurrentcontent"] = 3,["highendcontent"] = 3,["startraidingsoon"] = 1,["startinweek"] = 1,["tryingtorebuild"] = 1,["lookingtorebuild"] = 1,["lookingtogrow"] = 1,["growwithus"] = 1,
 ["friendsandguildies"] = 1,["levelwithfriends"] = .5,["liketolevel"] = .5,["easygoingplayers"] = 2,["justgoodraid"] = 3,["helpingeachother"] = 1,["helpwithleveling"] = 1,["helpifneeded"] = .5,["wehelpyou"] = .5,
