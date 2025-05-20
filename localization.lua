@@ -1323,7 +1323,7 @@ GF_WORD_TRADE = {
 ["anyroguearound"] = 1,["anyroguefor"] = 1,["anyroguethatcan"] = 1,
 ["canopenhitem"] = 1,
 ["openallyourhitem"] = 1,["helpmewithhitem"] = 1,
-["openallyour"] = 1,
+["openallyour"] = 1,["lockopen"] = 1,["lockopener"] = 1,["lockopening"] = 1,
 
 ["lockboxicanopen"] = 1,["icanopen"] = .5,["canopenbox"] = 1.5,["anyonecanopen"] = 1,["lastcallforlockbox"] = 1,
 
