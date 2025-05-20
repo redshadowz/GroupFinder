@@ -2055,7 +2055,7 @@ function GF_GetTypes(arg1, showanyway)
 	if string.find(arg1, "k10") or string.find(arg1, "k40") then GF_MessageData.foundRaid = 64 GF_MessageData.foundFlags = "kara" end
 	if GF_MessageData.foundLFM < 2 and ((string.find(arg1, "anyone%?") and string.find(arg1, "hquest")) or string.find(arg1, "%d+\=%d+")) then GF_MessageData.foundLFM = 2 end
 	
-	if string.find(arg1, "[ (]%d+ ?g") or string.find(arg1, "%d%s?+gold") or string.find(arg1, "[ (]%d+ ?s") or string.find(arg1, "%d%s?+silver") then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 2 end
+	if string.find(arg1, "[ (]%d+ ?g ") or string.find(arg1, "%d%s?+gold") or string.find(arg1, "[ (]%d+ ?s ") or string.find(arg1, "%d%s?+silver") then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 2 end
 	while GF_MessageData.foundTrades > 100 do GF_MessageData.foundTrades = GF_MessageData.foundTrades - 100 end
 	GF_MessageData.foundTrades = GF_MessageData.foundTrades - GF_MessageData.foundTradesExclusion
 

@@ -314,7 +314,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</Button>
 		</Frames>
 	</Frame>
-	<Frame name="GF_DialogFrameTemplate_UrlCopy" toplevel="true" enableMouse="true" frameStrata="DIALOG" virtual="true">
+	<Frame name="GF_DialogFrameTemplate_UrlCopy" toplevel="true" enableMouse="true" frameStrata="FULLSCREEN" virtual="true">
 		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
 			<BackgroundInsets>
 				<AbsInset left="11" right="12" top="12" bottom="11"/>
@@ -327,7 +327,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</EdgeSize>
 		</Backdrop>
 		<Size>
-			<AbsDimension x="320" y="60"/>
+			<AbsDimension x="320" y="44"/>
 		</Size>
 		<Anchors>
 			<Anchor point="CENTER">
@@ -351,17 +351,28 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnClick>
 				</Scripts>
 			</Button>
-			<EditBox name="$parentEditBox" inherits="GF_AbstractEditBox">
+			<EditBox name="$parentEditBox">
 				<Size>
-					<AbsDimension x="280" y="20"/>
+					<AbsDimension x="300" y="20"/>
 				</Size>
 				<Anchors>
-					<Anchor point="TOP" >
+					<Anchor point="TOP">
 						<Offset>
-							<AbsDimension x="0" y="-20"/>
+							<AbsDimension x="0" y="-13"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
+				<Layers>
+					<Layer level="BACKGROUND">
+						<Texture>
+							<Anchors>
+								<Anchor point="TOPLEFT"/>
+								<Anchor point="BOTTOMRIGHT"/>
+							</Anchors>
+							<Color r="0.0" g="0.0" b="0.0" a="0.92"/>
+						</Texture>
+					</Layer>
+				</Layers>
 				<FontString inherits="ChatFontNormal"/>
 				<Scripts>
 					<OnShow>
@@ -372,17 +383,17 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						this:SetTextInsets(4,0,0,0);
 					</OnLoad>
 					<OnTabPressed>
-						this:ClearFocus();
 						GF_UrlCopyFrame:Hide();
 					</OnTabPressed>
 					<OnEnterPressed>
-						this:ClearFocus();
 						GF_UrlCopyFrame:Hide();
 					</OnEnterPressed>
 					<OnEscapePressed>
-						this:ClearFocus();
 						GF_UrlCopyFrame:Hide();
 					</OnEscapePressed>
+					<OnEditFocusLost>
+						GF_UrlCopyFrame:Hide();
+					</OnEditFocusLost>
 				</Scripts>
 			</EditBox>
 		</Frames>
