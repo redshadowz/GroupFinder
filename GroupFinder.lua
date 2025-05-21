@@ -111,7 +111,7 @@ function GF_LoadVariables()
 		if not GF_SavedVariables.showlfg then GF_SavedVariables.showlfg = true end
 
 		if not GF_SavedVariables.searchtext then GF_SavedVariables.searchtext = "" end
-		if not GF_SavedVariables.searchbuttonstext then GF_SavedVariables.searchbuttonstext = "" end
+		if not GF_SavedVariables.searchbuttonstext then GF_SavedVariables.searchbuttonstext = {} end
 		if not GF_SavedVariables.searchlfgtext then GF_SavedVariables.searchlfgtext = "" end
 		if not GF_SavedVariables.searchlfgwhispertext then GF_SavedVariables.searchlfgwhispertext = "" end
 		if not GF_SavedVariables.lfgwhisperclass then GF_SavedVariables.lfgwhisperclass = GF_WARRIOR end
@@ -178,6 +178,7 @@ function GF_LoadVariables()
 		
 	if not GF_PreviousMessage then GF_PreviousMessage = {} end
 	if not GF_PlayerMessages then GF_PlayerMessages = {} end
+	if type(GF_SavedVariables.searchbuttonstext) ~= "table" then GF_SavedVariables.searchbuttonstext = {} end
 
 	if GF_WhoTable[GF_RealmName]["LOADED"][4] + 86400 < time() then -- Prune the WhoTable once per day
 		GF_WhoTable[GF_RealmName]["LOADED"] = { UnitLevel("player"), GF_Classes[UnitClass("player")], "", time() }
@@ -1010,7 +1011,7 @@ function GF_LoadSettings()
 	local TextToSet = { GF_SavedVariables.searchtext, GF_SavedVariables.searchlfgtext, GF_SavedVariables.searchlfgwhispertext }
 	local TextNames = { "GF_GroupsFrameDescriptionEditBox", "GF_LFGDescriptionEditBox", "GF_LFGWhoWhisperEditBox" }
 	for i=1, 3 do getglobal(TextNames[i]):SetText(TextToSet[i]) end
-	if GF_SavedVariables.searchbuttonstext ~= "" then GF_SearchListDropdown:LockHighlight() end
+	if GF_SearchButtonHasValues() then GF_SearchListDropdown:LockHighlight() end
 	getglobal(GF_LFGSizeDropdown:GetName().."TextLabel"):SetText(GF_SavedVariables.lfgsize);
 	getglobal(GF_LFGWhoClassDropdown:GetName().."TextLabel"):SetText(GF_SavedVariables.lfgwhisperclass);
 
@@ -1140,12 +1141,12 @@ function GF_IsFriendGuildieUsingAddon()
 end
 
 function GF_EntryMatchesGroupFilterCriteria(entry) -- GroupsFrame functions
-	if GF_SavedVariables.searchtext == "" and GF_SavedVariables.searchbuttonstext == "" and ((GF_SavedVariables.showlfg and entry.lfg) or (GF_SavedVariables.showlfm and not entry.lfg)) 
+	if GF_SavedVariables.searchtext == "" and not GF_SearchButtonHasValues() and ((GF_SavedVariables.showlfg and entry.lfg) or (GF_SavedVariables.showlfm and not entry.lfg)) 
 	and ((GF_SavedVariables.showdungeons and entry.type == "D") or (GF_SavedVariables.showraids and entry.type == "R") or (GF_SavedVariables.showquests and entry.type == "Q") or (GF_SavedVariables.showother and entry.type == "N"))
 	and (not GF_SavedVariables.autofilter or (entry.dlevel and entry.dlevel >= UnitLevel("player")-GF_SavedVariables.autofilterlevelvar and entry.dlevel <= UnitLevel("player")+GF_SavedVariables.autofilterlevelvar)) then
 		return true;
 	end
-	if (GF_SavedVariables.searchtext ~= "" or GF_SavedVariables.searchbuttonstext ~= "") and GF_SearchMessageForTextString(string.lower(entry.message).." ",string.lower(GF_SavedVariables.searchtext)..",",entry,GF_SavedVariables.searchbuttonstext) then
+	if (GF_SavedVariables.searchtext ~= "" or GF_SearchButtonHasValues()) and GF_SearchMessageForTextString(string.lower(entry.message).." ",string.lower(GF_SavedVariables.searchtext)..",",entry) then
 		return true;
 	end
 end
@@ -1204,7 +1205,7 @@ function GF_UpdateResults()
 				else dungeonLevelDifficulty = "|cff"..GF_DifficultyColors["GREY"] end
 
 				if entry.dlevel > 60 then dungeonLevelDifficulty = dungeonLevelDifficulty.."[60]|r " else dungeonLevelDifficulty = dungeonLevelDifficulty.."["..entry.dlevel.."]|r " end
-				if entry.flags ~= "" then dungeonLevelDifficulty = dungeonLevelDifficulty.."|r|cffffffff["..GF_GROUP_IDS[entry.flags].."]|r "
+				if entry.flags ~= "" then dungeonLevelDifficulty = dungeonLevelDifficulty.."|r|cffffffff["..entry.flags.."]|r "
 				elseif entry.type == "Q" then dungeonLevelDifficulty = dungeonLevelDifficulty.."|r|cffffffff[QUEST]|r " end
 				if GF_WhoTable[GF_RealmName][entry.op] then
 					local bottomtext;
@@ -1759,7 +1760,7 @@ function GF_ShowDropdownList(bframe)
 			if getglobal(button:GetName().."TextLabel"):GetStringWidth() >= width then width = getglobal(button:GetName().."TextLabel"):GetStringWidth()+5 end
 			button:Show()
 			if bframe == "SearchList" then
-				if string.find(GF_SavedVariables.searchbuttonstext, dtable[4]) then
+				if GF_SavedVariables.searchbuttonstext[dtable[4]] then
 					button:SetChecked(true)
 				else
 					button:SetChecked(false)
@@ -1798,23 +1799,24 @@ end
 function GF_AddRemoveSearch(bframe,entryname,add)
 	if bframe == "SearchList" then
 		if entryname == "Clear" then
-			GF_SavedVariables.searchbuttonstext = ""
+			GF_SavedVariables.searchbuttonstext = {}
 			GF_SavedVariables.searchtext = ""
 			getglobal(GF_GroupsFrameDescriptionEditBox:GetName()):SetText("");
+			GF_SearchList:Hide();
 		else
 			for i=1, getn(GF_BUTTONS_LIST[bframe]) do
 				if GF_BUTTONS_LIST[bframe][i][1] == entryname then
 					for j=4, getn(GF_BUTTONS_LIST[bframe][i]) do
 						if add then
-							GF_SavedVariables.searchbuttonstext = GF_BUTTONS_LIST[bframe][i][j].."/"..GF_SavedVariables.searchbuttonstext
+							GF_SavedVariables.searchbuttonstext[GF_BUTTONS_LIST[bframe][i][j]] = true
 						else
-							GF_SavedVariables.searchbuttonstext = gsub(GF_SavedVariables.searchbuttonstext, GF_BUTTONS_LIST[bframe][i][j].."[/%+%-]+", "")
+							GF_SavedVariables.searchbuttonstext[GF_BUTTONS_LIST[bframe][i][j]] = nil
 						end
 					end
 				end
 			end
 		end
-		if GF_SavedVariables.searchbuttonstext == "" then GF_SearchListDropdown:UnlockHighlight() else GF_SearchListDropdown:LockHighlight() end
+		if GF_SearchButtonHasValues() then GF_SearchListDropdown:LockHighlight() else GF_SearchListDropdown:UnlockHighlight() end
 		GF_ApplyFiltersToGroupList();
 	else
 		for i=1, getn(GF_BUTTONS_LIST[bframe]) do
@@ -1848,6 +1850,11 @@ function GF_AddRemoveSearch(bframe,entryname,add)
 			end
 		end
 		if bframe == "LFGSize" then GF_FixLFGStrings(true) else GF_FixLFGStrings() end
+	end
+end
+function GF_SearchButtonHasValues()
+	for word,_ in GF_SavedVariables.searchbuttonstext do
+		return true
 	end
 end
 
@@ -1972,7 +1979,7 @@ function GF_CheckForGroups(arg1,arg2,event,showanyway)
 -- "Say" messages will always be displayed unless flagged as spam.
 -- "Yell" and "Channel" messages will only display if allowed.
 	if GF_BlackList[GF_RealmName][arg2] and not GF_PlayersCurrentlyInGroup[arg2] and not GF_Friends[arg2] and not GF_Guildies[arg2] then return 8 end
-	GF_GetTypes(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(string.lower(" "..arg1.." "),".gg/%w+", ""), "|cff%w+|(%w+)[%d:]+|h", " %1 "), "|h|r", " "),"['']", "")," any? ?1 "," anyone ")," some ?1 "," anyone "),"any one","anyone"),"g2g","gtg"),"k+","k"),showanyway)
+	GF_GetTypes(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(string.lower(" "..arg1.." "),".gg/%w+", ""), "|cff%w+|(%w+)[%d:]+|h", " %1 "), "|h|r", " "),"['']", "")," any? ?1 "," anyone ")," some ?1 "," anyone "),"any one","anyone"),"g2g","gtg"),"kk+","kk"),"\"",""),showanyway)
 	if not GF_SavedVariables.showguilds and GF_MessageData.foundGuild >= 3 and (event == "CHAT_MSG_CHANNEL" or event == "CHAT_MSG_YELL") then return 7
 	elseif GF_MessageData.foundTrades >= 3 then return GF_CheckForSpam(arg1,arg2) or 5
 	elseif (GF_MessageData.foundIgnore or GF_MessageData.foundGuild >= 3) and GF_MessageData.foundLFM < 4 then return GF_CheckForSpam(arg1,arg2) or 4 end
@@ -1989,7 +1996,7 @@ function GF_CheckForGroups(arg1,arg2,event,showanyway)
 		end
 	end
 	return GF_CheckForSpam(arg1,arg2,foundInGroup) or foundInGroup;
-end -- /script GF_CheckForGroups(">Summons Service< 5G Taxi to - HYJAL - HYDRAXIAN - DIRE MAUL - STRAT - WINTERSPRING - AQ. Time is money friend!","r","CHAT_MSG_SAY",true) if showanyway == true then print(wordString) end
+end -- /script GF_CheckForGroups("Anyone going to do the \"Twilight Corrupter\" of |cffffff00|Hquest:8735:60|h[The Nightmare's Corruption]|h|r today?","r","CHAT_MSG_SAY",true)
 function GF_GetTypes(arg1, showanyway)
 	GF_MessageData = { foundIgnore = nil,foundGuild = 0,foundGuildExclusion = 0,foundLFM = 0,foundLFG = nil,foundClass = nil,foundQuest = nil,foundDungeon = nil,foundRaid = nil,foundTrades = 0,foundTradesExclusion = 0,foundPvP = nil,foundRFlags = "", foundDFlags = "", foundPFlags = "" }
 	local wordTable = {}
@@ -2025,7 +2032,7 @@ function GF_GetTypes(arg1, showanyway)
 		for i=1, getn(wordTable) do
 			if wordTable[i+j] and wordTable[i+j] ~= "" then
 				if j == 0 then wordString = wordTable[i] elseif j == 1 then wordString = wordTable[i]..wordTable[i+1] elseif j == 2 then wordString = wordTable[i]..wordTable[i+1]..wordTable[i+2] else wordString = wordTable[i]..wordTable[i+1]..wordTable[i+2]..wordTable[i+3] end
-				if GF_WORD_IGNORE[wordString] then GF_MessageData.foundIgnore = true if showanyway == true then print(wordString) end
+				if GF_WORD_IGNORE[wordString] then GF_MessageData.foundIgnore = true if showanyway == true then print(wordString.." ignore") end
 				elseif GF_WORD_GUILD[wordString] then
 					if GF_MessageData.foundGuild < 100 then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_WORD_GUILD[wordString]
 					elseif GF_MessageData.foundGuild > 100 and GF_WORD_GUILD[wordString] < 100 then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_WORD_GUILD[wordString] end
@@ -2049,7 +2056,7 @@ function GF_GetTypes(arg1, showanyway)
 					end
 					GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1; end
 				if GF_WORD_TRADE[wordString] then
-					if showanyway == true then print(wordString) end
+					if showanyway == true then print(wordString.." trade") end
 					if GF_MessageData.foundTrades < 100 then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_WORD_TRADE[wordString]
 					elseif GF_MessageData.foundTrades > 100 and GF_WORD_TRADE[wordString] < 100 then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_WORD_TRADE[wordString] end
 				elseif GF_TRADE_WORD_EXCLUSION[wordString] then GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + GF_TRADE_WORD_EXCLUSION[wordString] end
@@ -2145,10 +2152,10 @@ function GF_GetGroupInformation(arg1,arg2) -- Searches messages for Groups and s
 	local entry = {};
 	entry.op = arg2;
 	entry.message = arg1;
-	if GF_MessageData.foundRaid then entry.type = "R" entry.flags = GF_MessageData.foundRFlags
-	elseif GF_MessageData.foundDungeon and (not GF_MessageData.foundQuest or GF_MessageData.foundQuest == 0 or GF_MessageData.foundDungeon >= GF_MessageData.foundQuest) then entry.type = "D" entry.flags = GF_MessageData.foundDFlags
+	if GF_MessageData.foundRaid then entry.type = "R" entry.flags = GF_GROUP_IDS[GF_MessageData.foundRFlags]
+	elseif GF_MessageData.foundDungeon and (not GF_MessageData.foundQuest or GF_MessageData.foundQuest == 0 or GF_MessageData.foundDungeon >= GF_MessageData.foundQuest) then entry.type = "D" entry.flags = GF_GROUP_IDS[GF_MessageData.foundDFlags]
 	elseif GF_MessageData.foundQuest then entry.type = "Q" GF_MessageData.foundDungeon = nil entry.flags = ""
-	else entry.type = "N" if GF_MessageData.foundPvP then entry.flags = GF_MessageData.foundPFlags else entry.flags = "" end end
+	else entry.type = "N" if GF_MessageData.foundPvP then entry.flags = GF_GROUP_IDS[GF_MessageData.foundPFlags] else entry.flags = "" end end
 	
 	entry.dlevel = math.floor(GF_MessageData.foundRaid or GF_MessageData.foundDungeon or GF_MessageData.foundQuest or GF_MessageData.foundPvP or GF_MessageData.foundClass or 0);
 	if entry.dlevel == 0 and not GF_WhoTable[GF_RealmName][entry.op] then
@@ -2161,7 +2168,6 @@ function GF_GetGroupInformation(arg1,arg2) -- Searches messages for Groups and s
 	entry.t = time()
 	entry.lfg = GF_MessageData.foundLFG
 	
-
 	for i = 1, getn(GF_MessageList[GF_RealmName]) do
 		if arg2 == GF_MessageList[GF_RealmName][i].op then
 			if GF_SavedVariables.showgroupsnewonly then
@@ -2180,11 +2186,9 @@ function GF_GetGroupInformation(arg1,arg2) -- Searches messages for Groups and s
 end
 function GF_SearchMessageForTextString(msg,textstring,entry,buttontext)
 	for w in string.gfind(textstring, "([%w%s]+),") do
-		if string.find(msg, w) then return true end
+		if string.find(msg, w) or entry.flags == GF_GROUP_IDS[gsub(w," ","")] or entry.flags == string.upper(gsub(w," ", "")) then return true end
 	end
-	for word in string.gfind(buttontext, "(%a+)") do
-		if entry.flags == word then return true end
-	end
+	if GF_SavedVariables.searchbuttonstext[entry.flags] then return true end
 end
 
 function print(msg) -- I added this only temporarily so I could work on the addon without having to turn on other addons(reload faster)
