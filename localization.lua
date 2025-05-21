@@ -819,6 +819,16 @@ GF_WORD_IGNORE = {
 ["whencani"] = true,
 ["youwouldntbe"] = true,
 ["wouldntbeasking"] = true,
+["isthenpc"] = true,
+["youdbelooking"] = true,
+["blacksmithisthe"] = true,
+["tailoristhe"] = true,
+["enchantisthe"] = true,
+["leatherworkeristhe"] = true,
+["engineeristhe"] = true,
+["alchemististhe"] = true,
+["mineristhe"] = true,
+["herbalismisthe"] = true,
 
 -- Four Words
 ["ineeddruidhelp"] = true,["ineedhunterhelp"] = true,["ineedmagehelp"] = true,["ineedpaladinhelp"] = true,["ineedpriesthelp"] = true,["ineedroguehelp"] = true,["ineedshamanhelp"] = true,["ineedwarriorhelp"] = true,["ineedwarlockhelp"] = true,
@@ -1192,7 +1202,7 @@ GF_WORD_QUEST = {
 ["lordalidenperenolde"] = 42,["biggamehunter"] = 43,["crownofwill"] = 43,["crackingmaurysfoot"] = 44,["dustwallowmarshelite"] = 45,["challengeoverlordmokmorok"] = 45,["broodofonyxia"] = 45,["summontheprincess"] = 50,
 ["elitequeuehinterlands"] = 50,["elitequesthinterlands"] = 50,["hinterlandsallianceelite"] = 50,["hinterlandshordeelite"] = 50,["hinterlandsalliancegroup"] = 50,["hinterlandshordegroup"] = 50,
 ["trollelite"] = 50,["setthemablaze"] = 52,["muiginandlarion"] = 52,["larionandmuigin"] = 52,["pawncapturesqueen"] = 54,["timbermawholdrep"] = 55,["offorgottenmemories"] = 57,["thefinaltablets"] = 58,["afinalblow"] = 58,
-["whensmokeysings"] = 58,["mawofmadness"] = 60,["avastyeadmiral"] = 60,["thefourdukes"] = 60,["twilightbattleorders"] = 60,["kingsofflame"] = 60,["dukeofcynders"] = 60,["theeasternplagues"] = 60,
+["whensmokeysings"] = 58,["mawofmadness"] = 60,["avastyeadmiral"] = 60,["thefourdukes"] = 60,["twilightbattleorders"] = 60,["kingsofflame"] = 60,["dukeofcynders"] = 60,["theeasternplagues"] = 60,["theprisonscasing"] = 60,
 ["huntingforectoplasm"] = 60,["testofskull"] = 62,["draconicfordummies"] = 64,["silithushighcouncil"] = 64,["dukesinsilithus"] = 64,
 
 -- Four Words
