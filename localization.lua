@@ -726,6 +726,7 @@ GF_WORD_IGNORE = {
 ["anoodle"] = true,
 ["seriouslyreserving"] = true,
 ["reallyreserving"] = true,
+["inspectme"] = true,
 
 ["playingdruid"] = true,["playinghunter"] = true,["playingmage"] = true,["playingpaladin"] = true,["playingpriest"] = true,["playingrogue"] = true,["playingshaman"] = true,["playingwarlock"] = true,["playingwarrior"] = true,
 ["asferal"] = true,["asboomie"] = true,["asbalance"] = true,["asresto"] = true,["asrestoration"] = true,
