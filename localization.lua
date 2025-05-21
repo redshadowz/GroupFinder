@@ -367,12 +367,12 @@ GF_WORD_FIX = {
 ["tailoring"] = "tailor",["tailorer"] = "tailor",["tailorere"] = "tailor",["lw"] = "leatherworker",["letherworker"] = "leatherworker",["leatherworking"] = "leatherworker",["lwer"] = "leatherworker",["leatherer"] = "leatherworker",["leather"] = "leatherworker",
 ["alcemist"] = "alchemist",["alchy"] = "alchemist",["alch"] = "alchemist",["eng"] = "engineer",["engi"] = "engineer",
 ["agi"] = "agility",["gai"] = "agility",["aggi"] = "agility",["str"] = "strength",["spir"] = "spirit",["stam"] = "stamina",["stm"] = "stamina",["int"] = "intellect",["hp"] = "health",
-["hlth"] = "health",["sp"] = "spellpower",["chains"] = "chain",["def"] = "defense",["hands"] = "hand",["glv"] = "gloves",["golves"] = "gloves",["glove"] = "gloves",["chst"] = "chest",["buckles"] = "buckle",["buckel"] = "buckle",["bucle"] = "buckle",
+["hlth"] = "health",["sp"] = "spellpower",["chains"] = "chain",["def"] = "defense",["hands"] = "hand",["glv"] = "gloves",["golves"] = "gloves",["glove"] = "gloves",["chst"] = "chest",
 ["brc"] = "wrist",["wri"] = "wrist",["wrists"] = "wrist",["bracer"] = "wrist",["bracers"] = "wrist",["bracelet"] = "wrist",["bracelets"] = "wrist",["rings"] = "ring",["clk"] = "cloak",["gems"] = "gem",["spikes"] = "spike",
 ["onring"] = "toring",["onhead"] = "tohead",["ongloves"] = "togloves",["onlegs"] = "tolegs",["onboots"] = "toboots",["oncloak"] = "tocloak",["onwrist"] = "towrist",["onbelt"] = "tobelt",["onweapon"] = "toweapon",["onshield"] = "toshield",
 ["onchest"] = "tochest",["onneck"] = "toneck",["boot"] = "boots",["wep"] = "weapon",["weap"] = "weapon",["weapn"] = "weapon",["pants"] = "legs",["helm"] = "head",
 ["forring"] = "toring",["forhead"] = "tohead",["forgloves"] = "togloves",["forlegs"] = "tolegs",["forboots"] = "toboots",["forcloak"] = "tocloak",["forwrist"] = "towrist",["forbelt"] = "tobelt",["forweapon"] = "toweapon",["forshield"] = "toshield",
-["forchest"] = "tochest",["forneck"] = "toneck",
+["forchest"] = "tochest",["forneck"] = "toneck",["buckles"] = "buckle",["buckel"] = "buckle",["bucle"] = "buckle",["bucklet"] = "buckle",
 
 ["transmutes"] = "transmute",["transmut"] = "transmute",["trasmute"] = "transmute",["trasmutes"] = "transmute",["arcanite"] = "arcane",
 ["summ"] = "summon",["summons"] = "summon",["summoning"] = "summon",["summmons"] = "summon",["summs"] = "summon",["summing"] = "summon",["summin"] = "summon",["summv"] = "summon",["sums"] = "summon",
@@ -399,10 +399,10 @@ GF_WORD_FIX = {
 ["warriors"] = "warrior",["warior"] = "warrior",["wariors"] = "warrior",["furywar"] = "warrior",["furywars"] = "warrior",["protwar"] = "warrior",["protwars"] = "warrior",["armswar"] = "warrior",["armswars"] = "warrior",
 
 ["inv"] = "invite",["ginv"] = "ginvite",
-["russia"] = "russian",["ukraine"] = "ukrainian",["france"] = "french",["germany"] = "german",["spain"] = "spanish",["poland"] = "polish",["italy"] = "italian",["netherlands"] = "dutch",["philippines"] = "philippine",
+["russia"] = "russian",["russkie"] = "russian",["ruskie"] = "russian",["ukraine"] = "ukrainian",["france"] = "french",["germany"] = "german",["spain"] = "spanish",["poland"] = "polish",["italy"] = "italian",["netherlands"] = "dutch",["philippines"] = "philippine",
 ["rekrutuje"] = "recruiting",["recrutar"] = "recruiting",["recrute"] = "recruiting",["recruting"] = "recruiting",["recuiting"] = "recruiting",["recluta"] = "recruiting",["recrutando"] = "recruiting",["reclutando"] = "recruiting",-- Guild Recruitment
 ["guilds"] = "guild",["gildia"] = "guild",["gilde"] = "guild",["gilda"] = "guild",["guilde"] = "guild",["gildiyu"] = "guild",["gildenmitglieder"] = "guild",["gildii"] = "guild",["hcguild"] = "guild",
-["gildiya"] = "guild",["gildiyi"] = "guild",["gild"] = "guild",["guldia"] = "guild",["guilda"] = "guild",["guil"] = "guild",
+["gildiya"] = "guild",["gildiyi"] = "guild",["gild"] = "guild",["guldia"] = "guild",["guilda"] = "guild",["guil"] = "guild",["gildosi"] = "guild",
 ["progresowania"] = "progression",["progresar"] = "progression",["progreso"] = "progression",["progresshez"] = "progression",["prog"] = "progression",["progress"] = "progression",
 ["komunity"] = "community",["komunite"] = "community",["komunita"] = "community",["comunidad"] = "community",["comunidade"] = "community",["companheiros"] = "community",["kinship"] = "community",["Compañeros"] = "community",
 ["ambiance"] = "ambience",["ambient"] = "ambience",["ambient"] = "ambience",["socials"] = "social",["eventos"] = "events",
@@ -445,7 +445,7 @@ GF_WORD_FIX = {
 ["scholo"] = "scholomance",["scho"] = "scholomance",["sco"] = "scholomance",["shool"] = "scholomance",["sholo"] = "scholomance",["sholomance"] = "scholomance",["scolomance"] = "scholomance",["scholamance"] = "scholomance",["scolamance"] = "scholomance",
 ["solomance"] = "scholomance",["scolo"] = "scholomance",["schoolo"] = "scholomance",["scholor"] = "scholomance",["krastinovs"] = "krastinov",
 ["diremail"] = "diremaul",["mauls"] = "maul",["trib"] = "tribute",["shendralar"] = "dmw",
-["lvrs"] = "lbrs",["lvrs"] = "lbrs",["lbrd"] = "lbrs",["lbr"] = "lbrs",
+["lvrs"] = "lbrs",["lvrs"] = "lbrs",["lbrd"] = "lbrs",["lbr"] = "lbrs",["lrbs"] = "lbrs",
 ["ubers"] = "ubrs",["urbs"] = "ubrs",["ubs"] = "ubrs",["uber"] = "ubrs",["ubres"] = "ubrs",["ubbrs"] = "ubrs",["ubrd"] = "ubrs",["ubr"] = "ubrs",["valthalaks"] = "valthalak",
 
 ["onyixia"] = "onyxia",["onxy"] = "onyxia",["onyx"] = "onyxia",["onyxias"] = "onyxia",["onixia"] = "onyxia",["onixya"] = "onyxia",["ohy"] = "ony",["onny"] = "ony",["onyy"] = "ony",["oony"] = "ony",["onx"] = "ony",["onxyia"] = "ony",["oni"] = "ony", -- Raids
@@ -921,9 +921,9 @@ GF_WORD_GUILD = {
 ["frguild"] = 1,["fraguild"] = 1,["ruguild"] = 1,["czguild"] = .5,["plguild"] = .5,["naguild"] = .5,["auguild"] = .5,["uaguild"] = .5,["uhrguild"] = .5,["rusguild"] = .5,["euguild"] = .5,["brguild"] = .5,["ptguild"] = .5,["itaguild"] = .5,
 
 ["ukrainianguild"] = 1,["guildrussian"] = 1,["russianguild"] = 1,["finnishguild"] = 1,["philippineguild"] = 1,["algumaguild"] = 1,["algunaguild"] = 1,["germanguild"] = .5,
-["lfukrainianguild"] = 1,["lfrussianguild"] = 1,["lffinnishguild"] = 1,["lfphilippineguild"] = 1,["lfgermanguild"] = 1,["lffrenchguild"] = 1,["lfspanishguild"] = 1,["lfpolishguild"] = 1,["lfitalianguild"] = 1,["lfdutchguild"] = 1,
+["lfukrainianguild"] = 1,["lfrussianguild"] = 1,["lffinnishguild"] = 1,["lfphilippineguild"] = 1,["lffilipinoguild"] = 1,["lfgermanguild"] = 1,["lffrenchguild"] = 1,["lfspanishguild"] = 1,["lfpolishguild"] = 1,["lfitalianguild"] = 1,["lfdutchguild"] = 1,
 ["lfindonesiaguild"] = 1,["lfoceguild"] = 1,["lfnaguild"] = 1,["lfeuguild"] = 1,
-["needukrainianguild"] = 1,["needrussianguild"] = 1,["needfinnishguild"] = 1,["needphilippineguild"] = 1,["needgermanguild"] = 1,["needfrenchguild"] = 1,["needspanishguild"] = 1,["needpolishguild"] = 1,["needitalianguild"] = 1,["needdutchguild"] = 1,
+["needukrainianguild"] = 1,["needrussianguild"] = 1,["needfinnishguild"] = 1,["needphilippineguild"] = 1,["needfilipinoguild"] = 1,["needgermanguild"] = 1,["needfrenchguild"] = 1,["needspanishguild"] = 1,["needpolishguild"] = 1,["needitalianguild"] = 1,["needdutchguild"] = 1,
 ["needindonesiaguild"] = 1,["needoceguild"] = 1,["anyoceguild"] = 1,["neednaguild"] = 1,["needeuguild"] = 1,
 ["anyukrainianguild"] = 1,["anyrussianguild"] = 1,["anyfinnishguild"] = 1,["anyphilippineguild"] = 1,["anygermanguild"] = 1,["anyfrenchguild"] = 1,["anyspanishguild"] = 1,["anypolishguild"] = 1,["anyitalianguild"] = 1,["anydutchguild"] = 1,
 ["anyindonesiaguild"] = 1,["anyoceguild"] = 1,["anyoceguild"] = 1,["anynaguild"] = 1,["anyeuguild"] = 1,
@@ -960,6 +960,14 @@ GF_WORD_GUILD = {
 -- Italy
 ["nuovaguild"] = 1,["cercaplayer"] = 1,["seiinteressato"] = 1,["initaliano"] = 1,["italiano"] = .5,["interessato"] = 1,["cercoplayer"] = 1,["creazionegilda"] = 1,
 ["cerca"] = .5,["interesse"] = .5,["cercagiocatoriitaliani"] = 3,["sehaiinteresse"] = 1,
+
+-- To avoid spam
+["mexicanguild"] = 1,["canadianguild"] = 1,["venezuelanguild"] = 1,["cubanguild"] = 1,["brazilianguild"] = 1,["brasilianguild"] = 1,["argentineguild"] = 1,["southafricanguild"] = 1,["zimbabweanguild"] = 1,["nigerguild"] = 1,["nigerianguild"] = 1,
+["congoleseguild"] = 1,["moroccanguild"] = 1,["algerianguild"] = 1,["libyanguild"] = 1,["egyptianguild"] = 1,["ethiopianguild"] = 1,["somaliguild"] = 1,["kenyanguild"] = 1,["saudiguild"] = 1,["iranianguild"] = 1,["yemeniguild"] = 1,
+["syrianguild"] = 1,["iraqiguild"] = 1,["lebaneseguild"] = 1,["greekguild"] = 1,["turkishguild"] = 1,["turkeyguild"] = 1,["afghanguild"] = 1,["afghaniguild"] = 1,["pakistanguild"] = 1,["pakistaniguild"] = 1,["indiaguild"] = 1,["indianguild"] = 1,
+["portugueseguild"] = 1,["portugalguild"] = 1,["spainguild"] = .5,["spanishguild"] = .5,["norwegianguild"] = 1,["swedishguild"] = 1,["kazakhguild"] = 1,["tajikguild"] = 1,["turkguild"] = 1,["mongolianguild"] = 1,["mongoliaguild"] = 1,
+["chineseguild"] = 1,["chinaguild"] = 1,["japaneseguild"] = 1,["japanguild"] = 1,["koreanguild"] = 1,["koreaguild"] = 1,["thaiguild"] = 1,["thailandguild"] = 1,["vietnamguild"] = 1,["vietnameseguild"] = 1,["malayguild"] = 1,["malaysianguild"] = 1,
+["peruguild"] = 1,["peruvianguild"] = 1,["colombiaguild"] = 1,["colombianguild"] = 1,["chileguild"] = 1,["chileanguild"] = 1,["chadguild"] = 1,["ugandanguild"] = 1,["ugandaguild"] = 1,["rwandaguild"] = 1,
 }
 GF_GUILD_WORD_EXCLUSION = {
 ["today"] = .5,["tonight"] = .5,["host"] = .5,["legendaries"] = .5,["mats"] = .5,["bindings"] = .5,["boes"] = .5,["boe"] = .5,
@@ -1122,6 +1130,7 @@ GF_LFM_ONE_AFTER = {
 ["id"] = true,
 }
 GF_LFM_ONE_BEFORE = {
+["any"] = true,
 ["anyone"] = true,
 ["help"] = true,
 ["group"] = true,
@@ -1300,7 +1309,6 @@ GF_WORD_TRADE = {
 
 ["needcrusader"] = 1,["needbeastslaying"] = 1,["needicy"] = 1,["needfiery"] = 1,["withfiery"] = 1,
 ["arcaneresist"] = .5,["fireresist"] = .5,["shadowresist"] = .5,["frostresist"] = .5,["natureresist"] = .5,["arcaneres"] = .5,["fireres"] = .5,["shadowres"] = .5,["frostres"] = .5,["natureres"] = .5,["allres"] = .5,["resall"] = .5,
-["arhead"] = 1.5,["frhead"] = 1.5,["srhead"] = 1.5,["nrhead"] = 1.5,["arlegs"] = 1.5,["frlegs"] = 1.5,["srlegs"] = 1.5,["nrlegs"] = 1.5,
 ["allresist"] = .5,["resistall"] = .5,["enchantcloak"] = .5,["enchantchest"] = .5,["enchantwrist"] = .5,["enchantweapon"] = .5,["enchantshield"] = .5,["enchantgloves"] = .5,["enchantboots"] = .5,
 ["healthchest"] = .5,["chesthealth"] = .5,["staminawrist"] = .5,["wristtamina"] = .5,["wristintellect"] = .5,["wristspellpower"] = .5,["cloakagility"] = .5,["agilitycloak"] = .5,["subtletycloak"] = .5,
 ["cloakresist"] = .5,["staminaboots"] = .5,["bootsstamina"] = .5,["shieldstamina"] = .5,["gloveshaste"] = .5,["hastegloves"] = .5,
@@ -1308,7 +1316,7 @@ GF_WORD_TRADE = {
 ["allstats"] = .5,["ridingskill"] = .5,["mountspeed"] = .5,["spelldamage"] = .5,["spellpower"] = 1,["healpower"] = 1,["minorspeed"] = .5,["shieldspike"] = .5,["majorhealth"] = .5,["majormana"] = .5,["lesserblock"] = .5,["weapondamage"] = .5,["weaponchain"] = .5,
 ["firedamage"] = .5,["frostdamage"] = .5,["shadowdamage"] = .5,["arcanedamage"] = .5,["naturedamage"] = .5,["agilityenchant"] = .5,["strengthenchant"] = .5,["healenchant"] = 1,["miningenchant"] = 1,["candominingenchant"] = 1.5,
 ["anystats"] = .25,["anystamina"] = .25,["anystrength"] = .25,["anyagility"] = .25,["anyspirit"] = .25,["anyintellect"] = .25,
-["agilityhead"] = .5,["agilitylegs"] = .5,["strengthhead"] = .5,["strengthlegs"] = .5,["healweapon"] = .5,["damageweapon"] = .5,["elementalstones"] = .5,["redglow"] = .5,
+["healweapon"] = .5,["damageweapon"] = .5,["elementalstones"] = .5,["redglow"] = .5,
 ["transmutehitem"] = 1,["transmutearcane"] = 1,["arcanetransmute"] = 1,["moonclothcooldown"] = 1,
 
 ["lfbarrens"] = 1,["lfstonard"] = 1,["lfbootybay"] = 1,["lfmoonglade"] = 1,["lfwinterspring"] = 1,["lfdesolace"] = 1,["lfferalas"] = 1,["lfsilithus"] = 1,
@@ -1328,6 +1336,16 @@ GF_WORD_TRADE = {
 ["anyoneinterested"] = 1,
 ["exquisitemetalwork"] = 1,
 ["deliveredanywhere"] = 1,
+
+-- Head
+["arhead"] = 1.5,["frhead"] = 1.5,["srhead"] = 1.5,["nrhead"] = 1.5,
+["strengthhead"] = .5,["agilityhead"] = .5,["healthhead"] = 1,["aphead"] = .5,["attackpowerhead"] = .5,["hithead"] = .5,["staminahead"] = .5,["manahead"] = .5,
+["strengthtohead"] = 1,["agilitytohead"] = 1,["healthtohead"] = 1,["aptohead"] = .5,["attackpowertohead"] = .5,["hittohead"] = .5,["staminatohead"] = .5,["manatohead"] = .5,
+
+-- Legs
+["arlegs"] = 1.5,["frlegs"] = 1.5,["srlegs"] = 1.5,["nrlegs"] = 1.5,
+["strengthlegs"] = .5,["agilitylegs"] = .5,["healthlegs"] = 1,["aplegs"] = .5,["attackpowerlegs"] = .5,["hitlegs"] = .5,["staminalegs"] = .5,["manalegs"] = .5,
+["strengthtolegs"] = 1,["agilitytolegs"] = 1,["healthtolegs"] = 1,["aptolegs"] = .5,["attackpowertolegs"] = .5,["hittolegs"] = .5,["staminatolegs"] = .5,["manatolegs"] = .5,
 
 -- Three Words
 ["iseeka"] = 2.5,["iseekan"] = 2.5,
@@ -1353,10 +1371,10 @@ GF_WORD_TRADE = {
 ["blacksmithattachhitem"] = 3,["anyonetoattach"] = 3,["abletoattach"] = 2,["cananyoneapply"] = 2.5,
 ["applyspurs"] = 2.5,["applyahitem"] = 3,["cananyoneattach"] = 3,["applyhavehitem"] = 1,
 
-["movespeedboots"] = 1,["movementspeedboots"] = 1,["minorspeedboots"] = 1,["mstoboots"] = 1,["mountspeedhand"] = 1,["mountspeedgloves"] = 1,["agilitytohead"] = 1,["agilitytolegs"] = 1,["strengthtohead"] = 1,["strengthtolegs"] = 1,
+["movespeedboots"] = 1,["movementspeedboots"] = 1,["minorspeedboots"] = 1,["mstoboots"] = 1,["mountspeedhand"] = 1,["mountspeedgloves"] = 1,
 ["agilitytogloves"] = .5,["agilitytohand"] = .5,["agilitytotwohand"] = .5,["agilityonhand"] = .5,["agilityontwohand"] = .5,["agilityforhand"] = .5,["agilityfortwohand"] = .5,["hastetogloves"] = .5,["hasteongloves"] = .5,["hasteforgloves"] = .5,
 ["healtogloves"] = .5,["shadowtogloves"] = .5,["firetogloves"] = .5,["frosttogloves"] = .5,["agilitytoboots"] = 1,["healtoweapon"] = 1,["damagetoweapon"] = 1,["spellpowertoweapon"] = 1,
-["healthtochest"] = 1,["healthtohead"] = 1,["healthtolegs"] = 1,["statstochest"] = 1,["staminatowrist"] = 1,["staminatoboots"] = 1,["agilitytocloak"] = 1,["resisttocloak"] = 1,["strengthtowrist"] = 1,["intellecttowrist"] = 1,
+["healthtochest"] = 1,["statstochest"] = 1,["staminatowrist"] = 1,["staminatoboots"] = 1,["agilitytocloak"] = 1,["resisttocloak"] = 1,["strengthtowrist"] = 1,["intellecttowrist"] = 1,
 
 -- Portal
 ["portal"] = .5,["lfportal"] = 3,["buyportal"] = .5,["buyingportal"] = .5,["needportal"] = 2.25,["portalservice"] = 3,["gportal"] = 3,["offeringportal"] = 2,["sellportal"] = .5,["sellingportal"] = 1,["portalto"] = .5,["magemakemeportal"] = 2,
@@ -1799,13 +1817,21 @@ local GF_TURTLE_WORD_TRADE = {
 
 ["hyjal"] = .5,["theramore"] = .25,
 
--- Two Words
-["anyjewelcrafter"] = 1.5,["lfjewel"] = 3,["jewelcrafter"] = .5,["lfjewelcrafter"] = 3,["lfjc"] = 3,["enchantjewelcrafter"] = 1,
-["mastergemologist"] = 2,["mastergemonologist"] = 2,["allgem"] = 1,["everythingaround"] = 2,
+-- Jewelcrafting
+["jewelcrafter"] = .5,["lfjewel"] = 3,["lfjewelcrafter"] = 3,["lfjc"] = 3,
+["anyjewelcrafter"] = 1.5,["anyjewelcrafterfor"] = 1.5,["anyjewelcrafterwith"] = 1.5,["anyjewelcrafterhere"] = 1.5,["anyjewelcrafteraround"] = 1.5,
+["jewelcrafterfor"] = 1,["jewelcrafterwith"] = 1,
+["jewelcrafterforhitem"] = 3,["jewelcrafterwithhitem"] = 3,
 
-["beltenchant"] = 1,["beltbuckleenchant"] = 1,["lfbeltbuckle"] = 3,["lfagilitybuckle"] = 3,["lfintellectbuckle"] = 3,["allbeltbuckle"] = 3,["intellectbeltbuckle"] = 2,["agilitybeltbuckle"] = 2,["attachingintellect"] = 3,["attachingbeltbuckle"] = 3,
-["damageneck"] = .5,["statstrinket"] = 1,["ringagility"] = 1,["agilityring"] = 1,["ringstrength"] = 1,["strengthring"] = 1,["ringagility"] = 1,["ringstats"] = 1,["statsring"] = 1,["agilitywrist"] = 1,["healneck"] = 1,
-["ringenchant"] = 1,["enchantring"] = 1,["neckenchant"] = 1,["enchantneck"] = 1,["toring"] = .5,["toneck"] = .5,
+["mastergemologist"] = 2,["mastergemonologist"] = 2,["gemstone"] = .5,["allgem"] = 1,["allgemaround"] = 2,
+["enchantjewelcrafter"] = 1,
+
+-- Two Words
+["everythingaround"] = 2,
+
+["statstrinket"] = 1,["agilitywrist"] = 1,
+
+["allenchantaround"] = 2,
 
 ["lfwinterspring"] = 1,["lfswamp"] = 1,["lftheramore"] = 1,["lfalahthalas"] = 1,["lfhydraxian"] = 1,["lfstonard"] = 1,["lfhyjal"] = 1,["lfmoonglade"] = 1,
 ["lfgwinterspring"] = 1,["lfgswamp"] = 1,["lfgtheramore"] = 1,["lfgalahthalas"] = 1,["lfghydraxian"] = 1,["lfgstonard"] = 1,["lfghyjal"] = 1,["lfgmoonglade"] = 1,
@@ -1819,12 +1845,28 @@ local GF_TURTLE_WORD_TRADE = {
 
 ["pinkyservice"] = 2,["uncleabe"] = 2,
 
--- Three Words
-["anyjewelcrafterwith"] = 1,["anyjewelcrafterhere"] = 1.5,["anyjewelcrafteraround"] = 1.5,["jewelcrafterwithhitem"] = 3,["allgemaround"] = 2,["allenchantaround"] = 2,
+-- To Belt
+["beltenchant"] = 1,["beltbuckleenchant"] = 1,["lfbeltbuckle"] = 3,["lfagilitybuckle"] = 3,["lfintellectbuckle"] = 3,["allbeltbuckle"] = 3,["intellectbeltbuckle"] = 2,["agilitybeltbuckle"] = 2,["attachingintellect"] = 3,["attachingbeltbuckle"] = 3,
 
+-- To Ring
+["toring"] = .5,["ringenchant"] = 1,["enchantring"] = 1,
+["ringstrength"] = 1,["ringagility"] = 1,["ringstats"] = 1,["ringheal"] = 1,["ringnature"] = 1,["ringshadow"] = 1,["ringfrost"] = 1,["ringvamp"] = 1,["ringvamp"] = 1,["ringvampirism"] = 1,["ringsp"] = 1,["ringstamina"] = 1,
+["strengthring"] = 1,["agilityring"] = 1,["statsring"] = 1,["healring"] = 1,["naturering"] = 1,["shadowring"] = 1,["frostring"] = 1,["vampring"] = 1,["vampring"] = 1,["vampirismring"] = 1,["spring"] = 1,["staminaring"] = 1,
+["strengthtoring"] = 1,["agilitytoring"] = 1,["statstoring"] = 1,["healtoring"] = 1,["naturetoring"] = 1,["shadowtoring"] = 1,["frosttoring"] = 1,["vamptoring"] = 1,["vamptoring"] = 1,["vampirismtoring"] = 1,["sptoring"] = 1,["staminatoring"] = 1,
+
+["spelldamagetoring"] = 1,["spelldamagering"] = 1,["ringspelldamage"] = 1,
+
+-- To Neck
+["toneck"] = .5,["neckenchant"] = 1,["enchantneck"] = 1,
+["healneck"] = 1,["damageneck"] = 1,["strengthneck"] = 1,["agilityneck"] = 1,
+["neckheal"] = 1,["neckdamage"] = 1,["neckstrength"] = 1,["neckagility"] = 1,
+["healtoneck"] = 1,["damagetoneck"] = .5,["strengthtoneck"] = 1,["agilitytoneck"] = 1,
+["toimprovemyneck"] = 1,
+
+-- Three Words
 ["lfhitembeltbuckle"] = 3,["intellecttobelt"] = 1,["agilitytobelt"] = 2,["lfagilitywaist"] = 3,["lfagilitybelt"] = 3,["lfintellectwaist"] = 3,["onyourbelt"] = 1,
-["strengthtoring"] = 1,["agilitytoring"] = 1,["statstoring"] = 1,["strengthtoneck"] = 1,["agilitytoneck"] = 1,["healtoneck"] = 1,["agilitytowrist"] = 1,
-["healtoring"] = 1,["naturetoring"] = 1,["shadowtoring"] = 1,["frosttoring"] = 1,["vamptoring"] = 1,["sptoring"] = 1,["staminatoring"] = 1,
+
+["agilitytowrist"] = 1,
 
 ["anyhyjalportal"] = 1,["needhyjalportal"] = 1,["needportalhyjal"] = 1,
 ["portaltowinterspring"] = 1,["portalmetowinterspring"] = 1,["anywinterspringportal"] = 1,["needwinterspringportal"] = 1,["needportalwinterspring"] = 1,
@@ -1841,7 +1883,7 @@ local GF_TURTLE_WORD_TRADE = {
 ["hordeoralliance"] = 1,
 
 -- Four Words
-["agilityonmybelt"] = 1,["agilitytomybelt"] = 1,["intellectonmybelt"] = 1,["intellecttomybelt"] = 1,["toimprovemyneck"] = 1,["spelldamagetoring"] = 1,
+["agilityonmybelt"] = 1,["agilitytomybelt"] = 1,["intellectonmybelt"] = 1,["intellecttomybelt"] = 1,
 ["portaltowinterspringplease"] = 2,["portaltoswampplease"] = 2,["portaltostonardplease"] = 2,["portaltotheramoreplease"] = 2,["portaltoatplease"] = 2,["portaltoalahthalasplease"] = 2,
 ["summontohyjalplease"] = 2,
 }
