@@ -1979,7 +1979,7 @@ function GF_CheckForGroups(arg1,arg2,event,showanyway)
 -- "Say" messages will always be displayed unless flagged as spam.
 -- "Yell" and "Channel" messages will only display if allowed.
 	if GF_BlackList[GF_RealmName][arg2] and not GF_PlayersCurrentlyInGroup[arg2] and not GF_Friends[arg2] and not GF_Guildies[arg2] then return 8 end
-	GF_GetTypes(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(string.lower(" "..arg1.." "),".gg/%w+", ""), "|cff%w+|(%w+)[%d:]+|h", " %1 "), "|h|r", " "),"['']", "")," any? ?1 "," anyone ")," some ?1 "," anyone "),"any one","anyone"),"g2g","gtg"),"kk+","kk"),"\"",""),showanyway)
+	GF_GetTypes(gsub(gsub(gsub(gsub(gsub(gsub(gsub(string.lower(gsub(gsub(" "..arg1.." ", "|c%x+|+(%w+)[%d:]+|+h", " %1 "), "|+h|+r", " ")),".gg/%w+", ""),"['']", "")," any?%s?1[%p%s]"," anyone ")," some%s?1[%p%s]"," anyone "),"any one","anyone"),"g2g","gtg"),"kk+","kk"),showanyway)
 	if not GF_SavedVariables.showguilds and GF_MessageData.foundGuild >= 3 and (event == "CHAT_MSG_CHANNEL" or event == "CHAT_MSG_YELL") then return 7
 	elseif GF_MessageData.foundTrades >= 3 then return GF_CheckForSpam(arg1,arg2) or 5
 	elseif (GF_MessageData.foundIgnore or GF_MessageData.foundGuild >= 3) and GF_MessageData.foundLFM < 4 then return GF_CheckForSpam(arg1,arg2) or 4 end
@@ -1996,8 +1996,9 @@ function GF_CheckForGroups(arg1,arg2,event,showanyway)
 		end
 	end
 	return GF_CheckForSpam(arg1,arg2,foundInGroup) or foundInGroup;
-end -- /script GF_CheckForGroups("Anyone going to do the \"Twilight Corrupter\" of |cffffff00|Hquest:8735:60|h[The Nightmare's Corruption]|h|r today?","r","CHAT_MSG_SAY",true)
+end -- /script GF_CheckForGroups("WTB|cffffffff|Hitem:22528:0:0:0|h[Dark Iron Scraps]|h|r|cffffffff|Hitem:22527:0:0:0|h[Core of Elements]|h|r","r","CHAT_MSG_SAY",true)
 function GF_GetTypes(arg1, showanyway)
+	if showanyway == true then print(arg1) end
 	GF_MessageData = { foundIgnore = nil,foundGuild = 0,foundGuildExclusion = 0,foundLFM = 0,foundLFG = nil,foundClass = nil,foundQuest = nil,foundDungeon = nil,foundRaid = nil,foundTrades = 0,foundTradesExclusion = 0,foundPvP = nil,foundRFlags = "", foundDFlags = "", foundPFlags = "" }
 	local wordTable = {}
 	local wordString;
@@ -2186,7 +2187,7 @@ function GF_GetGroupInformation(arg1,arg2) -- Searches messages for Groups and s
 end
 function GF_SearchMessageForTextString(msg,textstring,entry,buttontext)
 	for w in string.gfind(textstring, "([%w%s]+),") do
-		if string.find(msg, w) or entry.flags == GF_GROUP_IDS[gsub(w," ","")] or entry.flags == string.upper(gsub(w," ", "")) then return true end
+		if string.find(msg, w) or entry.flags == GF_GROUP_IDS[string.lower(gsub(w," ",""))] or entry.flags == string.upper(gsub(w," ", "")) then return true end
 	end
 	if GF_SavedVariables.searchbuttonstext[entry.flags] then return true end
 end
