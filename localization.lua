@@ -470,7 +470,7 @@ GF_WORD_FIX = {
 ["foran"] = "for",["havea"] = "have",["havean"] = "have",["needa"] = "need",["needan"] = "need",["acn"] = "can",["restofskull"] = "testofskull",
 
 ["anynbody"] = "anyone",["anybody"] = "anyone",["yours"] = "your",["yer"] = "your",["ya"] = "your",["anyonw"] = "anyone",["anyon"] = "anyone",["anyoone"] = "anyone",["aynone"] = "anyone",["anyne"] = "anyone",["somewho"] = "anyone", -- Basic Words
-["someone"] = "anyone",["somebody"] = "anyone",["sombody"] = "anyone",["anyfor"] = "anyone",["forr"] = "for",["fora"] = "for",["für"] = "for",["onl"] = "only",["git"] = "get",["whofor"] = "anyonefor",
+["someone"] = "anyone",["somebody"] = "anyone",["sombody"] = "anyone",["anyfor"] = "anyone",["forr"] = "for",["fora"] = "for",["für"] = "for",["onl"] = "only",["git"] = "get",["whofor"] = "anyonefor",["ane"] = "any",
 ["needs"] = "need",["ned"] = "need",["neeed"] = "need",["want"] = "need",["wants"] = "need",["got"] = "have",["rserved"] = "reserved",["reservd"] = "reserved",["resrved"] = "reserved",["ppl"] = "people",["players"] = "player",
 ["available"] = "around",["avail"] = "around",["could"] = "can",["wat"] = "what",["jooin"] = "join",["joiin"] = "join",["joinn"] = "join",["jion"] = "join",["attachin"] = "attaching",["attachng"] = "attaching",["mats"] = "mat",["matts"] = "mat",
 ["recipes"] = "recipe",["bindings"] = "binding",["legendaries"] = "legendary",["boes"] = "boes",["mounts"] = "mount",["graveyard"] = "gy",["gyy"] = "gy",["gravyard"] = "gy",["grave"] = "gy",["grav"] = "gy",["gyyard"] = "gy",
