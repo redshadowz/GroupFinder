@@ -1690,7 +1690,7 @@ function GF_FixLFGStrings(lfmOnly) -- LFG Group Maker Functions
 			foundStartOfText = string.find(GF_SavedVariables.searchlfgtext, GF_BUTTONS_LIST.LFGDungeon[i][1]) or string.find(GF_SavedVariables.searchlfgtext, GF_BUTTONS_LIST.LFGDungeon[i][4])
 			if foundStartOfText then
 				if foundStartOfText + string.len(GF_BUTTONS_LIST.LFGDungeon[i][1])-1 > endOfFilter then endOfFilter = foundStartOfText + string.len(GF_BUTTONS_LIST.LFGDungeon[i][1])-1 end
-				maxGroupSize = 5;
+				if tonumber(maxGroupSize) > GF_BUTTONS_LIST.LFGDungeon[i][7] then maxGroupSize = GF_BUTTONS_LIST.LFGDungeon[i][7] end
 				table.insert(foundDungeonRaid,GF_BUTTONS_LIST.LFGDungeon[i][1]);
 			end
 		end
@@ -1698,7 +1698,7 @@ function GF_FixLFGStrings(lfmOnly) -- LFG Group Maker Functions
 			foundStartOfText = string.find(GF_SavedVariables.searchlfgtext, GF_BUTTONS_LIST.LFGRaid[i][1]) or string.find(GF_SavedVariables.searchlfgtext, GF_BUTTONS_LIST.LFGRaid[i][4])
 			if foundStartOfText then
 				if foundStartOfText + string.len(GF_BUTTONS_LIST.LFGRaid[i][1])-1 > endOfFilter then endOfFilter = foundStartOfText + string.len(GF_BUTTONS_LIST.LFGRaid[i][1])-1 end
-				maxGroupSize = GF_BUTTONS_LIST.LFGRaid[i][7];
+				if tonumber(maxGroupSize) > GF_BUTTONS_LIST.LFGRaid[i][7] then maxGroupSize = GF_BUTTONS_LIST.LFGRaid[i][7] end
 				table.insert(foundDungeonRaid,GF_BUTTONS_LIST.LFGRaid[i][1]);
 			end
 		end
@@ -2084,7 +2084,7 @@ function GF_GetTypes(arg1, showanyway)
 		end
 	end
 	if GF_MessageData.foundLFM < 2 and string.find(arg1, "%d+\=%d+") then GF_MessageData.foundLFM = 2 end
-	if GF_MessageData.foundGuild < 100 and string.find(arg1, "<[a-zA-Z0-9%& ]+>") then GF_MessageData.foundGuild = GF_MessageData.foundGuild + 2; GF_MessageData.foundTrades = GF_MessageData.foundTradesExclusion + 1; end
+	if GF_MessageData.foundGuild < 100 and string.find(arg1, "<[a-zA-Z0-9%& ]+>") then GF_MessageData.foundGuild = GF_MessageData.foundGuild + 2; GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1; end
 	while GF_MessageData.foundGuild > 100 do GF_MessageData.foundGuild = GF_MessageData.foundGuild - 100 end
 	GF_MessageData.foundGuild = GF_MessageData.foundGuild - GF_MessageData.foundGuildExclusion
 	
@@ -2096,11 +2096,11 @@ function GF_GetTypes(arg1, showanyway)
 		for i=1, getn(wordTable) do
 			print(wordTable[i])
 		end
-		print(GF_MessageData.foundGuild)
-		print(GF_MessageData.foundGuildExclusion)
-		print(GF_MessageData.foundTrades)
-		print(GF_MessageData.foundTradesExclusion)
-		print(GF_MessageData.foundLFM)
+		print(GF_MessageData.foundGuild.." guild")
+		print(GF_MessageData.foundGuildExclusion.." guildex")
+		print(GF_MessageData.foundTrades.." trades")
+		print(GF_MessageData.foundTradesExclusion.." tradesex")
+		print(GF_MessageData.foundLFM.." lfm")
 	end
 end -- /script GF_GetTypes("geared hunter lfg strat scarlet", true)
 function GF_CheckForSpam(arg1,arg2,foundInGroup)

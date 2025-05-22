@@ -46,37 +46,11 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</OnClick>
 		</Scripts>
 	</CheckButton>
-	<EditBox name="GF_AbstractEditBox" autoFocus="false" virtual="true">
+	<EditBox name="GF_AbstractEditBox" inherits="InputBoxTemplate" autoFocus="false" virtual="true">
 		<Size>
 			<AbsDimension x="140" y="20"/>
 		</Size>
 		<Layers>
-			<Layer level="ARTWORK">
-				<Texture>
-					<Anchors>
-						<Anchor point="TOPLEFT">
-							<Offset>
-								<AbsDimension x="1" y="-1"/>
-							</Offset>
-						</Anchor>
-						<Anchor point="BOTTOMRIGHT">
-							<Offset>
-								<AbsDimension x="-1" y="1"/>
-							</Offset>
-						</Anchor>
-					</Anchors>
-					<Color r="0.0" g="0.0" b="0.0" a="0.92"/>
-				</Texture>
-			</Layer>
-			<Layer level="BACKGROUND">
-				<Texture>
-					<Anchors>
-						<Anchor point="TOPLEFT"/>
-						<Anchor point="BOTTOMRIGHT"/>
-					</Anchors>
-					<Color r="1.0" g="1.0" b="1.0" a="0.5"/>
-				</Texture>
-			</Layer>
 			<Layer level="OVERLAY">
 				<FontString inherits="GameFontNormalSmall" name="$parentTextLabel" justifyH="RIGHT">
 					<Anchors>
@@ -94,6 +68,17 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</FontString>
 			</Layer>
 		</Layers>
+		<Scripts>
+			<OnLoad>
+				this:SetTextInsets(0, 8, 0, 0);
+			</OnLoad>
+			<OnEnterPressed>
+				this:ClearFocus();
+			</OnEnterPressed>
+			<OnEditFocusGained>
+				this:HighlightText(string.len(this:GetText())+1);
+			</OnEditFocusGained>
+		</Scripts>
 		<FontString inherits="ChatFontNormal"/>
 	</EditBox>
 	<Button name="GF_ButtonTemplate" inherits="UIPanelButtonTemplate" virtual="true">
@@ -450,7 +435,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Texture>
 			</Layer>
 			<Layer level="OVERLAY">
-				<FontString inherits="GameFontNormal" name="$parentNameLabel" justifyH="LEFT">
+				<FontString inherits="GameFontNormal" name="$parentNameLabel" justifyH="LEFT" font="Fonts\ARIALN.TTF">
 					<Anchors>
 						<Anchor point="TOPLEFT">
 							<Offset>
@@ -463,7 +448,15 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							</Offset>
 						</Anchor>
 					</Anchors>
-					<Color r="1.0" g="1.0" b="1.0" a="1"/>
+					<FontHeight>
+						<AbsValue val="14"/>
+					</FontHeight>
+					<Shadow>
+						<Offset>
+							<AbsDimension x="1" y="-1"/>
+						</Offset>
+						<Color r="0" g="0" b="0" a="0.5"/>
+					</Shadow>
 				</FontString>
 				<FontString inherits="GameFontNormalSmall" name="$parentMoreLabel" justifyH="LEFT" hidden="true">
 					<Size>
