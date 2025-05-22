@@ -180,6 +180,8 @@ function GF_LoadVariables()
 	if not GF_PlayerMessages then GF_PlayerMessages = {} end
 	if type(GF_SavedVariables.searchbuttonstext) ~= "table" then GF_SavedVariables.searchbuttonstext = {} end
 
+	if type(GF_SavedVariables.searchbuttonstext) ~= "table" then GF_SavedVariables.searchbuttonstext = {} end
+	for i=1, getn(GF_MessageList[GF_RealmName]) do if type(GF_MessageList[GF_RealmName][i].flags) ~= "table" then GF_MessageList[GF_RealmName] = {} end end
 	if GF_WhoTable[GF_RealmName]["LOADED"][4] + 86400 < time() then -- Prune the WhoTable once per day
 		GF_WhoTable[GF_RealmName]["LOADED"] = { UnitLevel("player"), GF_Classes[UnitClass("player")], "", time() }
 		GF_PruneTheWhoTable()
@@ -1205,7 +1207,7 @@ function GF_UpdateResults()
 				else dungeonLevelDifficulty = "|cff"..GF_DifficultyColors["GREY"] end
 
 				if entry.dlevel > 60 then dungeonLevelDifficulty = dungeonLevelDifficulty.."[60]|r " else dungeonLevelDifficulty = dungeonLevelDifficulty.."["..entry.dlevel.."]|r " end
-				if entry.flags ~= "" then dungeonLevelDifficulty = dungeonLevelDifficulty.."|r|cffffffff["..entry.flags.."]|r "
+				if entry.flags[1] ~= "" then dungeonLevelDifficulty = dungeonLevelDifficulty.."|r|cffffffff["..entry.flags[1].."]|r "
 				elseif entry.type == "Q" then dungeonLevelDifficulty = dungeonLevelDifficulty.."|r|cffffffff[QUEST]|r " end
 				if GF_WhoTable[GF_RealmName][entry.op] then
 					local bottomtext;
@@ -1999,14 +2001,21 @@ function GF_CheckForGroups(arg1,arg2,event,showanyway)
 end -- /script GF_CheckForGroups("WTB|cffffffff|Hitem:22528:0:0:0|h[Dark Iron Scraps]|h|r|cffffffff|Hitem:22527:0:0:0|h[Core of Elements]|h|r","r","CHAT_MSG_SAY",true)
 function GF_GetTypes(arg1, showanyway)
 	if showanyway == true then print(arg1) end
-	GF_MessageData = { foundIgnore = nil,foundGuild = 0,foundGuildExclusion = 0,foundLFM = 0,foundLFG = nil,foundClass = nil,foundQuest = nil,foundDungeon = nil,foundRaid = nil,foundTrades = 0,foundTradesExclusion = 0,foundPvP = nil,foundRFlags = "", foundDFlags = "", foundPFlags = "" }
+	GF_MessageData = { foundIgnore = nil,foundGuild = 0,foundGuildExclusion = 0,foundLFM = 0,foundLFG = nil,foundClass = nil,foundQuest = nil,foundDungeon = nil,foundRaid = nil,foundTrades = 0,foundTradesExclusion = 0,foundPvP = nil,foundDFlags = {},foundPFlags = {} }
 	local wordTable = {}
 	local wordString;
+
 	if string.sub(arg1,1,3) == "lfm" then table.insert(wordTable, "lfm") arg1 = string.sub(arg1, 4) GF_MessageData.foundLFM = 3
 	elseif string.sub(arg1,1,3) == "lfg" then table.insert(wordTable, "lfg") arg1 = string.sub(arg1, 4) GF_MessageData.foundLFG = true
 	elseif string.find(arg1, "lf[%s%d]+m ") then GF_MessageData.foundLFM = 4 local lfs,lfe = string.find(arg1, "lf[%s%d]+m ") if lfs > 1 then arg1 = string.sub(arg1,1,lfs+1)..string.sub(arg1,lfe) else arg1 = "lf"..string.sub(arg1,lfe) end
 	elseif string.sub(arg1,1,2) == "lf" then table.insert(wordTable, "lf") arg1 = string.sub(arg1, 3) GF_MessageData.foundLFM = 2 GF_MessageData.foundTrades = 102.5 end
 	if string.find(arg1, "%d+p") then local lfs,lfe = string.find(arg1, "%d+p") if lfs > 1 then arg1 = string.sub(arg1,1,lfs-1)..string.sub(arg1,lfe+1) else string.sub(arg1,lfe+1) end end
+	for word in string.gfind(arg1, " (%w%d+)") do
+		if GF_WORD_RAID[word] then
+			GF_MessageData.foundRaid = GF_WORD_RAID[word]
+			table.insert(GF_MessageData.foundDFlags, word)
+		end
+	end
 	for word in string.gfind(arg1, "(%a+)") do
 		if not GF_WORD_SKIP[word] then table.insert(wordTable, word) end
 	end
@@ -2024,14 +2033,14 @@ function GF_GetTypes(arg1, showanyway)
 				if j == 0 then wordString = wordTable[i] elseif j == 1 then wordString = wordTable[i]..wordTable[i+1] elseif j == 2 then wordString = wordTable[i]..wordTable[i+1]..wordTable[i+2] else wordString = wordTable[i]..wordTable[i+1]..wordTable[i+2]..wordTable[i+3] end
 				if GF_WORD_FIX[wordString] then
 					wordTable[i] = GF_WORD_FIX[wordString]
-					if j == 1 then wordTable[i+1] = "" elseif j == 2 then wordTable[i+1] = "" wordTable[i+2] = "" elseif j == 3 then wordTable[i+1] = "" wordTable[i+2] = "" wordTable[i+3] = "" end
+					if j == 1 then table.remove(wordTable,i+1) elseif j == 2 then table.remove(wordTable,i+2) table.remove(wordTable,i+1) elseif j == 3 then table.remove(wordTable,i+3) table.remove(wordTable,i+2) table.remove(wordTable,i+1) end
 				end
 			end
 		end
 	end
 	for j=0,3 do
 		for i=1, getn(wordTable) do
-			if wordTable[i+j] and wordTable[i+j] ~= "" then
+			if wordTable[i+j] then
 				if j == 0 then wordString = wordTable[i] elseif j == 1 then wordString = wordTable[i]..wordTable[i+1] elseif j == 2 then wordString = wordTable[i]..wordTable[i+1]..wordTable[i+2] else wordString = wordTable[i]..wordTable[i+1]..wordTable[i+2]..wordTable[i+3] end
 				if GF_WORD_IGNORE[wordString] then GF_MessageData.foundIgnore = true if showanyway == true then print(wordString.." ignore") end
 				elseif GF_WORD_GUILD[wordString] then
@@ -2041,15 +2050,18 @@ function GF_GetTypes(arg1, showanyway)
 				elseif GF_WORD_LFM[wordString] then if GF_WORD_LFM[wordString] > GF_MessageData.foundLFM then GF_MessageData.foundLFM = GF_WORD_LFM[wordString] end
 				elseif GF_WORD_LFG[wordString] then GF_MessageData.foundLFG = true
 				elseif GF_WORD_CLASSES[wordString] then GF_MessageData.foundClass = GF_WORD_CLASSES[wordString]
-				elseif GF_WORD_QUEST[wordString] then if GF_MessageData.foundQuest then if GF_WORD_QUEST[wordString] > GF_MessageData.foundQuest then GF_MessageData.foundQuest = GF_WORD_QUEST[wordString] end else GF_MessageData.foundQuest = GF_WORD_QUEST[wordString] GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1; end
-				elseif GF_WORD_DUNGEON[wordString] then if GF_MessageData.foundDungeon then if GF_WORD_DUNGEON[wordString] > GF_MessageData.foundDungeon then GF_MessageData.foundDungeon = GF_WORD_DUNGEON[wordString] GF_MessageData.foundDFlags = wordString; end else GF_MessageData.foundDungeon = GF_WORD_DUNGEON[wordString] GF_MessageData.foundDFlags = wordString; GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1; end
-				elseif GF_WORD_RAID[wordString] then if GF_MessageData.foundRaid then if GF_WORD_RAID[wordString] > GF_MessageData.foundRaid then GF_MessageData.foundRaid = GF_WORD_RAID[wordString] GF_MessageData.foundRFlags = wordString; end else GF_MessageData.foundRaid = GF_WORD_RAID[wordString] GF_MessageData.foundRFlags = wordString; GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1; end				
+				elseif GF_WORD_QUEST[wordString] then
+					if GF_MessageData.foundQuest then if GF_WORD_QUEST[wordString] > GF_MessageData.foundQuest then GF_MessageData.foundQuest = GF_WORD_QUEST[wordString] end
+					else GF_MessageData.foundQuest = GF_WORD_QUEST[wordString] GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1; end
+				elseif GF_WORD_DUNGEON[wordString] then
+					if not GF_MessageData.foundDungeon or GF_WORD_DUNGEON[wordString] > GF_MessageData.foundDungeon then GF_MessageData.foundDungeon = GF_WORD_DUNGEON[wordString] table.insert(GF_MessageData.foundDFlags,1,wordString)
+					else GF_MessageData.foundDungeon = GF_WORD_DUNGEON[wordString] table.insert(GF_MessageData.foundDFlags,wordString) GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1; end
+				elseif GF_WORD_RAID[wordString] then
+					if not GF_MessageData.foundRaid or GF_WORD_RAID[wordString] > GF_MessageData.foundRaid then GF_MessageData.foundRaid = GF_WORD_RAID[wordString] table.insert(GF_MessageData.foundDFlags,1,wordString)
+						else GF_MessageData.foundRaid = GF_WORD_RAID[wordString] table.insert(GF_MessageData.foundDFlags,wordString) GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1; end				
 				elseif GF_WORD_PVP[wordString] then
-					if GF_MessageData.foundPvP then
-						if GF_WORD_PVP[wordString] > GF_MessageData.foundPvP then GF_MessageData.foundPvP = GF_WORD_PVP[wordString] GF_MessageData.foundPFlags = wordString; end
-					else
-						GF_MessageData.foundPvP = GF_WORD_PVP[wordString] GF_MessageData.foundPFlags = wordString;
-					end
+					if not GF_MessageData.foundPvP or GF_WORD_PVP[wordString] > GF_MessageData.foundPvP then GF_MessageData.foundPvP = GF_WORD_PVP[wordString] table.insert(GF_MessageData.foundPFlags,1,wordString)
+					else GF_MessageData.foundPvP = GF_WORD_PVP[wordString] table.insert(GF_MessageData.foundPFlags, wordString) end
 					if GF_MessageData.foundPvP == 0 then
 						for num in string.gfind(arg1, "(%d+)[%s\[\]\+]?") do
 							if tonumber(num) > GF_MessageData.foundPvP and tonumber(num) > 8 and tonumber(num) < 61 then GF_MessageData.foundPvP = tonumber(num) end
@@ -2071,23 +2083,15 @@ function GF_GetTypes(arg1, showanyway)
 			end
 		end
 	end
-	if GF_MessageData.foundPvP == 0 then if string.find(arg1, "19") then GF_MessageData.foundPvP = 19 elseif string.find(arg1, "29") then GF_MessageData.foundPvP = 29 elseif string.find(arg1, "39") then GF_MessageData.foundPvP = 39
-		elseif string.find(arg1, "49") then GF_MessageData.foundPvP = 49 elseif string.find(arg1, "59") then GF_MessageData.foundPvP = 59 elseif string.find(arg1, "60") then GF_MessageData.foundPvP = 60 end end
-	if string.find(arg1, "k10") or string.find(arg1, "k40") then GF_MessageData.foundRaid = 64 GF_MessageData.foundRFlags = "kara" end
-	if GF_MessageData.foundLFM < 2 and ((string.find(arg1, "anyone%?") and string.find(arg1, "hquest")) or string.find(arg1, "%d+\=%d+")) then GF_MessageData.foundLFM = 2 end
+	if GF_MessageData.foundLFM < 2 and string.find(arg1, "%d+\=%d+") then GF_MessageData.foundLFM = 2 end
+	if GF_MessageData.foundGuild < 100 and string.find(arg1, "<[a-zA-Z0-9%& ]+>") then GF_MessageData.foundGuild = GF_MessageData.foundGuild + 2; GF_MessageData.foundTrades = GF_MessageData.foundTradesExclusion + 1; end
+	while GF_MessageData.foundGuild > 100 do GF_MessageData.foundGuild = GF_MessageData.foundGuild - 100 end
+	GF_MessageData.foundGuild = GF_MessageData.foundGuild - GF_MessageData.foundGuildExclusion
 	
-	if string.find(arg1, "[ (]%d+ ?g ") or string.find(arg1, "%d%s?+gold") or string.find(arg1, "[ (]%d+ ?s ") or string.find(arg1, "%d%s?+silver") then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 2 end
+	if string.find(arg1, "[ (]%d+%s?g[old%p ]") or string.find(arg1, "[ (]%d+ ?s[ilver%p ]") then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 2 end
 	while GF_MessageData.foundTrades > 100 do GF_MessageData.foundTrades = GF_MessageData.foundTrades - 100 end
 	GF_MessageData.foundTrades = GF_MessageData.foundTrades - GF_MessageData.foundTradesExclusion
 
-	if string.find(arg1, "<[a-zA-Z0-9%& ]+>") and GF_MessageData.foundGuild < 100 then GF_MessageData.foundGuild = GF_MessageData.foundGuild + 2; GF_MessageData.foundTrades = GF_MessageData.foundTrades - 1; end
-	while GF_MessageData.foundGuild > 100 do GF_MessageData.foundGuild = GF_MessageData.foundGuild - 100 end
-	GF_MessageData.foundGuild = GF_MessageData.foundGuild - GF_MessageData.foundGuildExclusion
-	if string.len(arg1) > 60 then
-		for i=1, getn(GF_STRING_FIND_LIST.GUILDBLOCKLIST) do
-			if string.find(arg1, GF_STRING_FIND_LIST.GUILDBLOCKLIST[i]) then GF_MessageData.foundGuild = 3 break end
-		end
-	end
 	if showanyway == true then
 		for i=1, getn(wordTable) do
 			print(wordTable[i])
@@ -2153,10 +2157,11 @@ function GF_GetGroupInformation(arg1,arg2) -- Searches messages for Groups and s
 	local entry = {};
 	entry.op = arg2;
 	entry.message = arg1;
-	if GF_MessageData.foundRaid then entry.type = "R" entry.flags = GF_GROUP_IDS[GF_MessageData.foundRFlags]
-	elseif GF_MessageData.foundDungeon and (not GF_MessageData.foundQuest or GF_MessageData.foundQuest == 0 or GF_MessageData.foundDungeon >= GF_MessageData.foundQuest) then entry.type = "D" entry.flags = GF_GROUP_IDS[GF_MessageData.foundDFlags]
-	elseif GF_MessageData.foundQuest then entry.type = "Q" GF_MessageData.foundDungeon = nil entry.flags = ""
-	else entry.type = "N" if GF_MessageData.foundPvP then entry.flags = GF_GROUP_IDS[GF_MessageData.foundPFlags] else entry.flags = "" end end
+	if GF_MessageData.foundRaid then entry.type = "R" entry.flags = {} for i=1, getn(GF_MessageData.foundDFlags) do table.insert(entry.flags, GF_GROUP_IDS[GF_MessageData.foundDFlags[i]]) end
+	elseif GF_MessageData.foundDungeon and (not GF_MessageData.foundQuest or GF_MessageData.foundQuest == 0 or GF_MessageData.foundDungeon >= GF_MessageData.foundQuest) then
+		entry.type = "D" entry.flags = {} for i=1, getn(GF_MessageData.foundDFlags) do table.insert(entry.flags, GF_GROUP_IDS[GF_MessageData.foundDFlags[i]]) end
+	elseif GF_MessageData.foundQuest then entry.type = "Q" GF_MessageData.foundDungeon = nil entry.flags = {""}
+	else entry.type = "N" if GF_MessageData.foundPvP then entry.flags = {} for i=1, getn(GF_MessageData.foundPFlags) do table.insert(entry.flags, GF_GROUP_IDS[GF_MessageData.foundPFlags[i]]) end else entry.flags = {""} end end
 	
 	entry.dlevel = math.floor(GF_MessageData.foundRaid or GF_MessageData.foundDungeon or GF_MessageData.foundQuest or GF_MessageData.foundPvP or GF_MessageData.foundClass or 0);
 	if entry.dlevel == 0 and not GF_WhoTable[GF_RealmName][entry.op] then
@@ -2187,9 +2192,14 @@ function GF_GetGroupInformation(arg1,arg2) -- Searches messages for Groups and s
 end
 function GF_SearchMessageForTextString(msg,textstring,entry,buttontext)
 	for w in string.gfind(textstring, "([%w%s]+),") do
-		if string.find(msg, w) or entry.flags == GF_GROUP_IDS[string.lower(gsub(w," ",""))] or entry.flags == string.upper(gsub(w," ", "")) then return true end
+		if string.find(msg, w) then return true end
+		for i=1, getn(entry.flags) do
+			if entry.flags[i] == GF_GROUP_IDS[string.lower(gsub(w," ",""))] or entry.flags[i] == string.upper(gsub(w," ", "")) then return true end
+		end
 	end
-	if GF_SavedVariables.searchbuttonstext[entry.flags] then return true end
+	for i=1, getn(entry.flags) do
+		if GF_SavedVariables.searchbuttonstext[entry.flags[i]] then return true end
+	end
 end
 
 function print(msg) -- I added this only temporarily so I could work on the addon without having to turn on other addons(reload faster)
