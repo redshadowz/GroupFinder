@@ -78,6 +78,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			<OnEditFocusGained>
 				this:HighlightText(string.len(this:GetText())+1);
 			</OnEditFocusGained>
+			<OnEditFocusLost>
+				this:HighlightText(string.len(this:GetText())+1);
+			</OnEditFocusLost>
 		</Scripts>
 		<FontString inherits="ChatFontNormal"/>
 	</EditBox>
@@ -255,11 +258,13 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					<OnEnterPressed>
 						this:ClearFocus();
 						GF_BlacklistAddPlayerDialogOKButton_OnCLick()
+						this:HighlightText(string.len(this:GetText())+1);
 					</OnEnterPressed>
 					<OnEscapePressed>
 						this:ClearFocus();
 						GF_AddPlayerFrameEditBox:SetText("");
 						GF_AddPlayerFrame:Hide();
+						this:HighlightText(string.len(this:GetText())+1);
 					</OnEscapePressed>
 				</Scripts>
 			</EditBox>
@@ -1135,21 +1140,25 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLoad>
 					<OnEditFocusLost>
 						GF_SavedVariables.searchtext = GF_GroupsFrameDescriptionEditBox:GetText();
+						this:HighlightText(string.len(this:GetText())+1);
 					</OnEditFocusLost>
 					<OnTabPressed>
 						this:ClearFocus();
 						GF_SavedVariables.searchtext = GF_GroupsFrameDescriptionEditBox:GetText()
 						GF_ApplyFiltersToGroupList();
+						this:HighlightText(string.len(this:GetText())+1);
 					</OnTabPressed>
 					<OnEnterPressed>
 						this:ClearFocus();
 						GF_SavedVariables.searchtext = GF_GroupsFrameDescriptionEditBox:GetText()
 						GF_ApplyFiltersToGroupList();
+						this:HighlightText(string.len(this:GetText())+1);
 					</OnEnterPressed>
 					<OnEscapePressed>
 						this:ClearFocus();
 						GF_SavedVariables.searchtext = GF_GroupsFrameDescriptionEditBox:GetText()
 						GF_ApplyFiltersToGroupList();
+						this:HighlightText(string.len(this:GetText())+1);
 					</OnEscapePressed>
 				</Scripts>
 			</EditBox>
@@ -2033,18 +2042,22 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 									<OnEditFocusLost>
 										GF_SavedVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText();
+										this:HighlightText(string.len(this:GetText())+1);
 									</OnEditFocusLost>
 									<OnTabPressed>
 										GF_SavedVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText();
 										this:ClearFocus();
+										this:HighlightText(string.len(this:GetText())+1);
 									</OnTabPressed>
 									<OnEnterPressed>
 										GF_SavedVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText();
 										this:ClearFocus();
+										this:HighlightText(string.len(this:GetText())+1);
 									</OnEnterPressed>
 									<OnEscapePressed>
 										GF_SavedVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText();
 										this:ClearFocus();
+										this:HighlightText(string.len(this:GetText())+1);
 									</OnEscapePressed>
 								</Scripts>
 							</EditBox>
@@ -2088,18 +2101,22 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 									<OnEditFocusLost>
 										GF_SavedVariables.searchlfgwhispertext = GF_LFGWhoWhisperEditBox:GetText();
+										this:HighlightText(string.len(this:GetText())+1);
 									</OnEditFocusLost>
 									<OnTabPressed>
 										GF_SavedVariables.searchlfgwhispertext = GF_LFGWhoWhisperEditBox:GetText();
 										this:ClearFocus();
+										this:HighlightText(string.len(this:GetText())+1);
 									</OnTabPressed>
 									<OnEnterPressed>
 										GF_SavedVariables.searchlfgwhispertext = GF_LFGWhoWhisperEditBox:GetText();
 										this:ClearFocus();
+										this:HighlightText(string.len(this:GetText())+1);
 									</OnEnterPressed>
 									<OnEscapePressed>
 										GF_SavedVariables.searchlfgwhispertext = GF_LFGWhoWhisperEditBox:GetText();
 										this:ClearFocus();
+										this:HighlightText(string.len(this:GetText())+1);
 									</OnEscapePressed>
 								</Scripts>
 							</EditBox>
@@ -2402,20 +2419,24 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									<OnEditFocusLost>
 										GF_BlackListItemSaveChanges()
 										GF_BlackListItemEditFrame:Hide()
+										this:HighlightText(string.len(this:GetText())+1);
 									</OnEditFocusLost>
 									<OnTabPressed>
 										GF_BlackListItemSaveChanges()
 										this:ClearFocus();
 										GF_BlackListItemEditFrame:Hide()
+										this:HighlightText(string.len(this:GetText())+1);
 									</OnTabPressed>
 									<OnEnterPressed>
 										GF_BlackListItemSaveChanges()
 										this:ClearFocus();
 										GF_BlackListItemEditFrame:Hide()
+										this:HighlightText(string.len(this:GetText())+1);
 									</OnEnterPressed>
 									<OnEscapePressed>
 										this:ClearFocus();
 										GF_BlackListItemEditFrame:Hide()
+										this:HighlightText(string.len(this:GetText())+1);
 									</OnEscapePressed>
 								</Scripts>
 							</EditBox>
