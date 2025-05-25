@@ -2677,9 +2677,27 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_LogShowLoot" inherits="GF_CheckButtonTemplate_Label">
+							<CheckButton name="GF_LogShowGuild" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="LEFT" relativeTo="GF_LogShowTradesTextLabel" relativePoint="RIGHT">
+										<Offset>
+											<AbsDimension x="0" y="0"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										GF_SavedVariables.logshowguilds = this:GetChecked();
+										if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
+									</OnClick>
+									<OnLoad>
+										getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_GUILD);
+									</OnLoad>
+								</Scripts>
+							</CheckButton>
+							<CheckButton name="GF_LogShowLoot" inherits="GF_CheckButtonTemplate_Label">
+								<Anchors>
+									<Anchor point="LEFT" relativeTo="GF_LogShowGuildTextLabel" relativePoint="RIGHT">
 										<Offset>
 											<AbsDimension x="0" y="0"/>
 										</Offset>
