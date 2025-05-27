@@ -2010,8 +2010,8 @@ function GF_GetTypes(arg1, showanyway)
 	elseif string.find(arg1, "%alfm ") then GF_MessageData.foundLFM = 3 local lfs,lfe = string.find(arg1, "%alfm ") arg1 = string.sub(arg1,1,lfs).." lfm "..string.sub(arg1,lfe+1)
 	elseif string.find(arg1, " lfg%a") then GF_MessageData.foundLFM = 3 local lfs,lfe = string.find(arg1, " lfg%a") arg1 = string.sub(arg1,1,lfs-1).." lfg "..string.sub(arg1,lfe)
 	elseif string.find(arg1, "%alfg ") then GF_MessageData.foundLFM = 3 local lfs,lfe = string.find(arg1, "%alfg ") arg1 = string.sub(arg1,1,lfs).." lfg "..string.sub(arg1,lfe+1)
-	elseif string.find(arg1, " lf[%s%d]+m ") then GF_MessageData.foundLFM = 4 local lfs,lfe = string.find(arg1, " lf[%s%d]+m ") arg1 = string.sub(arg1,1,lfs-1).." lfm "..string.sub(arg1,lfe)
-	elseif string.find(arg1, " lf%a") then GF_MessageData.foundLFM = 2 local lfs,lfe = string.find(arg1, " lf%a") arg1 = string.sub(arg1,1,lfs-1).." lf "..string.sub(arg1,lfe)
+	elseif string.find(arg1, " lf[%s%d]+m ") then GF_MessageData.foundLFM = 4 local lfs,lfe = string.find(arg1, " lf[%s%d]+m ") arg1 = string.sub(arg1,1,lfs-1).." lfm "..string.sub(arg1,lfe) GF_MessageData.foundGuildExclusion = 3 GF_MessageData.foundTradesExclusion = 3
+	elseif string.find(arg1, " lf%a") then GF_MessageData.foundLFM = 2 local lfs,lfe = string.find(arg1, " lf%a") if not string.find(string.sub(arg1,lfe,lfe),"[gm]") then arg1 = string.sub(arg1,1,lfs-1).." lf "..string.sub(arg1,lfe) end
 	elseif string.find(arg1, " heal%a") then local lfs,lfe = string.find(arg1, " heal%a") if string.sub(arg1, lfs, lfe+2) == "healer" then arg1 = string.sub(arg1,1,lfs-1).." healer "..string.sub(arg1,lfe+2) else arg1 = string.sub(arg1,1,lfs-1).." heal "..string.sub(arg1,lfe) end
 	elseif string.find(arg1, " tank%a") then local lfs,lfe = string.find(arg1, " tank%a") if string.sub(arg1, lfs, lfe+1) == "tanks" then arg1 = string.sub(arg1,1,lfs-1).." tanks "..string.sub(arg1,lfe+1) else arg1 = string.sub(arg1,1,lfs-1).." heal "..string.sub(arg1,lfe) end
 	elseif string.find(arg1, " dps%a") then local lfs,lfe = string.find(arg1, " dps%a") arg1 = string.sub(arg1,1,lfs-1).." dps "..string.sub(arg1,lfe)
