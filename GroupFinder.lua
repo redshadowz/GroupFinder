@@ -407,12 +407,12 @@ function GF_UpdateMainFrameWidth()
 			end
 			GF_LogFrameInternalFrame:SetWidth(350)
 		else
-			for i=1, 20 do if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",0,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",0,0) end getglobal("GF_NewItem"..i):SetWidth(652) end
+			for i=1, 20 do if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",0,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",0,0) end getglobal("GF_NewItem"..i):SetWidth(670) end
 			GF_LogFrameInternalFrame:SetPoint("TOPLEFT",29,-32)
 			GF_LogFrameInternalFrame:SetWidth(669)
 		end
 	else
-		for i=1, 20 do if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",0,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",0,0) end getglobal("GF_NewItem"..i):SetWidth(652) end
+		for i=1, 20 do if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",0,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",0,0) end getglobal("GF_NewItem"..i):SetWidth(670) end
 		GF_LogFrameInternalFrame:SetPoint("TOPLEFT",29,-64)
 		GF_LogFrameInternalFrame:SetWidth(669)
 	end
@@ -756,6 +756,17 @@ function GF_UpdateGroupsFrame()
 		GF_AddonMakeAListOfGroupsForSending = nil;
 		GF_AddonOPSentNamesOnLogin = {}
 		GF_ApplyFiltersToGroupList()
+	--[[else
+		for i=1, 20 do
+			if getglobal("GF_NewItem"..i) then
+				if i+GF_ResultsListOffset <= getn(GF_FilteredResultsList) then 
+					if (time() - GF_FilteredResultsList[i+GF_ResultsListOffset].t)/60 > 1 then
+						getglobal("GF_NewItem"..i.."MoreRightLabel"):SetText(floor(time() - GF_FilteredResultsList[i+GF_ResultsListOffset].t));
+					elseif floor((time() - GF_FilteredResultsList[i+GF_ResultsListOffset].t)/60) == 1 then getglobal("GF_NewItem"..i.."MoreRightLabel"):SetText(floor(time() - GF_FilteredResultsList[i+GF_ResultsListOffset].t));
+					else getglobal("GF_NewItem"..i.."MoreRightLabel"):SetText(floor(time() - GF_FilteredResultsList[i+GF_ResultsListOffset].t)); end
+				end
+			end
+		end--]]
 	end
 end
 

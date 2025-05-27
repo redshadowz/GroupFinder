@@ -390,7 +390,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 	</Frame>
 	<Frame name="GF_NewItemTemplate" virtual="true">
 		<Size>
-			<AbsDimension x="652" y="18"/>
+			<AbsDimension x="670" y="18"/>
 		</Size>
 		<Layers>
 			<Layer level="BACKGROUND">
@@ -449,7 +449,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Anchor>
 						<Anchor point="BOTTOMRIGHT" relativePoint="TOPRIGHT">
 							<Offset>
-								<AbsDimension x="-20" y="-16"/>
+								<AbsDimension x="-80" y="-16"/>
 							</Offset>
 						</Anchor>
 					</Anchors>
@@ -481,9 +481,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						<AbsDimension x="580" y="16"/>
 					</Size>
 					<Anchors>
-						<Anchor point="RIGHT">
+						<Anchor point="BOTTOMRIGHT">
 							<Offset>
-								<AbsDimension x="-20" y="-6"/>
+								<AbsDimension x="-50" y="0"/>
 							</Offset>
 						</Anchor>
 					</Anchors>
@@ -523,7 +523,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				<Anchors>
 					<Anchor point="TOPRIGHT">
 						<Offset>
-							<AbsDimension x="20" y="0"/>
+							<AbsDimension x="0" y="0"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
