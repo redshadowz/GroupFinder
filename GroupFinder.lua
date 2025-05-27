@@ -1999,7 +1999,7 @@ function GF_CheckForGroups(arg1,arg2,event,showanyway)
 		end
 	end
 	return GF_CheckForSpam(arg1,arg2,foundInGroup) or foundInGroup;
-end -- /script GF_CheckForGroups("WTB|cffffffff|Hitem:22528:0:0:0|h[Dark Iron Scraps]|h|r|cffffffff|Hitem:22527:0:0:0|h[Core of Elements]|h|r","r","CHAT_MSG_SAY",true)
+end
 function GF_GetTypes(arg1, showanyway)
 	if showanyway == true then print(arg1) end
 	GF_MessageData = { foundIgnore = nil,foundGuild = 0,foundGuildExclusion = 0,foundLFM = 0,foundLFG = nil,foundClass = nil,foundQuest = nil,foundDungeon = nil,foundRaid = nil,foundTrades = 0,foundTradesExclusion = 0,foundPvP = nil,foundDFlags = {},foundPFlags = {} }
@@ -2121,12 +2121,12 @@ function GF_GetTypes(arg1, showanyway)
 		for word,num in string.gfind(arg1, "(%a+) ?(%d+)") do if GF_WORD_LEVEL_DETECT[word] and tonumber(num) > 8 and tonumber(num) < 61 then GF_MessageData.foundClass = tonumber(num) return end end
 		for num,word in string.gfind(arg1, "(%d+) ?(%a+)") do if GF_WORD_LEVEL_DETECT[word] and tonumber(num) > 8 and tonumber(num) < 61 then GF_MessageData.foundClass = tonumber(num) return end end
 	end
-end -- /script GF_GetTypes("geared hunter lfg strat scarlet", true)
+end
 function GF_CheckForSpam(arg1,arg2,foundInGroup)
 	if not GF_PlayersCurrentlyInGroup[arg2] and not GF_Friends[arg2] and not GF_Guildies[arg2] then
 		if (GF_WhoTable[GF_RealmName][arg2] and tonumber(GF_WhoTable[GF_RealmName][arg2][1]) < GF_SavedVariables.blockmessagebelowlevel) and GF_WhoTable[GF_RealmName][arg2][4] + 86400 > time() then return 9; end  -- Block lowlevel
 		if GF_SavedVariables.spamfilter then
-			if GF_PlayerMessages[arg2] and GF_PlayerMessages[arg2][1] and GF_PlayerMessages[arg2][1] > GetTime() then return 7 end
+			if GF_PlayerMessages[arg2] and GF_PlayerMessages[arg2][1] and GF_PlayerMessages[arg2][1] > GetTime() then return 7 end -- Returns spam for the duration of the spam filter
 			if GF_IncomingMessagePrune + 3600 < time() then -- 1 hour
 				for name,_ in GF_PlayerMessages do
 					if GF_PlayerMessages[name][1] < GetTime() then
@@ -2139,7 +2139,7 @@ function GF_CheckForSpam(arg1,arg2,foundInGroup)
 				GF_PlayerMessages[arg2] = { [1] = GetTime(), [2] = string.sub(arg1,math.random(math.ceil(string.len(arg1)/4)),math.ceil(string.len(arg1)/4*3 + math.random(math.ceil(string.len(arg1)/4)))), [3] = "ZZZzzz123654" }
 			else
 				if (GF_PlayerMessages[arg2][1] + GF_SavedVariables.spamfilterduration*60 > GetTime()) and
-				(((string.len(GF_PlayerMessages[arg2][2]) > 40 and string.find(arg1,GF_PlayerMessages[arg2][2],1,true)) or (string.len(GF_PlayerMessages[arg2][3]) > 30 and string.find(arg1,GF_PlayerMessages[arg2][3],1,true)))
+				(((string.len(GF_PlayerMessages[arg2][2]) > 40 and string.find(arg1,GF_PlayerMessages[arg2][2],1,true)) or (string.len(GF_PlayerMessages[arg2][3]) > 40 and string.find(arg1,GF_PlayerMessages[arg2][3],1,true)))
 				or (string.find(arg1,GF_PlayerMessages[arg2][2],1,true) and string.find(arg1,GF_PlayerMessages[arg2][3],1,true))) then	-- Found Spammer
 					if GF_SavedVariables.autoblacklist and not GF_BlackList[GF_RealmName][arg2] and string.len(arg1) > 120 then
 						if GF_WhoTable[GF_RealmName][arg2] and GF_WhoTable[GF_RealmName][arg2][4] + 86400 > time() then -- Data must be less than a day old to autoblacklist or block lowlevel
