@@ -717,11 +717,11 @@ GF_WORD_IGNORE = {
 
 ["lastsheep"] = true,["sheisscared"] = true,["heisscared"] = true,["tellmethat"] = true,["icannotget"] = true,["itbugged"] = true,["isbugged"] = true,
 
-["itsnotavailable"] = true,["ifitsnot"] = true,["itmeans"] = true,["doingitatm"] = true,["ifidont"] = true,["illdie"] = true,["isita"] = true,["oragroup"] = true,
+["itsnotavailable"] = true,["ifitsnot"] = true,["anyonedone"] = true,["itmeans"] = true,["doingitatm"] = true,["ifidont"] = true,["illdie"] = true,["isita"] = true,["oragroup"] = true,
 ["muchfire"] = true,["muchfrost"] = true,["mucharcane"] = true,["muchshadow"] = true,["muchnature"] = true,["needtoteach"] = true,["teachme"] = true,["resetspot"] = true,["resetspots"] = true,
 ["muchfr"] = true,["muchar"] = true,["muchnr"] = true,["unbuffed"] = true,["gotthisfrom"] = true,["anyuseforit"] = true,["greenname"] = true,["flavoritem"] = true,["clearlyshows"] = true,["howyougot"] = true,["notgroup"] = true,
 
-["joinany"] = true,["dontneed"] = true,["dontneeda"] = true,["weabsolutely"] = true,["twow"] = true,
+["joinany"] = true,["dontneed"] = true,["dontneeda"] = true,["weabsolutely"] = true,["twow"] = true,["newhere"] = true,["ifipress"] = true,["pressqueue"] = true,["doesitportal"] = true,["portalme"] = true,["likeinretail"] = true,["orjustfind"] = true,["orjustfinds"] = true,
 
 -- Onyxia Head/Legs
 ["anyonyhead"] = true,["anyonyxiahead"] = true,["anynefhead"] = true,
@@ -1821,7 +1821,7 @@ GF_WORD_TRADE = {
 ["lockboxyourbox"] = 2,
 
 -- Lockbox
-["abletoopen"] = 2,["abletounlock"] = 1.5,["helpunlock"] = 1.5,
+["abletoopen"] = 2,["abletounlock"] = 1.5,["helpunlock"] = 1.5,["whocanunlock"] = 1.5,
 ["alllock"] = .5,["alllockbox"] = 1,["mybox"] = .5,["mylockbox"] = .5,
 ["anylockboxplease"] = .5,["anylocklockboxplease"] = 1,["lockboxplease"] = .5,
 ["anyonearoundhitem"] = 2,["anyonecanopen"] = 1,["anyonecanopenme"] = .5,["anyonecanopenmy"] = .5,["anyonecanopenhitem"] = 2,["anyonecanopenlock"] = 2,["anyonecanopenlockbox"] = 2,
@@ -1926,7 +1926,7 @@ GF_TRADE_WORD_EXCLUSION = {
 ["givingaway"] = .5,["forfree"] = .5,["ifyouneed"] = .5,["youcanhave"] = .5,["gift"] = .5,["mygift"] = .5,
 ["saystheguy"] = 1,["loseit"] = 2,["worldchat"] = 2,["lowping"] = 1,
 ["heardrumors"] = 1,["rumorsabout"] = 1,["aboutblizzard"] = 1,["buythisserver"] = 1,["buyingthisserver"] = 1,
-["whycanti"] = 1,
+["whycanti"] = 1,["lft"] = 1,["doesnotteleport"] = 1,["makethegroup"] = 1,
 }
 
 GF_GROUP_IDS = {
