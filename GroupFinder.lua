@@ -1205,7 +1205,7 @@ function GF_UpdateResults()
 		if getglobal(nFrame) then
 			if i+GF_ResultsListOffset <= groupListLength then 
 				local entry = GF_FilteredResultsList[i+GF_ResultsListOffset];
-				if GF_PlayersCurrentlyInGroup[entry.op] or GF_Friends[entry.op] or GF_Guildies[entry.op] then getglobal(nFrame.."NameLabel"):SetTextColor(255,215,0,1); else getglobal(nFrame.."NameLabel"):SetTextColor(0.75,0.75,1,1); end
+				if GF_PlayersCurrentlyInGroup[entry.op] or GF_Friends[entry.op] or GF_Guildies[entry.op] then getglobal(nFrame.."NameLabel"):SetTextColor(1,.843,0,1); elseif entry.hc then getglobal(nFrame.."NameLabel"):SetTextColor(1,.25,.25,1); else getglobal(nFrame.."NameLabel"):SetTextColor(0.75,0.75,1,1); end
 
 				if floor((time() - entry.t)/60) > 1 then getglobal(nFrame.."MoreRightLabel"):SetText(GF_FOUND..floor((time() - entry.t)/60)..GF_MINUTES..GF_TIME_AGO);
 				elseif floor((time() - entry.t)/60) == 1 then getglobal(nFrame.."MoreRightLabel"):SetText(GF_FOUND..floor((time() - entry.t)/60)..GF_MINUTE..GF_TIME_AGO);
@@ -1873,7 +1873,7 @@ function GF_SearchButtonHasValues()
 end
 
 function GF_FindGroupsAndDisplayCustomChatMessages(event,arg1,arg2,arg9) -- Chat Filters and Group Finders
-	if not GF_TextColors[event] or string.lower(arg9) == "lft" then
+	if not GF_TextColors[event] or string.lower(arg9) == "lft" or string.lower(arg9) == "hardcore" then
 		return true;
 	elseif GF_PreviousMessage[arg2] and GF_PreviousMessage[arg2][1] == arg1 and GF_PreviousMessage[arg2][2] > GetTime() then
 		if GF_PreviousMessage[arg2][3] then return true; end
@@ -1993,11 +1993,11 @@ function GF_CheckForGroups(arg1,arg2,event,showanyway)
 -- "Say" messages will always be displayed unless flagged as spam.
 -- "Yell" and "Channel" messages will only display if allowed.
 	if GF_BlackList[GF_RealmName][arg2] and not GF_PlayersCurrentlyInGroup[arg2] and not GF_Friends[arg2] and not GF_Guildies[arg2] then return 8 end
-	GF_GetTypes(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(string.lower(gsub(gsub(" "..arg1.." ", "|c%x+|+(%w+)[%d:]+|+h", " %1 "), "|+h|+r", " ")),".gg/%w+", ""),"%s%s+", " "),"['']", "")," any?%s?1[%p%s]"," anyone ")," some%s?1[%p%s]"," anyone "),"any one","anyone"),"g2g","gtg"),"kk+","kk"),"ss+","ss"),showanyway)
+	GF_GetTypes(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(string.lower(gsub(gsub(gsub(" "..arg1.." ", "|c%x+|+(%w+)[%d:]+|+h", " %1 "), "|+h|+r", " "),"([a-z])([A-Z])","%1 %2")),".gg/%w+", ""),"%s%s+", " "),"['']", "")," any?%s?1[%p%s]"," anyone ")," some%s?1[%p%s]"," anyone "),"any one","anyone"),"g2g","gtg"),"kk+","kk"),"ss+","ss"),showanyway)
 	if GF_MessageData.foundGuild >= 3 then return GF_CheckForSpam(arg1,arg2) or 11
 	elseif GF_MessageData.foundTrades >= 3 then return GF_CheckForSpam(arg1,arg2) or 5
-	elseif (GF_MessageData.foundIgnore or GF_MessageData.foundGuild >= 3) and GF_MessageData.foundLFM < 4 then return GF_CheckForSpam(arg1,arg2) or 4 end
-
+	elseif (GF_MessageData.foundIgnore and GF_MessageData.foundLFM < 4) then return GF_CheckForSpam(arg1,arg2) or 4 end
+--event ~= "CHAT_MSG_CHANNEL" or
 	local foundInGroup,entry = GF_GetGroupInformation(GF_CleanUpMessagesOfBadLinks(arg1),arg2);
 	GF_GetWhoData(arg2,foundInGroup)
 	if foundInGroup then
@@ -2013,7 +2013,7 @@ function GF_CheckForGroups(arg1,arg2,event,showanyway)
 end
 function GF_GetTypes(arg1, showanyway)
 	if showanyway == true then print(arg1) end
-	GF_MessageData = { foundIgnore = nil,foundGuild = 0,foundGuildExclusion = 0,foundLFM = 0,foundLFG = nil,foundClass = nil,foundQuest = nil,foundDungeon = nil,foundRaid = nil,foundTrades = 0,foundTradesExclusion = 0,foundPvP = nil,foundDFlags = {},foundPFlags = {} }
+	GF_MessageData = { foundIgnore = nil,foundGuild = 0,foundGuildExclusion = 0,foundLFM = 0,foundLFG = nil,foundClass = nil,foundQuest = nil,foundDungeon = nil,foundRaid = nil,foundTrades = 0,foundTradesExclusion = 0,foundPvP = nil,foundDFlags = {},foundPFlags = {},foundHC = nil,foundNotHC = nil }
 	local wordTable = {}
 	local wordString;
 
@@ -2041,11 +2041,15 @@ function GF_GetTypes(arg1, showanyway)
 		if not GF_WORD_SKIP[word] then table.insert(wordTable, word) end
 	end
 	for i=1, getn(wordTable) do
-		if GF_LFM_OTHER[wordTable[i]] then GF_MessageData.foundLFM = 3 break
-		elseif GF_LFG_OTHER[wordTable[i]] then GF_MessageData.foundLFG = true break end
+		if GF_LFM_OTHER[wordTable[i]] then GF_MessageData.foundLFM = 3
+		elseif GF_LFG_OTHER[wordTable[i]] then GF_MessageData.foundLFG = true
+		elseif GF_WORD_HC[wordTable[i]] then GF_MessageData.foundHC = true
+		elseif GF_WORD_NOT_HC[wordTable[i]] then GF_MessageData.foundNotHC = true end
 		if wordTable[i+1] then
-			if GF_LFM_OTHER[wordTable[i]..wordTable[i+1]] then GF_MessageData.foundLFM = 3 break
-			elseif GF_LFG_OTHER[wordTable[i]..wordTable[i+1]] then GF_MessageData.foundLFG = true break end
+			if GF_LFM_OTHER[wordTable[i]..wordTable[i+1]] then GF_MessageData.foundLFM = 3
+			elseif GF_LFG_OTHER[wordTable[i]..wordTable[i+1]] then GF_MessageData.foundLFG = true
+			elseif GF_WORD_HC[wordTable[i]..wordTable[i+1]] then GF_MessageData.foundHC = true
+			elseif GF_WORD_NOT_HC[wordTable[i]..wordTable[i+1]] then GF_MessageData.foundNotHC = true end
 		end
 	end
 	for j=0,3 do
@@ -2203,6 +2207,7 @@ function GF_GetGroupInformation(arg1,arg2) -- Searches messages for Groups and s
 	end
 	entry.t = time()
 	entry.lfg = GF_MessageData.foundLFG
+	if not GF_MessageData.foundNotHC then entry.hc = GF_MessageData.foundHC end
 	
 	for i = 1, getn(GF_MessageList[GF_RealmName]) do
 		if arg2 == GF_MessageList[GF_RealmName][i].op then
