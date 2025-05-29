@@ -46,11 +46,37 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</OnClick>
 		</Scripts>
 	</CheckButton>
-	<EditBox name="GF_AbstractEditBox" inherits="InputBoxTemplate" autoFocus="false" virtual="true">
+	<EditBox name="GF_AbstractEditBox" autoFocus="false" virtual="true">
 		<Size>
 			<AbsDimension x="140" y="20"/>
 		</Size>
 		<Layers>
+			<Layer level="ARTWORK">
+				<Texture>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset>
+								<AbsDimension x="1" y="-1"/>
+							</Offset>
+						</Anchor>
+						<Anchor point="BOTTOMRIGHT">
+							<Offset>
+								<AbsDimension x="-1" y="1"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+					<Color r="0.0" g="0.0" b="0.0" a="0.92"/>
+				</Texture>
+			</Layer>
+			<Layer level="BACKGROUND">
+				<Texture>
+					<Anchors>
+						<Anchor point="TOPLEFT"/>
+						<Anchor point="BOTTOMRIGHT"/>
+					</Anchors>
+					<Color r="1.0" g="1.0" b="1.0" a="0.5"/>
+				</Texture>
+			</Layer>
 			<Layer level="OVERLAY">
 				<FontString inherits="GameFontNormalSmall" name="$parentTextLabel" justifyH="RIGHT">
 					<Anchors>
@@ -68,20 +94,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</FontString>
 			</Layer>
 		</Layers>
-		<Scripts>
-			<OnLoad>
-				this:SetTextInsets(0, 8, 0, 0);
-			</OnLoad>
-			<OnEnterPressed>
-				this:ClearFocus();
-			</OnEnterPressed>
-			<OnEditFocusGained>
-				this:HighlightText(string.len(this:GetText())+1);
-			</OnEditFocusGained>
-			<OnEditFocusLost>
-				this:HighlightText(string.len(this:GetText())+1);
-			</OnEditFocusLost>
-		</Scripts>
 		<FontString inherits="ChatFontNormal"/>
 	</EditBox>
 	<Button name="GF_ButtonTemplate" inherits="UIPanelButtonTemplate" virtual="true">
@@ -258,13 +270,11 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					<OnEnterPressed>
 						this:ClearFocus();
 						GF_BlacklistAddPlayerDialogOKButton_OnCLick()
-						this:HighlightText(string.len(this:GetText())+1);
 					</OnEnterPressed>
 					<OnEscapePressed>
 						this:ClearFocus();
 						GF_AddPlayerFrameEditBox:SetText("");
 						GF_AddPlayerFrame:Hide();
-						this:HighlightText(string.len(this:GetText())+1);
 					</OnEscapePressed>
 				</Scripts>
 			</EditBox>
@@ -304,93 +314,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</Button>
 		</Frames>
 	</Frame>
-	<Frame name="GF_DialogFrameTemplate_UrlCopy" toplevel="true" enableMouse="true" frameStrata="FULLSCREEN" virtual="true">
-		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-			<BackgroundInsets>
-				<AbsInset left="11" right="12" top="12" bottom="11"/>
-			</BackgroundInsets>
-			<TileSize>
-				<AbsValue val="32"/>
-			</TileSize>
-			<EdgeSize>
-				<AbsValue val="32"/>
-			</EdgeSize>
-		</Backdrop>
-		<Size>
-			<AbsDimension x="320" y="44"/>
-		</Size>
-		<Anchors>
-			<Anchor point="CENTER">
-				<Offset>
-					<AbsDimension x="0" y="0"/>
-				</Offset>
-			</Anchor>
-		</Anchors>
-		<Frames>
-			<Button name="$parentCloseButton" inherits="UIPanelCloseButton">
-				<Anchors>
-					<Anchor point="TOPRIGHT">
-						<Offset>
-							<AbsDimension x="3" y="4"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
-				<Scripts>
-					<OnClick>
-						GF_UrlCopyFrame:Hide();
-					</OnClick>
-				</Scripts>
-			</Button>
-			<EditBox name="$parentEditBox">
-				<Size>
-					<AbsDimension x="300" y="20"/>
-				</Size>
-				<Anchors>
-					<Anchor point="TOP">
-						<Offset>
-							<AbsDimension x="0" y="-13"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
-				<Layers>
-					<Layer level="BACKGROUND">
-						<Texture>
-							<Anchors>
-								<Anchor point="TOPLEFT"/>
-								<Anchor point="BOTTOMRIGHT"/>
-							</Anchors>
-							<Color r="0.0" g="0.0" b="0.0" a="0.92"/>
-						</Texture>
-					</Layer>
-				</Layers>
-				<FontString inherits="ChatFontNormal"/>
-				<Scripts>
-					<OnShow>
-						this:SetFocus();
-						this:HighlightText();
-					</OnShow>
-					<OnLoad>
-						this:SetTextInsets(4,0,0,0);
-					</OnLoad>
-					<OnTabPressed>
-						GF_UrlCopyFrame:Hide();
-					</OnTabPressed>
-					<OnEnterPressed>
-						GF_UrlCopyFrame:Hide();
-					</OnEnterPressed>
-					<OnEscapePressed>
-						GF_UrlCopyFrame:Hide();
-					</OnEscapePressed>
-					<OnEditFocusLost>
-						GF_UrlCopyFrame:Hide();
-					</OnEditFocusLost>
-				</Scripts>
-			</EditBox>
-		</Frames>
-	</Frame>
 	<Frame name="GF_NewItemTemplate" virtual="true">
 		<Size>
-			<AbsDimension x="670" y="18"/>
+			<AbsDimension x="652" y="18"/>
 		</Size>
 		<Layers>
 			<Layer level="BACKGROUND">
@@ -440,7 +366,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Texture>
 			</Layer>
 			<Layer level="OVERLAY">
-				<FontString inherits="GameFontNormal" name="$parentNameLabel" justifyH="LEFT" font="Fonts\ARIALN.TTF">
+				<FontString inherits="GameFontNormal" name="$parentNameLabel" justifyH="LEFT">
 					<Anchors>
 						<Anchor point="TOPLEFT">
 							<Offset>
@@ -449,19 +375,11 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Anchor>
 						<Anchor point="BOTTOMRIGHT" relativePoint="TOPRIGHT">
 							<Offset>
-								<AbsDimension x="-80" y="-16"/>
+								<AbsDimension x="-20" y="-16"/>
 							</Offset>
 						</Anchor>
 					</Anchors>
-					<FontHeight>
-						<AbsValue val="14"/>
-					</FontHeight>
-					<Shadow>
-						<Offset>
-							<AbsDimension x="1" y="-1"/>
-						</Offset>
-						<Color r="0" g="0" b="0" a="0.5"/>
-					</Shadow>
+					<Color r="1.0" g="1.0" b="1.0" a="1"/>
 				</FontString>
 				<FontString inherits="GameFontNormalSmall" name="$parentMoreLabel" justifyH="LEFT" hidden="true">
 					<Size>
@@ -481,9 +399,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						<AbsDimension x="580" y="16"/>
 					</Size>
 					<Anchors>
-						<Anchor point="BOTTOMRIGHT">
+						<Anchor point="RIGHT">
 							<Offset>
-								<AbsDimension x="-50" y="0"/>
+								<AbsDimension x="-20" y="-6"/>
 							</Offset>
 						</Anchor>
 					</Anchors>
@@ -523,7 +441,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				<Anchors>
 					<Anchor point="TOPRIGHT">
 						<Offset>
-							<AbsDimension x="0" y="0"/>
+							<AbsDimension x="20" y="0"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -715,7 +633,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 	<MessageFrame name="GF_MinimapMessageFrameB5" inherits="GF_MinimapMessageFrameTemplateB"><Anchors><Anchor point="TOP" relativeTo="GF_MinimapMessageFrameA5" relativePoint="BOTTOM"/></Anchors></MessageFrame>
 	<MessageFrame name="GF_MinimapMessageFrameA6" inherits="GF_MinimapMessageFrameTemplateA"></MessageFrame>
 	<MessageFrame name="GF_MinimapMessageFrameB6" inherits="GF_MinimapMessageFrameTemplateB"><Anchors><Anchor point="TOP" relativeTo="GF_MinimapMessageFrameA6" relativePoint="BOTTOM"/></Anchors></MessageFrame>
-
 	<Button name="GF_MinimapIcon" enableMouse="true" frameStrata="LOW" toplevel="true" parent="Minimap">
 		<Size>
 			<AbsDimension x="33" y="33"/>
@@ -1140,25 +1057,21 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLoad>
 					<OnEditFocusLost>
 						GF_SavedVariables.searchtext = GF_GroupsFrameDescriptionEditBox:GetText();
-						this:HighlightText(string.len(this:GetText())+1);
 					</OnEditFocusLost>
 					<OnTabPressed>
 						this:ClearFocus();
 						GF_SavedVariables.searchtext = GF_GroupsFrameDescriptionEditBox:GetText()
 						GF_ApplyFiltersToGroupList();
-						this:HighlightText(string.len(this:GetText())+1);
 					</OnTabPressed>
 					<OnEnterPressed>
 						this:ClearFocus();
 						GF_SavedVariables.searchtext = GF_GroupsFrameDescriptionEditBox:GetText()
 						GF_ApplyFiltersToGroupList();
-						this:HighlightText(string.len(this:GetText())+1);
 					</OnEnterPressed>
 					<OnEscapePressed>
 						this:ClearFocus();
 						GF_SavedVariables.searchtext = GF_GroupsFrameDescriptionEditBox:GetText()
 						GF_ApplyFiltersToGroupList();
-						this:HighlightText(string.len(this:GetText())+1);
 					</OnEscapePressed>
 				</Scripts>
 			</EditBox>
@@ -2042,22 +1955,18 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 									<OnEditFocusLost>
 										GF_SavedVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText();
-										this:HighlightText(string.len(this:GetText())+1);
 									</OnEditFocusLost>
 									<OnTabPressed>
 										GF_SavedVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText();
 										this:ClearFocus();
-										this:HighlightText(string.len(this:GetText())+1);
 									</OnTabPressed>
 									<OnEnterPressed>
 										GF_SavedVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText();
 										this:ClearFocus();
-										this:HighlightText(string.len(this:GetText())+1);
 									</OnEnterPressed>
 									<OnEscapePressed>
 										GF_SavedVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText();
 										this:ClearFocus();
-										this:HighlightText(string.len(this:GetText())+1);
 									</OnEscapePressed>
 								</Scripts>
 							</EditBox>
@@ -2101,22 +2010,18 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 									<OnEditFocusLost>
 										GF_SavedVariables.searchlfgwhispertext = GF_LFGWhoWhisperEditBox:GetText();
-										this:HighlightText(string.len(this:GetText())+1);
 									</OnEditFocusLost>
 									<OnTabPressed>
 										GF_SavedVariables.searchlfgwhispertext = GF_LFGWhoWhisperEditBox:GetText();
 										this:ClearFocus();
-										this:HighlightText(string.len(this:GetText())+1);
 									</OnTabPressed>
 									<OnEnterPressed>
 										GF_SavedVariables.searchlfgwhispertext = GF_LFGWhoWhisperEditBox:GetText();
 										this:ClearFocus();
-										this:HighlightText(string.len(this:GetText())+1);
 									</OnEnterPressed>
 									<OnEscapePressed>
 										GF_SavedVariables.searchlfgwhispertext = GF_LFGWhoWhisperEditBox:GetText();
 										this:ClearFocus();
-										this:HighlightText(string.len(this:GetText())+1);
 									</OnEscapePressed>
 								</Scripts>
 							</EditBox>
@@ -2249,7 +2154,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						for i = 2, 20 do
 							getglobal("GF_NewItem"..i):SetPoint("TOP", "GF_NewItem"..(i-1), "BOTTOM", 0, 0);
 						end
-						GF_WorldAnnounceMessageTextLabel:SetPoint("BOTTOMLEFT", GF_GroupAutoCheckButtonTextLabel, "TOPRIGHT", 10, 7);
 					</OnLoad>
 				</Scripts>
 			</Frame>
@@ -2419,24 +2323,20 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									<OnEditFocusLost>
 										GF_BlackListItemSaveChanges()
 										GF_BlackListItemEditFrame:Hide()
-										this:HighlightText(string.len(this:GetText())+1);
 									</OnEditFocusLost>
 									<OnTabPressed>
 										GF_BlackListItemSaveChanges()
 										this:ClearFocus();
 										GF_BlackListItemEditFrame:Hide()
-										this:HighlightText(string.len(this:GetText())+1);
 									</OnTabPressed>
 									<OnEnterPressed>
 										GF_BlackListItemSaveChanges()
 										this:ClearFocus();
 										GF_BlackListItemEditFrame:Hide()
-										this:HighlightText(string.len(this:GetText())+1);
 									</OnEnterPressed>
 									<OnEscapePressed>
 										this:ClearFocus();
 										GF_BlackListItemEditFrame:Hide()
-										this:HighlightText(string.len(this:GetText())+1);
 									</OnEscapePressed>
 								</Scripts>
 							</EditBox>
@@ -2677,27 +2577,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_LogShowGuild" inherits="GF_CheckButtonTemplate_Label">
-								<Anchors>
-									<Anchor point="LEFT" relativeTo="GF_LogShowTradesTextLabel" relativePoint="RIGHT">
-										<Offset>
-											<AbsDimension x="0" y="0"/>
-										</Offset>
-									</Anchor>
-								</Anchors>
-								<Scripts>
-									<OnClick>
-										GF_SavedVariables.logshowguilds = this:GetChecked();
-										if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
-									</OnClick>
-									<OnLoad>
-										getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_GUILD);
-									</OnLoad>
-								</Scripts>
-							</CheckButton>
 							<CheckButton name="GF_LogShowLoot" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
-									<Anchor point="LEFT" relativeTo="GF_LogShowGuildTextLabel" relativePoint="RIGHT">
+									<Anchor point="LEFT" relativeTo="GF_LogShowTradesTextLabel" relativePoint="RIGHT">
 										<Offset>
 											<AbsDimension x="0" y="0"/>
 										</Offset>
@@ -2994,7 +2876,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_FrameShowFormattedChatCheckButton" inherits="GF_CheckButtonTemplate_Label">
+							<CheckButton name="GF_FrameShowOriginalChatCheckButton" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="TOPRIGHT">
 										<Offset>
@@ -3004,7 +2886,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										GF_SavedVariables.showformattedchat = this:GetChecked();
+										GF_SavedVariables.showoriginalchat = this:GetChecked();
 									</OnClick>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_ORIGINAL_CHAT);
@@ -3013,7 +2895,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							</CheckButton>
 							<CheckButton name="GF_FrameAlwaysShowGuildCheckButton" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="GF_FrameShowFormattedChatCheckButton">
+									<Anchor point="TOPLEFT" relativeTo="GF_FrameShowOriginalChatCheckButton">
 										<Offset>
 											<AbsDimension x="0" y="-30"/>
 										</Offset>
@@ -3442,7 +3324,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLoad>
 				</Scripts>
 			</Frame>
-			<Frame name="GF_UrlCopyFrame" inherits="GF_DialogFrameTemplate_UrlCopy" hidden="true"></Frame>
 		</Frames>
 		<Scripts>
 			<OnDragStart>
