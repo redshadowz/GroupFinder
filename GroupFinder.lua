@@ -1174,7 +1174,7 @@ function GF_ApplyFiltersToGroupList()
 		local entry = GF_MessageList[GF_RealmName][i];
 		if entry then
 			if entry.dlevel == 0 and GF_WhoTable[GF_RealmName][entry.op] then entry.dlevel = GF_WhoTable[GF_RealmName][entry.op][1] end
-			if (entry.t + GF_SavedVariables.grouplistingduration*60) > time() and not GF_BlackList[GF_RealmName][entry.op] and (not GF_WhoTable[GF_RealmName][entry.op] or GF_Classes[GF_WhoTable[GF_RealmName][entry.op][2]]) then
+			if (entry.t + GF_SavedVariables.grouplistingduration*60) > time() and not GF_BlackList[GF_RealmName][entry.op] and (not GF_WhoTable[GF_RealmName][entry.op] or GF_Classes[GF_WhoTable[GF_RealmName][entry.op][2]] ~= nil) then
 				if GF_EntryMatchesGroupFilterCriteria(entry) then
 					table.insert(GF_FilteredResultsList, entry);
 				end
