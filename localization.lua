@@ -499,7 +499,7 @@ GF_WORD_FIX = {
 ["warriors"] = "warrior",["warior"] = "warrior",["wariors"] = "warrior",["furywar"] = "warrior",["furywars"] = "warrior",["protwar"] = "warrior",["protwars"] = "warrior",["armswar"] = "warrior",["armswars"] = "warrior",
 
 ["restoshaman"] = "shaman",["enhanceshaman"] = "shaman",["enhancementshaman"] = "shaman",["elementalshaman"] = "shaman",
-["feraldruid"] = "druid",["kittydruid"] = "druid",["beardruid"] = "druid",["restodruid"] = "druid",["balancedruid"] = "druid",
+["feraldruid"] = "druid",["kittydruid"] = "druid",["beardruid"] = "druid",["restodruid"] = "druid",["balancedruid"] = "druid",["rdru"] = "druid",
 ["shadowpriest"] = "priest",["holypriest"] = "priest",["discpriest"] = "priest",["disciplinepriest"] = "priest",
 ["protpaladin"] = "paladin",["protpally"] = "paladin",["retpaladin"] = "paladin",["holypaladin"] = "paladin",["retributionpaladin"] = "paladin",["protectionpaladin"] = "paladin",
 ["assassinationrogue"] = "rogue",
@@ -593,7 +593,7 @@ GF_WORD_FIX = {
 ["solomance"] = "scholomance",["scolo"] = "scholomance",["schoolo"] = "scholomance",["scholor"] = "scholomance",["krastinovs"] = "krastinov",
 ["diremail"] = "diremaul",["mauls"] = "maul",["maule"] = "maul",["trib"] = "tribute",["shendralar"] = "dmw",["dmnt"] = "dmt",["eastdm"] = "dme",["northdm"] = "dmn",["westdm"] = "dmw",
 ["lvrs"] = "lbrs",["lvrs"] = "lbrs",["lbrd"] = "lbrs",["lbr"] = "lbrs",["lrbs"] = "lbrs",["lwbs"] = "lbrs",["lowerspire"] = "lowerblackrock",
-["ubers"] = "ubrs",["urbs"] = "ubrs",["ubs"] = "ubrs",["uber"] = "ubrs",["ubres"] = "ubrs",["ubbrs"] = "ubrs",["ubrd"] = "ubrs",["ubr"] = "ubrs",["ubrn"] = "ubrs",["ubts"] = "ubrs",
+["ubers"] = "ubrs",["urbs"] = "ubrs",["ubs"] = "ubrs",["uber"] = "ubrs",["ubres"] = "ubrs",["ubbrs"] = "ubrs",["ubrd"] = "ubrs",["ubr"] = "ubrs",["ubrn"] = "ubrs",["ubts"] = "ubrs",["umbrs"] = "ubrs",
 ["valthalaks"] = "valthalak",["upperspire"] = "upperblackrock",["drakisath"] = "drakkisath",["drakki"] = "drakkisath",["draki"] = "drakkisath",["drakk"] = "drakkisath",["drak"] = "drakkisath",
 
 ["repfarmstrat"] = "stratrepfarm",
@@ -647,7 +647,7 @@ GF_WORD_FIX = {
 ["theroyalrescue"] = "brd",["thechallenge"] = "brd",["theprincesssaved"] = "brd",["abindingcontract"] = "brd",["golemlord"] = "brd",["angerforge"] = "brd",["angerfod"] = "brd",
 ["winsor"] = "brd",["windwos"] = "brd",["lavarun"] = "brd",["brdarena"] = "brd",["brdarenas"] = "brd",["arenarun"] = "brd",["arenaspam"] = "brd",
 ["thefinaltablets"] = "lbrs",["bijousbelongings"] = "lbrs",["ayesteewhy"] = "lbrs",["putherdown"] = "lbrs",["kiblersexoticpets"] = "lbrs",["thepackmistress"] = "lbrs",["operativebijou"] = "lbrs",["thepackmistress"] = "lbrs",
-["maxwellsmission"] = "lbrs",["warlordscommand"] = "lbrs",["mothersmilk"] = "lbrs",["urokdoomhowl"] = "lbrs",
+["maxwellsmission"] = "lbrs",["warlordscommand"] = "lbrs",["mothersmilk"] = "lbrs",["urokdoomhowl"] = "lbrs",["morgrayhoof"] = "lbrs",
 ["generaldrakkisathsdemise"] = "ubrs",["forthehorde"] = "ubrs",["doomriggersclasp"] = "ubrs",["doomriggersclasp"] = "ubrs",["meaculpalordvalthalak"] = "ubrs",["oculusillusions"] = "ubrs",["theblackdragonchampion"] = "ubrs",["eggfreezing"] = "ubrs",
 ["thedarkstonetablet"] = "ubrs",["eggcollection"] = "ubrs",["sealofascension"] = "ubrs",["blackhandcommand"] = "ubrs",["thedemonforge"] = "ubrs",["eyeoftheemberseer"] = "ubrs",["bwlattunement"] = "ubrs",["attunementtobwl"] = "ubrs",["attunementforbwl"] = "ubrs",
 ["lethtendrissweb"] = "dmeast",["pusillin"] = "dme",["theelderazjtordin"] = "dme",["arcanerefreshment"] = "dme",["dreadsteedofxoroth"] = "dmw",["theinstigatorsenchantment"] = "dmw",["themadnesswithin"] = "dmwest",["treasureoftheshendralar"] = "dmw",

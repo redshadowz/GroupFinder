@@ -1951,6 +1951,7 @@ function GF_FindGroupsAndDisplayCustomChatMessages(event,arg1,arg2,arg9) -- Chat
 		return true;
 	else
 		local logType = GF_CheckForGroups(gsub(arg1,"[\\\"]", " "),arg2,event) or 4;
+		if logType == 5 or logType == 11 then GF_PlayerMessages[arg2][1] = GF_PlayerMessages[arg2][1] + 1 end -- To block multiple messages in series
 		GF_AddLogMessage(GF_CleanUpMessagesOfBadLinks(arg1),logType,true,arg2,arg8,arg9,event)
 		if (GF_SavedVariables.alwaysshowguild and (GF_Guildies[arg2] or GF_Friends[arg2] or GF_PlayersCurrentlyInGroup[arg2])) or GF_ChatCheckFilters(logType,arg1,event) then
 			if not GF_SavedVariables.showformattedchat or (event ~= "CHAT_MSG_CHANNEL") then
