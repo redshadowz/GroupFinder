@@ -1174,7 +1174,7 @@ function GF_ApplyFiltersToGroupList()
 		local entry = GF_MessageList[GF_RealmName][i];
 		if entry then
 			if entry.dlevel == 0 and GF_WhoTable[GF_RealmName][entry.op] then entry.dlevel = GF_WhoTable[GF_RealmName][entry.op][1] end
-			if (entry.t + GF_SavedVariables.grouplistingduration*60) > time() and not GF_BlackList[GF_RealmName][entry.op] then
+			if (entry.t + GF_SavedVariables.grouplistingduration*60) > time() and not GF_BlackList[GF_RealmName][entry.op] and (not GF_WhoTable[GF_RealmName][entry.op] or GF_Classes[GF_WhoTable[GF_RealmName][entry.op][2]]) then
 				if GF_EntryMatchesGroupFilterCriteria(entry) then
 					table.insert(GF_FilteredResultsList, entry);
 				end
@@ -2025,7 +2025,7 @@ function GF_GetTypes(arg1, showanyway)
 	elseif string.find(arg1, " lfg%a") then GF_MessageData.foundLFM = 3 local lfs,lfe = string.find(arg1, " lfg%a") arg1 = string.sub(arg1,1,lfs-1).." lfg "..string.sub(arg1,lfe)
 	elseif string.find(arg1, "%alfg ") then GF_MessageData.foundLFM = 3 local lfs,lfe = string.find(arg1, "%alfg ") arg1 = string.sub(arg1,1,lfs).." lfg "..string.sub(arg1,lfe+1)
 	elseif string.find(arg1, " lf[%s%d]+m ") then GF_MessageData.foundLFM = 4 local lfs,lfe = string.find(arg1, " lf[%s%d]+m ") arg1 = string.sub(arg1,1,lfs-1).." lfm "..string.sub(arg1,lfe+1) GF_MessageData.foundGuildExclusion = 3 GF_MessageData.foundTradesExclusion = 3
-	elseif string.find(arg1, " lf%a") then GF_MessageData.foundLFM = 2 local lfs,lfe = string.find(arg1, " lf%a") if not string.find(string.sub(arg1,lfe,lfe-1),"[gm]") then arg1 = string.sub(arg1,1,lfs-1).." lf "..string.sub(arg1,lfe) end
+	elseif string.find(arg1, " lf%a") then GF_MessageData.foundLFM = 2 local lfs,lfe = string.find(arg1, " lf%a") if not string.find(string.sub(arg1,lfe-1,lfe),"[gm]") then arg1 = string.sub(arg1,1,lfs-1).." lf "..string.sub(arg1,lfe) end
 	elseif string.find(arg1, " wtb%a") then local lfs,lfe = string.find(arg1, " wtb%a") arg1 = string.sub(arg1,1,lfs-1).." wtb "..string.sub(arg1,lfe)
 	elseif string.find(arg1, " wts%a") then local lfs,lfe = string.find(arg1, " wts%a") arg1 = string.sub(arg1,1,lfs-1).." wts "..string.sub(arg1,lfe)
 	elseif string.find(arg1, " wtt%a") then local lfs,lfe = string.find(arg1, " wtt%a") arg1 = string.sub(arg1,1,lfs-1).." wtt "..string.sub(arg1,lfe)
