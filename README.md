@@ -3,7 +3,7 @@ Group finder Addon for Vanilla Wow 1.12.1 based on the CallToArms addon(with Tur
 
 I hate chat spam, so I made this addon so I never have to see it again. I tried to make this addon as intuitive as possible, but it's probably pretty intimidating at first glance. Lots of checkboxes. Lots of edit boxes. Lots of dropdowns. I put as much as possible on the front page because the original CallToArms addon had too many pages to flip through and too many useless features.  
 
-PS: To people who might be interested in this addon. This isn't simply a group finder that searches world chat for groups. This is a massive chat filtering tool. It identifies four types of messages. Group messages. Guild messages. Trades messages. And Chat messages. And then allows you to show/hide them individually(with a sortable chatlog window). This essentially allows you to divide the World channel into four separate channels and see only what you want to see. Along with a group display frame to easily find/filter/search for groups.  
+PS: To people who might be interested in this addon. This isn't simply a group finder that searches world chat for groups. This is a massive chat filtering tool. It identifies four types of messages. Group messages. Guild messages. Trades messages. And Chat messages. And then allows you to show/hide them individually(with a sortable chatlog window). This essentially allows you to divide the World channel into four separate channels and see only what you want to see.
 
 PS: I recommend turning off "Show groups in Chat", "Show Trades", and "Show Guilds". Then turning on "Show groups in Minimap". Then go into the Log frame and uncheck "Group", "Filtered", "Loot", "Spam", "Blacklist", and "Level". So that you can go back and forth between chat and trades. If you're below level 60, turn on "Auto Filter" to only see groups near your level. The default keybinding is "I"(or Shift-G for the groups frame and Shift-L for the Logs frame).  
 
@@ -17,14 +17,14 @@ PS: I recommend turning off "Show groups in Chat", "Show Trades", and "Show Guil
 [Show New] - Whether to display 'New' group messages only(default: 3 minutes).  
 [Show Chat] - Whether to display non-group and non-trades messages in chat.  
 [Show Trades] - Whether to display trades in chat(wts/wtb/lfw/buying/selling/etc).  
-[Show Guilds] - Whether to display guild recruitment messages in chat(blocked messages are logged as "spam").  
 [Show Loots] - This will show/hide chat messages from item rolls, looting of money and grey items, selecting greed/need for uncommon items, and experience/honor/reputation gains.  
+[Show Guilds] - Whether to display guild recruitment messages in chat(blocked messages are logged as "spam").  
 Note: All blocked chat is recorded in the 'Log'.  
 
 >[Auto Filter] - Whether to only show groups near your level(default: 6 level difference).  
-[Play Sound] - Plays a sound when a group is found.  
 [Show Dungeons/Raids/Quests/Other/LFM/LFG] - To show/hide groups matching your criteria.  
 ["Keywords" editbox] - Filters your group list using this text. Separate by commas for multiple searches. The dropdown box will auto-populate a list of groups based on your level.  
+[Play Sound] - Plays a sound when a group is found.  
 [Auto /Who] - Whether to automatically '/who' groups/players from chat for their class/level information.  
 
 >[Join World Channel] - Keeps you in the World Channel.  
@@ -47,6 +47,6 @@ The 'Get Who' and 'Invite' Edit Box is for whispering people who match the selec
 4) Press the 'Invite' button to whisper someone on the 'Get Who' list. The number of players available is shown on the 'Get Who' button.  
 Note: Will not message the same person more than once every 15 minutes.
 
-
+![Image](https://github.com/user-attachments/assets/782da809-509d-4101-b75c-3e56afa2ebf5)  
 
 Note: Turtle WoW only allows a /who every ~30 seconds, and blocks you from whispering to more than ~15 different players within some arbitrary period of time.  
