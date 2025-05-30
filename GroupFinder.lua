@@ -723,7 +723,11 @@ function GF_CheckForAnnounce()
 		if GF_LFGDescriptionEditBox:GetText() == "" then GF_TurnOffAnnounce(GF_NOTHING_TO_ANNOUNCE) return end
 		if GF_AutoAnnounceTimer > GF_SavedVariables.announcetimer then
 			GF_AutoAnnounceTimer = 0;
-			SendChatMessage(GF_LFGDescriptionEditBox:GetText(), "CHANNEL", nil, GetChannelName(GF_CHANNEL_NAME));
+			if GF_Hardcore then
+				SendChatMessage(GF_LFGDescriptionEditBox:GetText(), "HARDCORE", nil, nil);
+			else 
+				SendChatMessage(GF_LFGDescriptionEditBox:GetText(), "CHANNEL", nil, GetChannelName(GF_CHANNEL_NAME));
+			end
 			DEFAULT_CHAT_FRAME:AddMessage(GF_SENT..GF_LFGDescriptionEditBox:GetText(), 1, 1, 0.5);
 			GF_AnnounceToLFGButton:SetText(GF_ANNOUNCE_LFG_BTN.."-"..GF_SavedVariables.announcetimer - GF_AutoAnnounceTimer);
 			GF_MinimapMessageFrameA1:AddMessage(GF_ANNOUNCED_LFG_EXT, 1.0, 1.0, 0.5, 1.0, UIERRORS_HOLD_TIME);
@@ -1049,7 +1053,7 @@ function GF_LoadSettings()
 	GF_PruneTheClassWhoTable()
 
 	if (GF_RealmName == "Nordanaar" or GF_RealmName == "Tel'Abim") then GF_AddTurtleWoWDungeonsRaids(); GF_WhoCooldownTime = 30; end
-	for i=1, 200 do if GetSpellName(i, BOOKTYPE_SPELL) == "Hardcore" then GF_Hardcore = true break end end
+	for i=1, 200 do if GetSpellName(i, BOOKTYPE_SPELL) == "Hardcore" then GF_Hardcore = true GF_WorldAnnounceMessageTextLabel:SetText(GF_HARDCORE_SEND_TEXT) break end end
 	if not GF_Hardcore then GF_SavedVariables.hardcore = nil GF_HardCoreCheckButton:SetChecked(false) end
 end
 function GF_JoinWorld(show)
