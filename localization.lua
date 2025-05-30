@@ -490,8 +490,8 @@ GF_WORD_FIX = {
 ["lootbox"] = "lockbox",["lootboxes"] = "lockbox",["boxes"] = "lockbox",["boxxed"] = "lockbox",["junkbox"] = "lockbox",["locked"] = "lock",["loxbox"] = "lockbox",["locklockbox"] = "lockbox",
 ["lockedchest"] = "lockbox",["familyjewels"] = "lockbox",["batteredchest"] = "lockbox",["batteredbox"] = "lockbox",["batteredlockbox"] = "lockbox",["nlock"] = "unlock",
 ["resistance"] = "resist",["resistances"] = "resist",["resi"] = "resist",["ressist"] = "resist",["lifestealing"] = "lifesteal",["crus"] = "crusader",["crusaders"] = "crusader",["firey"] = "fiery",
-["wttb"] = "wtb",["wtbx"] = "wtb",["wtts"] = "wts",["wtsx"] = "wts",["wtbb"] = "wtb",["wtss"] = "wts",["wttt"] = "wtt",["wttx"] = "wtt",["wtsh"] = "wts",["wtv"] = "wtb",["wrb"] = "wtb",["wfb"] = "wtb",["ltb"] = "wtb",["prices"] = "price",
-["sellin"] = "selling",["sellinf"] = "selling",["selll"] = "sell",["sellg"] = "selling",["sellers"] = "seller",["buyg"] = "buying",["services"] = "service",
+["wttb"] = "wtb",["wtbx"] = "wtb",["wtts"] = "wts",["wtsx"] = "wts",["wtbb"] = "wtb",["wtss"] = "wts",["wttt"] = "wtt",["wttx"] = "wtt",["wtsh"] = "wts",["wtv"] = "wtb",["wrb"] = "wtb",["wfb"] = "wtb",["ltb"] = "wtb",["wbt"] = "wtb",
+["sellin"] = "selling",["sellinf"] = "selling",["selll"] = "sell",["sellg"] = "selling",["sellers"] = "seller",["buyg"] = "buying",["services"] = "service",["prices"] = "price",
 ["working"] = "work",["tips"] = "tip",["tipp"] = "tip",["tipper"] = "tip",["tipps"] = "tip",["tippers"] = "tip",["crafting"] = "crafter",["crafted"] = "crafter",["auct"] = "ah",["auc"] = "ah",
 ["boosting"] = "boost",["booster"] = "boost",["boosts"] = "boost",["carrying"] = "carry",["fortunes"] = "fortune",["sercives"] = "service",["sercive"] = "service",["cd"] = "cooldown",["cds"] = "cooldown",["alchemisttable"] = "alchemistlab",
 ["needotbuy"] = "wtb",["needotsell"] = "wts",["needottrade"] = "wtt",
@@ -527,7 +527,7 @@ GF_WORD_FIX = {
 -- Guild recruitment related
 ["russia"] = "russian",["russkie"] = "russian",["ruskie"] = "russian",["ukraine"] = "ukrainian",["france"] = "french",["germany"] = "german",["spain"] = "spanish",["poland"] = "polish",["italy"] = "italian",["netherlands"] = "dutch",["philippines"] = "philippine",
 ["rekrutuje"] = "recruiting",["recrutar"] = "recruiting",["recrute"] = "recruiting",["recruting"] = "recruiting",["recuiting"] = "recruiting",
-["aguild"] = "guild",["guilds"] = "guild",["gildia"] = "guild",["gilde"] = "guild",["gilda"] = "guild",["guilde"] = "guild",["Gildiy"] = "guild",["gildiyu"] = "guild",["gildenmitglieder"] = "guild",["gildii"] = "guild",
+["aguild"] = "guild",["guilds"] = "guild",["gildia"] = "guild",["gilda"] = "guild",["guilde"] = "guild",["Gildiy"] = "guild",["gildiyu"] = "guild",["gildenmitglieder"] = "guild",["gildii"] = "guild",
 ["gildiya"] = "guild",["gildiyi"] = "guild",["gild"] = "guild",["guldia"] = "guild",["guilda"] = "guild",["guil"] = "guild",["gildosi"] = "guild",["guile"] = "guild",["giuld"] = "guild",["duild"] = "guild",
 ["progresowania"] = "progression",["progresar"] = "progression",["progreso"] = "progression",["progresshez"] = "progression",["prog"] = "progression",["progress"] = "progression",
 ["komunity"] = "community",["komunite"] = "community",["komunita"] = "community",["comunidad"] = "community",["comunidade"] = "community",["companheiros"] = "community",["kinship"] = "community",["compaeros"] = "community",["communities"] = "community",
@@ -1047,10 +1047,11 @@ GF_WORD_GUILD = {
 -- German
 ["deutsche"] = 1,["deutschsprachige"] = 1,["allianz"] = 1,["mitraiden"] = 1,["sucht"] = 1,["raidkader"] = 1,["motivierte"] = 1,["raidtage"] = 1,
 ["deutschsprachigen"] = 1,["joinwelt"] = 1,["werbeunterbrechung"] = 1,
-["yesttutruguild"] = 3,["sucheguild"] = 1,["suchenetteguild"] = 1,["uneguild"] = 1,
+["yesttutruguild"] = 3,["sucheguild"] = 1,["suchenetteguild"] = 1,["uneguild"] = 1,["uneguild"] = 1,
 ["suchtwiedermitspieler"] = 1,["suchtwieder"] = .5,["mitspieler"] = 1,["bistduzuverlssig"] = 1,["spaamzocken"] = 1,["dannkommzuuns"] = 1,["kommzuuns"] = 1,["wirfreuen"] = 1,["berjedeslevel"] = 1,["klasseoderrasse"] = 1,
-
+["gilde"] = 2,["levelgilde"] = 1,["suchedeute"] = 1,
 ["frdendeutschsprachigen"] = 1,
+
 ["compltersonroster"] = 2,["joueursmotivs"] = 1,["sbados"] = .5,
 -- Finnish
 ["finkilta"] = .5,["finnkilta"] = .5,["finjoukkue"] = .5,["finnjoukkue"] = .5,
@@ -1405,6 +1406,7 @@ GF_LFM_TWO_BEFORE = {
 ["invitefor"] = true,
 ["takeme"] = true,
 ["letsrun"] = true,
+["peoplefor"] = true,
 }
 GF_LFM_OTHER = {
 ["tributelfm"] = true,["stratlfm"] = true,["startlfm"] = true,["gylfm"] = true,["graveyardlfm"] = true,["gnomelfm"] = true,["armlfm"] = true,["armslfm"] = true,["templelfm"] = true,["rclfm"] = true,["schoollfm"] = true,
@@ -2134,7 +2136,7 @@ GF_WORD_TRADE = {
 
 -- Profession CD
 ["transmutehitemarcanebar"] = 1,["anyonewithmoonclothcooldown"] = 3,["anyonehavemoonclothcooldown"] = 3,
-["transmutehitem"] = 1,["transmutearcane"] = 1,["arcanetransmute"] = 1,["moonclothcooldown"] = 1,
+["yourtransmutecd"] = .5,["transmutecd"] = 1,["transmutehitem"] = 1,["transmutearcane"] = 1,["arcanetransmute"] = 1,["moonclothcooldown"] = 1,
 
 -- Gambling
 ["fortunefavorsthebold"] = 3,["youtoocanwin"] = 3,["comeandplaynow"] = 3,["highestpayoutgiventoday"] = 3,["winsomeeasygold"] = 3,["needtoberich"] = 1.5,["yourwishcometrue"] = 1,
