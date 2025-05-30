@@ -3,6 +3,7 @@
 GF_SavedVariables 							= {}
 GF_RealmName								= GetRealmName();
 local GF_MyName								= UnitName("player");
+local GF_Hardcore							= nil;
 local GF_WhoCooldownTime					= 10;
 local GF_NextAvailableWhoTime				= 0;
 local GF_UrgentWhoRequest					= {};
@@ -84,7 +85,7 @@ local ThingsToHide = { "GF_GroupsInChatCheckButton", "GF_GroupsNewOnlyCheckButto
 "GF_AnnounceToLFGButton", "GF_ResetLFGDescriptionButton", "GF_LogBottomButton", "GF_LogDownButton", "GF_LogUpButton", "GF_LogShowLoot",
 "GF_LogShowSpam", "GF_LogShowBlacklist", "GF_LogShowBelowLevel", "GF_MainFrameCloseButton", "GF_GroupsFrame_ResultsPrev", "GF_GroupsFrame_ResultsNext", "GF_LFGSizeDropdown", "GF_LFGLFMDropdown", "GF_LFGDungeonDropdown", "GF_LFGRaidDropdown",
 "GF_LFGRoleDropdown", "GF_GroupAutoCheckButton", "GF_LFGDescriptionEditBox", "GF_LFGWhisperButton", "GF_LFGWhoWhisperEditBox", "GF_FrameAnnounceTimerSlider", "GF_LFGWhoClassDropdown", "GF_LFGGetWhoButton",
-"GF_LogShowWhisperHistory", "GF_LogShowGroups", "GF_LogShowFiltered", "GF_LogShowChat", "GF_LogShowTrades", "GF_LogShowGuild",} -- "GF_HideMainFrameLeft", "GF_HideMainFrameRight",
+"GF_LogShowWhisperHistory", "GF_LogShowGroups", "GF_LogShowFiltered", "GF_LogShowChat", "GF_LogShowTrades", "GF_LogShowGuild", "GF_HardCoreCheckButton", } -- "GF_HideMainFrameLeft", "GF_HideMainFrameRight",
 local GF_DifficultyColors = { ["RED"] = "FF0000", ["ORANGE"] = "FF8040", ["YELLOW"] = "FFFF00", ["GREEN"] = "1eff00", ["GREY"] = "808080" }
 
 function GF_LoadVariables()
@@ -102,6 +103,7 @@ function GF_LoadVariables()
 		if not GF_SavedVariables.usewhoongroups then GF_SavedVariables.usewhoongroups = false end
 
 		if not GF_SavedVariables.autofilter then GF_SavedVariables.autofilter = false end
+		if not GF_SavedVariables.hardcore then GF_SavedVariables.hardcore = false end
 		if not GF_SavedVariables.playsounds then GF_SavedVariables.playsounds = false end
 		if not GF_SavedVariables.showdungeons then GF_SavedVariables.showdungeons = true end
 		if not GF_SavedVariables.showraids then GF_SavedVariables.showraids = true end
@@ -400,20 +402,20 @@ function GF_UpdateMainFrameWidth()
 	if GF_SavedVariables.mainframestatus ~= 0 then
 		if GF_SavedVariables.mainframewidth then
 			if GF_SavedVariables.mainframestatus == 2 then
-				for i=1, 20 do if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",330,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",330,0) end getglobal("GF_NewItem"..i):SetWidth(350) end
+				for i=1, 20 do if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",330,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",330,0) end getglobal("GF_NewItem"..i):SetWidth(350) getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("TOPLEFT",5,0) getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("BOTTOMRIGHT",getglobal("GF_NewItem"..i),"TOPRIGHT",-5,-16) end
 				GF_LogFrameInternalFrame:SetPoint("TOPLEFT",350,-32)
 			else
-				for i=1, 20 do if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",0,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",0,0) end getglobal("GF_NewItem"..i):SetWidth(350) end
+				for i=1, 20 do if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",0,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",0,0) end getglobal("GF_NewItem"..i):SetWidth(350) getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("TOPLEFT",5,0) getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("BOTTOMRIGHT",getglobal("GF_NewItem"..i),"TOPRIGHT",-5,-16) end
 				GF_LogFrameInternalFrame:SetPoint("TOPLEFT",29,-32)
 			end
 			GF_LogFrameInternalFrame:SetWidth(350)
 		else
-			for i=1, 20 do if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",0,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",0,0) end getglobal("GF_NewItem"..i):SetWidth(670) end
+			for i=1, 20 do if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",0,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",0,0) end getglobal("GF_NewItem"..i):SetWidth(670) getglobal("GF_NewItem"..i.."NameLabel"):ClearAllPoints() getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("TOPLEFT",5,0) getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("BOTTOMRIGHT",getglobal("GF_NewItem"..i),"TOPRIGHT",-80,-0) end
 			GF_LogFrameInternalFrame:SetPoint("TOPLEFT",29,-32)
 			GF_LogFrameInternalFrame:SetWidth(669)
 		end
 	else
-		for i=1, 20 do if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",0,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",0,0) end getglobal("GF_NewItem"..i):SetWidth(670) end
+		for i=1, 20 do if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",0,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",0,0) end getglobal("GF_NewItem"..i):SetWidth(670) getglobal("GF_NewItem"..i.."NameLabel"):ClearAllPoints() getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("TOPLEFT",5,0) getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("BOTTOMRIGHT",getglobal("GF_NewItem"..i),"TOPRIGHT",-80,-16) end
 		GF_LogFrameInternalFrame:SetPoint("TOPLEFT",29,-64)
 		GF_LogFrameInternalFrame:SetWidth(669)
 	end
@@ -436,7 +438,7 @@ function GF_UpdateMainFramePosition()
 end
 function GF_UpdateMainFrame()
 	if GF_SavedVariables.mainframestatus ~= 0 then
-		for i=1, 52 do
+		for i=1, 53 do
 			getglobal(ThingsToHide[i]):Hide()
 		end
 		GF_MainFrame:SetAlpha(0)
@@ -472,6 +474,7 @@ function GF_UpdateMainFrame()
 		for i=1, 52 do
 			getglobal(ThingsToHide[i]):Show()
 		end
+		if GF_Hardcore then GF_HardCoreCheckButton:Show() end
 		GF_MainFrame:SetAlpha(GF_SavedVariables.MainFrameTransparency)
 		GF_MainFrame:SetFrameStrata("MEDIUM")
 		GF_MainFrame:EnableMouse(true)
@@ -1014,14 +1017,14 @@ function GF_LoadSettings()
 	GF_SavedVariables.autofilter, GF_SavedVariables.showdungeons, GF_SavedVariables.showraids, GF_SavedVariables.showquests, GF_SavedVariables.showother, GF_SavedVariables.showlfm, GF_SavedVariables.showlfg,	GF_SavedVariables.logshowgroup,
 	GF_SavedVariables.logshowfiltered, GF_SavedVariables.logshowchat, GF_SavedVariables.logshowtrades, GF_SavedVariables.logshowguilds, GF_SavedVariables.logshowloot, GF_SavedVariables.logshowspam, GF_SavedVariables.logshowblacklist,
 	GF_SavedVariables.logshowbelowlevel,	GF_SavedVariables.joinworld, GF_SavedVariables.showformattedchat, GF_SavedVariables.usewhoongroups, GF_SavedVariables.systemfilter, GF_SavedVariables.showguilds, GF_SavedVariables.spamfilter,
-	GF_SavedVariables.autoblacklist,	GF_SavedVariables.playsounds, GF_SavedVariables.lfgauto, GF_SavedVariables.showwhisperlogs, GF_SavedVariables.mainframeheight, GF_SavedVariables.mainframewidth, GF_SavedVariables.alwaysshowguild}
+	GF_SavedVariables.autoblacklist,	GF_SavedVariables.playsounds, GF_SavedVariables.lfgauto, GF_SavedVariables.showwhisperlogs, GF_SavedVariables.mainframeheight, GF_SavedVariables.mainframewidth, GF_SavedVariables.alwaysshowguild, GF_SavedVariables.hardcore}
 	
 	local CheckButtonNames = { "GF_GroupsInChatCheckButton", "GF_GroupsInMinimapCheckButton", "GF_GroupsNewOnlyCheckButton", "GF_ShowChatCheckButton", "GF_ShowTradesCheckButton", "GF_ShowLootCheckButton", "GF_AutoFilterCheckButton",
 	"GF_GroupsFrameShowDungeonCheckButton", "GF_GroupsFrameShowRaidCheckButton", "GF_GroupsFrameShowQuestCheckButton", "GF_GroupsFrameShowOtherCheckButton", "GF_GroupsFrameShowLFMCheckButton", "GF_GroupsFrameShowLFGCheckButton",
 	"GF_LogShowGroups", "GF_LogShowFiltered", "GF_LogShowChat", "GF_LogShowTrades", "GF_LogShowGuild", "GF_LogShowLoot", "GF_LogShowSpam", "GF_LogShowBlacklist", "GF_LogShowBelowLevel", "GF_FrameJoinWorldCheckButton", 
 	"GF_FrameShowFormattedChatCheckButton","GF_FrameUseWhoOnGroupsCheckButton", "GF_FrameSystemFilterCheckButton", "GF_ShowGuildsCheckButton", "GF_FrameSpamFilterCheckButton", "GF_FrameAutoBlacklistCheckButton",
-	"GF_PlaySoundOnResultsCheckButton", "GF_GroupAutoCheckButton", "GF_LogShowWhisperHistory", "GF_HideMainFrameHeight", "GF_HideMainFrameWidth", "GF_FrameAlwaysShowGuildCheckButton", }
-	for i=1, 35 do getglobal(CheckButtonNames[i]):SetChecked(CheckButtonVariablesToSet[i]) end
+	"GF_PlaySoundOnResultsCheckButton", "GF_GroupAutoCheckButton", "GF_LogShowWhisperHistory", "GF_HideMainFrameHeight", "GF_HideMainFrameWidth", "GF_FrameAlwaysShowGuildCheckButton", "GF_HardCoreCheckButton", }
+	for i=1, 36 do getglobal(CheckButtonNames[i]):SetChecked(CheckButtonVariablesToSet[i]) end
 	
 	local TextToSet = { GF_SavedVariables.searchtext, GF_SavedVariables.searchlfgtext, GF_SavedVariables.searchlfgwhispertext }
 	local TextNames = { "GF_GroupsFrameDescriptionEditBox", "GF_LFGDescriptionEditBox", "GF_LFGWhoWhisperEditBox" }
@@ -1046,6 +1049,8 @@ function GF_LoadSettings()
 	GF_PruneTheClassWhoTable()
 
 	if (GF_RealmName == "Nordanaar" or GF_RealmName == "Tel'Abim") then GF_AddTurtleWoWDungeonsRaids(); GF_WhoCooldownTime = 30; end
+	for i=1, 200 do if GetSpellName(i, BOOKTYPE_SPELL) == "Hardcore" then GF_Hardcore = true break end end
+	if not GF_Hardcore then GF_SavedVariables.hardcore = nil GF_HardCoreCheckButton:SetChecked(false) end
 end
 function GF_JoinWorld(show)
 	if GF_SavedVariables.joinworld then
@@ -1156,7 +1161,7 @@ function GF_IsFriendGuildieUsingAddon()
 end
 
 function GF_EntryMatchesGroupFilterCriteria(entry) -- GroupsFrame functions
-	if GF_SavedVariables.searchtext == "" and not GF_SearchButtonHasValues() and ((GF_SavedVariables.showlfg and entry.lfg) or (GF_SavedVariables.showlfm and not entry.lfg)) 
+	if GF_SavedVariables.searchtext == "" and not GF_SearchButtonHasValues() and ((GF_SavedVariables.showlfg and entry.lfg) or (GF_SavedVariables.showlfm and not entry.lfg)) and (not GF_SavedVariables.hardcore or (GF_SavedVariables.hardcore and entry.hc))
 	and ((GF_SavedVariables.showdungeons and entry.type == "D") or (GF_SavedVariables.showraids and entry.type == "R") or (GF_SavedVariables.showquests and entry.type == "Q") or (GF_SavedVariables.showother and entry.type == "N"))
 	and (not GF_SavedVariables.autofilter or (entry.dlevel and entry.dlevel >= UnitLevel("player")-GF_SavedVariables.autofilterlevelvar and entry.dlevel <= UnitLevel("player")+GF_SavedVariables.autofilterlevelvar)) then
 		return true;
@@ -2066,6 +2071,7 @@ function GF_GetTypes(arg1, showanyway)
 				if GF_WORD_FIX[wordString] then
 					wordTable[i] = GF_WORD_FIX[wordString]
 					if j == 1 then table.remove(wordTable,i+1) elseif j == 2 then table.remove(wordTable,i+2) table.remove(wordTable,i+1) elseif j == 3 then table.remove(wordTable,i+3) table.remove(wordTable,i+2) table.remove(wordTable,i+1) end
+					if wordString ~= GF_WORD_FIX[wordString] then i = i - 1 end
 				end
 			end
 		end

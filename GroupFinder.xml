@@ -440,7 +440,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Texture>
 			</Layer>
 			<Layer level="OVERLAY">
-				<FontString inherits="GameFontNormal" name="$parentNameLabel" justifyH="LEFT" font="Fonts\ARIALN.TTF">
+				<FontString inherits="GameFontNormal" name="$parentNameLabel" justifyH="LEFT" font="Fonts\ARIALN.TTF" maxLines="1">
 					<Anchors>
 						<Anchor point="TOPLEFT">
 							<Offset>
@@ -483,7 +483,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					<Anchors>
 						<Anchor point="BOTTOMRIGHT">
 							<Offset>
-								<AbsDimension x="-50" y="0"/>
+								<AbsDimension x="-5" y="0"/>
 							</Offset>
 						</Anchor>
 					</Anchors>
@@ -920,6 +920,15 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Anchor>
 					</Anchors>
 				</FontString>
+				<FontString inherits="GameFontNormalSmall" name="GF_ShowChatTypesLabel" nonspacewrap="false" maxLines="1" text="GF_SHOW">
+					<Anchors>
+						<Anchor point="TOPRIGHT">
+							<Offset>
+								<AbsDimension x="-260" y="-8"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
 				<FontString inherits="GF_TitleFont" name="GF_ShowGroupsInLabel" nonspacewrap="false" justifyH="LEFT"  text="GF_SHOW_GROUPS_IN">
 					<Anchors>
 						<Anchor point="TOPLEFT">
@@ -1001,9 +1010,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</CheckButton>
 			<CheckButton name="GF_ShowChatCheckButton" inherits="GF_CheckButtonTemplate_Label">
 				<Anchors>
-					<Anchor point="TOPRIGHT">
+						<Anchor point="LEFT" relativeto="GF_ShowChatTypesLabel" relativePoint="RIGHT">
 						<Offset>
-							<AbsDimension x="-270" y="-2"/>
+							<AbsDimension x="0" y="0"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -1052,9 +1061,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</CheckButton>
 			<CheckButton name="GF_ShowGuildsCheckButton" inherits="GF_CheckButtonTemplate_Label">
 				<Anchors>
-					<Anchor point="TOP" relativeTo="GF_ShowLootCheckButton" relativePoint="BOTTOM">
+					<Anchor point="LEFT" relativeTo="GF_ShowLootCheckButtonTextLabel" relativePoint="RIGHT">
 						<Offset>
-							<AbsDimension x="15" y="4"/>
+							<AbsDimension x="0" y="0"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -1067,9 +1076,26 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="GF_FrameUseWhoOnGroupsCheckButton" inherits="GF_CheckButtonTemplate_Label">
+			<CheckButton name="GF_PlaySoundOnResultsCheckButton" inherits="GF_CheckButtonTemplate_Label">
 				<Anchors>
 					<Anchor point="TOP" relativeTo="GF_ShowGuildsCheckButton" relativePoint="BOTTOM">
+						<Offset>
+							<AbsDimension x="0" y="3"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						GF_SavedVariables.playsounds = this:GetChecked();
+					</OnClick>
+					<OnLoad>
+						getglobal(this:GetName().."TextLabel"):SetText(GF_PLAY_SOUND);
+					</OnLoad>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="GF_FrameUseWhoOnGroupsCheckButton" inherits="GF_CheckButtonTemplate_Label">
+				<Anchors>
+					<Anchor point="TOP" relativeTo="GF_PlaySoundOnResultsCheckButton" relativePoint="BOTTOM">
 						<Offset>
 							<AbsDimension x="0" y="6"/>
 						</Offset>
@@ -1088,7 +1114,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			<Button name="GF_SearchListDropdown" topLevel="true" virtual="true">
 				<Size x="24" y="24"/>
 				<Anchors>
-					<Anchor point="RIGHT" relativeTo="GF_ShowGuildsCheckButton" relativePoint="LEFT">
+					<Anchor point="RIGHT" relativeTo="GF_PlaySoundOnResultsCheckButton" relativePoint="LEFT">
 						<Offset>
 							<AbsDimension x="0" y="-8"/>
 						</Offset>
@@ -1216,9 +1242,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="GF_PlaySoundOnResultsCheckButton" inherits="GF_CheckButtonTemplate_Label">
+			<CheckButton name="GF_HardCoreCheckButton" inherits="GF_CheckButtonTemplate_Label" hidden="true">
 				<Anchors>
-					<Anchor point="TOPLEFT" relativeTo="GF_AutoFilterCheckButton" relativePoint="BOTTOMLEFT">
+					<Anchor point="TOP" relativeTo="GF_AutoFilterCheckButton" relativePoint="BOTTOM">
 						<Offset>
 							<AbsDimension x="0" y="6"/>
 						</Offset>
@@ -1226,10 +1252,11 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						GF_SavedVariables.playsounds = this:GetChecked();
+						GF_SavedVariables.hardcore = this:GetChecked();
+						GF_ApplyFiltersToGroupList();
 					</OnClick>
 					<OnLoad>
-						getglobal(this:GetName().."TextLabel"):SetText(GF_PLAY_SOUND);
+						getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_HARDCORE);
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
