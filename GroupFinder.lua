@@ -2155,47 +2155,44 @@ function GF_GetTypes(arg1, showanyway)
 	end
 end
 function GF_CheckForSpam(arg1,arg2,foundInGroup)
-	if not GF_PlayersCurrentlyInGroup[arg2] and not GF_Friends[arg2] and not GF_Guildies[arg2] then
-		if (GF_WhoTable[GF_RealmName][arg2] and tonumber(GF_WhoTable[GF_RealmName][arg2][1]) < GF_SavedVariables.blockmessagebelowlevel) and GF_WhoTable[GF_RealmName][arg2][4] + 86400 > time() then return 9; end  -- Block lowlevel
-		if GF_SavedVariables.spamfilter then
-			if GF_PlayerMessages[arg2] and GF_PlayerMessages[arg2][1] and GF_PlayerMessages[arg2][1] > GetTime() then return 7 end -- Returns spam for the duration of the spam filter
-			if GF_IncomingMessagePrune + 3600 < time() then -- 1 hour
-				for name,_ in GF_PlayerMessages do
-					if GF_PlayerMessages[name][1] < GetTime() then
-						GF_PlayerMessages[name] = nil;
-					end
-				end
-				GF_IncomingMessagePrune = time();
-			end
-			if not GF_PlayerMessages[arg2] then
-				GF_PlayerMessages[arg2] = { [1] = GetTime(), [2] = string.sub(arg1,math.random(math.ceil(string.len(arg1)/4)),math.ceil(string.len(arg1)/4*3 + math.random(math.ceil(string.len(arg1)/4)))), [3] = "ZZZzzz123654" }
-			else
-				if (GF_PlayerMessages[arg2][1] + GF_SavedVariables.spamfilterduration*60 > GetTime()) and
-				((string.len(arg1) > 40 and (string.find(arg1,GF_PlayerMessages[arg2][2],1,true) or string.find(arg1,GF_PlayerMessages[arg2][3],1,true)))
-				or (string.find(arg1,GF_PlayerMessages[arg2][2],1,true) and string.find(arg1,GF_PlayerMessages[arg2][3],1,true))) then	-- Found Spammer
-					if GF_SavedVariables.autoblacklist and not GF_BlackList[GF_RealmName][arg2] and string.len(arg1) > 120 then
-						if GF_WhoTable[GF_RealmName][arg2] and GF_WhoTable[GF_RealmName][arg2][4] + 86400 > time() then -- Data must be less than a day old to autoblacklist or block lowlevel
-							if tonumber(GF_WhoTable[GF_RealmName][arg2][1]) <= GF_SavedVariables.autoblacklistminlevel then																			-- Blacklist if below level filter
-								table.insert(GF_BlackList[GF_RealmName], 1, { arg2, "("..GF_WhoTable[GF_RealmName][arg2][1]..") "..arg1 })
-								GF_BlackList[GF_RealmName][arg2] = true;
-								GF_UpdateBlackListItems()
-								return 8;
-							end
-						else
-							if GF_SavedVariables.usewhoongroups and not GF_WhoQueue[name] then GF_WhoTable[GF_RealmName][arg2] = nil; GF_AddNameToWhoQueue(arg2,true); end
-						end
-					end
-					GF_PlayerMessages[arg2][1] = GF_PlayerMessages[arg2][1] + GF_SavedVariables.spamfilterduration*60
-					return 7
-				else
-					GF_PlayerMessages[arg2][1] = GetTime()
-				end
-				table.insert(GF_PlayerMessages[arg2],2,string.sub(arg1,math.random(math.ceil(string.len(arg1)/4)),math.ceil(string.len(arg1)/4*3 + math.random(math.ceil(string.len(arg1)/4)))))
-				table.remove(GF_PlayerMessages[arg2],4)
-				if string.find(arg1,string.sub(arg1,1,20),21, true) then return 7 end																													-- Repeating text in the same message
-			end
-		end
-	end
+        if GF_IncomingMessagePrune + 3600 < time() then -- 1 hour
+                for name,_ in GF_PlayerMessages do
+                        if GF_PlayerMessages[name][1] + GF_SavedVariables.spamfilterduration*60 < GetTime() then
+                                GF_PlayerMessages[name] = nil;
+                        end
+                end
+                GF_IncomingMessagePrune = time();
+        end
+        if not GF_PlayerMessages[arg2] then GF_PlayerMessages[arg2] = { [1] = GetTime(), [2] = string.sub(arg1,math.random(math.ceil(string.len(arg1)/4)),math.ceil(string.len(arg1)/4*3 + math.random(math.ceil(string.len(arg1)/4)))), [3] = "ZZZzzz123654" } end
+        if not GF_PlayersCurrentlyInGroup[arg2] and not GF_Friends[arg2] and not GF_Guildies[arg2] then
+                if (GF_WhoTable[GF_RealmName][arg2] and tonumber(GF_WhoTable[GF_RealmName][arg2][1]) < GF_SavedVariables.blockmessagebelowlevel) and GF_WhoTable[GF_RealmName][arg2][4] + 86400 > time() then return 9; end  -- Block lowlevel
+                if GF_SavedVariables.spamfilter then
+                        if GF_PlayerMessages[arg2] and GF_PlayerMessages[arg2][1] and GF_PlayerMessages[arg2][1] > GetTime() then return 7 end -- Returns spam for the duration of the spam filter
+                        if (GF_PlayerMessages[arg2][1] + 120 > GetTime()) and
+                        ((string.len(arg1) > 40 and (string.find(arg1,GF_PlayerMessages[arg2][2],1,true) or string.find(arg1,GF_PlayerMessages[arg2][3],1,true)))
+                        or (string.find(arg1,GF_PlayerMessages[arg2][2],1,true) and string.find(arg1,GF_PlayerMessages[arg2][3],1,true))) then        -- Found Spammer
+                                if GF_SavedVariables.autoblacklist and not GF_BlackList[GF_RealmName][arg2] and string.len(arg1) > 120 then
+                                        if GF_WhoTable[GF_RealmName][arg2] and GF_WhoTable[GF_RealmName][arg2][4] + 86400 > time() then -- Data must be less than a day old to autoblacklist or block lowlevel
+                                                if tonumber(GF_WhoTable[GF_RealmName][arg2][1]) <= GF_SavedVariables.autoblacklistminlevel then                                                                                                                                                        -- Blacklist if below level filter
+                                                        table.insert(GF_BlackList[GF_RealmName], 1, { arg2, "("..GF_WhoTable[GF_RealmName][arg2][1]..") "..arg1 })
+                                                        GF_BlackList[GF_RealmName][arg2] = true;
+                                                        GF_UpdateBlackListItems()
+                                                        return 8;
+                                                end
+                                        else
+                                                if GF_SavedVariables.usewhoongroups and not GF_WhoQueue[name] then GF_WhoTable[GF_RealmName][arg2] = nil; GF_AddNameToWhoQueue(arg2,true); end
+                                        end
+                                end
+                                GF_PlayerMessages[arg2][1] = GF_PlayerMessages[arg2][1] + GF_SavedVariables.spamfilterduration*60
+                                return 7
+                        else
+                                GF_PlayerMessages[arg2][1] = GetTime()
+                        end
+                        table.insert(GF_PlayerMessages[arg2],2,string.sub(arg1,math.random(math.ceil(string.len(arg1)/4)),math.ceil(string.len(arg1)/4*3 + math.random(math.ceil(string.len(arg1)/4)))))
+                        table.remove(GF_PlayerMessages[arg2],4)
+                        if string.find(arg1,string.sub(arg1,1,20),21, true) then return 7 end                                                                                                                                                                                                                                        -- Repeating text in the same message
+                end
+        end
 end
 
 function GF_GetGroupInformation(arg1,arg2) -- Searches messages for Groups and similiar functions
