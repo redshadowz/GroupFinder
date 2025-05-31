@@ -1052,9 +1052,11 @@ function GF_LoadSettings()
 	GF_DisplayLog()
 	GF_PruneTheClassWhoTable()
 
-	if (GF_RealmName == "Nordanaar" or GF_RealmName == "Tel'Abim") then GF_AddTurtleWoWDungeonsRaids(); GF_WhoCooldownTime = 30; end
-	for i=1, 200 do if GetSpellName(i, BOOKTYPE_SPELL) == "Hardcore" then GF_Hardcore = true GF_WorldAnnounceMessageTextLabel:SetText(GF_HARDCORE_SEND_TEXT) break end end
-	if not GF_Hardcore then GF_SavedVariables.hardcore = nil GF_HardCoreCheckButton:SetChecked(false) end
+	if (GF_RealmName == "Nordanaar" or GF_RealmName == "Tel'Abim") then
+		for i=1, 200 do if GetSpellName(i, BOOKTYPE_SPELL) == "Hardcore" then GF_Hardcore = true GF_WorldAnnounceMessageTextLabel:SetText(GF_HARDCORE_SEND_TEXT) break end end
+		if not GF_Hardcore then GF_SavedVariables.hardcore = nil GF_HardCoreCheckButton:SetChecked(false) end
+		GF_AddTurtleWoWDungeonsRaids(); GF_WhoCooldownTime = 30;
+	end
 end
 function GF_JoinWorld(show)
 	if GF_SavedVariables.joinworld then
@@ -2209,7 +2211,7 @@ function GF_GetGroupInformation(arg1,arg2) -- Searches messages for Groups and s
 		entry.type = "D" entry.flags = {} for i=1, getn(GF_MessageData.foundDFlags) do table.insert(entry.flags, GF_GROUP_IDS[GF_MessageData.foundDFlags[i]]) end
 	elseif GF_MessageData.foundQuest then entry.type = "Q" GF_MessageData.foundDungeon = nil entry.flags = {""}
 	else entry.type = "N" if GF_MessageData.foundPvP then if GF_MessageData.foundPvP == 0 then GF_MessageData.foundPvP = 60 end	entry.flags = {} for i=1, getn(GF_MessageData.foundPFlags) do table.insert(entry.flags, GF_GROUP_IDS[GF_MessageData.foundPFlags[i]]) end else entry.flags = {""} end end
-	
+	if (entry.type == "D" or entry.type == "R") and not entry.flags[1] then return end
 	entry.dlevel = math.floor(GF_MessageData.foundRaid or GF_MessageData.foundDungeon or GF_MessageData.foundQuest or GF_MessageData.foundPvP or GF_MessageData.foundClass or 0);
 	if entry.dlevel == 0 and not GF_WhoTable[GF_RealmName][entry.op] then
 		local number = 0;
