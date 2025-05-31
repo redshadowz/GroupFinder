@@ -2124,7 +2124,8 @@ function GF_GetTypes(arg1, showanyway)
 			end
 		end
 	end
-	if GF_MessageData.foundLFM < 2 and string.find(arg1, "%d+\=%d+") then GF_MessageData.foundLFM = 2 elseif string.find(GF_MessageData.lfmlfgName,GF_MessageData.groupName) then GF_MessageData.foundLFM = 0 print(GF_MessageData.lfmlfgName) print(GF_MessageData.groupName) end
+	if GF_MessageData.foundLFM < 2 and string.find(arg1, "%d+\=%d+") then GF_MessageData.foundLFM = 2
+	elseif not GF_MessageData.foundQuest and not GF_MessageData.foundDungeon and not GF_MessageData.foundRaid and string.find(GF_MessageData.lfmlfgName,GF_MessageData.groupName) then GF_MessageData.foundLFM = 0 end
 	if GF_MessageData.foundGuild < 100 and string.find(arg1, "<[a-zA-Z0-9%&%-/ ]+>") then GF_MessageData.foundGuild = GF_MessageData.foundGuild + 2; GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1; end
 	while GF_MessageData.foundGuild > 100 do GF_MessageData.foundGuild = GF_MessageData.foundGuild - 100 end
 	GF_MessageData.foundGuild = GF_MessageData.foundGuild - GF_MessageData.foundGuildExclusion
