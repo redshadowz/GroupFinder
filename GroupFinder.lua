@@ -1167,12 +1167,8 @@ function GF_IsFriendGuildieUsingAddon()
 end
 
 function GF_EntryMatchesGroupFilterCriteria(entry) -- GroupsFrame functions
-	if GF_SavedVariables.searchtext == "" and not GF_SearchButtonHasValues() and ((GF_SavedVariables.showlfg and entry.lfg) or (GF_SavedVariables.showlfm and not entry.lfg)) and (not GF_SavedVariables.hardcore or (GF_SavedVariables.hardcore and entry.hc))
-	and ((GF_SavedVariables.showdungeons and entry.type == "D") or (GF_SavedVariables.showraids and entry.type == "R") or (GF_SavedVariables.showquests and entry.type == "Q") or (GF_SavedVariables.showother and entry.type == "N"))
-	and (not GF_SavedVariables.autofilter or (entry.dlevel and entry.dlevel >= UnitLevel("player")-GF_SavedVariables.autofilterlevelvar and entry.dlevel <= UnitLevel("player")+GF_SavedVariables.autofilterlevelvar)) then
-		return true;
-	end
-	if (GF_SavedVariables.searchtext ~= "" or GF_SearchButtonHasValues()) and GF_SearchMessageForTextString(string.lower(entry.message).." ",string.lower(GF_SavedVariables.searchtext)..",",entry) then
+	if ((GF_SavedVariables.searchtext == "" and not GF_SearchButtonHasValues() and (not GF_SavedVariables.autofilter or (entry.dlevel and entry.dlevel >= UnitLevel("player")-GF_SavedVariables.autofilterlevelvar and entry.dlevel <= UnitLevel("player")+GF_SavedVariables.autofilterlevelvar))) or ((GF_SavedVariables.searchtext ~= "" or GF_SearchButtonHasValues()) and GF_SearchMessageForTextString(string.lower(entry.message).." ",string.lower(GF_SavedVariables.searchtext)..",",entry))) and ((GF_SavedVariables.showlfg and entry.lfg) or (GF_SavedVariables.showlfm and not entry.lfg)) and (not GF_SavedVariables.hardcore or (GF_SavedVariables.hardcore and entry.hc))
+	and ((GF_SavedVariables.showdungeons and entry.type == "D") or (GF_SavedVariables.showraids and entry.type == "R") or (GF_SavedVariables.showquests and entry.type == "Q") or (GF_SavedVariables.showother and entry.type == "N")) then
 		return true;
 	end
 end
@@ -1185,7 +1181,7 @@ function GF_ApplyFiltersToGroupList()
 	for i=1, getn(GF_MessageList[GF_RealmName]) do
 		local entry = GF_MessageList[GF_RealmName][i];
 		if entry then
-			if entry.dlevel == 0 and GF_WhoTable[GF_RealmName][entry.op] then entry.dlevel = GF_WhoTable[GF_RealmName][entry.op][1] end
+			if entry.dlevel == 0 then if GF_WhoTable[GF_RealmName][entry.op] then entry.dlevel = GF_WhoTable[GF_RealmName][entry.op][1] elseif entry.flags[1] == "SM" then  entry.dlevel = 35 end end
 			if (entry.t + GF_SavedVariables.grouplistingduration*60) > time() and not GF_BlackList[GF_RealmName][entry.op] and (not GF_WhoTable[GF_RealmName][entry.op] or (GF_WhoTable[GF_RealmName][entry.op][1] ~= nil and GF_Classes[GF_WhoTable[GF_RealmName][entry.op][2]] ~= nil and GF_WhoTable[GF_RealmName][entry.op][3] ~= nil)) then
 				if GF_EntryMatchesGroupFilterCriteria(entry) then
 					table.insert(GF_FilteredResultsList, entry);
@@ -2006,7 +2002,7 @@ function GF_CheckForGroups(arg1,arg2,event,showanyway)
 -- "Say" messages will always be displayed unless flagged as spam.
 -- "Yell" and "Channel" messages will only display if allowed.
 	if GF_BlackList[GF_RealmName][arg2] and not GF_PlayersCurrentlyInGroup[arg2] and not GF_Friends[arg2] and not GF_Guildies[arg2] then return 8 end
-	GF_GetTypes(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(string.lower(gsub(gsub(gsub(" "..arg1.." ", "|c%x+|+(%w+)[%d:]+|+h", " %1 "), "|+h|+r", " "),"([a-z])([A-Z])","%1 %2")),".gg/%w+", ""),"%s%s+", " "),"['']", "")," any?%s?1[%p%s]"," anyone ")," some%s?1[%p%s]"," anyone "),"any one","anyone"),"g2g","gtg"),"kk+","kk"),"ss+","ss"),showanyway)
+	GF_GetTypes(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(string.lower(gsub(gsub(gsub(" "..arg1.." ", "|c%x+|+(%w+)[%d:]+|+h", " %1 "), "|+h|+r", " "),"([a-z])([A-Z])","%1 %2")),".gg/%w+", ""),"%s%s+", " "),"['']", "")," any?%s?1[%p%s]"," anyone ")," some%s?1[%p%s]"," anyone "),"any one","anyone"),"g2g","gtg"),"kk+","kk"),"ss+","ss"),"%s(%a)%s(%a)%s","%1%2"),showanyway)
 	if event == "CHAT_MSG_HARDCORE" then GF_MessageData.foundHC = true end
 	if GF_MessageData.foundGuild >= 3 then return GF_CheckForSpam(arg1,arg2) or 11
 	elseif GF_MessageData.foundTrades >= 3 then return GF_CheckForSpam(arg1,arg2) or 5
@@ -2028,7 +2024,7 @@ function GF_CheckForGroups(arg1,arg2,event,showanyway)
 end
 function GF_GetTypes(arg1, showanyway)
 	if showanyway == true then print(arg1) end
-	GF_MessageData = { foundIgnore = nil,foundGuild = 0,foundGuildExclusion = 0,foundLFM = 0,foundLFG = nil,foundClass = nil,foundQuest = nil,foundDungeon = nil,foundRaid = nil,foundTrades = 0,foundTradesExclusion = 0,foundPvP = nil,foundDFlags = {},foundPFlags = {},foundHC = nil,foundNotHC = nil }
+	GF_MessageData = { foundIgnore = nil,foundGuild = 0,foundGuildExclusion = 0,foundLFM = 0,foundLFG = nil,foundClass = nil,foundQuest = nil,foundDungeon = nil,foundRaid = nil,foundTrades = 0,foundTradesExclusion = 0,foundPvP = nil,foundDFlags = {},foundPFlags = {},foundHC = nil,foundNotHC = nil, lfmlfgName = "zzz", groupName = "AAA" }
 	local wordTable = {}
 	local wordString;
 
@@ -2092,9 +2088,9 @@ function GF_GetTypes(arg1, showanyway)
 					if GF_MessageData.foundGuild < 100 then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_WORD_GUILD[wordString] 
 					elseif GF_MessageData.foundGuild > 100 and GF_WORD_GUILD[wordString] < 100 then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_WORD_GUILD[wordString] end
 				elseif GF_GUILD_WORD_EXCLUSION[wordString] then GF_MessageData.foundGuildExclusion = GF_MessageData.foundGuildExclusion + GF_GUILD_WORD_EXCLUSION[wordString]
-				elseif GF_WORD_LFM[wordString] then if GF_WORD_LFM[wordString] > GF_MessageData.foundLFM then GF_MessageData.foundLFM = GF_WORD_LFM[wordString] end
+				elseif GF_WORD_LFM[wordString] then if GF_WORD_LFM[wordString] > GF_MessageData.foundLFM then GF_MessageData.foundLFM = GF_WORD_LFM[wordString] GF_MessageData.lfmlfgName = wordString end
 				elseif GF_WORD_LFG[wordString] then GF_MessageData.foundLFG = true
-				elseif GF_WORD_CLASSES[wordString] then GF_MessageData.foundClass = GF_WORD_CLASSES[wordString]
+				elseif GF_WORD_CLASSES[wordString] then GF_MessageData.foundClass = GF_WORD_CLASSES[wordString] GF_MessageData.groupName = wordString
 				elseif GF_WORD_QUEST[wordString] then
 					if not GF_MessageData.foundQuest or GF_WORD_QUEST[wordString] > GF_MessageData.foundQuest then GF_MessageData.foundQuest = GF_WORD_QUEST[wordString] end
 					GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + .3; GF_MessageData.foundGuildExclusion = GF_MessageData.foundGuildExclusion + .1;
@@ -2128,7 +2124,7 @@ function GF_GetTypes(arg1, showanyway)
 			end
 		end
 	end
-	if GF_MessageData.foundLFM < 2 and string.find(arg1, "%d+\=%d+") then GF_MessageData.foundLFM = 2 end
+	if GF_MessageData.foundLFM < 2 and string.find(arg1, "%d+\=%d+") then GF_MessageData.foundLFM = 2 elseif string.find(GF_MessageData.lfmlfgName,GF_MessageData.groupName) then GF_MessageData.foundLFM = 0 print(GF_MessageData.lfmlfgName) print(GF_MessageData.groupName) end
 	if GF_MessageData.foundGuild < 100 and string.find(arg1, "<[a-zA-Z0-9%&%-/ ]+>") then GF_MessageData.foundGuild = GF_MessageData.foundGuild + 2; GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1; end
 	while GF_MessageData.foundGuild > 100 do GF_MessageData.foundGuild = GF_MessageData.foundGuild - 100 end
 	GF_MessageData.foundGuild = GF_MessageData.foundGuild - GF_MessageData.foundGuildExclusion
@@ -2211,7 +2207,7 @@ function GF_GetGroupInformation(arg1,arg2) -- Searches messages for Groups and s
 		entry.type = "D" entry.flags = {} for i=1, getn(GF_MessageData.foundDFlags) do table.insert(entry.flags, GF_GROUP_IDS[GF_MessageData.foundDFlags[i]]) end
 	elseif GF_MessageData.foundQuest then entry.type = "Q" GF_MessageData.foundDungeon = nil entry.flags = {""}
 	else entry.type = "N" if GF_MessageData.foundPvP then if GF_MessageData.foundPvP == 0 then GF_MessageData.foundPvP = 60 end	entry.flags = {} for i=1, getn(GF_MessageData.foundPFlags) do table.insert(entry.flags, GF_GROUP_IDS[GF_MessageData.foundPFlags[i]]) end else entry.flags = {""} end end
-	if (entry.type == "D" or entry.type == "R") and not entry.flags[1] then return end
+	if not entry.flags[1] then return end
 	entry.dlevel = math.floor(GF_MessageData.foundRaid or GF_MessageData.foundDungeon or GF_MessageData.foundQuest or GF_MessageData.foundPvP or GF_MessageData.foundClass or 0);
 	if entry.dlevel == 0 and not GF_WhoTable[GF_RealmName][entry.op] then
 		local number = 0;
