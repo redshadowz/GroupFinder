@@ -1290,7 +1290,7 @@ GF_GUILD_WORD_EXCLUSION = {
 }
 
 GF_WORD_LFM = {
-["lfm"] = 3,["lf"] = 2,["lft"] = 2,["lfr"] = 2,["wtj"] = 2,["lookingformore"] = 2,
+["lfm"] = 3,["lf"] = 2,["lft"] = 2,["lfr"] = 2,["wtj"] = 2,["lookingformore"] = 2,["weneedmore"] = 2,
 
 -- Roles/Classes
 ["lfmore"] = 3,["lfall"] = 3,["lfmembers"] = 3,["lfstealth"] = 2,
