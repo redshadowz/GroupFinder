@@ -2045,27 +2045,9 @@ function GF_GetTypes(arg1, showanyway)
 	elseif string.find(arg1, "%adps ") then local lfs,lfe = string.find(arg1, "%adps ") arg1 = string.sub(arg1,1,lfs).." dps "..string.sub(arg1,lfe+1)
 	elseif string.find(arg1, "\] %+") then GF_MessageData.foundLFM = 2 end
 	if string.find(arg1, "%d+p") then GF_MessageData.foundLFM = 2 end -- get rid fo "p" in "10p heal" messages from chinese
-	for word in string.gfind(arg1, " (%w%d+)") do
-		if GF_WORD_RAID[word] then
-			GF_MessageData.foundRaid = GF_WORD_RAID[word]
-			table.insert(GF_MessageData.foundDFlags, word)
-		end
-	end
-	for word in string.gfind(arg1, "(%a+)") do
-		if not GF_WORD_SKIP[word] then table.insert(wordTable, word) end
-	end
-	for i=1, getn(wordTable) do
-		if GF_LFM_OTHER[wordTable[i]] then GF_MessageData.foundLFM = 3
-		elseif GF_LFG_OTHER[wordTable[i]] then GF_MessageData.foundLFG = true
-		elseif GF_WORD_HC[wordTable[i]] then GF_MessageData.foundHC = true
-		elseif GF_WORD_NOT_HC[wordTable[i]] then GF_MessageData.foundNotHC = true end
-		if wordTable[i+1] then
-			if GF_LFM_OTHER[wordTable[i]..wordTable[i+1]] then GF_MessageData.foundLFM = 3
-			elseif GF_LFG_OTHER[wordTable[i]..wordTable[i+1]] then GF_MessageData.foundLFG = true
-			elseif GF_WORD_HC[wordTable[i]..wordTable[i+1]] then GF_MessageData.foundHC = true
-			elseif GF_WORD_NOT_HC[wordTable[i]..wordTable[i+1]] then GF_MessageData.foundNotHC = true end
-		end
-	end
+
+	for word in string.gfind(arg1, " (%w%d+)") do if GF_WORD_RAID[word] then table.insert(GF_MessageData.foundDFlags, GF_WORD_RAID[word]) end end
+	for word in string.gfind(arg1, "(%a+)") do if not GF_WORD_SKIP[word] then table.insert(wordTable, word) end	end
 	for j=0,3 do
 		for i=1, getn(wordTable) do
 			if wordTable[i+j] then
@@ -2083,6 +2065,8 @@ function GF_GetTypes(arg1, showanyway)
 			if wordTable[i+j] then
 				if j == 0 then wordString = wordTable[i] elseif j == 1 then wordString = wordTable[i]..wordTable[i+1] elseif j == 2 then wordString = wordTable[i]..wordTable[i+1]..wordTable[i+2] else wordString = wordTable[i]..wordTable[i+1]..wordTable[i+2]..wordTable[i+3] end
 				if GF_WORD_IGNORE[wordString] then GF_MessageData.foundIgnore = true if showanyway == true then print(wordString.." ignore") end
+				elseif GF_WORD_HC[wordString] then GF_MessageData.foundHC = true
+				elseif GF_WORD_NOT_HC[wordString] then GF_MessageData.foundNotHC = true
 				elseif GF_WORD_GUILD[wordString] then
 					if showanyway == true then print(wordString.." guild "..GF_WORD_GUILD[wordString]) end
 					if GF_MessageData.foundGuild < 100 then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_WORD_GUILD[wordString] 
@@ -2162,8 +2146,9 @@ function GF_CheckForSpam(arg1,arg2,foundInGroup)
                 end
                 GF_IncomingMessagePrune = time();
         end
-        if not GF_PlayerMessages[arg2] then GF_PlayerMessages[arg2] = { [1] = GetTime(), [2] = string.sub(arg1,math.random(math.ceil(string.len(arg1)/4)),math.ceil(string.len(arg1)/4*3 + math.random(math.ceil(string.len(arg1)/4)))), [3] = "ZZZzzz123654" } end
-        if not GF_PlayersCurrentlyInGroup[arg2] and not GF_Friends[arg2] and not GF_Guildies[arg2] then
+        if not GF_PlayerMessages[arg2] then
+			GF_PlayerMessages[arg2] = { [1] = GetTime(), [2] = string.sub(arg1,math.random(math.ceil(string.len(arg1)/4)),math.ceil(string.len(arg1)/4*3 + math.random(math.ceil(string.len(arg1)/4)))), [3] = "ZZZzzz123654" }
+        elseif not GF_PlayersCurrentlyInGroup[arg2] and not GF_Friends[arg2] and not GF_Guildies[arg2] then
                 if (GF_WhoTable[GF_RealmName][arg2] and tonumber(GF_WhoTable[GF_RealmName][arg2][1]) < GF_SavedVariables.blockmessagebelowlevel) and GF_WhoTable[GF_RealmName][arg2][4] + 86400 > time() then return 9; end  -- Block lowlevel
                 if GF_SavedVariables.spamfilter then
                         if GF_PlayerMessages[arg2] and GF_PlayerMessages[arg2][1] and GF_PlayerMessages[arg2][1] > GetTime() then return 7 end -- Returns spam for the duration of the spam filter
