@@ -2044,7 +2044,8 @@ function GF_GetTypes(arg1, showanyway)
 	elseif string.find(arg1, "%atank ") then local lfs,lfe = string.find(arg1, "%atank ") arg1 = string.sub(arg1,1,lfs).." tank "..string.sub(arg1,lfe+1)
 	elseif string.find(arg1, "%adps ") then local lfs,lfe = string.find(arg1, "%adps ") arg1 = string.sub(arg1,1,lfs).." dps "..string.sub(arg1,lfe+1)
 	elseif string.find(arg1, "\][0-9%s]+%+") then GF_MessageData.foundLFM = 2
-	elseif string.find(arg1, "\][0-9%s]+g") then GF_MessageData.foundTrades = .5 end
+	elseif string.find(arg1, "\][0-9%s]+g") then GF_MessageData.foundTrades = .5
+	elseif string.find(arg1, "\][0-9%s]+s") then GF_MessageData.foundTrades = .5 end
 
 	if string.find(arg1, "%d+p") then GF_MessageData.foundLFM = 2 end -- get rid fo "p" in "10p heal" messages from chinese
 
