@@ -2002,7 +2002,7 @@ function GF_CheckForGroups(arg1,arg2,event,showanyway)
 -- "Say" messages will always be displayed unless flagged as spam.
 -- "Yell" and "Channel" messages will only display if allowed.
 	if GF_BlackList[GF_RealmName][arg2] and not GF_PlayersCurrentlyInGroup[arg2] and not GF_Friends[arg2] and not GF_Guildies[arg2] then return 8 end
-	GF_GetTypes(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(string.lower(gsub(gsub(gsub(" "..arg1.." ", "|c%x+|+(%w+)[%d:]+|+h", " %1 "), "|+h|+r", " "),"([a-z])([A-Z])","%1 %2")),".gg/%w+", ""),"%s%s+", " "),"['']", "")," any?%s?1[%p%s]"," anyone ")," some%s?1[%p%s]"," anyone "),"any one","anyone"),"g2g","gtg"),"kk+","kk"),"ss+","ss"),"%s(%a)%s(%a)%s","%1%2"),showanyway)
+	GF_GetTypes(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(string.lower(gsub(gsub(gsub(" "..arg1.." ", "|c%x+|+(%w+)[%d:]+|+h", " %1 "), "|+h|+r", " "),"([a-z])([A-Z])","%1 %2")),".gg/%w+", ""),"(%a%a+)"," %1 "),"%s(%a)%s(%a)%s","%1%2"),"%s%s+", " "),"['']", "")," any?%s?1[%p%s]"," anyone ")," some%s?1[%p%s]"," anyone "),"any one","anyone"),"g2g","gtg"),"kk+","kk"),"ss+","ss"),showanyway)
 	if event == "CHAT_MSG_HARDCORE" then GF_MessageData.foundHC = true end
 	if GF_MessageData.foundGuild >= 3 then return GF_CheckForSpam(arg1,arg2) or 11
 	elseif GF_MessageData.foundTrades >= 3 then return GF_CheckForSpam(arg1,arg2) or 5
@@ -2043,7 +2043,9 @@ function GF_GetTypes(arg1, showanyway)
 	elseif string.find(arg1, "%aheal ") then local lfs,lfe = string.find(arg1, "%aheal ") arg1 = string.sub(arg1,1,lfs).." heal "..string.sub(arg1,lfe+1)
 	elseif string.find(arg1, "%atank ") then local lfs,lfe = string.find(arg1, "%atank ") arg1 = string.sub(arg1,1,lfs).." tank "..string.sub(arg1,lfe+1)
 	elseif string.find(arg1, "%adps ") then local lfs,lfe = string.find(arg1, "%adps ") arg1 = string.sub(arg1,1,lfs).." dps "..string.sub(arg1,lfe+1)
-	elseif string.find(arg1, "\] %+") then GF_MessageData.foundLFM = 2 end
+	elseif string.find(arg1, "\][0-9%s]+%+") then GF_MessageData.foundLFM = 2
+	elseif string.find(arg1, "\][0-9%s]+g") then GF_MessageData.foundTrades = .5 end
+
 	if string.find(arg1, "%d+p") then GF_MessageData.foundLFM = 2 end -- get rid fo "p" in "10p heal" messages from chinese
 
 	for word in string.gfind(arg1, " (%w%d+)") do if GF_WORD_RAID[word] then table.insert(GF_MessageData.foundDFlags, GF_WORD_RAID[word]) end end
@@ -2071,7 +2073,7 @@ function GF_GetTypes(arg1, showanyway)
 					if showanyway == true then print(wordString.." guild "..GF_WORD_GUILD[wordString]) end
 					if GF_MessageData.foundGuild < 100 then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_WORD_GUILD[wordString] 
 					elseif GF_MessageData.foundGuild > 100 and GF_WORD_GUILD[wordString] < 100 then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_WORD_GUILD[wordString] end
-				elseif GF_GUILD_WORD_EXCLUSION[wordString] then GF_MessageData.foundGuildExclusion = GF_MessageData.foundGuildExclusion + GF_GUILD_WORD_EXCLUSION[wordString]
+				elseif GF_GUILD_WORD_EXCLUSION[wordString] then GF_MessageData.foundGuildExclusion = GF_MessageData.foundGuildExclusion + GF_GUILD_WORD_EXCLUSION[wordString] if showanyway == true then print(wordString.." guildex") end
 				elseif GF_WORD_LFM[wordString] then if GF_WORD_LFM[wordString] > GF_MessageData.foundLFM then GF_MessageData.foundLFM = GF_WORD_LFM[wordString] GF_MessageData.lfmlfgName = wordString end
 				elseif GF_WORD_LFG[wordString] then GF_MessageData.foundLFG = true
 				elseif GF_WORD_CLASSES[wordString] then GF_MessageData.foundClass = GF_WORD_CLASSES[wordString] GF_MessageData.groupName = wordString
@@ -2097,7 +2099,7 @@ function GF_GetTypes(arg1, showanyway)
 					if showanyway == true then print(wordString.." trade "..GF_WORD_TRADE[wordString]) end
 					if GF_MessageData.foundTrades < 100 then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_WORD_TRADE[wordString]
 					elseif GF_MessageData.foundTrades > 100 and GF_WORD_TRADE[wordString] < 100 then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_WORD_TRADE[wordString] end
-				elseif GF_TRADE_WORD_EXCLUSION[wordString] then GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + GF_TRADE_WORD_EXCLUSION[wordString] end
+				elseif GF_TRADE_WORD_EXCLUSION[wordString] then GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + GF_TRADE_WORD_EXCLUSION[wordString] if showanyway == true then print(wordString.." tradesex") end end
 
 				if GF_MessageData.foundLFM == 0 and (GF_WORD_QUEST[wordString] or GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString]) then
 					for words,_ in GF_LFM_ONE_AFTER do if wordTable[i+j+1] and wordString..wordTable[i+j+1] == wordString..words then GF_MessageData.foundLFM = 2 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5; end end
