@@ -1273,16 +1273,46 @@ function GF_UpdateResults()
 	end
 end
 function GF_ListItem_OnMouseUp(id)
-	if (arg1 == "RightButton") then
-		local name = GF_FilteredResultsList[GF_ResultsListOffset + id].op;
+	local name = GF_FilteredResultsList[GF_ResultsListOffset + id].op;
+	if IsShiftKeyDown() and arg1 == "LeftButton" and not ChatFrameEditBox:IsVisible() then
+		for i=1, getn(GF_UrgentWhoRequest) do
+			if GF_UrgentWhoRequest[i] == name then table.remove(GF_UrgentWhoRequest, i) break end
+		end
+		if GF_NextAvailableWhoTime + 1 > time() then 
+			DEFAULT_CHAT_FRAME:AddMessage(GF_SENDING_WHO_FOR..name.." - "..math.ceil(GF_NextAvailableWhoTime - time() + getn(GF_UrgentWhoRequest) * 30)..GF_SECONDS, 1, 1, 0.5);
+		else
+			DEFAULT_CHAT_FRAME:AddMessage(GF_SENDING_WHO_FOR..name, 1, 1, 0.5);
+		end
+		table.insert(GF_UrgentWhoRequest,name);
+		GF_UrgentWhoRequest[name] = time();
+		return;
+	elseif IsControlKeyDown() and arg1 == "LeftButton" then
+		for i=1, GetNumRaidMembers() do
+			if UnitName("raid"..i) == name then
+				TargetUnit("raid"..i);
+				return;
+			end
+		end
+		for i=1, GetNumPartyMembers() do
+			if UnitName("party"..i) == name then
+				TargetUnit("party"..i);
+				return;
+			end
+		end
+		TargetByName(name);
+		return;
+	elseif IsAltKeyDown() and arg1 == "RightButton" then
+		InviteByName(name);
+		return;
+	elseif (arg1 == "RightButton") then
 		HideDropDownMenu(1);
 		if name ~= GF_MyName then
 			FriendsDropDown.initialize = FriendsFrameDropDown_Initialize;
 			FriendsDropDown.displayMode = "MENU";
 			FriendsDropDown.name = name;
 			ToggleDropDownMenu(1, nil, FriendsDropDown, "cursor");
+			return;
 		end
-		return;
 	end
 end
 function GF_ListItemAuxLeft_ShowTooltip(frame, id)
@@ -2028,28 +2058,28 @@ function GF_GetTypes(arg1, showanyway)
 	local wordTable = {}
 	local wordString;
 
-	if string.find(arg1, " lfm%a") then GF_MessageData.foundLFM = 3 local lfs,lfe = string.find(arg1, " lfm%a") arg1 = string.sub(arg1,1,lfs-1).." lfm "..string.sub(arg1,lfe)
-	elseif string.find(arg1, "%alfm ") then GF_MessageData.foundLFM = 3 local lfs,lfe = string.find(arg1, "%alfm ") arg1 = string.sub(arg1,1,lfs).." lfm "..string.sub(arg1,lfe+1)
-	elseif string.find(arg1, " lfg%a") then GF_MessageData.foundLFM = 3 local lfs,lfe = string.find(arg1, " lfg%a") arg1 = string.sub(arg1,1,lfs-1).." lfg "..string.sub(arg1,lfe)
-	elseif string.find(arg1, "%alfg ") then GF_MessageData.foundLFM = 3 local lfs,lfe = string.find(arg1, "%alfg ") arg1 = string.sub(arg1,1,lfs).." lfg "..string.sub(arg1,lfe+1)
+	if string.find(arg1, " lfm[%a%s]") then GF_MessageData.foundLFM = 3 local lfs,lfe = string.find(arg1, " lfm[%a%s]") arg1 = string.sub(arg1,1,lfs-1).." lfm "..string.sub(arg1,lfe)
+	elseif string.find(arg1, "[%a%s]lfm ") then GF_MessageData.foundLFM = 3 local lfs,lfe = string.find(arg1, "[%a%s]lfm ") arg1 = string.sub(arg1,1,lfs).." lfm "..string.sub(arg1,lfe+1)
+	elseif string.find(arg1, " lfg[%a%s]") then GF_MessageData.foundLFM = 3 local lfs,lfe = string.find(arg1, " lfg[%a%s]") arg1 = string.sub(arg1,1,lfs-1).." lfg "..string.sub(arg1,lfe)
+	elseif string.find(arg1, "[%a%s]lfg ") then GF_MessageData.foundLFM = 3 local lfs,lfe = string.find(arg1, "[%a%s]lfg ") arg1 = string.sub(arg1,1,lfs).." lfg "..string.sub(arg1,lfe+1)
 	elseif string.find(arg1, " lf[%s%d]+m ") then GF_MessageData.foundLFM = 4 local lfs,lfe = string.find(arg1, " lf[%s%d]+m ") arg1 = string.sub(arg1,1,lfs-1).." lfm "..string.sub(arg1,lfe+1) GF_MessageData.foundGuildExclusion = 3 GF_MessageData.foundTradesExclusion = 3
-	elseif string.find(arg1, " lf%a") then GF_MessageData.foundLFM = 2 local lfs,lfe = string.find(arg1, " lf%a") if not string.find(string.sub(arg1,lfe-1,lfe),"[gm]") then arg1 = string.sub(arg1,1,lfs-1).." lf "..string.sub(arg1,lfe) end
-	elseif string.find(arg1, " wtb%a") then local lfs,lfe = string.find(arg1, " wtb%a") arg1 = string.sub(arg1,1,lfs-1).." wtb "..string.sub(arg1,lfe)
-	elseif string.find(arg1, " wts%a") then local lfs,lfe = string.find(arg1, " wts%a") arg1 = string.sub(arg1,1,lfs-1).." wts "..string.sub(arg1,lfe)
-	elseif string.find(arg1, " wtt%a") then local lfs,lfe = string.find(arg1, " wtt%a") arg1 = string.sub(arg1,1,lfs-1).." wtt "..string.sub(arg1,lfe)
-	elseif string.find(arg1, " heal%a") then local lfs,lfe = string.find(arg1, " heal%a") if string.sub(arg1, lfs, lfe+2) == "healer" then arg1 = string.sub(arg1,1,lfs-1).." healer "..string.sub(arg1,lfe+2) else arg1 = string.sub(arg1,1,lfs-1).." heal "..string.sub(arg1,lfe) end
-	elseif string.find(arg1, " tank%a") then local lfs,lfe = string.find(arg1, " tank%a") if string.sub(arg1, lfs, lfe+1) == "tanks" then arg1 = string.sub(arg1,1,lfs-1).." tanks "..string.sub(arg1,lfe+1) else arg1 = string.sub(arg1,1,lfs-1).." heal "..string.sub(arg1,lfe) end
-	elseif string.find(arg1, " dps%a") then local lfs,lfe = string.find(arg1, " dps%a") arg1 = string.sub(arg1,1,lfs-1).." dps "..string.sub(arg1,lfe)
-	elseif string.find(arg1, "%aheal ") then local lfs,lfe = string.find(arg1, "%aheal ") arg1 = string.sub(arg1,1,lfs).." heal "..string.sub(arg1,lfe+1)
-	elseif string.find(arg1, "%atank ") then local lfs,lfe = string.find(arg1, "%atank ") arg1 = string.sub(arg1,1,lfs).." tank "..string.sub(arg1,lfe+1)
-	elseif string.find(arg1, "%adps ") then local lfs,lfe = string.find(arg1, "%adps ") arg1 = string.sub(arg1,1,lfs).." dps "..string.sub(arg1,lfe+1)
+	elseif string.find(arg1, " lf[%a%s]") then GF_MessageData.foundLFM = 2 local lfs,lfe = string.find(arg1, " lf[%a%s]") if not string.find(string.sub(arg1,lfe-1,lfe),"[gm]") then arg1 = string.sub(arg1,1,lfs-1).." lf "..string.sub(arg1,lfe) end
+	elseif string.find(arg1, " wtb[%a%s]") then local lfs,lfe = string.find(arg1, " wtb[%a%s]") arg1 = string.sub(arg1,1,lfs-1).." wtb "..string.sub(arg1,lfe)
+	elseif string.find(arg1, " wts[%a%s]") then local lfs,lfe = string.find(arg1, " wts[%a%s]") arg1 = string.sub(arg1,1,lfs-1).." wts "..string.sub(arg1,lfe)
+	elseif string.find(arg1, " wtt[%a%s]") then local lfs,lfe = string.find(arg1, " wtt[%a%s]") arg1 = string.sub(arg1,1,lfs-1).." wtt "..string.sub(arg1,lfe)
+	elseif string.find(arg1, " heal[%a%s]") then local lfs,lfe = string.find(arg1, " heal[%a%s]") if string.sub(arg1, lfs, lfe+2) == "healer" then arg1 = string.sub(arg1,1,lfs-1).." healer "..string.sub(arg1,lfe+2) else arg1 = string.sub(arg1,1,lfs-1).." heal "..string.sub(arg1,lfe) end
+	elseif string.find(arg1, " tank[%a%s]") then local lfs,lfe = string.find(arg1, " tank[%a%s]") if string.sub(arg1, lfs, lfe+1) == "tanks" then arg1 = string.sub(arg1,1,lfs-1).." tanks "..string.sub(arg1,lfe+1) else arg1 = string.sub(arg1,1,lfs-1).." heal "..string.sub(arg1,lfe) end
+	elseif string.find(arg1, " dps[%a%s]") then local lfs,lfe = string.find(arg1, " dps[%a%s]") arg1 = string.sub(arg1,1,lfs-1).." dps "..string.sub(arg1,lfe)
+	elseif string.find(arg1, "[%a%s]heal ") then local lfs,lfe = string.find(arg1, "[%a%s]heal ") arg1 = string.sub(arg1,1,lfs).." heal "..string.sub(arg1,lfe+1)
+	elseif string.find(arg1, "[%a%s]tank ") then local lfs,lfe = string.find(arg1, "[%a%s]tank ") arg1 = string.sub(arg1,1,lfs).." tank "..string.sub(arg1,lfe+1)
+	elseif string.find(arg1, "[%a%s]dps ") then local lfs,lfe = string.find(arg1, "[%a%s]dps ") arg1 = string.sub(arg1,1,lfs).." dps "..string.sub(arg1,lfe+1)
 	elseif string.find(arg1, "\][0-9%s]+%+") then GF_MessageData.foundLFM = 2
 	elseif string.find(arg1, "\][0-9%s]+g") then GF_MessageData.foundTrades = .5
 	elseif string.find(arg1, "\][0-9%s]+s") then GF_MessageData.foundTrades = .5 end
 
 	if string.find(arg1, "%d+p") then GF_MessageData.foundLFM = 2 end -- get rid fo "p" in "10p heal" messages from chinese
 
-	for word in string.gfind(arg1, " (%w%d+)") do if GF_WORD_RAID[word] then table.insert(GF_MessageData.foundDFlags, GF_WORD_RAID[word]) end end
+	for word in string.gfind(arg1, " (%w%d+)") do if GF_WORD_NUMBER[word] then table.insert(wordTable, GF_WORD_NUMBER[word]) end end
 	for word in string.gfind(arg1, "(%a+)") do if not GF_WORD_SKIP[word] then table.insert(wordTable, word) end	end
 	for j=0,3 do
 		for i=1, getn(wordTable) do
@@ -2067,15 +2097,15 @@ function GF_GetTypes(arg1, showanyway)
 		for i=1, getn(wordTable) do
 			if wordTable[i+j] then
 				if j == 0 then wordString = wordTable[i] elseif j == 1 then wordString = wordTable[i]..wordTable[i+1] elseif j == 2 then wordString = wordTable[i]..wordTable[i+1]..wordTable[i+2] else wordString = wordTable[i]..wordTable[i+1]..wordTable[i+2]..wordTable[i+3] end
-				if GF_WORD_IGNORE[wordString] then GF_MessageData.foundIgnore = true if showanyway == true then print(wordString.." ignore") end
-				elseif GF_WORD_HC[wordString] then GF_MessageData.foundHC = true
+				if GF_WORD_IGNORE[wordString] then GF_MessageData.foundIgnore = true if showanyway == true then print(wordString.." ignore") end end
+				if GF_WORD_HC[wordString] then GF_MessageData.foundHC = true
 				elseif GF_WORD_NOT_HC[wordString] then GF_MessageData.foundNotHC = true
 				elseif GF_WORD_GUILD[wordString] then
 					if showanyway == true then print(wordString.." guild "..GF_WORD_GUILD[wordString]) end
 					if GF_MessageData.foundGuild < 100 then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_WORD_GUILD[wordString] 
 					elseif GF_MessageData.foundGuild > 100 and GF_WORD_GUILD[wordString] < 100 then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_WORD_GUILD[wordString] end
-				elseif GF_GUILD_WORD_EXCLUSION[wordString] then GF_MessageData.foundGuildExclusion = GF_MessageData.foundGuildExclusion + GF_GUILD_WORD_EXCLUSION[wordString] if showanyway == true then print(wordString.." guildex") end
-				elseif GF_WORD_LFM[wordString] then if GF_WORD_LFM[wordString] > GF_MessageData.foundLFM then GF_MessageData.foundLFM = GF_WORD_LFM[wordString] GF_MessageData.lfmlfgName = wordString end
+				elseif GF_GUILD_WORD_EXCLUSION[wordString] then GF_MessageData.foundGuildExclusion = GF_MessageData.foundGuildExclusion + GF_GUILD_WORD_EXCLUSION[wordString] if showanyway == true then print(wordString.." guildex") end end
+				if GF_WORD_LFM[wordString] then if GF_WORD_LFM[wordString] > GF_MessageData.foundLFM then GF_MessageData.foundLFM = GF_WORD_LFM[wordString] GF_MessageData.lfmlfgName = wordString end
 				elseif GF_WORD_LFG[wordString] then GF_MessageData.foundLFG = true
 				elseif GF_WORD_CLASSES[wordString] then GF_MessageData.foundClass = GF_WORD_CLASSES[wordString] GF_MessageData.groupName = wordString
 				elseif GF_WORD_QUEST[wordString] then
@@ -2152,7 +2182,7 @@ function GF_CheckForSpam(arg1,arg2,foundInGroup)
         if not GF_PlayerMessages[arg2] then
 			GF_PlayerMessages[arg2] = { [1] = GetTime(), [2] = string.sub(arg1,math.random(math.ceil(string.len(arg1)/4)),math.ceil(string.len(arg1)/4*3 + math.random(math.ceil(string.len(arg1)/4)))), [3] = "ZZZzzz123654" }
         elseif not GF_PlayersCurrentlyInGroup[arg2] and not GF_Friends[arg2] and not GF_Guildies[arg2] then
-                if (GF_WhoTable[GF_RealmName][arg2] and tonumber(GF_WhoTable[GF_RealmName][arg2][1]) < GF_SavedVariables.blockmessagebelowlevel) and GF_WhoTable[GF_RealmName][arg2][4] + 86400 > time() then return 9; end  -- Block lowlevel
+                if (GF_WhoTable[GF_RealmName][arg2] and GF_WhoTable[GF_RealmName][arg2][1] < GF_SavedVariables.blockmessagebelowlevel) and GF_WhoTable[GF_RealmName][arg2][4] + 86400 > time() then return 9; end  -- Block lowlevel
                 if GF_SavedVariables.spamfilter then
                         if GF_PlayerMessages[arg2] and GF_PlayerMessages[arg2][1] and GF_PlayerMessages[arg2][1] > GetTime() then return 7 end -- Returns spam for the duration of the spam filter
                         if (GF_PlayerMessages[arg2][1] + 120 > GetTime()) and
@@ -2160,7 +2190,7 @@ function GF_CheckForSpam(arg1,arg2,foundInGroup)
                         or (string.find(arg1,GF_PlayerMessages[arg2][2],1,true) and string.find(arg1,GF_PlayerMessages[arg2][3],1,true))) then        -- Found Spammer
                                 if GF_SavedVariables.autoblacklist and not GF_BlackList[GF_RealmName][arg2] and string.len(arg1) > 120 then
                                         if GF_WhoTable[GF_RealmName][arg2] and GF_WhoTable[GF_RealmName][arg2][4] + 86400 > time() then -- Data must be less than a day old to autoblacklist or block lowlevel
-                                                if tonumber(GF_WhoTable[GF_RealmName][arg2][1]) <= GF_SavedVariables.autoblacklistminlevel then                                                                                                                                                        -- Blacklist if below level filter
+                                                if GF_WhoTable[GF_RealmName][arg2][1] <= GF_SavedVariables.autoblacklistminlevel then                                                                                                                                                        -- Blacklist if below level filter
                                                         table.insert(GF_BlackList[GF_RealmName], 1, { arg2, "("..GF_WhoTable[GF_RealmName][arg2][1]..") "..arg1 })
                                                         GF_BlackList[GF_RealmName][arg2] = true;
                                                         GF_UpdateBlackListItems()
@@ -2172,9 +2202,8 @@ function GF_CheckForSpam(arg1,arg2,foundInGroup)
                                 end
                                 GF_PlayerMessages[arg2][1] = GF_PlayerMessages[arg2][1] + GF_SavedVariables.spamfilterduration*60
                                 return 7
-                        else
-                                GF_PlayerMessages[arg2][1] = GetTime()
                         end
+                        GF_PlayerMessages[arg2][1] = GetTime()
                         table.insert(GF_PlayerMessages[arg2],2,string.sub(arg1,math.random(math.ceil(string.len(arg1)/4)),math.ceil(string.len(arg1)/4*3 + math.random(math.ceil(string.len(arg1)/4)))))
                         table.remove(GF_PlayerMessages[arg2],4)
                         if string.find(arg1,string.sub(arg1,1,20),21, true) then return 7 end                                                                                                                                                                                                                                        -- Repeating text in the same message
