@@ -185,7 +185,6 @@ function GF_LoadVariables()
 	if type(GF_SavedVariables.searchbuttonstext) ~= "table" then GF_SavedVariables.searchbuttonstext = {} end
 
 	if type(GF_SavedVariables.searchbuttonstext) ~= "table" then GF_SavedVariables.searchbuttonstext = {} end
-	for i=1, getn(GF_MessageList[GF_RealmName]) do if GF_MessageList[GF_RealmName][i].flags and type(GF_MessageList[GF_RealmName][i].flags) ~= "table" then GF_MessageList[GF_RealmName] = {} end end
 	if GF_WhoTable[GF_RealmName]["LOADED"][4] + 86400 < time() then -- Prune the WhoTable once per day
 		GF_WhoTable[GF_RealmName]["LOADED"] = { UnitLevel("player"), GF_Classes[UnitClass("player")], "", time() }
 		GF_PruneTheWhoTable()
@@ -209,7 +208,6 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 	this:RegisterEvent("GUILD_ROSTER_UPDATE");
 	this:RegisterEvent("FRIENDLIST_UPDATE");
 	this:RegisterEvent("PARTY_INVITE_REQUEST");
-	
 	
 	local old_ChatFrame_OnEvent = ChatFrame_OnEvent;
 	function ChatFrame_OnEvent(event) -- arg1(message), arg2(sender), arg4("Channel#." "(City/Trade)" "channelName"), arg5, (nameOfPlayerWhoLooted), arg7(zoneChannel#), arg8(channel#), arg9("City/Trade" "channelName")
@@ -308,6 +306,8 @@ function GF_SlashHandler(msg)
 		GF_UpdateMainFrame()
 	elseif string.lower(msg) == "toggle" then
 		GF_ToggleMainFrame()
+	elseif string.len(msg) > 5 and string.sub(string.lower(msg),1,4) == "test" then
+		GF_CheckForGroups(string.sub(msg,5),"R","CHAT_MSG_SAY",true)
 	else
 		DEFAULT_CHAT_FRAME:AddMessage("'/gf reset' to reset screen position", 1, 1, 0.5)
 		DEFAULT_CHAT_FRAME:AddMessage("'/gf toggle' to toggle the frame", 1, 1, 0.5)
@@ -1007,6 +1007,9 @@ function GF_OnEvent(event) -- OnEvent, LoadSettings, Bind Keys, Prune Tables
 	end
 end
 function GF_LoadSettings()
+	for i=1, getn(GF_MessageList[GF_RealmName]) do if GF_MessageList[GF_RealmName][i].flags and type(GF_MessageList[GF_RealmName][i].flags) ~= "table" then GF_MessageList[GF_RealmName] = {} break end end
+	for name,_ in GF_PlayerMessages do if type(GF_PlayerMessages[name][1]) ~= "table" then GF_PlayerMessages = {} break end end
+
 	local SliderVariablesToSet = { GF_SavedVariables.MinimapArcOffset, GF_SavedVariables.MinimapRadiusOffset, GF_SavedVariables.MinimapMsgArcOffset, GF_SavedVariables.MinimapMsgRadiusOffset, GF_SavedVariables.FilterLevel,
 	GF_SavedVariables.MainFrameTransparency,GF_SavedVariables.autoblacklistminlevel,GF_SavedVariables.blockmessagebelowlevel,GF_SavedVariables.grouplistingduration,GF_SavedVariables.autofilterlevelvar, GF_SavedVariables.MainFrameUIScale, }
 	local SliderNames = { "GF_MinimapArcSlider", "GF_MinimapRadiusSlider", "GF_MinimapMsgArcSlider", "GF_MinimapMsgRadiusSlider", "GF_FilterLevelSlider", "GF_FrameTransparencySlider",
@@ -1647,13 +1650,13 @@ end
 function GF_IsFoundClassWhoPlayerInADungeonOrPvP(zone)
 	for _,dtable in pairs(GF_BUTTONS_LIST["LFGDungeon"]) do
 		if zone == dtable[5] then return true end
-    end
+	end
 	for _,dtable in pairs(GF_BUTTONS_LIST["LFGRaid"]) do
 		if zone == dtable[5] then return true end
-    end
+	end
 	for _,dtable in pairs(GF_BUTTONS_LIST["LFGPvP"]) do
 		if zone == dtable[5] then return true end
-    end
+	end
 end
 function GF_GetWhoSendWhisperToAvailablePlayer()
 	local whispermessage = GF_LFGWhoWhisperEditBox:GetText()
@@ -1693,7 +1696,7 @@ function GF_FindDungeonLevel(whisperText,lfgText)
 		for w in string.gfind(lfgText, string.lower(dtable[1])) do
 			return dtable[6]
 		end
-    end
+	end
 	if GF_LFGWhoWhisperEditBox:GetText() ~= "" then 
 		for _,dtable in pairs(GF_BUTTONS_LIST["LFGRaid"]) do
 			for w in string.gfind(whisperText, string.lower(dtable[1])) do
@@ -1705,7 +1708,7 @@ function GF_FindDungeonLevel(whisperText,lfgText)
 		for w in string.gfind(lfgText, string.lower(dtable[1])) do
 			return dtable[6]
 		end
-    end
+	end
 end
 
 function GF_FixLFGStrings(lfmOnly) -- LFG Group Maker Functions
@@ -1989,7 +1992,7 @@ function GF_FindGroupsAndDisplayCustomChatMessages(event,arg1,arg2,arg9) -- Chat
 		return true;
 	else
 		local logType = GF_CheckForGroups(gsub(arg1,"[\\\"]", " "),arg2,event) or 4;
-		if logType == 5 or logType == 11 or logType < 4 then GF_PlayerMessages[arg2][1] = GF_PlayerMessages[arg2][1] + 1 end -- To block multiple messages in series
+		if logType == 5 or logType == 11 or logType < 4 then GF_PlayerMessages[arg2][1][1] = GF_PlayerMessages[arg2][1][1] + 1 end -- To block multiple messages in series
 		GF_AddLogMessage(GF_CleanUpMessagesOfBadLinks(arg1),logType,true,arg2,arg8,arg9,event)
 		if (GF_SavedVariables.alwaysshowguild and (GF_Guildies[arg2] or GF_Friends[arg2] or GF_PlayersCurrentlyInGroup[arg2])) or GF_ChatCheckFilters(logType,arg1,event) then
 			if not GF_SavedVariables.showformattedchat or (event ~= "CHAT_MSG_CHANNEL") then
@@ -2032,7 +2035,7 @@ function GF_CheckForGroups(arg1,arg2,event,showanyway)
 -- "Say" messages will always be displayed unless flagged as spam.
 -- "Yell" and "Channel" messages will only display if allowed.
 	if GF_BlackList[GF_RealmName][arg2] and not GF_PlayersCurrentlyInGroup[arg2] and not GF_Friends[arg2] and not GF_Guildies[arg2] then return 8 end
-	GF_GetTypes(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(string.lower(gsub(gsub(gsub(" "..arg1.." ", "|c%x+|+(%w+)[%d:]+|+h", " %1 "), "|+h|+r", " "),"([a-z])([A-Z])","%1 %2")),".gg/%w+", ""),"(%a%a+)"," %1 "),"%s(%a)%s(%a)%s","%1%2"),"%s%s+", " "),"['']", "")," any?%s?1[%p%s]"," anyone ")," some%s?1[%p%s]"," anyone "),"any one","anyone"),"g2g","gtg"),"kk+","kk"),"ss+","ss"),showanyway)
+	GF_GetTypes(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(string.lower(gsub(gsub(gsub(" "..arg1.." ", "|c%x+|+(%w+)[%d:]+|+h", " %1 "), "|+h|+r", " "),"([a-z])([A-Z])","%1 %2")),".gg/%w+", ""),"(%a%a+)"," %1 "),"%s(%a)%s(%a)%s","%1%2"),"%s%s+", " "),"['']", "")," any?%s?1[%p%s]"," anyone ")," some%s?1[%p%s]"," anyone "),"any one","anyone"),"g2g","gtg"),"kk+","kk"),"ss+","ss"),"aa+","a"),showanyway)
 	if event == "CHAT_MSG_HARDCORE" then GF_MessageData.foundHC = true end
 	if GF_MessageData.foundGuild >= 3 then return GF_CheckForSpam(arg1,arg2) or 11
 	elseif GF_MessageData.foundTrades >= 3 then return GF_CheckForSpam(arg1,arg2) or 5
@@ -2080,7 +2083,8 @@ function GF_GetTypes(arg1, showanyway)
 	if string.find(arg1, "%d+p") then GF_MessageData.foundLFM = 2 end -- get rid fo "p" in "10p heal" messages from chinese
 
 	for word in string.gfind(arg1, " (%w%d+)") do if GF_WORD_NUMBER[word] then table.insert(wordTable, GF_WORD_NUMBER[word]) end end
-	for word in string.gfind(arg1, "(%a+)") do if not GF_WORD_SKIP[word] then table.insert(wordTable, word) end	end
+	for word in string.gfind(arg1, "(%a+)") do if not GF_WORD_SKIP[word] then table.insert(wordTable, word) end end
+	if GF_WORD_TRADE_PHRASE[gsub(arg1, " ", "")] then GF_MessageData.foundTrades = 3 print("here") end
 	for j=0,3 do
 		for i=1, getn(wordTable) do
 			if wordTable[i+j] then
@@ -2089,6 +2093,11 @@ function GF_GetTypes(arg1, showanyway)
 					wordTable[i] = GF_WORD_FIX[wordString]
 					if j == 1 then table.remove(wordTable,i+1) elseif j == 2 then table.remove(wordTable,i+2) table.remove(wordTable,i+1) elseif j == 3 then table.remove(wordTable,i+3) table.remove(wordTable,i+2) table.remove(wordTable,i+1) end
 					if wordString ~= GF_WORD_FIX[wordString] then i = i - 1 end
+				elseif GF_WORD_FIX_SECOND[wordString] then
+					wordTable[i] = GF_WORD_FIX_SECOND[wordString][1]
+					if j == 1 then table.remove(wordTable,i+1) elseif j == 2 then table.remove(wordTable,i+2) table.remove(wordTable,i+1) elseif j == 3 then table.remove(wordTable,i+3) table.remove(wordTable,i+2) table.remove(wordTable,i+1) end
+					table.insert(wordTable,i+1,GF_WORD_FIX_SECOND[wordString][2])
+					if wordString ~= GF_WORD_FIX_SECOND[wordString][1]..GF_WORD_FIX_SECOND[wordString][2] then i = i - 1 end
 				end
 			end
 		end
@@ -2171,44 +2180,45 @@ function GF_GetTypes(arg1, showanyway)
 	end
 end
 function GF_CheckForSpam(arg1,arg2,foundInGroup)
-        if GF_IncomingMessagePrune + 3600 < time() then -- 1 hour
-                for name,_ in GF_PlayerMessages do
-                        if GF_PlayerMessages[name][1] + GF_SavedVariables.spamfilterduration*60 < GetTime() then
-                                GF_PlayerMessages[name] = nil;
-                        end
-                end
-                GF_IncomingMessagePrune = time();
-        end
-        if not GF_PlayerMessages[arg2] then
-			GF_PlayerMessages[arg2] = { [1] = GetTime(), [2] = string.sub(arg1,math.random(math.ceil(string.len(arg1)/4)),math.ceil(string.len(arg1)/4*3 + math.random(math.ceil(string.len(arg1)/4)))), [3] = "ZZZzzz123654" }
-        elseif not GF_PlayersCurrentlyInGroup[arg2] and not GF_Friends[arg2] and not GF_Guildies[arg2] then
-                if (GF_WhoTable[GF_RealmName][arg2] and GF_WhoTable[GF_RealmName][arg2][1] < GF_SavedVariables.blockmessagebelowlevel) and GF_WhoTable[GF_RealmName][arg2][4] + 86400 > time() then return 9; end  -- Block lowlevel
-                if GF_SavedVariables.spamfilter then
-                        if GF_PlayerMessages[arg2] and GF_PlayerMessages[arg2][1] and GF_PlayerMessages[arg2][1] > GetTime() then return 7 end -- Returns spam for the duration of the spam filter
-                        if (GF_PlayerMessages[arg2][1] + 120 > GetTime()) and
-                        ((string.len(arg1) > 40 and (string.find(arg1,GF_PlayerMessages[arg2][2],1,true) or string.find(arg1,GF_PlayerMessages[arg2][3],1,true)))
-                        or (string.find(arg1,GF_PlayerMessages[arg2][2],1,true) and string.find(arg1,GF_PlayerMessages[arg2][3],1,true))) then        -- Found Spammer
-                                if GF_SavedVariables.autoblacklist and not GF_BlackList[GF_RealmName][arg2] and string.len(arg1) > 120 then
-                                        if GF_WhoTable[GF_RealmName][arg2] and GF_WhoTable[GF_RealmName][arg2][4] + 86400 > time() then -- Data must be less than a day old to autoblacklist or block lowlevel
-                                                if GF_WhoTable[GF_RealmName][arg2][1] <= GF_SavedVariables.autoblacklistminlevel then                                                                                                                                                        -- Blacklist if below level filter
-                                                        table.insert(GF_BlackList[GF_RealmName], 1, { arg2, "("..GF_WhoTable[GF_RealmName][arg2][1]..") "..arg1 })
-                                                        GF_BlackList[GF_RealmName][arg2] = true;
-                                                        GF_UpdateBlackListItems()
-                                                        return 8;
-                                                end
-                                        else
-                                                if GF_SavedVariables.usewhoongroups and not GF_WhoQueue[name] then GF_WhoTable[GF_RealmName][arg2] = nil; GF_AddNameToWhoQueue(arg2,true); end
-                                        end
-                                end
-                                GF_PlayerMessages[arg2][1] = GF_PlayerMessages[arg2][1] + GF_SavedVariables.spamfilterduration*60
-                                return 7
-                        end
-                        GF_PlayerMessages[arg2][1] = GetTime()
-                        table.insert(GF_PlayerMessages[arg2],2,string.sub(arg1,math.random(math.ceil(string.len(arg1)/4)),math.ceil(string.len(arg1)/4*3 + math.random(math.ceil(string.len(arg1)/4)))))
-                        table.remove(GF_PlayerMessages[arg2],4)
-                        if string.find(arg1,string.sub(arg1,1,20),21, true) then return 7 end                                                                                                                                                                                                                                        -- Repeating text in the same message
-                end
-        end
+		if GF_IncomingMessagePrune + 3600 < time() then -- 1 hour
+			for name,_ in GF_PlayerMessages do
+					if GF_PlayerMessages[name][1][1] + GF_SavedVariables.spamfilterduration*60 < GetTime() then
+							GF_PlayerMessages[name] = nil;
+					end
+			end
+			GF_IncomingMessagePrune = time();
+		end
+		if not GF_PlayerMessages[arg2] then
+			GF_PlayerMessages[arg2] = { [1] = { GetTime(),GetTime(),GetTime() }, [2] = { string.sub(arg1,math.random(math.ceil(string.len(arg1)/4)),math.ceil(string.len(arg1)/4*3 + math.random(math.ceil(string.len(arg1)/4)))), "ZZZzzz123654", "ZZZzzz123654" } }
+		elseif not GF_PlayersCurrentlyInGroup[arg2] and not GF_Friends[arg2] and not GF_Guildies[arg2] then
+				if (GF_WhoTable[GF_RealmName][arg2] and GF_WhoTable[GF_RealmName][arg2][1] < GF_SavedVariables.blockmessagebelowlevel) and GF_WhoTable[GF_RealmName][arg2][4] + 86400 > time() then return 9; end  -- Block lowlevel
+				if GF_SavedVariables.spamfilter then
+					if GF_PlayerMessages[arg2] and GF_PlayerMessages[arg2][1][1] > GetTime() then return 7 end -- Returns spam for the duration of the spam filter
+					if ((string.len(arg1) > 30 and ((GF_PlayerMessages[arg2][1][1] + 120 > GetTime() and string.find(arg1,GF_PlayerMessages[arg2][2][1],1,true)) or (GF_PlayerMessages[arg2][1][2] + 120 > GetTime() and string.find(arg1,GF_PlayerMessages[arg2][2][2],1,true)) or (GF_PlayerMessages[arg2][1][3] + 120 > GetTime() and string.find(arg1,GF_PlayerMessages[arg2][2][3],1,true))))
+					or ((GF_PlayerMessages[arg2][1][1] + 120 > GetTime() and string.find(arg1,GF_PlayerMessages[arg2][2][1],1,true)) and (GF_PlayerMessages[arg2][1][2] + 120 > GetTime() and string.find(arg1,GF_PlayerMessages[arg2][2][2],1,true)))) then		-- Found Spammer
+							if GF_SavedVariables.autoblacklist and not GF_BlackList[GF_RealmName][arg2] and string.len(arg1) > 120 then
+									if GF_WhoTable[GF_RealmName][arg2] and GF_WhoTable[GF_RealmName][arg2][4] + 86400 > time() then -- Data must be less than a day old to autoblacklist or block lowlevel
+											if GF_WhoTable[GF_RealmName][arg2][1] <= GF_SavedVariables.autoblacklistminlevel then																																						-- Blacklist if below level filter
+													table.insert(GF_BlackList[GF_RealmName], 1, { arg2, "("..GF_WhoTable[GF_RealmName][arg2][1]..") "..arg1 })
+													GF_BlackList[GF_RealmName][arg2] = true;
+													GF_UpdateBlackListItems()
+													return 8;	
+											end
+									else
+											if GF_SavedVariables.usewhoongroups and not GF_WhoQueue[name] then GF_WhoTable[GF_RealmName][arg2] = nil; GF_AddNameToWhoQueue(arg2,true); end
+									end
+							end
+							table.insert(GF_PlayerMessages[arg2][1],1,GF_PlayerMessages[arg2][1][1] + GF_SavedVariables.spamfilterduration*60)
+							table.remove(GF_PlayerMessages[arg2][1],4)
+							return 7
+					end
+					table.insert(GF_PlayerMessages[arg2][1],1,GetTime())
+					table.remove(GF_PlayerMessages[arg2][1],4)
+					table.insert(GF_PlayerMessages[arg2][2],1,string.sub(arg1,math.random(math.ceil(string.len(arg1)/4)),math.ceil(string.len(arg1)/4*3 + math.random(math.ceil(string.len(arg1)/4)))))
+					table.remove(GF_PlayerMessages[arg2][2],4)
+					if string.find(arg1,string.sub(arg1,1,20),21, true) then return 7 end																																																										-- Repeating text in the same message
+				end
+		end
 end
 
 function GF_GetGroupInformation(arg1,arg2) -- Searches messages for Groups and similiar functions
