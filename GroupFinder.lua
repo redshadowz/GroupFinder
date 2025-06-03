@@ -2084,7 +2084,7 @@ function GF_GetTypes(arg1, showanyway)
 
 	for word in string.gfind(arg1, " (%w%d+)") do if GF_WORD_NUMBER[word] then table.insert(wordTable, GF_WORD_NUMBER[word]) end end
 	for word in string.gfind(arg1, "(%a+)") do if not GF_WORD_SKIP[word] then table.insert(wordTable, word) end end
-	if GF_WORD_TRADE_PHRASE[gsub(arg1, " ", "")] then GF_MessageData.foundTrades = 3 print("here") end
+	if GF_WORD_TRADE_PHRASE[gsub(arg1, " ", "")] then GF_MessageData.foundTrades = 3 end
 	for j=0,3 do
 		for i=1, getn(wordTable) do
 			if wordTable[i+j] then

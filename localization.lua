@@ -2348,7 +2348,7 @@ GF_WORD_TRADE = {
 ["ppnardinalsldor"] = 3,["vidfontnen"] = 1,["dricks"] = .5,["uppskattat"] = .5,
 }
 GF_WORD_TRADE_PHRASE = {
-["anyenchant"] = true,["anylockbox"] = true,
+["anyenchanter"] = true,["anylockpicker"] = true,["anylockpick"] = true,
 }
 GF_TRADE_WORD_EXCLUSION = {
 ["lfm"] = 2,["lfg"] = 1,["hr"] = 1,["ms"] = 1,["os"] = 1,
