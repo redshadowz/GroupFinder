@@ -410,12 +410,12 @@ function GF_UpdateMainFrameWidth()
 			end
 			GF_LogFrameInternalFrame:SetWidth(350)
 		else
-			for i=1, 20 do if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",0,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",0,0) end getglobal("GF_NewItem"..i):SetWidth(670) getglobal("GF_NewItem"..i.."NameLabel"):ClearAllPoints() getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("TOPLEFT",5,0) getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("BOTTOMRIGHT",getglobal("GF_NewItem"..i),"TOPRIGHT",-80,-0) end
-			GF_LogFrameInternalFrame:SetPoint("TOPLEFT",29,-32)
+			for i=1, 20 do if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",0,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",0,0) end getglobal("GF_NewItem"..i):SetWidth(670) getglobal("GF_NewItem"..i.."NameLabel"):ClearAllPoints() getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("TOPLEFT",5,0) getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("BOTTOMRIGHT",getglobal("GF_NewItem"..i),"TOPRIGHT",-5,-16) end
+			GF_LogFrameInternalFrame:SetPoint("TOPLEFT",29,-64)
 			GF_LogFrameInternalFrame:SetWidth(669)
 		end
 	else
-		for i=1, 20 do if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",0,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",0,0) end getglobal("GF_NewItem"..i):SetWidth(670) getglobal("GF_NewItem"..i.."NameLabel"):ClearAllPoints() getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("TOPLEFT",5,0) getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("BOTTOMRIGHT",getglobal("GF_NewItem"..i),"TOPRIGHT",-80,-16) end
+			for i=1, 20 do if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",0,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",0,0) end getglobal("GF_NewItem"..i):SetWidth(670) getglobal("GF_NewItem"..i.."NameLabel"):ClearAllPoints() getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("TOPLEFT",5,0) getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("BOTTOMRIGHT",getglobal("GF_NewItem"..i),"TOPRIGHT",-80,-16) end
 		GF_LogFrameInternalFrame:SetPoint("TOPLEFT",29,-64)
 		GF_LogFrameInternalFrame:SetWidth(669)
 	end
@@ -1319,6 +1319,7 @@ function GF_ListItem_OnMouseUp(id)
 	end
 end
 function GF_ListItemAuxLeft_ShowTooltip(frame, id)
+	if not id then return end
 	GameTooltip:ClearLines();
 	GameTooltip:SetOwner(this, "ANCHOR_BOTTOMLEFT");
 	GameTooltip:ClearAllPoints();
@@ -1339,6 +1340,7 @@ function GF_ResultItem_Hover_On(frame,id)
 	getglobal(frame:GetName().."MoreLabel"):SetPoint("LEFT", frame:GetName(), "LEFT", 37, -6);
 	getglobal(frame:GetName().."TextureSelectedBg"):Show();
 	getglobal(frame:GetName().."TextureSelectedIcon"):Show();
+	GF_ListItemAuxLeft_ShowTooltip(frame, id)
 end
 function GF_ResultItem_Hover_Off(frame)
 	frame:SetHeight(18);
