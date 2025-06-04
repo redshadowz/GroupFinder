@@ -68,7 +68,6 @@ GF_WhisperLogCurrentButtonID				= 0;
 GF_WhisperLogData							= {}
 GF_WhisperLogData[GF_RealmName]				= {}
 GF_WhisperLogData[GF_RealmName]["Guild"]	= {}
-local GF_MyWhispers							= {}
 local GF_MessageData						= {}
 local GF_Classes							= { [GF_PRIEST]="PRIEST",[GF_MAGE]="MAGE",[GF_WARLOCK]="WARLOCK",[GF_DRUID]="DRUID",[GF_HUNTER]="HUNTER",[GF_ROGUE]="ROGUE",[GF_WARRIOR]="WARRIOR",[GF_PALADIN]="PALADIN",[GF_SHAMAN]="SHAMAN",
 												["PRIEST"]=GF_PRIEST,["MAGE"]=GF_MAGE,["WARLOCK"]=GF_WARLOCK,["DRUID"]=GF_DRUID,["HUNTER"]=GF_HUNTER,["ROGUE"]=GF_ROGUE,["WARRIOR"]=GF_WARRIOR,["PALADIN"]=GF_PALADIN,["SHAMAN"]=GF_SHAMAN }
@@ -78,6 +77,8 @@ local GF_TextColors = { ["CHAT_MSG_SYSTEM"] = "ffff00", ["CHAT_MSG_SAY"] = "ffff
 ["CHAT_MSG_WHISPER_INFORM"] = "ff80ff", ["CHAT_MSG_PARTY"] = "aaaaff", ["CHAT_MSG_RAID"] = "ff7f00", ["CHAT_MSG_RAID_LEADER"] = "ff4809", ["CHAT_MSG_RAID_WARNING"] = "ff4800",  ["CHAT_MSG_BATTLEGROUND"] = "ff7f00",
 ["CHAT_MSG_BATTLEGROUND_LEADER"] = "ffdbb7", ["CHAT_MSG_LOOT"] = "00aa00", ["CHAT_MSG_MONEY"] = "ffff00", ["CHAT_MSG_EMOTE"] = "ff8040", ["CHAT_MSG_TEXT_EMOTE"] = "ff8040", ["CHAT_MSG_COMBAT_FACTION_CHANGE"] = "8080ff",
 ["CHAT_MSG_COMBAT_XP_GAIN"] = "6f6fff", ["CHAT_MSG_COMBAT_HONOR_GAIN"] = "e0ca0a", ["CHAT_MSG_MONSTER_SAY"] = "ffffff", ["CHAT_MSG_MONSTER_EMOTE"] = "ff8040", ["CHAT_MSG_HARDCORE"] = "a69973" }
+local GF_TextBypass = { ["CHAT_MSG_GUILD"] = true, ["CHAT_MSG_OFFICER"] = true, ["CHAT_MSG_WHISPER"] = true,["CHAT_MSG_WHISPER_INFORM"] = true, ["CHAT_MSG_PARTY"] = true, ["CHAT_MSG_RAID"] = true, ["CHAT_MSG_RAID_LEADER"] = true,
+["CHAT_MSG_RAID_WARNING"] = true,  ["CHAT_MSG_BATTLEGROUND"] = true,["CHAT_MSG_BATTLEGROUND_LEADER"] = true, }
 local GF_LootFilter = { ["CHAT_MSG_MONEY"] = true, ["CHAT_MSG_LOOT"] = true, ["CHAT_MSG_COMBAT_FACTION_CHANGE"] = true, ["CHAT_MSG_COMBAT_XP_GAIN"] = true, ["CHAT_MSG_COMBAT_HONOR_GAIN"] = true }
 local ThingsToHide = { "GF_GroupsInChatCheckButton", "GF_GroupsNewOnlyCheckButton", "GF_GroupsInMinimapCheckButton", "GF_ShowChatCheckButton", "GF_ShowTradesCheckButton", "GF_ShowLootCheckButton", "GF_ShowGuildsCheckButton",
 "GF_FrameUseWhoOnGroupsCheckButton", "GF_SearchListDropdown", "GF_GroupsFrameDescriptionEditBox", "GF_AutoFilterCheckButton", "GF_PlaySoundOnResultsCheckButton", "GF_GroupsFrameShowDungeonCheckButton", "GF_GroupsFrameShowRaidCheckButton",
@@ -166,7 +167,6 @@ function GF_LoadVariables()
 		if not GF_SavedVariables.mainframeishidden then GF_SavedVariables.mainframeishidden = true end -- if not hidden on login, show
 
 		if not GF_SavedVariables.logshowwhisperwindow then GF_SavedVariables.logshowwhisperwindow = true end
-		GF_MessageList = {}
 	end
 	if not GF_MessageList then GF_MessageList = {} end
 	if not GF_MessageList[GF_RealmName] then GF_MessageList[GF_RealmName] = {}; end
@@ -208,6 +208,17 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 	this:RegisterEvent("GUILD_ROSTER_UPDATE");
 	this:RegisterEvent("FRIENDLIST_UPDATE");
 	this:RegisterEvent("PARTY_INVITE_REQUEST");
+	this:RegisterEvent("CHAT_MSG_GUILD");
+	this:RegisterEvent("CHAT_MSG_OFFICER");
+	this:RegisterEvent("CHAT_MSG_WHISPER");
+	this:RegisterEvent("CHAT_MSG_WHISPER_INFORM");
+	this:RegisterEvent("CHAT_MSG_PARTY");
+	this:RegisterEvent("CHAT_MSG_RAID");
+	this:RegisterEvent("CHAT_MSG_RAID_LEADER");
+	this:RegisterEvent("CHAT_MSG_RAID_WARNING");
+	this:RegisterEvent("CHAT_MSG_BATTLEGROUND");
+	this:RegisterEvent("CHAT_MSG_BATTLEGROUND_LEADER");
+
 	
 	local old_ChatFrame_OnEvent = ChatFrame_OnEvent;
 	function ChatFrame_OnEvent(event) -- arg1(message), arg2(sender), arg4("Channel#." "(City/Trade)" "channelName"), arg5, (nameOfPlayerWhoLooted), arg7(zoneChannel#), arg8(channel#), arg9("City/Trade" "channelName")
@@ -215,11 +226,7 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 	end
 	local old_SendChatMessage = SendChatMessage;
 	function SendChatMessage(arg1,arg2,arg3,arg4) -- arg1(message), arg2(chatType(WHISPER/GUILD/CHANNEL/SAY/PARTYETC)), arg3(language), arg4(targetname(or channelname)));
-		if arg2 == "WHISPER" then 
-			arg4 = string.upper(string.sub(arg4,1,1))..string.lower(string.sub(arg4,2))
-			table.insert(GF_MyWhispers,{arg1,arg4})
-		end
-		old_SendChatMessage(arg1, arg2, arg3, arg4)
+		old_SendChatMessage(arg1,arg2,arg3,arg4)
 	end
 	local old_AddIgnore = AddIgnore;
 	function AddIgnore(name)
@@ -972,6 +979,14 @@ function GF_OnEvent(event) -- OnEvent, LoadSettings, Bind Keys, Prune Tables
 		end
 		if GF_SavedVariables.lfgauto then GF_FixLFGStrings(true) end
 		GF_UpdatePlayersInGroupList()
+	elseif event == "CHAT_MSG_WHISPER" then
+		GF_WhisperReceivedAddToWhisperHistoryList(arg1,arg2,event)
+	elseif event == "CHAT_MSG_WHISPER_INFORM" then
+		GF_WhisperReceivedAddToWhisperHistoryList(arg1,arg2,event)
+	elseif (event == "CHAT_MSG_GUILD" or event == "CHAT_MSG_OFFICER") then
+		GF_WhisperReceivedAddToWhisperHistoryList(arg1,arg2,event)
+	elseif arg2 == GF_MyName or event == "CHAT_MSG_PARTY" or event == "CHAT_MSG_RAID" or event == "CHAT_MSG_RAID_LEADER" or event == "CHAT_MSG_RAID_WARNING" or event == "CHAT_MSG_BATTLEGROUND" or event == "CHAT_MSG_BATTLEGROUND_LEADER" then
+		GF_AddLogMessage(arg1,10,true,arg2,arg8,arg9,event)
 	elseif (event == "GUILD_ROSTER_UPDATE" and GetNumGuildMembers() ~= GF_CurrentNumGuildies) then 
 		GF_UpdateGuildiesList()
 	elseif (event == "FRIENDLIST_UPDATE" and GetNumFriends() ~= GF_CurrentNumFriends) then
@@ -1007,7 +1022,7 @@ function GF_OnEvent(event) -- OnEvent, LoadSettings, Bind Keys, Prune Tables
 	end
 end
 function GF_LoadSettings()
-	for i=1, getn(GF_MessageList[GF_RealmName]) do if GF_MessageList[GF_RealmName][i].flags and type(GF_MessageList[GF_RealmName][i].flags) ~= "table" then GF_MessageList[GF_RealmName] = {} break end end
+	for i=1, getn(GF_MessageList[GF_RealmName]) do if not GF_MessageList[GF_RealmName][i].flags or type(GF_MessageList[GF_RealmName][i].flags) ~= "table" then GF_MessageList[GF_RealmName] = {} break end end
 	for name,_ in GF_PlayerMessages do if type(GF_PlayerMessages[name][1]) ~= "table" then GF_PlayerMessages = {} break end end
 
 	local SliderVariablesToSet = { GF_SavedVariables.MinimapArcOffset, GF_SavedVariables.MinimapRadiusOffset, GF_SavedVariables.MinimapMsgArcOffset, GF_SavedVariables.MinimapMsgRadiusOffset, GF_SavedVariables.FilterLevel,
@@ -1351,6 +1366,7 @@ function GF_ResultItem_Hover_Off(frame)
 	getglobal(frame:GetName().."MoreLabel"):SetPoint("LEFT", frame:GetName(), "LEFT", 5, -6);
 	getglobal(frame:GetName().."TextureSelectedBg"):Hide();
 	getglobal(frame:GetName().."TextureSelectedIcon"):Hide();
+	GameTooltip:Hide();
 end
 function GF_GetGroupWhoButton(frame,id)
 	if not GF_UrgentWhoRequest[GF_FilteredResultsList[GF_ResultsListOffset+id].op] then
@@ -1381,7 +1397,7 @@ function GF_LFMWhisperRequestInviteButton(frame,id)
 	getglobal(frame:GetName().."LFMWhisperRequestInviteButton"):Hide();
 	end
 
-function GF_WhisperHistoryButtonPressed(id,override) -- Whisper/Guild History Functions
+function GF_WhisperHistoryButtonPressed(id,override,nolog) -- Whisper/Guild History Functions
 	if not override and id == GF_WhisperLogCurrentButtonID then return end
 	getglobal("GF_WhisperHistoryButton"..GF_WhisperLogCurrentButtonID):UnlockHighlight()
 	getglobal("GF_WhisperHistoryButton"..id):LockHighlight()
@@ -1389,6 +1405,7 @@ function GF_WhisperHistoryButtonPressed(id,override) -- Whisper/Guild History Fu
 	if id > 1 then getglobal("GF_WhisperHistoryButtonCheckButton"..id):Show() end
 	
 	GF_WhisperLogCurrentButtonID = id;
+	if nolog then return end
 	if id == 0 then
 		GF_DisplayLog()
 	elseif id == 1 then
@@ -1400,7 +1417,6 @@ end
 function GF_WhisperReceivedAddToWhisperHistoryList(message,name,event)
 	message = gsub(gsub(gsub(gsub(" "..message.." "," (www%d-)%.([_A-Za-z0-9-]+)%.(%S+)%s?", "|cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r ")," (%a+)://(%S+)%s?", "|cffccccff|Hurl:%1://%2|h[%1://%2]|h|r ")," (%a+)%.(%a+)/(%S+)%s?", "|cffccccff|Hurl:%1.%2/%3|h[%1.%2/%3]|h|r ")," ([_A-Za-z0-9-]+)%.([_A-Za-z0-9-]+)%.(%S+)%s?", "|cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r ")
 
-	if name == GF_MyName and (event == "CHAT_MSG_WHISPER_INFORM" or event == "CHAT_MSG_WHISPER") then return end
 	if not GF_WhisperLogData[GF_RealmName][name] then
 		GF_WhisperLogData[GF_RealmName][name] = {}
 		if GF_Friends[name] then GF_WhisperLogData[GF_RealmName][name].priority = true; end
@@ -1435,7 +1451,7 @@ function GF_WhisperReceivedAddToWhisperHistoryList(message,name,event)
 		table.insert(GF_WhisperLogData[GF_RealmName]["Guild"],1,message)
 		if getn(GF_WhisperLogData[GF_RealmName][name]) > 128 then table.remove(GF_WhisperLogData[GF_RealmName][name],129) end
 		if getn(GF_WhisperLogData[GF_RealmName]["Guild"]) > 128 then table.remove(GF_WhisperLogData[GF_RealmName]["Guild"],129) end
-		if GF_WhisperLogCurrentButtonID > 1 then GF_Log:AddMessage(message, 1, 192/255, 192/255) end
+		if GF_WhisperLogCurrentButtonID > 1 and name == getglobal("GF_WhisperHistoryButton"..GF_WhisperLogCurrentButtonID):GetText() then GF_Log:AddMessage(message, 1, 192/255, 192/255) end
 		GF_WhisperHistoryUpdateFrame(name)
 	end
 	table.insert(GF_LogHistory[GF_RealmName],1,{message, 10})
@@ -1469,11 +1485,9 @@ function GF_WhisperHistoryUpdateFrame(name)
 			getglobal("GF_WhisperHistoryButton"..i):Hide()
 		end
 	end
-	if name and GF_WhisperLogCurrentButtonID > 1 then
-		if nameWasPriority then 
-			if GF_WhisperLogCurrentButtonID ~= 2 then GF_WhisperHistoryButtonPressed(2,true) end
-		else
-			if GF_WhisperLogCurrentButtonID ~= 2+numPriority then GF_WhisperHistoryButtonPressed(2+numPriority,true) end
+	for i=2, 20 do
+		if GF_WhisperLogData[GF_RealmName][i] then
+			if GF_WhisperLogData[GF_RealmName][i] == getglobal("GF_WhisperHistoryButton"..GF_WhisperLogCurrentButtonID):GetText() then GF_WhisperHistoryButtonPressed(i,true,true) end
 		end
 	end
 	if getn(GF_WhisperLogData[GF_RealmName]) > 20 then table.remove(GF_WhisperLogData[GF_RealmName],21) end	
@@ -1916,7 +1930,7 @@ function GF_SearchButtonHasValues()
 end
 
 function GF_FindGroupsAndDisplayCustomChatMessages(event,arg1,arg2,arg9) -- Chat Filters and Group Finders
-	if not GF_TextColors[event] or string.lower(arg9) == "lft" or string.lower(arg9) == "hardcore" then
+	if not GF_TextColors[event] or GF_TextBypass[event] or string.lower(arg9) == "lft" or string.lower(arg9) == "hardcore" then
 		return true;
 	elseif GF_PreviousMessage[arg2] and GF_PreviousMessage[arg2][1] == arg1 and GF_PreviousMessage[arg2][2] > GetTime() then
 		if GF_PreviousMessage[arg2][3] then return true; end
@@ -1929,28 +1943,6 @@ function GF_FindGroupsAndDisplayCustomChatMessages(event,arg1,arg2,arg9) -- Chat
 			return nil
 		end
 		GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,true}
-		return true;
-	elseif event == "CHAT_MSG_WHISPER" then
-		GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,true}
-		GF_WhisperReceivedAddToWhisperHistoryList(arg1,arg2,event)
-		return true;
-	elseif event == "CHAT_MSG_WHISPER_INFORM" then
-		GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,true}
-		for i=1, getn(GF_MyWhispers) do
-			if arg1 == GF_MyWhispers[i][1] then
-				GF_WhisperReceivedAddToWhisperHistoryList(arg1,GF_MyWhispers[i][2],event)
-				table.remove(GF_MyWhispers,i)
-				break
-			end
-		end
-		return true;
-	elseif (event == "CHAT_MSG_GUILD" or event == "CHAT_MSG_OFFICER") then
-		GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,true}
-		GF_WhisperReceivedAddToWhisperHistoryList(arg1,arg2,event)
-		return true;
-	elseif arg2 == GF_MyName or event == "CHAT_MSG_PARTY" or event == "CHAT_MSG_RAID" or event == "CHAT_MSG_RAID_LEADER" or event == "CHAT_MSG_RAID_WARNING" or event == "CHAT_MSG_BATTLEGROUND" or event == "CHAT_MSG_BATTLEGROUND_LEADER" then
-		GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,true}
-		GF_AddLogMessage(arg1,10,true,arg2,arg8,arg9,event)
 		return true;
 	elseif GF_LootFilter[event] then
 		GF_AddLogMessage(arg1,6,true,arg2,arg8,arg9,event)
