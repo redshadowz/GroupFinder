@@ -613,8 +613,9 @@ GF_WORD_FIX = {
 -- Dungeons
 ["rfch"] = "rfc",["rfcd"] = "rfc",["rfchasm"] = "rfc",["rangefire"] = "ragefire",["ragfire"] = "ragefire",["ragefir"] = "ragefire",["rf"] = "rfc",["rfcf"] = "rfc",["rffc"] = "rfc",["rrfc"] = "rfc",
 ["rfcx"] = "rfc",["rcf"] = "rfc",["rgc"] = "rfc",["rfv"] = "rfc",["ragefirechasmers"] = "rfc",["rcgroup"] = "rfc",["grouprc"] = "rfc",
-["deadmine"] = "deadmines",["dedmines"] = "deadmines",["dedmine"] = "deadmines",["deathmine"] = "deadmines",["deathmines"] = "deadmines",["vc"] = "deadmines",["vancleef"] = "deadmines",["dms"] = "dm",["deadmies"] = "deadmines",["deadmindes"] = "deadmines",
-["deaadmines"] = "deadmines",["deammine"] = "deadmines",["deammines"] = "deadmines",["deanmine"] = "deadmines",["deanmines"] = "deadmines",["deamines"] = "deadmines",["deadmmines"] = "deadmines",["deamines"] = "deadmines",["deadmins"] = "deadmines",
+["deadmine"] = "deadmines",["dedmines"] = "deadmines",["dedmine"] = "deadmines",["deathmine"] = "deadmines",["deathmines"] = "deadmines",["vc"] = "deadmines",["vancleef"] = "deadmines",["dms"] = "dm",
+["deadmies"] = "deadmines",["deadmindes"] = "deadmines",["deaadmines"] = "deadmines",["deammine"] = "deadmines",["deammines"] = "deadmines",["deanmine"] = "deadmines",["deanmines"] = "deadmines",
+["deamines"] = "deadmines",["deadmmines"] = "deadmines",["deamines"] = "deadmines",["deadmins"] = "deadmines",["dmines"] = "deadmines",["dmine"] = "deadmines",
 ["twc"] = "wc",["waling"] = "wailing",["walling"] = "wailing",["vailing"] = "wailing",["wailling"] = "wailing",["waililing"] = "wailing",["cavs"] = "caverns",["cavern"] = "caverns",["cave"] = "caverns",
 ["caves"] = "caverns",["cavers"] = "caverns",["caverne"] = "caverns",["carverns"] = "caverns",["cavernes"] = "caverns",["canverns"] = "caverns",
 ["stockades"] = "stockade",["stockede"] = "stockade",["stocakde"] = "stockade",["stokade"] = "stockade",["stokades"] = "stockade",["stocks"] = "stock",["stocls"] = "stock",["stockhades"] = "stockade",["stockaide"] = "stockade",["stockaid"] = "stockade",
@@ -857,7 +858,7 @@ GF_WORD_IGNORE = {
 ["lmaosaying"] = true,["endofaraid"] = true,["butitsactually"] = true,["peopleclick"] = true,["totheirdoom"] = true,["helpmewithportal"] = true,["tankinfo"] = true,["healinfo"] = true,["damageinfo"] = true,
 
 ["youarelooking"] = true,["youarelf"] = true,["nameplates"] = true,["whouses"] = true,["anyoneelsetried"] = true,["trieddoingquest"] = true,["butcouldnt"] = true,["whilefinding"] = true,["anyquestgive"] = true,["soloanyquest"] = true,
-["whatcouldgowrong"] = true,["aworldchat"] = true,["likeofus"] = true,["ofuslf"] = true,
+["whatcouldgowrong"] = true,["aworldchat"] = true,["likeofus"] = true,["ofuslf"] = true,["wewas"] = true,["hejustbails"] = true,["hejustleaves"] = true,["starttaunting"] = true,["tauntingtheraid"] = true,["tauntingthegroup"] = true,
 
 -- Addons
 ["pfquest"] = true,["healersmate"] = true,["kui"] = true,
@@ -1384,7 +1385,6 @@ GF_WORD_LFM = {
 ["doesanyonehaveto"] = 2,["doyouneedtogo"] = 2,["ifanyoneneed"] = 2,["ifyouneedtojoin"] = 2,["ineedhelp"] = 2,["needhelpfor"] = 2,["pleasejoinmy"] = 2,
 ["anyonewillingto"] = 2,["interestedinrunning"] = 2,["anyonegroup"] = 2,["grouptocomplete"] = 2,
 
-
 ["moreneededfor"] = 2,["morepeoplefor"] = 2,
 ["needallfor"] = 2,["needanyonestealth"] = 2,["needgroupfor"] = 2,["needhelpwith"] = 2,["needmorefor"] = 2,["needmoregroupmembers"] = 2,["needmorepeople"] = 2,["needmoreplayer"] = 2,["needmoreexceptionalplayer"] = 2,
 ["needpeoplefor"] = 2,["needstealth"] = 2,["needtocome"] = 2,["needtogroup"] = 2,["needtohelp"] = 2,["needtohelpwith"] = 2,["needtoraid"] = 2,
@@ -1392,7 +1392,7 @@ GF_WORD_LFM = {
 ["srmsos"] = 2,["msos"] = 2,["signup"] = 2,["signups"] = 2,
 ["summonready"] = 2,["wforinvite"] = 2,["whisperforinvite"] = 2,
 ["whoisdownto"] = 2,["wholetsdo"] = 2,
-["pleasejoindailybg"] = 2,
+["pleasejoindailybg"] = 2,["queuenow"] = 2,
 ["lookinggroupto"] = 2,["lookinggroupfor"] = 2,["askgroupto"] = 2,["askgroupfor"] = 2,
 ["needplayerfor"] = 2,["groupdelvinginto"] = 2,
 
@@ -1878,7 +1878,7 @@ GF_WORD_TRADE = {
 
 -- Misc Terms
 ["reasonableprice"] = .5,["foronly"] = 1,["elsearound"] = 1.5,
-["carryservice"] = 20,["keyservice"] = 3,["keyholder"] = 1.5,["healservice"] = 20,["tankservice"] = 20,["rogueservice"] = 1,["smeltservice"] = 3,["gankservice"] = 3,
+["carryservice"] = 20,["keyservice"] = 3,["keyholder"] = 1.5,["healservice"] = 20,["tankservice"] = 20,["rogueservice"] = 1,["smeltservice"] = 3,["gankservice"] = 3,["flaskservice"] = 3,["crafterservice"] = 3,
 ["blacksmithservice"] = 1.5,["tailorservice"] = 3,["leatherworkerservice"] = 3,["engineerservice"] = 3,["jewelcrafterservice"] = 3,
 ["healofferservice"] = 3,["tankofferservice"] = 3,["rogueofferservice"] = 3,
 
@@ -2584,7 +2584,7 @@ GF_HIGH_ELF				= "High Elf";
 GF_GOBLIN				= "Goblin";
 local GF_TURTLE_WORD_FIX = {
 ["alathalas"] = "alahthalas",
-["blackmoras"] = "blackmorass",["blackmorasss"] = "blackmorass",["morasss"] = "morass",["marass"] = "morass",["marass"] = "morass",["bmoras"] = "blackmorass",["bmorass"] = "blackmorass",
+["blackmoras"] = "blackmorass",["blackmorasss"] = "blackmorass",["morasss"] = "morass",["marass"] = "morass",["marass"] = "morass",["bmoras"] = "blackmorass",["bmorass"] = "blackmorass",["blackmoss"] = "blackmorass",
 ["cgrove"] = "crescentgrove",
 ["eshm"] = "es",["esh"] = "es",
 ["gileas"] = "gilneas",["gilenas"] = "gilneas",["gineas"] = "gilneas",["gilneeas"] = "gilneas",["gilnaeos"] = "gilneas",["gileans"] = "gilneas",["gilnease"] = "gilneas",["gilneaas"] = "gilneas",["glineas"] = "gilneas",["guilneas"] = "gilneas",

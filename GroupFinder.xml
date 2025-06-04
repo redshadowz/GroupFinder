@@ -390,7 +390,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 	</Frame>
 	<Frame name="GF_NewItemTemplate" virtual="true">
 		<Size>
-			<AbsDimension x="670" y="18"/>
+			<AbsDimension x="640" y="18"/>
 		</Size>
 		<Layers>
 			<Layer level="BACKGROUND">
@@ -476,14 +476,14 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</Anchors>
 					<Color r="1.0" g="1.0" b="1.0"/>
 				</FontString>
-				<FontString inherits="GameFontNormalSmall" name="$parentMoreRightLabel" justifyH="RIGHT" hidden="true">
+				<FontString inherits="GameFontNormalSmall" name="$parentMoreLeftLabel" justifyH="RIGHT">
 					<Size>
-						<AbsDimension x="580" y="16"/>
+						<AbsDimension x="0" y="16"/>
 					</Size>
 					<Anchors>
-						<Anchor point="BOTTOMRIGHT">
+						<Anchor point="RIGHT" relativeTo="$parentNameLabel" relativePoint="LEFT">
 							<Offset>
-								<AbsDimension x="-5" y="0"/>
+								<AbsDimension x="0" y="0"/>
 							</Offset>
 						</Anchor>
 					</Anchors>
@@ -1581,12 +1581,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</Button>
 			<Frame name="GF_GroupsFrame">
 				<Size>
-					<AbsDimension x="645" y="380"/>
+					<AbsDimension x="615" y="380"/>
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT">
 						<Offset>
-							<AbsDimension x="25" y="-65"/>
+							<AbsDimension x="55" y="-65"/>
 						</Offset>
 					</Anchor>
 				</Anchors>

@@ -409,20 +409,20 @@ function GF_UpdateMainFrameWidth()
 	if GF_SavedVariables.mainframestatus ~= 0 then
 		if GF_SavedVariables.mainframewidth then
 			if GF_SavedVariables.mainframestatus == 2 then
-				for i=1, 20 do if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",330,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",330,0) end getglobal("GF_NewItem"..i):SetWidth(350) getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("TOPLEFT",5,0) getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("BOTTOMRIGHT",getglobal("GF_NewItem"..i),"TOPRIGHT",-5,-16) end
+				for i=1, 20 do if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",330,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",330,0) end getglobal("GF_NewItem"..i):SetWidth(320) getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("TOPLEFT",5,0) getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("BOTTOMRIGHT",getglobal("GF_NewItem"..i),"TOPRIGHT",-5,-16) end
 				GF_LogFrameInternalFrame:SetPoint("TOPLEFT",350,-32)
 			else
-				for i=1, 20 do if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",0,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",0,0) end getglobal("GF_NewItem"..i):SetWidth(350) getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("TOPLEFT",5,0) getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("BOTTOMRIGHT",getglobal("GF_NewItem"..i),"TOPRIGHT",-5,-16) end
+				for i=1, 20 do if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",0,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",0,0) end getglobal("GF_NewItem"..i):SetWidth(320) getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("TOPLEFT",5,0) getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("BOTTOMRIGHT",getglobal("GF_NewItem"..i),"TOPRIGHT",-5,-16) end
 				GF_LogFrameInternalFrame:SetPoint("TOPLEFT",29,-32)
 			end
 			GF_LogFrameInternalFrame:SetWidth(350)
 		else
-			for i=1, 20 do if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",0,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",0,0) end getglobal("GF_NewItem"..i):SetWidth(670) getglobal("GF_NewItem"..i.."NameLabel"):ClearAllPoints() getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("TOPLEFT",5,0) getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("BOTTOMRIGHT",getglobal("GF_NewItem"..i),"TOPRIGHT",-5,-16) end
+			for i=1, 20 do if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",0,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",0,0) end getglobal("GF_NewItem"..i):SetWidth(640) getglobal("GF_NewItem"..i.."NameLabel"):ClearAllPoints() getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("TOPLEFT",5,0) getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("BOTTOMRIGHT",getglobal("GF_NewItem"..i),"TOPRIGHT",-5,-16) end
 			GF_LogFrameInternalFrame:SetPoint("TOPLEFT",29,-64)
 			GF_LogFrameInternalFrame:SetWidth(669)
 		end
 	else
-			for i=1, 20 do if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",0,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",0,0) end getglobal("GF_NewItem"..i):SetWidth(670) getglobal("GF_NewItem"..i.."NameLabel"):ClearAllPoints() getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("TOPLEFT",5,0) getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("BOTTOMRIGHT",getglobal("GF_NewItem"..i),"TOPRIGHT",-80,-16) end
+			for i=1, 20 do if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",0,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",0,0) end getglobal("GF_NewItem"..i):SetWidth(640) getglobal("GF_NewItem"..i.."NameLabel"):ClearAllPoints() getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("TOPLEFT",5,0) getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("BOTTOMRIGHT",getglobal("GF_NewItem"..i),"TOPRIGHT",-80,-16) end
 		GF_LogFrameInternalFrame:SetPoint("TOPLEFT",29,-64)
 		GF_LogFrameInternalFrame:SetWidth(669)
 	end
@@ -771,17 +771,19 @@ function GF_UpdateGroupsFrame()
 		GF_AddonMakeAListOfGroupsForSending = nil;
 		GF_AddonOPSentNamesOnLogin = {}
 		GF_ApplyFiltersToGroupList()
-	--[[else
+	else
+		local timeMin, timeSec
 		for i=1, 20 do
 			if getglobal("GF_NewItem"..i) then
-				if i+GF_ResultsListOffset <= getn(GF_FilteredResultsList) then 
-					if (time() - GF_FilteredResultsList[i+GF_ResultsListOffset].t)/60 > 1 then
-						getglobal("GF_NewItem"..i.."MoreRightLabel"):SetText(floor(time() - GF_FilteredResultsList[i+GF_ResultsListOffset].t));
-					elseif floor((time() - GF_FilteredResultsList[i+GF_ResultsListOffset].t)/60) == 1 then getglobal("GF_NewItem"..i.."MoreRightLabel"):SetText(floor(time() - GF_FilteredResultsList[i+GF_ResultsListOffset].t));
-					else getglobal("GF_NewItem"..i.."MoreRightLabel"):SetText(floor(time() - GF_FilteredResultsList[i+GF_ResultsListOffset].t)); end
+				if i+GF_ResultsListOffset <= getn(GF_FilteredResultsList) then
+					timeMin = floor(((time() - GF_FilteredResultsList[i+GF_ResultsListOffset].t))/60)
+					timeSec = (time() - GF_FilteredResultsList[i+GF_ResultsListOffset].t) - timeMin*60
+					if timeMin < 10 then timeMin = "0"..timeMin end
+					if timeSec < 10 then timeSec = "0"..timeSec end
+					getglobal("GF_NewItem"..i.."MoreLeftLabel"):SetText(timeMin..":"..timeSec);
 				end
 			end
-		end--]]
+		end
 	end
 end
 
@@ -1221,7 +1223,7 @@ function GF_UpdateResults()
 	GF_ResultsLabel:SetText(GF_FOUND..groupListLength.." / "..getn(GF_MessageList[GF_RealmName]));
 	GF_PageLabel:SetText(GF_PAGE.." "..math.ceil((GF_ResultsListOffset + .1) / GF_ResultsListOffsetSize).." / "..math.max(math.ceil(groupListLength / GF_ResultsListOffsetSize),1));
 	GF_PageLabel:Show();
-
+	local timeMin, timeSec
 	for i=1, 20 do
 		local nFrame = "GF_NewItem"..i;
 		if getglobal(nFrame) then
@@ -1232,10 +1234,11 @@ function GF_UpdateResults()
 				else
 					if GF_PlayersCurrentlyInGroup[entry.op] or GF_Friends[entry.op] or GF_Guildies[entry.op] then getglobal(nFrame.."NameLabel"):SetTextColor(1,.843,0,1); else getglobal(nFrame.."NameLabel"):SetTextColor(0.75,0.75,1,1); end
 				end
-
-				if floor((time() - entry.t)/60) > 1 then getglobal(nFrame.."MoreRightLabel"):SetText(GF_FOUND..floor((time() - entry.t)/60)..GF_MINUTES..GF_TIME_AGO);
-				elseif floor((time() - entry.t)/60) == 1 then getglobal(nFrame.."MoreRightLabel"):SetText(GF_FOUND..floor((time() - entry.t)/60)..GF_MINUTE..GF_TIME_AGO);
-				else getglobal(nFrame.."MoreRightLabel"):SetText(GF_FOUND..GF_TIME_JUST_NOW); end
+				timeMin = floor(((time() - GF_FilteredResultsList[i+GF_ResultsListOffset].t))/60)
+				timeSec = (time() - GF_FilteredResultsList[i+GF_ResultsListOffset].t) - timeMin*60
+				if timeMin < 10 then timeMin = "0"..timeMin end
+				if timeSec < 10 then timeSec = "0"..timeSec end
+				getglobal("GF_NewItem"..i.."MoreLeftLabel"):SetText(timeMin..":"..timeSec);
 
 				local dungeonLevelDifficulty = "";
 				if entry.dlevel - UnitLevel("player") > 3 then dungeonLevelDifficulty = "|cff"..GF_DifficultyColors["RED"]
@@ -1349,23 +1352,23 @@ end
 function GF_ResultItem_Hover_On(frame,id)
 	frame:SetHeight(32);
 	getglobal(frame:GetName().."MoreLabel"):Show();
-	getglobal(frame:GetName().."MoreRightLabel"):Show();
 	getglobal(frame:GetName().."TextureBlue"):Show();
 	getglobal(frame:GetName().."NameLabel"):SetPoint("TOPLEFT", frame:GetName(), "TOPLEFT", 37, 0);
 	getglobal(frame:GetName().."MoreLabel"):SetPoint("LEFT", frame:GetName(), "LEFT", 37, -6);
 	getglobal(frame:GetName().."TextureSelectedBg"):Show();
 	getglobal(frame:GetName().."TextureSelectedIcon"):Show();
+	getglobal(frame:GetName().."MoreLeftLabel"):SetPoint("RIGHT", frame:GetName(), "LEFT", 0, 0);
 	GF_ListItemAuxLeft_ShowTooltip(frame, id)
 end
 function GF_ResultItem_Hover_Off(frame)
 	frame:SetHeight(18);
 	getglobal(frame:GetName().."MoreLabel"):Hide();
-	getglobal(frame:GetName().."MoreRightLabel"):Hide();
 	getglobal(frame:GetName().."TextureBlue"):Hide();
 	getglobal(frame:GetName().."NameLabel"):SetPoint("TOPLEFT", frame:GetName(), "TOPLEFT", 5, 0);
 	getglobal(frame:GetName().."MoreLabel"):SetPoint("LEFT", frame:GetName(), "LEFT", 5, -6);
 	getglobal(frame:GetName().."TextureSelectedBg"):Hide();
 	getglobal(frame:GetName().."TextureSelectedIcon"):Hide();
+	getglobal(frame:GetName().."MoreLeftLabel"):SetPoint("RIGHT", frame:GetName(), "LEFT", 5, 0);
 	GameTooltip:Hide();
 end
 function GF_GetGroupWhoButton(frame,id)
