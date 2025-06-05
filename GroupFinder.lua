@@ -2064,6 +2064,7 @@ function GF_GetTypes(arg1, showanyway)
 	elseif string.find(arg1, "[%a%s]lfg ") then GF_MessageData.foundLFM = 3 local lfs,lfe = string.find(arg1, "[%a%s]lfg ") arg1 = string.sub(arg1,1,lfs).." lfg "..string.sub(arg1,lfe+1)
 	elseif string.find(arg1, " lf[%s%d]+m ") then GF_MessageData.foundLFM = 4 local lfs,lfe = string.find(arg1, " lf[%s%d]+m ") arg1 = string.sub(arg1,1,lfs-1).." lfm "..string.sub(arg1,lfe+1) GF_MessageData.foundGuildExclusion = 3 GF_MessageData.foundTradesExclusion = 3
 	elseif string.find(arg1, " lf[%a%s]") then GF_MessageData.foundLFM = 2 local lfs,lfe = string.find(arg1, " lf[%a%s]") if not string.find(string.sub(arg1,lfe-1,lfe),"[gm]") then arg1 = string.sub(arg1,1,lfs-1).." lf "..string.sub(arg1,lfe) end
+	elseif string.find(arg1, "[dpstnkhlr%s]lf ") then GF_MessageData.foundLFM = 2 local lfs,lfe = string.find(arg1, "[dpstnkhlr%s]lf ") arg1 = string.sub(arg1,1,lfs).." lf "..string.sub(arg1,lfe+1)
 	elseif string.find(arg1, " wtb[%a%s]") then local lfs,lfe = string.find(arg1, " wtb[%a%s]") arg1 = string.sub(arg1,1,lfs-1).." wtb "..string.sub(arg1,lfe)
 	elseif string.find(arg1, " wts[%a%s]") then local lfs,lfe = string.find(arg1, " wts[%a%s]") arg1 = string.sub(arg1,1,lfs-1).." wts "..string.sub(arg1,lfe)
 	elseif string.find(arg1, " wtt[%a%s]") then local lfs,lfe = string.find(arg1, " wtt[%a%s]") arg1 = string.sub(arg1,1,lfs-1).." wtt "..string.sub(arg1,lfe)
@@ -2081,7 +2082,6 @@ function GF_GetTypes(arg1, showanyway)
 
 	for word in string.gfind(arg1, " (%w%d+)") do if GF_WORD_NUMBER[word] then table.insert(wordTable, GF_WORD_NUMBER[word]) end end
 	for word in string.gfind(arg1, "(%a+)") do if not GF_WORD_SKIP[word] then table.insert(wordTable, word) end end
-	if GF_WORD_TRADE_PHRASE[gsub(arg1, " ", "")] then GF_MessageData.foundTrades = 3 end
 	for j=0,3 do
 		for i=1, getn(wordTable) do
 			if wordTable[i+j] then
@@ -2099,6 +2099,9 @@ function GF_GetTypes(arg1, showanyway)
 			end
 		end
 	end
+	wordString = ""
+	for i=1,3 do if wordTable[i] then wordString = wordString..wordTable[i] end end
+	if GF_WORD_TRADE_PHRASE[wordString] then GF_MessageData.foundTrades = 3 end
 	for j=0,3 do
 		for i=1, getn(wordTable) do
 			if wordTable[i+j] then
@@ -2143,6 +2146,10 @@ function GF_GetTypes(arg1, showanyway)
 					for words,_ in GF_LFM_ONE_BEFORE do if wordTable[i-1] and wordTable[i-1]..wordString == words..wordString then GF_MessageData.foundLFM = 2 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5; end end
 					for words,_ in GF_LFM_TWO_AFTER do if wordTable[i+j+2] and wordString..wordTable[i+j+1]..wordTable[i+j+2] == wordString..words then GF_MessageData.foundLFM = 2 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5; end end
 					for words,_ in GF_LFM_TWO_BEFORE do if wordTable[i-2] and wordTable[i-2]..wordTable[i-1]..wordString == words..wordString then GF_MessageData.foundLFM = 2 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5; end end
+
+					for words,_ in GF_LFG_ONE_AFTER do if wordTable[i+j+1] and wordString..wordTable[i+j+1] == wordString..words then GF_MessageData.foundLFG = true GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5; end end
+					for words,_ in GF_LFG_ONE_BEFORE do if wordTable[i-1] and wordTable[i-1]..wordString == words..wordString then GF_MessageData.foundLFG = true GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5; end end
+					for words,_ in GF_LFG_TWO_BEFORE do if wordTable[i-2] and wordTable[i-2]..wordTable[i-1]..wordString == words..wordString then GF_MessageData.foundLFG = true GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5; end end
 				end
 			end
 		end
