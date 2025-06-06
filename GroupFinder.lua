@@ -968,7 +968,7 @@ function GF_OnEvent(event) -- OnEvent, LoadSettings, Bind Keys, Prune Tables
 		GF_TurnOffAnnounce(GF_AFK_ANNOUNCE_OFF);
 	elseif event == "CHAT_MSG_ADDON" and arg1 == "GF" and arg4 ~= GF_MyName then
 		GF_AddonListOfFriendsGuildiesWithAddon[arg4] = true;
-		GF_ParseIncomingAddonMessages(arg2)
+		--GF_ParseIncomingAddonMessages(arg2)
 	elseif event == "WHO_LIST_UPDATE" then
 		GF_WhoListUpdated();
 	elseif event == "RAID_ROSTER_UPDATE" or event == "PARTY_LEADER_CHANGED" or event == "PARTY_MEMBERS_CHANGED" then
@@ -2037,7 +2037,6 @@ function GF_CheckForGroups(arg1,arg2,event,showanyway)
 	if GF_MessageData.foundGuild >= 3 then return GF_CheckForSpam(arg1,arg2) or 11
 	elseif GF_MessageData.foundTrades >= 3 then return GF_CheckForSpam(arg1,arg2) or 5
 	elseif (GF_MessageData.foundIgnore and GF_MessageData.foundLFM < 4) then return GF_CheckForSpam(arg1,arg2) or 4 end
---event ~= "CHAT_MSG_CHANNEL" or
 
 	local foundInGroup,entry = GF_GetGroupInformation(GF_CleanUpMessagesOfBadLinks(arg1),arg2);
 	GF_GetWhoData(arg2,foundInGroup)
@@ -2100,7 +2099,7 @@ function GF_GetTypes(arg1, showanyway)
 		end
 	end
 	wordString = ""
-	for i=1,3 do if wordTable[i] then wordString = wordString..wordTable[i] end end
+	for i=1,4 do if wordTable[i] then wordString = wordString..wordTable[i] end end
 	if GF_WORD_TRADE_PHRASE[wordString] then GF_MessageData.foundTrades = 3 end
 	for j=0,3 do
 		for i=1, getn(wordTable) do
@@ -2156,11 +2155,11 @@ function GF_GetTypes(arg1, showanyway)
 	end
 	if GF_MessageData.foundLFM < 2 and string.find(arg1, "%d+\=%d+") then GF_MessageData.foundLFM = 2
 	elseif not GF_MessageData.foundQuest and not GF_MessageData.foundDungeon and not GF_MessageData.foundRaid and string.find(GF_MessageData.lfmlfgName,GF_MessageData.groupName) then GF_MessageData.foundLFM = 0 end
-	if GF_MessageData.foundGuild < 100 and string.find(arg1, "<[a-zA-Z0-9%&%-/ ]+>") then GF_MessageData.foundGuild = GF_MessageData.foundGuild + 2; GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1; end
+	if GF_MessageData.foundGuild < 100 and string.find(arg1, "<[a-zA-Z0-9%&%-/ ]+>") or string.find(arg1, "~[a-zA-Z0-9%&%-/ ]+~") then GF_MessageData.foundGuild = GF_MessageData.foundGuild + 2; GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1; end
 	while GF_MessageData.foundGuild > 100 do GF_MessageData.foundGuild = GF_MessageData.foundGuild - 100 end
 	GF_MessageData.foundGuild = GF_MessageData.foundGuild - GF_MessageData.foundGuildExclusion
 	
-	if string.find(arg1, "[%p ]%d+%s?g[%p ]") or string.find(arg1, "[%p ]%d+%s?gold[%p ]") or string.find(arg1, "[%p ]%d+ ?s[%p ]") or string.find(arg1, "[%p ]%d+ ?silver[%p ]") then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 2 end
+	if string.find(arg1, "[%p ]%d+%s?g[%p ]") or string.find(arg1, "[%p ]%d+%s?gold[%p ]") or string.find(arg1, "[%p ]%d%d?%s?s[%p ]") or string.find(arg1, "[%p ]%d+ ?silver[%p ]") then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 2 end
 	while GF_MessageData.foundTrades > 100 do GF_MessageData.foundTrades = GF_MessageData.foundTrades - 100 end
 	GF_MessageData.foundTrades = GF_MessageData.foundTrades - GF_MessageData.foundTradesExclusion
 
