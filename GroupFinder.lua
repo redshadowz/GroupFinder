@@ -635,9 +635,9 @@ end
 function GF_OnUpdate() -- OnUpdate, SendWho, WhoListUpdated, Announce, Broadcast, Update MessageList
 	if GF_UpdateTicker < GetTime() then -- Triggers once per second
 		GF_UpdateTicker = GetTime() + 1
-		GF_CheckForBroadCast()
+		--GF_CheckForBroadCast()
 		GF_UpdateGroupsFrame()
-		GF_RequestAdditionalWhoDataUpdates()
+		--GF_RequestAdditionalWhoDataUpdates()
 		GF_CheckForAnnounce()
 		GF_SendWhoIfNameInQueue()
 	end
