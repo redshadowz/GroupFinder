@@ -2032,7 +2032,7 @@ function GF_CheckForGroups(arg1,arg2,event,showanyway)
 -- "Say" messages will always be displayed unless flagged as spam.
 -- "Yell" and "Channel" messages will only display if allowed.
 	if GF_BlackList[GF_RealmName][arg2] and not GF_PlayersCurrentlyInGroup[arg2] and not GF_Friends[arg2] and not GF_Guildies[arg2] then return 8 end
-	GF_GetTypes(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(string.lower(gsub(gsub(gsub(" "..arg1.." ", "|c%x+|+(%w+)[%d:]+|+h", " %1 "), "|+h|+r", " "),"([a-z])([A-Z])","%1 %2")),".gg/%w+", ""),"(%a%a+)"," %1 "),"%s(%a)%s(%a)%s","%1%2"),"%s%s+", " "),"['']", "")," any?%s?1[%p%s]"," anyone ")," some%s?1[%p%s]"," anyone "),"any one","anyone"),"g2g","gtg"),"kk+","kk"),"ss+","ss"),"aa+","a"),showanyway)
+	GF_GetTypes(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(string.lower(gsub(gsub(gsub(" "..arg1.." ", "|c%x+|+(%w+)[%d:]+|+h", " %1 "), "|+h|+r", " "),"([a-z])([A-Z])","%1 %2")),".gg/%w+", ""),"(%a%a+)"," %1 "),"%s(%a)%s(%a)%s","%1%2"),"%s%s+", " "),"['']", "")," any?%s?1[%p%s]"," anyone ")," some%s?1[%p%s]"," anyone "),"any one","anyone"),"g2g","gtg"),"kk+","kk"),"lolol","lol"),"ss+","ss"),"aa+","a"),showanyway)
 	if event == "CHAT_MSG_HARDCORE" then GF_MessageData.foundHC = true end
 	if GF_MessageData.foundGuild >= 3 then return GF_CheckForSpam(arg1,arg2) or 11
 	elseif GF_MessageData.foundTrades >= 3 then return GF_CheckForSpam(arg1,arg2) or 5
