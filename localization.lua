@@ -377,9 +377,10 @@ GF_WORD_FIX = {
 ["invitein"] = "invite",["invitefor"] = "invite",["instance"] = "dungeon",["instances"] = "dungeon",["eplchapel"] = "epl",["dmf"] = "darkmoonfaire",
 ["poplockbox"] = "openlockbox",["youre"] = "youare",["mission"] = "quest",["getportal"] = "needportal",["preemptivedonations"] = "selling",["assist"] = "help",
 ["onebox"] = "box",["twobox"] = "box",["threebox"] = "box",["fourbox"] = "box",["onelockbox"] = "lockbox",["twolockbox"] = "lockbox",["threelockbox"] = "lockbox",["fourlockbox"] = "lockbox",
-["beginners"] = "beginner",["newbie"] = "beginner",["nub"] = "beginner",["nubs"] = "beginner",["noob"] = "beginner",["noobs"] = "beginner",["newbs"] = "beginner",["newbies"] = "beginner",["noobie"] = "beginner",["noobies"] = "beginner",
+["beginners"] = "beginner",["newbie"] = "beginner",["nub"] = "beginner",["nubs"] = "beginner",["noob"] = "beginner",["noobs"] = "beginner",["newbs"] = "beginner",
+["newbies"] = "beginner",["noobie"] = "beginner",["noobies"] = "beginner",["newcomer"] = "beginner",["newcomers"] = "beginner",
 
-["leveljewelcrafter"] = "jewelcrafter",["decentjewelcrafter"] = "jewelcrafter",["waterlords"] = "hydraxian",["waterlord"] = "hydraxian",["hydraxianhydraxian"] = "hydraxian",
+["leveljewelcrafter"] = "jewelcrafter",["decentjewelcrafter"] = "jewelcrafter",["waterlords"] = "hydraxian",["waterlord"] = "hydraxian",["waterlorsd"] = "hydraxian",["hydraxianhydraxian"] = "hydraxian",
 ["levelblacksmith"] = "blacksmith",["levelleatherworker"] = "leatherworker",["leveltailor"] = "tailor",["levelalchemy"] = "alchemy",["levelenchant"] = "enchant",["levelengineer"] = "engineer",
 
 ["starting"] = "start",["making"] = "make",["creating"] = "create",["hosting"] = "host",["forming"] = "form",["gathering"] = "gather",
@@ -412,6 +413,11 @@ GF_WORD_FIX = {
 ["adruid"] = "druid",["ahunter"] = "hunter",["amage"] = "mage",["apaladin"] = "paladin",["apriest"] = "priest",["arogue"] = "rogue",["ashaman"] = "shaman",["awarlock"] = "warlock",["awarrior"] = "warrior",
 ["somedruid"] = "druid",["somehunter"] = "hunter",["somemage"] = "mage",["somepaladin"] = "paladin",["somepriest"] = "priest",["somerogue"] = "rogue",["someshaman"] = "shaman",["somewarlock"] = "warlock",["somewarrior"] = "warrior",
 
+-- Guild
+["afghaniguild"] = "comboguild",["algerianguild"] = "comboguild",["americanguild"] = "comboguild",["argentineguild"] = "comboguild",["auguild"] = "comboguild",["auoceguild"] = "comboguild",["balkanguild"] = "comboguild",["brazilianguild"] = "comboguild",["canadianguild"] = "comboguild",["chadguild"] = "comboguild",["chileanguild"] = "comboguild",["chineseguild"] = "comboguild",["colombianguild"] = "comboguild",["congoleseguild"] = "comboguild",["cubanguild"] = "comboguild",["czechguild"] = "comboguild",["danishguild"] = "comboguild",["dutchguild"] = "comboguild",["egyptianguild"] = "comboguild",["englishguild"] = "comboguild",["ethiopianguild"] = "comboguild",["euguild"] = "comboguild",["finnishguild"] = "comboguild",["frguild"] = "comboguild",["frenchguild"] = "comboguild",["greekguild"] = "comboguild",["germanguild"] = "comboguild",["hungarianguild"] = "comboguild",["indianguild"] = "comboguild",["iranianguild"] = "comboguild",["iraqiguild"] = "comboguild",["italianguild"] = "comboguild",["japaneseguild"] = "comboguild",["kazakhguild"] = "comboguild",["kenyanguild"] = "comboguild",["koreanguild"] = "comboguild",["lebaneseguild"] = "comboguild",["libyanguild"] = "comboguild",["malayguild"] = "comboguild",["mexicanguild"] = "comboguild",["mongolianguild"] = "comboguild",["moroccanguild"] = "comboguild",["naguild"] = "comboguild",["nigerianguild"] = "comboguild",["nordguild"] = "comboguild",["norwegianguild"] = "comboguild",["oceguild"] = "comboguild",["oceauguild"] = "comboguild",["pakistaniguild"] = "comboguild",["peruvianguild"] = "comboguild",["filipinoguild"] = "comboguild",["polishguild"] = "comboguild",["portugueseguild"] = "comboguild",["romanianguild"] = "comboguild",["russianguild"] = "comboguild",["rwandanguild"] = "comboguild",["saudiguild"] = "comboguild",["somalianguild"] = "comboguild",["saguild"] = "comboguild",["spanishguild"] = "comboguild",["swedishguild"] = "comboguild",["syrianguild"] = "comboguild",["tajikguild"] = "comboguild",["thaiguild"] = "comboguild",["turkishguild"] = "comboguild",["ukrainianguild"] = "comboguild",["ugandanguild"] = "comboguild",["uhrguild"] = "comboguild",["venezuelanguild"] = "comboguild",["vietnameseguild"] = "comboguild",["yemeniguild"] = "comboguild",["zimbabweanguild"] = "comboguild",
+["activeguild"] = "comboguild",["allianceguild"] = "comboguild",["basedguild"] = "comboguild",["beginnerguild"] = "comboguild",["bigguild"] = "comboguild",["biggerguild"] = "comboguild",["casualguild"] = "comboguild",["challengingguild"] = "comboguild",["chillguild"] = "comboguild",["coolguild"] = "comboguild",["cozyguild"] = "comboguild",["crossfactionguild"] = "comboguild",["dadguild"] = "comboguild",["druidguild"] = "comboguild",["dungeonguild"] = "comboguild",["dwarfguild"] = "comboguild",["erpguild"] = "comboguild",["friendlyguild"] = "comboguild",["funguild"] = "comboguild",["furryguild"] = "comboguild",["gnomeguild"] = "comboguild",["goblinguild"] = "comboguild",["goodguild"] = "comboguild",["hcguild"] = "comboguild",["helpfulguild"] = "comboguild",["highelfguild"] = "comboguild",["hordeguild"] = "comboguild",["humanguild"] = "comboguild",["hunterguild"] = "comboguild",["hypeguild"] = "comboguild",["largeguild"] = "comboguild",["levelguild"] = "comboguild",["levelingguild"] = "comboguild",["lgbtguild"] = "comboguild",["lgbtqguild"] = "comboguild",["mageguild"] = "comboguild",["massiveguild"] = "comboguild",["mediumsizedguild"] = "comboguild",["memeguild"] = "comboguild",["mercenaryguild"] = "comboguild",["newguild"] = "comboguild",["newerguild"] = "comboguild",["newlycreatedguild"] = "comboguild",["newlyformedguild"] = "comboguild",["newlymadeguild"] = "comboguild",["nightelfguild"] = "comboguild",["northamericanguild"] = "comboguild",["onlyguild"] = "comboguild",["orcguild"] = "comboguild",["paladinguild"] = "comboguild",["priestguild"] = "comboguild",["pveguild"] = "comboguild",["pvpguild"] = "comboguild",["raidguild"] = "comboguild",["reallybigguild"] = "comboguild",["recentlyformedguild"] = "comboguild",["rogueguild"] = "comboguild",["roleplayingguild"] = "comboguild",["rpguild"] = "comboguild",["scourgeguild"] = "comboguild",["shamanguild"] = "comboguild",["skilledguild"] = "comboguild",["smallguild"] = "comboguild",["socialguild"] = "comboguild",["talkativeguild"] = "comboguild",["taurenguild"] = "comboguild",["topguild"] = "comboguild",["toprankguild"] = "comboguild",["trollguild"] = "comboguild",["undeadguild"] = "comboguild",["verybigguild"] = "comboguild",["verytalkativeguild"] = "comboguild",["warlockguild"] = "comboguild",["warriorguild"] = "comboguild",["wokeguild"] = "comboguild",["acdcguild"] = "comboguild",["femboyguild"] = "comboguild",["veganguild"] = "comboguild",["wowguild"] = "comboguild",
+["chinesespeak"] = "combospeak",["danishspeak"] = "combospeak",["dutchspeak"] = "combospeak",["englishspeak"] = "combospeak",["finnishspeak"] = "combospeak",["frenchspeak"] = "combospeak",["germanspeak"] = "combospeak",["greekspeak"] = "combospeak",["italianspeak"] = "combospeak",["japanesespeak"] = "combospeak",["koreanspeak"] = "combospeak",["norwegianspeak"] = "combospeak",["portuguesespeak"] = "combospeak",["russianspeak"] = "combospeak",["spanishspeak"] = "combospeak",["turkishspeak"] = "combospeak",["vietnamesespeak"] = "combospeak",
+
 -- Foreign
 ["encantamientodebotas"] = "enchantboots",["encantamientodeescudo"] = "enchantshield",["encantarbrazalete"] = "enchantwrist",
 ["encantamiento"] = "enchant",["encantar"] = "enchant",
@@ -429,8 +435,8 @@ GF_WORD_FIX = {
 ["norway"] = "norwegian",["oceanic"] = "oce",["pakistan"] = "pakistani",["peru"] = "peruvian",["philippines"] = "filipino",["philippine"] = "filipino",["poland"] = "polish",["pl"] = "polish",["portugal"] = "portuguese",
 ["romania"] = "romanian",["ro"] = "romanian",["ru"] = "russian",["russia"] = "russian",["rus"] = "russian",["russkie"] = "russian",["ruskie"] = "russian",["rwanda"] = "rwandan",["somalia"] = "somalian",["somali"] = "somalian",["southafrican"] = "sa",
 ["esp"] = "spanish",["spain"] = "spanish",["iberian"] = "spanish",["iberia"] = "spanish",
-["swede"] = "swedish",["sweden"] = "swedish",["syria"] = "syrian",["tajikistan"] = "tajik",["thailand"] = "thai",["turk"] = "turkish",["turkey"] = "turkish",["uganda"] = "ugandan",["ua"] = "ukrainian",["ukraine"] = "ukrainian",["uzbekistan"] = "uzbek",
-["venezuela"] = "venezuelan",["vietnam"] = "vietnamese",["viet"] = "vietnamese",["yemen"] = "yemeni",["zimbabwe"] = "zimbabwean",
+["swede"] = "swedish",["sweden"] = "swedish",["syria"] = "syrian",["tajikistan"] = "tajik",["thailand"] = "thai",["trk"] = "turkish",["turk"] = "turkish",["turkey"] = "turkish",["uganda"] = "ugandan",["ua"] = "ukrainian",["ukraine"] = "ukrainian",
+["uzbekistan"] = "uzbek",["venezuela"] = "venezuelan",["vietnam"] = "vietnamese",["viet"] = "vietnamese",["yemen"] = "yemeni",["zimbabwe"] = "zimbabwean",
 
 -- Misc words
 ["anyne"] = "anyone",["anny"] = "any",["anoyone"] = "anyone",["annyone"] = "anyone",["enyone"] = "anyone",["anyione"] = "anyone",["forr"] = "for",["onl"] = "only",["git"] = "get",["chilled"] = "chill",["bags"] = "bag",["zny"] = "any",
@@ -453,11 +459,14 @@ GF_WORD_FIX = {
 ["escorting"] = "escort",["mobs"] = "mob",["turns"] = "turn",["u"] = "you",["rewards"] = "reward",["giver"] = "give",["givers"] = "give",["gives"] = "give",["suggestions"] = "suggestion",["patterns"] = "pattern",["champions"] = "champion",
 ["dropping"] = "drop",["dropper"] = "drop",["drops"] = "drop",["orges"] = "ogres",["tryingh"] = "trying",["ganking"] = "gank",["ganks"] = "gank",["gankin"] = "gank",["rememberer"] = "remember",["togheter"] = "together",["insterested "] = "interested",
 ["douses"] = "douse",["dousers"] = "douse",["dowse"] = "douse",["dowses"] = "douse",["dowsers"] = "douse",["strt"] = "start",["starts"] = "start",["tests"] = "test",["tst"] = "test",["trainers"] = "trainer",["chasam"] = "chasm",
-
+["speaking"] = "speak",["speaker"] = "speak",["speakers"] = "speak",["speaks"] = "speak",["imossible"] = "impossible",["doenst"] = "doesnt",["chann"] = "channel",["channl"] = "channel",["seperate"] = "separate",
+["elesharp"] = "elementalsharpening",["elesharpening"] = "elementalsharpening",["elementalsharp"] = "elementalsharpening",["randos"] = "random",["randoms"] = "random",["femboi"] = "femboy",
 ["levelling"] = "leveling",["levelers"] = "leveling",["lvlers"] = "leveling",["lvling"] = "leveling",["lvlin"] = "leveling",["lvl"] = "level",["levlers"] = "leveling",["levling"] = "leveling",["leveel"] = "leveling",
 ["levl"] = "level",["lvel"] = "level",["levlin"] = "leveling",["lvelin"] = "leveling",["levln"] = "leveling",["lveln"] = "leveling",["lecel"] = "level",
 
 ["dkk"] = "dk",
+
+["sharesomestores"] = "sharesomestories",["sharestores"] = "sharestories",
 
 -- Roles
 ["healz"] = "heal",["heals"] = "heal",["healer"] = "heal",["healers"] = "heal",["healere"] = "heal",["healre"] = "heal",["xheal"] = "heal",["mheal"] = "heal",["heaer"] = "heal",["healler"] = "heal",["heler"] = "heal",["offhealer"] = "heal",["offheal"] = "heal",
@@ -490,6 +499,8 @@ GF_WORD_FIX = {
 
 ["elites"] = "elite",["elit"] = "elite",["leet"] = "elite",["leets"] = "elite",["eliteq"] = "elite",["elitequest"] = "elite",["elitezone"] = "elite",["elitequeue"] = "elite",["elitue"] = "elite",
 ["elire"] = "elite",["elits"] = "elite",["eilte"] = "elite",["elete"] = "elite",["eletes"] = "elite",
+
+["silithuscombatquest"] = "combattask",["fielddutycombatquest"] = "combattask",
 
 -- Professions
 ["bs"] = "blacksmith",["blacksmither"] = "blacksmith",["blacksmithing"] = "blacksmith",["hammersmith"] = "blacksmith",["swordsmith"] = "blacksmith",["blacmiting"] = "blacksmith",["smelting"] = "smelt",["locksmith"] = "lockbox",["locksmithing"] = "lockbox",
@@ -620,8 +631,9 @@ GF_WORD_FIX = {
 ["ofrecemoscontenido"] = "clearingcontent",
 
 -- Quests
-["morben"] = "morbent",["ladin"] = "ladim",["garak"] = "grark",["barow"] = "barov",
-["jinthalor"] = "jinthaalor",["jinthaatol"] = "jinthaalor",["jinthaator"] = "jinthaalor",["jinhacity"] = "jinthaalor",["jintaalor"] = "jinthaalor",["hidraxian"] = "hydraxian",["hydrax"] = "hydraxian",["hydraxis"] = "hydraxian",["hidraxy"] = "hydraxian",
+["morben"] = "morbent",["ladin"] = "ladim",["garak"] = "grark",["barow"] = "barov",["kozruk"] = "fozruk",
+["jinthalor"] = "jinthaalor",["jinthaatol"] = "jinthaalor",["jinthaator"] = "jinthaalor",["jinhacity"] = "jinthaalor",["jintaalor"] = "jinthaalor",
+["hidraxian"] = "hydraxian",["hydrax"] = "hydraxian",["hydraxis"] = "hydraxian",["hidraxy"] = "hydraxian",["hydraxial"] = "hydraxian",
 ["stormgarde"] = "stromgarde",["stormgard"] = "stromgarde",["stormguard"] = "stromgarde",["stromguard"] = "stromgarde",["smonus"] = "somnus",["duks"] = "dukes",
 ["bagthera"] = "bhagthera",["bajkteera"] = "bhagthera",["baghtira"] = "bhagthera",["princes"] = "princess",
 ["noz"] = "nozdormu",["obsidon"] = "obsidion",["tf"] = "thunderfury",["tf"] = "thunderfury",["frostmauls"] = "frostmaul",["aquamentas"] = "aquementas",["aquamentos"] = "aquementas",["restofskull"] = "testofskull",
@@ -762,13 +774,14 @@ GF_WORD_FIX = {
 ["gelneas"] = "gilneas",["gilcity"] = "gilneas",["gilcity"] = "gilneas",["giln"] = "gilneas",["gilneascity"] = "gilneas",["gilcity"] = "gilneas",["gilnea"] = "gilneas",["gilnes"] = "gilneas",["gil"] = "gilneas",
 ["hfc"] = "hfq",["hrg"] = "hfq",["htq"] = "hfq",["hatforge"] = "hateforge",["hategorhe"] = "hateforge",
 ["hijal"] = "hyjal",["hayja"] = "hyjal",["hyial"] = "hyjal",["hyal"] = "hyjal",["hyall"] = "hyjal",["hyjia"] = "hyjal",["hyja"] = "hyjal",["hyall"] = "hyjal",["hujal"] = "hyjal",["hyall"] = "hcjal",
-["karazan"] = "karazhan",["lowerkara"] = "karazhan",["kz"] = "karazhan",["lkh"] = "karazhan",["ukh"] = "karazhan",["khara"] = "karazhan",["cara"] = "karazhan",["kara"] = "karazhan",["kata"] = "karazhan",["karazhanv"] = "karazhan",
+["karazan"] = "karazhan",["lowerkara"] = "karazhan",["kz"] = "karazhan",["lkh"] = "karazhan",["ukh"] = "karazhan",["khara"] = "karazhan",
+["cara"] = "karazhan",["kara"] = "karazhan",["kata"] = "karazhan",["karazhanv"] = "karazhan",["kharazan"] = "karazhan",
 ["karacrypt"] = "karacrypt",["karazhancrypt"] = "karacrypt",["stormwindcrypt"] = "karacrypt",["crypts"] = "crypt",
 ["morrass"] = "morass",["moras"] = "morass",["morras"] = "morass",
 ["smv"] = "swv",["vaults"] = "vault",
 
 -- Quest and monster names
-["klavens"] = "klaven",["otarius"] = "ostarius",["larranikus"] = "larannikus",["leranikus"] = "larannikus",["hellscreem"] = "hellscream",["concanius"] = "concavius",
+["klavens"] = "klaven",["otarius"] = "ostarius",["larranikus"] = "larannikus",["laranikus"] = "larannikus",["leranikus"] = "larannikus",["hellscreem"] = "hellscream",["concanius"] = "concavius",
 
 -- Professions
 ["jeweller"] = "jewelcrafter",["jewellcraft"] = "jewelcrafter",["jewellcrafter"] = "jewelcrafter",["jewellcrafting"] = "jewelcrafter",["jewelcrafterw"] = "jewelcrafter",["jewelcrafterw"] = "jewelcrafter",["jewlcrafter"] = "jewelcrafter",
@@ -934,7 +947,10 @@ GF_WORD_IGNORE = {
 ["gmssay"] = true,["allmonitored"] = true,["aremonitored"] = true,["dontpunish"] = true,["obviousseller"] = true,["areputting"] = true,["whitelevel"] = true,["i used to"] = true,["dungeoninretail"] = true,["babypulls"] = true,
 ["howdoi"] = true,["howtostart"] = true,["questguild"] = true,["hcsshouldnot"] = true,["shouldnotbe"] = true,["saidnowipes"] = true,["runsaid"] = true,["acrosstheroom"] = true,["takesages"] = true,["wegetthere"] = true,
 ["killinglowbies"] = true,["killingbeginner"] = true,["exploreyour"] = true,["innerdominatrix"] = true,["wanttoexplore"] = true,["shoulditry"] = true,["hardtoget"] = true,["getfromthe"] = true,
+["onamonday"] = true,["onatuesday"] = true,["onawednesday"] = true,["onathursday"] = true,["onafriday"] = true,["onasaturday"] = true,["onasunday"] = true,
+["itsdying"] = true,["withrandom"] = true,["randomisnormal"] = true,["howthunderfury"] = true,["doyougroup"] = true,
 --[""] = true,
+--["dungeondragons"] = true,["dungeonanddragons"] = true,
 
 -- Addons
 ["pfquest"] = true,["healersmate"] = true,["kui"] = true,
@@ -1036,7 +1052,7 @@ GF_WORD_GUILD = {
 
 ["levellaugh"] = .5,["laughlevel"] = .5,["wejustlevel"] = .5,
 
-["guildwithchillpeople"] = 1,["chillpeople"] = .5,
+["guildwithchillpeople"] = 1,["chillpeople"] = .5,["guildforbeginner"] = 1,
 
 ["needtofind"] = .5,
 ["druidfind"] = .5,["hunterfind"] = .5,["magefind"] = .5,["paladinfind"] = .5,["priestfind"] = .5,["roguefind"] = .5,["shamanfind"] = .5,["warlockfind"] = .5,["warriorfind"] = .5,
@@ -1095,10 +1111,10 @@ GF_WORD_GUILD = {
 ["newplayer"] = 2,["newmembers"] = 1.5,["seriousmembers"] = .5,["veteranplayer"] = 1,["casualfriendly"] = 1,
 ["dungeoncrawling"] = 1,["pleasantadventure"] = 2,["goodvibes"] = 2,["groupclears"] = 2,["laidback"] = .5,["personalpractice"] = .5,["roleplayingevent"] = .5,["ourvoyage"] = .5,["freshjourney"] = .5,["funplace"] = .5,
 ["warmodeonly"] = .5,["hordeonly"] = .5,["pvpfriendly"] = 1,["pvefriendly"] = 1,
-["wejoke"] = .5,["weaccept"] = 1,
+["wejoke"] = .5,["weaccept"] = 1,["sharesomestories"] = 1,["storiesofadventure"] = 1,["adventurestories"] = 1,["nearesttavern"] = .5,
 ["alliancewarmodeonly"] = .5,["hordewarmodeonly"] = .5,["warmodeonly"] = 1,
 
-["collective"] = .5,["sharedjourney"] = 1,["isanadventure"] = .5,["oneofus"] = .5,["tohangout"] = .5,
+["collective"] = .5,["sharedjourney"] = 1,["isanadventure"] = .5,["oneofus"] = .5,["tohangout"] = .5,["comehangout"] = .5,["hangoutwithus"] = 1,
 
 ["naandeu"] = 1,["euandna"] = 1,
 
@@ -1128,157 +1144,22 @@ GF_WORD_GUILD = {
 ["playerofanyclass"] = 1,["playerofallclasses"] = 1,["opentoall"] = 1,["alllevelsarewelcome"] = 1,
 
 ["levelwithyourfellow"] = 1,["nopressure"] = .5,["raidwillcomeeventually"] = 1,
-
 ["socialpve"] = .5,["socialpvp"] = .5,["socialexperience"] = .5,["pvepvp"] = .5,["pvpexperience"] = .5,["pvepvpexperience"] = 1,
 
 -- Guild terms
-["wowguild"] = .5,["activewowguild"] = .5,["alliancewowguild"] = .5,["chillwowguild"] = .5,["coolwowguild"] = .5,["cozywowguild"] = .5,["crossfactionwowguild"] = .5,["erpwowguild"] = .5,["friendlywowguild"] = .5,["funwowguild"] = .5,["helpfulwowguild"] = .5,["hordewowguild"] = .5,["levelwowguild"] = .5,["levelingwowguild"] = .5,["pvpwowguild"] = .5,["raidwowguild"] = .5,["rpwowguild"] = .5,["socialwowguild"] = .5,
-["lgbtfriendlyguild"] = .5,["lgbtguild"] = .5,["lgbtqguild"] = .5,["lgbtqriendlyguild"] = .5,["challengingguild"] = .5,
-["lflgbtfriendlyguild"] = .5,["lflgbtguild"] = .5,["lflgbtqguild"] = .5,["lflgbtqriendlyguild"] = .5,
-["dungeonguild"] = 1,["lfdungeonguild"] = .5,["lfgdungeonguild"] = .5,["anydungeonguild"] = .5,["needdungeonguild"] = .5,
-["newguild"] = .5,["lfnewguild"] = .5,["lfgnewguild"] = .5,["anynewguild"] = .5,["neednewguild"] = .5,
-
-["basedguild"] = .5,["lfbasedguild"] = .5,["lfgbasedguild"] = .5,["anybasedguild"] = .5,["needbasedguild"] = .5,["freshbasedguild"] = .5,
-["memeguild"] = .5,["lfmemeguild"] = .5,["lfgmemeguild"] = .5,["needmemeguild"] = .5,
-["beginnerguild"] = .5,["lfbeginnerguild"] = .5,["lfgbeginnerguild"] = .5,["needbeginnerguild"] = .5,
-["newlymade"] = .5,["newlymadeguild"] = .5,["lfnewlymadeguild"] = .5,["lfgnewlymadeguild"] = .5,["neednewlymadeguild"] = .5,
-["newlycreatedguild"] = .5,["lfnewlycreatedguild"] = .5,["lfgnewlycreatedguild"] = .5,["neednewlycreatedguild"] = .5,
-["challenging"] = .5,["challengingguild"] = .5,["lfchallengingguild"] = .5,["lfgchallengingguild"] = .5,["needchallengingguild"] = .5,
-["hypeguild"] = .5,["lfhypeguild"] = .5,["lfghypeguild"] = .5,["needhypeguild"] = .5,
-["skilledguild"] = .5,["lfskilledguild"] = .5,["lfgskilledguild"] = .5,["needskilledguild"] = .5,
-["allianceonlyguild"] = .5,["lfallianceonlyguild"] = .5,["lfgallianceonlyguild"] = .5,["needallianceonlyguild"] = .5,
-["hordeonlyguild"] = .5,["lfhordeonlyguild"] = .5,["lfghordeonlyguild"] = .5,["needhordeonlyguild"] = .5,
-["recentlyformedguild"] = .5,["lfrecentlyformedguild"] = .5,["lfgrecentlyformedguild"] = .5,["needrecentlyformedguild"] = .5,
-["newlyformedguild"] = .5,["lfnewlyformedguild"] = .5,["lfgnewlyformedguild"] = .5,["neednewlyformedguild"] = .5,
-["wokeguild"] = .5,["lfwokeguild"] = .5,["lfgwokeguild"] = .5,["needwokeguild"] = .5,
-["furryguild"] = .5,["lffurryguild"] = .5,["lfgfurryguild"] = .5,["anyfurryguild"] = .5,["needfurryguild"] = .5,["freshfurryguild"] = .5,
-["newlyformed"] = 1,["recentlyformed"] = 1,
+["comboguild"] = 102.5,["lfcomboguild"] = 1,["lfgcomboguild"] = 1,["anycomboguild"] = .5,["needcomboguild"] = .5,["freshcomboguild"] = .5,
+["combospeak"] = 1,["combospeakguild"] = .5,["lfcombospeak"] = .5,["lfgcombospeak"] = .5,["anycombospeak"] = .5,["needcombospeak"] = .5,["freshcombospeak"] = .5,
 
 -- Guild combinations
-["activeguild"] = .5,["inviteactiveguild"] = .5,["lfactiveguild"] = .5,["lfgactiveguild"] = .5,["needactiveguild"] = .5,["anyactiveguild"] = .5,["allianceactiveguild"] = .5,["beginneractiveguild"] = .5,["casualactiveguild"] = .5,["chillactiveguild"] = .5,["coolactiveguild"] = .5,["cozyactiveguild"] = .5,["crossfactionactiveguild"] = .5,["erpactiveguild"] = .5,["friendlyactiveguild"] = .5,["funactiveguild"] = .5,["helpfulactiveguild"] = .5,["hordeactiveguild"] = .5,["levelactiveguild"] = .5,["levelingactiveguild"] = .5,["pveactiveguild"] = .5,["pvpactiveguild"] = .5,["raidactiveguild"] = .5,["rpactiveguild"] = .5,["socialactiveguild"] = .5,["mercenaryactiveguild"] = .5,["roleplayingactiveguild"] = .5,
-["allianceguild"] = .5,["inviteallianceguild"] = .5,["lfallianceguild"] = .5,["lfgallianceguild"] = .5,["needallianceguild"] = .5,["anyallianceguild"] = .5,["activeallianceguild"] = .5,["beginnerallianceguild"] = .5,["casualallianceguild"] = .5,["chillallianceguild"] = .5,["coolallianceguild"] = .5,["cozyallianceguild"] = .5,["crossfactionallianceguild"] = .5,["erpallianceguild"] = .5,["friendlyallianceguild"] = .5,["funallianceguild"] = .5,["helpfulallianceguild"] = .5,["hordeallianceguild"] = .5,["levelallianceguild"] = .5,["levelingallianceguild"] = .5,["pveallianceguild"] = .5,["pvpallianceguild"] = .5,["raidallianceguild"] = .5,["rpallianceguild"] = .5,["socialallianceguild"] = .5,["mercenaryallianceguild"] = .5,["roleplayingallianceguild"] = .5,
-["beginnerguild"] = .5,["invitebeginnerguild"] = .5,["lfbeginnerguild"] = .5,["lfgbeginnerguild"] = .5,["needbeginnerguild"] = .5,["anybeginnerguild"] = .5,["activebeginnerguild"] = .5,["alliancebeginnerguild"] = .5,["casualbeginnerguild"] = .5,["chillbeginnerguild"] = .5,["coolbeginnerguild"] = .5,["cozybeginnerguild"] = .5,["crossfactionbeginnerguild"] = .5,["erpbeginnerguild"] = .5,["friendlybeginnerguild"] = .5,["funbeginnerguild"] = .5,["helpfulbeginnerguild"] = .5,["hordebeginnerguild"] = .5,["levelbeginnerguild"] = .5,["levelingbeginnerguild"] = .5,["pvebeginnerguild"] = .5,["pvpbeginnerguild"] = .5,["raidbeginnerguild"] = .5,["rpbeginnerguild"] = .5,["socialbeginnerguild"] = .5,["mercenarybeginnerguild"] = .5,["roleplayingbeginnerguild"] = .5,
-["casualguild"] = .5,["invitecasualguild"] = .5,["lfcasualguild"] = .5,["lfgcasualguild"] = .5,["needcasualguild"] = .5,["anycasualguild"] = .5,["activecasualguild"] = .5,["alliancecasualguild"] = .5,["beginnercasualguild"] = .5,["chillcasualguild"] = .5,["coolcasualguild"] = .5,["cozycasualguild"] = .5,["crossfactioncasualguild"] = .5,["erpcasualguild"] = .5,["friendlycasualguild"] = .5,["funcasualguild"] = .5,["helpfulcasualguild"] = .5,["hordecasualguild"] = .5,["levelcasualguild"] = .5,["levelingcasualguild"] = .5,["pvecasualguild"] = .5,["pvpcasualguild"] = .5,["raidcasualguild"] = .5,["rpcasualguild"] = .5,["socialcasualguild"] = .5,["mercenarycasualguild"] = .5,["roleplayingcasualguild"] = .5,
-["chillguild"] = .5,["invitechillguild"] = .5,["lfchillguild"] = .5,["lfgchillguild"] = .5,["needchillguild"] = .5,["anychillguild"] = .5,["activechillguild"] = .5,["alliancechillguild"] = .5,["beginnerchillguild"] = .5,["casualchillguild"] = .5,["coolchillguild"] = .5,["cozychillguild"] = .5,["crossfactionchillguild"] = .5,["erpchillguild"] = .5,["friendlychillguild"] = .5,["funchillguild"] = .5,["helpfulchillguild"] = .5,["hordechillguild"] = .5,["levelchillguild"] = .5,["levelingchillguild"] = .5,["pvechillguild"] = .5,["pvpchillguild"] = .5,["raidchillguild"] = .5,["rpchillguild"] = .5,["socialchillguild"] = .5,["mercenarychillguild"] = .5,["roleplayingchillguild"] = .5,
-["coolguild"] = .5,["invitecoolguild"] = .5,["lfcoolguild"] = .5,["lfgcoolguild"] = .5,["needcoolguild"] = .5,["anycoolguild"] = .5,["activecoolguild"] = .5,["alliancecoolguild"] = .5,["beginnercoolguild"] = .5,["casualcoolguild"] = .5,["chillcoolguild"] = .5,["cozycoolguild"] = .5,["crossfactioncoolguild"] = .5,["erpcoolguild"] = .5,["friendlycoolguild"] = .5,["funcoolguild"] = .5,["helpfulcoolguild"] = .5,["hordecoolguild"] = .5,["levelcoolguild"] = .5,["levelingcoolguild"] = .5,["pvecoolguild"] = .5,["pvpcoolguild"] = .5,["raidcoolguild"] = .5,["rpcoolguild"] = .5,["socialcoolguild"] = .5,["mercenarycoolguild"] = .5,["roleplayingcoolguild"] = .5,
-["cozyguild"] = .5,["invitecozyguild"] = .5,["lfcozyguild"] = .5,["lfgcozyguild"] = .5,["needcozyguild"] = .5,["anycozyguild"] = .5,["activecozyguild"] = .5,["alliancecozyguild"] = .5,["beginnercozyguild"] = .5,["casualcozyguild"] = .5,["chillcozyguild"] = .5,["coolcozyguild"] = .5,["crossfactioncozyguild"] = .5,["erpcozyguild"] = .5,["friendlycozyguild"] = .5,["funcozyguild"] = .5,["helpfulcozyguild"] = .5,["hordecozyguild"] = .5,["levelcozyguild"] = .5,["levelingcozyguild"] = .5,["pvecozyguild"] = .5,["pvpcozyguild"] = .5,["raidcozyguild"] = .5,["rpcozyguild"] = .5,["socialcozyguild"] = .5,["mercenarycozyguild"] = .5,["roleplayingcozyguild"] = .5,
-["crossfactionguild"] = .5,["invitecrossfactionguild"] = .5,["lfcrossfactionguild"] = .5,["lfgcrossfactionguild"] = .5,["needcrossfactionguild"] = .5,["anycrossfactionguild"] = .5,["activecrossfactionguild"] = .5,["alliancecrossfactionguild"] = .5,["beginnercrossfactionguild"] = .5,["casualcrossfactionguild"] = .5,["chillcrossfactionguild"] = .5,["coolcrossfactionguild"] = .5,["cozycrossfactionguild"] = .5,["erpcrossfactionguild"] = .5,["friendlycrossfactionguild"] = .5,["funcrossfactionguild"] = .5,["helpfulcrossfactionguild"] = .5,["hordecrossfactionguild"] = .5,["levelcrossfactionguild"] = .5,["levelingcrossfactionguild"] = .5,["pvecrossfactionguild"] = .5,["pvpcrossfactionguild"] = .5,["raidcrossfactionguild"] = .5,["rpcrossfactionguild"] = .5,["socialcrossfactionguild"] = .5,["mercenarycrossfactionguild"] = .5,["roleplayingcrossfactionguild"] = .5,
-["erpguild"] = .5,["inviteerpguild"] = .5,["lferpguild"] = .5,["lfgerpguild"] = .5,["neederpguild"] = .5,["anyerpguild"] = .5,["activeerpguild"] = .5,["allianceerpguild"] = .5,["beginnererpguild"] = .5,["casualerpguild"] = .5,["chillerpguild"] = .5,["coolerpguild"] = .5,["cozyerpguild"] = .5,["crossfactionerpguild"] = .5,["friendlyerpguild"] = .5,["funerpguild"] = .5,["helpfulerpguild"] = .5,["hordeerpguild"] = .5,["levelerpguild"] = .5,["levelingerpguild"] = .5,["pveerpguild"] = .5,["pvperpguild"] = .5,["raiderpguild"] = .5,["rperpguild"] = .5,["socialerpguild"] = .5,["mercenaryerpguild"] = .5,["roleplayingerpguild"] = .5,
-["friendlyguild"] = .5,["invitefriendlyguild"] = .5,["lffriendlyguild"] = .5,["lfgfriendlyguild"] = .5,["needfriendlyguild"] = .5,["anyfriendlyguild"] = .5,["activefriendlyguild"] = .5,["alliancefriendlyguild"] = .5,["beginnerfriendlyguild"] = .5,["casualfriendlyguild"] = .5,["chillfriendlyguild"] = .5,["coolfriendlyguild"] = .5,["cozyfriendlyguild"] = .5,["crossfactionfriendlyguild"] = .5,["erpfriendlyguild"] = .5,["funfriendlyguild"] = .5,["helpfulfriendlyguild"] = .5,["hordefriendlyguild"] = .5,["levelfriendlyguild"] = .5,["levelingfriendlyguild"] = .5,["pvefriendlyguild"] = .5,["pvpfriendlyguild"] = .5,["raidfriendlyguild"] = .5,["rpfriendlyguild"] = .5,["socialfriendlyguild"] = .5,["mercenaryfriendlyguild"] = .5,["roleplayingfriendlyguild"] = .5,
-["funguild"] = .5,["invitefunguild"] = .5,["lffunguild"] = .5,["lfgfunguild"] = .5,["needfunguild"] = .5,["anyfunguild"] = .5,["activefunguild"] = .5,["alliancefunguild"] = .5,["beginnerfunguild"] = .5,["casualfunguild"] = .5,["chillfunguild"] = .5,["coolfunguild"] = .5,["cozyfunguild"] = .5,["crossfactionfunguild"] = .5,["erpfunguild"] = .5,["friendlyfunguild"] = .5,["helpfulfunguild"] = .5,["hordefunguild"] = .5,["levelfunguild"] = .5,["levelingfunguild"] = .5,["pvefunguild"] = .5,["pvpfunguild"] = .5,["raidfunguild"] = .5,["rpfunguild"] = .5,["socialfunguild"] = .5,["mercenaryfunguild"] = .5,["roleplayingfunguild"] = .5,
-["helpfulguild"] = .5,["invitehelpfulguild"] = .5,["lfhelpfulguild"] = .5,["lfghelpfulguild"] = .5,["needhelpfulguild"] = .5,["anyhelpfulguild"] = .5,["activehelpfulguild"] = .5,["alliancehelpfulguild"] = .5,["beginnerhelpfulguild"] = .5,["casualhelpfulguild"] = .5,["chillhelpfulguild"] = .5,["coolhelpfulguild"] = .5,["cozyhelpfulguild"] = .5,["crossfactionhelpfulguild"] = .5,["erphelpfulguild"] = .5,["friendlyhelpfulguild"] = .5,["funhelpfulguild"] = .5,["hordehelpfulguild"] = .5,["levelhelpfulguild"] = .5,["levelinghelpfulguild"] = .5,["pvehelpfulguild"] = .5,["pvphelpfulguild"] = .5,["raidhelpfulguild"] = .5,["rphelpfulguild"] = .5,["socialhelpfulguild"] = .5,["mercenaryhelpfulguild"] = .5,["roleplayinghelpfulguild"] = .5,
-["hordeguild"] = .5,["invitehordeguild"] = .5,["lfhordeguild"] = .5,["lfghordeguild"] = .5,["needhordeguild"] = .5,["anyhordeguild"] = .5,["activehordeguild"] = .5,["alliancehordeguild"] = .5,["beginnerhordeguild"] = .5,["casualhordeguild"] = .5,["chillhordeguild"] = .5,["coolhordeguild"] = .5,["cozyhordeguild"] = .5,["crossfactionhordeguild"] = .5,["erphordeguild"] = .5,["friendlyhordeguild"] = .5,["funhordeguild"] = .5,["helpfulhordeguild"] = .5,["levelhordeguild"] = .5,["levelinghordeguild"] = .5,["pvehordeguild"] = .5,["pvphordeguild"] = .5,["raidhordeguild"] = .5,["rphordeguild"] = .5,["socialhordeguild"] = .5,["mercenaryhordeguild"] = .5,["roleplayinghordeguild"] = .5,
-["levelguild"] = .5,["invitelevelguild"] = .5,["lflevelguild"] = .5,["lfglevelguild"] = .5,["needlevelguild"] = .5,["anylevelguild"] = .5,["activelevelguild"] = .5,["alliancelevelguild"] = .5,["beginnerlevelguild"] = .5,["casuallevelguild"] = .5,["chilllevelguild"] = .5,["coollevelguild"] = .5,["cozylevelguild"] = .5,["crossfactionlevelguild"] = .5,["erplevelguild"] = .5,["friendlylevelguild"] = .5,["funlevelguild"] = .5,["helpfullevelguild"] = .5,["hordelevelguild"] = .5,["levelinglevelguild"] = .5,["pvelevelguild"] = .5,["pvplevelguild"] = .5,["raidlevelguild"] = .5,["rplevelguild"] = .5,["sociallevelguild"] = .5,["mercenarylevelguild"] = .5,["roleplayinglevelguild"] = .5,
-["levelingguild"] = .5,["invitelevelingguild"] = .5,["lflevelingguild"] = .5,["lfglevelingguild"] = .5,["needlevelingguild"] = .5,["anylevelingguild"] = .5,["activelevelingguild"] = .5,["alliancelevelingguild"] = .5,["beginnerlevelingguild"] = .5,["casuallevelingguild"] = .5,["chilllevelingguild"] = .5,["coollevelingguild"] = .5,["cozylevelingguild"] = .5,["crossfactionlevelingguild"] = .5,["erplevelingguild"] = .5,["friendlylevelingguild"] = .5,["funlevelingguild"] = .5,["helpfullevelingguild"] = .5,["hordelevelingguild"] = .5,["levellevelingguild"] = .5,["pvelevelingguild"] = .5,["pvplevelingguild"] = .5,["raidlevelingguild"] = .5,["rplevelingguild"] = .5,["sociallevelingguild"] = .5,["mercenarylevelingguild"] = .5,["roleplayinglevelingguild"] = .5,
-["pveguild"] = .5,["invitepveguild"] = .5,["lfpvpguild"] = .5,["lfgpvpguild"] = .5,["needpvpguild"] = .5,["anypvpguild"] = .5,["activepveguild"] = .5,["alliancepveguild"] = .5,["beginnerpveguild"] = .5,["casualpveguild"] = .5,["chillpveguild"] = .5,["coolpveguild"] = .5,["cozypveguild"] = .5,["crossfactionpveguild"] = .5,["erppveguild"] = .5,["friendlypveguild"] = .5,["funpveguild"] = .5,["helpfulpveguild"] = .5,["hordepveguild"] = .5,["levelpveguild"] = .5,["levelingpveguild"] = .5,["pvppveguild"] = .5,["raidpveguild"] = .5,["rppveguild"] = .5,["socialpveguild"] = .5,["mercenarypveguild"] = .5,["roleplayingpveguild"] = .5,
-["pvpguild"] = .5,["invitepvpguild"] = .5,["lfraidguild"] = .5,["lfgraidguild"] = .5,["needraidguild"] = .5,["anyraidguild"] = .5,["activepvpguild"] = .5,["alliancepvpguild"] = .5,["beginnerpvpguild"] = .5,["casualpvpguild"] = .5,["chillpvpguild"] = .5,["coolpvpguild"] = .5,["cozypvpguild"] = .5,["crossfactionpvpguild"] = .5,["erppvpguild"] = .5,["friendlypvpguild"] = .5,["funpvpguild"] = .5,["helpfulpvpguild"] = .5,["hordepvpguild"] = .5,["levelpvpguild"] = .5,["levelingpvpguild"] = .5,["pvepvpguild"] = .5,["raidpvpguild"] = .5,["rppvpguild"] = .5,["socialpvpguild"] = .5,["mercenarypvpguild"] = .5,["roleplayingpvpguild"] = .5,
-["raidguild"] = .5,["inviteraidguild"] = .5,["lfrpguild"] = .5,["lfgrpguild"] = .5,["needrpguild"] = .5,["anyrpguild"] = .5,["activeraidguild"] = .5,["allianceraidguild"] = .5,["beginnerraidguild"] = .5,["casualraidguild"] = .5,["chillraidguild"] = .5,["coolraidguild"] = .5,["cozyraidguild"] = .5,["crossfactionraidguild"] = .5,["erpraidguild"] = .5,["friendlyraidguild"] = .5,["funraidguild"] = .5,["helpfulraidguild"] = .5,["horderaidguild"] = .5,["levelraidguild"] = .5,["levelingraidguild"] = .5,["pveraidguild"] = .5,["pvpraidguild"] = .5,["rpraidguild"] = .5,["socialraidguild"] = .5,["mercenaryraidguild"] = .5,["roleplayingraidguild"] = .5,
-["rpguild"] = .5,["inviterpguild"] = .5,["lfsocialguild"] = .5,["lfgsocialguild"] = .5,["needsocialguild"] = .5,["anysocialguild"] = .5,["activerpguild"] = .5,["alliancerpguild"] = .5,["beginnerrpguild"] = .5,["casualrpguild"] = .5,["chillrpguild"] = .5,["coolrpguild"] = .5,["cozyrpguild"] = .5,["crossfactionrpguild"] = .5,["erprpguild"] = .5,["friendlyrpguild"] = .5,["funrpguild"] = .5,["helpfulrpguild"] = .5,["horderpguild"] = .5,["levelrpguild"] = .5,["levelingrpguild"] = .5,["pverpguild"] = .5,["pvprpguild"] = .5,["raidrpguild"] = .5,["socialrpguild"] = .5,["mercenaryrpguild"] = .5,["roleplayingrpguild"] = .5,
-["socialguild"] = .5,["invitesocialguild"] = .5,["lfmercenaryguild"] = .5,["lfgmercenaryguild"] = .5,["needmercenaryguild"] = .5,["anymercenaryguild"] = .5,["activesocialguild"] = .5,["alliancesocialguild"] = .5,["beginnersocialguild"] = .5,["casualsocialguild"] = .5,["chillsocialguild"] = .5,["coolsocialguild"] = .5,["cozysocialguild"] = .5,["crossfactionsocialguild"] = .5,["erpsocialguild"] = .5,["friendlysocialguild"] = .5,["funsocialguild"] = .5,["helpfulsocialguild"] = .5,["hordesocialguild"] = .5,["levelsocialguild"] = .5,["levelingsocialguild"] = .5,["pvesocialguild"] = .5,["pvpsocialguild"] = .5,["raidsocialguild"] = .5,["rpsocialguild"] = .5,["mercenarysocialguild"] = .5,["roleplayingsocialguild"] = .5,
-["mercenaryguild"] = .5,["invitemercenaryguild"] = .5,["lfroleplayingguild"] = .5,["lfgroleplayingguild"] = .5,["needroleplayingguild"] = .5,["anyroleplayingguild"] = .5,["activemercenaryguild"] = .5,["alliancemercenaryguild"] = .5,["beginnermercenaryguild"] = .5,["casualmercenaryguild"] = .5,["chillmercenaryguild"] = .5,["coolmercenaryguild"] = .5,["cozymercenaryguild"] = .5,["crossfactionmercenaryguild"] = .5,["erpmercenaryguild"] = .5,["friendlymercenaryguild"] = .5,["funmercenaryguild"] = .5,["helpfulmercenaryguild"] = .5,["hordemercenaryguild"] = .5,["levelmercenaryguild"] = .5,["levelingmercenaryguild"] = .5,["pvemercenaryguild"] = .5,["pvpmercenaryguild"] = .5,["raidmercenaryguild"] = .5,["rpmercenaryguild"] = .5,["socialmercenaryguild"] = .5,["roleplayingmercenaryguild"] = .5,
-["roleplayingguild"] = .5,["inviteroleplayingguild"] = .5,["lfroleplayingguild"] = .5,["lfgroleplayingguild"] = .5,["needroleplayingguild"] = .5,["anyroleplayingguild"] = .5,["activeroleplayingguild"] = .5,["allianceroleplayingguild"] = .5,["beginnerroleplayingguild"] = .5,["casualroleplayingguild"] = .5,["chillroleplayingguild"] = .5,["coolroleplayingguild"] = .5,["cozyroleplayingguild"] = .5,["crossfactionroleplayingguild"] = .5,["erproleplayingguild"] = .5,["friendlyroleplayingguild"] = .5,["funroleplayingguild"] = .5,["helpfulroleplayingguild"] = .5,["horderoleplayingguild"] = .5,["levelroleplayingguild"] = .5,["levelingroleplayingguild"] = .5,["pveroleplayingguild"] = .5,["pvproleplayingguild"] = .5,["raidroleplayingguild"] = .5,["rproleplayingguild"] = .5,["socialroleplayingguild"] = .5,["mercenaryroleplayingguild"] = .5,
+["afghani"] = .5,["algerian"] = .5,["american"] = .5,["argentine"] = .5,["au"] = .5,["auoce"] = .5,["balkan"] = .5,["brazilian"] = .5,["canadian"] = .5,["chad"] = .5,["chilean"] = .5,["chinese"] = .5,["colombian"] = .5,["congolese"] = .5,["cuban"] = .5,["czech"] = .5,["danish"] = .5,["dutch"] = .5,["egyptian"] = .5,["english"] = .5,["ethiopian"] = .5,["eu"] = .5,["finnish"] = .5,["fr"] = .5,["french"] = .5,["greek"] = .5,["german"] = .5,["hungarian"] = .5,["indian"] = .5,["iranian"] = .5,["iraqi"] = .5,["italian"] = .5,["japanese"] = .5,["kazakh"] = .5,["kenyan"] = .5,["korean"] = .5,["lebanese"] = .5,["libyan"] = .5,["malay"] = .5,["mexican"] = .5,["mongolian"] = .5,["moroccan"] = .5,["na"] = .5,["nigerian"] = .5,["nord"] = .5,["norwegian"] = .5,["oce"] = .5,["oceau"] = .5,["pakistani"] = .5,["peruvian"] = .5,["filipino"] = .5,["polish"] = .5,["portuguese"] = .5,["romanian"] = .5,["russian"] = .5,["rwandan"] = .5,["saudi"] = .5,["somalian"] = .5,["sa"] = .5,["spanish"] = .5,["swedish"] = .5,["syrian"] = .5,["tajik"] = .5,["thai"] = .5,["turkish"] = .5,["ukrainian"] = .5,["ugandan"] = .5,["uhr"] = .5,["venezuelan"] = .5,["vietnamese"] = .5,["yemeni"] = .5,["zimbabwean"] = .5,
+["activecomboguild"] = .5,["alliancecomboguild"] = .5,["basedcomboguild"] = .5,["beginnercomboguild"] = .5,["bigcomboguild"] = .5,["biggercomboguild"] = .5,["casualcomboguild"] = .5,["challengingcomboguild"] = .5,["chillcomboguild"] = .5,["coolcomboguild"] = .5,["cozycomboguild"] = .5,["crossfactioncomboguild"] = .5,["dadcomboguild"] = .5,["druidcomboguild"] = .5,["dungeoncomboguild"] = .5,["dwarfcomboguild"] = .5,["erpcomboguild"] = .5,["friendlycomboguild"] = .5,["funcomboguild"] = .5,["furrycomboguild"] = .5,["gnomecomboguild"] = .5,["goblincomboguild"] = .5,["goodcomboguild"] = .5,["hccomboguild"] = .5,["helpfulcomboguild"] = .5,["highelfcomboguild"] = .5,["hordecomboguild"] = .5,["humancomboguild"] = .5,["huntercomboguild"] = .5,["hypecomboguild"] = .5,["largecomboguild"] = .5,["levelcomboguild"] = .5,["levelingcomboguild"] = .5,["lgbtcomboguild"] = .5,["lgbtqcomboguild"] = .5,["magecomboguild"] = .5,["massivecomboguild"] = .5,["mediumsizedcomboguild"] = .5,["memecomboguild"] = .5,["mercenarycomboguild"] = .5,["newcomboguild"] = .5,["newercomboguild"] = .5,["newlycreatedcomboguild"] = .5,["newlyformedcomboguild"] = .5,["newlymadecomboguild"] = .5,["nightelfcomboguild"] = .5,["northamericancomboguild"] = .5,["onlycomboguild"] = .5,["orccomboguild"] = .5,["paladincomboguild"] = .5,["priestcomboguild"] = .5,["pvecomboguild"] = .5,["pvpcomboguild"] = .5,["raidcomboguild"] = .5,["reallybigcomboguild"] = .5,["recentlyformedcomboguild"] = .5,["roguecomboguild"] = .5,["roleplayingcomboguild"] = .5,["rpcomboguild"] = .5,["scourgecomboguild"] = .5,["shamancomboguild"] = .5,["skilledcomboguild"] = .5,["smallcomboguild"] = .5,["socialcomboguild"] = .5,["talkativecomboguild"] = .5,["taurencomboguild"] = .5,["topcomboguild"] = .5,["toprankcomboguild"] = .5,["trollcomboguild"] = .5,["undeadcomboguild"] = .5,["verybigcomboguild"] = .5,["verytalkativecomboguild"] = .5,["warlockcomboguild"] = .5,["warriorcomboguild"] = .5,["wokecomboguild"] = .5,["acdccomboguild"] = .5,["femboycomboguild"] = .5,["vegancomboguild"] = .5,["wowcomboguild"] = .5,
+["active"] = .25,["based"] = .25,["beginner"] = .25,["bigger"] = .25,["casual"] = .25,["chill"] = .25,["cool"] = .25,["cozy"] = .25,["crossfaction"] = .25,["erp"] = .25,["friendly"] = .25,["furry"] = .25,["helpful"] = .25,["hype"] = .25,["leveling"] = .25,["lgbt"] = .25,["lgbtq"] = .25,["mediumsized"] = .25,["meme"] = .25,["mercenary"] = .25,["newer"] = .25,["newlycreated"] = .25,["newlyformed"] = .25,["newlymade"] = .25,["northamerican"] = .25,["pve"] = .25,["pvp"] = .25,["reallybig"] = .25,["recentlyformed"] = .25,["roleplaying"] = .25,["social"] = .25,["talkative"] = .25,["toprank"] = .25,["verybig"] = .25,["verytalkative"] = .25,["woke"] = .25,["acdc"] = .25,["femboy"] = .25,["vegan"] = .25,["wow"] = .25,
 
-["euallianceguild"] = .5,["naallianceguild"] = .5,["auallianceguild"] = .5,["oceallianceguild"] = .5,["ruallianceguild"] = .5,
-["eucrossfactionguild"] = .5,["nacrossfactionguild"] = .5,["aucrossfactionguild"] = .5,["ocecrossfactionguild"] = .5,["rucrossfactionguild"] = .5,
-["euerpguild"] = .5,["naerpguild"] = .5,["auerpguild"] = .5,["oceerpguild"] = .5,["ruerpguild"] = .5,
-["euhordeguild"] = .5,["nahordeguild"] = .5,["auhordeguild"] = .5,["ocehordeguild"] = .5,["ruhordeguild"] = .5,
-["eulevelguild"] = .5,["nalevelguild"] = .5,["aulevelguild"] = .5,["ocelevelguild"] = .5,["rulevelguild"] = .5,
-["eulevelingguild"] = .5,["nalevelingguild"] = .5,["aulevelingguild"] = .5,["ocelevelingguild"] = .5,["rulevelingguild"] = .5,
-["eupvpguild"] = .5,["napvpguild"] = .5,["aupvpguild"] = .5,["ocepvpguild"] = .5,["rupvpguild"] = .5,
-["euraidguild"] = .5,["naraidguild"] = .5,["auraidguild"] = .5,["oceraidguild"] = .5,["ruraidguild"] = .5,
-["eurpguild"] = .5,["narpguild"] = .5,["aurpguild"] = .5,["ocerpguild"] = .5,["rurpguild"] = .5,
-["eusocialguild"] = .5,["nasocialguild"] = .5,["ausocialguild"] = .5,["ocesocialguild"] = .5,["rusocialguild"] = .5,
-["eumercenaryguild"] = .5,["namercenaryguild"] = .5,["aumercenaryguild"] = .5,["ocemercenaryguild"] = .5,["rumercenaryguild"] = .5,
-["euroleplayingguild"] = .5,["naroleplayingguild"] = .5,["auroleplayingguild"] = .5,["oceroleplayingguild"] = .5,["ruroleplayingguild"] = .5,
-["eudadguild"] = .5,["nadadguild"] = .5,["audadguild"] = .5,["ocedadguild"] = .5,["rudadguild"] = .5,
-
-["goodguild"] = .5,["lfgoodguild"] = .5,["lfggoodguild"] = .5,["needgoodguild"] = .5,["anygoodguild"] = .5,
-["toprankguild"] = .5,["lftoprankguild"] = .5,["lfgtoprankguild"] = .5,["needtoprankguild"] = .5,["anytoprankguild"] = .5,
-["northamericanguild"] = .5,["lfnorthamericanguild"] = .5,["lfgnorthamericanguild"] = .5,["neednorthamericanguild"] = .5,["anynorthamericanguild"] = .5,
-["smallguild"] = .5,["lfsmallguild"] = .5,["lfgsmallguild"] = .5,["needsmallguild"] = .5,["anysmallguild"] = .5,
-["bigguild"] = .5,["lfbigguild"] = .5,["lfgbigguild"] = .5,["needbigguild"] = .5,["anybigguild"] = .5,
-["biggerguild"] = .5,["lfbiggerguild"] = .5,["lfgbiggerguild"] = .5,["needbiggerguild"] = .5,["anybiggerguild"] = .5,
-["largeguild"] = .5,["lflargeguild"] = .5,["lfglargeguild"] = .5,["needlargeguild"] = .5,["anylargeguild"] = .5,
-["massiveguild"] = .5,["lfmassiveguild"] = .5,["lfgmassiveguild"] = .5,["needmassiveguild"] = .5,["anymassiveguild"] = .5,
-["newerguild"] = .5,["lfnewerguild"] = .5,["lfgnewerguild"] = .5,["neednewerguild"] = .5,["anynewerguild"] = .5,
-["newguild"] = .5,["lfnewguild"] = .5,["lfgnewguild"] = .5,["neednewguild"] = .5,["anynewguild"] = .5,
-["reallybigguild"] = .5,["lfreallybigguild"] = .5,["lfgreallybigguild"] = .5,["needreallybigguild"] = .5,["anyreallybigguild"] = .5,
-["mediumsizedguild"] = .5,["lfmediumsizedguild"] = .5,["lfgmediumsizedguild"] = .5,["needmediumsizedguild"] = .5,["anymediumsizedguild"] = .5,
-["talkativeguild"] = .5,["lftalkativeguild"] = .5,["lfgtalkativeguild"] = .5,["needtalkativeguild"] = .5,["anytalkativeguild"] = .5,
-["verytalkativeguild"] = .5,["lfverytalkativeguild"] = .5,["lfgverytalkativeguild"] = .5,["needverytalkativeguild"] = .5,["anyverytalkativeguild"] = .5,
-["verybigguild"] = .5,["lfverybigguild"] = .5,["lfgverybigguild"] = .5,["needverybigguild"] = .5,["anyverybigguild"] = .5,
-
-["goodactiveguild"] = .5,["toprankactiveguild"] = .5,["northamericanactiveguild"] = .5,["smallactiveguild"] = .5,["bigactiveguild"] = .5,["biggeractiveguild"] = .5,["largeactiveguild"] = .5,["massiveactiveguild"] = .5,["neweractiveguild"] = .5,["newactiveguild"] = .5,["reallybigactiveguild"] = .5,["mediumsizedactiveguild"] = .5,
-["goodallianceguild"] = .5,["toprankallianceguild"] = .5,["northamericanallianceguild"] = .5,["smallallianceguild"] = .5,["bigallianceguild"] = .5,["biggerallianceguild"] = .5,["largeallianceguild"] = .5,["massiveallianceguild"] = .5,["newerallianceguild"] = .5,["newallianceguild"] = .5,["reallybigallianceguild"] = .5,["mediumsizedallianceguild"] = .5,
-["goodchillguild"] = .5,["toprankchillguild"] = .5,["northamericanchillguild"] = .5,["smallchillguild"] = .5,["bigchillguild"] = .5,["biggerchillguild"] = .5,["largechillguild"] = .5,["massivechillguild"] = .5,["newerchillguild"] = .5,["newchillguild"] = .5,["reallybigchillguild"] = .5,["mediumsizedchillguild"] = .5,
-["goodcoolguild"] = .5,["toprankcoolguild"] = .5,["northamericancoolguild"] = .5,["smallcoolguild"] = .5,["bigcoolguild"] = .5,["biggercoolguild"] = .5,["largecoolguild"] = .5,["massivecoolguild"] = .5,["newercoolguild"] = .5,["newcoolguild"] = .5,["reallybigcoolguild"] = .5,["mediumsizedcoolguild"] = .5,
-["goodcozyguild"] = .5,["toprankcozyguild"] = .5,["northamericancozyguild"] = .5,["smallcozyguild"] = .5,["bigcozyguild"] = .5,["biggercozyguild"] = .5,["largecozyguild"] = .5,["massivecozyguild"] = .5,["newercozyguild"] = .5,["newcozyguild"] = .5,["reallybigcozyguild"] = .5,["mediumsizedcozyguild"] = .5,
-["goodcrossfactionguild"] = .5,["toprankcrossfactionguild"] = .5,["northamericancrossfactionguild"] = .5,["smallcrossfactionguild"] = .5,["bigcrossfactionguild"] = .5,["biggercrossfactionguild"] = .5,["largecrossfactionguild"] = .5,["massivecrossfactionguild"] = .5,["newercrossfactionguild"] = .5,["newcrossfactionguild"] = .5,["reallybigcrossfactionguild"] = .5,["mediumsizedcrossfactionguild"] = .5,
-["gooderpguild"] = .5,["toprankerpguild"] = .5,["northamericanerpguild"] = .5,["smallerpguild"] = .5,["bigerpguild"] = .5,["biggererpguild"] = .5,["largeerpguild"] = .5,["massiveerpguild"] = .5,["newererpguild"] = .5,["newerpguild"] = .5,["reallybigerpguild"] = .5,["mediumsizederpguild"] = .5,
-["goodfriendlyguild"] = .5,["toprankfriendlyguild"] = .5,["northamericanfriendlyguild"] = .5,["smallfriendlyguild"] = .5,["bigfriendlyguild"] = .5,["biggerfriendlyguild"] = .5,["largefriendlyguild"] = .5,["massivefriendlyguild"] = .5,["newerfriendlyguild"] = .5,["newfriendlyguild"] = .5,["reallybigfriendlyguild"] = .5,["mediumsizedfriendlyguild"] = .5,
-["goodfunguild"] = .5,["toprankfunguild"] = .5,["northamericanfunguild"] = .5,["smallfunguild"] = .5,["bigfunguild"] = .5,["biggerfunguild"] = .5,["largefunguild"] = .5,["massivefunguild"] = .5,["newerfunguild"] = .5,["newfunguild"] = .5,["reallybigfunguild"] = .5,["mediumsizedfunguild"] = .5,
-["goodhelpfulguild"] = .5,["toprankhelpfulguild"] = .5,["northamericanhelpfulguild"] = .5,["smallhelpfulguild"] = .5,["bighelpfulguild"] = .5,["biggerhelpfulguild"] = .5,["largehelpfulguild"] = .5,["massivehelpfulguild"] = .5,["newerhelpfulguild"] = .5,["newhelpfulguild"] = .5,["reallybighelpfulguild"] = .5,["mediumsizedhelpfulguild"] = .5,
-["goodhordeguild"] = .5,["toprankhordeguild"] = .5,["northamericanhordeguild"] = .5,["smallhordeguild"] = .5,["bighordeguild"] = .5,["biggerhordeguild"] = .5,["largehordeguild"] = .5,["massivehordeguild"] = .5,["newerhordeguild"] = .5,["newhordeguild"] = .5,["reallybighordeguild"] = .5,["mediumsizedhordeguild"] = .5,
-["goodlevelguild"] = .5,["topranklevelguild"] = .5,["northamericanlevelguild"] = .5,["smalllevelguild"] = .5,["biglevelguild"] = .5,["biggerlevelguild"] = .5,["largelevelguild"] = .5,["massivelevelguild"] = .5,["newerlevelguild"] = .5,["newlevelguild"] = .5,["reallybiglevelguild"] = .5,["mediumsizedlevelguild"] = .5,
-["goodlevelingguild"] = .5,["topranklevelingguild"] = .5,["northamericanlevelingguild"] = .5,["smalllevelingguild"] = .5,["biglevelingguild"] = .5,["biggerlevelingguild"] = .5,["largelevelingguild"] = .5,["massivelevelingguild"] = .5,["newerlevelingguild"] = .5,["newlevelingguild"] = .5,["reallybiglevelingguild"] = .5,["mediumsizedlevelingguild"] = .5,
-["goodpvpguild"] = .5,["toprankpvpguild"] = .5,["northamericanpvpguild"] = .5,["smallpvpguild"] = .5,["bigpvpguild"] = .5,["biggerpvpguild"] = .5,["largepvpguild"] = .5,["massivepvpguild"] = .5,["newerpvpguild"] = .5,["newpvpguild"] = .5,["reallybigpvpguild"] = .5,["mediumsizedpvpguild"] = .5,
-["goodraidguild"] = .5,["toprankraidguild"] = .5,["northamericanraidguild"] = .5,["smallraidguild"] = .5,["bigraidguild"] = .5,["biggerraidguild"] = .5,["largeraidguild"] = .5,["massiveraidguild"] = .5,["newerraidguild"] = .5,["newraidguild"] = .5,["reallybigraidguild"] = .5,["mediumsizedraidguild"] = .5,
-["goodrpguild"] = .5,["toprankrpguild"] = .5,["northamericanrpguild"] = .5,["smallrpguild"] = .5,["bigrpguild"] = .5,["biggerrpguild"] = .5,["largerpguild"] = .5,["massiverpguild"] = .5,["newerrpguild"] = .5,["newrpguild"] = .5,["reallybigrpguild"] = .5,["mediumsizedrpguild"] = .5,
-["goodsocialguild"] = .5,["topranksocialguild"] = .5,["northamericansocialguild"] = .5,["smallsocialguild"] = .5,["bigsocialguild"] = .5,["biggersocialguild"] = .5,["largesocialguild"] = .5,["massivesocialguild"] = .5,["newersocialguild"] = .5,["newsocialguild"] = .5,["reallybigsocialguild"] = .5,["mediumsizedsocialguild"] = .5,
-
-["chinesespeaking"] = .5,["chinesespeakingguild"] = 1,["lfchinesespeakingguild"] = .5,["lfgchinesespeakingguild"] = .5,["needchinesespeakingguild"] = .5,
-["danishspeaking"] = .5,["danishspeakingguild"] = 1,["lfdanishspeakingguild"] = .5,["lfgdanishspeakingguild"] = .5,["needdanishspeakingguild"] = .5,
-["dutchspeaking"] = .5,["dutchspeakingguild"] = 1,["lfdutchspeakingguild"] = .5,["lfgdutchspeakingguild"] = .5,["needdutchspeakingguild"] = .5,
-["englishspeaking"] = .5,["englishspeakingguild"] = 1,["lfenglishspeakingguild"] = .5,["lfgenglishspeakingguild"] = .5,["needenglishspeakingguild"] = .5,
-["finnishspeaking"] = .5,["finnishspeakingguild"] = 1,["lffinnishspeakingguild"] = .5,["lfgfinnishspeakingguild"] = .5,["needfinnishspeakingguild"] = .5,
-["frenchspeaking"] = .5,["frenchspeakingguild"] = 1,["lffrenchspeakingguild"] = .5,["lfgfrenchspeakingguild"] = .5,["needfrenchspeakingguild"] = .5,
-["germanspeaking"] = .5,["germanspeakingguild"] = 1,["lfgermanspeakingguild"] = .5,["lfggermanspeakingguild"] = .5,["needgermanspeakingguild"] = .5,
-["greekspeaking"] = .5,["greekspeakingguild"] = 1,["lfgreekspeakingguild"] = .5,["lfggreekspeakingguild"] = .5,["needgreekspeakingguild"] = .5,
-["italianspeaking"] = .5,["italianspeakingguild"] = 1,["lfitalianspeakingguild"] = .5,["lfgitalianspeakingguild"] = .5,["needitalianspeakingguild"] = .5,
-["japanesespeaking"] = .5,["japanesespeakingguild"] = 1,["lfjapanesespeakingguild"] = .5,["lfgjapanesespeakingguild"] = .5,["needjapanesespeakingguild"] = .5,
-["koreanspeaking"] = .5,["koreanspeakingguild"] = 1,["lfkoreanspeakingguild"] = .5,["lfgkoreanspeakingguild"] = .5,["needkoreanspeakingguild"] = .5,
-["norwegianspeaking"] = .5,["norwegianspeakingguild"] = 1,["lfnorwegianspeakingguild"] = .5,["lfgnorwegianspeakingguild"] = .5,["neednorwegianspeakingguild"] = .5,
-["portuguesespeaking"] = .5,["portuguesespeakingguild"] = 1,["lfportuguesespeakingguild"] = .5,["lfgportuguesespeakingguild"] = .5,["needportuguesespeakingguild"] = .5,
-["russianspeaking"] = .5,["russianspeakingguild"] = 1,["lfrussianspeakingguild"] = .5,["lfgrussianspeakingguild"] = .5,["needrussianspeakingguild"] = .5,
-["spanishspeaking"] = .5,["spanishspeakingguild"] = 1,["lfspanishspeakingguild"] = .5,["lfgspanishspeakingguild"] = .5,["needspanishspeakingguild"] = .5,
-["turkishspeaking"] = .5,["turkishspeakingguild"] = 1,["lfturkishspeakingguild"] = .5,["lfgturkishspeakingguild"] = .5,["needturkishspeakingguild"] = .5,
-["vietnamesespeaking"] = .5,["vietnamesespeakingguild"] = 1,["lfvietnamesespeakingguild"] = .5,["lfgvietnamesespeakingguild"] = .5,["needvietnamesespeakingguild"] = .5,
-
--- Class/Races
-["humanguild"] = .5,["gnomeguild"] = .5,["dwarfguild"] = .5,["nightelfguild"] = .5,["highelfguild"] = .5,["orcguild"] = .5,["taurenguild"] = .5,["trollguild"] = .5,["undeadguild"] = .5,["goblinguild"] = .5,["druidguild"] = .5,["hunterguild"] = .5,["mageguild"] = .5,["paladinguild"] = .5,["priestguild"] = .5,["rogueguild"] = .5,["shamanguild"] = .5,["warlockguild"] = .5,["warriorguild"] = .5,["scourgeguild"] = .5,
-["lfhumanguild"] = .5,["lfgnomeguild"] = .5,["lfdwarfguild"] = .5,["lfnightelfguild"] = .5,["lfhighelfguild"] = .5,["lforcguild"] = .5,["lftaurenguild"] = .5,["lftrollguild"] = .5,["lfundeadguild"] = .5,["lfgoblinguild"] = .5,["druidonly"] = .5,["hunteronly"] = .5,["mageonly"] = .5,["paladinonly"] = .5,["priestonly"] = .5,["rogueonly"] = .5,["shamanonly"] = .5,["warlockonly"] = .5,["warrioronly"] = .5,["scourgeonly"] = .5,
-["lfghumanguild"] = .5,["lfggnomeguild"] = .5,["lfgdwarfguild"] = .5,["lfgnightelfguild"] = .5,["lfghighelfguild"] = .5,["lfgorcguild"] = .5,["lfgtaurenguild"] = .5,["lfgtrollguild"] = .5,["lfgundeadguild"] = .5,["lfggoblinguild"] = .5,["druidonlyguild"] = .5,["hunteronlyguild"] = .5,["mageonlyguild"] = .5,["paladinonlyguild"] = .5,["priestonlyguild"] = .5,["rogueonlyguild"] = .5,["shamanonlyguild"] = .5,["warlockonlyguild"] = .5,["warrioronlyguild"] = .5,["scourgeonlyguild"] = .5,
-
-["needhumanguild"] = .5,["anyhumanguild"] = .5,["humanonlyguild"] = .5,["humanfocused"] = .5,["humanfocusedguild"] = .5,["gnomehuman"] = .5,["dwarfhuman"] = .5,["nightelfhuman"] = .5,["highelfhuman"] = .5,["orchuman"] = .5,["taurenhuman"] = .5,["trollhuman"] = .5,["undeadhuman"] = .5,["goblinhuman"] = .5,
-["needgnomeguild"] = .5,["anygnomeguild"] = .5,["gnomeonlyguild"] = .5,["gnomefocused"] = .5,["gnomefocusedguild"] = .5,["humangnome"] = .5,["dwarfgnome"] = .5,["nightelfgnome"] = .5,["highelfgnome"] = .5,["orcgnome"] = .5,["taurengnome"] = .5,["trollgnome"] = .5,["undeadgnome"] = .5,["goblingnome"] = .5,
-["needdwarfguild"] = .5,["anydwarfguild"] = .5,["dwarfonlyguild"] = .5,["dwarffocused"] = .5,["dwarffocusedguild"] = .5,["humandwarf"] = .5,["gnomedwarf"] = .5,["nightelfdwarf"] = .5,["highelfdwarf"] = .5,["orcdwarf"] = .5,["taurendwarf"] = .5,["trolldwarf"] = .5,["undeaddwarf"] = .5,["goblindwarf"] = .5,
-["neednightelfguild"] = .5,["anynightelfguild"] = .5,["nightelfonlyguild"] = .5,["nightelffocused"] = .5,["nightelffocusedguild"] = .5,["humannightelf"] = .5,["gnomenightelf"] = .5,["dwarfnightelf"] = .5,["highelfnightelf"] = .5,["orcnightelf"] = .5,["taurennightelf"] = .5,["trollnightelf"] = .5,["undeadnightelf"] = .5,["goblinnightelf"] = .5,
-["needhighelfguild"] = .5,["anyhighelfguild"] = .5,["highelfonlyguild"] = .5,["highelffocused"] = .5,["highelffocusedguild"] = .5,["humanhighelf"] = .5,["gnomehighelf"] = .5,["dwarfhighelf"] = .5,["nightelfhighelf"] = .5,["orchighelf"] = .5,["taurenhighelf"] = .5,["trollhighelf"] = .5,["undeadhighelf"] = .5,["goblinhighelf"] = .5,
-["needorcguild"] = .5,["anyorcguild"] = .5,["orconlyguild"] = .5,["orcfocused"] = .5,["orcfocusedguild"] = .5,["humanorc"] = .5,["gnomeorc"] = .5,["dwarforc"] = .5,["nightelforc"] = .5,["highelforc"] = .5,["taurenorc"] = .5,["trollorc"] = .5,["undeadorc"] = .5,["goblinorc"] = .5,
-["needtaurenguild"] = .5,["anytaurenguild"] = .5,["taurenonlyguild"] = .5,["taurenfocused"] = .5,["taurenfocusedguild"] = .5,["humantauren"] = .5,["gnometauren"] = .5,["dwarftauren"] = .5,["nightelftauren"] = .5,["highelftauren"] = .5,["orctauren"] = .5,["trolltauren"] = .5,["undeadtauren"] = .5,["goblintauren"] = .5,
-["needtrollguild"] = .5,["anytrollguild"] = .5,["trollonlyguild"] = .5,["trollfocused"] = .5,["trollfocusedguild"] = .5,["humantroll"] = .5,["gnometroll"] = .5,["dwarftroll"] = .5,["nightelftroll"] = .5,["highelftroll"] = .5,["orctroll"] = .5,["taurentroll"] = .5,["undeadtroll"] = .5,["goblintroll"] = .5,
-["needundeadguild"] = .5,["anyundeadguild"] = .5,["undeadonlyguild"] = .5,["undeadfocused"] = .5,["undeadfocusedguild"] = .5,["humanundead"] = .5,["gnomeundead"] = .5,["dwarfundead"] = .5,["nightelfundead"] = .5,["highelfundead"] = .5,["orcundead"] = .5,["taurenundead"] = .5,["trollundead"] = .5,["goblinundead"] = .5,
-["needgoblinguild"] = .5,["anygoblinguild"] = .5,["goblinonlyguild"] = .5,["goblinfocused"] = .5,["goblinfocusedguild"] = .5,["humangoblin"] = .5,["gnomegoblin"] = .5,["dwarfgoblin"] = .5,["nightelfgoblin"] = .5,["highelfgoblin"] = .5,["orcgoblin"] = .5,["taurengoblin"] = .5,["trollgoblin"] = .5,["undeadgoblin"] = .5,
-
--- Other
-["memeguild"] = .5,["lfmemeguild"] = .5,["lfgmemeguild"] = .5,["anymemeguild"] = .5,["needmemeguild"] = .5,["freshmemeguild"] = .5,
-["newlymadeguild"] = .5,["lfnewlymadeguild"] = .5,["lfgnewlymadeguild"] = .5,["anynewlymadeguild"] = .5,["neednewlymadeguild"] = .5,["freshnewlymadeguild"] = .5,
-["newlycreatedguild"] = .5,["lfnewlycreatedguild"] = .5,["lfgnewlycreatedguild"] = .5,["anynewlycreatedguild"] = .5,["neednewlycreatedguild"] = .5,["freshnewlycreatedguild"] = .5,
-["challengingguild"] = .5,["lfchallengingguild"] = .5,["lfgchallengingguild"] = .5,["anychallengingguild"] = .5,["needchallengingguild"] = .5,["freshchallengingguild"] = .5,
-["hypeguild"] = .5,["lfhypeguild"] = .5,["lfghypeguild"] = .5,["anyhypeguild"] = .5,["needhypeguild"] = .5,["freshhypeguild"] = .5,
-["skilledguild"] = .5,["lfskilledguild"] = .5,["lfgskilledguild"] = .5,["anyskilledguild"] = .5,["needskilledguild"] = .5,["freshskilledguild"] = .5,
-["recentlyformedguild"] = .5,["lfrecentlyformedguild"] = .5,["lfgrecentlyformedguild"] = .5,["anyrecentlyformedguild"] = .5,["needrecentlyformedguild"] = .5,["freshrecentlyformedguild"] = .5,
-["newlyformedguild"] = .5,["lfnewlyformedguild"] = .5,["lfgnewlyformedguild"] = .5,["anynewlyformedguild"] = .5,["neednewlyformedguild"] = .5,["freshnewlyformedguild"] = .5,
-["wokeguild"] = .5,["lfwokeguild"] = .5,["lfgwokeguild"] = .5,["anywokeguild"] = .5,["needwokeguild"] = .5,["freshwokeguild"] = .5,
-["dungeonguild"] = .5,["lfdungeonguild"] = .5,["lfgdungeonguild"] = .5,["anydungeonguild"] = .5,["needdungeonguild"] = .5,["freshdungeonguild"] = .5,
-["newguild"] = .5,["lfnewguild"] = .5,["lfgnewguild"] = .5,["anynewguild"] = .5,["neednewguild"] = .5,["freshnewguild"] = .5,
-["dadguild"] = .5,["lfdadguild"] = .5,["lfgdadguild"] = .5,["anydadguild"] = .5,["needdadguild"] = .5,["freshdadguild"] = .5,
-["hcguild"] = .5,["lfhcguild"] = .5,["lfghcguild"] = .5,["anyhcguild"] = .5,["needhcguild"] = .5,["freshhcguild"] = .5,
+["eucomboguild"] = .5,["comboguildeu"] = .5,["nacomboguild"] = .5,["comboguildna"] = .5,["aucomboguild"] = .5,["comboguildau"] = .5,["ocecomboguild"] = .5,["comboguildoce"] = .5,["rucomboguild"] = .5,["comboguildru"] = .5,
 
 -- Foreign Words
 ["utc"] = .5,["cet"] = .5,["msk"] = 1,["est"] = 1,
 ["polska"] = 1,["ukrainska"] = 1,["czsk"] = .5,["cesko"] = 1,["romani"] = 1,["slovenska"] = 1,["brasilia"] = 1,["bulgarski"] = 1,["hispana"] = 1,["italiana"] = 1,["magyar"] = 1,["oceanic"] = .5,["aest"] = .5,
-
 ["czsfk"] = 2,["sfkcz"] = 2,
 
 ["mercredi"] = .5,["dimanche"] = .5,["joueursenleveling"] = 1,["joueursactifs"] = 1,
@@ -1313,10 +1194,13 @@ GF_WORD_GUILD = {
 
 -- Finnish
 ["finkilta"] = .5,["finnkilta"] = .5,["finjoukkue"] = .5,["finnjoukkue"] = .5,
-["maajoukue"] = 2,["maajoukkue"] = 2,["scouttaa"] = 2,
+["maajoukue"] = 2,["maajoukkue"] = 2,["maajoukue"] = 2,["majoukkue"] = 2,["scouttaa"] = 2,
+["suomalaanen"] = 1,["joukkuesuomesta"] = 1,["skouta"] = 1,["skoutauusia"] = 1,
+
 ["finnational"] = 2.5,["finnnational"] = 2.5,["finlandsnationalgroup"] = 2.5,["finlandnationalgroup"] = 2.5,
 ["josontyls"] = 1,["hakeejseni"] = 3,["mitmuutamenoatoistaaseksi"] = 3,["skouttaa"] = 1,["teretulemast"] = 1,
-["finguild"] = .5,["etsiiriveliihinsuusiakykyj"] = 1,["etsiiriveliihinsuusia"] = 2,["kykyj"] = 1,["skouttaauusiakykyj"] = 1,["uusiakykyj"] = 1,["pelityyli"] = 1,["sooloolijat"] = 1,["roolipelaajat"] = 1,["kaikkiteretulemast"] = 1,
+["finguild"] = .5,["finplayer"] = .5,["newfinplayer"] = .5,
+["etsiiriveliihinsuusiakykyj"] = 1,["etsiiriveliihinsuusia"] = 2,["kykyj"] = 1,["skouttaauusiakykyj"] = 1,["uusiakykyj"] = 1,["pelityyli"] = 1,["sooloolijat"] = 1,["roolipelaajat"] = 1,["kaikkiteretulemast"] = 1,
 ["suomibndi"] = 2,["etsiiuusia"] = 1,
 ["etsii"] = 1,["kykyjetsii"] = 1,["uraatarjolla"] = 1,["maajoukkueessa"] = 1,["paikkaauki"] = 1,["skoutaa"] = 1,
 ["uusia"] = .5,["riveihins"] = .5,
@@ -1363,79 +1247,8 @@ GF_WORD_GUILD = {
 -- Romanian
 ["recruteaza"] = 1,["romni"] = 1,["jucatoriromni"] = 1,["pentrucontent"] = 1,["socialevenimente"] = 1,["sidistractie"] = 1,["pentruinfosauinvite"] = .5,["evenimente"] = .5,
 
--- To avoid spam
-["afghani"] = .5,["afghaniguild"] = .5,["lfafghaniguild"] = .5,["lfgafghaniguild"] = .5,["anyafghaniguild"] = .5,["needafghaniguild"] = .5,["freshafghaniguild"] = .5,
-["algerian"] = .5,["algerianguild"] = .5,["lfalgerianguild"] = .5,["lfgalgerianguild"] = .5,["anyalgerianguild"] = .5,["needalgerianguild"] = .5,["freshalgerianguild"] = .5,
-["american"] = .5,["americanguild"] = .5,["lfamericanguild"] = .5,["lfgamericanguild"] = .5,["anyamericanguild"] = .5,["needamericanguild"] = .5,["freshamericanguild"] = .5,
-["argentine"] = .5,["argentineguild"] = .5,["lfargentineguild"] = .5,["lfgargentineguild"] = .5,["anyargentineguild"] = .5,["needargentineguild"] = .5,["freshargentineguild"] = .5,
-["au"] = .5,["auguild"] = .5,["lfauguild"] = .5,["lfgauguild"] = .5,["anyauguild"] = .5,["needauguild"] = .5,["freshauguild"] = .5,
-["auoce"] = .5,["auoceguild"] = .5,["lfauoceguild"] = .5,["lfgauoceguild"] = .5,["anyauoceguild"] = .5,["needauoceguild"] = .5,["freshauoceguild"] = .5,
-["balkan"] = .5,["balkanguild"] = .5,["lfbalkanguild"] = .5,["lfgbalkanguild"] = .5,["anybalkanguild"] = .5,["needbalkanguild"] = .5,["freshbalkanguild"] = .5,
-["brazilian"] = .5,["brazilianguild"] = .5,["lfbrazilianguild"] = .5,["lfgbrazilianguild"] = .5,["anybrazilianguild"] = .5,["needbrazilianguild"] = .5,["freshbrazilianguild"] = .5,
-["canadian"] = .5,["canadianguild"] = .5,["lfcanadianguild"] = .5,["lfgcanadianguild"] = .5,["anycanadianguild"] = .5,["needcanadianguild"] = .5,["freshcanadianguild"] = .5,
-["chad"] = .5,["chadguild"] = .5,["lfchadguild"] = .5,["lfgchadguild"] = .5,["anychadguild"] = .5,["needchadguild"] = .5,["freshchadguild"] = .5,
-["chilean"] = .5,["chileanguild"] = .5,["lfchileanguild"] = .5,["lfgchileanguild"] = .5,["anychileanguild"] = .5,["needchileanguild"] = .5,["freshchileanguild"] = .5,
-["chinese"] = .5,["chineseguild"] = .5,["lfchineseguild"] = .5,["lfgchineseguild"] = .5,["anychineseguild"] = .5,["needchineseguild"] = .5,["freshchineseguild"] = .5,
-["colombian"] = .5,["colombianguild"] = .5,["lfcolombianguild"] = .5,["lfgcolombianguild"] = .5,["anycolombianguild"] = .5,["needcolombianguild"] = .5,["freshcolombianguild"] = .5,
-["congolese"] = .5,["congoleseguild"] = .5,["lfcongoleseguild"] = .5,["lfgcongoleseguild"] = .5,["anycongoleseguild"] = .5,["needcongoleseguild"] = .5,["freshcongoleseguild"] = .5,
-["cuban"] = .5,["cubanguild"] = .5,["lfcubanguild"] = .5,["lfgcubanguild"] = .5,["anycubanguild"] = .5,["needcubanguild"] = .5,["freshcubanguild"] = .5,
-["czech"] = .5,["czechguild"] = .5,["lfczechguild"] = .5,["lfgczechguild"] = .5,["anyczechguild"] = .5,["needczechguild"] = .5,["freshczechguild"] = .5,
-["danish"] = .5,["danishguild"] = .5,["lfdanishguild"] = .5,["lfgdanishguild"] = .5,["anydanishguild"] = .5,["needdanishguild"] = .5,["freshdanishguild"] = .5,
-["dutch"] = .5,["dutchguild"] = .5,["lfdutchguild"] = .5,["lfgdutchguild"] = .5,["anydutchguild"] = .5,["needdutchguild"] = .5,["freshdutchguild"] = .5,
-["egyptian"] = .5,["egyptianguild"] = .5,["lfegyptianguild"] = .5,["lfgegyptianguild"] = .5,["anyegyptianguild"] = .5,["needegyptianguild"] = .5,["freshegyptianguild"] = .5,
-["english"] = .5,["englishguild"] = .5,["lfenglishguild"] = .5,["lfgenglishguild"] = .5,["anyenglishguild"] = .5,["needenglishguild"] = .5,["freshenglishguild"] = .5,
-["ethiopian"] = .5,["ethiopianguild"] = .5,["lfethiopianguild"] = .5,["lfgethiopianguild"] = .5,["anyethiopianguild"] = .5,["needethiopianguild"] = .5,["freshethiopianguild"] = .5,
-["eu"] = .5,["euguild"] = .5,["lfeuguild"] = .5,["lfgeuguild"] = .5,["anyeuguild"] = .5,["needeuguild"] = .5,["fresheuguild"] = .5,
-["finnish"] = .5,["finnishguild"] = .5,["lffinnishguild"] = .5,["lfgfinnishguild"] = .5,["anyfinnishguild"] = .5,["needfinnishguild"] = .5,["freshfinnishguild"] = .5,
-["fr"] = .5,["frguild"] = .5,["lffrguild"] = .5,["lfgfrguild"] = .5,["anyfrguild"] = .5,["needfrguild"] = .5,["freshfrguild"] = .5,
-["french"] = .5,["frenchguild"] = .5,["lffrenchguild"] = .5,["lfgfrenchguild"] = .5,["anyfrenchguild"] = .5,["needfrenchguild"] = .5,["freshfrenchguild"] = .5,
-["greek"] = .5,["greekguild"] = .5,["lfgreekguild"] = .5,["lfggreekguild"] = .5,["anygreekguild"] = .5,["needgreekguild"] = .5,["freshgreekguild"] = .5,
-["german"] = .5,["germanguild"] = .5,["lfgermanguild"] = .5,["lfggermanguild"] = .5,["anygermanguild"] = .5,["needgermanguild"] = .5,["freshgermanguild"] = .5,
-["hungarian"] = .5,["hungarianguild"] = .5,["lfhungarianguild"] = .5,["lfghungarianguild"] = .5,["anyhungarianguild"] = .5,["needhungarianguild"] = .5,["freshhungarianguild"] = .5,
-["indian"] = .5,["indianguild"] = .5,["lfindianguild"] = .5,["lfgindianguild"] = .5,["anyindianguild"] = .5,["needindianguild"] = .5,["freshindianguild"] = .5,
-["iranian"] = .5,["iranianguild"] = .5,["lfiranianguild"] = .5,["lfgiranianguild"] = .5,["anyiranianguild"] = .5,["neediranianguild"] = .5,["freshiranianguild"] = .5,
-["iraqi"] = .5,["iraqiguild"] = .5,["lfiraqiguild"] = .5,["lfgiraqiguild"] = .5,["anyiraqiguild"] = .5,["neediraqiguild"] = .5,["freshiraqiguild"] = .5,
-["italian"] = .5,["italianguild"] = .5,["lfitalianguild"] = .5,["lfgitalianguild"] = .5,["anyitalianguild"] = .5,["needitalianguild"] = .5,["freshitalianguild"] = .5,
-["japanese"] = .5,["japaneseguild"] = .5,["lfjapaneseguild"] = .5,["lfgjapaneseguild"] = .5,["anyjapaneseguild"] = .5,["needjapaneseguild"] = .5,["freshjapaneseguild"] = .5,
-["kazakh"] = .5,["kazakhguild"] = .5,["lfkazakhguild"] = .5,["lfgkazakhguild"] = .5,["anykazakhguild"] = .5,["needkazakhguild"] = .5,["freshkazakhguild"] = .5,
-["kenyan"] = .5,["kenyanguild"] = .5,["lfkenyanguild"] = .5,["lfgkenyanguild"] = .5,["anykenyanguild"] = .5,["needkenyanguild"] = .5,["freshkenyanguild"] = .5,
-["korean"] = .5,["koreanguild"] = .5,["lfkoreanguild"] = .5,["lfgkoreanguild"] = .5,["anykoreanguild"] = .5,["needkoreanguild"] = .5,["freshkoreanguild"] = .5,
-["lebanese"] = .5,["lebaneseguild"] = .5,["lflebaneseguild"] = .5,["lfglebaneseguild"] = .5,["anylebaneseguild"] = .5,["needlebaneseguild"] = .5,["freshlebaneseguild"] = .5,
-["libyan"] = .5,["libyanguild"] = .5,["lflibyanguild"] = .5,["lfglibyanguild"] = .5,["anylibyanguild"] = .5,["needlibyanguild"] = .5,["freshlibyanguild"] = .5,
-["malay"] = .5,["malayguild"] = .5,["lfmalayguild"] = .5,["lfgmalayguild"] = .5,["anymalayguild"] = .5,["needmalayguild"] = .5,["freshmalayguild"] = .5,
-["mexican"] = .5,["mexicanguild"] = .5,["lfmexicanguild"] = .5,["lfgmexicanguild"] = .5,["anymexicanguild"] = .5,["needmexicanguild"] = .5,["freshmexicanguild"] = .5,
-["mongolian"] = .5,["mongolianguild"] = .5,["lfmongolianguild"] = .5,["lfgmongolianguild"] = .5,["anymongolianguild"] = .5,["needmongolianguild"] = .5,["freshmongolianguild"] = .5,
-["moroccan"] = .5,["moroccanguild"] = .5,["lfmoroccanguild"] = .5,["lfgmoroccanguild"] = .5,["anymoroccanguild"] = .5,["needmoroccanguild"] = .5,["freshmoroccanguild"] = .5,
-["na"] = .5,["naguild"] = .5,["lfnaguild"] = .5,["lfgnaguild"] = .5,["anynaguild"] = .5,["neednaguild"] = .5,["freshnaguild"] = .5,
-["nigerian"] = .5,["nigerianguild"] = .5,["lfnigerianguild"] = .5,["lfgnigerianguild"] = .5,["anynigerianguild"] = .5,["neednigerianguild"] = .5,["freshnigerianguild"] = .5,
-["nord"] = .5,["nordguild"] = .5,["lfnordguild"] = .5,["lfgnordguild"] = .5,["anynordguild"] = .5,["neednordguild"] = .5,["freshnordguild"] = .5,
-["norwegian"] = .5,["norwegianguild"] = .5,["lfnorwegianguild"] = .5,["lfgnorwegianguild"] = .5,["anynorwegianguild"] = .5,["neednorwegianguild"] = .5,["freshnorwegianguild"] = .5,
-["oce"] = .5,["oceguild"] = .5,["lfoceguild"] = .5,["lfgoceguild"] = .5,["anyoceguild"] = .5,["needoceguild"] = .5,["freshoceguild"] = .5,
-["oceau"] = .5,["oceauguild"] = .5,["lfoceauguild"] = .5,["lfgoceauguild"] = .5,["anyoceauguild"] = .5,["needoceauguild"] = .5,["freshoceauguild"] = .5,
-["pakistani"] = .5,["pakistaniguild"] = .5,["lfpakistaniguild"] = .5,["lfgpakistaniguild"] = .5,["anypakistaniguild"] = .5,["needpakistaniguild"] = .5,["freshpakistaniguild"] = .5,
-["peruvian"] = .5,["peruvianguild"] = .5,["lfperuvianguild"] = .5,["lfgperuvianguild"] = .5,["anyperuvianguild"] = .5,["needperuvianguild"] = .5,["freshperuvianguild"] = .5,
-["filipino"] = .5,["filipinoguild"] = .5,["lffilipinoguild"] = .5,["lfgfilipinoguild"] = .5,["anyfilipinoguild"] = .5,["needfilipinoguild"] = .5,["freshfilipinoguild"] = .5,
-["polish"] = .5,["polishguild"] = .5,["lfpolishguild"] = .5,["lfgpolishguild"] = .5,["anypolishguild"] = .5,["needpolishguild"] = .5,["freshpolishguild"] = .5,
-["portuguese"] = .5,["portugueseguild"] = .5,["lfportugueseguild"] = .5,["lfgportugueseguild"] = .5,["anyportugueseguild"] = .5,["needportugueseguild"] = .5,["freshportugueseguild"] = .5,
-["romanian"] = .5,["romanianguild"] = .5,["lfromanianguild"] = .5,["lfgromanianguild"] = .5,["anyromanianguild"] = .5,["needromanianguild"] = .5,["freshromanianguild"] = .5,
-["russian"] = .5,["russianguild"] = .5,["lfrussianguild"] = .5,["lfgrussianguild"] = .5,["anyrussianguild"] = .5,["needrussianguild"] = .5,["freshrussianguild"] = .5,
-["rwandan"] = .5,["rwandanguild"] = .5,["lfrwandanguild"] = .5,["lfgrwandanguild"] = .5,["anyrwandanguild"] = .5,["needrwandanguild"] = .5,["freshrwandanguild"] = .5,
-["saudi"] = .5,["saudiguild"] = .5,["lfsaudiguild"] = .5,["lfgsaudiguild"] = .5,["anysaudiguild"] = .5,["needsaudiguild"] = .5,["freshsaudiguild"] = .5,
-["somalian"] = .5,["somalianguild"] = .5,["lfsomalianguild"] = .5,["lfgsomalianguild"] = .5,["anysomalianguild"] = .5,["needsomalianguild"] = .5,["freshsomalianguild"] = .5,
-["sa"] = .5,["saguild"] = .5,["lfsaguild"] = .5,["lfgsaguild"] = .5,["anysaguild"] = .5,["needsaguild"] = .5,["freshsaguild"] = .5,
-["spanish"] = .5,["spanishguild"] = .5,["lfspanishguild"] = .5,["lfgspanishguild"] = .5,["anyspanishguild"] = .5,["needspanishguild"] = .5,["freshspanishguild"] = .5,
-["swedish"] = .5,["swedishguild"] = .5,["lfswedishguild"] = .5,["lfgswedishguild"] = .5,["anyswedishguild"] = .5,["needswedishguild"] = .5,["freshswedishguild"] = .5,
-["syrian"] = .5,["syrianguild"] = .5,["lfsyrianguild"] = .5,["lfgsyrianguild"] = .5,["anysyrianguild"] = .5,["needsyrianguild"] = .5,["freshsyrianguild"] = .5,
-["tajik"] = .5,["tajikguild"] = .5,["lftajikguild"] = .5,["lfgtajikguild"] = .5,["anytajikguild"] = .5,["needtajikguild"] = .5,["freshtajikguild"] = .5,
-["thai"] = .5,["thaiguild"] = .5,["lfthaiguild"] = .5,["lfgthaiguild"] = .5,["anythaiguild"] = .5,["needthaiguild"] = .5,["freshthaiguild"] = .5,
-["turkish"] = .5,["turkishguild"] = .5,["lfturkishguild"] = .5,["lfgturkishguild"] = .5,["anyturkishguild"] = .5,["needturkishguild"] = .5,["freshturkishguild"] = .5,
-["ukrainian"] = .5,["ukrainianguild"] = .5,["lfukrainianguild"] = .5,["lfgukrainianguild"] = .5,["anyukrainianguild"] = .5,["needukrainianguild"] = .5,["freshukrainianguild"] = .5,
-["ugandan"] = .5,["ugandanguild"] = .5,["lfugandanguild"] = .5,["lfgugandanguild"] = .5,["anyugandanguild"] = .5,["needugandanguild"] = .5,["freshugandanguild"] = .5,
-["uhr"] = .5,["uhrguild"] = .5,["lfuhrguild"] = .5,["lfguhrguild"] = .5,["anyuhrguild"] = .5,["needuhrguild"] = .5,["freshuhrguild"] = .5,
-["venezuelan"] = .5,["venezuelanguild"] = .5,["lfvenezuelanguild"] = .5,["lfgvenezuelanguild"] = .5,["anyvenezuelanguild"] = .5,["needvenezuelanguild"] = .5,["freshvenezuelanguild"] = .5,
-["vietnamese"] = .5,["vietnameseguild"] = .5,["lfvietnameseguild"] = .5,["lfgvietnameseguild"] = .5,["anyvietnameseguild"] = .5,["needvietnameseguild"] = .5,["freshvietnameseguild"] = .5,
-["yemeni"] = .5,["yemeniguild"] = .5,["lfyemeniguild"] = .5,["lfgyemeniguild"] = .5,["anyyemeniguild"] = .5,["needyemeniguild"] = .5,["freshyemeniguild"] = .5,
-["zimbabwean"] = .5,["zimbabweanguild"] = .5,["lfzimbabweanguild"] = .5,["lfgzimbabweanguild"] = .5,["anyzimbabweanguild"] = .5,["needzimbabweanguild"] = .5,["freshzimbabweanguild"] = .5,
+-- Turkish
+["guildmiz"] = 2,["turkguildmiz"] = .5,["kurulmustur"] = .5,["gelmekisteyenler"] = 1.5,["gelmek"] = .5,
 }
 GF_GUILD_WORD_EXCLUSION = {
 ["today"] = .5,["tonight"] = .5,["host"] = .5,["legendaries"] = .5,["mat"] = .5,["bindings"] = .5,["boes"] = .5,["boe"] = .5,["hr"] = .5,["mount"] = .5,["recipe"] = .5,
@@ -1446,6 +1259,7 @@ GF_GUILD_WORD_EXCLUSION = {
 
 ["itsa"] = .5,["theyrea"] = .5,
 ["ngl"] = 1,["yousoundlike"] = 1,["cantseewhy"] = .5,["myguild"] = .5,["whileinahc"] = 1,["autobooted"] = 1,["doyoustay"] = 1,["stayin"] = .5,["getauto"] = .5,
+["separatechannel"] = .5,["completelyseparate"] = .5,
 }
 
 GF_WORD_LFM = {
@@ -1492,6 +1306,7 @@ GF_WORD_LFM = {
 ["pleasejoindailybg"] = 2,["queuenow"] = 2,
 ["lookinggroupto"] = 2,["lookinggroupfor"] = 2,["askgroupto"] = 2,["askgroupfor"] = 2,
 ["needplayerfor"] = 2,["groupdelvinginto"] = 2,
+["tryingtodo"] = 2,["wouldlovesomehelp"] = 2,
 
 -- Boost
 ["freedmboost"] = 2,["freedeadminesboost"] = 2,["freestockadeboost"] = 2,["freestockboost"] = 2,["freebfdboost"] = 2,["freeblackfathomboost"] = 2,["freeblackfathomdeepsboost"] = 2,["freeblackfathomdeepboost"] = 2,
@@ -1508,7 +1323,7 @@ GF_WORD_LFM = {
 ["anyonetherefor"] = 2,["anyonetodo"] = 2,["anyoneupfor"] = 2,["anyonewhocanhelp"] = 2,["anyoneworkingon"] = 2,["anyoneelsefor"] = 2,["anyoneelsedoing"] = 2,["anyoneelseneed"] = 2,["anyoneelseupfor"] = 2,["anyonehelpcomplete"] = 2,
 
 -- Any
-["anyupfor"] = 2,["anyothersfor"] = 2,["anylastmin"] = 2,
+["anyupfor"] = 2,["anyothersfor"] = 2,["anylastmin"] = 2,["anyroomfor"] = 2,
 ["allianceforquest"] = 2,["anyallianceneed"] = 2,["hordeforquest"] = 2,["anyhordeneed"] = 2,
 ["clothspotfor"] = 2,["leatherworkerspotfor"] = 2,["mailspotfor"] = 2,["platespotfor"] = 2,
 
@@ -1542,6 +1357,9 @@ GF_WORD_LFM = {
 
 -- Farm
 ["badgefarm"] = 2,["argentdawnrepfarm"] = 2,["stratrepfarm"] = 2,["repfarmopen"] = 2,["getyouraqrepfarm"] = 2,["combatbadgefarm"] = 2,["aqccrepfarm"] = 2,
+
+-- Class
+["anydruidletsdo"] = 2,["anyhunterletsdo"] = 2,["anymageletsdo"] = 2,["anypaladinletsdo"] = 2,["anypriestletsdo"] = 2,["anyrogueletsdo"] = 2,["anyshamanletsdo"] = 2,["anywarlockletsdo"] = 2,["anywarriorletsdo"] = 2,
 
 -- Other
 ["bindingrecipereserved"] = 2,["bindingmatreserved"] = 2,["bindingmountreserved"] = 2,["bindingboereserved"] = 2,
@@ -1826,7 +1644,7 @@ GF_WORD_QUEST = {
 ["prayertoelune"] = 50,["snapjawsmon"] = 50,["whiskeyslimslostgrog"] = 50,["incendosaurs"] = 49,["ismorelikeit"] = 49,["lardlosthislunch"] = 49,["cursethesefatfingers"] = 49,["fierymenace"] = 49,["gammeritamon"] = 48,["thealtarofzul"] = 48,["findooxhl"] = 48,
 ["vilebranchhooligans"] = 48,["theflawlessflame"] = 48,["suntarastones"] = 48,["dorius"] = 48,["stolensmithingtuyere"] = 48,["tuyereandlookoutsspyglass"] = 48,["astickysituation"] = 48,["rescueooxhl"] = 48,["forgingtheshaft"] = 48,["skulkrockcleanup"] = 48,
 ["huntingthesavages"] = 48,["cannibalisticcousins"] = 48,["avengingthefallen"] = 48,["jobopportunitycullingthe"] = 48,["opportunitycullingthecompetition"] = 48,["stalkingthestalkers"] = 48,["thecaptainschest"] = 47,["linesofcommunication"] = 47,
-["rinjiistrapped"] = 47,["maizoth"] = 46,["themindseye"] = 46,["ledgerfromtanaris"] = 46,["savingyenniku"] = 46,["speakingwithganzulah"] = 46,["fillingthesoulgem"] = 46,["fieryblazeenchantments"] = 46,["blackdrakesheart"] = 45,["goingtobehard"] = 45,
+["rinjiistrapped"] = 47,["maizoth"] = 46,["themindseye"] = 46,["ledgerfromtanaris"] = 46,["savingyenniku"] = 46,["speakwithganzulah"] = 46,["fillingthesoulgem"] = 46,["fieryblazeenchantments"] = 46,["blackdrakesheart"] = 45,["goingtobehard"] = 45,
 ["stranglethornfever"] = 45,["mokk"] = 45,["messageinabottle"] = 45,["kingmukla"] = 45,["witherbarkcages"] = 45,["undamagedvenomsac"] = 45,["continuedthreat"] = 45,["thesingingcrystals"] = 45,["trollnecklacebounty"] = 45,["thebloodsailbuccaneers"] = 45,
 ["starhandandtheheart"] = 44,["thestarhandandthe"] = 44,["anambassadorofevil"] = 44,["crackingmaurysfoot"] = 44,["badlandsreagentrunii"] = 44,["sweetamber"] = 44,["voodoodues"] = 44,["deathfrombelow"] = 44,["mokthardinsenchantment"] = 44,["zanzilssecret"] = 44,
 ["foolsstout"] = 44,["pooloftears"] = 43,["biggamehunter"] = 43,["insearchofthetemple"] = 43,["raptormastery"] = 43,["thecrownofwill"] = 43,["cortellosriddle"] = 43,["rhapsodyskalimdorkocktail"] = 43,["akirisbythebundle"] = 43,["threatfromthesea"] = 43,
@@ -1834,7 +1652,7 @@ GF_WORD_QUEST = {
 ["splitbonenecklace"] = 42,["sigilofarathor"] = 41,["thelostfragments"] = 41,["mazensbehest"] = 41,["venturecompanymining"] = 41,["uptosnuff"] = 41,["bloodscalpclanheads"] = 41,["scaringshaky"] = 41,["theperenoldetiara"] = 40,["thecurseofthetides"] = 40,
 ["panthermastery"] = 40,["crushridgewarmongers"] = 40,["colonelkurzen"] = 40,["kurzen"] = 40,["foulmagics"] = 40,["calltoarm"] = 40,["thebrokensigil"] = 40,["therealthreat"] = 40,["wantedottoandfalconcrest"] = 40,
 ["greenhillsofstranglethorn"] = 40,["thegreenhillsof"] = 40,["sunkentreasure"] = 40,["wordofathreat"] = 40,["passingwordofa"] = 40,["deepseasalvage"] = 40,["darkcouncil"] = 40,["trollwitchery"] = 40,["amealservedcold"] = 40,["wantedbaronvardus"] = 40,
-["vardus"] = 40,["speakingwithnezzliok"] = 40,["prospectoffaith"] = 40,["baronsdemise"] = 40,["scrounging"] = 40,["lackofsurplus"] = 40,["drownedsorrows"] = 40,["coyotethieves"] = 40,["trelanesdefenses"] = 39,["attackonthetower"] = 39,["thecrownofwill"] = 39,
+["vardus"] = 40,["speakwithnezzliok"] = 40,["prospectoffaith"] = 40,["baronsdemise"] = 40,["scrounging"] = 40,["lackofsurplus"] = 40,["drownedsorrows"] = 40,["coyotethieves"] = 40,["trelanesdefenses"] = 39,["attackonthetower"] = 39,["thecrownofwill"] = 39,
 ["wantedmarezcowl"] = 39,["badlandsreagentrun"] = 39,["prettyboyduncan"] = 39,["wandoverfist"] = 39,["studyoftheelementsrock"] = 39,["preservingknowledge"] = 38,["excelsior"] = 38,["stonesofbinding"] = 38,["kurzensmystery"] = 38,
 ["mirages"] = 38,["galensescape"] = 38,["galen"] = 38,["specialforces"] = 38,["thevilereef"] = 37,["stromgardebadge"] = 37,["theprincesstrapped"] = 37,["tigermastery"] = 37,["stoneofthetides"] = 37,["headhunting"] = 37,["guileoftheraptor"] = 37,
 ["ofanewplague"] = 37,["hintsofanew"] = 37,["thedefenseofgromgol"] = 37,["encroachingwildlife"] = 37,["goldir"] = 36,["itsweightingold"] = 36,["worthitsweightin"] = 36,["tostealfromthieves"] = 36,["someassemblyrequired"] = 36,["hostiletakeover"] = 36,
@@ -1878,7 +1696,7 @@ GF_WORD_QUEST = {
 ["andrefirebeard"] = 45,["piratehatsahoy"] = 45,["faeriedragonmuisek"] = 45,["zukkashinfestation"] = 45,["agrimdiscovery"] = 45,["anewcloakssheen"] = 45,["deadmire"] = 45,["screecherspirits"] = 44,["morewastewanderjustice"] = 44,["thehighwilderness"] = 44,
 ["theogresofferalas"] = 44,["overlordmokmorokksconcern"] = 43,["themissingcourier"] = 43,["wastewanderjustice"] = 43,["againstthehatecrest"] = 43,["alphastrike"] = 43,["identifyingthebrood"] = 43,["gordunnicobalt"] = 43,["armyoftheblackdragon"] = 43,
 ["khanhratha"] = 42,["waronthewoodpaw"] = 42,["induriumore"] = 42,["razzericstweaking"] = 41,
-["thecorrupter"] = 40,["margspeaks"] = 40,["andbugs"] = 40,["indurium"] = 39,["ghostoplasm"] = 39,["oplasmroundup"] = 39,["thekarnitalshipwreck"] = 39,["bonecollector"] = 39,["getmeoutof"] = 39,["meoutofhere"] = 39,
+["thecorrupter"] = 40,["margspeak"] = 40,["andbugs"] = 40,["indurium"] = 39,["ghostoplasm"] = 39,["oplasmroundup"] = 39,["thekarnitalshipwreck"] = 39,["bonecollector"] = 39,["getmeoutof"] = 39,["meoutofhere"] = 39,
 ["bookoftheancients"] = 38,["gizeltoncaravan"] = 38,["handofiruxos"] = 38,["portalofthelegion"] = 38,["mudrocksoupandbugs"] = 38,["ongeku"] = 37,["frostmaw"] = 37,["goblinsponsorship"] = 37,["catchoftheday"] = 37,["khanjehn"] = 37,["khanshaka"] = 37,
 ["theblackshield"] = 37,["stinkysescape"] = 37,["reagentsforreclaimersinc"] = 37,["reagentsforreclaimers"] = 37,["claimrackmorestreasure"] = 36,["dreamdustintheswamp"] = 36,["otherfishtofry"] = 36,["encrustedtailfins"] = 35,["jarlneedblade"] = 35,
 ["brutalpolitics"] = 35,["jarlneedeyes"] = 35,["bodyguardforhire"] = 35,["theswarmgrows"] = 35,["thetheramoredocks"] = 35,["stealingsupplies"] = 35,["khandezhepah"] = 35,["partsoftheswarm"] = 35,["theramorespies"] = 35,["clambait"] = 35,["kodoroundup"] = 34,
@@ -1999,6 +1817,9 @@ GF_WORD_TRADE = {
 ["carry"] = 1,["boost"] = 1,
 ["hitem"] = .5,["needhitem"] = 1,["anyneedhitem"] = 1.5,
 
+["leatherworkerseller"] = 1,["clothseller"] = 1,["potionseller"] = 1,["anyleatherworkerseller"] = 1,["anyclothseller"] = 1,["anypotionseller"] = 1,["anyhcleatherworkerseller"] = 1,["anyhcclothseller"] = 1,["anyhcpotionseller"] = 1,
+["leatherworkersellerplease"] = 1,["clothsellerplease"] = 1,["potionsellerplease"] = 1,["needleatherworkerseller"] = 1,["needclothseller"] = 1,["needpotionseller"] = 1,["needhcleatherworkerseller"] = 1,["needhcclothseller"] = 1,["needhcpotionseller"] = 1,
+
 -- Misc recipes
 ["sageblade"] = .5,["lionheart"] = .5,["titanic"] = .5,["corebag"] = .5,["sylvan"] = .5,["glacial"] = .5,["bloodvine"] = .5,["devilsaur"] = .5,
 ["onycloak"] = .5,["zgsets"] = .5,["hideofwild"] = .5,["hideofthewild"] = .5,["triballeatherworker"] = .5,
@@ -2060,7 +1881,8 @@ GF_WORD_TRADE = {
 ["anyoneinterested"] = 1,
 ["exquisitemetalwork"] = 1,
 ["deliveredanywhere"] = 1,["atyourservice"] = 1,
-["getyourcheap"] = 1,["stillcheap"] = 1,["justlisted"] = .5,["justlistedhitem"] = .5,["thoriumspike"] = .5,["mithrilspike"] = .5,["ironspike"] = .5,["thoriumshieldspike"] = 1,["mithrilshieldspike"] = 1,["ironshieldspike"] = 1,["spikeapply"] = 1,
+["getyourcheap"] = 1,["stillcheap"] = 1,["justlisted"] = .5,["justlistedhitem"] = .5,
+["thoriumspike"] = .5,["mithrilspike"] = .5,["ironspike"] = .5,["thoriumshieldspike"] = 1,["mithrilshieldspike"] = 1,["ironshieldspike"] = 1,["spikeapply"] = 1,["elementalsharpening"] = .5,
 
 ["premiumquality"] = 1,["ordernow"] = 1,["therightchoice"] = .5,
 ["hordeoralliance"] = 1,["imhc"] = .5,
@@ -2130,6 +1952,9 @@ GF_WORD_TRADE = {
 ["cananyenchant"] = 1,["cananyenchantmake"] = .5,
 
 ["enchantaround"] = .5,["enchantaroundwhocan"] = .5,["enchantplease"] = 1,["enchanthelp"] = 1,["enchantpleasehelp"] = 1.5,
+
+-- Misc to stop spam
+["ridingspeed"] = .5,["advancedmine"] = .5,["mineandherb"] = .5,
 
 -- Stats/General enchants
 ["allresist"] = .5,["arcanedamage"] = .5,["beastslayer"] = .5,["firedamage"] = .5,["glow"] = .5,["mountspeed"] = .5,["movespeed"] = .5,["mp"] = .5,["resistall"] = .5,["riding"] = .5,["ridingskill"] = .5,["runspeed"] = .5,["firedamage"] = .5,["frostdamage"] = .5,["shadowdamage"] = .5,["naturedamage"] = .5,["arcanedamage"] = .5,["weapondamage"] = .5,["allstats"] = .5,
@@ -2358,7 +2183,7 @@ GF_WORD_TRADE = {
 
 -- Portal
 ["portal"] = .5,["toportal"] = .5,["forportal"] = .5,["foraportal"] = .5,["anyoneportal"] = .5,["anyoneportalfor"] = .5,["lfportal"] = 3,["ineedportal"] = 1,["pleaseportal"] = 1,["magepleaseportal"] = .5,
-["buyportal"] = .5,["buyingportal"] = .5,["needportal"] = 2.25,["portalservice"] = 3,["gportal"] = 3,["offerportal"] = 2,["sellportal"] = .5,["sellingportal"] = 1,["buyportalfromme"] = 1,
+["buyportal"] = .5,["buyingportal"] = .5,["needportal"] = 2.25,["portalservice"] = 3,["gportal"] = 3,["offerportal"] = 2,["sellportal"] = .5,["sellingportal"] = 1,["buyportalfromme"] = 1,["sellingportalanywhere"] = 1,
 
 ["portalplease"] = .5,["buyportalplease"] = 1.5,["buyingportalplease"] = .5,["needportalplease"] = 2.25,["whocanopenportal"] = 1,["doyouhaveportal"] = .5,
 ["createportal"] = 2,["portalmeto"] = 1.5,["anyportal"] = 1,["makeaportal"] = .5,["cananyoneportal"] = 1,["cananyoneportalme"] = 1.25,["willanyoneportalme"] = 2.25,["anyonecanportal"] = 1,
@@ -2394,7 +2219,7 @@ GF_WORD_TRADE = {
 ["payinggoldsummon"] = 2,["payingmoneysummon"] = 2,["warlocktosummon"] = 1,["locktosummon"] = 1,["summonmeto"] = 2.5,["cansummonmeto"] = .5,["anyonesummonmeto"] = .5,["abletosummon"] = 1,["willingtosummon"] = 1,
 ["anyoneneedtosummon"] = .5,["needtosummon"] = .5,["needtosummonme"] = .5,["anyoneneedtosummonme"] = .5,
 ["anylockable"] = .5,["anywarlockable"] = .5,["anywarlockin"] = .5,["lockservice"] = 3,["warlockservice"] = 20,
-["canwarlock"] = .5,["canwarlockhelpsummon"] = 1,["canwarlocksummon"] = 1,["canwarlocksummonme"] = .5,["summonmeplease"] = 2.25,["helpsummonplease"] = 1.25,["helpsummon"] = 1,
+["canwarlock"] = .5,["canwarlockhelpsummon"] = 1,["warlockhelpsummon"] = .5,["canwarlocksummon"] = 1,["canwarlocksummonme"] = .5,["summonmeplease"] = 2.25,["helpsummonplease"] = 1.25,["helpsummon"] = 1,
 
 ["havesummon"] = .5,["cansummon"] = .5,["summonaround"] = .5, -- cannot go over 3.25 with things associated with group summon advertisements(have summon, summon available, etc).. lf 2.5, summon .25, then +5
 
@@ -2460,7 +2285,7 @@ GF_WORD_TRADE = {
 ["freelockbox"] = 2,["getyourlockbox"] = .5,["havelockbox"] = .5,["helpwithhitem"] = 1,["icanopen"] = .5,
 ["illopenyour"] = 1,["itslockboxtime"] = 1,["lastcallforlockbox"] = 1,
 ["lockbox"] = 1,["lockboxlockbox"] = 1,["lflockbox"] = 2,["lockboxunlock"] = 1,
-["lockboxicanopen"] = 1,["lockboxopened"] = 1,["lockboxopenedtoday"] = 1,["lockboxopening"] = 1,["lockboxopeningtime"] = 1,["lockboxservice"] = 2,["lockboxtime"] = 1,["lockboxanyone"] = 1.5,["lockboxdoyouopen"] = 2,
+["lockboxicanopen"] = 1,["lockboxopened"] = 1,["lockboxopenedtoday"] = 1,["lockboxopening"] = 1,["lockboxopeningtime"] = 1,["lockboxservice"] = 2,["lockboxtime"] = 1,["lockboxanyone"] = 1.5,["lockboxdoyouopen"] = 2,["lockboxneedopen"] = 2,
 ["lockboxthatneedunlock"] = 1,["lockboxthatneedopen"] = 1,
 ["lockopen"] = 1,["lockopener"] = 1,["lockopening"] = 1,["locktopick"] = 1.5,["lockboxopen"] = 1,["lockboxopener"] = 1,["anylockopener"] = .5,["anylockboxopener"] = .5,
 ["levellockbox"] = .5,["lowlevellockbox"] = .5,["midlevellockbox"] = .5,

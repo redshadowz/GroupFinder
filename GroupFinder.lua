@@ -2140,11 +2140,11 @@ function GF_GetTypes(arg1, showanyway)
 					elseif GF_MessageData.foundTrades > 100 and GF_WORD_TRADE[wordString] < 100 then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_WORD_TRADE[wordString] end
 				elseif GF_TRADE_WORD_EXCLUSION[wordString] then GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + GF_TRADE_WORD_EXCLUSION[wordString] if showanyway == true then print(wordString.." tradesex") end end
 
-				if GF_MessageData.foundLFM == 0 and (GF_WORD_QUEST[wordString] or GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString]) then
-					for words,_ in GF_LFM_ONE_AFTER do if wordTable[i+j+1] and wordString..wordTable[i+j+1] == wordString..words then GF_MessageData.foundLFM = 2 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5; end end
-					for words,_ in GF_LFM_ONE_BEFORE do if wordTable[i-1] and wordTable[i-1]..wordString == words..wordString then GF_MessageData.foundLFM = 2 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5; end end
-					for words,_ in GF_LFM_TWO_AFTER do if wordTable[i+j+2] and wordString..wordTable[i+j+1]..wordTable[i+j+2] == wordString..words then GF_MessageData.foundLFM = 2 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5; end end
-					for words,_ in GF_LFM_TWO_BEFORE do if wordTable[i-2] and wordTable[i-2]..wordTable[i-1]..wordString == words..wordString then GF_MessageData.foundLFM = 2 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5; end end
+				if (GF_WORD_QUEST[wordString] or GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString]) then
+					for words,_ in GF_LFM_ONE_AFTER do if wordTable[i+j+1] and wordString..wordTable[i+j+1] == wordString..words then if GF_MessageData.foundLFM == 0 then GF_MessageData.foundLFM = 2 end GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5; end end
+					for words,_ in GF_LFM_ONE_BEFORE do if wordTable[i-1] and wordTable[i-1]..wordString == words..wordString then if GF_MessageData.foundLFM == 0 then GF_MessageData.foundLFM = 2 end GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5; end end
+					for words,_ in GF_LFM_TWO_AFTER do if wordTable[i+j+2] and wordString..wordTable[i+j+1]..wordTable[i+j+2] == wordString..words then if GF_MessageData.foundLFM == 0 then GF_MessageData.foundLFM = 2 end GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5; end end
+					for words,_ in GF_LFM_TWO_BEFORE do if wordTable[i-2] and wordTable[i-2]..wordTable[i-1]..wordString == words..wordString then if GF_MessageData.foundLFM == 0 then GF_MessageData.foundLFM = 2 end GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5; end end
 
 					for words,_ in GF_LFG_ONE_AFTER do if wordTable[i+j+1] and wordString..wordTable[i+j+1] == wordString..words then GF_MessageData.foundLFG = true GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5; end end
 					for words,_ in GF_LFG_ONE_BEFORE do if wordTable[i-1] and wordTable[i-1]..wordString == words..wordString then GF_MessageData.foundLFG = true GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5; end end
