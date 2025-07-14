@@ -920,11 +920,11 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Anchor>
 					</Anchors>
 				</FontString>
-				<FontString inherits="GameFontNormalSmall" name="GF_ShowChatTypesLabel" nonspacewrap="false" maxLines="1" text="GF_SHOW">
+				<FontString inherits="GF_TitleFont" name="GF_ShowChatTypesLabel" nonspacewrap="false" maxLines="1" text="GF_SHOW">
 					<Anchors>
 						<Anchor point="TOPRIGHT">
 							<Offset>
-								<AbsDimension x="-260" y="-8"/>
+								<AbsDimension x="-260" y="-6"/>
 							</Offset>
 						</Anchor>
 					</Anchors>
@@ -2059,7 +2059,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Anchors>
 									<Anchor point="LEFT" relativeTo="GF_GroupAutoCheckButtonTextLabel" relativePoint="RIGHT">
 										<Offset>
-											<AbsDimension x="5" y="0"/>
+											<AbsDimension x="10" y="0"/>
 										</Offset>
 									</Anchor>
 								</Anchors>

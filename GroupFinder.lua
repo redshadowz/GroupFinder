@@ -2,7 +2,6 @@
 
 GF_SavedVariables 							= {}
 GF_RealmName								= GetRealmName();
-local GF_MyName								= UnitName("player");
 local GF_Hardcore							= nil;
 local GF_WhoCooldownTime					= 10;
 local GF_NextAvailableWhoTime				= 0;
@@ -530,7 +529,7 @@ function GF_AddChannelMessage(arg1,arg2,arg8,arg9)
 		local channellist = { GetChatWindowChannels(i) };
 		for j=1, getn(channellist) do
 			if string.find(arg9,channellist[j]) then
-				if GF_WhoTable[GF_RealmName][arg2] and arg2 ~= GF_MyName then
+				if GF_WhoTable[GF_RealmName][arg2] and arg2 ~= UnitName("player") then
 					getglobal("ChatFrame"..i):AddMessage("["..arg8..". "..string.upper(string.sub(arg9,1,1))..string.lower(string.sub(arg9,2)).."] ".."|cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][arg2][2]] or "ffffff").."[|Hplayer:"..arg2.."|h"..arg2..", "..GF_WhoTable[GF_RealmName][arg2][1].."]|h|r: "..arg1, 1, 192/255, 192/255) 
 				else
 					getglobal("ChatFrame"..i):AddMessage("["..arg8..". "..string.upper(string.sub(arg9,1,1))..string.lower(string.sub(arg9,2)).."] ".."|cff".."9d9d9d".."[|Hplayer:"..arg2.."|h"..arg2.."]|h|r: "..arg1,  1, 192/255, 192/255);
@@ -587,7 +586,7 @@ function GF_AddLogMessage(arg1,filteredChat,add,arg2,arg8,arg9,event)
 		if GF_LootFilter[event] then
 			arg1 = "|cff"..GF_TextColors[event].."["..date("%H:%M").."]"..GF_LogMessageCodes[filteredChat]..arg1.."|r"
 		elseif event ~= "CHAT_MSG_CHANNEL" and GF_TextColors[event] then
-			if arg2 == GF_MyName then
+			if arg2 == UnitName("player") then
 				arg1 = "|cff"..GF_TextColors[event].."["..date("%H:%M").."] "..GF_LogMessageCodes[filteredChat].."|r|cff"..(GF_ClassColors[GF_Classes[UnitClass("player")]] or "9d9d9d").."[|Hplayer:"..arg2.."|h"..arg2..", "..UnitLevel("player").."]:|h|r|cff"..GF_TextColors[event]..arg1.."|r"
 			elseif GF_WhoTable[GF_RealmName][arg2] then 
 				arg1 = "|cff"..GF_TextColors[event].."["..date("%H:%M").."] "..GF_LogMessageCodes[filteredChat].."|r|cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][arg2][2]] or "9d9d9d").."[|Hplayer:"..arg2.."|h"..arg2..", "..GF_WhoTable[GF_RealmName][arg2][1].."]:|h|r|cff"..GF_TextColors[event]..arg1.."|r"
@@ -596,7 +595,7 @@ function GF_AddLogMessage(arg1,filteredChat,add,arg2,arg8,arg9,event)
 			end
 		else
 			arg9 = arg8..". "..string.upper(string.sub(arg9,1,1))..string.lower(string.sub(string.gsub(arg9, " - .*", ""),2))
-			if arg2 == GF_MyName then 
+			if arg2 == UnitName("player") then 
 				arg1 = "["..date("%H:%M").."] "..GF_LogMessageCodes[filteredChat].."["..arg9.."] ".."|cff"..(GF_ClassColors[GF_Classes[UnitClass("player")]] or "9d9d9d").."[|Hplayer:"..arg2.."|h"..arg2..", "..UnitLevel("player").."]:|h|r"..arg1
 			elseif GF_WhoTable[GF_RealmName][arg2] then 
 				arg1 = "["..date("%H:%M").."] "..GF_LogMessageCodes[filteredChat].."["..arg9.."] ".."|cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][arg2][2]] or "9d9d9d").."[|Hplayer:"..arg2.."|h"..arg2..", "..GF_WhoTable[GF_RealmName][arg2][1].."]:|h|r"..arg1
@@ -966,7 +965,7 @@ end
 function GF_OnEvent(event) -- OnEvent, LoadSettings, Bind Keys, Prune Tables
 	if GF_AutoAnnounceTimer and event == "CHAT_MSG_SYSTEM" and string.find(arg1, GF_NOW_AFK) then
 		GF_TurnOffAnnounce(GF_AFK_ANNOUNCE_OFF);
-	elseif event == "CHAT_MSG_ADDON" and arg1 == "GF" and arg4 ~= GF_MyName then
+	elseif event == "CHAT_MSG_ADDON" and arg1 == "GF" and arg4 ~= UnitName("player") then
 		GF_AddonListOfFriendsGuildiesWithAddon[arg4] = true;
 		--GF_ParseIncomingAddonMessages(arg2)
 	elseif event == "WHO_LIST_UPDATE" then
@@ -987,7 +986,7 @@ function GF_OnEvent(event) -- OnEvent, LoadSettings, Bind Keys, Prune Tables
 		GF_WhisperReceivedAddToWhisperHistoryList(arg1,arg2,event)
 	elseif (event == "CHAT_MSG_GUILD" or event == "CHAT_MSG_OFFICER") then
 		GF_WhisperReceivedAddToWhisperHistoryList(arg1,arg2,event)
-	elseif arg2 == GF_MyName or event == "CHAT_MSG_PARTY" or event == "CHAT_MSG_RAID" or event == "CHAT_MSG_RAID_LEADER" or event == "CHAT_MSG_RAID_WARNING" or event == "CHAT_MSG_BATTLEGROUND" or event == "CHAT_MSG_BATTLEGROUND_LEADER" then
+	elseif arg2 == UnitName("player") or event == "CHAT_MSG_PARTY" or event == "CHAT_MSG_RAID" or event == "CHAT_MSG_RAID_LEADER" or event == "CHAT_MSG_RAID_WARNING" or event == "CHAT_MSG_BATTLEGROUND" or event == "CHAT_MSG_BATTLEGROUND_LEADER" then
 		GF_AddLogMessage(arg1,10,true,arg2,arg8,arg9,event)
 	elseif (event == "GUILD_ROSTER_UPDATE" and GetNumGuildMembers() ~= GF_CurrentNumGuildies) then 
 		GF_UpdateGuildiesList()
@@ -1150,7 +1149,7 @@ function GF_GetNumGroupMembers() -- Get Group/Friends/Guildies information(turns
 end
 function GF_UpdatePlayersInGroupList()
 	GF_PlayersCurrentlyInGroup = {}
-	GF_PlayersCurrentlyInGroup[GF_MyName] = true;
+	GF_PlayersCurrentlyInGroup[UnitName("player")] = true;
 	for i=1,5 do
 		if UnitExists("party"..i) then GF_PlayersCurrentlyInGroup[UnitName("party"..i)] = true; end
 	end
@@ -1163,7 +1162,7 @@ function GF_UpdateFriendsList()
 	GF_Friends = {};
 	for i=1, GetNumFriends() do
 		local name,level,class = GetFriendInfo(i)
-		if name then 
+		if name and class and level and level > 0 then
 			GF_Friends[name] = true;
 			GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], "", time()}
 		end
@@ -1327,7 +1326,7 @@ function GF_ListItem_OnMouseUp(id)
 		return;
 	elseif (arg1 == "RightButton") then
 		HideDropDownMenu(1);
-		if name ~= GF_MyName then
+		if name ~= UnitName("player") then
 			FriendsDropDown.initialize = FriendsFrameDropDown_Initialize;
 			FriendsDropDown.displayMode = "MENU";
 			FriendsDropDown.name = name;
@@ -2032,7 +2031,7 @@ function GF_CheckForGroups(arg1,arg2,event,showanyway)
 -- "Say" messages will always be displayed unless flagged as spam.
 -- "Yell" and "Channel" messages will only display if allowed.
 	if GF_BlackList[GF_RealmName][arg2] and not GF_PlayersCurrentlyInGroup[arg2] and not GF_Friends[arg2] and not GF_Guildies[arg2] then return 8 end
-	GF_GetTypes(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(string.lower(gsub(gsub(gsub(" "..arg1.." ", "|c%x+|+(%w+)[%d:]+|+h", " %1 "), "|+h|+r", " "),"([a-z])([A-Z])","%1 %2")),".gg/%w+", ""),"(%a%a+)"," %1 "),"%s(%a)%s(%a)%s","%1%2"),"%s%s+", " "),"['']", "")," any?%s?1[%p%s]"," anyone ")," some%s?1[%p%s]"," anyone "),"any one","anyone"),"g2g","gtg"),"kk+","kk"),"lolol","lol"),"ss+","ss"),"aa+","a"),showanyway)
+	GF_GetTypes(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(string.lower(gsub(gsub(gsub(" "..arg1.." ", "|c%x+|+(%w+)[%d:]+|+h", " %1 "), "|+h|+r", " "),"([a-z])([A-Z])","%1 %2")),".gg/%w+", ""),"(%a%a+)"," %1 "),"%s(%a)%s(%a)%s","%1%2"),"%s%s+", " "),"['']", "")," any?%s?1[%p%s]"," anyone ")," some%s?1[%p%s]"," anyone "),"any one","anyone"),"g2g","gtg"),"kk+","kk"),"lolol","lol"),"ss+","ss"),"aa+","a"),"oo+","oo"),"ee+","ee"),showanyway)
 	if event == "CHAT_MSG_HARDCORE" then GF_MessageData.foundHC = true end
 	if GF_MessageData.foundGuild >= 3 then return GF_CheckForSpam(arg1,arg2) or 11
 	elseif GF_MessageData.foundTrades >= 3 then return GF_CheckForSpam(arg1,arg2) or 5
