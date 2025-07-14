@@ -1162,7 +1162,7 @@ function GF_UpdateFriendsList()
 	GF_Friends = {};
 	for i=1, GetNumFriends() do
 		local name,level,class = GetFriendInfo(i)
-		if name and class and level and level > 0 then
+		if name and GF_Classes[class] and level and level > 0 then
 			GF_Friends[name] = true;
 			GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], "", time()}
 		end
