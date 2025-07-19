@@ -2031,7 +2031,7 @@ function GF_CheckForGroups(arg1,arg2,event,showanyway)
 -- "Say" messages will always be displayed unless flagged as spam.
 -- "Yell" and "Channel" messages will only display if allowed.
 	if GF_BlackList[GF_RealmName][arg2] and not GF_PlayersCurrentlyInGroup[arg2] and not GF_Friends[arg2] and not GF_Guildies[arg2] then return 8 end
-	GF_GetTypes(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(string.lower(gsub(gsub(gsub(" "..arg1.." ", "|c%x+|+(%w+)[%d:]+|+h", " %1 "), "|+h|+r", " "),"([a-z])([A-Z])","%1 %2")),".gg/%w+", ""),"(%a%a+)"," %1 "),"%s(%a)%s(%a)%s","%1%2"),"%s%s+", " "),"['']", "")," any?%s?1[%p%s]"," anyone ")," som%e?%s?1[%p%s]"," anyone "),"any one","anyone"),"g2g","gtg"),"kk+","kk"),"lolol","lol"),"ss+","ss"),"aa+","a"),"oo+","oo"),"ee+","ee"),showanyway)
+	GF_GetTypes(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(gsub(string.lower(gsub(gsub(gsub(" "..arg1.." ", "|c%x+|+(%w+)[%d:]+|+h", " %1 "), "|+h|+r", " "),"([a-z ][a-z])([A-Z])","%1 %2")),".gg/%w+", ""),"(%a%a+)"," %1 "),"%s(%a)%s(%a)%s","%1%2"),"%s%s+", " "),"['']", ""),"g2g","gtg"),"kk+","kk"),"lolol","lol"),"ss+","ss"),"aa+","a"),"oo+","oo"),"ee+","ee"),showanyway)
 	if event == "CHAT_MSG_HARDCORE" then GF_MessageData.foundHC = true end
 	if GF_MessageData.foundGuild >= 3 then return GF_CheckForSpam(arg1,arg2) or 11
 	elseif GF_MessageData.foundTrades >= 3 then return GF_CheckForSpam(arg1,arg2) or 5
@@ -2055,30 +2055,36 @@ function GF_GetTypes(arg1, showanyway)
 	GF_MessageData = { foundIgnore = nil,foundGuild = 0,foundGuildExclusion = 0,foundLFM = 0,foundLFG = nil,foundClass = nil,foundQuest = nil,foundDungeon = nil,foundRaid = nil,foundTrades = 0,foundTradesExclusion = 0,foundPvP = nil,foundDFlags = {},foundPFlags = {},foundHC = nil,foundNotHC = nil, lfmlfgName = "zzz", groupName = "AAA" }
 	local wordTable = {}
 	local wordString;
+	local lfs,lfe;
 
-	if string.find(arg1, " lfm[%a%s]") then GF_MessageData.foundLFM = 3 local lfs,lfe = string.find(arg1, " lfm[%a%s]") arg1 = string.sub(arg1,1,lfs-1).." lfm "..string.sub(arg1,lfe)
-	elseif string.find(arg1, "[%a%s]lfm ") then GF_MessageData.foundLFM = 3 local lfs,lfe = string.find(arg1, "[%a%s]lfm ") arg1 = string.sub(arg1,1,lfs).." lfm "..string.sub(arg1,lfe+1)
-	elseif string.find(arg1, " lfg[%a%s]") then GF_MessageData.foundLFM = 3 local lfs,lfe = string.find(arg1, " lfg[%a%s]") arg1 = string.sub(arg1,1,lfs-1).." lfg "..string.sub(arg1,lfe)
-	elseif string.find(arg1, "[%a%s]lfg ") then GF_MessageData.foundLFM = 3 local lfs,lfe = string.find(arg1, "[%a%s]lfg ") arg1 = string.sub(arg1,1,lfs).." lfg "..string.sub(arg1,lfe+1)
-	elseif string.find(arg1, " lf[%s%d]+m ") then GF_MessageData.foundLFM = 4 local lfs,lfe = string.find(arg1, " lf[%s%d]+m ") arg1 = string.sub(arg1,1,lfs-1).." lfm "..string.sub(arg1,lfe+1) GF_MessageData.foundGuildExclusion = 3 GF_MessageData.foundTradesExclusion = 3
-	elseif string.find(arg1, " lf[%a%s]") then GF_MessageData.foundLFM = 2 local lfs,lfe = string.find(arg1, " lf[%a%s]") if not string.find(string.sub(arg1,lfe-1,lfe),"[gm]") then arg1 = string.sub(arg1,1,lfs-1).." lf "..string.sub(arg1,lfe) end
-	elseif string.find(arg1, "[dpstnkhlr%s]lf ") then GF_MessageData.foundLFM = 2 local lfs,lfe = string.find(arg1, "[dpstnkhlr%s]lf ") arg1 = string.sub(arg1,1,lfs).." lf "..string.sub(arg1,lfe+1)
-	elseif string.find(arg1, " wtb[%a%s]") then local lfs,lfe = string.find(arg1, " wtb[%a%s]") arg1 = string.sub(arg1,1,lfs-1).." wtb "..string.sub(arg1,lfe)
-	elseif string.find(arg1, " wts[%a%s]") then local lfs,lfe = string.find(arg1, " wts[%a%s]") arg1 = string.sub(arg1,1,lfs-1).." wts "..string.sub(arg1,lfe)
-	elseif string.find(arg1, " wtt[%a%s]") then local lfs,lfe = string.find(arg1, " wtt[%a%s]") arg1 = string.sub(arg1,1,lfs-1).." wtt "..string.sub(arg1,lfe)
-	elseif string.find(arg1, " heal[%a%s]") then local lfs,lfe = string.find(arg1, " heal[%a%s]") if string.sub(arg1, lfs, lfe+2) == "healer" then arg1 = string.sub(arg1,1,lfs-1).." healer "..string.sub(arg1,lfe+2) else arg1 = string.sub(arg1,1,lfs-1).." heal "..string.sub(arg1,lfe) end
-	elseif string.find(arg1, " tank[%a%s]") then local lfs,lfe = string.find(arg1, " tank[%a%s]") if string.sub(arg1, lfs, lfe+1) == "tanks" then arg1 = string.sub(arg1,1,lfs-1).." tanks "..string.sub(arg1,lfe+1) else arg1 = string.sub(arg1,1,lfs-1).." heal "..string.sub(arg1,lfe) end
-	elseif string.find(arg1, " dps[%a%s]") then local lfs,lfe = string.find(arg1, " dps[%a%s]") arg1 = string.sub(arg1,1,lfs-1).." dps "..string.sub(arg1,lfe)
-	elseif string.find(arg1, "[%a%s]heal ") then local lfs,lfe = string.find(arg1, "[%a%s]heal ") arg1 = string.sub(arg1,1,lfs).." heal "..string.sub(arg1,lfe+1)
-	elseif string.find(arg1, "[%a%s]tank ") then local lfs,lfe = string.find(arg1, "[%a%s]tank ") arg1 = string.sub(arg1,1,lfs).." tank "..string.sub(arg1,lfe+1)
-	elseif string.find(arg1, "[%a%s]dps ") then local lfs,lfe = string.find(arg1, "[%a%s]dps ") arg1 = string.sub(arg1,1,lfs).." dps "..string.sub(arg1,lfe+1)
+	if string.find(arg1, " lfm[%a%s]") then GF_MessageData.foundLFM = 3; lfs,lfe = string.find(arg1, " lfm[%a%s]") arg1 = string.sub(arg1,1,lfs-1).." lfm "..string.sub(arg1,lfe)
+	elseif string.find(arg1, "[%a%s]lfm ") then GF_MessageData.foundLFM = 3; lfs,lfe = string.find(arg1, "[%a%s]lfm ") arg1 = string.sub(arg1,1,lfs).." lfm "..string.sub(arg1,lfe+1)
+	elseif string.find(arg1, " lfg[%a%s]") then GF_MessageData.foundLFM = 3; lfs,lfe = string.find(arg1, " lfg[%a%s]") arg1 = string.sub(arg1,1,lfs-1).." lfg "..string.sub(arg1,lfe)
+	elseif string.find(arg1, "[%a%s]lfg ") then GF_MessageData.foundLFM = 3; lfs,lfe = string.find(arg1, "[%a%s]lfg ") arg1 = string.sub(arg1,1,lfs).." lfg "..string.sub(arg1,lfe+1)
+	elseif string.find(arg1, " lf[%s%d]+m ") then GF_MessageData.foundLFM = 4; lfs,lfe = string.find(arg1, " lf[%s%d]+m ") arg1 = string.sub(arg1,1,lfs-1).." lfm "..string.sub(arg1,lfe+1) GF_MessageData.foundGuildExclusion = 3 GF_MessageData.foundTradesExclusion = 3
+	elseif string.find(arg1, " lf[%a%s]") then GF_MessageData.foundLFM = 2; lfs,lfe = string.find(arg1, " lf[%a%s]") if not string.find(string.sub(arg1,lfe-1,lfe),"[gm]") then arg1 = string.sub(arg1,1,lfs-1).." lf "..string.sub(arg1,lfe) end
+	elseif string.find(arg1, "[dpstnkhlr%s]lf ") then GF_MessageData.foundLFM = 2; lfs,lfe = string.find(arg1, "[dpstnkhlr%s]lf ") arg1 = string.sub(arg1,1,lfs).." lf "..string.sub(arg1,lfe+1)
+	elseif string.find(arg1, " wtb[%a%s]") then lfs,lfe = string.find(arg1, " wtb[%a%s]") arg1 = string.sub(arg1,1,lfs-1).." wtb "..string.sub(arg1,lfe)
+	elseif string.find(arg1, " wts[%a%s]") then lfs,lfe = string.find(arg1, " wts[%a%s]") arg1 = string.sub(arg1,1,lfs-1).." wts "..string.sub(arg1,lfe)
+	elseif string.find(arg1, " wtt[%a%s]") then lfs,lfe = string.find(arg1, " wtt[%a%s]") arg1 = string.sub(arg1,1,lfs-1).." wtt "..string.sub(arg1,lfe)
+	elseif string.find(arg1, " heal[%a%s]") then lfs,lfe = string.find(arg1, " heal[%a%s]") if string.sub(arg1, lfs, lfe+2) == "healer" then arg1 = string.sub(arg1,1,lfs-1).." healer "..string.sub(arg1,lfe+2) else arg1 = string.sub(arg1,1,lfs-1).." heal "..string.sub(arg1,lfe) end
+	elseif string.find(arg1, " tank[%a%s]") then lfs,lfe = string.find(arg1, " tank[%a%s]") if string.sub(arg1, lfs, lfe+1) == "tanks" then arg1 = string.sub(arg1,1,lfs-1).." tanks "..string.sub(arg1,lfe+1) else arg1 = string.sub(arg1,1,lfs-1).." heal "..string.sub(arg1,lfe) end
+	elseif string.find(arg1, " dps[%a%s]") then lfs,lfe = string.find(arg1, " dps[%a%s]") arg1 = string.sub(arg1,1,lfs-1).." dps "..string.sub(arg1,lfe)
+	elseif string.find(arg1, "[%a%s]heal ") then lfs,lfe = string.find(arg1, "[%a%s]heal ") arg1 = string.sub(arg1,1,lfs).." heal "..string.sub(arg1,lfe+1)
+	elseif string.find(arg1, "[%a%s]tank ") then lfs,lfe = string.find(arg1, "[%a%s]tank ") arg1 = string.sub(arg1,1,lfs).." tank "..string.sub(arg1,lfe+1)
+	elseif string.find(arg1, "[%a%s]dps ") then lfs,lfe = string.find(arg1, "[%a%s]dps ") arg1 = string.sub(arg1,1,lfs).." dps "..string.sub(arg1,lfe+1)
 	elseif string.find(arg1, "\][0-9%s]+%+") then GF_MessageData.foundLFM = 2
 	elseif string.find(arg1, "\][0-9%s]+g") then GF_MessageData.foundTrades = .5
 	elseif string.find(arg1, "\][0-9%s]+s") then GF_MessageData.foundTrades = .5 end
 
 	if string.find(arg1, "%d+p") then GF_MessageData.foundLFM = 2 end -- get rid fo "p" in "10p heal" messages from chinese
 
-	for word in string.gfind(arg1, " (%w%d+)") do if GF_WORD_NUMBER[word] then table.insert(wordTable, GF_WORD_NUMBER[word]) end end
+
+	lfs = 1; -- To detect number/word combinations(eg "1st = first")
+	while true do lfs,lfe,wordString = string.find(arg1," (%d+%s?%a+) ",lfs) if not wordString then break end wordString = gsub(wordString," ","") if GF_WORD_NUMBER[wordString] then arg1 = string.sub(arg1,1,lfs)..GF_WORD_NUMBER[wordString]..string.sub(arg1,lfe) end lfs = lfe; end
+	lfs = 1; -- To detect word/number combinations(eg "any1 = anyone")
+	while true do lfs,lfe,wordString = string.find(arg1," (%a+%s?%d+) ",lfs) if not wordString then break end wordString = gsub(wordString," ","") if GF_WORD_NUMBER[wordString] then arg1 = string.sub(arg1,1,lfs)..GF_WORD_NUMBER[wordString]..string.sub(arg1,lfe) end lfs = lfe; end
+
 	for word in string.gfind(arg1, "(%a+)") do if not GF_WORD_SKIP[word] then table.insert(wordTable, word) end end
 	for j=0,3 do
 		for i=1, getn(wordTable) do
@@ -2158,7 +2164,7 @@ function GF_GetTypes(arg1, showanyway)
 	while GF_MessageData.foundGuild > 100 do GF_MessageData.foundGuild = GF_MessageData.foundGuild - 100 end
 	GF_MessageData.foundGuild = GF_MessageData.foundGuild - GF_MessageData.foundGuildExclusion
 	
-	if string.find(arg1, "[%p ]%d+%s?g[%p ]") or string.find(arg1, "[%p ]%d+%s?gold[%p ]") or string.find(arg1, "[%p ]%d%d?%s?s[%p ]") or string.find(arg1, "[%p ]%d+ ?silver[%p ]") then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 2 end
+	if string.find(arg1, "[%p ]%d+%s?gs?[%p ]") or string.find(arg1, "[%p ]%d+%s?gold[%p ]") or string.find(arg1, "[%p ]%d%d?%s?s[%p ]") or string.find(arg1, "[%p ]%d+ ?silver[%p ]") then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 2 end
 	while GF_MessageData.foundTrades > 100 do GF_MessageData.foundTrades = GF_MessageData.foundTrades - 100 end
 	GF_MessageData.foundTrades = GF_MessageData.foundTrades - GF_MessageData.foundTradesExclusion
 
@@ -2179,6 +2185,9 @@ function GF_GetTypes(arg1, showanyway)
 	elseif GF_MessageData.foundClass == 0 then
 		for word,num in string.gfind(arg1, "(%a+)%p?%s?(%d+)") do if GF_WORD_FIX[word] then word = GF_WORD_FIX[word] end if GF_WORD_LEVEL_DETECT[word] and tonumber(num) > 8 and tonumber(num) < 61 then GF_MessageData.foundClass = tonumber(num) return end end
 		for num,word in string.gfind(arg1, "(%d+)%p?%s?(%a+)") do if GF_WORD_FIX[word] then word = GF_WORD_FIX[word] end if GF_WORD_LEVEL_DETECT[word] and tonumber(num) > 8 and tonumber(num) < 61 then GF_MessageData.foundClass = tonumber(num) return end end
+		for i=1, getn(wordTable) do if GF_WORD_LEVEL_ZONE[wordTable[i]] then GF_MessageData.foundDungeon = GF_WORD_LEVEL_ZONE[wordTable[i]] end end
+	elseif GF_MessageData.foundQuest == 0 then
+		for i=1, getn(wordTable) do if GF_WORD_LEVEL_ZONE[wordTable[i]] then GF_MessageData.foundQuest = GF_WORD_LEVEL_ZONE[wordTable[i]] end end
 	end
 end
 function GF_CheckForSpam(arg1,arg2,foundInGroup)
