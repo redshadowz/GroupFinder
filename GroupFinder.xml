@@ -421,6 +421,21 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</Anchors>
 					<Color r="0.0" g="0.0" b="0.25" a="0.75"/>
 				</Texture>
+				<Texture name ="$parentTextureGold" hidden="true">
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset>
+								<AbsDimension x="30" y="-1"/>
+							</Offset>
+						</Anchor>
+						<Anchor point="BOTTOMRIGHT">
+							<Offset>
+								<AbsDimension x="0" y="1"/>
+							</Offset>
+						</Anchor>						
+					</Anchors>
+					<Color r="1" g=".85" b="0.0" a=".15"/>
+				</Texture>	
 			</Layer>
 			<Layer level="ARTWORK">
 				<Texture name ="$parentTextureSelectedBg"  file="Interface\WorldStateFrame\WorldStateFinalScoreFrame-TopBackground" alphaMode="ADD" hidden="true">
@@ -534,6 +549,13 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					<OnClick>
 						GF_GetGroupWhoButton(this:GetParent(),this:GetParent():GetID())
 					</OnClick>
+					<OnEnter>
+						GF_ResultItem_Hover_On(this:GetParent());
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide();
+						GF_ResultItem_Hover_Off(this:GetParent());
+					</OnLeave>
 				</Scripts>
 			</Button>
 			<Button name="$parentLFGInviteButton" inherits="GF_ButtonTemplate" text="GF_INVITE" hidden="true">
@@ -551,6 +573,13 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					<OnClick>
 						GF_LFGInviteButton(this:GetParent(),this:GetParent():GetID())
 					</OnClick>
+					<OnEnter>
+						GF_ResultItem_Hover_On(this:GetParent());
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide();
+						GF_ResultItem_Hover_Off(this:GetParent());
+					</OnLeave>
 				</Scripts>
 			</Button>
 			<Button name="$parentLFMWhisperRequestInviteButton" inherits="GF_ButtonTemplate" text="GF_REQUEST" hidden="true">
@@ -568,6 +597,13 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					<OnClick>
 						GF_LFMWhisperRequestInviteButton(this:GetParent(),this:GetParent():GetID())
 					</OnClick>
+					<OnEnter>
+						GF_ResultItem_Hover_On(this:GetParent());
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide();
+						GF_ResultItem_Hover_Off(this:GetParent());
+					</OnLeave>
 				</Scripts>
 			</Button>
 		</Frames>
