@@ -167,7 +167,7 @@ function GF_LoadVariables()
 		if not GF_SavedVariables.logshowwhisperwindow then GF_SavedVariables.logshowwhisperwindow = true end
 	end
 	if not GF_SavedVariables.friendsToRemove then GF_SavedVariables.friendsToRemove = {} end
-	if type(GF_SavedVariables.hardcore) == "boolean" then GF_SavedVariables.hardcore = 1 end
+	if not GF_SavedVariables.hardcore or type(GF_SavedVariables.hardcore) == "boolean" then GF_SavedVariables.hardcore = 1 end
 	if not GF_BUTTONS_LIST.LFGSize[GF_SavedVariables.lfgsize] then GF_SavedVariables.lfgsize = 1 end
 	if not GF_MessageList then GF_MessageList = {} end
 	if not GF_MessageList[GF_RealmName] then GF_MessageList[GF_RealmName] = {}; end
