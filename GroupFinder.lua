@@ -1318,7 +1318,7 @@ function GF_UpdateResults()
 	end
 end
 function GF_ListItem_OnMouseUp(id)
-	local name = GF_FilteredResultsList[GF_ResultsListOffset + id].op;
+	local name = GF_FilteredResultsList[GF_ResultsListOffset+id].op;
 	if IsShiftKeyDown() and arg1 == "LeftButton" and not ChatFrameEditBox:IsVisible() then
 		for i=1, getn(GF_UrgentWhoRequest) do
 			if GF_UrgentWhoRequest[i] == name then table.remove(GF_UrgentWhoRequest, i) break end
@@ -1358,9 +1358,11 @@ function GF_ListItem_OnMouseUp(id)
 			ToggleDropDownMenu(1, nil, FriendsDropDown, "cursor");
 			return;
 		end
+	else
+		GF_ListItemAuxLeft_ShowTooltip(getglobal("GF_NewItem"..id),id,true)
 	end
 end
-function GF_ListItemAuxLeft_ShowTooltip(frame, id)
+function GF_ListItemAuxLeft_ShowTooltip(frame,id,showall)
 	if not id then return end
 	GameTooltip:ClearLines();
 	GameTooltip:SetOwner(this, "ANCHOR_BOTTOMLEFT");
@@ -1371,6 +1373,17 @@ function GF_ListItemAuxLeft_ShowTooltip(frame, id)
 	
 	--GameTooltip:AddLine(GF_FilteredResultsList[GF_ResultsListOffset+id].op);
 	GameTooltip:AddLine(GF_FilteredResultsList[GF_ResultsListOffset+id].message, 0.9, 0.9, 1.0, 1, 1);
+	if showall then
+		if GF_PlayerMessages[GF_FilteredResultsList[GF_ResultsListOffset+id].op][2][1] and GF_PlayerMessages[GF_FilteredResultsList[GF_ResultsListOffset+id].op][2][1] ~= GF_FilteredResultsList[GF_ResultsListOffset+id].message then
+			GameTooltip:AddLine(GF_PlayerMessages[GF_FilteredResultsList[GF_ResultsListOffset+id].op][2][1], 0.9, 0.9, 1.0, 1, 1);
+		end
+		if GF_PlayerMessages[GF_FilteredResultsList[GF_ResultsListOffset+id].op][2][2] and GF_PlayerMessages[GF_FilteredResultsList[GF_ResultsListOffset+id].op][2][2] ~= GF_FilteredResultsList[GF_ResultsListOffset+id].message and GF_PlayerMessages[GF_FilteredResultsList[GF_ResultsListOffset+id].op][2][1] ~= GF_PlayerMessages[GF_FilteredResultsList[GF_ResultsListOffset+id].op][2][2] and GF_PlayerMessages[GF_FilteredResultsList[GF_ResultsListOffset+id].op][2][2] ~= "ZZZzzz123654" then
+			GameTooltip:AddLine(GF_PlayerMessages[GF_FilteredResultsList[GF_ResultsListOffset+id].op][2][2], 0.9, 0.9, 1.0, 1, 1);
+		end
+		if GF_PlayerMessages[GF_FilteredResultsList[GF_ResultsListOffset+id].op][2][3] and GF_PlayerMessages[GF_FilteredResultsList[GF_ResultsListOffset+id].op][2][3] ~= GF_FilteredResultsList[GF_ResultsListOffset+id].message and GF_PlayerMessages[GF_FilteredResultsList[GF_ResultsListOffset+id].op][2][1] ~= GF_PlayerMessages[GF_FilteredResultsList[GF_ResultsListOffset+id].op][2][2] and GF_PlayerMessages[GF_FilteredResultsList[GF_ResultsListOffset+id].op][2][2] ~= GF_PlayerMessages[GF_FilteredResultsList[GF_ResultsListOffset+id].op][2][3] and GF_PlayerMessages[GF_FilteredResultsList[GF_ResultsListOffset+id].op][2][3] ~= "ZZZzzz123654" then
+			GameTooltip:AddLine(GF_PlayerMessages[GF_FilteredResultsList[GF_ResultsListOffset+id].op][2][3], 0.9, 0.9, 1.0, 1, 1);
+		end
+	end
 	GameTooltip:Show();
 end
 function GF_ResultItem_Hover_On(frame,id)
@@ -2276,20 +2289,20 @@ end
 function GF_CheckForSpam(arg1,arg2,foundInGroup)
 		if GF_IncomingMessagePrune + 3600 < time() then -- 1 hour
 			for name,_ in GF_PlayerMessages do
-					if GF_PlayerMessages[name][1][1] + GF_SavedVariables.spamfilterduration*60 < GetTime() then
-							GF_PlayerMessages[name] = nil;
+					if GF_PlayerMessages[name][1][1] + 840 + GF_SavedVariables.spamfilterduration*60 < GetTime() then -- Save messages for 15 minute minimum
+						GF_PlayerMessages[name] = nil;
 					end
 			end
 			GF_IncomingMessagePrune = time();
 		end
 		if not GF_PlayerMessages[arg2] then
-			GF_PlayerMessages[arg2] = { [1] = { GetTime(),GetTime(),GetTime() }, [2] = { string.sub(arg1,math.random(math.ceil(string.len(arg1)/4)),math.ceil(string.len(arg1)/4*3 + math.random(math.ceil(string.len(arg1)/4)))), "ZZZzzz123654", "ZZZzzz123654" } }
+			GF_PlayerMessages[arg2] = { [1] = { GetTime(),GetTime(),GetTime() }, [2] = { arg1, "ZZZzzz123654", "ZZZzzz123654" } }
 		elseif not GF_PlayersCurrentlyInGroup[arg2] and not GF_Friends[arg2] and not GF_Guildies[arg2] then
 				if (GF_WhoTable[GF_RealmName][arg2] and GF_WhoTable[GF_RealmName][arg2][1] < GF_SavedVariables.blockmessagebelowlevel) and GF_WhoTable[GF_RealmName][arg2][4] + 86400 > time() then return 9; end  -- Block lowlevel
 				if GF_SavedVariables.spamfilter then
 					if GF_PlayerMessages[arg2] and GF_PlayerMessages[arg2][1][1] > GetTime() then return 7 end -- Returns spam for the duration of the spam filter
-					if ((string.len(arg1) > 30 and ((GF_PlayerMessages[arg2][1][1] + 120 > GetTime() and string.find(arg1,GF_PlayerMessages[arg2][2][1],1,true)) or (GF_PlayerMessages[arg2][1][2] + 120 > GetTime() and string.find(arg1,GF_PlayerMessages[arg2][2][2],1,true)) or (GF_PlayerMessages[arg2][1][3] + 120 > GetTime() and string.find(arg1,GF_PlayerMessages[arg2][2][3],1,true))))
-					or ((GF_PlayerMessages[arg2][1][1] + 120 > GetTime() and string.find(arg1,GF_PlayerMessages[arg2][2][1],1,true)) and (GF_PlayerMessages[arg2][1][2] + 120 > GetTime() and string.find(arg1,GF_PlayerMessages[arg2][2][2],1,true)))) then		-- Found Spammer
+					if ((string.len(arg1) > 30 and ((GF_PlayerMessages[arg2][1][1] + 120 > GetTime() and string.find(arg1,string.sub(GF_PlayerMessages[arg2][2][1],math.random(math.ceil(string.len(GF_PlayerMessages[arg2][2][1])/4)),math.ceil(string.len(GF_PlayerMessages[arg2][2][1])/4*3 + math.random(math.ceil(string.len(GF_PlayerMessages[arg2][2][1])/4)))),1,true)) or (GF_PlayerMessages[arg2][1][2] + 120 > GetTime() and string.find(arg1,string.sub(GF_PlayerMessages[arg2][2][2],math.random(math.ceil(string.len(GF_PlayerMessages[arg2][2][2])/4)),math.ceil(string.len(GF_PlayerMessages[arg2][2][2])/4*3 + math.random(math.ceil(string.len(GF_PlayerMessages[arg2][2][2])/4)))),1,true)) or (GF_PlayerMessages[arg2][1][3] + 120 > GetTime() and string.find(arg1,string.sub(GF_PlayerMessages[arg2][2][3],math.random(math.ceil(string.len(GF_PlayerMessages[arg2][2][3])/4)),math.ceil(string.len(GF_PlayerMessages[arg2][2][3])/4*3 + math.random(math.ceil(string.len(GF_PlayerMessages[arg2][2][3])/4)))),1,true))))
+					or ((GF_PlayerMessages[arg2][1][1] + 120 > GetTime() and string.find(arg1,string.sub(GF_PlayerMessages[arg2][2][1],math.random(math.ceil(string.len(GF_PlayerMessages[arg2][2][1])/4)),math.ceil(string.len(GF_PlayerMessages[arg2][2][1])/4*3 + math.random(math.ceil(string.len(GF_PlayerMessages[arg2][2][1])/4)))),1,true)) and (GF_PlayerMessages[arg2][1][2] + 120 > GetTime() and string.find(arg1,string.sub(GF_PlayerMessages[arg2][2][2],math.random(math.ceil(string.len(GF_PlayerMessages[arg2][2][2])/4)),math.ceil(string.len(GF_PlayerMessages[arg2][2][2])/4*3 + math.random(math.ceil(string.len(GF_PlayerMessages[arg2][2][2])/4)))),1,true)))) then		-- Found Spammer
 							if GF_SavedVariables.autoblacklist and not GF_BlackList[GF_RealmName][arg2] and string.len(arg1) > 120 then
 									if GF_WhoTable[GF_RealmName][arg2] and GF_WhoTable[GF_RealmName][arg2][4] + 86400 > time() then -- Data must be less than a day old to autoblacklist or block lowlevel
 											if GF_WhoTable[GF_RealmName][arg2][1] <= GF_SavedVariables.autoblacklistminlevel then																																						-- Blacklist if below level filter
@@ -2308,7 +2321,7 @@ function GF_CheckForSpam(arg1,arg2,foundInGroup)
 					end
 					table.insert(GF_PlayerMessages[arg2][1],1,GetTime())
 					table.remove(GF_PlayerMessages[arg2][1],4)
-					table.insert(GF_PlayerMessages[arg2][2],1,string.sub(arg1,math.random(math.ceil(string.len(arg1)/4)),math.ceil(string.len(arg1)/4*3 + math.random(math.ceil(string.len(arg1)/4)))))
+					table.insert(GF_PlayerMessages[arg2][2],1,arg1)
 					table.remove(GF_PlayerMessages[arg2][2],4)
 					if string.find(arg1,string.sub(arg1,1,20),21, true) then return 7 end																																																										-- Repeating text in the same message
 				end
