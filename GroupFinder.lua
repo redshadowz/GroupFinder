@@ -543,8 +543,8 @@ end
 function GF_ChatCheckFilters(logType,arg1,event)
 	if logType == 7 or logType == 8 or logType == 9 then
 		return
-	--elseif event == "CHAT_MSG_SAY" then
-		--return true
+	elseif event == "CHAT_MSG_SAY" then
+		return true
 	elseif (logType == 1 or logType == 2) then 
 		if GF_SavedVariables.showgroupsinminimap then GF_ShowGroupsOnMinimap(arg1,arg2) end
 		if GF_SavedVariables.showgroupsinchat or (logType == 2 and GF_SavedVariables.showgroupsnewonly) then return true end
@@ -2049,7 +2049,7 @@ function GF_FindGroupsAndDisplayCustomChatMessages(event,arg1,arg2,arg9) -- Chat
 		--print(GetTime())
 		if logType == 5 or logType == 11 or logType < 4 then GF_PlayerMessages[arg2][1][1] = GF_PlayerMessages[arg2][1][1] + 1 end -- To block multiple messages in series
 		GF_AddLogMessage(GF_CleanUpMessagesOfBadLinks(arg1),logType,true,arg2,arg8,arg9,event)
-		if (GF_SavedVariables.alwaysshowguild and (GF_Guildies[arg2] or GF_Friends[arg2] or GF_PlayersCurrentlyInGroup[arg2])) or GF_ChatCheckFilters(logType,arg1,event) then
+		if arg2 == UnitName("player") or (GF_SavedVariables.alwaysshowguild and (GF_Guildies[arg2] or GF_Friends[arg2] or GF_PlayersCurrentlyInGroup[arg2])) or GF_ChatCheckFilters(logType,arg1,event) then
 			if not GF_SavedVariables.showformattedchat or (event ~= "CHAT_MSG_CHANNEL") then
 				GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,true}
 				return true;
@@ -2204,6 +2204,7 @@ function GF_GetTypes(arg1, showanyway)
 			if (GF_WORD_QUEST[wordString] or GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString]) then GF_MessageData.foundLFG = 2; end
 		end
 	end
+	if getn(wordTable) > 2 and GF_LFM_TWO_AFTER[wordTable[getn(wordTable)-1]..wordTable[getn(wordTable)]] then GF_MessageData.foundLFM = 2; end
 
 	for j=0,3 do
 		for i=1, getn(wordTable) do
@@ -2217,8 +2218,8 @@ function GF_GetTypes(arg1, showanyway)
 					if GF_MessageData.foundGuild < 100 then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_WORD_GUILD[wordString] 
 					elseif GF_MessageData.foundGuild > 100 and GF_WORD_GUILD[wordString] < 100 then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_WORD_GUILD[wordString] end
 				elseif GF_GUILD_WORD_EXCLUSION[wordString] then GF_MessageData.foundGuildExclusion = GF_MessageData.foundGuildExclusion + GF_GUILD_WORD_EXCLUSION[wordString] if showanyway == true then print(wordString.." guildex") end end
-				if GF_WORD_LFM[wordString] then if GF_WORD_LFM[wordString] > GF_MessageData.foundLFM then GF_MessageData.foundLFM = GF_WORD_LFM[wordString] GF_MessageData.lfmlfgName = wordString end
-				elseif GF_WORD_LFG[wordString] then if GF_WORD_LFG[wordString] > GF_MessageData.foundLFG then GF_MessageData.foundLFG = GF_WORD_LFG[wordString] end end
+				if GF_WORD_LFM[wordString] then if GF_WORD_LFM[wordString] > GF_MessageData.foundLFM then GF_MessageData.foundLFM = GF_WORD_LFM[wordString] GF_MessageData.lfmlfgName = wordString if showanyway == true then print(wordString.." lfm") end end
+				elseif GF_WORD_LFG[wordString] then if GF_WORD_LFG[wordString] > GF_MessageData.foundLFG then GF_MessageData.foundLFG = GF_WORD_LFG[wordString] if showanyway == true then print(wordString.." lfg") end end end
 				if GF_WORD_CLASSES[wordString] then GF_MessageData.foundClass = GF_WORD_CLASSES[wordString] GF_MessageData.groupName = wordString
 				elseif GF_WORD_QUEST[wordString] then
 					if showanyway == true then print(wordString) end
@@ -2289,6 +2290,11 @@ function GF_GetTypes(arg1, showanyway)
 		print(GF_MessageData.foundTradesExclusion.." tradesex")
 		print(GF_MessageData.foundLFMPreSuf.." lfm PreSuf .... "..GF_MessageData.foundLFGPreSuf.." lfg PreSuf")
 		print(GF_MessageData.foundLFM.." lfm .... "..GF_MessageData.foundLFG.." lfg")
+		if GF_MessageData.foundQuest then print(GF_MessageData.foundQuest.." quest") end
+		if GF_MessageData.foundDungeon then print(GF_MessageData.foundDungeon.." dungeon") end
+		if GF_MessageData.foundRaid then print(GF_MessageData.foundRaid.." raid") end
+		if GF_MessageData.foundPvP then print(GF_MessageData.foundPvP.." pvp") end
+		if GF_MessageData.foundClass then print(GF_MessageData.foundClass.." class") end
 	end
 
 	if GF_MessageData.foundDungeon == 0 then
