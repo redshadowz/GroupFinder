@@ -709,6 +709,7 @@ function GF_AddNameToWhoQueue(name,addToTopOfList,useFriends)
 		if GF_WhoQueue[i] == name then return end
 	end
 	if useFriends then
+		for _,data in GF_SavedVariables.friendsToRemove do if data + 3 > time() then return end end
 		AddFriend(name)
 		GF_SavedVariables.friendsToRemove[name] = time();
 	elseif addToTopOfList then
@@ -1183,13 +1184,11 @@ function GF_UpdateFriendsList()
 			GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], "", time()}
 		end
 		if GF_SavedVariables.friendsToRemove[name] then
-			if GF_SavedVariables.friendsToRemove[name] + 5 > time() then
-				RemoveFriend(i)
-			end
+			RemoveFriend(i)
 		end
 	end
-	for name,savedtime in GF_SavedVariables.friendsToRemove do
-		if not GF_Friends[name] and GF_SavedVariables.friendsToRemove[name] + 5 < time() then GF_SavedVariables.friendsToRemove[name] = nil; end
+	for name,_ in GF_SavedVariables.friendsToRemove do
+		if not GF_Friends[name] and GF_SavedVariables.friendsToRemove[name] + 30 < time() then GF_SavedVariables.friendsToRemove[name] = nil; end
 	end
 end
 function GF_UpdateGuildiesList()
@@ -1287,7 +1286,7 @@ function GF_UpdateResults()
 				if (not GF_SavedVariables.mainframeheight or GF_SavedVariables.mainframestatus == 0) or i < 14 then
 					getglobal(nFrame):Show();
 					if GF_SavedVariables.mainframestatus == 0 then
-						if not GF_PlayingOnTurtle and not GF_SavedVariables.usewhoongroups and not GF_UrgentWhoRequest[entry.op] and (not GF_WhoTable[GF_RealmName][entry.op]
+						if not GF_SavedVariables.usewhoongroups and not GF_UrgentWhoRequest[entry.op] and (not GF_WhoTable[GF_RealmName][entry.op]
 						or (GF_WhoTable[GF_RealmName][entry.op][1] < 60 and GF_WhoTable[GF_RealmName][entry.op][4] + 86400 < time())) then
 							getglobal(nFrame.."GroupWhoButton"):Show();
 						else
@@ -1409,7 +1408,10 @@ function GF_ResultItem_Hover_Off(frame)
 	GameTooltip:Hide();
 end
 function GF_GetGroupWhoButton(frame,id)
-	if not GF_UrgentWhoRequest[GF_FilteredResultsList[GF_ResultsListOffset+id].op] then
+	if GF_PlayingOnTurtle then
+		GF_AddNameToWhoQueue(GF_FilteredResultsList[GF_ResultsListOffset+id].op,true,true)
+		getglobal(frame:GetName().."GroupWhoButton"):Hide();
+	elseif not GF_UrgentWhoRequest[GF_FilteredResultsList[GF_ResultsListOffset+id].op] then
 		if GF_NextAvailableWhoTime + 1 > time() then
 			DEFAULT_CHAT_FRAME:AddMessage(GF_SENDING_WHO_FOR..GF_FilteredResultsList[GF_ResultsListOffset+id].op.." - "..math.ceil(GF_NextAvailableWhoTime - time() + getn(GF_UrgentWhoRequest) * 30)..GF_SECONDS, 1, 1, 0.5);
 		else
@@ -2031,7 +2033,7 @@ function GF_FindGroupsAndDisplayCustomChatMessages(event,arg1,arg2,arg9) -- Chat
 			GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,nil}
 			return nil;
 		else
-			if GF_SavedVariables.friendsToRemove[gsub(arg1,"(%a+)(.*)","%1")] and GF_SavedVariables.friendsToRemove[gsub(arg1,"(%a+)(.*)","%1")] + 5 > time() then
+			if GF_SavedVariables.friendsToRemove[gsub(arg1,"(%a+)(.*)","%1")] then
 				GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,nil}
 				return
 			else
@@ -2158,13 +2160,17 @@ function GF_GetTypes(arg1, showanyway)
 	while true do lfs,lfe,wordString = string.find(arg1,"[%s%d%p](%d%s?[gs]+)[%p%s]",lfs) if not wordString then break end wordString = gsub(wordString," ","") if GF_WORD_NUMBER[wordString] then arg1 = string.sub(arg1,1,lfs)..GF_WORD_NUMBER[wordString]..string.sub(arg1,lfe) end lfs = lfs + string.len(wordString) + 1; end
 	if string.find(arg1, "[%p%s]%d+%s?gold[%p%s]") or string.find(arg1, "[%p%s]%d+%s?silvers?[%p%s]") then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 2 end
 
-	lfs = 1; -- To detect words after "]" (eg "[hitem] for free ")... For detecting trades
-	while true do lfs,lfe,wordString = string.find(arg1, "\]%s?(%a+%s%a+)[%p%s]",lfs) if not wordString then break end wordString = gsub(wordString," ","") if GF_WORD_PREFIX_SUFFIX[wordString] then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_WORD_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." trade "..GF_WORD_PREFIX_SUFFIX[wordString]) end end lfs = lfe; end
-	lfs = 1; -- To detect words before "<" (eg " join <guild>")... For detecting guild
-	while true do lfs,lfe,wordString = string.find(arg1, " (%a+)%s?<",lfs) if not wordString then break end if GF_WORD_PREFIX_SUFFIX[wordString] then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_WORD_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." guild "..GF_WORD_PREFIX_SUFFIX[wordString]) end end lfs = lfe; end
+	lfs = 1; -- To detect one word after "]" (eg "[hitem] ah ")... For detecting trades
+	while true do lfs,lfe,wordString = string.find(arg1, "\]%s?%d?%p?%s?(%a+)[%p%s]",lfs) if not wordString then break end wordString = gsub(wordString," ","") if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_TRADE_PREFIX_SUFFIX[wordString] then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_TRADE_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." trade "..GF_TRADE_PREFIX_SUFFIX[wordString]) end end lfs = lfe; end
+	lfs = 1; -- To detect two words after "]" (eg "[hitem] for free ")... For detecting trades
+	while true do lfs,lfe,wordString = string.find(arg1, "\]%s?%d?%p?%s?(%a+%s%a+)[%p%s]",lfs) if not wordString then break end wordString = gsub(wordString," ","") if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_TRADE_PREFIX_SUFFIX[wordString] then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_TRADE_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." trade "..GF_TRADE_PREFIX_SUFFIX[wordString]) end end lfs = lfe; end
+	lfs = 1; -- To detect one word before "<" (eg " join <guild>")... For detecting guild
+	while true do lfs,lfe,wordString = string.find(arg1, " (%a+)%s?<",lfs) if not wordString then break end if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_PREFIX_SUFFIX[wordString] then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_GUILD_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." guild "..GF_GUILD_PREFIX_SUFFIX[wordString]) end end lfs = lfe; end
+	lfs = 1; -- To detect two words after ">" (eg "<guild> now taking")... For detecting guild
+	while true do lfs,lfe,wordString = string.find(arg1, ">%s?(%a+ %a+) ",lfs) if not wordString then break end wordString = gsub(wordString," ","") if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_PREFIX_SUFFIX[wordString] then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_GUILD_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." guild "..GF_GUILD_PREFIX_SUFFIX[wordString]) end end lfs = lfe; end
 
 	lfs = 1; -- To detect words between "()" (eg "(rp)","(human only)")... To help detect guild recruitment messages.
-	while true do lfs,lfe,wordString = string.find(arg1, "%(([%w%s]+)%)",lfs) if not wordString then break end if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end wordString = gsub(wordString," ","") if GF_WORD_GUILD_BRACKET[wordString] then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_WORD_GUILD_BRACKET[wordString] if showanyway == true then print(wordString.." guild "..GF_WORD_GUILD_BRACKET[wordString]) end end lfs = lfe; end
+	while true do lfs,lfe,wordString = string.find(arg1, "%(([%w%s]+)%)",lfs) if not wordString then break end if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end wordString = gsub(wordString," ","") if GF_GUILD_BRACKET[wordString] then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_GUILD_BRACKET[wordString] if showanyway == true then print(wordString.." guild "..GF_GUILD_BRACKET[wordString]) end end lfs = lfe; end
 
 	lfs = 2; -- Block letter repeats
 	local lfa,lfb,lfc;
@@ -2249,7 +2255,7 @@ function GF_GetTypes(arg1, showanyway)
 					elseif GF_MessageData.foundTrades > 100 and GF_WORD_TRADE[wordString] < 100 then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_WORD_TRADE[wordString] end
 				elseif GF_TRADE_WORD_EXCLUSION[wordString] then GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + GF_TRADE_WORD_EXCLUSION[wordString] if showanyway == true then print(wordString.." tradesex") end end
 
-				if (GF_WORD_QUEST[wordString] or GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString]) then
+				if not GF_LFM_BYPASS[wordString] and (GF_WORD_QUEST[wordString] or GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString]) then
 					for words,_ in GF_LFM_ONE_AFTER do if wordTable[i+j+1] and wordString..wordTable[i+j+1] == wordString..words then if GF_MessageData.foundLFM == 0 then GF_MessageData.foundLFM = 1 end GF_MessageData.foundLFMPreSuf = 1; GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5; end end
 					for words,_ in GF_LFM_ONE_BEFORE do if wordTable[i-1] and wordTable[i-1]..wordString == words..wordString then if GF_MessageData.foundLFM == 0 then GF_MessageData.foundLFM = 1 end GF_MessageData.foundLFMPreSuf = 1; GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5; end end
 					for words,_ in GF_LFM_TWO_AFTER do if wordTable[i+j+2] and wordString..wordTable[i+j+1]..wordTable[i+j+2] == wordString..words then if GF_MessageData.foundLFM == 0 then GF_MessageData.foundLFM = 1 end GF_MessageData.foundLFMPreSuf = 1; GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5; end end
@@ -2310,7 +2316,7 @@ function GF_GetTypes(arg1, showanyway)
 	end
 end
 function GF_CheckForSpam(arg1,arg2,foundInGroup)
-		if GF_IncomingMessagePrune + 3600 < time() then -- 1 hour
+		if GF_IncomingMessagePrune + 600 < time() then -- 10 minutes
 			for name,_ in GF_PlayerMessages do
 					if GF_PlayerMessages[name][1][1] + GF_SavedVariables.grouplistingduration*60 < GetTime() then
 						GF_PlayerMessages[name] = nil;
