@@ -708,7 +708,7 @@ function GF_AddNameToWhoQueue(name,addToTopOfList,useFriends)
 	for i=1, getn(GF_WhoQueue) do
 		if GF_WhoQueue[i] == name then return end
 	end
-	if useFriends then
+	if useFriends and name ~= UnitName("player") then
 		for _,data in GF_SavedVariables.friendsToRemove do if data + 3 > time() then return end end
 		AddFriend(name)
 		GF_SavedVariables.friendsToRemove[name] = time();
