@@ -1373,7 +1373,7 @@ function GF_ListItemAuxLeft_ShowTooltip(frame,id,showall)
 	
 	--GameTooltip:AddLine(GF_FilteredResultsList[GF_ResultsListOffset+id].op);
 	GameTooltip:AddLine(GF_FilteredResultsList[GF_ResultsListOffset+id].message, 0.9, 0.9, 1.0, 1, 1);
-	if showall then
+	if showall and GF_PlayerMessages[GF_FilteredResultsList[GF_ResultsListOffset+id].op] then
 		if GF_PlayerMessages[GF_FilteredResultsList[GF_ResultsListOffset+id].op][2][1] and GF_PlayerMessages[GF_FilteredResultsList[GF_ResultsListOffset+id].op][2][1] ~= GF_FilteredResultsList[GF_ResultsListOffset+id].message then
 			GameTooltip:AddLine(GF_PlayerMessages[GF_FilteredResultsList[GF_ResultsListOffset+id].op][2][1], 0.9, 0.9, 1.0, 1, 1);
 		end
@@ -2312,7 +2312,7 @@ end
 function GF_CheckForSpam(arg1,arg2,foundInGroup)
 		if GF_IncomingMessagePrune + 3600 < time() then -- 1 hour
 			for name,_ in GF_PlayerMessages do
-					if GF_PlayerMessages[name][1][1] + 840 + GF_SavedVariables.spamfilterduration*60 < GetTime() then -- Save messages for 15 minute minimum
+					if GF_PlayerMessages[name][1][1] + GF_SavedVariables.grouplistingduration*60 < GetTime() then
 						GF_PlayerMessages[name] = nil;
 					end
 			end
