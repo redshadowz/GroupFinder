@@ -1,4 +1,6 @@
 # GroupFinder
+Warning: 8/2/2025... This update made significant code changes. I changed the way /auto who works on turtle. I added chatformatting for all chat types(instead of just channels). I also added quest and item link support for the announcement message editbox. Among various other fixes/improvements.
+
 Group finder Addon for Vanilla Wow 1.12.1 based on the CallToArms addon(with Turtle WoW support).  
 
 I hate chat spam, so I made this addon so I never have to see it again. I tried to make this addon as intuitive as possible, but it's probably pretty intimidating at first glance. Lots of checkboxes. Lots of edit boxes. Lots of dropdowns. I put as much as possible on the front page because the original CallToArms addon had too many pages to flip through and too many useless features.  
