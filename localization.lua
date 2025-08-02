@@ -59,6 +59,7 @@ GF_CHAT_ON= "Chat on"
 GF_CHAT_OFF= "Chat off"
 GF_CHAT_GROUP_ON= "Groups in chat, on"
 GF_CHAT_GROUP_OFF= "Groups in chat, off"
+GF_QUEST_IS_LEVEL_TEXT= " is level "
 
 -- Log Filters
 GF_LOG_AND_MONITOR= "Logs "; -- Label at top of Log frame
@@ -238,6 +239,9 @@ GF_ShowGuildsCheckButton = {
 GF_FrameUseWhoOnGroupsCheckButton = {
 	tooltip1 = "Use who on groups",
 	tooltip2 = "When checked, will use /who automatically to find class/level/guild information." },
+GF_FrameUseWhoOnGroupsCheckButtonTurtle = {
+	tooltip1 = "Use who on groups",
+	tooltip2 = "When checked, will find class/level information automatically via the Friends List(this will add then remove names from your friends list)." },
 
 GF_AutoFilterCheckButton = {
 	tooltip1 = "Auto-Filter", 
@@ -726,7 +730,7 @@ GF_WORD_FIX = {
 
 -- Dungeons
 ["rfch"] = "rfc",["rfcd"] = "rfc",["rfchasm"] = "rfc",["rangefire"] = "ragefire",["regefire"] = "ragefire",["ragfire"] = "ragefire",["ragefir"] = "ragefire",["rf"] = "rfc",["rfcf"] = "rfc",["rffc"] = "rfc",["rrfc"] = "rfc",["rfg"] = "rfc",
-["rfcx"] = "rfc",["rcf"] = "rfc",["rgc"] = "rfc",["rfv"] = "rfc",["ragefirechasmers"] = "rfc",["rcgroup"] = "rfc",["grouprc"] = "rfc",
+["rfcx"] = "rfc",["rcf"] = "rfc",["rgc"] = "rfc",["rfv"] = "rfc",["ragefirechasmers"] = "rfc",["rcgroup"] = "rfc",["grouprc"] = "rfc",["rsc"] = "rfc",
 ["deadmine"] = "deadmines",["dedmines"] = "deadmines",["dedmine"] = "deadmines",["deathmine"] = "deadmines",["deathmines"] = "deadmines",["vc"] = "deadmines",["vancleef"] = "deadmines",["dms"] = "dm",
 ["deadmies"] = "deadmines",["deadmindes"] = "deadmines",["deaadmines"] = "deadmines",["deammine"] = "deadmines",["deammines"] = "deadmines",["deanmine"] = "deadmines",["deanmines"] = "deadmines",["deadmiens"] = "deadmines",
 ["deadmin"] = "deadmines",["deamines"] = "deadmines",["deadmmines"] = "deadmines",["deamines"] = "deadmines",["deadmins"] = "deadmines",["dmines"] = "deadmines",["dmine"] = "deadmines",["minesofthedead"] = "deadmines",
@@ -808,7 +812,7 @@ GF_WORD_FIX = {
 ["nefarien"] = "nefarian",["nefarion"] = "nefarian",["ossi"] = "ossirian",["nax"] = "naxxramas",["naxx"] = "naxxramas",["taq"] = "aq",
 ["hakar"] = "hakkar",["hakakr"] = "hakkar",["zulgrub"] = "zulgurub",["zulgurub"] = "zulgurub",["gurrub"] = "gurub",["zgs"] = "zg",["aqs"] = "aq",["mcs"] = "mc",["karas"] = "kara",
 ["onyixia"] = "onyxia",["onxy"] = "onyxia",["onyx"] = "onyxia",["onyxias"] = "onyxia",["onixia"] = "onyxia",["oniwya"] = "onyxia",["onixya"] = "onyxia",["onyqia"] = "onyxia",["onyxxia"] = "onyxia",["onyxuia"] = "onyxia",["onyixa"] = "onyxia",
-["ohy"] = "ony",["onny"] = "ony",["onyy"] = "ony",["oony"] = "ony",["onx"] = "ony",["onxyia"] = "ony",["oni"] = "ony",["onys"] = "ony",
+["ohy"] = "ony",["onny"] = "ony",["onyy"] = "ony",["oony"] = "ony",["onx"] = "ony",["onxyia"] = "ony",["oni"] = "ony",["onys"] = "ony",["onyzia"] = "onyxia",["onyza"] = "onyxia",
 ["azurg"] = "azuregos",["azurgo"] = "azuregos",["azurego"] = "azuregos",["azurgos"] = "azuregos",["azuregs"] = "azuregos",["kazzk"] = "kazzak",["kazz"] = "kazzak",["kazak"] = "kazzak",
 ["ysonder"] = "ysondre",["ysondr"] = "ysondre",["ysndre"] = "ysondre",["ysnder"] = "ysondre",["lethn"] = "lethon",["tarar"] = "taerar",["emeris"] = "emeriss",["emerss"] = "emeriss",
 ["raggi"] = "ragnaros",
@@ -2144,7 +2148,7 @@ GF_WORD_QUEST = {
 ["leadersofthereefscale"] = 10,["terrorofchillbreeze"] = 11,["downwiththesickness"] = 14,["headofthepack"] = 16,["falloftheusurper"] = 20,["thescytheofelune"] = 30,["talesofthepast"] = 38,["andjusticeforall"] = 43,["headofthehunters"] = 44,
 ["inabookonce"] = 49,["bringdownthepriestess"] = 50,["thesmasherandthetrampler"] = 53,["lightfalluponthee"] = 56,["killingthetidelord"] = 56,["anechofrombeyond"] = 56,["strengthtomovemountain"] = 58,
 ["scytheofthegoddess"] = 60,["fateoftheharborage"] = 60,["underthevibrantmoonlight"] = 60,["terrorofthewebweavers"] = 60,["tocatcharat"] = 60,["findingademonhunter"] = 60,["thedepthsofkarazhan"] = 63,["tobuildapounder"] = 60,
-["swifttravelformquest"] = 60,
+["swifttravelformquest"] = 60,["themysteryofkarazhan"] = 60,
 
 ["weaponskillquest"] = 60,["weaponskillelite"] = 60,
 ["furbolgelite"] = 60,

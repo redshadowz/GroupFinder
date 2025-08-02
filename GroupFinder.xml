@@ -2150,7 +2150,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									<OnLoad>
 										this:SetTextInsets(4,0,0,0);
 									</OnLoad>
+									<OnEditFocusGained>
+										if GF_LFGDescriptionEditBoxHasFocus[2] + .005 &lt; GetTime() then GF_LFGDescriptionEditBoxHasFocus = {true,GetTime()}; end
+										this:HighlightText(string.len(this:GetText())+1);
+									</OnEditFocusGained>
 									<OnEditFocusLost>
+										if GF_LFGDescriptionEditBoxHasFocus[2] + .005 &lt; GetTime() then GF_LFGDescriptionEditBoxHasFocus = {nil,GetTime()}; end
 										GF_SavedVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText();
 										this:HighlightText(string.len(this:GetText())+1);
 									</OnEditFocusLost>
