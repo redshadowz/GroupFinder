@@ -9,6 +9,25 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 		<Size>
 			<AbsDimension x="100" y="20"/>
 		</Size>
+		<Layers>
+			<Layer level="OVERLAY">
+				<Texture name ="$parentTextureGold" hidden="true">
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset>
+								<AbsDimension x="3" y="-2"/>
+							</Offset>
+						</Anchor>
+						<Anchor point="BOTTOMRIGHT">
+							<Offset>
+								<AbsDimension x="-3" y="-2"/>
+							</Offset>
+						</Anchor>						
+					</Anchors>
+					<Color r="1" g=".85" b="0.0" a=".15"/>
+				</Texture>	
+			</Layer>
+		</Layers>
 		<Anchors>
 			<Anchor point="TOPRIGHT">
 				<Offset>
@@ -268,7 +287,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnEscapePressed>
 				</Scripts>
 			</EditBox>
-			<Button name="$parentOkButton" inherits="GF_ButtonTemplate">
+			<Button name="$parentOkButton" inherits="GF_ButtonTemplate" text="GF_OK">
 				<Size>
 					<AbsDimension x="80" y="32"/>
 				</Size>
@@ -293,6 +312,88 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					<Anchor point="BOTTOMLEFT">
 						<Offset>
 							<AbsDimension x="20" y="16"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						this:GetParent():Hide();
+					</OnClick>
+				</Scripts>
+			</Button>
+		</Frames>
+	</Frame>
+	<Frame name="GF_DialogFrameTemplate_ResetSettings" toplevel="true" enableMouse="true" frameStrata="DIALOG" virtual="true">
+		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+			<BackgroundInsets>
+				<AbsInset left="11" right="12" top="12" bottom="11"/>
+			</BackgroundInsets>
+			<TileSize>
+				<AbsValue val="32"/>
+			</TileSize>
+			<EdgeSize>
+				<AbsValue val="32"/>
+			</EdgeSize>
+		</Backdrop>
+		<Size>
+			<AbsDimension x="350" y="100"/>
+		</Size>
+		<Anchors>
+			<Anchor point="CENTER">
+				<Offset>
+					<AbsDimension x="0" y="0"/>
+				</Offset>
+			</Anchor>
+		</Anchors>
+		<Layers>
+			<Layer level="ARTWORK">
+				<FontString inherits="GameFontNormalLarge" name="$parentHeadingLabel" nonspacewrap="false">
+					<Size>
+						<AbsDimension x="350" y="20"/>
+					</Size>
+					<Anchors>
+						<Anchor point="TOP">
+							<Offset>
+								<AbsDimension x="0" y="-16"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<Button name="$parentOkButton" inherits="GF_ButtonTemplate" text="GF_OK">
+				<Size>
+					<AbsDimension x="80" y="32"/>
+				</Size>
+				<Anchors>
+					<Anchor point="BOTTOMLEFT">
+						<Offset>
+							<AbsDimension x="80" y="16"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						GF_SavedVariables = {};
+						GF_LoadVariables()
+						GF_LoadSettings()
+						this:GetParent():Hide();
+						DEFAULT_CHAT_FRAME:AddMessage("GF: "..GF_YOUR_SETTINGS_RESET, 1, 1, 0.5);
+					</OnClick>
+					<OnHide>
+						this:GetParent():Hide();
+					</OnHide>
+				</Scripts>
+			</Button>
+			<Button name="$parentCloseButton" inherits="GF_ButtonTemplate" text="GF_CANCEL">
+				<Size>
+					<AbsDimension x="80" y="32"/>
+				</Size>
+				<Anchors>
+					<Anchor point="BOTTOMRIGHT">
+						<Offset>
+							<AbsDimension x="-80" y="16"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -1141,6 +1242,10 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					<OnClick>
 						GF_SavedVariables.usewhoongroups = this:GetChecked();
 						GF_UpdateResults()
+						if not GF_SavedVariables.usewhoongroups then
+							GF_WhoQueue = {}
+							for name,data in GF_SavedVariables.friendsToRemove do if data > time() then GF_SavedVariables.friendsToRemove[name] = nil end end
+						end
 					</OnClick>
 					<OnLoad>
 						getglobal(this:GetName().."TextLabel"):SetText(GF_USE_WHO_ON_GROUPS);
@@ -1165,7 +1270,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						end
 					</OnClick>
 					<OnLeave>
-						if not GetMouseFocus() or (GetMouseFocus() and not string.find(GetMouseFocus():GetName(), "SearchList")) then 
+						if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "SearchList")) then 
 							GF_SearchList:Hide()
 						end
 					</OnLeave>
@@ -1254,7 +1359,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Layers>
 				<Scripts>
 					<OnLeave>
-						if not GetMouseFocus() or (GetMouseFocus() and not string.find(GetMouseFocus():GetName(), "SearchList")) then 
+						if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "SearchList")) then 
 							GF_SearchList:Hide()
 						end
 					</OnLeave>
@@ -1295,7 +1400,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						end
 					</OnClick>
 					<OnLeave>
-						if not GetMouseFocus() or (GetMouseFocus() and not string.find(GetMouseFocus():GetName(), "LFGHardCore")) then 
+						if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGHardCore")) then 
 							GF_LFGHardCore:Hide()
 						end
 					</OnLeave>
@@ -1337,7 +1442,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Layers>
 				<Scripts>
 					<OnLeave>
-						if not GetMouseFocus() or (GetMouseFocus() and not string.find(GetMouseFocus():GetName(), "LFGHardCore")) then 
+						if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGHardCore")) then 
 							GF_LFGHardCore:Hide()
 						end
 					</OnLeave>
@@ -1812,7 +1917,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										end
 									</OnClick>
 									<OnLeave>
-										if not GetMouseFocus() or (GetMouseFocus() and not string.find(GetMouseFocus():GetName(), "LFGSize")) then 
+										if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGSize")) then 
 											GF_LFGSize:Hide()
 										end
 									</OnLeave>
@@ -1851,7 +1956,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Layers>
 								<Scripts>
 									<OnLeave>
-										if not GetMouseFocus() or (GetMouseFocus() and not string.find(GetMouseFocus():GetName(), "LFGSize")) then 
+										if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGSize")) then 
 											GF_LFGSize:Hide()
 										end
 									</OnLeave>
@@ -1874,7 +1979,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										end
 									</OnClick>
 									<OnLeave>
-										if not GetMouseFocus() or (GetMouseFocus() and not string.find(GetMouseFocus():GetName(), "LFGLFM")) then 
+										if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGLFM")) then 
 											GF_LFGLFM:Hide()
 										end
 									</OnLeave>
@@ -1916,7 +2021,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Layers>
 								<Scripts>
 									<OnLeave>
-										if not GetMouseFocus() or (GetMouseFocus() and not string.find(GetMouseFocus():GetName(), "LFGLFM")) then 
+										if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGLFM")) then 
 											GF_LFGLFM:Hide()
 										end
 									</OnLeave>
@@ -1939,7 +2044,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										end
 									</OnClick>
 									<OnLeave>
-										if not GetMouseFocus() or (GetMouseFocus() and not string.find(GetMouseFocus():GetName(), "LFGDungeon")) then 
+										if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGDungeon")) then 
 											GF_LFGDungeon:Hide()
 										end
 									</OnLeave>
@@ -1981,7 +2086,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Layers>
 								<Scripts>
 									<OnLeave>
-										if not GetMouseFocus() or (GetMouseFocus() and not string.find(GetMouseFocus():GetName(), "LFGDungeon")) then 
+										if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGDungeon")) then 
 											GF_LFGDungeon:Hide()
 										end
 									</OnLeave>
@@ -2004,7 +2109,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										end
 									</OnClick>
 									<OnLeave>
-										if not GetMouseFocus() or (GetMouseFocus() and not string.find(GetMouseFocus():GetName(), "LFGRaid")) then 
+										if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGRaid")) then 
 											GF_LFGRaid:Hide()
 										end
 									</OnLeave>
@@ -2046,7 +2151,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Layers>
 								<Scripts>
 									<OnLeave>
-										if not GetMouseFocus() or (GetMouseFocus() and not string.find(GetMouseFocus():GetName(), "LFGRaid")) then 
+										if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGRaid")) then 
 											GF_LFGRaid:Hide()
 										end
 									</OnLeave>
@@ -2069,7 +2174,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										end
 									</OnClick>
 									<OnLeave>
-										if not GetMouseFocus() or (GetMouseFocus() and not string.find(GetMouseFocus():GetName(), "LFGRole")) then 
+										if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGRole")) then 
 											GF_LFGRole:Hide()
 										end
 									</OnLeave>
@@ -2111,7 +2216,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Layers>
 								<Scripts>
 									<OnLeave>
-										if not GetMouseFocus() or (GetMouseFocus() and not string.find(GetMouseFocus():GetName(), "LFGRole")) then 
+										if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGRole")) then 
 											GF_LFGRole:Hide()
 										end
 									</OnLeave>
@@ -2294,7 +2399,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										end
 									</OnClick>
 									<OnLeave>
-										if not GetMouseFocus() or (GetMouseFocus() and not string.find(GetMouseFocus():GetName(), "LFGWhoClass")) then 
+										if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGWhoClass")) then 
 											GF_LFGWhoClass:Hide()
 										end
 									</OnLeave>
@@ -2333,7 +2438,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Layers>
 								<Scripts>
 									<OnLeave>
-										if not GetMouseFocus() or (GetMouseFocus() and not string.find(GetMouseFocus():GetName(), "LFGWhoClass")) then 
+										if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGWhoClass")) then 
 											GF_LFGWhoClass:Hide()
 										end
 									</OnLeave>
@@ -2468,7 +2573,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								GF_AddPlayerFrameHeadingLabel:SetText(GF_ADD_PLAYER);
 								GF_AddPlayerFrameContentLabel:SetText(GF_ENTER_PLAYER_NAME);
 								GF_AddPlayerFrameEditBox:Show();
-								GF_AddPlayerFrameOkButton:SetText(GF_OK);
 							</OnLoad>
 						</Scripts>
 					</Frame>
@@ -3026,7 +3130,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				<Frames>
 					<Frame name="GF_SettingsFrameChatSettings" inherits="GF_OptionFrameBoxTemplate">
 						<Size>
-							<AbsDimension x="600" y="125"/>
+							<AbsDimension x="600" y="110"/>
 						</Size>
 						<Anchors>
 							<Anchor point="TOP">
@@ -3040,7 +3144,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Anchors>
 									<Anchor point="TOPLEFT">
 										<Offset>
-											<AbsDimension x="24" y="-10"/>
+											<AbsDimension x="24" y="-5"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -3058,7 +3162,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeTo="GF_FrameJoinWorldCheckButton">
 										<Offset>
-											<AbsDimension x="0" y="-30"/>
+											<AbsDimension x="0" y="-25"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -3079,7 +3183,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Anchors>
 									<Anchor point="TOP">
 										<Offset>
-											<AbsDimension x="-65" y="-10"/>
+											<AbsDimension x="-65" y="-5"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -3096,7 +3200,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeTo="GF_FrameSystemFilterCheckButton">
 										<Offset>
-											<AbsDimension x="0" y="-30"/>
+											<AbsDimension x="0" y="-25"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -3113,7 +3217,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Anchors>
 									<Anchor point="TOPRIGHT">
 										<Offset>
-											<AbsDimension x="-163" y="-10"/>
+											<AbsDimension x="-163" y="-5"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -3130,7 +3234,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeTo="GF_FrameShowFormattedChatCheckButton">
 										<Offset>
-											<AbsDimension x="0" y="-30"/>
+											<AbsDimension x="0" y="-25"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -3222,7 +3326,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							</Slider>
 						</Frames>
 					</Frame>
-					<Frame name="GF_SettingsFrameOtherSettings" inherits="GF_OptionFrameBoxTemplate">
+					<Frame name="GF_SettingsFrameGroupSettings" inherits="GF_OptionFrameBoxTemplate">
 						<Size>
 							<AbsDimension x="600" y="56"/>
 						</Size>
@@ -3315,10 +3419,10 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</Frame>
 					<Frame name="GF_SettingsFrameLFxSettings" inherits="GF_OptionFrameBoxTemplate">
 						<Size>
-							<AbsDimension x="600" y="75"/>
+							<AbsDimension x="600" y="70"/>
 						</Size>
 						<Anchors>
-							<Anchor point="TOP" relativeTo="GF_SettingsFrameOtherSettings" relativePoint="BOTTOM">
+							<Anchor point="TOP" relativeTo="GF_SettingsFrameGroupSettings" relativePoint="BOTTOM">
 								<Offset>
 									<AbsDimension x="0" y="-15"/>
 								</Offset>
@@ -3389,7 +3493,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							</Slider>
 							<Button name="GF_UIScaleSliderUpdateButton" inherits="GF_ButtonTemplate" text="GF_UISCALE_UPDATE">
 								<Size>
-									<AbsDimension x="100" y="30"/>
+									<AbsDimension x="100" y="27"/>
 								</Size>
 								<Anchors>
 									<Anchor point="Top" relativeTo="GF_UIScaleSlider" relativePoint="BOTTOM">
@@ -3431,7 +3535,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							</Slider>
 						</Frames>
 					</Frame>
-					<Frame name="$parentMinimapSettings" inherits="GF_OptionFrameBoxTemplate">
+					<Frame name="GF_SettingsFrameMinimapSettings" inherits="GF_OptionFrameBoxTemplate">
 						<Size>
 							<AbsDimension x="600" y="100"/>
 						</Size>
@@ -3547,12 +3651,92 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							</Slider>
 						</Frames>
 					</Frame>
+					<Frame name="GF_SettingsFrameOtherSettings" inherits="GF_OptionFrameBoxTemplate">
+						<Size>
+							<AbsDimension x="600" y="40"/>
+						</Size>
+						<Anchors>
+							<Anchor point="TOP" relativeTo="GF_SettingsFrameMinimapSettings" relativePoint="BOTTOM">
+								<Offset>
+									<AbsDimension x="0" y="-15"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Frames>
+							<CheckButton name="GF_FrameQuestModCheckButton" inherits="GF_CheckButtonTemplate_Label">
+								<Anchors>
+									<Anchor point="TOPLEFT">
+										<Offset>
+											<AbsDimension x="24" y="-8"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										GF_SavedVariables.questmod = this:GetChecked();
+									</OnClick>
+									<OnLoad>
+										getglobal(this:GetName().."TextLabel"):SetText(GF_QUEST_MOD);
+									</OnLoad>
+								</Scripts>
+							</CheckButton>
+							<CheckButton name="GF_PurgePFDBCheckButton" inherits="GF_CheckButtonTemplate_Label">
+								<Anchors>
+									<Anchor point="TOP">
+										<Offset>
+											<AbsDimension x="-85" y="-8"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										GF_SavedVariables.purgepfdb = this:GetChecked();
+									</OnClick>
+									<OnLoad>
+										getglobal(this:GetName().."TextLabel"):SetText(GF_PURGE_PFDB);
+									</OnLoad>
+								</Scripts>
+							</CheckButton>
+							<Button name="GF_ResetAllSettingsButton" inherits="GF_ButtonTemplate" text="GF_RESET_ALL_SETTINGS">
+								<Size>
+									<AbsDimension x="120" y="21"/>
+								</Size>
+								<Anchors>
+									<Anchor point="TOPRIGHT">
+										<Offset>
+											<AbsDimension x="-35" y="-10"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										GF_ResetAllSettingsDialog:Show()
+									</OnClick>
+								</Scripts>
+							</Button>
+							<Frame name="GF_ResetAllSettingsDialog" inherits="GF_DialogFrameTemplate_ResetSettings" hidden="true">
+								<Anchors>
+									<Anchor point="CENTER" relativeTo="GF_SettingsFrame">
+										<Offset>
+											<AbsDimension x="0" y="0"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnLoad>
+										GF_ResetAllSettingsDialogHeadingLabel:SetText(GF_ARE_YOU_SURE_RESET_SETTINGS);
+									</OnLoad>
+								</Scripts>
+							</Frame>
+						</Frames>
+					</Frame>
 				</Frames>    
 				<Scripts>
 					<OnLoad>
-						GF_SettingsFrameMinimapSettingsTitle:SetText(GF_MINIMAP_SETTINGS);
-						GF_SettingsFrameLFxSettingsTitle:SetText(GF_DISPLAY_SETTINGS);
 						GF_SettingsFrameChatSettingsTitle:SetText(GF_CHAT_SETTINGS);
+						GF_SettingsFrameGroupSettingsTitle:SetText(GF_GROUP_SETTINGS);
+						GF_SettingsFrameLFxSettingsTitle:SetText(GF_DISPLAY_SETTINGS);
+						GF_SettingsFrameMinimapSettingsTitle:SetText(GF_MINIMAP_SETTINGS);
 						GF_SettingsFrameOtherSettingsTitle:SetText(GF_OTHER_SETTINGS);
 					</OnLoad>
 				</Scripts>
