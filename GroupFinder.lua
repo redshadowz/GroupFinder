@@ -200,6 +200,10 @@ function GF_LoadVariables()
 	for i=1, getn(GF_LogHistory[GF_RealmName]) do
 		if not GF_LogHistory[GF_RealmName][i] then break elseif not GF_LogHistory[GF_RealmName][i][3] then table.remove(GF_LogHistory[GF_RealmName],i) i = i - 1 end
 	end
+	if not GetGuildRosterShowOffline() then
+		SetGuildRosterShowOffline(true)
+		SetGuildRosterShowOffline(false)
+	end
 end
 
 function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
@@ -2223,8 +2227,14 @@ function GF_FindGroupsAndDisplayCustomChatMessages(event) -- Chat Filters and Gr
 			GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,true}
 			return true
 		elseif GF_SavedVariables.showformattedchat and string.find(arg1, GF_FRIEND_MSG_SYSTEM) then
-			GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,nil}
-			return nil
+			for name,_ in string.gfind(arg1, GF_FRIEND_MSG_SYSTEM) do
+				if GF_WhoTable[GF_RealmName][name] then
+					GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,nil}
+					return nil
+				end
+			end
+			GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,true}
+			return true
 		elseif GF_SavedVariables.systemfilter and GF_CheckSystemMessageFilter(arg1) then
 			GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,nil}
 			return nil;
@@ -2389,6 +2399,10 @@ function GF_GetTypes(arg1, showanyway)
 					wordTable[i] = GF_WORD_FIX_BEFORE_QUEST[wordString]
 					for k=1, j do table.remove(wordTable,i+k) end
 					if wordString ~= GF_WORD_FIX_BEFORE_QUEST[wordString] then i = i - 1 end
+				elseif GF_WORD_FIX_QUEST_DUNGEON[wordString] then
+					wordTable[i] = GF_WORD_FIX_QUEST_DUNGEON[wordString]
+					for k=1, j do table.remove(wordTable,i+k) end
+					if wordString ~= GF_WORD_FIX_QUEST_DUNGEON[wordString] then i = i - 1 end
 				end
 			end
 		end
@@ -2682,7 +2696,7 @@ function CompileFixedQuests()
 		lfs = 1; -- To detect words with explanation points "!" (eg "hungry!","lost!")... To help identify quests with short names.
 		while true do lfs,lfe,wordString = string.find(arg1, "(%a+!)",lfs) if not wordString then break end if GF_WORD_NUMBER[wordString] then arg1 = string.sub(arg1,1,lfs-1)..GF_WORD_NUMBER[wordString]..string.sub(arg1,lfe+1) end lfs = lfs + string.len(wordString) + 1; end
 		lfs = 1; -- To detect space/word/number+/space combinations(eg " k10" = lowerkarazhan)
-		while true do lfs,lfe,wordString = string.find(arg1,"(%a+%s?[:%-]?%s?%d+)",lfs) if not wordString then break end wordString = gsub(wordString,"[%s:%-]","") if GF_WORD_NUMBER[wordString] then arg1 = string.sub(arg1,1,lfs)..GF_WORD_NUMBER[wordString]..string.sub(arg1,lfe) end lfs = lfs + string.len(wordString) + 1; end
+		while true do lfs,lfe,wordString = string.find(arg1,"(%a+%s?[:%-]?%s?%d+)",lfs) if not wordString then break end wordString = gsub(wordString,"[%s:%-]","") if GF_WORD_NUMBER[wordString] then arg1 = string.sub(arg1,1,lfs-1)..GF_WORD_NUMBER[wordString]..string.sub(arg1,lfe+1) end lfs = lfs + string.len(wordString) + 1; end
 
 		for word in string.gfind(arg1, "(%a+)") do
 			if GF_WORD_FIX_BYPASS[word] then _,_,wordString = string.find(arg1,"(%a+)%s?"..word) if wordString and GF_WORD_SKIP[wordString] then table.insert(wordTable, wordString) end end
