@@ -1,7 +1,7 @@
 # GroupFinder
-Warning: 8/29/2025... I made more code changes. Mostly related to color-coded chat. Hopefully nothing is broken, rofl.
-
 Group finder Addon for Vanilla Wow 1.12.1 based on the CallToArms addon(with Turtle WoW support).  
+
+Update: 9/17/2025... I'm working on addressing the Patch 1.8/Ambershire/Hardcore issues. I also have a long list of phrases that are getting through the addon's filters and I'm trying to find ways to detect them and/or add them to the database.  
 
 I hate chat spam, so I made this addon so I never have to see it again. I tried to make this addon as intuitive as possible, but it's probably pretty intimidating at first glance. Lots of checkboxes. Lots of edit boxes. Lots of dropdowns. I put as much as possible on the front page because the original CallToArms addon had too many pages to flip through and too many useless features.  
 
