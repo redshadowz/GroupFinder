@@ -1384,17 +1384,20 @@ end
 function GF_UpdatePlayersInGroupList()
 	GF_PlayersCurrentlyInGroup = {}
 	GF_PlayersCurrentlyInGroup[UnitName("player")] = true
-	for i=1,5 do
-		if UnitExists("party"..i) then
-			GF_PlayersCurrentlyInGroup[UnitName("party"..i)] = true
-			GF_WhoTable[GF_RealmName][UnitName("party"..i)] = { UnitLevel("party"..i), GF_Classes[UnitClass("party"..i)], GetGuildInfo("party"..i), time() }
+	if GetNumRaidMembers() > 1 then
+		for i=1,40 do
+			local name,_,_,level,class = GetRaidRosterInfo(i)
+			if name and class and GF_Classes[class] and level and level > 0 then
+				GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], GetGuildInfo("raid"..i), time() }
+				GF_PlayersCurrentlyInGroup[name] = true
+			end
 		end
-	end
-	for i=1,40 do
-		local name,_,_,level,class = GetRaidRosterInfo(i)
-		if name and class and GF_Classes[class] and level and level > 0 then
-			GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], GetGuildInfo("raid"..i), time() }
-			GF_PlayersCurrentlyInGroup[name] = true
+	else
+		for i=1,4 do
+			if UnitExists("party"..i) and UnitClass("party"..i) and GF_Classes[UnitClass("party"..i)] and UnitLevel("party"..i) and UnitLevel("party"..i) > 0 then
+				GF_PlayersCurrentlyInGroup[UnitName("party"..i)] = true
+				GF_WhoTable[GF_RealmName][UnitName("party"..i)] = { UnitLevel("party"..i), GF_Classes[UnitClass("party"..i)], GetGuildInfo("party"..i), time() }
+			end
 		end
 	end
 end
