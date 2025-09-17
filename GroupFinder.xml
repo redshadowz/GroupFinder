@@ -1252,7 +1252,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
-			<Button name="GF_SearchListDropdown" topLevel="true" virtual="true">
+			<Button name="GF_SearchListDropdown">
 				<Size x="24" y="24"/>
 				<Anchors>
 					<Anchor point="RIGHT" relativeTo="GF_PlaySoundOnResultsCheckButton" relativePoint="LEFT">
@@ -1329,7 +1329,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnEscapePressed>
 				</Scripts>
 			</EditBox>
-			<Frame name="GF_SearchList" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true" virtual="true">
+			<Frame name="GF_SearchList" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true">
 				<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border">
 					<BackgroundInsets>
 						<AbsInset left="4" right="4" top="4" bottom="4"/>
@@ -1383,7 +1383,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
-			<Button name="GF_LFGHardCoreDropdown" inherits="GF_ButtonTemplate" topLevel="true" virtual="true">
+			<Button name="GF_LFGHardCoreDropdown" inherits="GF_ButtonTemplate" hidden="true">
 				<Anchors>
 					<Anchor point="TOP" relativeTo="GF_AutoFilterCheckButton" relativePoint="BOTTOM">
 						<Offset>
@@ -1412,7 +1412,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Down" setAllPoints="true"/>
 				<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD" setAllPoints="true"/>
 			</Button>
-			<Frame name="GF_LFGHardCore" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true" virtual="true">
+			<Frame name="GF_LFGHardCore" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true">
 				<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border">
 					<BackgroundInsets>
 						<AbsInset left="4" right="4" top="4" bottom="4"/>
@@ -1900,7 +1900,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<DisabledTexture file="Interface\Buttons\UI-SpellbookIcon-NextPage-Disabled"/>
 								<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD"/>
 							</Button>
-							<Button name="GF_LFGSizeDropdown" inherits="GF_ButtonTemplate" topLevel="true" virtual="true">
+							<Button name="GF_LFGSizeDropdown" inherits="GF_ButtonTemplate">
 								<Anchors>
 									<Anchor point="BOTTOMLEFT" relativeTo="GF_MainFrame" relativePoint="BOTTOMLEFT">
 										<Offset>
@@ -1926,7 +1926,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Down" setAllPoints="true"/>
 								<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD" setAllPoints="true"/>
 							</Button>
-							<Frame name="GF_LFGSize" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true" virtual="true">
+							<Frame name="GF_LFGSize" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true">
 								<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border">
 									<BackgroundInsets>
 										<AbsInset left="4" right="4" top="4" bottom="4"/>
@@ -1962,7 +1962,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLeave>
 								</Scripts>
 							</Frame>
-							<Button name="GF_LFGLFMDropdown" inherits="GF_ButtonTemplate" topLevel="true" virtual="true">
+							<Button name="GF_LFGLFMDropdown" inherits="GF_ButtonTemplate">
 								<Anchors>
 									<Anchor point="BOTTOMLEFT" relativeTo="GF_MainFrame" relativePoint="BOTTOMLEFT">
 										<Offset>
@@ -1991,7 +1991,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Down" setAllPoints="true"/>
 								<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD" setAllPoints="true"/>
 							</Button>
-							<Frame name="GF_LFGLFM" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true" virtual="true">
+							<Frame name="GF_LFGLFM" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true">
 								<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border">
 									<BackgroundInsets>
 										<AbsInset left="4" right="4" top="4" bottom="4"/>
@@ -2027,7 +2027,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLeave>
 								</Scripts>
 							</Frame>
-							<Button name="GF_LFGDungeonDropdown" inherits="GF_ButtonTemplate" topLevel="true" virtual="true">
+							<Button name="GF_LFGDungeonDropdown" inherits="GF_ButtonTemplate">
 								<Anchors>
 									<Anchor point="LEFT" relativeTo="GF_LFGLFMDropdownTextLabel" relativePoint="RIGHT">
 										<Offset>
@@ -2056,7 +2056,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Down" setAllPoints="true"/>
 								<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD" setAllPoints="true"/>
 							</Button>
-							<Frame name="GF_LFGDungeon" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true" virtual="true">
+							<Frame name="GF_LFGDungeon" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true">
 								<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border">
 									<BackgroundInsets>
 										<AbsInset left="4" right="4" top="4" bottom="4"/>
@@ -2092,7 +2092,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLeave>
 								</Scripts>
 							</Frame>
-							<Button name="GF_LFGRaidDropdown" inherits="GF_ButtonTemplate" topLevel="true" virtual="true">
+							<Button name="GF_LFGRaidDropdown" inherits="GF_ButtonTemplate">
 								<Anchors>
 									<Anchor point="LEFT" relativeTo="GF_LFGDungeonDropdownTextLabel" relativePoint="RIGHT">
 										<Offset>
@@ -2121,7 +2121,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Down" setAllPoints="true"/>
 								<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD" setAllPoints="true"/>
 							</Button>
-							<Frame name="GF_LFGRaid" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true" virtual="true">
+							<Frame name="GF_LFGRaid" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true">
 								<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border">
 									<BackgroundInsets>
 										<AbsInset left="4" right="4" top="4" bottom="4"/>
@@ -2157,7 +2157,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLeave>
 								</Scripts>
 							</Frame>
-							<Button name="GF_LFGRoleDropdown" inherits="GF_ButtonTemplate" topLevel="true" virtual="true">
+							<Button name="GF_LFGRoleDropdown" inherits="GF_ButtonTemplate">
 								<Anchors>
 									<Anchor point="LEFT" relativeTo="GF_LFGRaidDropdownTextLabel" relativePoint="RIGHT">
 										<Offset>
@@ -2186,7 +2186,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Down" setAllPoints="true"/>
 								<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD" setAllPoints="true"/>
 							</Button>
-							<Frame name="GF_LFGRole" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true" virtual="true">
+							<Frame name="GF_LFGRole" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true">
 								<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border">
 									<BackgroundInsets>
 										<AbsInset left="4" right="4" top="4" bottom="4"/>
@@ -2382,7 +2382,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnValueChanged>
 								</Scripts>
 							</Slider>
-							<Button name="GF_LFGWhoClassDropdown" inherits="GF_ButtonTemplate" topLevel="true" virtual="true">
+							<Button name="GF_LFGWhoClassDropdown" inherits="GF_ButtonTemplate">
 								<Anchors>
 									<Anchor point="RIGHT" relativeTo="$parentPrev" relativePoint="LEFT">
 										<Offset>
@@ -2408,7 +2408,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Down" setAllPoints="true"/>
 								<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD" setAllPoints="true"/>
 							</Button>
-							<Frame name="GF_LFGWhoClass" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true" virtual="true">
+							<Frame name="GF_LFGWhoClass" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true">
 								<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border">
 									<BackgroundInsets>
 										<AbsInset left="4" right="4" top="4" bottom="4"/>
