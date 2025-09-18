@@ -3260,19 +3260,14 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnLoad>
-										getglobal(this:GetName().."High"):SetText("60");
-										getglobal(this:GetName().."Low"):SetText("1");
-										this:SetMinMaxValues(1,20);
-										this:SetValueStep(1);
+										getglobal(this:GetName().."High"):SetText("120");
+										getglobal(this:GetName().."Low"):SetText("5");
+										this:SetMinMaxValues(5,120);
+										this:SetValueStep(5);
 									</OnLoad>
 									<OnValueChanged>
-										if this:GetValue() > 10 then
-											GF_SavedVariables.spamfilterduration = (this:GetValue()-10)*5 + 10;
-											getglobal(this:GetName().."Text"):SetText(GF_SPAM_FILTER_TIMER.." - "..GF_SavedVariables.spamfilterduration..GF_MINUTES);
-										else
-											GF_SavedVariables.spamfilterduration = this:GetValue();
-											getglobal(this:GetName().."Text"):SetText(GF_SPAM_FILTER_TIMER.." - "..GF_SavedVariables.spamfilterduration..GF_MINUTES);
-										end
+										GF_SavedVariables.spamfilterduration = this:GetValue();
+										getglobal(this:GetName().."Text"):SetText(GF_SPAM_FILTER_TIMER.." - "..GF_SavedVariables.spamfilterduration..GF_SECONDS);
 									</OnValueChanged>
 								</Scripts>
 							</Slider>

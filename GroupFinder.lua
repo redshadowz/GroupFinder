@@ -136,7 +136,7 @@ function GF_LoadVariables()
 
 		if not GF_SavedVariables.joinworld then GF_SavedVariables.joinworld = true end
 		if not GF_SavedVariables.spamfilter then GF_SavedVariables.spamfilter = true end
-		if not GF_SavedVariables.spamfilterduration then GF_SavedVariables.spamfilterduration = 3 end
+		if not GF_SavedVariables.spamfilterduration then GF_SavedVariables.spamfilterduration = 15 end
 		if not GF_SavedVariables.systemfilter then GF_SavedVariables.systemfilter = false end
 		if not GF_SavedVariables.autoblacklist then GF_SavedVariables.autoblacklist = true end
 		if not GF_SavedVariables.autoblacklistminlevel then GF_SavedVariables.autoblacklistminlevel = 12 end
@@ -732,7 +732,7 @@ function GF_CleanUpMessagesOfBadLinks(arg1) -- Removes CLINK and pfQuest/Questie
 	return arg1
 end
 function GF_ShowGroupsOnMinimap(arg1,arg2)
-	for name,mmtable in GF_MiniMapMessages[7] do if mmtable[1] + 20 < GetTime() then GF_MiniMapMessages[7][name] = nil end end
+	for name,mmtable in GF_MiniMapMessages[7] do if mmtable[1] <= GetTime() then GF_MiniMapMessages[7][name] = nil end end
 	if GF_MiniMapMessages[1] > GetTime() and GF_MiniMapMessages[2] > GetTime() and GF_MiniMapMessages[3] > GetTime() and GF_MiniMapMessages[4] > GetTime() and GF_MiniMapMessages[5] > GetTime() and GF_MiniMapMessages[6] > GetTime() then
 		local lowest = { GetTime()+20, 0 }
 		for i=1, 6 do
@@ -741,7 +741,7 @@ function GF_ShowGroupsOnMinimap(arg1,arg2)
 		GF_MiniMapMessages[lowest[2]] = 0
 	end
 	for i=1, 6 do
-		if GF_MiniMapMessages[i] < GetTime() then
+		if GF_MiniMapMessages[i] <= GetTime() then
 			if GF_MiniMapMessages[7][arg2] and GF_MiniMapMessages[7][arg2][1] > GetTime() then i = GF_MiniMapMessages[7][arg2][2] end
 			if GF_WhoTable[GF_RealmName][arg2] and GF_WhoTable[GF_RealmName][arg2][1] then 
 				getglobal("GF_MinimapMessageFrameA"..i):AddMessage("|cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][arg2][2]] or "ffffff").."|Hplayer:"..arg2.."|h "..arg2..", "..GF_WhoTable[GF_RealmName][arg2][1].." "..GF_WhoTable[GF_RealmName][arg2][2].."|h|r", 1, 1, 1)
@@ -1248,8 +1248,6 @@ function GF_LoadSettings()
 		GF_AddTurtleWoWDungeonsRaids()
 		GF_WhoCooldownTime = 30
 		GF_PlayingOnTurtle = true
-	else
-		GF_SavedVariables.hardcore = 1
 	end
 	for i=1, 100 do
 		if GetSpellName(i, BOOKTYPE_SPELL) == GF_HARDCORE_SPELL_NAME then
@@ -1259,6 +1257,7 @@ function GF_LoadSettings()
 			break
 		end
 	end
+	if not GF_PlayingOnTurtle then GF_SavedVariables.hardcore = 1 end
 	if GF_Hardcore then
 		GF_BUTTONS_LIST.LFGHardCore[1][4] = GF_HARDCORE_SEND_TEXT
 		table.insert(GF_BUTTONS_LIST.LFGHardCore, 2, { GF_SHOW_HARDCORE, 1, 60, GF_HARDCORE_SEND_TEXT, nil, true, })
@@ -1270,14 +1269,13 @@ function GF_LoadSettings()
 	for i=1, getn(GF_MessageList[GF_RealmName]) do if not GF_MessageList[GF_RealmName][i].flags or type(GF_MessageList[GF_RealmName][i].flags) ~= "table" then GF_MessageList[GF_RealmName] = {} break end end
 	for name,_ in GF_PlayerMessages do if type(GF_PlayerMessages[name][1]) ~= "table" then GF_PlayerMessages = {} break end end
 
-	local SliderVariablesToSet = { GF_SavedVariables.MinimapArcOffset, GF_SavedVariables.MinimapRadiusOffset, GF_SavedVariables.MinimapMsgArcOffset, GF_SavedVariables.MinimapMsgRadiusOffset, GF_SavedVariables.FilterLevel,
+	local SliderVariablesToSet = { GF_SavedVariables.MinimapArcOffset, GF_SavedVariables.MinimapRadiusOffset, GF_SavedVariables.MinimapMsgArcOffset, GF_SavedVariables.MinimapMsgRadiusOffset, GF_SavedVariables.FilterLevel, GF_SavedVariables.spamfilterduration,
 	GF_SavedVariables.MainFrameTransparency,GF_SavedVariables.autoblacklistminlevel,GF_SavedVariables.blockmessagebelowlevel,GF_SavedVariables.grouplistingduration,GF_SavedVariables.autofilterlevelvar, GF_SavedVariables.MainFrameUIScale, }
-	local SliderNames = { "GF_MinimapArcSlider", "GF_MinimapRadiusSlider", "GF_MinimapMsgArcSlider", "GF_MinimapMsgRadiusSlider", "GF_FilterLevelSlider", "GF_FrameTransparencySlider",
-	"GF_FrameSpamBlacklistMinLevelSlider", "GF_FrameBlockMessagesBelowLevelSlider", "GF_GroupListingDurationSlider", "GF_AutoFilterLevelSlider", "GF_UIScaleSlider", }
-	for i=1, 11 do getglobal(SliderNames[i]):SetValue(SliderVariablesToSet[i]) end
+	local SliderNames = { "GF_MinimapArcSlider", "GF_MinimapRadiusSlider", "GF_MinimapMsgArcSlider", "GF_MinimapMsgRadiusSlider", "GF_FilterLevelSlider", "GF_FrameSpamFilterDurationSlider",
+	"GF_FrameTransparencySlider", "GF_FrameSpamBlacklistMinLevelSlider", "GF_FrameBlockMessagesBelowLevelSlider", "GF_GroupListingDurationSlider", "GF_AutoFilterLevelSlider", "GF_UIScaleSlider", }
+	for i=1, 12 do getglobal(SliderNames[i]):SetValue(SliderVariablesToSet[i]) end
 
 	if GF_SavedVariables.announcetimer > 600 then GF_FrameAnnounceTimerSlider:SetValue((GF_SavedVariables.announcetimer-600)/300 + 10) else	GF_FrameAnnounceTimerSlider:SetValue(GF_SavedVariables.announcetimer/60)end
-	if GF_SavedVariables.spamfilterduration > 10 then GF_FrameSpamFilterDurationSlider:SetValue((GF_SavedVariables.spamfilterduration-10)/5 + 10) else GF_FrameSpamFilterDurationSlider:SetValue(GF_SavedVariables.spamfilterduration) end
 	if GF_SavedVariables.showgroupsnewonlytime > 10 then GF_GroupNewTimeoutSlider:SetValue((GF_SavedVariables.showgroupsnewonlytime-10)/5 + 10) else GF_GroupNewTimeoutSlider:SetValue(GF_SavedVariables.showgroupsnewonlytime) end
 
 	local CheckButtonVariablesToSet = { GF_SavedVariables.showgroupsinchat, GF_SavedVariables.showgroupsinminimap, GF_SavedVariables.showgroupsnewonly, GF_SavedVariables.showchattexts, GF_SavedVariables.showtradestexts, GF_SavedVariables.showloottexts,
@@ -2615,7 +2613,7 @@ function GF_CheckForSpam(arg1,arg2,foundInGroup)
 											if GF_SavedVariables.usewhoongroups and not GF_WhoQueue[name] then GF_WhoTable[GF_RealmName][arg2] = nil if GF_PlayingOnTurtle and not GF_SavedVariables.friendsToRemove[name] then GF_AddNameToWhoQueue(arg2,true,true) else GF_AddNameToWhoQueue(arg2,true) end end
 									end
 							end
-							table.insert(GF_PlayerMessages[arg2][1],1,GF_PlayerMessages[arg2][1][1] + GF_SavedVariables.spamfilterduration*60)
+							table.insert(GF_PlayerMessages[arg2][1],1,GF_PlayerMessages[arg2][1][1] + GF_SavedVariables.spamfilterduration)
 							table.remove(GF_PlayerMessages[arg2][1],4)
 							return 7
 					end
