@@ -1124,14 +1124,14 @@ function GF_ParseIncomingAddonMessages(msg)
 		for senttime,sentname,message in string.gfind(msg, "(%d+)([a-zA-Z]+):(.+)") do
 			GF_GetTypes(gsub(gsub(gsub(gsub(gsub(string.lower(gsub(gsub(gsub(gsub(" "..msg.." ", " |+h%[([%w%s%p]+)%]|+h|+r", " %1 "), "|c%x+|+(%w+)[%d:]+|+h", " %1 "), "|+h|+r", " "),"([a-z ][a-z])([A-Z])","%1 %2")),".gg/%w+", ""),"([%p%s])(%w%w+)([%p%s])","%1 %2 %3"),"[%s%.%[](%a)[%s%.](%a)[%s%.]","%1%2"),"%s%s+", " "),"[']", ""))
 
-			for i = 1, getn(GF_MessageList[GF_RealmName]) do
+			for i=1, getn(GF_MessageList[GF_RealmName]) do
 				if GF_MessageList[GF_RealmName][i].op and GF_MessageList[GF_RealmName][i].op == sentname then
 					table.remove(GF_MessageList[GF_RealmName], i)
 					break
 				end
 			end
 			if getn(GF_MessageList[GF_RealmName]) > 0 then
-				for i = 1, getn(GF_MessageList[GF_RealmName]) do
+				for i=1, getn(GF_MessageList[GF_RealmName]) do
 					if tonumber(senttime) > GF_MessageList[GF_RealmName][i].t then
 						table.insert(GF_MessageList[GF_RealmName], i, GF_GetGroupInformation(GF_CleanUpMessagesOfBadLinks(message),sentname,tonumber(senttime)))
 						break
@@ -2524,15 +2524,15 @@ function GF_GetTypes(arg1, showanyway)
 				end
 
 				if not GF_LFM_BYPASS[wordString] and (GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString]) then
-					if wordTable[i+j+1] and (GF_LFM_ONE_AFTER[wordTable[i+j+1]]) or wordTable[i-1] and (GF_LFM_ONE_BEFORE[wordTable[i-1]])
-					or wordTable[i+j+2] and (GF_LFM_TWO_AFTER[wordTable[i+j+1]..wordTable[i+j+2]]) or wordTable[i-2] and (GF_LFM_TWO_BEFORE[wordTable[i-2]..wordTable[i-1]]) then
-						if GF_MessageData.foundLFM == 0 then GF_MessageData.foundLFM = 1 end GF_MessageData.foundLFMPreSuf = 1 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5
+					if wordTable[i+j+1] and GF_LFM_ONE_AFTER[wordTable[i+j+1]] or wordTable[i-1] and GF_LFM_ONE_BEFORE[wordTable[i-1]]
+					or wordTable[i+j+2] and GF_LFM_TWO_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] or wordTable[i-2] and GF_LFM_TWO_BEFORE[wordTable[i-2]..wordTable[i-1]] then
+						if GF_MessageData.foundLFM == 0 then GF_MessageData.foundLFM = 1 end if wordTable[i-1] and GF_LFMLFG_PREFIX_GUILD[wordTable[i-1]] then GF_MessageData.foundGuildExclusion = GF_MessageData.foundGuildExclusion + 1 end GF_MessageData.foundLFMPreSuf = 1 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5
 					end
 
 					if wordTable[i+j+1] and (GF_LFG_ONE_AFTER[wordTable[i+j+1]] or (GF_WORD_FIX_LFM[wordTable[i+j+1]] and GF_LFG_ONE_AFTER[GF_WORD_FIX_LFM[wordTable[i+j+1]]]))
 					or wordTable[i-1] and (GF_LFG_ONE_BEFORE[wordTable[i-1]] or (GF_WORD_FIX_LFM[wordTable[i-1]] and GF_LFG_ONE_BEFORE[GF_WORD_FIX_LFM[wordTable[i-1]]]))
 					or wordTable[i+j+2] and (GF_LFG_TWO_AFTER[wordTable[i+j+1]..wordTable[i+j+2]]) or wordTable[i-2] and (GF_LFG_TWO_BEFORE[wordTable[i-2]..wordTable[i-1]]) then
-						if GF_MessageData.foundLFG == 0 then GF_MessageData.foundLFG = 1 end GF_MessageData.foundLFGPreSuf = 1 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5
+						if GF_MessageData.foundLFG == 0 then GF_MessageData.foundLFG = 1 end if wordTable[i-1] and GF_LFMLFG_PREFIX_GUILD[wordTable[i-1]] then GF_MessageData.foundGuildExclusion = GF_MessageData.foundGuildExclusion + 1 end GF_MessageData.foundLFGPreSuf = 1 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5
 					end
 				end
 			end
@@ -2653,8 +2653,8 @@ function GF_GetGroupInformation(arg1,arg2,sentTime) -- Searches messages for Gro
 	if GF_MessageData.foundLFG > 0 then entry.lfg = true end
 	if not GF_MessageData.foundNotHC then entry.hc = GF_MessageData.foundHC end
 	
-	for i = 1, getn(GF_MessageList[GF_RealmName]) do
-		if arg2 == GF_MessageList[GF_RealmName][i].op then
+	for i=1, getn(GF_MessageList[GF_RealmName]) do
+		if GF_MessageList[GF_RealmName][i].op and GF_MessageList[GF_RealmName][i].op == arg2 then
 			if GF_SavedVariables.showgroupsnewonly then
 				if GF_MessageList[GF_RealmName][i].t + GF_SavedVariables.showgroupsnewonlytime*60 > time() then
 					entry.t = GF_MessageList[GF_RealmName][i].t
