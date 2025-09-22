@@ -1,10 +1,6 @@
 # GroupFinder
 Group finder Addon for Vanilla Wow 1.12.1 based on the CallToArms addon(with Turtle WoW support).  
 
-Update: 9/20/2025... There was a problem with the addon's sharing that caused it to throw an error. There was also a problem with the spamfilter blocking too much. I fixed all known issues and improved the database. I still have a few detection methods that need to be added.  
-
-Update: 9/17/2025... I'm working on addressing the Patch 1.8/Ambershire/Hardcore issues. I also have a long list of phrases that are getting through the addon's filters and I'm trying to find ways to detect them and/or add them to the database. It will take several hours(possibly until tomorrow, my sister is having surgery today). I'll update again when I am finished.  
-
 I made this addon because I hate chat spam. I tried to make this addon as intuitive as possible, but it's probably pretty intimidating at first glance. Lots of checkboxes. Lots of edit boxes. Lots of dropdowns. I put as much as possible on the front page because the original CallToArms addon had too many pages to flip through and too many useless features.  
 
 PS: To people who might be interested in this addon. This isn't simply a group finder that searches world chat for groups. This is a massive chat filtering tool. It identifies four types of messages - Group messages, guild messages, trades messages, and Chat messages; And allows you to show/hide them individually(with a sortable chatlog window).  
