@@ -414,7 +414,7 @@ GF_WORD_FIX = {
 -- Full word replacement
 ["fora"] = "for",["foran"] = "for",["havea"] = "have",["havean"] = "have",["neededa"] = "needed",["needing"] = "need",["want"] = "need",["wants"] = "need",["wanting"] = "need",["needa"] = "need",["needan"] = "need",["wherethe"] = "need",
 ["needtodo"] = "letsdo",["joina"] = "join",["joinan"] = "join",["jointo"] = "join",["atip"] = "tip",["someone"] = "anyone",["somebody"] = "anyone",["whofor"] = "anyonefor",["ane"] = "any",["seek"] = "lf",["seeks"] = "lf",
-["anyoneto"] = "anyone",["anybody"] = "anyone",["somewho"] = "anyone",["somone"] = "anyone",["got"] = "have",["gota"] = "have",["gogo"] = "go",["gogogo"] = "go",["gogogogo"] = "go",
+["anyoneto"] = "anyone",["anybody"] = "anyone",["somewho"] = "anyone",["somone"] = "anyone",["got"] = "have",["gota"] = "have",["gogo"] = "go",["timers"] = "timer",
 ["available"] = "around",["avail"] = "around",["needtostart"] = "letsdo",["calopen"] = "canopen",["poppedjoin"] = "join",["fastrun"] = "run",["runninga"] = "running",["runningan"] = "running",
 ["party"] = "group",["groupof"] = "group",["pug"] = "group",["pugs"] = "group",["parti"] = "group",["team"] = "group",["teams"] = "group",["witha"] = "with",
 ["partnerup"] = "group",["askfor"] = "lf",["also"] = "else",["to"] = "to",["on"] = "on",["for"] = "for",["amlooking"] = "looking",["looks"] = "look",["lookingwhocando"] = "lf",
@@ -1504,6 +1504,7 @@ GF_WORD_IGNORE = {
 ["anynefarianturnins"] = 1,["anynefarianturns"] = 1,["anynefariangoingtodrop"] = 1,["nefariandrop"] = 1,["nefarianpleasedrop"] = 1,["nefarianneeddrop"] = 1,["nefariananyonedrop"] = 1,
 
 ["anyonyxianefarian"] = 1,
+["onyxiatimer"] = 1,["nefariantimer"] = 1,
 
 -- Classes
 ["lfdruidmotw"] = 1,["lfdruidmark"] = 1,["lfmageintellect"] = 1,["lfmagearcaneintellect"] = 1,["lfprieststamina"] = 1,["lfpriestfortitude"] = 1,["lfpriestspirit"] = 1,["lfpriestdivinespirit"] = 1,["lfpaladinkings"] = 1,
