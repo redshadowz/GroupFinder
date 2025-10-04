@@ -10,24 +10,25 @@ NOTE: To people who might be interested in this addon. This isn't simply a group
 [Middle] - 'Group listings'  
 [Bottom] - 'Group Maker'  
 
->[Show groups] - Whether to display group messages in chat.  
-[Show Minimap] - Whether to display group messages next to the minimap button.  
-[Show New] - Whether to display 'New' group messages only(default: 3 minutes).  
-[Show Chat] - Whether to display non-group and non-trades messages in chat.  
-[Show Trades] - Whether to display trades in chat(wts/wtb/lfw/buying/selling/etc).  
-[Show Loots] - This will show/hide chat messages from item rolls, looting of money and grey items, selecting greed/need for uncommon items, and experience/honor/reputation gains.  
-[Show Guilds] - Whether to display guild recruitment messages in chat(blocked messages are logged as "spam").  
-Note: All blocked chat is recorded in the 'Log'.  
+>[Show groups in Chat] - Whether to display group messages in chat.  
+[Show New] - Whether to only display 'New' group messages in chat(default: 3 minutes).  
+[Show Minimap] - Whether to display group messages next to the minimap.  
+[Show Chat] - Whether to display non-trade/non-group/non-guild recruitment messages in chat.  
+[Show Trades] - Whether to display trade messages in chat(wts/wtb/lfw/buying/selling/etc).  
+[Show Loots] - This will show/hide messages from item rolls, looting of money/grey items, selecting greed/need for uncommon items, and experience/honor/reputation gains.  
+[Show Guilds] - Whether to display guild recruitment messages in chat.  
+Note: All blocked chat messages are recorded in the 'Log'.  
 
->[Auto Filter] - Whether to only show groups near your level(default: 6 level difference).  
+>[Auto Filter] - Whether to only show groups near your level(default: 5 level difference).  
 [Show Dungeons/Raids/Quests/Other/LFM/LFG] - To show/hide groups matching your criteria.  
-["Keywords" editbox] - Filters your group list using this text. Separate by commas for multiple searches. The dropdown box will auto-populate a list of groups based on your level.  
+["Keywords" editbox] - Filters the group list using this text. Separate by commas for multiple searches. The dropdown box will auto-populate a list of groups based on your level.  
 [Play Sound] - Plays a sound when a group is found.  
 [Auto /Who] - Whether to automatically '/who' groups/players from chat for their class/level information.  
+Note: On Turtle Servers there is also a dropdown button for filtering Normal and Hardcore groups. Plus "Auto /Who" uses the friends list to more quickly acquire Class/Level data.  
 
 >[Join World Channel] - Keeps you in the World Channel.  
-[Enable Error Filtering] - This will block server messages related to group invites/declines, quest sharing, and 'attempts to run away in fear' messages.  
-[Show Original Chat] - This removes all chat formatting(class colors/levels/layout).  
+[Enable System Filtering] - This will block server messages related to group invites/declines, quest sharing, and NPC 'say' and 'emote' messages.  
+[Show Formatted Chat] - This formats chat messages to show level and class color.  
 [Enable Spam Filtering] - The Spam Filter will block repetitive messages.  
 [Enable Auto Blacklist] - Automatically blacklists players who 'spam' if they are below the level threshold(default: level 12).  
 [Always Show Guild/Friends] - All messages from friends/guildies will be displayed. Ignoring chat filters.  
