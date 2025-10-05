@@ -2331,16 +2331,14 @@ function GF_GetTypes(arg1, showanyway)
 	if showanyway == true then print(arg1) end
 	GF_MessageData = { foundIgnore = 0,foundGuild = 0,foundGuildExclusion = 0,foundLFM = 0,foundLFMPreSuf = 0,foundLFG = 0,foundLFGPreSuf = 0,foundClass = nil,foundQuest = {},foundDungeon = nil,foundRaid = nil,foundTrades = 0,foundTradesExclusion = 0,foundPvP = nil,foundDFlags = {},foundPFlags = {},foundHC = nil,foundNotHC = nil, lfmlfgName = "zzz", groupName = {} }
 	local wordTable = {}
-	local wordString
-	local lfs,lfe
-	local tempVar
+	local wordString,lfs,lfe,tempVar
 
 	for i=1,string.len(arg1)-1 do -- Block letter repeats
 		lfs = strbyte(arg1,i)
 		lfe = strbyte(arg1,i+1)
 		if lfs == lfe then
 			if lfs >= 97 and lfs <= 122 then
-				if (lfs == strbyte(arg1,i+2)) then
+				if lfs == strbyte(arg1,i+2) then
 					table.insert(wordTable,strchar(lfs)) table.insert(wordTable,strchar(lfe)) i=i+2 for j=1,250 do if lfs ~= strbyte(arg1,i+j) then i=i+j-1 break end end
 				else
 					table.insert(wordTable,strchar(lfs)) table.insert(wordTable,strchar(lfe)) i=i+1
@@ -2464,25 +2462,27 @@ function GF_GetTypes(arg1, showanyway)
 	end
 	tempVar = getn(wordTable)
 	for j=0,4 do
-		for i=1, tempVar do
-			if wordTable[i+j] then
-				wordString = wordTable[i]
-				for k=1, j do wordString = wordString..wordTable[i+k] end
+		lfs = 1
+		while lfs <= tempVar do
+			if wordTable[lfs+j] then
+				wordString = wordTable[lfs]
+				for k=1, j do wordString = wordString..wordTable[lfs+k] end
 				if GF_WORD_FIX_BEFORE_QUEST[wordString] then
-					wordTable[i] = GF_WORD_FIX_BEFORE_QUEST[wordString]
-					for k=1, j do table.remove(wordTable,i+1) tempVar=tempVar-1 end
-					if wordString ~= GF_WORD_FIX_BEFORE_QUEST[wordString] then i = i - 1 end
+					wordTable[lfs] = GF_WORD_FIX_BEFORE_QUEST[wordString]
+					for k=1, j do table.remove(wordTable,lfs+1) tempVar=tempVar-1 end
+					if wordString ~= GF_WORD_FIX_BEFORE_QUEST[wordString] then lfs = lfs - 1 end
 				elseif GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString] then
-					wordTable[i] = GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][1]
-					for k=1, j do table.remove(wordTable,i+1) tempVar=tempVar-1 end
-					table.insert(wordTable,i+1,GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][2]) tempVar=tempVar+1
-					if wordString ~= GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][1]..GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][2] then if i > 1 then i = i - 2 else i = i - 1 end end
+					wordTable[lfs] = GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][1]
+					for k=1, j do table.remove(wordTable,lfs+1) tempVar=tempVar-1 end
+					table.insert(wordTable,lfs+1,GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][2]) tempVar=tempVar+1
+					if wordString ~= GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][1]..GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][2] then if lfs > 1 then lfs = lfs - 2 else lfs = lfs - 1 end end
 				elseif GF_WORD_FIX_QUEST_DUNGEON[wordString] then
-					wordTable[i] = GF_WORD_FIX_QUEST_DUNGEON[wordString]
-					for k=1, j do table.remove(wordTable,i+1) tempVar=tempVar-1 end
-					if wordString ~= GF_WORD_FIX_QUEST_DUNGEON[wordString] then i = i - 1 end
+					wordTable[lfs] = GF_WORD_FIX_QUEST_DUNGEON[wordString]
+					for k=1, j do table.remove(wordTable,lfs+1) tempVar=tempVar-1 end
+					if wordString ~= GF_WORD_FIX_QUEST_DUNGEON[wordString] then lfs = lfs - 1 end
 				end
 			end
+			lfs = lfs + 1
 		end
 	end
 	for i=1, tempVar do if wordTable[i] == "x" then table.remove(wordTable,i) i = i - 1 tempVar=tempVar-1 end end
@@ -2512,14 +2512,14 @@ function GF_GetTypes(arg1, showanyway)
 					GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + .3 GF_MessageData.foundGuildExclusion = GF_MessageData.foundGuildExclusion + .1
 				end
 				if not GF_LFM_BYPASS[wordString] and GF_WORD_QUEST[wordString] then
-					if wordTable[i+j+1] and (GF_LFM_ONE_AFTER[wordTable[i+j+1]]) or wordTable[i-1] and (GF_LFM_ONE_BEFORE[wordTable[i-1]])
-					or wordTable[i+j+2] and (GF_LFM_TWO_AFTER[wordTable[i+j+1]..wordTable[i+j+2]]) or wordTable[i-2] and (GF_LFM_TWO_BEFORE[wordTable[i-2]..wordTable[i-1]]) then
+					if wordTable[i+j+1] and (GF_LFM_AFTER[wordTable[i+j+1]]) or wordTable[i-1] and (GF_LFM_BEFORE[wordTable[i-1]])
+					or wordTable[i+j+2] and (GF_LFM_AFTER[wordTable[i+j+1]..wordTable[i+j+2]]) or wordTable[i-2] and (GF_LFM_BEFORE[wordTable[i-2]..wordTable[i-1]]) then
 						if GF_MessageData.foundLFM == 0 then GF_MessageData.foundLFM = 1 end GF_MessageData.foundLFMPreSuf = 1 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5
 					end
 
-					if wordTable[i+j+1] and (GF_LFG_ONE_AFTER[wordTable[i+j+1]] or (GF_WORD_FIX_LFM[wordTable[i+j+1]] and GF_LFG_ONE_AFTER[GF_WORD_FIX_LFM[wordTable[i+j+1]]]))
-					or wordTable[i-1] and (GF_LFG_ONE_BEFORE[wordTable[i-1]] or (GF_WORD_FIX_LFM[wordTable[i-1]] and GF_LFG_ONE_BEFORE[GF_WORD_FIX_LFM[wordTable[i-1]]]))
-					or wordTable[i+j+2] and (GF_LFG_TWO_AFTER[wordTable[i+j+1]..wordTable[i+j+2]]) or wordTable[i-2] and (GF_LFG_TWO_BEFORE[wordTable[i-2]..wordTable[i-1]]) then
+					if wordTable[i+j+1] and (GF_LFG_AFTER[wordTable[i+j+1]] or (GF_WORD_FIX_LFM[wordTable[i+j+1]] and GF_LFG_AFTER[GF_WORD_FIX_LFM[wordTable[i+j+1]]]))
+					or wordTable[i-1] and (GF_LFG_BEFORE[wordTable[i-1]] or (GF_WORD_FIX_LFM[wordTable[i-1]] and GF_LFG_BEFORE[GF_WORD_FIX_LFM[wordTable[i-1]]]))
+					or wordTable[i+j+2] and (GF_LFG_AFTER[wordTable[i+j+1]..wordTable[i+j+2]]) or wordTable[i-2] and (GF_LFG_BEFORE[wordTable[i-2]..wordTable[i-1]]) then
 						if GF_MessageData.foundLFG == 0 and GF_MessageData.foundLFMPreSuf == 0 then GF_MessageData.foundLFG = 1 end GF_MessageData.foundLFGPreSuf = 1 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5
 					end
 				end
@@ -2529,21 +2529,23 @@ function GF_GetTypes(arg1, showanyway)
 
 -- Normal Search
 	for j=0,4 do
-		for i=1, tempVar do
-			if wordTable[i+j] then
-				wordString = wordTable[i]
-				for k=1, j do wordString = wordString..wordTable[i+k] end
+		lfs = 1
+		while lfs <= tempVar do
+			if wordTable[lfs+j] then
+				wordString = wordTable[lfs]
+				for k=1, j do wordString = wordString..wordTable[lfs+k] end
 				if GF_WORD_FIX[wordString] then
-					wordTable[i] = GF_WORD_FIX[wordString]
-					for k=1, j do table.remove(wordTable,i+1) tempVar=tempVar-1 end
-					if wordString ~= GF_WORD_FIX[wordString] then if i > 1 then i = i - 2 else i = i - 1 end end
+					wordTable[lfs] = GF_WORD_FIX[wordString]
+					for k=1, j do table.remove(wordTable,lfs+1) tempVar=tempVar-1 end
+					if wordString ~= GF_WORD_FIX[wordString] then if lfs > 1 then lfs = lfs - 2 else lfs = lfs - 1 end end
 				elseif GF_WORD_FIX_SECOND[wordString] then
-					wordTable[i] = GF_WORD_FIX_SECOND[wordString][1]
-					for k=1, j do table.remove(wordTable,i+1) tempVar=tempVar-1 end
-					table.insert(wordTable,i+1,GF_WORD_FIX_SECOND[wordString][2]) tempVar=tempVar+1
-					if wordString ~= GF_WORD_FIX_SECOND[wordString][1]..GF_WORD_FIX_SECOND[wordString][2] then if i > 1 then i = i - 2 else i = i - 1 end end
+					wordTable[lfs] = GF_WORD_FIX_SECOND[wordString][1]
+					for k=1, j do table.remove(wordTable,lfs+1) tempVar=tempVar-1 end
+					table.insert(wordTable,lfs+1,GF_WORD_FIX_SECOND[wordString][2]) tempVar=tempVar+1
+					if wordString ~= GF_WORD_FIX_SECOND[wordString][1]..GF_WORD_FIX_SECOND[wordString][2] then if lfs > 1 then lfs = lfs - 2 else lfs = lfs - 1 end end
 				end
 			end
+			lfs = lfs + 1
 		end
 	end
 	if tempVar < 5 then
@@ -2555,12 +2557,11 @@ function GF_GetTypes(arg1, showanyway)
 			if (GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString] or GF_GROUP_PHRASE_QUESTION[wordString]) then GF_MessageData.foundLFG = 2
 			elseif GF_WORD_TRADE_QUESTION[wordString] then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_WORD_TRADE_QUESTION[wordString]
 			elseif GF_WORD_GUILD_QUESTION[wordString] then GF_MessageData.foundGuild = 3 end
-		elseif tempVar > 2 and GF_LFM_TWO_AFTER[wordTable[tempVar-1]..wordTable[tempVar]] then GF_MessageData.foundLFM = 2 end
+		elseif tempVar > 2 and GF_LFM_AFTER[wordTable[tempVar-1]..wordTable[tempVar]] then GF_MessageData.foundLFM = 2 end
 		if GF_TRADE_FIRST_LAST[wordTable[1]] and GF_TRADE_FIRST_LAST[wordTable[1]][wordTable[tempVar]] then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 3
 		elseif GF_MessageData.foundLFM == 0 and GF_GROUP_FIRST_LAST[wordTable[1]] and GF_GROUP_FIRST_LAST[wordTable[1]][wordTable[tempVar]] then GF_MessageData.foundLFM = 2
 		elseif GF_GUILD_FIRST_LAST[wordTable[1]] and GF_GUILD_FIRST_LAST[wordTable[1]][wordTable[tempVar]] then GF_MessageData.foundGuild = GF_MessageData.foundGuild + 3 end
 	end
-
 	for j=0,3 do
 		for i=1, getn(wordTable) do
 			if wordTable[i+j] then
@@ -2601,13 +2602,13 @@ function GF_GetTypes(arg1, showanyway)
 				elseif GF_TRADE_WORD_EXCLUSION[wordString] then GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + GF_TRADE_WORD_EXCLUSION[wordString] if showanyway == true then print(wordString.." tradesex") end end
 
 				if not GF_LFM_BYPASS[wordString] and (GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString] or GF_WORD_QUEST[wordString]) then
-					if GF_LFM_ONE_AFTER[wordTable[i+j+1]] or GF_LFM_ONE_BEFORE[wordTable[i-1]] or wordTable[i+j+2] and GF_LFM_TWO_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] or wordTable[i-2] and GF_LFM_TWO_BEFORE[wordTable[i-2]..wordTable[i-1]] then
+					if GF_LFM_AFTER[wordTable[i+j+1]] or GF_LFM_BEFORE[wordTable[i-1]] or wordTable[i+j+2] and GF_LFM_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] or wordTable[i-2] and GF_LFM_BEFORE[wordTable[i-2]..wordTable[i-1]] then
 						if GF_MessageData.foundLFM == 0 then GF_MessageData.foundLFM = 1 end if wordTable[i-1] and GF_LFMLFG_PREFIX_GUILD[wordTable[i-1]] then GF_MessageData.foundGuildExclusion = GF_MessageData.foundGuildExclusion + 1 end GF_MessageData.foundLFMPreSuf = 1 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5
 					end
 
-					if (GF_LFG_ONE_AFTER[wordTable[i+j+1]] or (GF_WORD_FIX_LFM[wordTable[i+j+1]] and GF_LFG_ONE_AFTER[GF_WORD_FIX_LFM[wordTable[i+j+1]]]))
-					or (GF_LFG_ONE_BEFORE[wordTable[i-1]] or (GF_WORD_FIX_LFM[wordTable[i-1]] and GF_LFG_ONE_BEFORE[GF_WORD_FIX_LFM[wordTable[i-1]]]))
-					or wordTable[i+j+2] and GF_LFG_TWO_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] or wordTable[i-2] and GF_LFG_TWO_BEFORE[wordTable[i-2]..wordTable[i-1]] then
+					if (GF_LFG_AFTER[wordTable[i+j+1]] or (GF_WORD_FIX_LFM[wordTable[i+j+1]] and GF_LFG_AFTER[GF_WORD_FIX_LFM[wordTable[i+j+1]]]))
+					or (GF_LFG_BEFORE[wordTable[i-1]] or (GF_WORD_FIX_LFM[wordTable[i-1]] and GF_LFG_BEFORE[GF_WORD_FIX_LFM[wordTable[i-1]]]))
+					or wordTable[i+j+2] and GF_LFG_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] or wordTable[i-2] and GF_LFG_BEFORE[wordTable[i-2]..wordTable[i-1]] then
 						if GF_MessageData.foundLFG == 0 and GF_MessageData.foundLFMPreSuf == 0 then GF_MessageData.foundLFG = 1 end if wordTable[i-1] and GF_LFMLFG_PREFIX_GUILD[wordTable[i-1]] then GF_MessageData.foundGuildExclusion = GF_MessageData.foundGuildExclusion + 1 end GF_MessageData.foundLFGPreSuf = 1 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5
 					end
 				end
