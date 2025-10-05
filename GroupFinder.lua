@@ -851,9 +851,11 @@ end
 function GF_WhoListUpdated()
 	for i=1, GetNumWhoResults() do
 		local name, guild, level, race, class, zone = GetWhoInfo(i)
-		GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], guild, time() }
-		GF_AddonWhoDataToBeSentBuffer[name] = GF_WhoTable[GF_RealmName][name]
-		GF_AddonNamesFromWhoSinceLoggedOn[name] = true
+		if GF_Classes[class] then
+			GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], guild, time() }
+			GF_AddonWhoDataToBeSentBuffer[name] = GF_WhoTable[GF_RealmName][name]
+			GF_AddonNamesFromWhoSinceLoggedOn[name] = true
+		end
 		if GF_UrgentWhoRequest[name] then GF_UrgentWhoRequest[name] = nil if GF_UpdateAndRequestTimer > 4 then GF_UpdateAndRequestTimer = 5 end end
 		if GF_IsGuildieOrPartyMemberUsingAddon() then GF_AddonNeedToBroadcastSomething = true end
 		GF_TimeTillNextBroadcast = 0
@@ -1185,7 +1187,7 @@ function GF_OnEvent(event) -- OnEvent, LoadSettings, Bind Keys, Prune Tables
 					local name,_,_,level,class,_,_,_,online = GetGuildRosterInfo(i)
 					if name then 
 						if online then GF_Guildies[name] = true else GF_Guildies[name] = nil end
-						GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], GetGuildInfo("player"), time() }
+						if GF_Classes[class] then GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], GetGuildInfo("player"), time() } end
 					end
 				end
 			end
@@ -1419,7 +1421,7 @@ function GF_UpdateGuildiesList()
 		local name,_,_,level,class,_,_,_,online = GetGuildRosterInfo(i)
 		if name then 
 			if online then GF_Guildies[name] = true else GF_Guildies[name] = nil end
-			GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], GetGuildInfo("player"), time() }
+			if GF_Classes[class] then GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], GetGuildInfo("player"), time() } end
 		end
 	end
 end
@@ -2220,9 +2222,11 @@ function GF_FindGroupsAndDisplayCustomChatMessages(event) -- Chat Filters and Gr
 		elseif string.find(arg1, GF_WHO_MSG_SYSTEM) then
 			for i=1, GetNumWhoResults() do
 				local name,guild,level,_,class = GetWhoInfo(i)
-				GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], guild, time() }
-				GF_AddonWhoDataToBeSentBuffer[name] = GF_WhoTable[GF_RealmName][name]
-				GF_AddonNamesFromWhoSinceLoggedOn[name] = true
+				if GF_Classes[class] then
+					GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], guild, time() }
+					GF_AddonWhoDataToBeSentBuffer[name] = GF_WhoTable[GF_RealmName][name]
+					GF_AddonNamesFromWhoSinceLoggedOn[name] = true
+				end
 				if GF_UrgentWhoRequest[name] then GF_UrgentWhoRequest[name] = nil GF_UpdateAndRequestTimer = .5 end
 				if GF_IsGuildieOrPartyMemberUsingAddon() then GF_AddonNeedToBroadcastSomething = true end
 				GF_TimeTillNextBroadcast = 0
@@ -2301,7 +2305,7 @@ function GF_CheckForGroups(arg1,arg2,arg9,event,showanyway)
 -- "Say" messages will always be displayed unless flagged as spam.
 -- "Yell" and "Channel" messages will only display if allowed.
 	if GF_BlackList[GF_RealmName][arg2] and not GF_PlayersCurrentlyInGroup[arg2] and not GF_Friends[arg2] and not GF_Guildies[arg2] then return 8 end
-	GF_GetTypes(gsub(gsub(gsub(gsub(string.lower(gsub(gsub(gsub(" "..arg1.." ", "|c%x+|+(%w+)[%w:]+|+h", " %1 "), "|+[hr]", ""),"([a-z ][a-z])([A-Z])","%1 %2")),".gg/%w+", ""),"[\"#\$\%&\*,\.@\\\^_`~|]"," "),"'",""),"[%.%[%s](%a)[%s%.](%a)[%s%.]","%1%2"),showanyway)
+	GF_GetTypes(gsub(gsub(gsub(string.lower(gsub(gsub(gsub(" "..arg1.." ", "|c%x+|+(%w+)[%w:]+|+h", " %1 "), "|+[hr]", ""),"([a-z ][a-z])([A-Z])","%1 %2")),".gg/%w+", ""),"[\"#\$\%&\*,\.@\\\^_`~|]"," "),"'",""),showanyway)
 	if event == "HARDCORE" or string.lower(arg9) == "hardcore" then GF_MessageData.foundHC = true end
 	if GF_MessageData.foundGuild >= 3 then return GF_CheckForSpam(arg1,arg2) or 11
 	elseif GF_MessageData.foundTrades >= 3 then return GF_CheckForSpam(arg1,arg2) or 5
@@ -2331,7 +2335,7 @@ function GF_GetTypes(arg1, showanyway)
 	local lfs,lfe
 	local tempVar
 
-	for i=1,string.len(arg1) do -- Block letter repeats
+	for i=1,string.len(arg1)-1 do -- Block letter repeats
 		lfs = strbyte(arg1,i)
 		lfe = strbyte(arg1,i+1)
 		if lfs == lfe then
@@ -2342,15 +2346,22 @@ function GF_GetTypes(arg1, showanyway)
 					table.insert(wordTable,strchar(lfs)) table.insert(wordTable,strchar(lfe)) i=i+1
 				end
 			else
-				table.insert(wordTable,strchar(lfs)) i=i+1 for j=1,250 do if lfs ~= strbyte(arg1,i+j) then i=i+j-1 break end end
+				table.insert(wordTable,strchar(lfs)) i=i+1 for j=1,250 do if lfs ~= strbyte(arg1,i+j) then if lfs == 32 then i=i+j-2 else i=i+j-1 end break end end
 			end
-		elseif lfs == strbyte(arg1,i+2) and lfe == strbyte(arg1,i+3) and lfs == strbyte(arg1,i+4) then
-			table.insert(wordTable,strchar(lfs)) table.insert(wordTable,strchar(lfe)) table.insert(wordTable,strchar(strbyte(arg1,i+2))) table.insert(wordTable,strchar(strbyte(arg1,i+3))) i=i+3 for j=1,250 do if strbyte(arg1,i+j) ~= strbyte(arg1,i+j-2) then i=i+j-1 break end end
+		elseif lfs == strbyte(arg1,i+2) and lfs == strbyte(arg1,i+4) and lfe ~= 32 and strbyte(arg1,i+3) ~= 32 then
+			if lfs == 32 or lfs == 46 then
+				table.insert(wordTable,strchar(lfs)) table.insert(wordTable,strchar(lfe)) table.insert(wordTable,strchar(strbyte(arg1,i+3))) i=i+3 for j=3,250,2 do if lfs ~= strbyte(arg1,i+j) or strbyte(arg1,i+j-1) == 32 then i=i+j-3 break else table.insert(wordTable,strchar(strbyte(arg1,i+j-1))) end end
+			elseif lfe == strbyte(arg1,i+3) then
+				table.insert(wordTable,strchar(lfs)) table.insert(wordTable,strchar(lfe)) table.insert(wordTable,strchar(strbyte(arg1,i+2))) table.insert(wordTable,strchar(strbyte(arg1,i+3))) i=i+3 for j=2,250 do if strbyte(arg1,i+j) ~= strbyte(arg1,i+j-2) then i=i+j-1 break end end
+			else
+				table.insert(wordTable,strchar(lfs))
+			end
 		else
 			table.insert(wordTable,strchar(lfs))
 		end
 	end
 	arg1 = table.concat(wordTable)
+	if string.sub(arg1,-1) ~= " " then arg1 = arg1.." " end
 	wordTable = {}
 
 	if string.find(arg1, "\]%s?%d+%s?\+") then GF_MessageData.foundLFM = 2 end -- Group "] 2+"
@@ -2509,7 +2520,7 @@ function GF_GetTypes(arg1, showanyway)
 					if wordTable[i+j+1] and (GF_LFG_ONE_AFTER[wordTable[i+j+1]] or (GF_WORD_FIX_LFM[wordTable[i+j+1]] and GF_LFG_ONE_AFTER[GF_WORD_FIX_LFM[wordTable[i+j+1]]]))
 					or wordTable[i-1] and (GF_LFG_ONE_BEFORE[wordTable[i-1]] or (GF_WORD_FIX_LFM[wordTable[i-1]] and GF_LFG_ONE_BEFORE[GF_WORD_FIX_LFM[wordTable[i-1]]]))
 					or wordTable[i+j+2] and (GF_LFG_TWO_AFTER[wordTable[i+j+1]..wordTable[i+j+2]]) or wordTable[i-2] and (GF_LFG_TWO_BEFORE[wordTable[i-2]..wordTable[i-1]]) then
-						if GF_MessageData.foundLFG == 0 then GF_MessageData.foundLFG = 1 end GF_MessageData.foundLFGPreSuf = 1 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5
+						if GF_MessageData.foundLFG == 0 and GF_MessageData.foundLFMPreSuf == 0 then GF_MessageData.foundLFG = 1 end GF_MessageData.foundLFGPreSuf = 1 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5
 					end
 				end
 			end
@@ -2597,7 +2608,7 @@ function GF_GetTypes(arg1, showanyway)
 					if (GF_LFG_ONE_AFTER[wordTable[i+j+1]] or (GF_WORD_FIX_LFM[wordTable[i+j+1]] and GF_LFG_ONE_AFTER[GF_WORD_FIX_LFM[wordTable[i+j+1]]]))
 					or (GF_LFG_ONE_BEFORE[wordTable[i-1]] or (GF_WORD_FIX_LFM[wordTable[i-1]] and GF_LFG_ONE_BEFORE[GF_WORD_FIX_LFM[wordTable[i-1]]]))
 					or wordTable[i+j+2] and GF_LFG_TWO_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] or wordTable[i-2] and GF_LFG_TWO_BEFORE[wordTable[i-2]..wordTable[i-1]] then
-						if GF_MessageData.foundLFG == 0 then GF_MessageData.foundLFG = 1 end if wordTable[i-1] and GF_LFMLFG_PREFIX_GUILD[wordTable[i-1]] then GF_MessageData.foundGuildExclusion = GF_MessageData.foundGuildExclusion + 1 end GF_MessageData.foundLFGPreSuf = 1 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5
+						if GF_MessageData.foundLFG == 0 and GF_MessageData.foundLFMPreSuf == 0 then GF_MessageData.foundLFG = 1 end if wordTable[i-1] and GF_LFMLFG_PREFIX_GUILD[wordTable[i-1]] then GF_MessageData.foundGuildExclusion = GF_MessageData.foundGuildExclusion + 1 end GF_MessageData.foundLFGPreSuf = 1 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5
 					end
 				end
 			end
