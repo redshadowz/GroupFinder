@@ -2368,7 +2368,7 @@ function GF_GetTypes(arg1, showanyway)
 	while true do lfs,lfe,wordString,tempVar = string.find(arg1," (%d+([=/])%d+) ",lfs) if not wordString then break end if tempVar == "=" then GF_MessageData.foundLFM = 2 lfs = lfe else arg1 = string.sub(arg1,1,lfs).."group"..string.sub(arg1,lfe) lfs = lfs + 6 end end
 
 	lfs = 1 -- To detect space/lf##m/letter(eg " lf15mbwl" = lfm bwl)
-	while true do lfs,lfe,wordString = string.find(arg1," (lf?%s?%d+m)%s?%a+",lfs) if not wordString then break end arg1 = string.sub(arg1,1,lfs).."lfm "..string.sub(arg1,lfs+string.len(wordString)+1) lfs = lfs + 4 GF_MessageData.foundLFM = 4 GF_MessageData.foundGuildExclusion = 3 GF_MessageData.foundTradesExclusion = 3 end
+	while true do lfs,lfe,wordString = string.find(arg1," ([lk]f?%s?%d+m)[%p%s]",lfs) if not wordString then break end arg1 = string.sub(arg1,1,lfs).."lfm "..string.sub(arg1,lfs+string.len(wordString)+1) lfs = lfs + 4 GF_MessageData.foundLFM = 4 GF_MessageData.foundGuildExclusion = 3 GF_MessageData.foundTradesExclusion = 3 end
 	lfs = 2 -- To detect word/word with no space(eg "lfgscholo" = lfg scholo)
 	while true do 
 		lfs,lfe,wordString = string.find(arg1,"(%a%a%a%a+)",lfs)
@@ -2442,7 +2442,7 @@ function GF_GetTypes(arg1, showanyway)
 		elseif GF_WORD_GOLD[tempVar] then
 			arg1 = string.sub(arg1,1,lfs)..GF_WORD_GOLD[tempVar]..string.sub(arg1,lfe)
 			lfs = lfs + string.len(GF_WORD_GOLD[tempVar])
-			if GF_MessageData.foundTrades < 2 then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 2 end
+			if GF_MessageData.foundTrades < 2 and tempVar ~= "bh" then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 2 end
 		else
 			lfs = lfe
 		end
