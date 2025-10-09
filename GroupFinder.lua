@@ -2416,20 +2416,38 @@ function GF_GetTypes(arg1, showanyway)
 	lfs = 1 -- To detect space/word/number+/space combinations(eg " k10" = lowerkarazhan)
 	while true do lfs,lfe,wordString = string.find(arg1," (%a+%s?[:%-]?%s?%d+)s?[%p%s]",lfs) if not wordString then break end wordString = gsub(wordString,"[%s:%-]","") if GF_WORD_NUMBER[wordString] then arg1 = string.sub(arg1,1,lfs)..GF_WORD_NUMBER[wordString]..string.sub(arg1,lfe) end lfs = lfs + string.len(wordString) + 1 end
 
-	lfs = 2 -- To detect "]"
-	while true do
-		lfs = string.find(arg1,"\]",lfs)
-		if not lfs then break end
-		tempVar = string.sub(arg1,lfs,lfs+10)
-		if GF_MessageData.foundLFM == 0 then lfe = string.find(tempVar, "\]%s?%d+%s?\+") if lfe then GF_MessageData.foundLFM = 2 if showanyway == true then print("##+ lfm") end end end -- Group "] 2+"
-		lfe = string.find(tempVar, "\][0-9\- ]+[gs]") if lfe then GF_MessageData.foundTrades = .5 if showanyway == true then print("##g trade .5") end end -- Trades "]2.5g"
-		lfe = string.find(tempVar, "\]%s?%p?%s?%d+m[%p%s]") if lfe then GF_MessageData.foundLFM = 2 if showanyway == true then print("##m lfm") end end -- Group "] 2m"
-		lfe = string.find(tempVar, "\]%s?%p?%s?x%d+[%p%s]") if lfe then GF_MessageData.foundTrades = GF_MessageData.foundTrades + .5 if showanyway == true then print("x## trade .5") end end -- Trades "] x2"
-		-- To detect one word after "]" (eg "[hitem] ah ")... For detecting trades
-		_,_,wordString = string.find(tempVar, "\]%s?%d?%p?%s?(%a+)[%p%s]") if wordString then if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_TRADE_PREFIX_SUFFIX[wordString] then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_TRADE_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." trade "..GF_TRADE_PREFIX_SUFFIX[wordString]) end end end
-		-- To detect two words after "]" (eg "[hitem] for free ")... For detecting trades
-		_,_,wordString = string.find(tempVar, "\]%s?%d?%p?%s?(%a+%s%a+)[%p%s]") if wordString then wordString = gsub(wordString," ","") if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_TRADE_PREFIX_SUFFIX[wordString] then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_TRADE_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." trade "..GF_TRADE_PREFIX_SUFFIX[wordString]) end end end
-		lfs = lfs + 1
+	tempVar = string.find(arg1,"%]")
+	if tempVar then -- To detect "]"
+		if GF_MessageData.foundLFM == 0 then lfe = string.find(arg1, "%]%s?%d+%s?\+",tempVar) if lfe then GF_MessageData.foundLFM = 2 if showanyway == true then print("##+ lfm") end end end -- Group "] 2+"
+		if string.find(arg1, "%]%s?[0-9\-]+%s?[gs]",tempVar) then GF_MessageData.foundTrades = GF_MessageData.foundTrades + .5 if showanyway == true then print("##g trade .5") end end -- Trades "]2.5g"
+		if string.find(arg1, "%]%s?%p?%s?%d+m[%p%s]",tempVar) then GF_MessageData.foundLFM = 2 if showanyway == true then print("##m lfm") end end -- Group "] 2m"
+		if string.find(arg1, "%]%s?%p?%s?x%d+[%p%s]",tempVar) then GF_MessageData.foundTrades = GF_MessageData.foundTrades + .5 if showanyway == true then print("x## trade .5") end end -- Trades "] x2"
+		if string.find(arg1, "\]%s?%d+[\+\-][\+\-][%p%s]",tempVar) then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 1 if showanyway == true then print("+- trade 1") end end -- Trades "[hitem] 36+-"
+		lfs = tempVar -- To detect one word after "]" (eg "[hitem] ah ")... For detecting trades
+		while true do lfs,lfe,wordString = string.find(arg1, "%]%s?x?%d?%d?x?%p?%s?(%a+)[%p%s]",lfs) if not wordString then break end if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_TRADE_PREFIX_SUFFIX[wordString] then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_TRADE_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." trade "..GF_TRADE_PREFIX_SUFFIX[wordString]) end end lfs = lfe end
+		lfs = tempVar -- To detect two words after "]" (eg "[hitem] for free ")... For detecting trades
+		while true do lfs,lfe,wordString = string.find(arg1, "%]%s?x?%d?%d?x?%p?%s?(%a+%s%a+)[%p%s]",lfs) if not wordString then break end wordString = gsub(wordString," ","") if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_TRADE_PREFIX_SUFFIX[wordString] then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_TRADE_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." trade "..GF_TRADE_PREFIX_SUFFIX[wordString]) end end lfs = lfe end
+	end
+	if string.find(arg1,"%[") then -- To detect "["
+		if string.find(arg1, "[%p%s]%d+%s?x%s?%[") then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 1 if showanyway == true then print("##x [ trade 1") end end -- Trades " 2x ["
+		if string.find(arg1, "[%p%s]x%s?%d+%s?%[") then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 1 if showanyway == true then print("x## [ trade 1") end end -- Trades " x2 ["
+		lfs = 1 -- To detect one word before "[" (eg "free [hitem] ")... For detecting trades
+		while true do lfs,lfe,wordString = string.find(arg1, "[%p%s](%a+)%s?%s?x?%d?%d?x?h?i?t?e?m?%s?%[",lfs) if not wordString then break end if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end
+			if GF_TRADE_PREFIX_SUFFIX[wordString] then
+				GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_TRADE_PREFIX_SUFFIX[wordString]
+				if showanyway == true then print(wordString.." trade "..GF_TRADE_PREFIX_SUFFIX[wordString]) end
+				
+				_,_,wordString = string.find(arg1, "%]%s?x?%d?%d?x?%p?%s?(%a+)[%p%s]",lfe)
+				if wordString then
+					if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end
+					if GF_TRADE_PREFIX_SUFFIX[wordString] then
+						GF_MessageData.foundTrades = GF_MessageData.foundTrades + 3
+						if showanyway == true then print(wordString.." trade "..GF_TRADE_PREFIX_SUFFIX[wordString]) end
+					end
+				end
+			end
+			lfs = lfe
+		end
 	end
 	lfs = 1 -- To detect space/number+/word/space combinations(eg " 10th " = tenth, " 5g " = 5gold)
 	while true do
@@ -2450,14 +2468,13 @@ function GF_GetTypes(arg1, showanyway)
 
 	lfs = 1 -- To detect one word before "<" (eg " join <guild>")... For detecting guild
 	while true do lfs,lfe,wordString = string.find(arg1, " (%a+)%s?<",lfs) if not wordString then break end if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_PREFIX_SUFFIX[wordString] then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_GUILD_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." guild "..GF_GUILD_PREFIX_SUFFIX[wordString]) end end lfs = lfe end
-	lfs = 2 -- To detect ">"
-	while true do
-		lfs = string.find(arg1,">",lfs)
-		if not lfs then break end
-		tempVar = string.sub(arg1,lfs,lfs+15)
-		_,_,wordString = string.find(tempVar, ">%s?(%a+)[%p%s]") if wordString then if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_PREFIX_SUFFIX[wordString] then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_GUILD_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." guild "..GF_GUILD_PREFIX_SUFFIX[wordString]) end end end
-		_,_,wordString = string.find(tempVar, ">%s?(%a+ %a+)[%p%s]") if wordString then wordString = gsub(wordString," ","") if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_PREFIX_SUFFIX[wordString] then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_GUILD_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." guild "..GF_GUILD_PREFIX_SUFFIX[wordString]) end end end
-		lfs = lfs + 1
+
+	tempVar = string.find(arg1,">")
+	if tempVar then -- To detect ">"
+		lfs = tempVar
+		while true do lfs,lfe,wordString = string.find(arg1, ">%s?(%a+)[%p%s]",lfs) if not wordString then break end if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_PREFIX_SUFFIX[wordString] then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_GUILD_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." guild "..GF_GUILD_PREFIX_SUFFIX[wordString]) end end lfs = lfe end
+		lfs = tempVar
+		while true do lfs,lfe,wordString = string.find(arg1, ">%s?(%a+ %a+)[%p%s]",lfs) if not wordString then break end wordString = gsub(wordString," ","") if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_PREFIX_SUFFIX[wordString] then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_GUILD_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." guild "..GF_GUILD_PREFIX_SUFFIX[wordString]) end end lfs = lfe end
 	end
 
 	lfs = 1 -- To detect words between "()" (eg "(rp)","(human only)")... To help detect guild recruitment messages.
@@ -2519,21 +2536,23 @@ function GF_GetTypes(arg1, showanyway)
 			if wordTable[i+j] then
 				wordString = wordTable[i]
 				for k=1, j do wordString = wordString..wordTable[i+k] end
-				if GF_WORD_QUEST[wordString] and not GF_GROUP_WORD_BYPASS[wordString] then
-					if showanyway == true then print(wordString.." quest") end
-					if not GF_MessageData.foundQuest[1] or GF_WORD_QUEST[wordString][2] > GF_MessageData.foundQuest[1] or GF_MessageData.foundQuest[2] < j then GF_MessageData.foundQuest[1] = GF_WORD_QUEST[wordString][2] GF_MessageData.foundQuest[2] = j end
-					GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + .3 GF_MessageData.foundGuildExclusion = GF_MessageData.foundGuildExclusion + .1
-				end
-				if not GF_LFM_BYPASS[wordString] and GF_WORD_QUEST[wordString] then
-					if wordTable[i+j+1] and (GF_LFM_AFTER[wordTable[i+j+1]]) or wordTable[i-1] and (GF_LFM_BEFORE[wordTable[i-1]])
-					or wordTable[i+j+2] and (GF_LFM_AFTER[wordTable[i+j+1]..wordTable[i+j+2]]) or wordTable[i-2] and (GF_LFM_BEFORE[wordTable[i-2]..wordTable[i-1]]) then
-						if GF_MessageData.foundLFM == 0 then GF_MessageData.foundLFM = 1 end GF_MessageData.foundLFMPreSuf = 1 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5
+				if not GF_GROUP_WORD_BYPASS[wordString] then
+					if GF_WORD_QUEST[wordString] then
+						if showanyway == true then print(wordString.." quest") end
+						if not GF_MessageData.foundQuest[1] or GF_WORD_QUEST[wordString][2] > GF_MessageData.foundQuest[1] or GF_MessageData.foundQuest[2] < j then GF_MessageData.foundQuest[1] = GF_WORD_QUEST[wordString][2] GF_MessageData.foundQuest[2] = j end
+						GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + .3 GF_MessageData.foundGuildExclusion = GF_MessageData.foundGuildExclusion + .1
 					end
+					if not GF_LFM_BYPASS[wordString] and GF_WORD_QUEST[wordString] then
+						if wordTable[i+j+1] and (GF_LFM_AFTER[wordTable[i+j+1]]) or wordTable[i-1] and (GF_LFM_BEFORE[wordTable[i-1]])
+						or wordTable[i+j+2] and (GF_LFM_AFTER[wordTable[i+j+1]..wordTable[i+j+2]]) or wordTable[i-2] and (GF_LFM_BEFORE[wordTable[i-2]..wordTable[i-1]]) then
+							if GF_MessageData.foundLFM == 0 then GF_MessageData.foundLFM = 1 end GF_MessageData.foundLFMPreSuf = 1 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5
+						end
 
-					if wordTable[i+j+1] and (GF_LFG_AFTER[wordTable[i+j+1]] or (GF_WORD_FIX_LFM[wordTable[i+j+1]] and GF_LFG_AFTER[GF_WORD_FIX_LFM[wordTable[i+j+1]]]))
-					or wordTable[i-1] and (GF_LFG_BEFORE[wordTable[i-1]] or (GF_WORD_FIX_LFM[wordTable[i-1]] and GF_LFG_BEFORE[GF_WORD_FIX_LFM[wordTable[i-1]]]))
-					or wordTable[i+j+2] and (GF_LFG_AFTER[wordTable[i+j+1]..wordTable[i+j+2]]) or wordTable[i-2] and (GF_LFG_BEFORE[wordTable[i-2]..wordTable[i-1]]) then
-						if GF_MessageData.foundLFG == 0 and GF_MessageData.foundLFMPreSuf == 0 then GF_MessageData.foundLFG = 1 end GF_MessageData.foundLFGPreSuf = 1 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5
+						if wordTable[i+j+1] and (GF_LFG_AFTER[wordTable[i+j+1]] or (GF_WORD_FIX_LFM[wordTable[i+j+1]] and GF_LFG_AFTER[GF_WORD_FIX_LFM[wordTable[i+j+1]]]))
+						or wordTable[i-1] and (GF_LFG_BEFORE[wordTable[i-1]] or (GF_WORD_FIX_LFM[wordTable[i-1]] and GF_LFG_BEFORE[GF_WORD_FIX_LFM[wordTable[i-1]]]))
+						or wordTable[i+j+2] and (GF_LFG_AFTER[wordTable[i+j+1]..wordTable[i+j+2]]) or wordTable[i-2] and (GF_LFG_BEFORE[wordTable[i-2]..wordTable[i-1]]) then
+							if GF_MessageData.foundLFG == 0 and GF_MessageData.foundLFMPreSuf == 0 then GF_MessageData.foundLFG = 1 end GF_MessageData.foundLFGPreSuf = 1 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5
+						end
 					end
 				end
 			end
@@ -2614,7 +2633,7 @@ function GF_GetTypes(arg1, showanyway)
 					elseif GF_MessageData.foundTrades > 100 and GF_WORD_TRADE[wordString] < 100 then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_WORD_TRADE[wordString] end
 				elseif GF_TRADE_WORD_EXCLUSION[wordString] then GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + GF_TRADE_WORD_EXCLUSION[wordString] if showanyway == true then print(wordString.." tradesex") end end
 
-				if not GF_LFM_BYPASS[wordString] and (GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString] or GF_WORD_QUEST[wordString]) then
+				if not GF_LFM_BYPASS[wordString] and (GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString] or (GF_WORD_QUEST[wordString] and not GF_GROUP_WORD_BYPASS[wordString])) then
 					if GF_LFM_AFTER[wordTable[i+j+1]] or GF_LFM_BEFORE[wordTable[i-1]] or wordTable[i+j+2] and GF_LFM_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] or wordTable[i-2] and GF_LFM_BEFORE[wordTable[i-2]..wordTable[i-1]] then
 						if GF_MessageData.foundLFM == 0 then GF_MessageData.foundLFM = 1 end if wordTable[i-1] and GF_LFMLFG_PREFIX_GUILD[wordTable[i-1]] then GF_MessageData.foundGuildExclusion = GF_MessageData.foundGuildExclusion + 1 end GF_MessageData.foundLFMPreSuf = 1 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5
 					end
