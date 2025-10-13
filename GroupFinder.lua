@@ -2365,7 +2365,7 @@ function GF_GetTypes(arg1, showanyway)
 	if string.find(arg1, "%d+p[%p%s]") then GF_MessageData.foundLFM = 2 end -- "10p heal" messages from chinese
 
 	lfs = 1 -- To detect space/number+/punctuation/number+/space for groups
-	while true do lfs,lfe,wordString,tempVar = string.find(arg1," (%d+([=/])%d+) ",lfs) if not wordString then break end if tempVar == "=" then GF_MessageData.foundLFM = 2 lfs = lfe else arg1 = string.sub(arg1,1,lfs).."group"..string.sub(arg1,lfe) lfs = lfs + 6 end end
+	while true do lfs,lfe,wordString,tempVar = string.find(arg1,"[%p%s](%d+([=/])%d+) ",lfs) if not wordString then break end if tempVar == "=" then GF_MessageData.foundLFM = 2 lfs = lfe else arg1 = string.sub(arg1,1,lfs).."group"..string.sub(arg1,lfe) lfs = lfs + 6 end end
 
 	lfs = 1 -- To detect space/lf##m/letter(eg " lf15mbwl" = lfm bwl)
 	while true do lfs,lfe,wordString = string.find(arg1," ([lk]f?%s?%d+m)[%p%s]",lfs) if not wordString then break end arg1 = string.sub(arg1,1,lfs).."lfm "..string.sub(arg1,lfs+string.len(wordString)+1) lfs = lfs + 4 GF_MessageData.foundLFM = 4 GF_MessageData.foundGuildExclusion = 3 GF_MessageData.foundTradesExclusion = 3 end
@@ -2513,7 +2513,7 @@ function GF_GetTypes(arg1, showanyway)
 					for k=1, j do table.remove(wordTable,lfs+1) tempVar=tempVar-1 end
 					if wordString ~= GF_WORD_FIX_BEFORE_QUEST[wordString] then
 						if lfs > 1 then lfs = lfs - 2 else lfs = lfs - 1 end
-					elseif wordTable[lfs-1] then
+					elseif lfs > 1 and wordTable[lfs-1] then
 						wordString = wordTable[lfs-1]
 						for k=1, j do wordString = wordString..wordTable[lfs-1+k] end
 						if GF_WORD_FIX_BEFORE_QUEST[wordString] then
@@ -2527,7 +2527,7 @@ function GF_GetTypes(arg1, showanyway)
 					table.insert(wordTable,lfs+1,GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][2]) tempVar=tempVar+1
 					if wordString ~= GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][1]..GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][2] then
 						if lfs > 1 then lfs = lfs - 2 else lfs = lfs - 1 end
-					elseif wordTable[lfs-1] then
+					elseif lfs > 1 and wordTable[lfs-1] then
 						wordString = wordTable[lfs-1]
 						for k=1, j do wordString = wordString..wordTable[lfs-1+k] end
 						if GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString] then
@@ -2541,7 +2541,7 @@ function GF_GetTypes(arg1, showanyway)
 					for k=1, j do table.remove(wordTable,lfs+1) tempVar=tempVar-1 end
 					if wordString ~= GF_WORD_FIX_QUEST_DUNGEON[wordString] then
 						if lfs > 1 then lfs = lfs - 2 else lfs = lfs - 1 end
-					elseif wordTable[lfs-1] then
+					elseif lfs > 1 and wordTable[lfs-1] then
 						wordString = wordTable[lfs-1]
 						for k=1, j do wordString = wordString..wordTable[lfs-1+k] end
 						if GF_WORD_FIX_QUEST_DUNGEON[wordString] then
@@ -2610,7 +2610,7 @@ function GF_GetTypes(arg1, showanyway)
 					for k=1, j do table.remove(wordTable,lfs+1) tempVar=tempVar-1 end
 					if wordString ~= GF_WORD_FIX[wordString] then
 						if lfs > 1 then lfs = lfs - 2 else lfs = lfs - 1 end
-					elseif wordTable[lfs-1] then
+					elseif lfs > 1 and wordTable[lfs-1] then
 						wordString = wordTable[lfs-1]
 						for k=1, j do wordString = wordString..wordTable[lfs-1+k] end
 						if GF_WORD_FIX[wordString] then
@@ -2624,7 +2624,7 @@ function GF_GetTypes(arg1, showanyway)
 					table.insert(wordTable,lfs+1,GF_WORD_FIX_SECOND[wordString][2]) tempVar=tempVar+1
 					if wordString ~= GF_WORD_FIX_SECOND[wordString][1]..GF_WORD_FIX_SECOND[wordString][2] then
 						if lfs > 1 then lfs = lfs - 2 else lfs = lfs - 1 end
-					elseif wordTable[lfs-1] then
+					elseif lfs > 1 and wordTable[lfs-1] then
 						wordString = wordTable[lfs-1]
 						for k=1, j do wordString = wordString..wordTable[lfs-1+k] end
 						if GF_WORD_FIX_SECOND[wordString] then
