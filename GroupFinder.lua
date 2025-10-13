@@ -2513,12 +2513,12 @@ function GF_GetTypes(arg1, showanyway)
 					for k=1, j do table.remove(wordTable,lfs+1) tempVar=tempVar-1 end
 					if wordString ~= GF_WORD_FIX_BEFORE_QUEST[wordString] then
 						if lfs > 1 then lfs = lfs - 2 else lfs = lfs - 1 end
-					elseif lfs > 1 and wordTable[lfs-1] then
+					elseif lfs > 1 then
 						wordString = wordTable[lfs-1]
-						for k=1, j do wordString = wordString..wordTable[lfs-1+k] end
+						for k=1, j do if wordTable[lfs-1+k] then wordString = wordString..wordTable[lfs-1+k] end end
 						if GF_WORD_FIX_BEFORE_QUEST[wordString] then
 							wordTable[lfs-1] = GF_WORD_FIX_BEFORE_QUEST[wordString]
-							for k=1, j do table.remove(wordTable,lfs) tempVar=tempVar-1 end
+							for k=1, j do if wordTable[lfs] then table.remove(wordTable,lfs) tempVar=tempVar-1 end end
 						end
 					end
 				elseif GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString] then
@@ -2527,12 +2527,12 @@ function GF_GetTypes(arg1, showanyway)
 					table.insert(wordTable,lfs+1,GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][2]) tempVar=tempVar+1
 					if wordString ~= GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][1]..GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][2] then
 						if lfs > 1 then lfs = lfs - 2 else lfs = lfs - 1 end
-					elseif lfs > 1 and wordTable[lfs-1] then
+					elseif lfs > 1 then
 						wordString = wordTable[lfs-1]
-						for k=1, j do wordString = wordString..wordTable[lfs-1+k] end
+						for k=1, j do if wordTable[lfs-1+k] then wordString = wordString..wordTable[lfs-1+k] end end
 						if GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString] then
 							wordTable[lfs-1] = GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][1]
-							for k=1, j do table.remove(wordTable,lfs) tempVar=tempVar-1 end
+							for k=1, j do if wordTable[lfs] then table.remove(wordTable,lfs) tempVar=tempVar-1 end end
 							table.insert(wordTable,lfs,GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][2]) tempVar=tempVar+1
 						end
 					end
@@ -2541,12 +2541,12 @@ function GF_GetTypes(arg1, showanyway)
 					for k=1, j do table.remove(wordTable,lfs+1) tempVar=tempVar-1 end
 					if wordString ~= GF_WORD_FIX_QUEST_DUNGEON[wordString] then
 						if lfs > 1 then lfs = lfs - 2 else lfs = lfs - 1 end
-					elseif lfs > 1 and wordTable[lfs-1] then
+					elseif lfs > 1 then
 						wordString = wordTable[lfs-1]
-						for k=1, j do wordString = wordString..wordTable[lfs-1+k] end
+						for k=1, j do if wordTable[lfs-1+k] then wordString = wordString..wordTable[lfs-1+k] end end
 						if GF_WORD_FIX_QUEST_DUNGEON[wordString] then
 							wordTable[lfs-1] = GF_WORD_FIX_QUEST_DUNGEON[wordString]
-							for k=1, j do table.remove(wordTable,lfs) tempVar=tempVar-1 end
+							for k=1, j do if wordTable[lfs] then table.remove(wordTable,lfs) tempVar=tempVar-1 end end
 						end
 					end
 				end
@@ -2610,12 +2610,12 @@ function GF_GetTypes(arg1, showanyway)
 					for k=1, j do table.remove(wordTable,lfs+1) tempVar=tempVar-1 end
 					if wordString ~= GF_WORD_FIX[wordString] then
 						if lfs > 1 then lfs = lfs - 2 else lfs = lfs - 1 end
-					elseif lfs > 1 and wordTable[lfs-1] then
+					elseif lfs > 1 then
 						wordString = wordTable[lfs-1]
-						for k=1, j do wordString = wordString..wordTable[lfs-1+k] end
+						for k=1, j do if wordTable[lfs-1+k] then wordString = wordString..wordTable[lfs-1+k] end end
 						if GF_WORD_FIX[wordString] then
 							wordTable[lfs-1] = GF_WORD_FIX[wordString]
-							for k=1, j do table.remove(wordTable,lfs) tempVar=tempVar-1 end
+							for k=1, j do if wordTable[lfs] then table.remove(wordTable,lfs) tempVar=tempVar-1 end end
 						end
 					end
 				elseif GF_WORD_FIX_SECOND[wordString] and (not GF_TRADE_PORTAL_SKIP[wordString] or not GF_TRADE_PORTAL_SKIP_NAMES[wordTable[lfs-1]]) then
@@ -2624,12 +2624,12 @@ function GF_GetTypes(arg1, showanyway)
 					table.insert(wordTable,lfs+1,GF_WORD_FIX_SECOND[wordString][2]) tempVar=tempVar+1
 					if wordString ~= GF_WORD_FIX_SECOND[wordString][1]..GF_WORD_FIX_SECOND[wordString][2] then
 						if lfs > 1 then lfs = lfs - 2 else lfs = lfs - 1 end
-					elseif lfs > 1 and wordTable[lfs-1] then
+					elseif lfs > 1 then
 						wordString = wordTable[lfs-1]
-						for k=1, j do wordString = wordString..wordTable[lfs-1+k] end
+						for k=1, j do if wordTable[lfs-1+k] then wordString = wordString..wordTable[lfs-1+k] end end
 						if GF_WORD_FIX_SECOND[wordString] then
 							wordTable[lfs-1] = GF_WORD_FIX_SECOND[wordString][1]
-							for k=1, j do table.remove(wordTable,lfs) tempVar=tempVar-1 end
+							for k=1, j do if wordTable[lfs] then table.remove(wordTable,lfs) tempVar=tempVar-1 end end
 							table.insert(wordTable,lfs,GF_WORD_FIX_SECOND[wordString][2]) tempVar=tempVar+1
 						end
 					end

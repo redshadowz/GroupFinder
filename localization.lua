@@ -591,7 +591,7 @@ GF_WORD_FIX = {
 ["zulgurub"] = "zulgurub",["karacrypt"] = "karacrypt",["stormwroughtcastle"] = "stormwroughtcastle",["stormwroughtruins"] = "stormwroughtruins",["stormwroughtdescent"] = "stormwroughtdescent",
 
 ["caniheal"] = "caniheal",["canitank"] = "canitank",["canidamage"] = "canidamage",
-["servertime"] = "servertime",["auctionhouse"] = "auctionhouse",["whisperme"] = "whisperme",["saltshaker"] = "saltshaker",
+["servertime"] = "servertime",
 
 ["onyxiabuff"] = "onyxiabuff",["onyxiahead"] = "onyxiahead",["nefarianbuff"] = "nefarianbuff",["nefarianhead"] = "nefarianhead",["rendbuff"] = "rendbuff",["rendhead"] = "rendhead",
 
@@ -1090,7 +1090,15 @@ GF_WORD_FIX_BEFORE_QUEST = {
 -- Make sure word is recombined
 ["andsomuchmore"] = "andsomuchmore",["surchargemayapply"] = "surchargemayapply",["anyoneneedthese"] = "anyoneneedthese",["icanprovide"] = "icanprovide",["needtonof"] = "needtonof",
 ["thankfulfortip"] = "thankfulfortip",["tipareappreciate"] = "tipareappreciate",["tipareoptional"] = "tipareoptional",["tiparewelcome"] = "tiparewelcome",["tipifyoucan"] = "tipifyoucan",
-["tipisappreciate"] = "tipisappreciate",["tipisoptional"] = "tipisoptional",["tipiswelcome"] = "tipiswelcome",
+["tipisappreciate"] = "tipisappreciate",["tipisoptional"] = "tipisoptional",["tipiswelcome"] = "tipiswelcome",["whisperme"] = "whisperme",["interestedinhitem"] = "interestedinhitem",
+["atyourservice"] = "atyourservice",["comegetyour"] = "comegetyour",["havemagefood"] = "havemagefood",["howmuchfor"] = "howmuchfor",["icanprovide"] = "icanprovide",["magefoodwater"] = "magefoodwater",
+["plentyofstack"] = "plentyofstack",["canyouopen"] = "canyouopen",["tonofbar"] = "tonofbar",["tonofcloth"] = "tonofcloth",["tonofleatherworker"] = "tonofleatherworker",["tonofore"] = "tonofore",
+["tonofstone"] = "tonofstone",["waterforme"] = "waterforme",["youroownmat"] = "youroownmat",["openforme"] = "openforme",["openforyou"] = "openforyou",["needtonsof"] = "needtonsof",
+["anyoneneedfree"] = "anyoneneedfree",["anyoneneedthese"] = "anyoneneedthese",["magefoodplease"] = "magefoodplease",["workforfree"] = "workforfree",["roguearoundopen"] = "roguearoundopen",
+["rogueforopen"] = "rogueforopen",["roguemindopening"] = "roguemindopening",["unlockyourbox"] = "unlockyourbox",["anyonehavehitem"] = "anyonehavehitem",["anyonewithhitem"] = "anyonewithhitem",
+["anywithhitem"] = "anywithhitem",["getyourhitem"] = "getyourhitem",["needthishitem"] = "needthishitem",["openforbusiness"] = "openforbusiness",["shopisopen"] = "shopisopen",["needtomake"] = "needtomake",
+["abletounlock"] = "abletounlock",["cananyonepick"] = "cananyonepick",["roguedoinglock"] = "roguedoinglock",["rogueforbox"] = "rogueforbox",["rogueforlock"] = "rogueforlock",["rogueforunlock"] = "rogueforunlock",
+["roguetopick"] = "roguetopick",["auctionhouse"] = "auctionhouse",["saltshaker"] = "saltshaker",
 
 -- Professions
 ["bs"] = "blacksmith",["bss"] = "blacksmith",["blacmiting"] = "blacksmith",["blacskmith"] = "blacksmith",["blacsmiting"] = "blacksmith",["blacksmithw"] = "blacksmith",["bsmith"] = "blacksmith",
