@@ -2376,23 +2376,34 @@ function GF_GetTypes(arg1, showanyway)
 		tempVar = string.len(wordString) - 1
 		if tempVar > 7 then tempVar = 7 end
 		for i=tempVar, 3, -1 do
-			if GF_WORD_SPECIAL_COMBINATION[string.sub(wordString,1,i)] and not GF_WORD_SPECIAL_COMBINATION[wordString] then
-				arg1 = string.sub(arg1,1,lfs-1)..GF_WORD_SPECIAL_COMBINATION[string.sub(wordString,1,i)].." "..string.sub(arg1,lfs+i)
-				lfs = lfs + (i-string.len(GF_WORD_SPECIAL_COMBINATION[string.sub(wordString,1,i)])) + string.len(wordString) + 1
+			if GF_WORD_SPECIAL_COMBINATION[string.sub(wordString,1,i)] then 
+				if GF_WORD_SPECIAL_EXCEPTIONS[wordString] then
+					arg1 = string.sub(arg1,1,lfs-1)..wordString.." "..string.sub(arg1,lfe+1)
+					lfs = lfs + string.len(wordString)
+				else
+					arg1 = string.sub(arg1,1,lfs-1)..string.sub(wordString,1,i).." "..string.sub(arg1,lfs+i)
+					lfs = lfs + (i-string.len(string.sub(wordString,1,i))) + string.len(wordString) + 1
+				end
 				break
-			elseif GF_WORD_SPECIAL_COMBINATION[string.sub(wordString,-i)] and not GF_WORD_SPECIAL_COMBINATION[wordString] then
-				arg1 = string.sub(arg1,1,lfe-i).." "..GF_WORD_SPECIAL_COMBINATION[string.sub(wordString,-i)]..string.sub(arg1,lfe+1)
-				lfs = lfs + (i-string.len(GF_WORD_SPECIAL_COMBINATION[string.sub(wordString,-i)])) + string.len(wordString) + 1
+			elseif GF_WORD_SPECIAL_COMBINATION[string.sub(wordString,-i)] then
+				if GF_WORD_SPECIAL_EXCEPTIONS[wordString] then
+					arg1 = string.sub(arg1,1,lfe-i).." "..wordString..string.sub(arg1,lfe+1)
+					lfs = lfs + string.len(wordString)
+				else
+					arg1 = string.sub(arg1,1,lfe-i).." "..string.sub(wordString,-i)..string.sub(arg1,lfe+1)
+					lfs = lfs + (i-string.len(string.sub(wordString,-i))) + string.len(wordString) + 1
+				end
 				break
 			end
 		end
 		if lfs < lfe then
 			if GF_WORD_SPECIAL_COMBINATION[string.sub(wordString,1,2)] then
-				arg1 = string.sub(arg1,1,lfs-1)..GF_WORD_SPECIAL_COMBINATION[string.sub(wordString,1,2)].." "..string.sub(arg1,lfs+2)
+				arg1 = string.sub(arg1,1,lfs-1)..string.sub(wordString,1,2).." "..string.sub(arg1,lfs+2)
 				lfs = lfs + string.len(wordString) + 1
 			elseif string.sub(wordString,-2) == "lf" then
 				wordString = string.sub(wordString,1,-3)
-				if GF_WORD_FIX_BEFORE_QUEST[wordString] then wordString = GF_WORD_FIX_BEFORE_QUEST[wordString] end
+				if GF_WORD_FIX_SINGLE_WORD[wordString] then wordString = GF_WORD_FIX_SINGLE_WORD[wordString]
+				elseif GF_WORD_FIX_BEFORE_QUEST[wordString] then wordString = GF_WORD_FIX_BEFORE_QUEST[wordString] end
 				if GF_WORD_QUEST[wordString] then
 					arg1 = string.sub(arg1,1,lfs-1)..wordString.." lf"..string.sub(arg1,lfe+1)
 				else
@@ -2409,10 +2420,10 @@ function GF_GetTypes(arg1, showanyway)
 	end
 
 	lfs = 2 -- To fix single words
-	while true do lfs,lfe,wordString = string.find(arg1,"(%a+)",lfs) if not wordString then break elseif GF_WORD_FIX_BEFORE_QUEST[wordString] then arg1 = string.sub(arg1,1,lfs-1)..GF_WORD_FIX_BEFORE_QUEST[wordString]..string.sub(arg1,lfe+1) lfs = lfs + string.len(GF_WORD_FIX_BEFORE_QUEST[wordString]) else lfs = lfe+1 end end
+	while true do lfs,lfe,wordString = string.find(arg1,"(%a+)",lfs) if not wordString then break elseif GF_WORD_FIX_SINGLE_WORD[wordString] then arg1 = string.sub(arg1,1,lfs-1)..GF_WORD_FIX_SINGLE_WORD[wordString]..string.sub(arg1,lfe+1) lfs = lfs + string.len(GF_WORD_FIX_SINGLE_WORD[wordString]) else lfs = lfe+1 end end
 
 	lfs = 1 -- To detect space/letter/number/letter/space combinations(eg " g2g " = gtg)
-	while true do lfs,lfe,wordString = string.find(arg1," (w?g?%a%s?%d%s?%ab?g?)[%p%s]",lfs) if not wordString then break end wordString = gsub(wordString," ","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = string.sub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..string.sub(arg1,lfe) end lfs = lfs + string.len(wordString) + 1 end
+	while true do lfs,lfe,wordString = string.find(arg1," (w?%a%s?%d%s?%ab?)[%p%s]",lfs) if not wordString then break end wordString = gsub(wordString," ","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = string.sub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..string.sub(arg1,lfe) end lfs = lfs + string.len(wordString) + 1 end
 	lfs = 1 -- To detect space/word/number+/space combinations(eg " k10" = lowerkarazhan)
 	while true do lfs,lfe,wordString = string.find(arg1," (%a+%s?[:%-]?%s?%d+)s?[%p%s]",lfs) if not wordString then break end wordString = gsub(wordString,"[%s:%-]","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = string.sub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..string.sub(arg1,lfe) end lfs = lfs + string.len(wordString) + 1 end
 
@@ -2522,6 +2533,8 @@ function GF_GetTypes(arg1, showanyway)
 	for j=0,4 do
 		lfs = 1
 		while lfs <= tempVar do
+
+-- it processes word 1
 			if wordTable[1][lfs+j] then
 				wordString = wordTable[1][lfs]
 				for k=1, j do wordString = wordString..wordTable[1][lfs+k] end
