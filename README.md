@@ -1,7 +1,7 @@
 # GroupFinder
 Group finder Addon for Vanilla Wow 1.12.1 based on the CallToArms addon(with Turtle WoW support).  
 
-10/13/2025 update: I did a lot of work on trades detection. When I logged on Ambershire, I noticed a lot of trade spam getting through the filters. The new system should detect pretty much everything.  
+10/17/2025 update: I finished the new trade system. Which allowed me to significantly shrink the size of the database file. I'm planning on emplying a similar system for guild detection.  
 
 PS: I can't test the addon with other languages/clients, but I'm interested in whether the addon even works for people who don't speak English. And if not, what I would need to make it work.  
 
