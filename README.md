@@ -1,7 +1,7 @@
 # GroupFinder
 Group finder Addon for Vanilla Wow 1.12.1 based on the CallToArms addon(with Turtle WoW support).  
 
-10/17/2025 update: I finished the new trade system. Which allowed me to significantly shrink the size of the database file. I'm planning on emplying a similar system for guild detection.  
+10/17/2025 update: I finished the new trade system. Which allowed me to significantly shrink the size of the database file. I'm planning on implementing a similar system for guild detection.  
 
 PS: I can't test the addon with other languages/clients, but I'm interested in whether the addon even works for people who don't speak English. And if not, what I would need to make it work.  
 
