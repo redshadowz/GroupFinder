@@ -2280,7 +2280,7 @@ function GF_CheckForGroups(arg1,arg2,arg9,event,showanyway)
 -- "Say" messages will always be displayed unless flagged as spam.
 -- "Yell" and "Channel" messages will only display if allowed.
 	if GF_BlackList[GF_RealmName][arg2] and not GF_PlayersCurrentlyInGroup[arg2] and not GF_Friends[arg2] and not GF_Guildies[arg2] then return 8 end
-	GF_GetTypes(gsub(gsub(gsub(string.lower(gsub(gsub(gsub(arg1, "|+c[a-z0-9]+|+(%w+)[%w:]+|+h", " %1 "), "|+[hr]", ""),"([a-z ][a-z])([A-Z])","%1 %2")),".gg/%w+", ""),"[\"#\$\%&\*,\.@\\\^_`~|]"," "),"'",""),showanyway)
+	GF_GetTypes(gsub(gsub(gsub(gsub(gsub(gsub(string.lower(arg1), "|c%x+|(%w+)[%w:]+|h", " %1 Z"), "|[hr]", ""),"([a-z ][a-z])([A-Z])","%1 %2"),".gg/%w+", ""),"[\"#\$\%&\*,\.@\\\^_`~|]"," "),"'",""),showanyway)
 	if event == "HARDCORE" or string.lower(arg9) == "hardcore" then GF_MessageData.foundHC = true end
 	if GF_MessageData.foundGuild >= 3 then return GF_CheckForSpam(arg1,arg2) or 11
 	elseif GF_MessageData.foundTrades >= 3 then return GF_CheckForSpam(arg1,arg2) or 5
@@ -2352,7 +2352,6 @@ function GF_GetTypes(arg1, showanyway)
 
 	lfs = 1 -- To detect "faces"(eg ":d",":p")
 	while true do lfs,lfe,wordString = string.find(arg1, " (%p%a+) ",lfs) if not wordString then break end if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = string.sub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..string.sub(arg1,lfe) end lfs = lfs + string.len(wordString) + 1 end
-
 	lfs = 2 -- To detect word/word with no space(eg "lfgscholo" = lfg scholo)
 	while true do
 		lfs,lfe,wordString = string.find(arg1,"(%a%a%a%a+)",lfs)
@@ -2371,7 +2370,7 @@ function GF_GetTypes(arg1, showanyway)
 				break
 			elseif GF_WORD_WORD_REPLACE[string.sub(wordString,-i)] then
 				if GF_WORD_SPECIAL_EXCEPTIONS[wordString] then
-					arg1 = string.sub(arg1,1,lfe-i).." "..wordString..string.sub(arg1,lfe+1)
+					arg1 = string.sub(arg1,1,lfs-1).." "..wordString..string.sub(arg1,lfe+1)
 					lfs = lfs + string.len(wordString)
 				elseif not GF_WORD_WORD_REPLACE[wordString] then
 					arg1 = string.sub(arg1,1,lfe-i).." "..string.sub(wordString,-i)..string.sub(arg1,lfe+1)
@@ -2474,9 +2473,9 @@ function GF_GetTypes(arg1, showanyway)
 		while true do lfs,lfe,wordString = string.find(arg1, ">%s?(%a+ %a+)[%p%s]",lfs) if not wordString then break end wordString = gsub(wordString," ","") if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_PREFIX_SUFFIX[wordString] then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_GUILD_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." guild "..GF_GUILD_PREFIX_SUFFIX[wordString]) end end lfs = lfe end
 	end
 	lfs = 1 -- To detect words between "()" (eg "(rp)","(human only)")... To help detect guild recruitment messages.
-	while true do lfs,lfe,wordString = string.find(arg1, "[%(%[]([%w%s]+)[%)%]]",lfs)
+	while true do lfs,lfe,wordString = string.find(arg1, "[%(%[](.-)[%)%]]",lfs)
 		if not wordString then break end
-		if string.sub(arg1,lfs-6,lfs-2) == "hitem" then
+		if string.byte(arg1,lfs-1) == 90 then
 			for tempVar in string.gfind(wordString, "(%a+)") do if GF_WORD_FIX_ITEM_NAME[tempVar] then arg1 = string.sub(arg1,1,lfs)..GF_WORD_FIX_ITEM_NAME[tempVar]..string.sub(arg1,lfe) break end end
 		else
 			wordString = gsub(wordString," ","")
