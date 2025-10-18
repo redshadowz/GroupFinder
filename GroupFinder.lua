@@ -2606,7 +2606,7 @@ function GF_GetTypes(arg1, showanyway)
 					table.insert(wordTable,lfs+1,GF_WORD_FIX_SECOND[wordString][2]) table.insert(wordTableTrade,lfs+1,GF_WORD_FIX_SECOND[wordString][2]) tempVar=tempVar+1
 					if wordString ~= GF_WORD_FIX_SECOND[wordString][1]..GF_WORD_FIX_SECOND[wordString][2] then
 						if GF_WORD_FIX_TRADE[wordTableTrade[lfs]] then wordTableTrade[lfs] = GF_WORD_FIX_TRADE[wordTableTrade[lfs]][1] end
-						if GF_WORD_FIX_TRADE[wordTableTrade[lfs+1]] then wordTableTrade[lfs+1] = GF_WORD_FIX_TRADE[wordTableTrade[lfs+1]][2] end
+						if GF_WORD_FIX_TRADE[wordTableTrade[lfs+1]] then wordTableTrade[lfs+1] = GF_WORD_FIX_TRADE[wordTableTrade[lfs+1]][1] end
 						if lfs > 1 then lfs = lfs - 2 else lfs = lfs - 1 end
 					end
 				elseif GF_WORD_FIX_TRADE[wordString] then
