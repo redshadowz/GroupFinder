@@ -2307,13 +2307,14 @@ function GF_GetTypes(arg1, showanyway)
 	arg1 = " "..arg1.." "
 	GF_MessageData = { foundIgnore = 0,foundGuild = 0,foundGuildExclusion = 0,foundLFM = 0,foundLFMPreSuf = 0,foundLFG = 0,foundLFGPreSuf = 0,foundClass = nil,foundQuest = {},foundDungeon = nil,foundRaid = nil,foundTrades = 0,foundTradesExclusion = 0,foundPvP = nil,foundDFlags = {},foundPFlags = {},foundHC = nil,foundNotHC = nil, lfmlfgName = "zzz", groupName = {} }
 	local wordTable,wordTableTrade,wordTableGuild = {},{},{}
-	local wordString,lfs,lfe,tempVar
-
+	local wordString,lfs,lfe,tempVal,tempString
+	local languageID
+	
 	if string.find(arg1, "%d+p[%p%s]") then GF_MessageData.foundLFM = 2 end -- "10p heal" messages from chinese
 	lfs = 1 -- To detect space/lf##m/letter(eg " lf15mbwl" = lfm bwl)
 	while true do lfs,lfe,wordString = string.find(arg1," ([lk]f?%s?%d+m)[%p%s]",lfs) if not wordString then break end arg1 = string.sub(arg1,1,lfs).."lfm "..string.sub(arg1,lfs+string.len(wordString)+1) lfs = lfs + 4 GF_MessageData.foundLFM = 4 GF_MessageData.foundGuildExclusion = 3 GF_MessageData.foundTradesExclusion = 3 end
 	lfs = 1 -- To detect space/number+/punctuation/number+/space for groups
-	while true do lfs,lfe,wordString,tempVar = string.find(arg1,"[%p%s](%d+([=/])%d+) ",lfs) if not wordString then break end if tempVar == "=" then GF_MessageData.foundLFM = 2 lfs = lfe else arg1 = string.sub(arg1,1,lfs).."group"..string.sub(arg1,lfe) lfs = lfs + 6 end end
+	while true do lfs,lfe,wordString,tempString = string.find(arg1,"[%p%s](%d+([=/])%d+) ",lfs) if not wordString then break end if tempString == "=" then GF_MessageData.foundLFM = 2 lfs = lfe else arg1 = string.sub(arg1,1,lfs).."group"..string.sub(arg1,lfe) lfs = lfs + 6 end end
 	lfs,lfe,wordString = string.find(arg1,"%d?%s?\-?([\+±])\-?%s?%d?")
 	if lfs then -- To detect "+- or ±"
 		if wordString == "±" then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 1 if showanyway == true then print("± trade 1") end
@@ -2321,38 +2322,38 @@ function GF_GetTypes(arg1, showanyway)
 		elseif string.find(arg1, "%d%s?[\+\-][\+\-]",lfs) then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 1 if showanyway == true then print("d%+- trade 1") end end
 	end
 
-	tempVar = 1
+	tempVal = 1
 	while true do -- Block letter repeats
-		lfs = strbyte(arg1,tempVar)
-		lfe = strbyte(arg1,tempVar+1)
+		lfs = strbyte(arg1,tempVal)
+		lfe = strbyte(arg1,tempVal+1)
 		if not lfe then break end
 		if lfs == lfe then
 			if lfs >= 97 and lfs <= 122 then
-				if lfs == strbyte(arg1,tempVar+2) then
-					table.insert(wordTable,strchar(lfs)) table.insert(wordTable,strchar(lfe)) tempVar=tempVar+2 for j=1,250 do if lfs ~= strbyte(arg1,tempVar+j) then tempVar=tempVar+j-1 break end end
+				if lfs == strbyte(arg1,tempVal+2) then
+					table.insert(wordTable,strchar(lfs)) table.insert(wordTable,strchar(lfe)) tempVal=tempVal+2 for j=1,250 do if lfs ~= strbyte(arg1,tempVal+j) then tempVal=tempVal+j-1 break end end
 				else
-					table.insert(wordTable,strchar(lfs)) table.insert(wordTable,strchar(lfe)) tempVar=tempVar+1
+					table.insert(wordTable,strchar(lfs)) table.insert(wordTable,strchar(lfe)) tempVal=tempVal+1
 				end
 			else
-				table.insert(wordTable,strchar(lfs)) tempVar=tempVar+1 for j=1,250 do if lfs ~= strbyte(arg1,tempVar+j) then tempVar=tempVar+j-1 break end end
+				table.insert(wordTable,strchar(lfs)) tempVal=tempVal+1 for j=1,250 do if lfs ~= strbyte(arg1,tempVal+j) then tempVal=tempVal+j-1 break end end
 			end
 		elseif lfe == 32 or lfe == 46 then
-			wordString = strbyte(arg1,tempVar-1)
-			if (wordString == 32 or wordString == 46) and wordString == strbyte(arg1,tempVar+3) then
-				table.insert(wordTable,strchar(lfs)) table.insert(wordTable,strchar(strbyte(arg1,tempVar+2))) tempVar=tempVar+2 for j=3,250,2 do if strbyte(arg1,tempVar+j) ~= 32 and strbyte(arg1,tempVar+j) ~= 46 then tempVar=tempVar+j-3 break else table.insert(wordTable,strchar(strbyte(arg1,tempVar+j-1))) end end
+			wordString = strbyte(arg1,tempVal-1)
+			if (wordString == 32 or wordString == 46) and wordString == strbyte(arg1,tempVal+3) then
+				table.insert(wordTable,strchar(lfs)) table.insert(wordTable,strchar(strbyte(arg1,tempVal+2))) tempVal=tempVal+2 for j=3,250,2 do if strbyte(arg1,tempVal+j) ~= 32 and strbyte(arg1,tempVal+j) ~= 46 then tempVal=tempVal+j-3 break else table.insert(wordTable,strchar(strbyte(arg1,tempVal+j-1))) end end
 			else
 				table.insert(wordTable,strchar(lfs))
 			end
-		elseif lfs == strbyte(arg1,tempVar+2) and lfs == strbyte(arg1,tempVar+4) and lfs ~= 32 and lfs ~= 46 then
-			if lfe == strbyte(arg1,tempVar+3) then
-				table.insert(wordTable,strchar(lfs)) table.insert(wordTable,strchar(lfe)) table.insert(wordTable,strchar(strbyte(arg1,tempVar+2))) table.insert(wordTable,strchar(strbyte(arg1,tempVar+3))) tempVar=tempVar+3 for j=2,250 do if strbyte(arg1,tempVar+j) ~= strbyte(arg1,tempVar+j-2) then tempVar=tempVar+j-1 break end end
+		elseif lfs == strbyte(arg1,tempVal+2) and lfs == strbyte(arg1,tempVal+4) and lfs ~= 32 and lfs ~= 46 then
+			if lfe == strbyte(arg1,tempVal+3) then
+				table.insert(wordTable,strchar(lfs)) table.insert(wordTable,strchar(lfe)) table.insert(wordTable,strchar(strbyte(arg1,tempVal+2))) table.insert(wordTable,strchar(strbyte(arg1,tempVal+3))) tempVal=tempVal+3 for j=2,250 do if strbyte(arg1,tempVal+j) ~= strbyte(arg1,tempVal+j-2) then tempVal=tempVal+j-1 break end end
 			else
 				table.insert(wordTable,strchar(lfs))
 			end
 		else
 			table.insert(wordTable,strchar(lfs))
 		end
-		tempVar = tempVar + 1
+		tempVal = tempVal + 1
 	end
 	arg1 = table.concat(wordTable)
 	if string.sub(arg1,-1) ~= " " then arg1 = arg1.." " end
@@ -2364,9 +2365,9 @@ function GF_GetTypes(arg1, showanyway)
 	while true do
 		lfs,lfe,wordString = string.find(arg1,"(%a%a%a%a+)",lfs)
 		if not wordString then break end
-		tempVar = string.len(wordString) - 1
-		if tempVar > 11 then tempVar = 11 end
-		for i=tempVar, 3, -1 do
+		tempVal = string.len(wordString) - 1
+		if tempVal > 11 then tempVal = 11 end
+		for i=tempVal, 3, -1 do
 			if GF_WORD_WORD_REPLACE[string.sub(wordString,1,i)] then 
 				if GF_WORD_SPECIAL_EXCEPTIONS[wordString] then
 					arg1 = string.sub(arg1,1,lfs-1)..wordString.." "..string.sub(arg1,lfe+1)
@@ -2410,7 +2411,7 @@ function GF_GetTypes(arg1, showanyway)
 		end
 	end
 	lfs = 2 -- To fix single words
-	while true do lfs,lfe,wordString = string.find(arg1,"(%a+)",lfs) if not wordString then break elseif GF_WORD_FIX_SINGLE_WORD[wordString] then arg1 = string.sub(arg1,1,lfs-1)..GF_WORD_FIX_SINGLE_WORD[wordString]..string.sub(arg1,lfe+1) lfs = lfs + string.len(GF_WORD_FIX_SINGLE_WORD[wordString]) else lfs = lfe+1 end end
+	while true do lfs,lfe,wordString = string.find(arg1, "(.-)[%s%p%d]",lfs) if not wordString then break elseif GF_WORD_FIX_SINGLE_WORD[wordString] then arg1 = string.sub(arg1,1,lfs-1)..GF_WORD_FIX_SINGLE_WORD[wordString]..string.sub(arg1,lfe) lfs = lfs + string.len(GF_WORD_FIX_SINGLE_WORD[wordString]) elseif GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString] then arg1 = string.sub(arg1,1,lfs-1)..GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString][1]..string.sub(arg1,lfe) lfs = lfs + string.len(GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString][1]) if not languageID then languageID = GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString][2] end else lfs = lfe+1 end end
 	lfs = 1 -- To detect space/letter/number/letter/space combinations(eg " g2g " = gtg)
 	while true do lfs,lfe,wordString = string.find(arg1," (w?%a%s?%d%s?%ab?)[%p%s]",lfs) if not wordString then break end wordString = gsub(wordString," ","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = string.sub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..string.sub(arg1,lfe) end lfs = lfs + string.len(wordString) + 1 end
 	lfs = 1 -- To detect space/word/number+/space combinations(eg " k10" = lowerkarazhan)
@@ -2419,17 +2420,17 @@ function GF_GetTypes(arg1, showanyway)
 	while true do lfs,lfe,wordString = string.find(arg1, " (%a+%s?!) ",lfs) if not wordString then break end wordString = gsub(wordString," ","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = string.sub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..string.sub(arg1,lfe) end lfs = lfs + string.len(wordString) + 1 end
 	lfs = 1 -- To detect space/number+/word/space combinations(eg " 10th " = tenth, " 5g " = 5gold)
 	while true do
-		lfs,lfe,wordString,tempVar = string.find(arg1,"[%p%s](%d+%s?(%a+))[%p%s]",lfs)
+		lfs,lfe,wordString,tempString = string.find(arg1,"[%p%s](%d+%s?(%a+))[%p%s]",lfs)
 		if not wordString then break end
 		wordString = gsub(wordString," ","")
-		if GF_WORD_FIX[tempVar] then wordString = string.sub(wordString,1,string.len(tempVar)*-1-1)..GF_WORD_FIX[tempVar] end
+		if GF_WORD_FIX[tempString] then wordString = string.sub(wordString,1,string.len(tempString)*-1-1)..GF_WORD_FIX[tempString] end
 		if GF_WORD_SPECIAL_COMBINATION[wordString] then
 			arg1 = string.sub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..string.sub(arg1,lfe)
 			lfs = lfs + string.len(GF_WORD_SPECIAL_COMBINATION[wordString])
-		elseif GF_WORD_GOLD[tempVar] then
-			arg1 = string.sub(arg1,1,lfs)..GF_WORD_GOLD[tempVar]..string.sub(arg1,lfe)
-			lfs = lfs + string.len(GF_WORD_GOLD[tempVar])
-			if GF_MessageData.foundTrades < 2 and tempVar ~= "bh" then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 2 end
+		elseif GF_WORD_GOLD[tempString] then
+			arg1 = string.sub(arg1,1,lfs)..GF_WORD_GOLD[tempString]..string.sub(arg1,lfe)
+			lfs = lfs + string.len(GF_WORD_GOLD[tempString])
+			if GF_MessageData.foundTrades < 2 and tempString ~= "bh" then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 2 end
 		else
 			lfs = lfe
 		end
@@ -2441,20 +2442,20 @@ function GF_GetTypes(arg1, showanyway)
 
 		if strbyte(arg1,lfs) == 91 and strbyte(arg1,lfe) == 93 then -- "[]"
 			if strbyte(arg1,lfs-1) == 90 then -- From Link
-				tempVar = string.sub(arg1,1,lfs)
-				if string.find(tempVar, "[%p%s]%d+%s?x%s+hitem Z%[$") then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 1 if showanyway == true then print("##x [ trade 1") end end -- Trades " 2x ["
-				if string.find(tempVar, "[%p%s]x%s?%d+%s+hitem Z%[$") then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 1 if showanyway == true then print("x## [ trade 1") end end -- Trades " x2 ["
+				tempString = string.sub(arg1,1,lfs)
+				if string.find(tempString, "[%p%s]%d+%s?x%s+hitem Z%[$") then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 1 if showanyway == true then print("##x [ trade 1") end end -- Trades " 2x ["
+				if string.find(tempString, "[%p%s]x%s?%d+%s+hitem Z%[$") then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 1 if showanyway == true then print("x## [ trade 1") end end -- Trades " x2 ["
 
-				_,_,tempVar = string.find(tempVar, "[%p%s](%a+)%s?%s?x?%d?%d?x?%s+hitem Z%[$") -- One word before
-				if GF_WORD_FIX[tempVar] then tempVar = GF_WORD_FIX[tempVar] end
-				if GF_TRADE_PREFIX_SUFFIX[tempVar] then
-					GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_TRADE_PREFIX_SUFFIX[tempVar]
-					if showanyway == true then print(tempVar.." trade <word>[ "..GF_TRADE_PREFIX_SUFFIX[tempVar]) end
-					_,_,tempVar = string.find(arg1, "^%]%s?x?%d?%d?x?%p?%s?(%a+)[%p%s]",lfe)
-					if GF_WORD_FIX[tempVar] then tempVar = GF_WORD_FIX[tempVar] end
-					if GF_TRADE_PREFIX_SUFFIX[tempVar] then
+				_,_,tempString = string.find(tempString, "[%p%s](%a+)%s?%s?x?%d?%d?x?%s+hitem Z%[$") -- One word before
+				if GF_WORD_FIX[tempString] then tempString = GF_WORD_FIX[tempString] end
+				if GF_TRADE_PREFIX_SUFFIX[tempString] then
+					GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_TRADE_PREFIX_SUFFIX[tempString]
+					if showanyway == true then print(tempString.." trade <word>[ "..GF_TRADE_PREFIX_SUFFIX[tempString]) end
+					_,_,tempString = string.find(arg1, "^%]%s?x?%d?%d?x?%p?%s?(%a+)[%p%s]",lfe)
+					if GF_WORD_FIX[tempString] then tempString = GF_WORD_FIX[tempString] end
+					if GF_TRADE_PREFIX_SUFFIX[tempString] then
 						GF_MessageData.foundTrades = GF_MessageData.foundTrades + 2.5
-						if showanyway == true then print(tempVar.." trade ]<word> 2.5") end
+						if showanyway == true then print(tempString.." trade ]<word> 2.5") end
 					end
 				end
 				for words in string.gfind(wordString, "(%a+)") do if GF_WORD_FIX_ITEM_NAME[words] then arg1 = string.sub(arg1,1,lfs)..GF_WORD_FIX_ITEM_NAME[words]..string.sub(arg1,lfe) break end end
@@ -2469,29 +2470,30 @@ function GF_GetTypes(arg1, showanyway)
 			_,_,wordString = string.find(arg1, "^%]%s?x?%d?%d?x?%p?%s?(%a+%s%a+)[%p%s]",lfe) if wordString then wordString = gsub(wordString," ","") if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_TRADE_PREFIX_SUFFIX[wordString] then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_TRADE_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." trade ] "..GF_TRADE_PREFIX_SUFFIX[wordString]) end end end
 			_,_,wordString = string.find(arg1, "^%]%s?x?%d?%d?x?%p?%s?(%a+%s%a+%s%a+)[%p%s]",lfe) if wordString then wordString = gsub(wordString," ","") if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_TRADE_PREFIX_SUFFIX[wordString] then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_TRADE_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." trade ] "..GF_TRADE_PREFIX_SUFFIX[wordString]) end end end
 		elseif strbyte(arg1,lfs) == 60 and strbyte(arg1,lfe) == 62 then -- "<>"
-			tempVar = string.sub(arg1,1,lfs)
-			_,_,wordString = string.find(tempVar, " (%a+)%s?<$") if wordString then if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_PREFIX_SUFFIX[wordString] then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_GUILD_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." guild "..GF_GUILD_PREFIX_SUFFIX[wordString]) end end end
+			tempString = string.sub(arg1,1,lfs)
+			_,_,wordString = string.find(tempString, " (%a+)%s?<$") if wordString then if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_PREFIX_SUFFIX[wordString] then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_GUILD_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." guild "..GF_GUILD_PREFIX_SUFFIX[wordString]) end end end
 			_,_,wordString = string.find(arg1, "^>%s?(%a+)[%p%s]",lfe) if wordString then if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_PREFIX_SUFFIX[wordString] then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_GUILD_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." guild "..GF_GUILD_PREFIX_SUFFIX[wordString]) end end end
 			_,_,wordString = string.find(arg1, "^>%s?(%a+ %a+)[%p%s]",lfe) if wordString then wordString = gsub(wordString," ","") if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_PREFIX_SUFFIX[wordString] then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_GUILD_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." guild "..GF_GUILD_PREFIX_SUFFIX[wordString]) end end end
 		end
 		lfs = lfs + 1
 	end
 
+	if not languageID then languageID = 1 end
 -- Quest Search
 	for word in string.gfind(arg1, "(.-)[%s%p%d]+") do
-		if GF_WORD_FIX_BYPASS[word] then _,_,wordString = string.find(arg1,"(%a+)%s?"..word) if wordString and GF_WORD_SKIP[wordString] then table.insert(wordTable, wordString) end end
-		if not GF_WORD_SKIP[word] then table.insert(wordTable, word) end
+		if GF_WORD_FIX_BYPASS[word] then _,_,wordString = string.find(arg1,"(%a+)%s?"..word) if wordString and GF_WORD_SKIP[languageID][wordString] then table.insert(wordTable, wordString) end end
+		if not GF_WORD_SKIP[languageID][word] then table.insert(wordTable, word) end
 	end
-	tempVar = getn(wordTable)
+	tempVal = getn(wordTable)
 	for j=0,3 do
 		lfs = 1
-		while lfs <= tempVar do
+		while lfs <= tempVal do
 			if wordTable[lfs+j] then
 				wordString = wordTable[lfs]
 				for k=1, j do wordString = wordString..wordTable[lfs+k] end
 				if GF_WORD_FIX_BEFORE_QUEST[wordString] then
 					wordTable[lfs] = GF_WORD_FIX_BEFORE_QUEST[wordString]
-					for k=1, j do table.remove(wordTable,lfs+1) tempVar=tempVar-1 end
+					for k=1, j do table.remove(wordTable,lfs+1) tempVal=tempVal-1 end
 					if wordString ~= GF_WORD_FIX_BEFORE_QUEST[wordString] then
 						if lfs > 1 then lfs = lfs - 2 else lfs = lfs - 1 end
 					elseif lfs > 1 then
@@ -2499,13 +2501,13 @@ function GF_GetTypes(arg1, showanyway)
 						for k=1, j do if wordTable[lfs-1+k] then wordString = wordString..wordTable[lfs-1+k] end end
 						if GF_WORD_FIX_BEFORE_QUEST[wordString] then
 							wordTable[lfs-1] = GF_WORD_FIX_BEFORE_QUEST[wordString]
-							for k=1, j do if wordTable[lfs] then table.remove(wordTable,lfs) tempVar=tempVar-1 end end
+							for k=1, j do if wordTable[lfs] then table.remove(wordTable,lfs) tempVal=tempVal-1 end end
 						end
 					end
 				elseif GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString] then
 					wordTable[lfs] = GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][1]
-					for k=1, j do table.remove(wordTable,lfs+1) tempVar=tempVar-1 end
-					table.insert(wordTable,lfs+1,GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][2]) tempVar=tempVar+1
+					for k=1, j do table.remove(wordTable,lfs+1) tempVal=tempVal-1 end
+					table.insert(wordTable,lfs+1,GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][2]) tempVal=tempVal+1
 					if wordString ~= GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][1]..GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][2] then
 						if lfs > 1 then lfs = lfs - 2 else lfs = lfs - 1 end
 					elseif lfs > 1 then
@@ -2513,13 +2515,13 @@ function GF_GetTypes(arg1, showanyway)
 						for k=1, j do if wordTable[lfs-1+k] then wordString = wordString..wordTable[lfs-1+k] end end
 						if GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString] then
 							wordTable[lfs-1] = GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][1]
-							for k=1, j do if wordTable[lfs] then table.remove(wordTable,lfs) tempVar=tempVar-1 end end
-							table.insert(wordTable,lfs,GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][2]) tempVar=tempVar+1
+							for k=1, j do if wordTable[lfs] then table.remove(wordTable,lfs) tempVal=tempVal-1 end end
+							table.insert(wordTable,lfs,GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][2]) tempVal=tempVal+1
 						end
 					end
 				elseif GF_WORD_FIX_QUEST_DUNGEON[wordString] then
 					wordTable[lfs] = GF_WORD_FIX_QUEST_DUNGEON[wordString]
-					for k=1, j do table.remove(wordTable,lfs+1) tempVar=tempVar-1 end
+					for k=1, j do table.remove(wordTable,lfs+1) tempVal=tempVal-1 end
 					if wordString ~= GF_WORD_FIX_QUEST_DUNGEON[wordString] then
 						if lfs > 1 then lfs = lfs - 2 else lfs = lfs - 1 end
 					elseif lfs > 1 then
@@ -2527,7 +2529,7 @@ function GF_GetTypes(arg1, showanyway)
 						for k=1, j do if wordTable[lfs-1+k] then wordString = wordString..wordTable[lfs-1+k] end end
 						if GF_WORD_FIX_QUEST_DUNGEON[wordString] then
 							wordTable[lfs-1] = GF_WORD_FIX_QUEST_DUNGEON[wordString]
-							for k=1, j do if wordTable[lfs] then table.remove(wordTable,lfs) tempVar=tempVar-1 end end
+							for k=1, j do if wordTable[lfs] then table.remove(wordTable,lfs) tempVal=tempVal-1 end end
 						end
 					end
 				end
@@ -2535,24 +2537,24 @@ function GF_GetTypes(arg1, showanyway)
 			lfs = lfs + 1
 		end
 	end
-	for i=1, tempVar do if wordTable[i] == "x" then table.remove(wordTable,i) i = i - 1 tempVar=tempVar-1 end end
-	if wordTable[1] == "hquest" and tempVar <= 9 then
+	for i=1, tempVal do if wordTable[i] == "x" then table.remove(wordTable,i) i = i - 1 tempVal=tempVal-1 end end
+	if wordTable[1] == "hquest" and tempVal <= 9 then
 		wordString = ""
 		if string.sub(arg1,-2) == "? " then
 			if wordTable[2] then
-				for i=2,tempVar do wordString = wordString..wordTable[i] end
+				for i=2,tempVal do wordString = wordString..wordTable[i] end
 				if GF_WORD_QUEST[wordString] then GF_MessageData.foundLFG = 2 end
 			end
 		end
 		lfs = 1 -- To detect punctuation after "]" (eg "[hitem] + ")... For detecting groups
 		while true do lfs,lfe,wordString = string.find(arg1, "\]%s?(%p)[%p%s]",lfs) if not wordString then break end if wordString == "+" or wordString == "?" then GF_MessageData.foundLFG = 2 end lfs = lfe end
-	elseif string.sub(arg1,-2) == "? " and tempVar < 9 then
+	elseif string.sub(arg1,-2) == "? " and tempVal < 9 then
 		wordString = ""
-		for i=1,tempVar do wordString = wordString..wordTable[i] end
+		for i=1,tempVal do wordString = wordString..wordTable[i] end
 		if GF_WORD_QUEST[wordString] then GF_MessageData.foundLFG = 2 end
 	elseif string.sub(arg1,1,2) == " +" and GF_WORD_ROLES[wordTable[1]] then GF_MessageData.foundLFM = 2 end
 	for j=0,7 do
-		for i=1, tempVar do
+		for i=1, tempVal do
 			if wordTable[i+j] then
 				wordString = wordTable[i]
 				for k=1, j do wordString = wordString..wordTable[i+k] end
@@ -2578,21 +2580,21 @@ function GF_GetTypes(arg1, showanyway)
 	end
 
 -- Normal Search
-	for i=1, tempVar do wordTableTrade[i] = wordTable[i] wordTableGuild[i] = wordTable[i] end
+	for i=1, tempVal do wordTableTrade[i] = wordTable[i] wordTableGuild[i] = wordTable[i] end
 	for j=0,3 do -- Fix Words
 		lfs = 1
-		while lfs <= tempVar do
+		while lfs <= tempVal do
 			if wordTable[lfs+j] then
 				wordString = wordTable[lfs]
 				for k=1, j do wordString = wordString..wordTable[lfs+k] end
 				if GF_WORD_FIX[wordString] then
 					wordTable[lfs] = GF_WORD_FIX[wordString] wordTableTrade[lfs] = GF_WORD_FIX[wordString] wordTableGuild[lfs] = GF_WORD_FIX[wordString]
-					for k=1, j do table.remove(wordTable,lfs+1) table.remove(wordTableTrade,lfs+1) table.remove(wordTableGuild,lfs+1) tempVar=tempVar-1 end
+					for k=1, j do table.remove(wordTable,lfs+1) table.remove(wordTableTrade,lfs+1) table.remove(wordTableGuild,lfs+1) tempVal=tempVal-1 end
 					if wordString ~= GF_WORD_FIX[wordString] then if GF_WORD_FIX_TRADE[wordTableTrade[lfs]] then wordTableTrade[lfs] = GF_WORD_FIX_TRADE[wordTableTrade[lfs]][1] end if GF_WORD_FIX_GUILD[wordTableGuild[lfs]] then wordTableGuild[lfs] = GF_WORD_FIX_GUILD[wordTableGuild[lfs]][1] end if lfs > 1 then lfs = lfs - 2 else lfs = lfs - 1 end end
 				elseif GF_WORD_FIX_SECOND[wordString] then
 					wordTable[lfs] = GF_WORD_FIX_SECOND[wordString][1] wordTableTrade[lfs] = GF_WORD_FIX_SECOND[wordString][1] wordTableGuild[lfs] = GF_WORD_FIX_SECOND[wordString][1]
-					for k=1, j do table.remove(wordTable,lfs+1) table.remove(wordTableTrade,lfs+1) table.remove(wordTableGuild,lfs+1) tempVar=tempVar-1 end
-					table.insert(wordTable,lfs+1,GF_WORD_FIX_SECOND[wordString][2]) table.insert(wordTableTrade,lfs+1,GF_WORD_FIX_SECOND[wordString][2]) table.insert(wordTableGuild,lfs+1,GF_WORD_FIX_SECOND[wordString][2]) tempVar=tempVar+1
+					for k=1, j do table.remove(wordTable,lfs+1) table.remove(wordTableTrade,lfs+1) table.remove(wordTableGuild,lfs+1) tempVal=tempVal-1 end
+					table.insert(wordTable,lfs+1,GF_WORD_FIX_SECOND[wordString][2]) table.insert(wordTableTrade,lfs+1,GF_WORD_FIX_SECOND[wordString][2]) table.insert(wordTableGuild,lfs+1,GF_WORD_FIX_SECOND[wordString][2]) tempVal=tempVal+1
 					if wordString ~= GF_WORD_FIX_SECOND[wordString][1]..GF_WORD_FIX_SECOND[wordString][2] then
 						if GF_WORD_FIX_TRADE[wordTableTrade[lfs]] then wordTableTrade[lfs] = GF_WORD_FIX_TRADE[wordTableTrade[lfs]][1] end
 						if GF_WORD_FIX_TRADE[wordTableTrade[lfs+1]] then wordTableTrade[lfs+1] = GF_WORD_FIX_TRADE[wordTableTrade[lfs+1]][1] end
@@ -2608,44 +2610,44 @@ function GF_GetTypes(arg1, showanyway)
 			lfs = lfs + 1
 		end
 	end
-	for j=1, tempVar do -- Add adjacent trade/guild words
+	for j=1, tempVal do -- Add adjacent trade/guild words
 		if strbyte(wordTableTrade[j]) <= 90 then
 			if j > 1 and strbyte(wordTableTrade[j-1]) >= 97 then for i=1, 250 do if not GF_TRADE_COMMON_WORDS[wordTableTrade[j-i]] then break end wordTableTrade[j-i] = GF_TRADE_COMMON_WORDS[wordTableTrade[j-i]] end end
-			if j < tempVar and strbyte(wordTableTrade[j+1]) >= 97 then for i=1, 250 do if not GF_TRADE_COMMON_WORDS[wordTableTrade[j+i]] then break end wordTableTrade[j+i] = GF_TRADE_COMMON_WORDS[wordTableTrade[j+i]] end end
+			if j < tempVal and strbyte(wordTableTrade[j+1]) >= 97 then for i=1, 250 do if not GF_TRADE_COMMON_WORDS[wordTableTrade[j+i]] then break end wordTableTrade[j+i] = GF_TRADE_COMMON_WORDS[wordTableTrade[j+i]] end end
 		end
 		if strbyte(wordTableGuild[j]) <= 90 then
 			if j > 1 and strbyte(wordTableGuild[j-1]) >= 97 then for i=1, 250 do if not GF_GUILD_COMMON_WORDS[wordTableGuild[j-i]] then break end wordTableGuild[j-i] = GF_GUILD_COMMON_WORDS[wordTableGuild[j-i]] end end
-			if j < tempVar and strbyte(wordTableGuild[j+1]) >= 97 then for i=1, 250 do if not GF_GUILD_COMMON_WORDS[wordTableGuild[j+i]] then break end wordTableGuild[j+i] = GF_GUILD_COMMON_WORDS[wordTableGuild[j+i]] end end
+			if j < tempVal and strbyte(wordTableGuild[j+1]) >= 97 then for i=1, 250 do if not GF_GUILD_COMMON_WORDS[wordTableGuild[j+i]] then break end wordTableGuild[j+i] = GF_GUILD_COMMON_WORDS[wordTableGuild[j+i]] end end
 		end
 	end
-	if tempVar <= 4 then -- Check 4-word Phrase
+	if tempVal <= 4 then -- Check 4-word Phrase
 		wordString = ""
 		lfe = ""
 		lfs = nil
-		for i=1,tempVar do wordString = wordString..wordTable[i] end
-		for i=1,tempVar do lfe = lfe..wordTableTrade[i] if strbyte(wordTableTrade[i]) > 90 then lfs = true end end
+		for i=1,tempVal do wordString = wordString..wordTable[i] end
+		for i=1,tempVal do lfe = lfe..wordTableTrade[i] if strbyte(wordTableTrade[i]) > 90 then lfs = true end end
 		if GF_WORD_TRADE_PHRASE[lfe] then GF_MessageData.foundTrades = 3 end
 		if GF_WORD_GUILD_PHRASE[wordString] then GF_MessageData.foundGuild = 3 end
 		if string.sub(arg1,-2) == "? " then
 			if (GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString] or GF_GROUP_PHRASE_QUESTION[wordString]) then GF_MessageData.foundLFG = 2
 			elseif GF_WORD_TRADE_QUESTION[lfe] then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_WORD_TRADE_QUESTION[lfe]
 			elseif GF_WORD_GUILD_QUESTION[wordString] then GF_MessageData.foundGuild = 3
-			elseif tempVar > 2 then
+			elseif tempVal > 2 then
 				if GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]] then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]]
 				elseif not lfs then	GF_MessageData.foundTrades = GF_MessageData.foundTrades + 1.25 end
 			end
-		elseif tempVar > 2 then
-			if GF_LFM_AFTER[wordTable[tempVar-1]..wordTable[tempVar]] then GF_MessageData.foundLFM = 2
+		elseif tempVal > 2 then
+			if GF_LFM_AFTER[wordTable[tempVal-1]..wordTable[tempVal]] then GF_MessageData.foundLFM = 2
 			elseif GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]] then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]]
 			elseif not lfs then	GF_MessageData.foundTrades = GF_MessageData.foundTrades + 1.25 end
 		end
 		lfe = ""
 		lfs = nil
-		for i=1,tempVar do lfe = lfe..wordTableGuild[i] if strbyte(wordTableGuild[i]) > 90 then lfs = true end end
-		if GF_TRADE_FIRST_LAST[wordTableTrade[1]] and GF_TRADE_FIRST_LAST[wordTableTrade[1]][wordTableTrade[tempVar]] then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 3
-		elseif GF_MessageData.foundLFM == 0 and GF_GROUP_FIRST_LAST[wordTable[1]] and GF_GROUP_FIRST_LAST[wordTable[1]][wordTable[tempVar]] then GF_MessageData.foundLFM = 2
-		elseif GF_GUILD_FIRST_LAST[wordTableGuild[1]] and GF_GUILD_FIRST_LAST[wordTableGuild[1]][wordTableGuild[tempVar]] then GF_MessageData.foundGuild = GF_MessageData.foundGuild + 3
-		elseif not lfs and tempVar > 2 then GF_MessageData.foundGuild = GF_MessageData.foundGuild + 1.25 end
+		for i=1,tempVal do lfe = lfe..wordTableGuild[i] if strbyte(wordTableGuild[i]) > 90 then lfs = true end end
+		if GF_TRADE_FIRST_LAST[wordTableTrade[1]] and GF_TRADE_FIRST_LAST[wordTableTrade[1]][wordTableTrade[tempVal]] then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 3
+		elseif GF_MessageData.foundLFM == 0 and GF_GROUP_FIRST_LAST[wordTable[1]] and GF_GROUP_FIRST_LAST[wordTable[1]][wordTable[tempVal]] then GF_MessageData.foundLFM = 2
+		elseif GF_GUILD_FIRST_LAST[wordTableGuild[1]] and GF_GUILD_FIRST_LAST[wordTableGuild[1]][wordTableGuild[tempVal]] then GF_MessageData.foundGuild = GF_MessageData.foundGuild + 3
+		elseif not lfs and tempVal > 2 then GF_MessageData.foundGuild = GF_MessageData.foundGuild + 1.25 end
 	end
 	for j=0,3 do -- Score the wordTable
 		for i=1, getn(wordTable) do
@@ -2706,7 +2708,7 @@ function GF_GetTypes(arg1, showanyway)
 				wordString = wordTableGuild[i]
 				for k=1, j do wordString = wordString..wordTableGuild[i+k] end
 				if GF_WORD_GUILD[wordString] then
-					if strbyte(wordString) ~= 71 then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_WORD_GUILD[wordString] if showanyway == true then print(wordString.." guild "..GF_WORD_GUILD[wordString]) end
+					if j ~= 0 or strbyte(wordString) ~= 71 then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_WORD_GUILD[wordString] if showanyway == true then print(wordString.." guild "..GF_WORD_GUILD[wordString]) end
 					elseif GF_MessageData.foundGuild < 100 then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_WORD_GUILD[wordString] if showanyway == true then print(wordString.." guild "..GF_WORD_GUILD[wordString]) end end
 				end
 			end
