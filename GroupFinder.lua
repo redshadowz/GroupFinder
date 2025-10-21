@@ -2310,9 +2310,9 @@ function GF_GetTypes(arg1, showanyway)
 	local wordString,lfs,lfe,tempVal,tempString
 	local languageID
 	
-	if string.find(arg1, "%d+p[%p%s]") then GF_MessageData.foundLFM = 2 end -- "10p heal" messages from chinese
+	if string.find(arg1, "%d+p[%p%s]") then GF_MessageData.foundLFM = 2 if showanyway == true then print("##p lfm 2") end end -- "10p heal" messages from chinese
 	lfs = 1 -- To detect space/lf##m/letter(eg " lf15mbwl" = lfm bwl)
-	while true do lfs,lfe,wordString = string.find(arg1," ([lk]f?%s?%d+m)[%p%s]",lfs) if not wordString then break end arg1 = string.sub(arg1,1,lfs).."lfm "..string.sub(arg1,lfs+string.len(wordString)+1) lfs = lfs + 4 GF_MessageData.foundLFM = 4 GF_MessageData.foundGuildExclusion = 3 GF_MessageData.foundTradesExclusion = 3 end
+	while true do lfs,lfe,wordString = string.find(arg1," ([lk]f?%s?%d+m)[%p%s]",lfs) if not wordString then break end arg1 = string.sub(arg1,1,lfs).."lfm "..string.sub(arg1,lfs+string.len(wordString)+1) lfs = lfs + 4 GF_MessageData.foundLFM = 4 GF_MessageData.foundGuildExclusion = 3 GF_MessageData.foundTradesExclusion = 3 if showanyway == true then print("lf##m lfm 4 .. guildex 3... tradesex 3") end end
 	lfs = 1 -- To detect space/number+/punctuation/number+/space for groups
 	while true do lfs,lfe,wordString,tempString = string.find(arg1,"[%p%s](%d+([=/])%d+) ",lfs) if not wordString then break end if tempString == "=" then GF_MessageData.foundLFM = 2 lfs = lfe else arg1 = string.sub(arg1,1,lfs).."group"..string.sub(arg1,lfe) lfs = lfs + 6 end end
 	lfs,lfe,wordString = string.find(arg1,"%d?%s?\-?([\+±])\-?%s?%d?")
@@ -2430,7 +2430,7 @@ function GF_GetTypes(arg1, showanyway)
 		elseif GF_WORD_GOLD[tempString] then
 			arg1 = string.sub(arg1,1,lfs)..GF_WORD_GOLD[tempString]..string.sub(arg1,lfe)
 			lfs = lfs + string.len(GF_WORD_GOLD[tempString])
-			if GF_MessageData.foundTrades < 2 and tempString ~= "bh" then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 2 end
+			if GF_MessageData.foundTrades < 2 and tempString ~= "bh" then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 2 if showanyway == true then print("#g trade 2") end end
 		else
 			lfs = lfe
 		end
@@ -2543,16 +2543,16 @@ function GF_GetTypes(arg1, showanyway)
 		if string.sub(arg1,-2) == "? " then
 			if wordTable[2] then
 				for i=2,tempVal do wordString = wordString..wordTable[i] end
-				if GF_WORD_QUEST[wordString] then GF_MessageData.foundLFG = 2 end
+				if GF_WORD_QUEST[wordString] then GF_MessageData.foundLFG = 2 if showanyway == true then print("quest? lfg 2") end end
 			end
 		end
 		lfs = 1 -- To detect punctuation after "]" (eg "[hitem] + ")... For detecting groups
-		while true do lfs,lfe,wordString = string.find(arg1, "\]%s?(%p)[%p%s]",lfs) if not wordString then break end if wordString == "+" or wordString == "?" then GF_MessageData.foundLFG = 2 end lfs = lfe end
+		while true do lfs,lfe,wordString = string.find(arg1, "\]%s?(%p)[%p%s]",lfs) if not wordString then break end if wordString == "+" or wordString == "?" then GF_MessageData.foundLFG = 2 if showanyway == true then print("[quest]+ lfg 2") end end lfs = lfe end
 	elseif string.sub(arg1,-2) == "? " and tempVal < 9 then
 		wordString = ""
 		for i=1,tempVal do wordString = wordString..wordTable[i] end
-		if GF_WORD_QUEST[wordString] then GF_MessageData.foundLFG = 2 end
-	elseif string.sub(arg1,1,2) == " +" and GF_WORD_ROLES[wordTable[1]] then GF_MessageData.foundLFM = 2 end
+		if GF_WORD_QUEST[wordString] then GF_MessageData.foundLFG = 2 if showanyway == true then print("quest? lfg 2") end end
+	elseif string.sub(arg1,1,2) == " +" and GF_WORD_ROLES[wordTable[1]] then GF_MessageData.foundLFM = 2 if showanyway == true then print("[quest]+ lfg 2") end end
 	for j=0,7 do
 		for i=1, tempVal do
 			if wordTable[i+j] then
@@ -2567,11 +2567,11 @@ function GF_GetTypes(arg1, showanyway)
 					if not GF_LFM_BYPASS[wordString] and GF_WORD_QUEST[wordString] then
 						if GF_LFM_AFTER[wordTable[i+j+1]] or GF_LFM_BEFORE[wordTable[i-1]] or wordTable[i+j+2] and GF_LFM_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] or wordTable[i-2] and GF_LFM_BEFORE[wordTable[i-2]..wordTable[i-1]]
 						or wordTable[i-3] and GF_LFM_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] then
-							if GF_MessageData.foundLFM == 0 then GF_MessageData.foundLFM = 1 end GF_MessageData.foundLFMPreSuf = 1 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5
+							if GF_MessageData.foundLFM == 0 then GF_MessageData.foundLFM = 1 end GF_MessageData.foundLFMPreSuf = 1 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5 if showanyway == true then print("triggername lfm 1/2 .. tradesex 1.5") end
 						end
 
 						if GF_LFG_AFTER[wordTable[i+j+1]] or GF_LFG_BEFORE[wordTable[i-1]] or wordTable[i+j+2] and GF_LFG_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] or wordTable[i-2] and GF_LFG_BEFORE[wordTable[i-2]..wordTable[i-1]] then
-							if GF_MessageData.foundLFG == 0 and GF_MessageData.foundLFMPreSuf == 0 then GF_MessageData.foundLFG = 1 end GF_MessageData.foundLFGPreSuf = 1 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5
+							if GF_MessageData.foundLFG == 0 and GF_MessageData.foundLFMPreSuf == 0 then GF_MessageData.foundLFG = 1 end GF_MessageData.foundLFGPreSuf = 1 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5 if showanyway == true then print("triggername lfg 1/2 .. tradesex 1.5") end
 						end
 					end
 				end
@@ -2626,28 +2626,28 @@ function GF_GetTypes(arg1, showanyway)
 		lfs = nil
 		for i=1,tempVal do wordString = wordString..wordTable[i] end
 		for i=1,tempVal do lfe = lfe..wordTableTrade[i] if strbyte(wordTableTrade[i]) > 90 then lfs = true end end
-		if GF_WORD_TRADE_PHRASE[lfe] then GF_MessageData.foundTrades = 3 end
-		if GF_WORD_GUILD_PHRASE[wordString] then GF_MessageData.foundGuild = 3 end
+		if GF_WORD_TRADE_PHRASE[lfe] then GF_MessageData.foundTrades = 3 if showanyway == true then print("tradephrase trades 3") end end
+		if GF_WORD_GUILD_PHRASE[wordString] then GF_MessageData.foundGuild = 3 if showanyway == true then print("guildphrase guild 3") end end
 		if string.sub(arg1,-2) == "? " then
-			if (GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString] or GF_GROUP_PHRASE_QUESTION[wordString]) then GF_MessageData.foundLFG = 2
-			elseif GF_WORD_TRADE_QUESTION[lfe] then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_WORD_TRADE_QUESTION[lfe]
-			elseif GF_WORD_GUILD_QUESTION[wordString] then GF_MessageData.foundGuild = 3
+			if (GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString] or GF_GROUP_PHRASE_QUESTION[wordString]) then GF_MessageData.foundLFG = 2 if showanyway == true then print("group? lfg 2") end
+			elseif GF_WORD_TRADE_QUESTION[lfe] then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_WORD_TRADE_QUESTION[lfe] if showanyway == true then print("trades? trades "..GF_WORD_TRADE_QUESTION[lfe]) end
+			elseif GF_WORD_GUILD_QUESTION[wordString] then GF_MessageData.foundGuild = 3 if showanyway == true then print("guild? guild 3") end
 			elseif tempVal > 2 then
-				if GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]] then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]]
-				elseif not lfs then	GF_MessageData.foundTrades = GF_MessageData.foundTrades + 1.25 end
+				if GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]] then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]] if showanyway == true then print("first two? trades "..GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]]) end
+				elseif not lfs then	GF_MessageData.foundTrades = GF_MessageData.foundTrades + 1.25 if showanyway == true then print("tradeonly? trades 1.25") end end
 			end
 		elseif tempVal > 2 then
-			if GF_LFM_AFTER[wordTable[tempVal-1]..wordTable[tempVal]] then GF_MessageData.foundLFM = 2
-			elseif GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]] then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]]
-			elseif not lfs then	GF_MessageData.foundTrades = GF_MessageData.foundTrades + 1.25 end
+			if GF_LFM_AFTER[wordTable[tempVal-1]..wordTable[tempVal]] then GF_MessageData.foundLFM = 2 if showanyway == true then print("word lfmafter lfm 2") end
+			elseif GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]] then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]] if showanyway == true then print("first two trades "..GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]]) end
+			elseif not lfs then	GF_MessageData.foundTrades = GF_MessageData.foundTrades + 1.25 if showanyway == true then print("tradeonly trades 1.25") end end
 		end
 		lfe = ""
 		lfs = nil
 		for i=1,tempVal do lfe = lfe..wordTableGuild[i] if strbyte(wordTableGuild[i]) > 90 then lfs = true end end
-		if GF_TRADE_FIRST_LAST[wordTableTrade[1]] and GF_TRADE_FIRST_LAST[wordTableTrade[1]][wordTableTrade[tempVal]] then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 3
-		elseif GF_MessageData.foundLFM == 0 and GF_GROUP_FIRST_LAST[wordTable[1]] and GF_GROUP_FIRST_LAST[wordTable[1]][wordTable[tempVal]] then GF_MessageData.foundLFM = 2
-		elseif GF_GUILD_FIRST_LAST[wordTableGuild[1]] and GF_GUILD_FIRST_LAST[wordTableGuild[1]][wordTableGuild[tempVal]] then GF_MessageData.foundGuild = GF_MessageData.foundGuild + 3
-		elseif not lfs and tempVal > 2 then GF_MessageData.foundGuild = GF_MessageData.foundGuild + 1.25 end
+		if GF_TRADE_FIRST_LAST[wordTableTrade[1]] and GF_TRADE_FIRST_LAST[wordTableTrade[1]][wordTableTrade[tempVal]] then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 3 if showanyway == true then print("firstlast trades 3") end
+		elseif GF_MessageData.foundLFM == 0 and GF_GROUP_FIRST_LAST[wordTable[1]] and GF_GROUP_FIRST_LAST[wordTable[1]][wordTable[tempVal]] then GF_MessageData.foundLFM = 2 if showanyway == true then print("firstlast lfm 2") end
+		elseif GF_GUILD_FIRST_LAST[wordTableGuild[1]] and GF_GUILD_FIRST_LAST[wordTableGuild[1]][wordTableGuild[tempVal]] then GF_MessageData.foundGuild = GF_MessageData.foundGuild + 3 if showanyway == true then print("firstlast guild 3") end
+		elseif not lfs and tempVal > 2 then GF_MessageData.foundGuild = GF_MessageData.foundGuild + 1.25 if showanyway == true then print("guildonly guild 1.25") end end
 	end
 	for j=0,3 do -- Score the wordTable
 		for i=1, getn(wordTable) do
@@ -2678,16 +2678,16 @@ function GF_GetTypes(arg1, showanyway)
 					table.insert(GF_MessageData.groupName,wordString) GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + .3 GF_MessageData.foundGuildExclusion = GF_MessageData.foundGuildExclusion + .1
 				end
 				if GF_TRADE_WORD_EXCLUSION[wordString] then GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + GF_TRADE_WORD_EXCLUSION[wordString] if showanyway == true then print(wordString.." tradesex") end end
-				if wordTableTrade[i-1] == "portal" and (GF_WORD_LEVEL_ZONE[wordString] or GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString]) then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 1 end
+				if wordTableTrade[i-1] == "portal" and (GF_WORD_LEVEL_ZONE[wordString] or GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString]) then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 1 if showanyway == true then print("portalzone trade 1") end end
 
 				if not GF_LFM_BYPASS[wordString] and (GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString] or (GF_WORD_QUEST[wordString] and not GF_GROUP_WORD_BYPASS[wordString])) then
 					if GF_LFM_AFTER[wordTable[i+j+1]] or GF_LFM_BEFORE[wordTable[i-1]] or wordTable[i+j+2] and GF_LFM_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] or wordTable[i-2] and GF_LFM_BEFORE[wordTable[i-2]..wordTable[i-1]]
 					or wordTable[i-3] and GF_LFM_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] then
-						if GF_MessageData.foundLFM == 0 then GF_MessageData.foundLFM = 1 end if wordTable[i-1] and GF_LFMLFG_PREFIX_GUILD[wordTable[i-1]] then GF_MessageData.foundGuildExclusion = GF_MessageData.foundGuildExclusion + 1 end GF_MessageData.foundLFMPreSuf = 1 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5
+						if GF_MessageData.foundLFM == 0 then GF_MessageData.foundLFM = 1 end if wordTable[i-1] and GF_LFMLFG_PREFIX_GUILD[wordTable[i-1]] then GF_MessageData.foundGuildExclusion = GF_MessageData.foundGuildExclusion + 1 end GF_MessageData.foundLFMPreSuf = 1 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5 if showanyway == true then print("triggername lfm 1/2 .. tradesex 1.5") end
 					end
 
 					if GF_LFG_AFTER[wordTable[i+j+1]] or GF_LFG_BEFORE[wordTable[i-1]] or wordTable[i+j+2] and GF_LFG_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] or wordTable[i-2] and GF_LFG_BEFORE[wordTable[i-2]..wordTable[i-1]] then
-						if GF_MessageData.foundLFG == 0 and GF_MessageData.foundLFMPreSuf == 0 then GF_MessageData.foundLFG = 1 end if wordTable[i-1] and GF_LFMLFG_PREFIX_GUILD[wordTable[i-1]] then GF_MessageData.foundGuildExclusion = GF_MessageData.foundGuildExclusion + 1 end GF_MessageData.foundLFGPreSuf = 1 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5
+						if GF_MessageData.foundLFG == 0 and GF_MessageData.foundLFMPreSuf == 0 then GF_MessageData.foundLFG = 1 end if wordTable[i-1] and GF_LFMLFG_PREFIX_GUILD[wordTable[i-1]] then GF_MessageData.foundGuildExclusion = GF_MessageData.foundGuildExclusion + 1 end GF_MessageData.foundLFGPreSuf = 1 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5 if showanyway == true then print("triggername lfg 1/2 .. tradesex 1.5") end
 					end
 				end
 			end
@@ -2716,7 +2716,7 @@ function GF_GetTypes(arg1, showanyway)
 	end
 
 	if GF_MessageData.groupName[1] and not GF_MessageData.foundQuest[1] and not GF_MessageData.foundDungeon and not GF_MessageData.foundRaid then lfs = 0 for i=1,getn(GF_MessageData.groupName) do if string.find(GF_MessageData.lfmlfgName,GF_MessageData.groupName[i]) then lfs = lfs + 1 end end if lfs == getn(GF_MessageData.groupName) then GF_MessageData.foundLFM = 0 GF_MessageData.foundLFG = 0 end end
-	if GF_MessageData.foundGuild < 100 and string.find(arg1, "[<~][a-zA-Z0-9%&%-/ ]+[>~]") then GF_MessageData.foundGuild = GF_MessageData.foundGuild + 2 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1 end
+	if GF_MessageData.foundGuild < 100 and string.find(arg1, "[<~][a-zA-Z0-9%&%-/ ]+[>~]") then GF_MessageData.foundGuild = GF_MessageData.foundGuild + 2 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1 if showanyway == true then print("<words> guild 2 .. tradesex 1") end end
 	while GF_MessageData.foundGuild > 100 do GF_MessageData.foundGuild = GF_MessageData.foundGuild - 100 end
 	GF_MessageData.foundGuild = GF_MessageData.foundGuild - GF_MessageData.foundGuildExclusion
 	
