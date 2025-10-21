@@ -2446,7 +2446,7 @@ function GF_GetTypes(arg1, showanyway)
 				if string.find(tempString, "[%p%s]%d+%s?x%s+hitem Z%[$") then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 1 if showanyway == true then print("##x [ trade 1") end end -- Trades " 2x ["
 				if string.find(tempString, "[%p%s]x%s?%d+%s+hitem Z%[$") then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 1 if showanyway == true then print("x## [ trade 1") end end -- Trades " x2 ["
 
-				_,_,tempString = string.find(tempString, "[%p%s](%a+)%s?%s?x?%d?%d?x?%s+hitem Z%[$") -- One word before
+				_,_,tempString = string.find(tempString, "[%p%s](%a+)%s?%s?x?%d?%d?x?%p?%s+hitem Z%[$") -- One word before
 				if GF_WORD_FIX[tempString] then tempString = GF_WORD_FIX[tempString] end
 				if GF_TRADE_PREFIX_SUFFIX[tempString] then
 					GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_TRADE_PREFIX_SUFFIX[tempString]
