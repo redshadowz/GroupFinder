@@ -849,7 +849,7 @@ GF_WORD_FIX_SINGLE_WORD = {
 ["helpr"] = "help",["imaigine"] = "imagine",["sry"] = "sorry",["sory"] = "sorry",["srry"] = "sorry",["imossible"] = "impossible",["ist"] = "is",["jion"] = "join",["dkk"] = "dk",["insterested "] = "interested",["intrested"] = "interested",
 ["invtie"] = "invite",["invita"] = "invite",["inv"] = "invite",["ginv"] = "ginvite",["gadge"] = "gadget",["hyal"] = "hyjal",["hygal"] = "hyjal",["coupl"] = "couple",["weith"] = "with",["farmm"] = "farm",["levln"] = "leveling",["lvling"] = "leveling",
 ["joiin"] = "join",["jooin"] = "join",["lecel"] = "level",["lel"] = "lol",["leveel"] = "level",["lvlving"] = "leveling",["levl"] = "level",["levlers"] = "leveling",["levlin"] = "leveling",["levling"] = "leveling",
-["lvel"] = "level",["lvelin"] = "leveling",["lveln"] = "leveling",["lvln"] = "leveling",["lvl"] = "level",["lvlers"] = "leveling",["lvlin"] = "leveling",["trools"] = "trolls",
+["lvel"] = "level",["lvlv"] = "level",["lvelin"] = "leveling",["lveln"] = "leveling",["lvln"] = "leveling",["lvl"] = "level",["lvlers"] = "leveling",["lvlin"] = "leveling",["trools"] = "trolls",
 ["fro"] = "for",["allys"] = "alliance",["loking"] = "looking",["lst"] = "last",["conjurived"] = "conjured",["bassin"] = "basin",["friendlly"] = "friendly",
 
 ["mithrill"] = "mithril",["mythril"] = "mithril",["mythrin"] = "mithril",["moar"] = "more",["nead"] = "need",["acn"] = "can",
@@ -1510,7 +1510,7 @@ GF_WORD_SPECIAL_EXCEPTIONS = {
 ["weekend"] = true,["exploring"] = true,
 }
 GF_WORD_GOLD = {
-["g"] = "gold",["gs"] = "gold",["gold"] = "gold",["silver"] = "silver",["silvers"] = "silver",["silv"] = "silver",["bh"] = "heal",["s"] = "D",
+["g"] = "gold",["gs"] = "gold",["gold"] = "gold",["silver"] = "silver",["silvers"] = "silver",["silv"] = "silver",["bh"] = "heal",["s"] = "N",
 }
 GF_WORD_FIX_ITEM_NAME = {
 ["stone"] = "stone",["bar"] = "bar",["ore"] = "ore",["cloth"] = "cloth",["leather"] = "leather",["buckle"] = "buckle",["gemstone"] = "gemstone",["lockbox"] = "lockbox",["enchant"] = "enchant",["libram"] = "libram",["arcanum"] = "arcanum",
