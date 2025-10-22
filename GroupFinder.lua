@@ -391,8 +391,8 @@ function GF_GetQuestInfo(text,printinfo)
 	wordString = ""
 	for i=1, getn(wordTable) do if wordTable[i] then wordString = wordString..wordTable[i] end end
 	if GF_WORD_QUEST[wordString] then
-		if printinfo then
-			if GF_WORD_QUEST[wordString][4] and GF_WORD_QUEST[wordString][3] ~= GF_WORD_QUEST[wordString][4] then
+		if printinfo and GF_QUEST_ZONE_ID[GF_WORD_QUEST[wordString][3]] then
+			if GF_QUEST_ZONE_ID[GF_WORD_QUEST[wordString][4]] and GF_WORD_QUEST[wordString][3] ~= GF_WORD_QUEST[wordString][4] then
 				DEFAULT_CHAT_FRAME:AddMessage("GF: "..text..GF_QUEST_IS_LEVEL_TEXT..GF_WORD_QUEST[wordString][2].."("..GF_QUEST_ZONE_ID[GF_WORD_QUEST[wordString][3]].."), Objective("..GF_QUEST_ZONE_ID[GF_WORD_QUEST[wordString][4]]..")", 1, 1, 0.5)
 			else
 				DEFAULT_CHAT_FRAME:AddMessage("GF: "..text..GF_QUEST_IS_LEVEL_TEXT..GF_WORD_QUEST[wordString][2].."("..GF_QUEST_ZONE_ID[GF_WORD_QUEST[wordString][3]]..")", 1, 1, 0.5)

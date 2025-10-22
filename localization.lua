@@ -806,7 +806,7 @@ GF_WORD_FIX_SINGLE_WORD = {
 ["liutenant"] = "lieutenant",["alvaroid"] = "alverold",["souther"] = "southern",["escourts"] = "escort",["escourt"] = "escort",["stealthie"] = "stealth",
 ["grp"] = "group",["grps"] = "group",["grup"] = "group",["groupg"] = "group",["quets"] = "quest",["qujests"] = "quest",["qst"] = "quest",["reput"] = "rep",["repu"] = "rep",
 ["rading"] = "raid",["rlading"] = "raid",["dungs"] = "dungeon",["dungen"] = "dungeon",["dungens"] = "dungeon",["dunjn"] = "dungeon",["dongeon"] = "dungeon",
-["que"] = "queue",["q"] = "queue",["qeue"] = "queue",["qs"] = "queue",["qeues"] = "queue",["qued"] = "queue",["ques"] = "queue",["quee"] = "queue",["premdae"] = "premade",
+["que"] = "queue",["q"] = "queue",["qeue"] = "queue",["qs"] = "queue",["qeues"] = "queue",["qued"] = "queue",["ques"] = "queue",["quee"] = "queue",["queeue"] = "queue",["premdae"] = "premade",
 ["ellite"] = "elite",["elit"] = "elite",["leet"] = "elite",["leets"] = "elite",["eliteq"] = "elite",["elitue"] = "elite",["elites"] = "elite",["elties"] = "elite",["eilite"] = "elite",["elitres"] = "elite",
 ["elire"] = "elite",["elits"] = "elite",["eilte"] = "elite",["elete"] = "elite",["eletes"] = "elite",["elitte"] = "elite",["skulz"] = "skull",["skullz"] = "skull",
 
