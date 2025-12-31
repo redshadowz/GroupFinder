@@ -2,8 +2,8 @@
 
 GF_SavedVariables 							= {}
 GF_RealmName								= GetRealmName()
+GF_PlayingOnTurtle							= nil
 local GF_Hardcore							= nil
-local GF_PlayingOnTurtle					= nil
 local GF_WhoCooldownTime					= 10
 local GF_NextAvailableWhoTime				= 0
 local GF_UrgentWhoRequest					= {}
@@ -43,7 +43,7 @@ local GF_AddonNamesToBeSentAsARequest		= {}
 local GF_AddonOPSentNamesOnLogin			= {}
 local GF_AddonGroupDataToBeSentBuffer		= {}
 local GF_AddonMakeAListOfGroupsForSending	= nil
-local GF_AddonListOfGuildAndPartyMembersWithAddon= {}
+local GF_AddonListOfGuildAndPartyMembersWithAddon = {}
 local GF_AddonTimeSinceLastUpdate			= 0
 local GF_AddonNamesFromWhoSinceLoggedOn		= {}
 local GF_AddonNeedToBroadcastSomething		= nil
@@ -1377,11 +1377,13 @@ function GF_UpdateFriendsList()
 	GF_Friends = {}
 	for i=1, GetNumFriends() do
 		local name,level,class,_,online = GetFriendInfo(i)
-		if name and class and GF_Classes[class] and level and level > 0 then
-			if online then GF_Friends[name] = true else GF_Friends[name] = nil end
-			GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], "", time()}
-		else
-			if not GF_FriendUnknown[name] then GF_FriendUnknown[name] = time() end
+		if name then
+			if class and GF_Classes[class] and level and level > 0 then
+				if online then GF_Friends[name] = true else GF_Friends[name] = nil end
+				GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], "", time()}
+			elseif not GF_FriendUnknown[name] then
+				GF_FriendUnknown[name] = time()
+			end
 		end
 		if GF_SavedVariables.friendsToRemove[name] then RemoveFriend(i) end
 	end
@@ -2156,10 +2158,9 @@ end
 
 function GF_FindGroupsAndDisplayCustomChatMessages(event) -- Chat Filters and Group Finders
 	event = gsub(event,"CHAT_MSG_","")
+	if not GF_TextColors[event] or string.lower(arg9) == "lft" then	return true end
 	if arg2 then arg2 = gsub(arg2,".* ","") end
-	if not GF_TextColors[event] or string.lower(arg9) == "lft" then
-		return true
-	elseif GF_TextBypass[event] then
+	if GF_TextBypass[event] then
 		if GF_SavedVariables.showformattedchat then return nil else return true end
 	elseif GF_PreviousMessage[arg2] and GF_PreviousMessage[arg2][1] == arg1 and GF_PreviousMessage[arg2][2] > GetTime() then
 		if GF_PreviousMessage[arg2][3] then return true end
@@ -2488,7 +2489,8 @@ function GF_GetTypes(arg1, showanyway)
 	end
 
 -- Process foreign languages here(full 0-3 cycle)
-	if not languageID then languageID = 1 end
+	--if not languageID then languageID = "en" end
+	languageID = "en"
 -- Quest Search
 	lfs = 2 -- Add all words to the wordTable
 	while true do
@@ -2569,6 +2571,9 @@ function GF_GetTypes(arg1, showanyway)
 							for k=1, j do if wordTable[lfs] then table.remove(wordTable,lfs) tempVal=tempVal-1 end end
 						end
 					end
+				--elseif GF_LANGUAGE_FOREIGN_COMMON_MULTIWORDS[wordString] then
+					--wordTable[lfs] = GF_LANGUAGE_FOREIGN_COMMON_MULTIWORDS[wordString]
+					--for k=1, j do table.remove(wordTable,lfs+1) tempVal=tempVal-1 end
 				end
 			end
 			lfs = lfs + 1
@@ -2640,8 +2645,8 @@ function GF_GetTypes(arg1, showanyway)
 						if lfs > 1 then lfs = lfs - 2 else lfs = lfs - 1 end
 					end
 				else
-					if GF_WORD_FIX_TRADE[wordString] then wordTableTrade[lfs] = GF_WORD_FIX_TRADE[wordString][1] for k=1, j do table.remove(wordTableTrade,lfs+1) table.insert(wordTableTrade,lfs+1,GF_WORD_FIX_TRADE[wordString][2]) end end
-					if GF_WORD_FIX_GUILD[wordString] then wordTableGuild[lfs] = GF_WORD_FIX_GUILD[wordString][1] for k=1, j do table.remove(wordTableGuild,lfs+1) table.insert(wordTableGuild,lfs+1,GF_WORD_FIX_GUILD[wordString][2]) end end
+					if GF_WORD_FIX_TRADE[wordString] then wordTableTrade[lfs] = GF_WORD_FIX_TRADE[wordString][1] for k=1, j do table.remove(wordTableTrade,lfs+k) table.insert(wordTableTrade,lfs+k,GF_WORD_FIX_TRADE[wordString][2]) end end
+					if GF_WORD_FIX_GUILD[wordString] then wordTableGuild[lfs] = GF_WORD_FIX_GUILD[wordString][1] for k=1, j do table.remove(wordTableGuild,lfs+k) table.insert(wordTableGuild,lfs+k,GF_WORD_FIX_GUILD[wordString][2]) end end
 				end
 			end
 			lfs = lfs + 1
@@ -2748,7 +2753,7 @@ function GF_GetTypes(arg1, showanyway)
 	if GF_MessageData.foundGuild < 100 and string.find(arg1, "[<~][a-zA-Z0-9%&%-/ ]+[>~]") then GF_MessageData.foundGuild = GF_MessageData.foundGuild + 2 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1 if showanyway == true then print("<words> guild 2 .. tradesex 1") end end
 	while GF_MessageData.foundGuild > 100 do GF_MessageData.foundGuild = GF_MessageData.foundGuild - 100 end
 	GF_MessageData.foundGuild = GF_MessageData.foundGuild - GF_MessageData.foundGuildExclusion
-	
+
 	GF_MessageData.foundTrades = GF_MessageData.foundTrades - GF_MessageData.foundTradesExclusion
 
 	if GF_MessageData.foundLFM > GF_MessageData.foundLFG then GF_MessageData.foundLFG = -10 end
@@ -3038,7 +3043,7 @@ function GetModifiedQuestName(entryname)
 	end
 
 -- Process foreign languages here(full 0-3 cycle)
-	if not languageID then languageID = 1 end
+	languageID = "en"
 -- Quest Search
 	lfs = 2 -- Add all words to the wordTable
 	while true do
@@ -3104,19 +3109,6 @@ function GetModifiedQuestName(entryname)
 							wordTable[lfs-1] = GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][1]
 							for k=1, j do if wordTable[lfs] then table.remove(wordTable,lfs) tempVal=tempVal-1 end end
 							table.insert(wordTable,lfs,GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][2]) tempVal=tempVal+1
-						end
-					end
-				elseif GF_WORD_FIX_QUEST_DUNGEON[wordString] then
-					wordTable[lfs] = GF_WORD_FIX_QUEST_DUNGEON[wordString]
-					for k=1, j do table.remove(wordTable,lfs+1) tempVal=tempVal-1 end
-					if wordString ~= GF_WORD_FIX_QUEST_DUNGEON[wordString] then
-						if lfs > 1 then lfs = lfs - 2 else lfs = lfs - 1 end
-					elseif lfs > 1 then
-						wordString = wordTable[lfs-1]
-						for k=1, j do if wordTable[lfs-1+k] then wordString = wordString..wordTable[lfs-1+k] end end
-						if GF_WORD_FIX_QUEST_DUNGEON[wordString] then
-							wordTable[lfs-1] = GF_WORD_FIX_QUEST_DUNGEON[wordString]
-							for k=1, j do if wordTable[lfs] then table.remove(wordTable,lfs) tempVal=tempVal-1 end end
 						end
 					end
 				end
