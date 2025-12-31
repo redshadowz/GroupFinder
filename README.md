@@ -1,12 +1,6 @@
 # GroupFinder
 Group finder Addon for Vanilla Wow 1.12.1 based on the CallToArms addon(with Turtle WoW support).  
 
-10/20/2025 update: I finished the new trade and guild detection system. Which greatly shrunk the size of the database file(~720k down to ~525k). Now I'm working on a small foreign language translator.  
-
-PS: If you guys are curious how the addon works. You can test a phrase by typing "/gf test <text>". It shows any string/word changes and the scoring system. Each word will display the "normal word..trade word..guild word".  
-
-PS: I can't test the addon with other languages/clients, but I'm interested in whether the addon even works for people who don't speak English. And if not, what I would need to make it work.  
-
 I made this addon because I hate chat spam. I tried to make this addon as intuitive as possible, but it's probably pretty intimidating at first glance. Lots of checkboxes. Lots of edit boxes. Lots of dropdowns. I put as much as possible on the front page because the original CallToArms addon had too many pages to flip through and too many useless features.  
 
 NOTE: To people who might be interested in this addon. This isn't simply a group finder that searches world chat for groups. This is a massive chat filtering tool. It identifies four types of messages - Group messages, guild messages, trades messages, and Chat messages; And allows you to show/hide them individually(with a sortable chatlog window).  
