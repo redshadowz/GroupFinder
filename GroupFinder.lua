@@ -2024,24 +2024,15 @@ function GF_FixLFGStrings(lfmOnly) -- LFG Group Maker Functions
 		end
 	end
 end
-function GF_CreateSearchDropdownButton(id, parent)
-	local button = CreateFrame("CheckButton", parent:GetName()..id, parent, "GF_GF_CheckButtonTemplate_Label_Click")
-	if id == 1 then
-		button:SetPoint("TOPLEFT", parent, "TOPLEFT", 6, -4)
-	else
-		button:SetPoint("TOP", getglobal(parent:GetName()..(id-1) ), "BOTTOM", 0, 6)
-	end
-	return button
-end
 function GF_ShowDropdownList(bframe)
 	local width = 0
 	GF_NumLFGSearchButtons = 0
 	GF_SavedVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText()
-	local LFGLFMFound = nil
+	local LFGLFMFound
 	for _,dtable in pairs(GF_BUTTONS_LIST[bframe]) do
 		if UnitLevel("player") >= dtable[2] and UnitLevel("player") <= dtable[3] then
 			GF_NumLFGSearchButtons = GF_NumLFGSearchButtons + 1
-			local button = getglobal("GF_"..bframe..GF_NumLFGSearchButtons) or GF_CreateSearchDropdownButton(GF_NumLFGSearchButtons, getglobal("GF_"..bframe))
+			local button = getglobal("GF_"..bframe..GF_NumLFGSearchButtons) or CreateFrame("CheckButton", getglobal("GF_"..bframe):GetName()..GF_NumLFGSearchButtons, getglobal("GF_"..bframe), "GF_CheckButtonTemplate_Label_Click")
 			getglobal(button:GetName().."TextLabel"):SetText(dtable[1])
 			if getglobal(button:GetName().."TextLabel"):GetStringWidth() >= width then width = getglobal(button:GetName().."TextLabel"):GetStringWidth()+5 end
 			button:Show()
@@ -2082,10 +2073,29 @@ function GF_ShowDropdownList(bframe)
 			end
 		end
 	end
-	getglobal("GF_"..bframe):SetHeight(12 + GF_NumLFGSearchButtons * 18)
-	getglobal("GF_"..bframe):SetWidth(width + 45)
-	getglobal("GF_"..bframe):ClearAllPoints()
-	getglobal("GF_"..bframe):SetPoint("TOPLEFT", getglobal("GF_"..bframe.."Dropdown"), "BOTTOMLEFT", 0, 4)
+	if getglobal("GF_"..bframe..(GF_NumLFGSearchButtons+1)) and getglobal("GF_"..bframe..(GF_NumLFGSearchButtons+1)):IsShown() then for i=1, 50 do if getglobal("GF_"..bframe..(GF_NumLFGSearchButtons+i)) then getglobal("GF_"..bframe..(GF_NumLFGSearchButtons+i)):Hide() else break end end end
+	getglobal("GF_"..bframe.."1"):SetPoint("TOPLEFT", getglobal("GF_"..bframe):GetName(), "TOPLEFT", 6, -4)
+	if (bframe == "SearchList" and GF_NumLFGSearchButtons <= 10) or (bframe ~= "SearchList" and GF_NumLFGSearchButtons <= 6) then
+		for i=1, GF_NumLFGSearchButtons do
+			getglobal("GF_"..bframe..i):SetPoint("TOP", getglobal("GF_"..bframe..(i-1)), "BOTTOM", 0, 6)
+		end
+		getglobal("GF_"..bframe):SetHeight(12 + GF_NumLFGSearchButtons * 18)
+		getglobal("GF_"..bframe):SetWidth(width + 45)
+		getglobal("GF_"..bframe):ClearAllPoints()
+		getglobal("GF_"..bframe):SetPoint("TOPLEFT", getglobal("GF_"..bframe.."Dropdown"), "BOTTOMLEFT", 0, 4)
+	else
+		getglobal("GF_"..bframe.."2"):SetPoint("TOPLEFT", getglobal("GF_"..bframe):GetName(), "TOPLEFT", (width + 51), -4)
+		for i=3, GF_NumLFGSearchButtons, 2 do
+			getglobal("GF_"..bframe..i):SetPoint("TOP", getglobal("GF_"..bframe..(i-2)), "BOTTOM", 0, 6)
+		end
+		for i=4, GF_NumLFGSearchButtons, 2 do
+			getglobal("GF_"..bframe..i):SetPoint("TOP", getglobal("GF_"..bframe..(i-2)), "BOTTOM", 0, 6)
+		end
+		getglobal("GF_"..bframe):SetHeight(12 + ceil(GF_NumLFGSearchButtons/2) * 18)
+		getglobal("GF_"..bframe):SetWidth((width + 45) * 2)
+		getglobal("GF_"..bframe):ClearAllPoints()
+		getglobal("GF_"..bframe):SetPoint("TOPLEFT", getglobal("GF_"..bframe.."Dropdown"), "BOTTOMLEFT", -1*(width + 45), 4)
+	end
 	if GF_NumLFGSearchButtons > 0 then getglobal("GF_"..bframe):Show() end
 end
 function GF_AddRemoveSearch(bframe,entryname,add)
@@ -2605,15 +2615,15 @@ function GF_GetTypes(arg1, showanyway)
 						if showanyway == true then print(wordString.." quest") end
 						if not GF_MessageData.foundQuest[1] or GF_WORD_QUEST[wordString][2] > GF_MessageData.foundQuest[1] or GF_MessageData.foundQuest[2] < j then GF_MessageData.foundQuest[1] = GF_WORD_QUEST[wordString][2] GF_MessageData.foundQuest[2] = j end
 						GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + .3 GF_MessageData.foundGuildExclusion = GF_MessageData.foundGuildExclusion + .1
-					end
-					if not GF_LFM_BYPASS[wordString] and GF_WORD_QUEST[wordString] then
-						if GF_LFM_AFTER[wordTable[i+j+1]] or GF_LFM_BEFORE[wordTable[i-1]] or wordTable[i+j+2] and GF_LFM_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] or wordTable[i-2] and GF_LFM_BEFORE[wordTable[i-2]..wordTable[i-1]]
-						or wordTable[i-3] and GF_LFM_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] then
-							if GF_MessageData.foundLFM == 0 then GF_MessageData.foundLFM = 1 end GF_MessageData.foundLFMPreSuf = 1 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5 if showanyway == true then print("triggername lfm 1/2 .. tradesex 1.5") end
-						end
+						if not GF_LFM_BYPASS[wordString] then
+							if GF_LFM_AFTER[wordTable[i+j+1]] or GF_LFM_BEFORE[wordTable[i-1]] or wordTable[i+j+2] and GF_LFM_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] or wordTable[i-2] and GF_LFM_BEFORE[wordTable[i-2]..wordTable[i-1]]
+							or wordTable[i-3] and GF_LFM_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] then
+								if GF_MessageData.foundLFM == 0 then GF_MessageData.foundLFM = 1 end GF_MessageData.foundLFMPreSuf = 1 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5 if showanyway == true then print(wordString.." triggername lfm 1/2 .. tradesex 1.5") end
+							end
 
-						if GF_LFG_AFTER[wordTable[i+j+1]] or GF_LFG_BEFORE[wordTable[i-1]] or wordTable[i+j+2] and GF_LFG_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] or wordTable[i-2] and GF_LFG_BEFORE[wordTable[i-2]..wordTable[i-1]] then
-							if GF_MessageData.foundLFG == 0 and GF_MessageData.foundLFMPreSuf == 0 then GF_MessageData.foundLFG = 1 end GF_MessageData.foundLFGPreSuf = 1 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5 if showanyway == true then print("triggername lfg 1/2 .. tradesex 1.5") end
+							if GF_LFG_AFTER[wordTable[i+j+1]] or GF_LFG_BEFORE[wordTable[i-1]] or wordTable[i+j+2] and GF_LFG_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] or wordTable[i-2] and GF_LFG_BEFORE[wordTable[i-2]..wordTable[i-1]] then
+								if GF_MessageData.foundLFG == 0 and GF_MessageData.foundLFMPreSuf == 0 then GF_MessageData.foundLFG = 1 end GF_MessageData.foundLFGPreSuf = 1 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5 if showanyway == true then print(wordString.." triggername lfg 1/2 .. tradesex 1.5") end
+							end
 						end
 					end
 				end
@@ -2662,33 +2672,33 @@ function GF_GetTypes(arg1, showanyway)
 			if j < tempVal and strbyte(wordTableGuild[j+1]) >= 97 then for i=1, 250 do if not GF_GUILD_COMMON_WORDS[wordTableGuild[j+i]] then break end wordTableGuild[j+i] = GF_GUILD_COMMON_WORDS[wordTableGuild[j+i]] end end
 		end
 	end
-	if tempVal <= 4 then -- Check 4-word Phrase
+	if tempVal <= 6 then -- Check 4/6-word Phrase
 		wordString = ""
 		lfe = ""
 		lfs = nil
 		for i=1,tempVal do wordString = wordString..wordTable[i] end
 		for i=1,tempVal do lfe = lfe..wordTableTrade[i] if strbyte(wordTableTrade[i]) > 90 then lfs = true end end
-		if GF_WORD_TRADE_PHRASE[lfe] then GF_MessageData.foundTrades = 3 if showanyway == true then print("tradephrase trades 3") end end
+		if GF_WORD_TRADE_PHRASE[lfe] then GF_MessageData.foundTrades = 2 if showanyway == true then print("tradephrase trades 3") end end
 		if GF_WORD_GUILD_PHRASE[wordString] then GF_MessageData.foundGuild = 3 if showanyway == true then print("guildphrase guild 3") end end
 		if string.sub(arg1,-2) == "? " then
 			if (GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString] or GF_GROUP_PHRASE_QUESTION[wordString]) then GF_MessageData.foundLFG = 2 if showanyway == true then print("group? lfg 2") end
-			elseif GF_WORD_TRADE_QUESTION[lfe] then GF_MessageData.foundTrades = 3 if showanyway == true then print("trades? trades "..GF_WORD_TRADE_QUESTION[lfe]) end
+			elseif GF_WORD_TRADE_QUESTION[lfe] then GF_MessageData.foundTrades = 2 if showanyway == true then print("trades? trades "..GF_WORD_TRADE_QUESTION[lfe]) end
 			elseif GF_WORD_GUILD_QUESTION[wordString] then GF_MessageData.foundGuild = 3 if showanyway == true then print("guild? guild 3") end
 			elseif tempVal > 2 then
-				if GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]] then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]] if showanyway == true then print("first two? trades "..GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]]) end
+				if tempVal <= 4 and GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]] then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]] if showanyway == true then print("first two? trades "..GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]]) end
 				elseif not lfs then	GF_MessageData.foundTrades = GF_MessageData.foundTrades + 1.25 if showanyway == true then print("tradeonly? trades 1.25") end end
 			end
 		elseif tempVal > 2 then
-			if GF_LFM_AFTER[wordTable[tempVal-1]..wordTable[tempVal]] then GF_MessageData.foundLFM = 2 if showanyway == true then print("word lfmafter lfm 2") end
-			elseif GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]] then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]] if showanyway == true then print("first two trades "..GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]]) end
+			if tempVal <= 4 and GF_LFM_AFTER[wordTable[tempVal-1]..wordTable[tempVal]] then GF_MessageData.foundLFM = 2 if showanyway == true then print("word lfmafter lfm 2") end
+			elseif tempVal <= 4 and GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]] then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]] if showanyway == true then print("first two trades "..GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]]) end
 			elseif not lfs then	GF_MessageData.foundTrades = GF_MessageData.foundTrades + 1.25 if showanyway == true then print("tradeonly trades 1.25") end end
 		end
 		lfe = ""
 		lfs = nil
 		for i=1,tempVal do lfe = lfe..wordTableGuild[i] if strbyte(wordTableGuild[i]) > 90 then lfs = true end end
-		if GF_TRADE_FIRST_LAST[wordTableTrade[1]] and GF_TRADE_FIRST_LAST[wordTableTrade[1]][wordTableTrade[tempVal]] then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 3 if showanyway == true then print("firstlast trades 3") end
-		elseif GF_MessageData.foundLFM == 0 and GF_GROUP_FIRST_LAST[wordTable[1]] and GF_GROUP_FIRST_LAST[wordTable[1]][wordTable[tempVal]] then GF_MessageData.foundLFM = 2 if showanyway == true then print("firstlast lfm 2") end
-		elseif GF_GUILD_FIRST_LAST[wordTableGuild[1]] and GF_GUILD_FIRST_LAST[wordTableGuild[1]][wordTableGuild[tempVal]] then GF_MessageData.foundGuild = GF_MessageData.foundGuild + 3 if showanyway == true then print("firstlast guild 3") end
+		if tempVal <= 4 and GF_TRADE_FIRST_LAST[wordTableTrade[1]] and GF_TRADE_FIRST_LAST[wordTableTrade[1]][wordTableTrade[tempVal]] then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 3 if showanyway == true then print("firstlast trades 3") end
+		elseif tempVal <= 4 and GF_MessageData.foundLFM == 0 and GF_GROUP_FIRST_LAST[wordTable[1]] and GF_GROUP_FIRST_LAST[wordTable[1]][wordTable[tempVal]] then GF_MessageData.foundLFM = 2 if showanyway == true then print("firstlast lfm 2") end
+		elseif tempVal <= 4 and GF_GUILD_FIRST_LAST[wordTableGuild[1]] and GF_GUILD_FIRST_LAST[wordTableGuild[1]][wordTableGuild[tempVal]] then GF_MessageData.foundGuild = GF_MessageData.foundGuild + 3 if showanyway == true then print("firstlast guild 3") end
 		elseif not lfs and tempVal > 2 then GF_MessageData.foundGuild = GF_MessageData.foundGuild + 1.25 if showanyway == true then print("guildonly guild 1.25") end end
 	end
 	for j=0,3 do -- Score the wordTable
@@ -2725,11 +2735,11 @@ function GF_GetTypes(arg1, showanyway)
 				if not GF_LFM_BYPASS[wordString] and (GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString] or (GF_WORD_QUEST[wordString] and not GF_GROUP_WORD_BYPASS[wordString])) then
 					if GF_LFM_AFTER[wordTable[i+j+1]] or GF_LFM_BEFORE[wordTable[i-1]] or wordTable[i+j+2] and GF_LFM_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] or wordTable[i-2] and GF_LFM_BEFORE[wordTable[i-2]..wordTable[i-1]]
 					or wordTable[i-3] and GF_LFM_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] then
-						if GF_MessageData.foundLFM == 0 then GF_MessageData.foundLFM = 1 end if wordTable[i-1] and GF_LFMLFG_PREFIX_GUILD[wordTable[i-1]] then GF_MessageData.foundGuildExclusion = GF_MessageData.foundGuildExclusion + 1 end GF_MessageData.foundLFMPreSuf = 1 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5 if showanyway == true then print("triggername lfm 1/2 .. tradesex 1.5") end
+						if GF_MessageData.foundLFM == 0 then GF_MessageData.foundLFM = 1 end if wordTable[i-1] and GF_LFMLFG_PREFIX_GUILD[wordTable[i-1]] then GF_MessageData.foundGuildExclusion = GF_MessageData.foundGuildExclusion + 1 end GF_MessageData.foundLFMPreSuf = 1 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5 if showanyway == true then print(wordString.." triggername lfm 1/2 .. tradesex 1.5") end
 					end
 
 					if GF_LFG_AFTER[wordTable[i+j+1]] or GF_LFG_BEFORE[wordTable[i-1]] or wordTable[i+j+2] and GF_LFG_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] or wordTable[i-2] and GF_LFG_BEFORE[wordTable[i-2]..wordTable[i-1]] then
-						if GF_MessageData.foundLFG == 0 and GF_MessageData.foundLFMPreSuf == 0 then GF_MessageData.foundLFG = 1 end if wordTable[i-1] and GF_LFMLFG_PREFIX_GUILD[wordTable[i-1]] then GF_MessageData.foundGuildExclusion = GF_MessageData.foundGuildExclusion + 1 end GF_MessageData.foundLFGPreSuf = 1 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5 if showanyway == true then print("triggername lfg 1/2 .. tradesex 1.5") end
+						if GF_MessageData.foundLFG == 0 and GF_MessageData.foundLFMPreSuf == 0 then GF_MessageData.foundLFG = 1 end if wordTable[i-1] and GF_LFMLFG_PREFIX_GUILD[wordTable[i-1]] then GF_MessageData.foundGuildExclusion = GF_MessageData.foundGuildExclusion + 1 end GF_MessageData.foundLFGPreSuf = 1 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5 if showanyway == true then print(wordString.." triggername lfg 1/2 .. tradesex 1.5") end
 					end
 				end
 			end
@@ -2846,7 +2856,7 @@ function GF_GetGroupInformation(arg1,arg2,sentTime) -- Searches messages for Gro
 	entry.op = arg2
 	entry.message = arg1
 	if GF_MessageData.foundRaid then entry.type = "R" entry.flags = {} for i=1, getn(GF_MessageData.foundDFlags) do table.insert(entry.flags, GF_GROUP_IDS[GF_MessageData.foundDFlags[i]]) end
-	elseif GF_MessageData.foundDungeon and (not GF_MessageData.foundQuest[1] or GF_MessageData.foundQuest[1] == 0 or GF_MessageData.foundDungeon >= GF_MessageData.foundQuest[1]) then
+	elseif GF_MessageData.foundDungeon and (not GF_MessageData.foundQuest[1] or GF_MessageData.foundQuest[1] == 0 or GF_MessageData.foundDungeon >= GF_MessageData.foundQuest[1] - 3) then
 		entry.type = "D" entry.flags = {} for i=1, getn(GF_MessageData.foundDFlags) do table.insert(entry.flags, GF_GROUP_IDS[GF_MessageData.foundDFlags[i]]) end
 	elseif GF_MessageData.foundQuest[1] then entry.type = "Q" GF_MessageData.foundDungeon = nil entry.flags = {"QUEST"}
 	else entry.type = "N" if GF_MessageData.foundPvP then if GF_MessageData.foundPvP == 0 then GF_MessageData.foundPvP = 60 end	entry.flags = {} for i=1, getn(GF_MessageData.foundPFlags) do table.insert(entry.flags, GF_GROUP_IDS[GF_MessageData.foundPFlags[i]]) end else entry.flags = {""} end end
@@ -2879,7 +2889,7 @@ function GF_GetGroupInformation(arg1,arg2,sentTime) -- Searches messages for Gro
 	end
 	return entry, 1
 end
-function GF_SearchMessageForTextString(msg,textstring,entry,buttontext)
+function GF_SearchMessageForTextString(msg,textstring,entry)
 	for w in string.gfind(textstring, "([%w%s]+),") do
 		if string.find(msg, w) then return true end
 		for i=1, getn(entry.flags) do
@@ -2887,7 +2897,13 @@ function GF_SearchMessageForTextString(msg,textstring,entry,buttontext)
 		end
 	end
 	for i=1, getn(entry.flags) do
-		if GF_SavedVariables.searchbuttonstext[entry.flags[i]] then return true end
+		if GF_SavedVariables.searchbuttonstext[entry.flags[i]] then
+			if entry.flags[i] == "QUEST" then
+				if not GF_SavedVariables.autofilter or (entry.dlevel and entry.dlevel >= UnitLevel("player")-GF_SavedVariables.autofilterlevelvar and entry.dlevel <= UnitLevel("player")+GF_SavedVariables.autofilterlevelvar) then return true end
+			else
+				return true
+			end
+		end
 	end
 end
 

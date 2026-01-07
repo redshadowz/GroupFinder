@@ -176,7 +176,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</OnClick>
 		</Scripts>
 	</CheckButton>
-	<CheckButton name="GF_GF_CheckButtonTemplate_Label_Click" inherits="GF_CheckButtonTemplate_Label" virtual="true">
+	<CheckButton name="GF_CheckButtonTemplate_Label_Click" inherits="GF_CheckButtonTemplate_Label" virtual="true">
 		<Scripts>
 			<OnClick>
 				if string.find(this:GetName(),"LFG") or string.find(this:GetName(),"SearchList") then
@@ -193,6 +193,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						GF_AddRemoveSearch(string.sub(string.gsub(this:GetName(),"%d*",""), 4), getglobal(this:GetName().."TextLabel"):GetText(), nil)
 					end
 				end
+				if GF_AutoAnnounceTimer and string.find(this:GetName(),"LFG") then GF_TurnOffAnnounce(GF_AUTO_ANNOUNCE_SETTINGS_CHANGED) end
 			</OnClick>
 		</Scripts>
 	</CheckButton>
