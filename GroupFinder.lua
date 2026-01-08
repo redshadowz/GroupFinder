@@ -2147,11 +2147,11 @@ function GF_AddRemoveSearch(bframe,entryname,add)
 							GF_SavedVariables.searchlfgtext = gsub(GF_SavedVariables.searchlfgtext, GF_BUTTONS_LIST.LFGLFM[j][1], "")
 						end
 						GF_SavedVariables.searchlfgtext = gsub(GF_SavedVariables.searchlfgtext, "LF%d+M", "")
-						GF_SavedVariables.searchlfgtext = GF_BUTTONS_LIST[bframe][i][1]..gsub(GF_SavedVariables.searchlfgtext, "^%d+", "")
+						GF_SavedVariables.searchlfgtext = GF_BUTTONS_LIST[bframe][i][1].." "..gsub(GF_SavedVariables.searchlfgtext, "^%d+", "")
 						GF_LFGLFM:Hide()
 					end
 				else
-					GF_SavedVariables.searchlfgtext = GF_BUTTONS_LIST[bframe][i][1]..gsub(GF_SavedVariables.searchlfgtext, "^%d+", "")
+					GF_SavedVariables.searchlfgtext = GF_BUTTONS_LIST[bframe][i][1].." "..gsub(GF_SavedVariables.searchlfgtext, "^%d+", "")
 				end
 				if not add then GF_SavedVariables.searchlfgtext = gsub(gsub(gsub(gsub(GF_SavedVariables.searchlfgtext, "^%d+", ""),"for "..GF_BUTTONS_LIST[bframe][i][1],""),"need "..GF_BUTTONS_LIST[bframe][i][1],""),GF_BUTTONS_LIST[bframe][i][1],"") GF_LFGLFM:Hide() end
 				GF_LFGDescriptionEditBox:SetText(GF_SavedVariables.searchlfgtext)
@@ -2731,7 +2731,13 @@ function GF_GetTypes(arg1, showanyway)
 				end
 				if GF_TRADE_WORD_EXCLUSION[wordString] then GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + GF_TRADE_WORD_EXCLUSION[wordString] if showanyway == true then print(wordString.." tradesex") end end
 				if wordTableTrade[i-1] == "portal" and (GF_WORD_LEVEL_ZONE[wordString] or GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString]) then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 1 if showanyway == true then print("portalzone trade 1") end end
-
+-- Look for generic words before connecting words
+-- A lot of my phrases uses connecting words... I think what I was looking for is druid/level/pro/big, and other adjectives
+-- Also words like few, several, many, lots, and other describing words
+-- Conjunctions like and/or, for, 10x, 
+-- dps/tank/heal/etc(need dps + tank)
+-- need tank and healer for dragonmaw retreat
+-- 
 				if not GF_LFM_BYPASS[wordString] and (GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString] or (GF_WORD_QUEST[wordString] and not GF_GROUP_WORD_BYPASS[wordString])) then
 					if GF_LFM_AFTER[wordTable[i+j+1]] or GF_LFM_BEFORE[wordTable[i-1]] or wordTable[i+j+2] and GF_LFM_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] or wordTable[i-2] and GF_LFM_BEFORE[wordTable[i-2]..wordTable[i-1]]
 					or wordTable[i-3] and GF_LFM_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] then

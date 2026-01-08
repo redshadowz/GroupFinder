@@ -1368,6 +1368,7 @@ GF_WORD_FIX_QUEST_DUNGEON = { -- Quest names converted to dungeons. Processed be
 ["larvarun"] = "brd",
 }
 GF_WORD_FIX_LF_BEFORE = { -- Empty
+--[""] = "",
 }
 GF_WORD_FIX_LF_AFTER = { -- Empty
 }
@@ -3638,8 +3639,8 @@ GF_BUTTONS_LIST = {
 [24] = { "Dire Maul Tribute", 56, 60, "dmt", "Dire Maul", 62, 5, },
 [25] = { "Scholomance", 57, 60, "scholo", "Scholomance", 62, 5, },
 [26] = { "Stratholme Live", 57, 60, "strat live", "Stratholme", 61, 5, },
-[26] = { "UD Stratholme", 57, 60, "ud strat", "Stratholme", 62, 5, },
-[27] = { "Upper Blackrock Spire", 57, 60, "ubrs", "Blackrock Spire", 62, 10, },
+[27] = { "UD Stratholme", 57, 60, "ud strat", "Stratholme", 62, 5, },
+[28] = { "Upper Blackrock Spire", 57, 60, "ubrs", "Blackrock Spire", 62, 10, },
 	},
 	["LFGRaid"] = {
 [1] = { "Zul'Gurub", 1, 60, "zg", "Zul'Gurub", 63, 20, },
@@ -3715,14 +3716,14 @@ local GF_TurtleSearchList = {
 [9] = { "Emerald Sanctum", 60, 60, "ES", },
 }
 local GF_TurtleGroupButtonsListDungeons = { -- header, min to show, max to show, filter to remove names, filter to remove names, Who list level
-[1] = { "Dragonmaw Retreat", 26, 33, "dmr", "Dragonmaw Retreat", 30, },
-[2] = { "Crescent Grove", 32, 40, "cg", "Crescent Grove", 36, },
-[3] = { "Stormwrought Ruins", 35, 42, "stormwrought", "Stormwrought Ruins", 39, },
-[4] = { "Gilneas City", 42, 49, "gilneas", "Gilneas City", 46, },
-[5] = { "Hateforge Quarry", 52, 60, "quarry", "Hateforge Quarry", 57, },
-[6] = { "Stormwind Vault", 60, 60, "vault", "Stormwind Vault", 63, },
-[7] = { "Black Morass", 60, 60, "morass", "Black Morass", 63, },
-[8] = { "Karazhan Crypt", 60, 60, "crypt", "Karazhan Crypt", 63, },
+[1] = { "Dragonmaw Retreat", 26, 33, "dmr", "Dragonmaw Retreat", 30, 5, },
+[2] = { "Crescent Grove", 32, 40, "cg", "Crescent Grove", 36, 5, },
+[3] = { "Stormwrought Ruins", 35, 42, "stormwrought", "Stormwrought Ruins", 39, 5, },
+[4] = { "Gilneas City", 42, 49, "gilneas", "Gilneas City", 46, 5, },
+[5] = { "Hateforge Quarry", 52, 60, "quarry", "Hateforge Quarry", 57, 5, },
+[6] = { "Stormwind Vault", 60, 60, "vault", "Stormwind Vault", 63, 5, },
+[7] = { "Black Morass", 60, 60, "morass", "Black Morass", 63, 5, },
+[8] = { "Karazhan Crypt", 60, 60, "crypt", "Karazhan Crypt", 63, 5, },
 }
 local GF_TurtleGroupButtonsListRaids = {
 [1] = { "Emerald Sanctum", 1, 60, "sanctum", "Emerald Sanctum", 63, 40, },
@@ -3731,7 +3732,7 @@ local GF_TurtleGroupButtonsListRaids = {
 }
 function GF_AddTurtleWoWDungeonsRaids()
 	for i=1, getn(GF_TurtleSearchList) do table.insert(GF_BUTTONS_LIST.SearchList, 27, GF_TurtleSearchList[i]) end
-	for i=1, getn(GF_TurtleGroupButtonsListDungeons) do table.insert(GF_BUTTONS_LIST.LFGDungeon, 28, GF_TurtleGroupButtonsListDungeons[i]) end
+	for i=1, getn(GF_TurtleGroupButtonsListDungeons) do table.insert(GF_BUTTONS_LIST.LFGDungeon, 29, GF_TurtleGroupButtonsListDungeons[i]) end
 	for i=1, getn(GF_TurtleGroupButtonsListRaids) do table.insert(GF_BUTTONS_LIST.LFGRaid, 8, GF_TurtleGroupButtonsListRaids[i]) end
 	table.insert(GF_BUTTONS_LIST.LFGSize, 3, { GF_12_MAN, 1, 60, 12, } )
 	GF_GenTooltips["GF_FrameUseWhoOnGroupsCheckButton"].tooltip2 = GF_GenTooltips["GF_FrameUseWhoOnGroupsCheckButtonTurtle"].tooltip2
