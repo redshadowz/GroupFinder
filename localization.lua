@@ -305,13 +305,24 @@ GF_GroupAutoCheckButton = {
 	tooltip2 = "Adjusts your 'LFM' or 'LFxM' messages by the number of people in the group relative to the selected group size." },
 GF_GetWhoWhisperEditBox = { 
 	tooltip1 = "Whisper Message", 
-	tooltip2 = "Use the 'Get Who' button to make a list of players matching the class and level range of the dungeon selected. Press the 'Invite' button to send this text(if blank it will send the World Channel message instead). Will not message the same person more than once every 15 minutes." },
+	tooltip2 = "Use the 'Get Who' button to make a list of players matching the class and level selected. Press the 'Whisper' button to send this text(if blank it will send the World Channel message instead). Will not message the same person more than once every 15 minutes." },
 GF_GetWhoButton = { 
 	tooltip1 = "Gets a who list",
-	tooltip2 = "Looks for players of the class selected and within the level range of the dungeon selected.",  },
+	tooltip2 = "Looks for players of the class and level selected.",  },
 GF_GetWhoWhisperButton = { 
 	tooltip1 = "Send an invite whisper", 
-	tooltip2 = "Whispers one player per click from the list made by the 'Get Who' button. Whispers the text below. If blank it will send the World Channel message instead.",  },
+	tooltip2 = "Whispers the next player on the list made by the 'Get Who' button. If the text input on this line is blank then it will send the World Channel message instead.",  },
+GF_GetWhoSkipButton = { 
+	tooltip1 = "Skip player", 
+	tooltip2 = "Skips the next name on the Get Who list for 15 minutes.",  },
+
+GF_LFGFrameToggleButton = { 
+	tooltip1 = "Toggle Groupmaker", 
+	tooltip2 = "Toggles the Groupmaker to help you create world channel messages.",  },
+GF_GetWhoFrameToggleButton = { 
+	tooltip1 = "Toggle Get Who", 
+	tooltip2 = "Toggles a menu  to help you find players for dungeons, raids, etc.",  },
+
 GF_AnnounceToLFGButton = {
 	tooltip1 = "Announce",
 	tooltip2 = "Announces your group to the world channel automatically. Stops announcing if you go afk or if your group is full or if you lose party leader(doesn't require party leader)." },

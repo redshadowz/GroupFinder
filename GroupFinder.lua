@@ -1,4 +1,4 @@
-﻿local GF_CurrentVersion						= 530
+﻿local GF_CurrentVersion						= 550
 
 GF_SavedVariables 							= {}
 GF_RealmName								= GetRealmName()
@@ -121,7 +121,7 @@ function GF_LoadVariables()
 		if not GF_SavedVariables.searchlfgtext then GF_SavedVariables.searchlfgtext = "" end
 		if not GF_SavedVariables.searchlfgwhispertext then GF_SavedVariables.searchlfgwhispertext = "" end
 		if not GF_SavedVariables.getwhowhisperclass then GF_SavedVariables.getwhowhisperclass = GF_WARRIOR end
-		if not GF_SavedVariables.getwhowhisperlevel then GF_SavedVariables.getwhowhisperlevel = 0 end
+		if not GF_SavedVariables.getwhowhisperlevel then GF_SavedVariables.getwhowhisperlevel = 60 end
 		if not GF_SavedVariables.announcetimer then GF_SavedVariables.announcetimer = 300 end
 		if not GF_SavedVariables.lfgauto then GF_SavedVariables.lfgauto = false end
 		if not GF_SavedVariables.lfgsize or not tonumber(GF_SavedVariables.lfgsize) then GF_SavedVariables.lfgsize = 1 end
