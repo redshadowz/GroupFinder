@@ -1587,6 +1587,42 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Down" setAllPoints="true"/>
 				<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD" setAllPoints="true"/>
 			</Button>
+			<Frame name="GF_SearchList" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true">
+				<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border">
+					<BackgroundInsets>
+						<AbsInset left="4" right="4" top="4" bottom="4"/>
+					</BackgroundInsets>
+					<EdgeSize>
+						<AbsValue val="16"/>
+					</EdgeSize>
+					<BorderColor r="0.6" g="0.6" b="0.6"/>
+				</Backdrop>
+				<Layers>
+					<Layer level ="BACKGROUND">
+						<Texture file="Interface\ChatFrame\ChatFrameBackground">
+							<Anchors>
+								<Anchor point="TOPLEFT">
+									<Offset x="4" y="-4"/>
+								</Anchor>
+								<Anchor point="BOTTOMRIGHT">
+									<Offset x="-4" y="4"/>
+								</Anchor>
+							</Anchors>
+							<Gradient orientation="VERTICAL">
+								<MinColor r="0" g="0" b="0" a="0.9"/>
+								<MaxColor r="0.2" g="0.2" b="0.2" a="0.9"/>
+							</Gradient>
+						</Texture>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnLeave>
+						if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "SearchList")) then 
+							GF_SearchList:Hide()
+						end
+					</OnLeave>
+				</Scripts>
+			</Frame>
 			<EditBox name="GF_GroupsFrameDescriptionEditBox" inherits="GF_AbstractEditBox">
 				<Anchors>
 					<Anchor point="RIGHT" relativeTo="GF_SearchListDropdown" relativePoint="LEFT">
@@ -1637,42 +1673,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnEscapePressed>
 				</Scripts>
 			</EditBox>
-			<Frame name="GF_SearchList" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true">
-				<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border">
-					<BackgroundInsets>
-						<AbsInset left="4" right="4" top="4" bottom="4"/>
-					</BackgroundInsets>
-					<EdgeSize>
-						<AbsValue val="16"/>
-					</EdgeSize>
-					<BorderColor r="0.6" g="0.6" b="0.6"/>
-				</Backdrop>
-				<Layers>
-					<Layer level ="BACKGROUND">
-						<Texture file="Interface\ChatFrame\ChatFrameBackground">
-							<Anchors>
-								<Anchor point="TOPLEFT">
-									<Offset x="4" y="-4"/>
-								</Anchor>
-								<Anchor point="BOTTOMRIGHT">
-									<Offset x="-4" y="4"/>
-								</Anchor>
-							</Anchors>
-							<Gradient orientation="VERTICAL">
-								<MinColor r="0" g="0" b="0" a="0.9"/>
-								<MaxColor r="0.2" g="0.2" b="0.2" a="0.9"/>
-							</Gradient>
-						</Texture>
-					</Layer>
-				</Layers>
-				<Scripts>
-					<OnLeave>
-						if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "SearchList")) then 
-							GF_SearchList:Hide()
-						end
-					</OnLeave>
-				</Scripts>
-			</Frame>
 			<Frame name="GF_LFGHardCore" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true">
 				<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border">
 					<BackgroundInsets>
@@ -1938,6 +1938,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						GF_UpdateMainFrameHeight()
 						GF_UpdateMainFrameWidth()
 						GF_UpdateMainFrame()
+						GF_UpdateWhisperFrame()
 						GF_UpdateResults()
 					</OnClick>
 				</Scripts>
@@ -1960,6 +1961,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						GF_UpdateMainFrameHeight()
 						GF_UpdateMainFrameWidth()
 						GF_UpdateMainFrame()
+						GF_UpdateWhisperFrame()
 						GF_UpdateResults()
 					</OnClick>
 				</Scripts>
