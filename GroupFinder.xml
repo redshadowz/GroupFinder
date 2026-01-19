@@ -176,22 +176,20 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</OnClick>
 		</Scripts>
 	</CheckButton>
-	<CheckButton name="GF_CheckButtonTemplate_Label_Click" inherits="GF_CheckButtonTemplate_Label" virtual="true">
+	<CheckButton name="GF_LFGDropdownCheckButtonTemplate_Label" inherits="GF_CheckButtonTemplate_Label" virtual="true">
 		<Scripts>
 			<OnClick>
-				if string.find(this:GetName(),"LFG") or string.find(this:GetName(),"SearchList") then
-					if this:GetChecked() then
-						GF_AddRemoveSearch(string.sub(string.gsub(this:GetName(),"(%w)%d*","%1"), 4), getglobal(this:GetName().."TextLabel"):GetText(), true)
-					else
-						if getglobal(this:GetName().."TextLabel"):GetText() == "Clear" then
-							for i=1, GF_NumLFGSearchButtons-1 do
-								local button = getglobal(string.gsub(this:GetName(),"(%a)%d*","%1")..i)
-								button:SetChecked(false)
-							end
-							this:SetChecked(true)
+				if this:GetChecked() then
+					GF_AddRemoveSearch(this:GetName(), getglobal(this:GetName().."TextLabel"):GetText(), true)
+				else
+					if getglobal(this:GetName().."TextLabel"):GetText() == "Clear" then
+						for i=1, GF_NumLFGSearchButtons-1 do
+							local button = getglobal(string.gsub(this:GetName(),"(%a)%d*","%1")..i)
+							button:SetChecked(false)
 						end
-						GF_AddRemoveSearch(string.sub(string.gsub(this:GetName(),"%d*",""), 4), getglobal(this:GetName().."TextLabel"):GetText(), nil)
+						this:SetChecked(true)
 					end
+					GF_AddRemoveSearch(this:GetName(), getglobal(this:GetName().."TextLabel"):GetText(), nil)
 				end
 				if GF_AutoAnnounceTimer and string.find(this:GetName(),"LFG") then GF_TurnOffAnnounce(GF_AUTO_ANNOUNCE_SETTINGS_CHANGED) end
 			</OnClick>
@@ -1058,24 +1056,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Anchor>
 					</Anchors>
 				</FontString>
-				<FontString inherits="GF_TitleFont" name="GF_ShowChatTypesLabel" nonspacewrap="false" maxLines="1" text="GF_SHOW">
-					<Anchors>
-						<Anchor point="TOPRIGHT">
-							<Offset>
-								<AbsDimension x="-260" y="-6"/>
-							</Offset>
-						</Anchor>
-					</Anchors>
-				</FontString>
-				<FontString inherits="GF_TitleFont" name="GF_ShowGroupsInLabel" nonspacewrap="false" justifyH="LEFT"  text="GF_SHOW_GROUPS_IN">
-					<Anchors>
-						<Anchor point="TOPLEFT">
-							<Offset>
-								<AbsDimension x="10" y="-6"/>
-							</Offset>
-						</Anchor>
-					</Anchors>
-				</FontString>
 			</Layer>
 		</Layers>
 		<Frames>
@@ -1093,132 +1073,29 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnClick>
 				</Scripts>
 			</Button>
-			<CheckButton name="GF_GroupsInChatCheckButton" inherits="GF_CheckButtonTemplate_Label">
+			<CheckButton name="GF_AutoFilterCheckButton" inherits="GF_CheckButtonTemplate_Label">
 				<Anchors>
-					<Anchor point="LEFT" relativeTo="GF_ShowGroupsInLabel" relativePoint="RIGHT">
+					<Anchor point="TOPLEFT">
 						<Offset>
-							<AbsDimension x="5" y="-2"/>
+							<AbsDimension x="8" y="-22"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						GF_SavedVariables.showgroupsinchat = this:GetChecked();
-						GF_SavedVariables.showgroupsnewonly = GF_GroupsNewOnlyCheckButton:SetChecked(false);
+						GF_SavedVariables.autofilter = this:GetChecked();
+						GF_ApplyFiltersToGroupList();
 					</OnClick>
 					<OnLoad>
-						getglobal(this:GetName().."TextLabel"):SetText(GF_CHAT);
-					</OnLoad>
-				</Scripts>
-			</CheckButton>
-			<CheckButton name="GF_GroupsNewOnlyCheckButton" inherits="GF_CheckButtonTemplate_Label">
-				<Anchors>
-					<Anchor point="LEFT" relativeTo="GF_GroupsInChatCheckButtonTextLabel" relativePoint="RIGHT">
-						<Offset>
-							<AbsDimension x="0" y="0"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
-				<Scripts>
-					<OnClick>
-						GF_SavedVariables.showgroupsnewonly = this:GetChecked();
-						GF_SavedVariables.showgroupsinchat = GF_GroupsInChatCheckButton:SetChecked(false);
-					</OnClick>
-					<OnLoad>
-						getglobal(this:GetName().."TextLabel"):SetText(GF_NEW_ONLY);
-					</OnLoad>
-				</Scripts>
-			</CheckButton>
-			<CheckButton name="GF_GroupsInMinimapCheckButton" inherits="GF_CheckButtonTemplate_Label">
-				<Anchors>
-					<Anchor point="LEFT" relativeTo="GF_GroupsNewOnlyCheckButtonTextLabel" relativePoint="RIGHT">
-						<Offset>
-							<AbsDimension x="0" y="0"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
-				<Scripts>
-					<OnClick>
-						GF_SavedVariables.showgroupsinminimap = this:GetChecked();
-					</OnClick>
-					<OnLoad>
-						getglobal(this:GetName().."TextLabel"):SetText(GF_MINIMAP);
-					</OnLoad>
-				</Scripts>
-			</CheckButton>
-			<CheckButton name="GF_ShowChatCheckButton" inherits="GF_CheckButtonTemplate_Label">
-				<Anchors>
-						<Anchor point="LEFT" relativeto="GF_ShowChatTypesLabel" relativePoint="RIGHT">
-						<Offset>
-							<AbsDimension x="0" y="0"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
-				<Scripts>
-					<OnClick>
-						GF_SavedVariables.showchattexts = this:GetChecked();
-					</OnClick>
-					<OnLoad>
-						getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_CHAT);
-					</OnLoad>
-				</Scripts>
-			</CheckButton>
-			<CheckButton name="GF_ShowTradesCheckButton" inherits="GF_CheckButtonTemplate_Label">
-				<Anchors>
-					<Anchor point="LEFT" relativeTo="GF_ShowChatCheckButtonTextLabel" relativePoint="RIGHT">
-						<Offset>
-							<AbsDimension x="0" y="0"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
-				<Scripts>
-					<OnClick>
-						GF_SavedVariables.showtradestexts = this:GetChecked();
-					</OnClick>
-					<OnLoad>
-						getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_TRADES);
-					</OnLoad>
-				</Scripts>
-			</CheckButton>
-			<CheckButton name="GF_ShowLootCheckButton" inherits="GF_CheckButtonTemplate_Label">
-				<Anchors>
-					<Anchor point="LEFT" relativeTo="GF_ShowTradesCheckButtonTextLabel" relativePoint="RIGHT">
-						<Offset>
-							<AbsDimension x="0" y="0"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
-				<Scripts>
-					<OnClick>
-						GF_SavedVariables.showloottexts = this:GetChecked();
-					</OnClick>
-					<OnLoad>
-						getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_LOOT);
-					</OnLoad>
-				</Scripts>
-			</CheckButton>
-			<CheckButton name="GF_ShowGuildsCheckButton" inherits="GF_CheckButtonTemplate_Label">
-				<Anchors>
-					<Anchor point="LEFT" relativeTo="GF_ShowLootCheckButtonTextLabel" relativePoint="RIGHT">
-						<Offset>
-							<AbsDimension x="0" y="0"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
-				<Scripts>
-					<OnClick>
-						GF_SavedVariables.showguilds = this:GetChecked();
-					</OnClick>
-					<OnLoad>
-						getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_GUILDS);
+						getglobal(this:GetName().."TextLabel"):SetText(GF_AUTO_FILTER);
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
 			<CheckButton name="GF_PlaySoundOnResultsCheckButton" inherits="GF_CheckButtonTemplate_Label">
 				<Anchors>
-					<Anchor point="TOP" relativeTo="GF_ShowGuildsCheckButton" relativePoint="BOTTOM">
+					<Anchor point="TOP" relativeTo="GF_AutoFilterCheckButton" relativePoint="BOTTOM">
 						<Offset>
-							<AbsDimension x="0" y="3"/>
+							<AbsDimension x="0" y="6"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -1231,9 +1108,439 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
+			<Button name="GF_GroupFilterDropdownButton" inherits="GF_ButtonTemplate">
+				<Anchors>
+					<Anchor point="LEFT" relativeTo="GF_AutoFilterCheckButtonTextLabel" relativePoint="RIGHT">
+						<Offset>
+							<AbsDimension x="5" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						if not GF_GroupFilterDropdownMenu:IsShown() then
+							GF_GroupFilterDropdownMenu:Show()
+						else
+							GF_GroupFilterDropdownMenu:Hide()
+						end
+					</OnClick>
+					<OnLeave>
+						if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "GF_GroupFilter")) then 
+							GF_GroupFilterDropdownMenu:Hide()
+						end
+					</OnLeave>
+					<OnLoad>
+						getglobal(this:GetName().."TextLabel"):SetText(GF_GROUP_FILTERS);
+					</OnLoad>
+				</Scripts>
+				<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up" setAllPoints="true"/>
+				<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Down" setAllPoints="true"/>
+				<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD" setAllPoints="true"/>
+			</Button>
+			<Frame name="GF_GroupFilterDropdownMenu" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true">
+				<Size>
+					<AbsDimension x="100" y="120"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="GF_GroupFilterDropdownButton" relativePoint="BOTTOMLEFT">
+						<Offset>
+							<AbsDimension x="0" y="4"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border">
+					<BackgroundInsets>
+						<AbsInset left="4" right="4" top="4" bottom="4"/>
+					</BackgroundInsets>
+					<EdgeSize>
+						<AbsValue val="16"/>
+					</EdgeSize>
+					<BorderColor r="0.6" g="0.6" b="0.6"/>
+				</Backdrop>
+				<Layers>
+					<Layer level ="BACKGROUND">
+						<Texture file="Interface\ChatFrame\ChatFrameBackground">
+							<Anchors>
+								<Anchor point="TOPLEFT">
+									<Offset x="4" y="-4"/>
+								</Anchor>
+								<Anchor point="BOTTOMRIGHT">
+									<Offset x="-4" y="4"/>
+								</Anchor>
+							</Anchors>
+							<Gradient orientation="VERTICAL">
+								<MinColor r="0" g="0" b="0" a="0.9"/>
+								<MaxColor r="0.2" g="0.2" b="0.2" a="0.9"/>
+							</Gradient>
+						</Texture>
+					</Layer>
+				</Layers>
+				<Frames>
+					<CheckButton name="GF_GroupFilterShowDungeonCheckButton" inherits="GF_CheckButtonTemplate_Label">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset>
+									<AbsDimension x="6" y="-4"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								GF_SavedVariables.showdungeons = this:GetChecked();
+								GF_ApplyFiltersToGroupList();
+							</OnClick>
+							<OnLoad>
+								getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_DUNGEONS);
+							</OnLoad>
+						</Scripts>
+					</CheckButton>
+					<CheckButton name="GF_GroupFilterShowRaidCheckButton" inherits="GF_CheckButtonTemplate_Label">
+						<Anchors>
+							<Anchor point="TOP" relativeTo="GF_GroupFilterShowDungeonCheckButton" relativePoint="BOTTOM">
+								<Offset>
+									<AbsDimension x="0" y="6"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								GF_SavedVariables.showraids = this:GetChecked();
+								GF_ApplyFiltersToGroupList();
+							</OnClick>
+							<OnLoad>
+								getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_RAIDS);
+							</OnLoad>
+						</Scripts>
+					</CheckButton>
+					<CheckButton name="GF_GroupFilterShowQuestCheckButton" inherits="GF_CheckButtonTemplate_Label">
+						<Anchors>
+							<Anchor point="TOP" relativeTo="GF_GroupFilterShowRaidCheckButton" relativePoint="BOTTOM">
+								<Offset>
+									<AbsDimension x="0" y="6"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								GF_SavedVariables.showquests = this:GetChecked();
+								GF_ApplyFiltersToGroupList();
+							</OnClick>
+							<OnLoad>
+								getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_QUESTS);
+							</OnLoad>
+						</Scripts>
+					</CheckButton>
+					<CheckButton name="GF_GroupFilterShowOtherCheckButton" inherits="GF_CheckButtonTemplate_Label">
+						<Anchors>
+							<Anchor point="TOP" relativeTo="GF_GroupFilterShowQuestCheckButton" relativePoint="BOTTOM">
+								<Offset>
+									<AbsDimension x="0" y="6"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								GF_SavedVariables.showother = this:GetChecked();
+								GF_ApplyFiltersToGroupList();
+							</OnClick>
+							<OnLoad>
+								getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_OTHER);
+							</OnLoad>
+						</Scripts>
+					</CheckButton>
+					<CheckButton name="GF_GroupFilterShowLFMCheckButton" inherits="GF_CheckButtonTemplate_Label">
+						<Anchors>
+							<Anchor point="TOP" relativeTo="GF_GroupFilterShowOtherCheckButton" relativePoint="BOTTOM">
+								<Offset>
+									<AbsDimension x="0" y="6"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								GF_SavedVariables.showlfm = this:GetChecked();
+								GF_ApplyFiltersToGroupList();
+							</OnClick>
+							<OnLoad>
+								getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_LFM);
+							</OnLoad>
+						</Scripts>
+					</CheckButton>
+					<CheckButton name="GF_GroupFilterShowLFGCheckButton" inherits="GF_CheckButtonTemplate_Label">
+						<Anchors>
+							<Anchor point="TOP" relativeTo="GF_GroupFilterShowLFMCheckButton" relativePoint="BOTTOM">
+								<Offset>
+									<AbsDimension x="0" y="6"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								GF_SavedVariables.showlfg = this:GetChecked();
+								GF_ApplyFiltersToGroupList();
+							</OnClick>
+							<OnLoad>
+								getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_LFG);
+							</OnLoad>
+						</Scripts>
+					</CheckButton>
+				</Frames>
+				<Scripts>
+					<OnLeave>
+						if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "GF_GroupFilter")) then 
+							GF_GroupFilterDropdownMenu:Hide()
+						end
+					</OnLeave>
+					<OnLoad>
+						this:SetWidth(GF_GroupFilterDropdownButtonTextLabel:GetStringWidth()+50);
+					</OnLoad>
+				</Scripts>
+			</Frame>
+			<Button name="GF_LFGHardCoreDropdown" inherits="GF_ButtonTemplate" hidden="true">
+				<Anchors>
+					<Anchor point="TOP" relativeTo="GF_GroupFilterDropdownButton" relativePoint="BOTTOM">
+						<Offset>
+							<AbsDimension x="0" y="6"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						if not GF_LFGHardCore:IsShown() then
+							GF_ShowDropdownList("LFGHardCore")
+						else
+							GF_LFGHardCore:Hide()
+						end
+					</OnClick>
+					<OnLeave>
+						if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGHardCore")) then 
+							GF_LFGHardCore:Hide()
+						end
+					</OnLeave>
+					<OnLoad>
+						getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_HARDCORE);
+					</OnLoad>
+				</Scripts>
+				<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up" setAllPoints="true"/>
+				<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Down" setAllPoints="true"/>
+				<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD" setAllPoints="true"/>
+			</Button>
+			<Button name="GF_ChatFilterDropdownButton" inherits="GF_ButtonTemplate">
+				<Scripts>
+					<OnClick>
+						if not GF_ChatFilterDropdownMenu:IsShown() then
+							GF_ChatFilterDropdownMenu:Show()
+						else
+							GF_ChatFilterDropdownMenu:Hide()
+						end
+					</OnClick>
+					<OnLeave>
+						if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "GF_ChatFilter")) then 
+							GF_ChatFilterDropdownMenu:Hide()
+						end
+					</OnLeave>
+					<OnLoad>
+						getglobal(this:GetName().."TextLabel"):SetText(GF_CHAT_FILTERS);
+						this:SetPoint("TOPRIGHT", GF_MainFrameCloseButton, "BOTTOMRIGHT", -1*getglobal(this:GetName().."TextLabel"):GetStringWidth() -15, 6);
+					</OnLoad>
+				</Scripts>
+				<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up" setAllPoints="true"/>
+				<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Down" setAllPoints="true"/>
+				<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD" setAllPoints="true"/>
+			</Button>
+			<Frame name="GF_ChatFilterDropdownMenu" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true">
+				<Size>
+					<AbsDimension y="180"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="GF_ChatFilterDropdownButton" relativePoint="BOTTOMLEFT">
+						<Offset>
+							<AbsDimension x="0" y="4"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border">
+					<BackgroundInsets>
+						<AbsInset left="4" right="4" top="4" bottom="4"/>
+					</BackgroundInsets>
+					<EdgeSize>
+						<AbsValue val="16"/>
+					</EdgeSize>
+					<BorderColor r="0.6" g="0.6" b="0.6"/>
+				</Backdrop>
+				<Layers>
+					<Layer level ="BACKGROUND">
+						<Texture file="Interface\ChatFrame\ChatFrameBackground">
+							<Anchors>
+								<Anchor point="TOPLEFT">
+									<Offset x="4" y="-4"/>
+								</Anchor>
+								<Anchor point="BOTTOMRIGHT">
+									<Offset x="-4" y="4"/>
+								</Anchor>
+							</Anchors>
+							<Gradient orientation="VERTICAL">
+								<MinColor r="0" g="0" b="0" a="0.9"/>
+								<MaxColor r="0.2" g="0.2" b="0.2" a="0.9"/>
+							</Gradient>
+						</Texture>
+						<FontString inherits="GF_TitleFont" name="GF_ShowGroupsInLabel" text="GF_SHOW_GROUPS_IN">
+							<Anchors>
+								<Anchor point="TOPLEFT">
+									<Offset>
+										<AbsDimension x="5" y="-5"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+						<FontString inherits="GF_TitleFont" name="GF_ShowChatTypesLabel" text="GF_SHOW">
+							<Anchors>
+								<Anchor point="TOPLEFT">
+									<Offset>
+										<AbsDimension x="5" y="-80"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Frames>
+					<CheckButton name="GF_ChatFilterGroupsInChatCheckButton" inherits="GF_CheckButtonTemplate_Label">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="GF_ShowGroupsInLabel" relativePoint="BOTTOMLEFT">
+								<Offset>
+									<AbsDimension x="5" y="0"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								GF_SavedVariables.showgroupsinchat = this:GetChecked();
+								GF_SavedVariables.showgroupsnewonly = GF_ChatFilterGroupsNewOnlyCheckButton:SetChecked(false);
+							</OnClick>
+							<OnLoad>
+								getglobal(this:GetName().."TextLabel"):SetText(GF_CHAT);
+							</OnLoad>
+						</Scripts>
+					</CheckButton>
+					<CheckButton name="GF_ChatFilterGroupsNewOnlyCheckButton" inherits="GF_CheckButtonTemplate_Label">
+						<Anchors>
+							<Anchor point="TOP" relativeTo="GF_ChatFilterGroupsInChatCheckButton" relativePoint="BOTTOM">
+								<Offset>
+									<AbsDimension x="0" y="6"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								GF_SavedVariables.showgroupsnewonly = this:GetChecked();
+								GF_SavedVariables.showgroupsinchat = GF_ChatFilterGroupsInChatCheckButton:SetChecked(false);
+							</OnClick>
+							<OnLoad>
+								getglobal(this:GetName().."TextLabel"):SetText(GF_NEW_ONLY);
+							</OnLoad>
+						</Scripts>
+					</CheckButton>
+					<CheckButton name="GF_ChatFilterGroupsInMinimapCheckButton" inherits="GF_CheckButtonTemplate_Label">
+						<Anchors>
+							<Anchor point="TOP" relativeTo="GF_ChatFilterGroupsNewOnlyCheckButton" relativePoint="BOTTOM">
+								<Offset>
+									<AbsDimension x="0" y="6"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								GF_SavedVariables.showgroupsinminimap = this:GetChecked();
+							</OnClick>
+							<OnLoad>
+								getglobal(this:GetName().."TextLabel"):SetText(GF_MINIMAP);
+							</OnLoad>
+						</Scripts>
+					</CheckButton>
+					<CheckButton name="GF_ChatFilterShowChatCheckButton" inherits="GF_CheckButtonTemplate_Label">
+						<Anchors>
+								<Anchor point="TOP" relativeto="GF_ShowChatTypesLabel" relativePoint="BOTTOM">
+								<Offset>
+									<AbsDimension x="5" y="-2"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								GF_SavedVariables.showchattexts = this:GetChecked();
+							</OnClick>
+							<OnLoad>
+								getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_CHAT);
+							</OnLoad>
+						</Scripts>
+					</CheckButton>
+					<CheckButton name="GF_ChatFilterShowTradesCheckButton" inherits="GF_CheckButtonTemplate_Label">
+						<Anchors>
+							<Anchor point="TOP" relativeTo="GF_ChatFilterShowChatCheckButton" relativePoint="BOTTOM">
+								<Offset>
+									<AbsDimension x="0" y="4"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								GF_SavedVariables.showtradestexts = this:GetChecked();
+							</OnClick>
+							<OnLoad>
+								getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_TRADES);
+							</OnLoad>
+						</Scripts>
+					</CheckButton>
+					<CheckButton name="GF_ChatFilterShowLootCheckButton" inherits="GF_CheckButtonTemplate_Label">
+						<Anchors>
+							<Anchor point="TOP" relativeTo="GF_ChatFilterShowTradesCheckButton" relativePoint="BOTTOM">
+								<Offset>
+									<AbsDimension x="0" y="6"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								GF_SavedVariables.showloottexts = this:GetChecked();
+							</OnClick>
+							<OnLoad>
+								getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_LOOT);
+							</OnLoad>
+						</Scripts>
+					</CheckButton>
+					<CheckButton name="GF_ChatFilterShowGuildsCheckButton" inherits="GF_CheckButtonTemplate_Label">
+						<Anchors>
+							<Anchor point="TOP" relativeTo="GF_ChatFilterShowLootCheckButton" relativePoint="BOTTOM">
+								<Offset>
+									<AbsDimension x="0" y="6"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								GF_SavedVariables.showguilds = this:GetChecked();
+							</OnClick>
+							<OnLoad>
+								getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_GUILDS);
+							</OnLoad>
+						</Scripts>
+					</CheckButton>
+				</Frames>
+				<Scripts>
+					<OnLeave>
+						if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "GF_ChatFilter")) then 
+							GF_ChatFilterDropdownMenu:Hide()
+						end
+					</OnLeave>
+					<OnLoad>
+						this:SetWidth(GF_ShowGroupsInLabel:GetStringWidth()+5);
+					</OnLoad>
+				</Scripts>
+			</Frame>
 			<CheckButton name="GF_FrameUseWhoOnGroupsCheckButton" inherits="GF_CheckButtonTemplate_Label">
 				<Anchors>
-					<Anchor point="TOP" relativeTo="GF_PlaySoundOnResultsCheckButton" relativePoint="BOTTOM">
+					<Anchor point="TOP" relativeTo="GF_ChatFilterDropdownButton" relativePoint="BOTTOM">
 						<Offset>
 							<AbsDimension x="0" y="6"/>
 						</Offset>
@@ -1256,7 +1563,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			<Button name="GF_SearchListDropdown">
 				<Size x="24" y="24"/>
 				<Anchors>
-					<Anchor point="RIGHT" relativeTo="GF_PlaySoundOnResultsCheckButton" relativePoint="LEFT">
+					<Anchor point="RIGHT" relativeTo="GF_ChatFilterDropdownButton" relativePoint="LEFT">
 						<Offset>
 							<AbsDimension x="0" y="-8"/>
 						</Offset>
@@ -1366,53 +1673,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLeave>
 				</Scripts>
 			</Frame>
-			<CheckButton name="GF_AutoFilterCheckButton" inherits="GF_CheckButtonTemplate_Label">
-				<Anchors>
-					<Anchor point="TOPLEFT">
-						<Offset>
-							<AbsDimension x="8" y="-22"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
-				<Scripts>
-					<OnClick>
-						GF_SavedVariables.autofilter = this:GetChecked();
-						GF_ApplyFiltersToGroupList();
-					</OnClick>
-					<OnLoad>
-						getglobal(this:GetName().."TextLabel"):SetText(GF_AUTO_FILTER);
-					</OnLoad>
-				</Scripts>
-			</CheckButton>
-			<Button name="GF_LFGHardCoreDropdown" inherits="GF_ButtonTemplate" hidden="true">
-				<Anchors>
-					<Anchor point="TOP" relativeTo="GF_AutoFilterCheckButton" relativePoint="BOTTOM">
-						<Offset>
-							<AbsDimension x="0" y="6"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
-				<Scripts>
-					<OnClick>
-						if not GF_LFGHardCore:IsShown() then
-							GF_ShowDropdownList("LFGHardCore")
-						else
-							GF_LFGHardCore:Hide()
-						end
-					</OnClick>
-					<OnLeave>
-						if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGHardCore")) then 
-							GF_LFGHardCore:Hide()
-						end
-					</OnLeave>
-					<OnLoad>
-						getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_HARDCORE);
-					</OnLoad>
-				</Scripts>
-				<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up" setAllPoints="true"/>
-				<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Down" setAllPoints="true"/>
-				<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD" setAllPoints="true"/>
-			</Button>
 			<Frame name="GF_LFGHardCore" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true">
 				<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border">
 					<BackgroundInsets>
@@ -1449,114 +1709,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLeave>
 				</Scripts>
 			</Frame>
-			<CheckButton name="GF_GroupsFrameShowDungeonCheckButton" inherits="GF_CheckButtonTemplate_Label">
-				<Anchors>
-					<Anchor point="LEFT" relativeTo="GF_AutoFilterCheckButtonTextLabel" relativePoint="RIGHT">
-						<Offset>
-							<AbsDimension x="0" y="0"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
-				<Scripts>
-					<OnClick>
-						GF_SavedVariables.showdungeons = this:GetChecked();
-						GF_ApplyFiltersToGroupList();
-					</OnClick>
-					<OnLoad>
-						getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_DUNGEONS);
-					</OnLoad>
-				</Scripts>
-			</CheckButton>
-			<CheckButton name="GF_GroupsFrameShowRaidCheckButton" inherits="GF_CheckButtonTemplate_Label">
-				<Anchors>
-					<Anchor point="TOPLEFT" relativeTo="GF_GroupsFrameShowDungeonCheckButton" relativePoint="BOTTOMLEFT">
-						<Offset>
-							<AbsDimension x="0" y="6"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
-				<Scripts>
-					<OnClick>
-						GF_SavedVariables.showraids = this:GetChecked();
-						GF_ApplyFiltersToGroupList();
-					</OnClick>
-					<OnLoad>
-						getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_RAIDS);
-					</OnLoad>
-				</Scripts>
-			</CheckButton>
-			<CheckButton name="GF_GroupsFrameShowQuestCheckButton" inherits="GF_CheckButtonTemplate_Label">
-				<Anchors>
-					<Anchor point="LEFT" relativeTo="GF_GroupsFrameShowDungeonCheckButtonTextLabel" relativePoint="RIGHT">
-						<Offset>
-							<AbsDimension x="0" y="0"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
-				<Scripts>
-					<OnClick>
-						GF_SavedVariables.showquests = this:GetChecked();
-						GF_ApplyFiltersToGroupList();
-					</OnClick>
-					<OnLoad>
-						getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_QUESTS);
-					</OnLoad>
-				</Scripts>
-			</CheckButton>
-			<CheckButton name="GF_GroupsFrameShowOtherCheckButton" inherits="GF_CheckButtonTemplate_Label">
-				<Anchors>
-					<Anchor point="TOPLEFT" relativeTo="GF_GroupsFrameShowQuestCheckButton" relativePoint="BOTTOMLEFT">
-						<Offset>
-							<AbsDimension x="0" y="6"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
-				<Scripts>
-					<OnClick>
-						GF_SavedVariables.showother = this:GetChecked();
-						GF_ApplyFiltersToGroupList();
-					</OnClick>
-					<OnLoad>
-						getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_OTHER);
-					</OnLoad>
-				</Scripts>
-			</CheckButton>
-			<CheckButton name="GF_GroupsFrameShowLFMCheckButton" inherits="GF_CheckButtonTemplate_Label">
-				<Anchors>
-					<Anchor point="LEFT" relativeTo="GF_GroupsFrameShowQuestCheckButtonTextLabel" relativePoint="RIGHT">
-						<Offset>
-							<AbsDimension x="0" y="0"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
-				<Scripts>
-					<OnClick>
-						GF_SavedVariables.showlfm = this:GetChecked();
-						GF_ApplyFiltersToGroupList();
-					</OnClick>
-					<OnLoad>
-						getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_LFM);
-					</OnLoad>
-				</Scripts>
-			</CheckButton>
-			<CheckButton name="GF_GroupsFrameShowLFGCheckButton" inherits="GF_CheckButtonTemplate_Label">
-				<Anchors>
-					<Anchor point="TOPLEFT" relativeTo="GF_GroupsFrameShowLFMCheckButton" relativePoint="BOTTOMLEFT">
-						<Offset>
-							<AbsDimension x="0" y="6"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
-				<Scripts>
-					<OnClick>
-						GF_SavedVariables.showlfg = this:GetChecked();
-						GF_ApplyFiltersToGroupList();
-					</OnClick>
-					<OnLoad>
-						getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_LFG);
-					</OnLoad>
-				</Scripts>
-			</CheckButton>
 			<Button name="GF_HideMainFrameLeft">
 				<Size>
 					<AbsDimension x="26" y="26"/>
@@ -1768,6 +1920,50 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnClick>
 				</Scripts>
 			</Button>
+			<Button name="GF_LFGFrameToggleButton" inherits="GF_ButtonTemplate" text="GF_LFG">
+				<Size>
+					<AbsDimension x="40" y="22"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="GF_ShowSearchButton" relativePoint="TOPRIGHT">
+						<Offset>
+							<AbsDimension x="-5" y="3"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						if GF_SavedVariables.lfgshown then GF_SavedVariables.lfgshown = nil else GF_SavedVariables.lfgshown = true end
+						GF_LFGWhoUpdateOffset()
+						GF_UpdateMainFrameHeight()
+						GF_UpdateMainFrameWidth()
+						GF_UpdateMainFrame()
+						GF_UpdateResults()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="GF_GetWhoFrameToggleButton" inherits="GF_ButtonTemplate" text="GF_WHO">
+				<Size>
+					<AbsDimension x="40" y="22"/>
+				</Size>
+				<Anchors>
+					<Anchor point="LEFT" relativeTo="GF_LFGFrameToggleButton" relativePoint="RIGHT">
+						<Offset>
+							<AbsDimension x="2" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						if GF_SavedVariables.getwhoshown then GF_SavedVariables.getwhoshown = nil else GF_SavedVariables.getwhoshown = true end
+						GF_LFGWhoUpdateOffset()
+						GF_UpdateMainFrameHeight()
+						GF_UpdateMainFrameWidth()
+						GF_UpdateMainFrame()
+						GF_UpdateResults()
+					</OnClick>
+				</Scripts>
+			</Button>
 			<Frame name="GF_GroupsFrame">
 				<Size>
 					<AbsDimension x="615" y="380"/>
@@ -1785,45 +1981,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							<Anchor point="TOPLEFT" />
 							<Anchor point="BOTTOMRIGHT" />
 						</Anchors>
-						<Layers>
-							<Layer level="ARTWORK">
-								<FontString inherits="GameFontNormalSmall" name="GF_ResultsLabel" nonspacewrap="false" justifyH="LEFT"  text="GF_FOUND">
-									<Color r="0.9" g="0.9" b="0.9"/>
-									<Size>
-										<AbsDimension x="0" y="0"/>
-									</Size>
-									<Anchors>
-										<Anchor point="BOTTOMRIGHT" relativeTo="GF_MainFrame" relativePoint="BOTTOMRIGHT">
-											<Offset>
-												<AbsDimension x="-27" y="50"/>
-											</Offset>
-										</Anchor>
-									</Anchors>
-								</FontString>
-								<FontString inherits="GameFontNormalSmall" name="GF_PageLabel" nonspacewrap="false">
-									<Size>
-										<AbsDimension x="70" y="20"/>
-									</Size>
-									<Anchors>
-										<Anchor point="TOPRIGHT" relativeTo="GF_ResultsLabel" relativePoint="BOTTOMRIGHT">
-											<Offset>
-												<AbsDimension x="0" y="0"/>
-											</Offset>
-										</Anchor>
-									</Anchors>
-								</FontString>
-								<FontString inherits="GameFontNormalSmall" name="GF_WorldAnnounceMessageTextLabel" nonspacewrap="false" justifyH="LEFT"  text="GF_WORLD_SEND_TEXT">
-									<Color r="0.9" g="0.9" b="0.9"/>
-									<Anchors>
-										<Anchor point="BOTTOMLEFT" relativeTo="GF_MainFrame" relativePoint="BOTTOMLEFT">
-											<Offset>
-												<AbsDimension x="60" y="52"/>
-											</Offset>
-										</Anchor>
-									</Anchors>
-								</FontString>
-							</Layer>
-						</Layers>
 						<Frames>
 							<Frame name="GF_NewItem1" inherits="GF_NewItemTemplate" id="1">
 								<Anchors>
@@ -1853,624 +2010,831 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							<Frame name="GF_NewItem18"  inherits="GF_NewItemTemplate" id="18"></Frame>
 							<Frame name="GF_NewItem19"  inherits="GF_NewItemTemplate" id="19"></Frame>
 							<Frame name="GF_NewItem20"  inherits="GF_NewItemTemplate" id="20"></Frame>
-							<Button name="$parentPrev">
+							<Frame name="GF_NewItem21"  inherits="GF_NewItemTemplate" id="21"></Frame>
+							<Frame name="GF_NewItem22"  inherits="GF_NewItemTemplate" id="22"></Frame>
+							<Frame name="GF_GetWhoFrame" enableMouse="true">
 								<Size>
-									<AbsDimension x="25" y="25"/>
+									<AbsDimension x="680" y="23"/>
 								</Size>
-								<Anchors>
-									<Anchor point="RIGHT" relativeTo="GF_PageLabel" relativePoint="LEFT">
-										<Offset>
-											<AbsDimension x="3" y="0"/>
-										</Offset>
-									</Anchor>
-								</Anchors>
-								<Scripts>
-									<OnClick>
-										if GF_ResultsListOffset >0 then
-											GF_ResultsListOffset = GF_ResultsListOffset - GF_ResultsListOffsetSize;
-											GF_UpdateResults();
-										end
-									</OnClick>
-								</Scripts>
-								<NormalTexture file="Interface\Buttons\UI-SpellbookIcon-PrevPage-Up"/>
-								<PushedTexture file="Interface\Buttons\UI-SpellbookIcon-PrevPage-Down"/>
-								<DisabledTexture file="Interface\Buttons\UI-SpellbookIcon-PrevPage-Disabled"/>
-								<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD"/>
-							</Button>
-							<Button name="$parentNext">
-								<Size>
-									<AbsDimension x="25" y="25"/>
-								</Size>
-								<Anchors>
-									<Anchor point="LEFT" relativeTo="GF_PageLabel" relativePoint="RIGHT">
-										<Offset>
-											<AbsDimension x="-3" y="0"/>
-										</Offset>
-									</Anchor>
-								</Anchors>
-								<Scripts>
-									<OnClick>
-										if getn(GF_FilteredResultsList) >GF_ResultsListOffset + GF_ResultsListOffsetSize then
-											GF_ResultsListOffset = GF_ResultsListOffset + GF_ResultsListOffsetSize;
-											GF_UpdateResults();
-										end
-									</OnClick>
-								</Scripts>
-								<NormalTexture file="Interface\Buttons\UI-SpellbookIcon-NextPage-Up"/>
-								<PushedTexture file="Interface\Buttons\UI-SpellbookIcon-NextPage-Down"/>
-								<DisabledTexture file="Interface\Buttons\UI-SpellbookIcon-NextPage-Disabled"/>
-								<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD"/>
-							</Button>
-							<Button name="GF_LFGSizeDropdown" inherits="GF_ButtonTemplate">
 								<Anchors>
 									<Anchor point="BOTTOMLEFT" relativeTo="GF_MainFrame" relativePoint="BOTTOMLEFT">
 										<Offset>
-											<AbsDimension x="10" y="-5"/>
+											<AbsDimension x="10" y="-15"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
-								<Scripts>
-									<OnClick>
-										if not GF_LFGSize:IsShown() then
-											GF_ShowDropdownList("LFGSize")
-										else
-											GF_LFGSize:Hide()
-										end
-									</OnClick>
-									<OnLeave>
-										if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGSize")) then 
-											GF_LFGSize:Hide()
-										end
-									</OnLeave>
-								</Scripts>
-								<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up" setAllPoints="true"/>
-								<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Down" setAllPoints="true"/>
-								<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD" setAllPoints="true"/>
-							</Button>
-							<Frame name="GF_LFGSize" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true">
-								<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border">
-									<BackgroundInsets>
-										<AbsInset left="4" right="4" top="4" bottom="4"/>
-									</BackgroundInsets>
-									<EdgeSize>
-										<AbsValue val="16"/>
-									</EdgeSize>
-									<BorderColor r="0.6" g="0.6" b="0.6"/>
-								</Backdrop>
-								<Layers>
-									<Layer level ="BACKGROUND">
-										<Texture file="Interface\ChatFrame\ChatFrameBackground">
-											<Anchors>
-												<Anchor point="TOPLEFT">
-													<Offset x="4" y="-4"/>
-												</Anchor>
-												<Anchor point="BOTTOMRIGHT">
-													<Offset x="-4" y="4"/>
-												</Anchor>
-											</Anchors>
-											<Gradient orientation="VERTICAL">
-												<MinColor r="0" g="0" b="0" a="0.9"/>
-												<MaxColor r="0.2" g="0.2" b="0.2" a="0.9"/>
-											</Gradient>
-										</Texture>
-									</Layer>
-								</Layers>
-								<Scripts>
-									<OnLeave>
-										if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGSize")) then 
-											GF_LFGSize:Hide()
-										end
-									</OnLeave>
-								</Scripts>
+								<Frames>
+									<Button name="GF_GetWhoButton" inherits="GF_ButtonTemplate" text="GF_GET_WHO">
+										<Size>
+											<AbsDimension x="80" y="24"/>
+										</Size>
+										<Anchors>
+											<Anchor point="BOTTOMLEFT">
+												<Offset>
+													<AbsDimension x="0" y="0"/>
+												</Offset>
+											</Anchor>
+										</Anchors>
+										<Scripts>
+											<OnClick>
+												GF_ToggleGetWho()
+											</OnClick>
+										</Scripts>
+									</Button>
+									<Button name="GF_GetWhoTotalNames" inherits="GF_ButtonTemplate" text="0">
+										<Size>
+											<AbsDimension x="30" y="24"/>
+										</Size>
+										<Anchors>
+											<Anchor point="LEFT" relativeTo="GF_GetWhoButton" relativePoint="RIGHT">
+												<Offset>
+													<AbsDimension x="0" y="0"/>
+												</Offset>
+											</Anchor>
+										</Anchors>
+										<Scripts>
+											<OnLoad>
+												GF_GetWhoTotalNames:Disable()
+											</OnLoad>
+										</Scripts>
+									</Button>
+									<Button name="GF_GetWhoClassDropdown" inherits="GF_ButtonTemplate">
+										<Anchors>
+											<Anchor point="LEFT" relativeTo="GF_GetWhoTotalNames" relativePoint="RIGHT">
+												<Offset>
+													<AbsDimension x="0" y="0"/>
+												</Offset>
+											</Anchor>
+										</Anchors>
+										<Scripts>
+											<OnClick>
+												if not GF_GetWhoClass:IsShown() then
+													GF_ShowDropdownList("GetWhoClass")
+												else
+													GF_GetWhoClass:Hide()
+												end
+											</OnClick>
+											<OnLeave>
+												if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "GetWhoClass")) then 
+													GF_GetWhoClass:Hide()
+												end
+											</OnLeave>
+										</Scripts>
+										<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up" setAllPoints="true"/>
+										<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Down" setAllPoints="true"/>
+										<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD" setAllPoints="true"/>
+									</Button>
+									<Frame name="GF_GetWhoClass" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true">
+										<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border">
+											<BackgroundInsets>
+												<AbsInset left="4" right="4" top="4" bottom="4"/>
+											</BackgroundInsets>
+											<EdgeSize>
+												<AbsValue val="16"/>
+											</EdgeSize>
+											<BorderColor r="0.6" g="0.6" b="0.6"/>
+										</Backdrop>
+										<Layers>
+											<Layer level ="BACKGROUND">
+												<Texture file="Interface\ChatFrame\ChatFrameBackground">
+													<Anchors>
+														<Anchor point="TOPLEFT">
+															<Offset x="4" y="-4"/>
+														</Anchor>
+														<Anchor point="BOTTOMRIGHT">
+															<Offset x="-4" y="4"/>
+														</Anchor>
+													</Anchors>
+													<Gradient orientation="VERTICAL">
+														<MinColor r="0" g="0" b="0" a="0.9"/>
+														<MaxColor r="0.2" g="0.2" b="0.2" a="0.9"/>
+													</Gradient>
+												</Texture>
+											</Layer>
+										</Layers>
+										<Scripts>
+											<OnLeave>
+												if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "GetWhoClass")) then 
+													GF_GetWhoClass:Hide()
+												end
+											</OnLeave>
+										</Scripts>
+									</Frame>
+									<Button name="GF_GetWhoLevelDropdown" inherits="GF_ButtonTemplate">
+										<Anchors>
+											<Anchor point="LEFT" relativeTo="GF_GetWhoClassDropdown" relativePoint="RIGHT">
+												<Offset>
+													<AbsDimension x="45" y="0"/>
+												</Offset>
+											</Anchor>
+										</Anchors>
+										<Scripts>
+											<OnClick>
+												if not GF_GetWhoLevel:IsShown() then
+													GF_ShowDropdownList("GetWhoLevel")
+												else
+													GF_GetWhoLevel:Hide()
+												end
+											</OnClick>
+											<OnLeave>
+												if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "GetWhoLevel")) then 
+													GF_GetWhoLevel:Hide()
+												end
+											</OnLeave>
+										</Scripts>
+										<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up" setAllPoints="true"/>
+										<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Down" setAllPoints="true"/>
+										<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD" setAllPoints="true"/>
+									</Button>
+									<Frame name="GF_GetWhoLevel" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true">
+										<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border">
+											<BackgroundInsets>
+												<AbsInset left="4" right="4" top="4" bottom="4"/>
+											</BackgroundInsets>
+											<EdgeSize>
+												<AbsValue val="16"/>
+											</EdgeSize>
+											<BorderColor r="0.6" g="0.6" b="0.6"/>
+										</Backdrop>
+										<Layers>
+											<Layer level ="BACKGROUND">
+												<Texture file="Interface\ChatFrame\ChatFrameBackground">
+													<Anchors>
+														<Anchor point="TOPLEFT">
+															<Offset x="4" y="-4"/>
+														</Anchor>
+														<Anchor point="BOTTOMRIGHT">
+															<Offset x="-4" y="4"/>
+														</Anchor>
+													</Anchors>
+													<Gradient orientation="VERTICAL">
+														<MinColor r="0" g="0" b="0" a="0.9"/>
+														<MaxColor r="0.2" g="0.2" b="0.2" a="0.9"/>
+													</Gradient>
+												</Texture>
+											</Layer>
+										</Layers>
+										<Scripts>
+											<OnLeave>
+												if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "GetWhoLevel")) then 
+													GF_GetWhoLevel:Hide()
+												end
+											</OnLeave>
+										</Scripts>
+									</Frame>
+									<EditBox name="GF_GetWhoWhisperEditBox" letters="128" inherits="GF_AbstractEditBox">
+										<Size>
+											<AbsDimension x="210" y="22"/>
+										</Size>
+										<Anchors>
+											<Anchor point="LEFT" relativeTo="GF_GetWhoLevelDropdown" relativePoint="RIGHT">
+												<Offset>
+													<AbsDimension x="60" y="0"/>
+												</Offset>
+											</Anchor>
+										</Anchors>
+										<Layers>
+											<Layer level="ARTWORK">
+												<FontString inherits="GameFontNormalSmall" name="GF_GetWhoNameLabel" justifyH="LEFT" nonspacewrap="false">
+													<Size>
+														<AbsDimension x="170" y="20"/>
+													</Size>
+													<Anchors>
+														<Anchor point="LEFT" relativePoint="RIGHT">
+															<Offset>
+																<AbsDimension x="5" y="0"/>
+															</Offset>
+														</Anchor>
+													</Anchors>
+												</FontString>
+											</Layer>
+										</Layers>
+										<Scripts>
+											<OnEnter>
+												GF_ShowTooltip(this);
+											</OnEnter>
+											<OnLeave>
+												GameTooltip:Hide();
+											</OnLeave>
+											<OnLoad>
+												this:SetTextInsets(4,0,0,0);
+											</OnLoad>
+											<OnEditFocusLost>
+												GF_SavedVariables.searchlfgwhispertext = GF_GetWhoWhisperEditBox:GetText();
+												this:HighlightText(string.len(this:GetText())+1);
+											</OnEditFocusLost>
+											<OnTabPressed>
+												GF_SavedVariables.searchlfgwhispertext = GF_GetWhoWhisperEditBox:GetText();
+												this:ClearFocus();
+												this:HighlightText(string.len(this:GetText())+1);
+											</OnTabPressed>
+											<OnEnterPressed>
+												GF_SavedVariables.searchlfgwhispertext = GF_GetWhoWhisperEditBox:GetText();
+												this:ClearFocus();
+												this:HighlightText(string.len(this:GetText())+1);
+											</OnEnterPressed>
+											<OnEscapePressed>
+												GF_SavedVariables.searchlfgwhispertext = GF_GetWhoWhisperEditBox:GetText();
+												this:ClearFocus();
+												this:HighlightText(string.len(this:GetText())+1);
+											</OnEscapePressed>
+										</Scripts>
+									</EditBox>
+									<Button name="GF_GetWhoSkipButton" inherits="GF_ButtonTemplate" text="GF_SKIP">
+										<Size>
+											<AbsDimension x="40" y="24"/>
+										</Size>
+										<Anchors>
+											<Anchor point="BOTTOMRIGHT">
+												<Offset>
+													<AbsDimension x="0" y="0"/>
+												</Offset>
+											</Anchor>
+										</Anchors>
+										<Scripts>
+											<OnClick>
+												GF_GetWhoSkipPlayer()
+											</OnClick>
+										</Scripts>
+									</Button>
+									<Button name="GF_GetWhoWhisperButton" inherits="GF_ButtonTemplate" text="GF_WHISPER">
+										<Size>
+											<AbsDimension x="65" y="24"/>
+										</Size>
+										<Anchors>
+											<Anchor point="RIGHT" relativeTo="GF_GetWhoSkipButton" relativePoint="LEFT">
+												<Offset>
+													<AbsDimension x="0" y="0"/>
+												</Offset>
+											</Anchor>
+										</Anchors>
+										<Scripts>
+											<OnClick>
+												GF_GetWhoSendWhisperToAvailablePlayer()
+											</OnClick>
+										</Scripts>
+									</Button>
+								</Frames>
 							</Frame>
-							<Button name="GF_LFGLFMDropdown" inherits="GF_ButtonTemplate">
+							<Frame name="GF_LFGFrame" enableMouse="true">
+								<Size>
+									<AbsDimension x="680" y="30"/>
+								</Size>
 								<Anchors>
 									<Anchor point="BOTTOMLEFT" relativeTo="GF_MainFrame" relativePoint="BOTTOMLEFT">
 										<Offset>
-											<AbsDimension x="80" y="-5"/>
+											<AbsDimension x="10" y="10"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
-								<Scripts>
-									<OnClick>
-										if not GF_LFGLFM:IsShown() then
-											GF_ShowDropdownList("LFGLFM")
-										else
-											GF_LFGLFM:Hide()
-										end
-									</OnClick>
-									<OnLeave>
-										if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGLFM")) then 
-											GF_LFGLFM:Hide()
-										end
-									</OnLeave>
-									<OnLoad>
-										getglobal(this:GetName().."TextLabel"):SetText(GF_LFM_LFG);
-									</OnLoad>
-								</Scripts>
-								<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up" setAllPoints="true"/>
-								<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Down" setAllPoints="true"/>
-								<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD" setAllPoints="true"/>
-							</Button>
-							<Frame name="GF_LFGLFM" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true">
-								<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border">
-									<BackgroundInsets>
-										<AbsInset left="4" right="4" top="4" bottom="4"/>
-									</BackgroundInsets>
-									<EdgeSize>
-										<AbsValue val="16"/>
-									</EdgeSize>
-									<BorderColor r="0.6" g="0.6" b="0.6"/>
-								</Backdrop>
-								<Layers>
-									<Layer level ="BACKGROUND">
-										<Texture file="Interface\ChatFrame\ChatFrameBackground">
-											<Anchors>
-												<Anchor point="TOPLEFT">
-													<Offset x="4" y="-4"/>
-												</Anchor>
-												<Anchor point="BOTTOMRIGHT">
-													<Offset x="-4" y="4"/>
-												</Anchor>
-											</Anchors>
-											<Gradient orientation="VERTICAL">
-												<MinColor r="0" g="0" b="0" a="0.9"/>
-												<MaxColor r="0.2" g="0.2" b="0.2" a="0.9"/>
-											</Gradient>
-										</Texture>
-									</Layer>
-								</Layers>
-								<Scripts>
-									<OnLeave>
-										if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGLFM")) then 
-											GF_LFGLFM:Hide()
-										end
-									</OnLeave>
-								</Scripts>
+								<Frames>
+									<CheckButton name="GF_GroupAutoCheckButton" inherits="GF_CheckButtonTemplate_Label">
+										<Anchors>
+											<Anchor point="BOTTOMLEFT">
+												<Offset>
+													<AbsDimension x="0" y="0"/>
+												</Offset>
+											</Anchor>
+										</Anchors>
+										<Scripts>
+											<OnClick>
+													GF_SavedVariables.lfgauto = this:GetChecked();
+													GF_FixLFGStrings()
+											</OnClick>
+											<OnLoad>
+												getglobal(this:GetName().."TextLabel"):SetText(GF_AUTO);
+											</OnLoad>
+										</Scripts>
+									</CheckButton>
+									<Button name="GF_LFGSizeDropdown" inherits="GF_ButtonTemplate">
+										<Anchors>
+											<Anchor point="LEFT" relativeTo="GF_GroupAutoCheckButtonTextLabel" relativePoint="RIGHT">
+												<Offset>
+													<AbsDimension x="5" y="0"/>
+												</Offset>
+											</Anchor>
+										</Anchors>
+										<Scripts>
+											<OnClick>
+												if not GF_LFGSize:IsShown() then
+													GF_ShowDropdownList("LFGSize")
+												else
+													GF_LFGSize:Hide()
+												end
+											</OnClick>
+											<OnLeave>
+												if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGSize")) then 
+													GF_LFGSize:Hide()
+												end
+											</OnLeave>
+										</Scripts>
+										<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up" setAllPoints="true"/>
+										<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Down" setAllPoints="true"/>
+										<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD" setAllPoints="true"/>
+									</Button>
+									<Frame name="GF_LFGSize" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true">
+										<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border">
+											<BackgroundInsets>
+												<AbsInset left="4" right="4" top="4" bottom="4"/>
+											</BackgroundInsets>
+											<EdgeSize>
+												<AbsValue val="16"/>
+											</EdgeSize>
+											<BorderColor r="0.6" g="0.6" b="0.6"/>
+										</Backdrop>
+										<Layers>
+											<Layer level ="BACKGROUND">
+												<Texture file="Interface\ChatFrame\ChatFrameBackground">
+													<Anchors>
+														<Anchor point="TOPLEFT">
+															<Offset x="4" y="-4"/>
+														</Anchor>
+														<Anchor point="BOTTOMRIGHT">
+															<Offset x="-4" y="4"/>
+														</Anchor>
+													</Anchors>
+													<Gradient orientation="VERTICAL">
+														<MinColor r="0" g="0" b="0" a="0.9"/>
+														<MaxColor r="0.2" g="0.2" b="0.2" a="0.9"/>
+													</Gradient>
+												</Texture>
+											</Layer>
+										</Layers>
+										<Scripts>
+											<OnLeave>
+												if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGSize")) then 
+													GF_LFGSize:Hide()
+												end
+											</OnLeave>
+										</Scripts>
+									</Frame>
+									<Button name="GF_LFGLFMDropdown" inherits="GF_ButtonTemplate">
+										<Anchors>
+											<Anchor point="LEFT" relativeTo="GF_GroupAutoCheckButtonTextLabel" relativePoint="RIGHT">
+												<Offset>
+													<AbsDimension x="70" y="0"/>
+												</Offset>
+											</Anchor>
+										</Anchors>
+										<Scripts>
+											<OnClick>
+												if not GF_LFGLFM:IsShown() then
+													GF_ShowDropdownList("LFGLFM")
+												else
+													GF_LFGLFM:Hide()
+												end
+											</OnClick>
+											<OnLeave>
+												if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGLFM")) then 
+													GF_LFGLFM:Hide()
+												end
+											</OnLeave>
+											<OnLoad>
+												getglobal(this:GetName().."TextLabel"):SetText(GF_LFM_LFG);
+											</OnLoad>
+										</Scripts>
+										<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up" setAllPoints="true"/>
+										<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Down" setAllPoints="true"/>
+										<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD" setAllPoints="true"/>
+									</Button>
+									<Frame name="GF_LFGLFM" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true">
+										<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border">
+											<BackgroundInsets>
+												<AbsInset left="4" right="4" top="4" bottom="4"/>
+											</BackgroundInsets>
+											<EdgeSize>
+												<AbsValue val="16"/>
+											</EdgeSize>
+											<BorderColor r="0.6" g="0.6" b="0.6"/>
+										</Backdrop>
+										<Layers>
+											<Layer level ="BACKGROUND">
+												<Texture file="Interface\ChatFrame\ChatFrameBackground">
+													<Anchors>
+														<Anchor point="TOPLEFT">
+															<Offset x="4" y="-4"/>
+														</Anchor>
+														<Anchor point="BOTTOMRIGHT">
+															<Offset x="-4" y="4"/>
+														</Anchor>
+													</Anchors>
+													<Gradient orientation="VERTICAL">
+														<MinColor r="0" g="0" b="0" a="0.9"/>
+														<MaxColor r="0.2" g="0.2" b="0.2" a="0.9"/>
+													</Gradient>
+												</Texture>
+											</Layer>
+										</Layers>
+										<Scripts>
+											<OnLeave>
+												if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGLFM")) then 
+													GF_LFGLFM:Hide()
+												end
+											</OnLeave>
+										</Scripts>
+									</Frame>
+									<Button name="GF_LFGDungeonDropdown" inherits="GF_ButtonTemplate">
+										<Anchors>
+											<Anchor point="LEFT" relativeTo="GF_LFGLFMDropdownTextLabel" relativePoint="RIGHT">
+												<Offset>
+													<AbsDimension x="5" y="0"/>
+												</Offset>
+											</Anchor>
+										</Anchors>
+										<Scripts>
+											<OnClick>
+												if not GF_LFGDungeon:IsShown() then
+													GF_ShowDropdownList("LFGDungeon")
+												else
+													GF_LFGDungeon:Hide()
+												end
+											</OnClick>
+											<OnLeave>
+												if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGDungeon")) then 
+													GF_LFGDungeon:Hide()
+												end
+											</OnLeave>
+											<OnLoad>
+												getglobal(this:GetName().."TextLabel"):SetText(GF_DUNGEON);
+											</OnLoad>
+										</Scripts>
+										<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up" setAllPoints="true"/>
+										<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Down" setAllPoints="true"/>
+										<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD" setAllPoints="true"/>
+									</Button>
+									<Frame name="GF_LFGDungeon" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true">
+										<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border">
+											<BackgroundInsets>
+												<AbsInset left="4" right="4" top="4" bottom="4"/>
+											</BackgroundInsets>
+											<EdgeSize>
+												<AbsValue val="16"/>
+											</EdgeSize>
+											<BorderColor r="0.6" g="0.6" b="0.6"/>
+										</Backdrop>
+										<Layers>
+											<Layer level ="BACKGROUND">
+												<Texture file="Interface\ChatFrame\ChatFrameBackground">
+													<Anchors>
+														<Anchor point="TOPLEFT">
+															<Offset x="4" y="-4"/>
+														</Anchor>
+														<Anchor point="BOTTOMRIGHT">
+															<Offset x="-4" y="4"/>
+														</Anchor>
+													</Anchors>
+													<Gradient orientation="VERTICAL">
+														<MinColor r="0" g="0" b="0" a="0.9"/>
+														<MaxColor r="0.2" g="0.2" b="0.2" a="0.9"/>
+													</Gradient>
+												</Texture>
+											</Layer>
+										</Layers>
+										<Scripts>
+											<OnLeave>
+												if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGDungeon")) then 
+													GF_LFGDungeon:Hide()
+												end
+											</OnLeave>
+										</Scripts>
+									</Frame>
+									<Button name="GF_LFGRaidDropdown" inherits="GF_ButtonTemplate">
+										<Anchors>
+											<Anchor point="LEFT" relativeTo="GF_LFGDungeonDropdownTextLabel" relativePoint="RIGHT">
+												<Offset>
+													<AbsDimension x="5" y="0"/>
+												</Offset>
+											</Anchor>
+										</Anchors>
+										<Scripts>
+											<OnClick>
+												if not GF_LFGRaid:IsShown() then
+													GF_ShowDropdownList("LFGRaid")
+												else
+													GF_LFGRaid:Hide()
+												end
+											</OnClick>
+											<OnLeave>
+												if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGRaid")) then 
+													GF_LFGRaid:Hide()
+												end
+											</OnLeave>
+											<OnLoad>
+												getglobal(this:GetName().."TextLabel"):SetText(GF_RAID);
+											</OnLoad>
+										</Scripts>
+										<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up" setAllPoints="true"/>
+										<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Down" setAllPoints="true"/>
+										<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD" setAllPoints="true"/>
+									</Button>
+									<Frame name="GF_LFGRaid" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true">
+										<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border">
+											<BackgroundInsets>
+												<AbsInset left="4" right="4" top="4" bottom="4"/>
+											</BackgroundInsets>
+											<EdgeSize>
+												<AbsValue val="16"/>
+											</EdgeSize>
+											<BorderColor r="0.6" g="0.6" b="0.6"/>
+										</Backdrop>
+										<Layers>
+											<Layer level ="BACKGROUND">
+												<Texture file="Interface\ChatFrame\ChatFrameBackground">
+													<Anchors>
+														<Anchor point="TOPLEFT">
+															<Offset x="4" y="-4"/>
+														</Anchor>
+														<Anchor point="BOTTOMRIGHT">
+															<Offset x="-4" y="4"/>
+														</Anchor>
+													</Anchors>
+													<Gradient orientation="VERTICAL">
+														<MinColor r="0" g="0" b="0" a="0.9"/>
+														<MaxColor r="0.2" g="0.2" b="0.2" a="0.9"/>
+													</Gradient>
+												</Texture>
+											</Layer>
+										</Layers>
+										<Scripts>
+											<OnLeave>
+												if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGRaid")) then 
+													GF_LFGRaid:Hide()
+												end
+											</OnLeave>
+										</Scripts>
+									</Frame>
+									<Button name="GF_LFGRoleDropdown" inherits="GF_ButtonTemplate">
+										<Anchors>
+											<Anchor point="LEFT" relativeTo="GF_LFGRaidDropdownTextLabel" relativePoint="RIGHT">
+												<Offset>
+													<AbsDimension x="5" y="0"/>
+												</Offset>
+											</Anchor>
+										</Anchors>
+										<Scripts>
+											<OnClick>
+												if not GF_LFGRole:IsShown() then
+													GF_ShowDropdownList("LFGRole")
+												else
+													GF_LFGRole:Hide()
+												end
+											</OnClick>
+											<OnLeave>
+												if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGRole")) then 
+													GF_LFGRole:Hide()
+												end
+											</OnLeave>
+											<OnLoad>
+												getglobal(this:GetName().."TextLabel"):SetText(GF_ROLE);
+											</OnLoad>
+										</Scripts>
+										<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up" setAllPoints="true"/>
+										<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Down" setAllPoints="true"/>
+										<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD" setAllPoints="true"/>
+									</Button>
+									<Frame name="GF_LFGRole" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true">
+										<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border">
+											<BackgroundInsets>
+												<AbsInset left="4" right="4" top="4" bottom="4"/>
+											</BackgroundInsets>
+											<EdgeSize>
+												<AbsValue val="16"/>
+											</EdgeSize>
+											<BorderColor r="0.6" g="0.6" b="0.6"/>
+										</Backdrop>
+										<Layers>
+											<Layer level ="BACKGROUND">
+												<Texture file="Interface\ChatFrame\ChatFrameBackground">
+													<Anchors>
+														<Anchor point="TOPLEFT">
+															<Offset x="4" y="-4"/>
+														</Anchor>
+														<Anchor point="BOTTOMRIGHT">
+															<Offset x="-4" y="4"/>
+														</Anchor>
+													</Anchors>
+													<Gradient orientation="VERTICAL">
+														<MinColor r="0" g="0" b="0" a="0.9"/>
+														<MaxColor r="0.2" g="0.2" b="0.2" a="0.9"/>
+													</Gradient>
+												</Texture>
+											</Layer>
+										</Layers>
+										<Scripts>
+											<OnLeave>
+												if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGRole")) then 
+													GF_LFGRole:Hide()
+												end
+											</OnLeave>
+										</Scripts>
+									</Frame>
+								</Frames>
 							</Frame>
-							<Button name="GF_LFGDungeonDropdown" inherits="GF_ButtonTemplate">
-								<Anchors>
-									<Anchor point="LEFT" relativeTo="GF_LFGLFMDropdownTextLabel" relativePoint="RIGHT">
-										<Offset>
-											<AbsDimension x="5" y="0"/>
-										</Offset>
-									</Anchor>
-								</Anchors>
-								<Scripts>
-									<OnClick>
-										if not GF_LFGDungeon:IsShown() then
-											GF_ShowDropdownList("LFGDungeon")
-										else
-											GF_LFGDungeon:Hide()
-										end
-									</OnClick>
-									<OnLeave>
-										if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGDungeon")) then 
-											GF_LFGDungeon:Hide()
-										end
-									</OnLeave>
-									<OnLoad>
-										getglobal(this:GetName().."TextLabel"):SetText(GF_DUNGEON);
-									</OnLoad>
-								</Scripts>
-								<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up" setAllPoints="true"/>
-								<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Down" setAllPoints="true"/>
-								<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD" setAllPoints="true"/>
-							</Button>
-							<Frame name="GF_LFGDungeon" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true">
-								<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border">
-									<BackgroundInsets>
-										<AbsInset left="4" right="4" top="4" bottom="4"/>
-									</BackgroundInsets>
-									<EdgeSize>
-										<AbsValue val="16"/>
-									</EdgeSize>
-									<BorderColor r="0.6" g="0.6" b="0.6"/>
-								</Backdrop>
-								<Layers>
-									<Layer level ="BACKGROUND">
-										<Texture file="Interface\ChatFrame\ChatFrameBackground">
-											<Anchors>
-												<Anchor point="TOPLEFT">
-													<Offset x="4" y="-4"/>
-												</Anchor>
-												<Anchor point="BOTTOMRIGHT">
-													<Offset x="-4" y="4"/>
-												</Anchor>
-											</Anchors>
-											<Gradient orientation="VERTICAL">
-												<MinColor r="0" g="0" b="0" a="0.9"/>
-												<MaxColor r="0.2" g="0.2" b="0.2" a="0.9"/>
-											</Gradient>
-										</Texture>
-									</Layer>
-								</Layers>
-								<Scripts>
-									<OnLeave>
-										if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGDungeon")) then 
-											GF_LFGDungeon:Hide()
-										end
-									</OnLeave>
-								</Scripts>
-							</Frame>
-							<Button name="GF_LFGRaidDropdown" inherits="GF_ButtonTemplate">
-								<Anchors>
-									<Anchor point="LEFT" relativeTo="GF_LFGDungeonDropdownTextLabel" relativePoint="RIGHT">
-										<Offset>
-											<AbsDimension x="5" y="0"/>
-										</Offset>
-									</Anchor>
-								</Anchors>
-								<Scripts>
-									<OnClick>
-										if not GF_LFGRaid:IsShown() then
-											GF_ShowDropdownList("LFGRaid")
-										else
-											GF_LFGRaid:Hide()
-										end
-									</OnClick>
-									<OnLeave>
-										if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGRaid")) then 
-											GF_LFGRaid:Hide()
-										end
-									</OnLeave>
-									<OnLoad>
-										getglobal(this:GetName().."TextLabel"):SetText(GF_RAID);
-									</OnLoad>
-								</Scripts>
-								<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up" setAllPoints="true"/>
-								<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Down" setAllPoints="true"/>
-								<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD" setAllPoints="true"/>
-							</Button>
-							<Frame name="GF_LFGRaid" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true">
-								<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border">
-									<BackgroundInsets>
-										<AbsInset left="4" right="4" top="4" bottom="4"/>
-									</BackgroundInsets>
-									<EdgeSize>
-										<AbsValue val="16"/>
-									</EdgeSize>
-									<BorderColor r="0.6" g="0.6" b="0.6"/>
-								</Backdrop>
-								<Layers>
-									<Layer level ="BACKGROUND">
-										<Texture file="Interface\ChatFrame\ChatFrameBackground">
-											<Anchors>
-												<Anchor point="TOPLEFT">
-													<Offset x="4" y="-4"/>
-												</Anchor>
-												<Anchor point="BOTTOMRIGHT">
-													<Offset x="-4" y="4"/>
-												</Anchor>
-											</Anchors>
-											<Gradient orientation="VERTICAL">
-												<MinColor r="0" g="0" b="0" a="0.9"/>
-												<MaxColor r="0.2" g="0.2" b="0.2" a="0.9"/>
-											</Gradient>
-										</Texture>
-									</Layer>
-								</Layers>
-								<Scripts>
-									<OnLeave>
-										if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGRaid")) then 
-											GF_LFGRaid:Hide()
-										end
-									</OnLeave>
-								</Scripts>
-							</Frame>
-							<Button name="GF_LFGRoleDropdown" inherits="GF_ButtonTemplate">
-								<Anchors>
-									<Anchor point="LEFT" relativeTo="GF_LFGRaidDropdownTextLabel" relativePoint="RIGHT">
-										<Offset>
-											<AbsDimension x="5" y="0"/>
-										</Offset>
-									</Anchor>
-								</Anchors>
-								<Scripts>
-									<OnClick>
-										if not GF_LFGRole:IsShown() then
-											GF_ShowDropdownList("LFGRole")
-										else
-											GF_LFGRole:Hide()
-										end
-									</OnClick>
-									<OnLeave>
-										if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGRole")) then 
-											GF_LFGRole:Hide()
-										end
-									</OnLeave>
-									<OnLoad>
-										getglobal(this:GetName().."TextLabel"):SetText(GF_ROLE);
-									</OnLoad>
-								</Scripts>
-								<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up" setAllPoints="true"/>
-								<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Down" setAllPoints="true"/>
-								<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD" setAllPoints="true"/>
-							</Button>
-							<Frame name="GF_LFGRole" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true">
-								<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border">
-									<BackgroundInsets>
-										<AbsInset left="4" right="4" top="4" bottom="4"/>
-									</BackgroundInsets>
-									<EdgeSize>
-										<AbsValue val="16"/>
-									</EdgeSize>
-									<BorderColor r="0.6" g="0.6" b="0.6"/>
-								</Backdrop>
-								<Layers>
-									<Layer level ="BACKGROUND">
-										<Texture file="Interface\ChatFrame\ChatFrameBackground">
-											<Anchors>
-												<Anchor point="TOPLEFT">
-													<Offset x="4" y="-4"/>
-												</Anchor>
-												<Anchor point="BOTTOMRIGHT">
-													<Offset x="-4" y="4"/>
-												</Anchor>
-											</Anchors>
-											<Gradient orientation="VERTICAL">
-												<MinColor r="0" g="0" b="0" a="0.9"/>
-												<MaxColor r="0.2" g="0.2" b="0.2" a="0.9"/>
-											</Gradient>
-										</Texture>
-									</Layer>
-								</Layers>
-								<Scripts>
-									<OnLeave>
-										if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGRole")) then 
-											GF_LFGRole:Hide()
-										end
-									</OnLeave>
-								</Scripts>
-							</Frame>
-							<CheckButton name="GF_GroupAutoCheckButton" inherits="GF_CheckButtonTemplate_Label">
-								<Anchors>
-									<Anchor point="BOTTOM" relativeTo="GF_LFGSizeDropdown" relativePoint="TOP">
-										<Offset>
-											<AbsDimension x="0" y="7"/>
-										</Offset>
-									</Anchor>
-								</Anchors>
-								<Scripts>
-									<OnClick>
-											GF_SavedVariables.lfgauto = this:GetChecked();
-											GF_FixLFGStrings()
-									</OnClick>
-									<OnLoad>
-										getglobal(this:GetName().."TextLabel"):SetText(GF_AUTO);
-									</OnLoad>
-								</Scripts>
-							</CheckButton>
-							<EditBox name="GF_LFGDescriptionEditBox" letters="256" inherits="GF_AbstractEditBox">
+							<Frame name="GF_MessageFrame" enableMouse="true">
 								<Size>
-									<AbsDimension x="342" y="22"/>
+									<AbsDimension x="680" y="30"/>
 								</Size>
 								<Anchors>
-									<Anchor point="LEFT" relativeTo="GF_GroupAutoCheckButtonTextLabel" relativePoint="RIGHT">
+									<Anchor point="BOTTOMLEFT" relativeTo="GF_MainFrame" relativePoint="BOTTOMLEFT">
 										<Offset>
-											<AbsDimension x="10" y="0"/>
-										</Offset>
-									</Anchor>
-								</Anchors>
-								<Scripts>
-									<OnLoad>
-										this:SetTextInsets(4,0,0,0);
-									</OnLoad>
-									<OnEditFocusGained>
-										if GF_LFGDescriptionEditBoxHasFocus[2] + .005 &lt; GetTime() then GF_LFGDescriptionEditBoxHasFocus = {true,GetTime()}; end
-										this:HighlightText(string.len(this:GetText())+1);
-									</OnEditFocusGained>
-									<OnEditFocusLost>
-										if GF_LFGDescriptionEditBoxHasFocus[2] + .005 &lt; GetTime() then GF_LFGDescriptionEditBoxHasFocus = {nil,GetTime()}; end
-										GF_SavedVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText();
-										this:HighlightText(string.len(this:GetText())+1);
-									</OnEditFocusLost>
-									<OnTabPressed>
-										GF_SavedVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText();
-										this:ClearFocus();
-										this:HighlightText(string.len(this:GetText())+1);
-									</OnTabPressed>
-									<OnEnterPressed>
-										GF_SavedVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText();
-										this:ClearFocus();
-										this:HighlightText(string.len(this:GetText())+1);
-									</OnEnterPressed>
-									<OnEscapePressed>
-										GF_SavedVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText();
-										this:ClearFocus();
-										this:HighlightText(string.len(this:GetText())+1);
-									</OnEscapePressed>
-								</Scripts>
-							</EditBox>
-							<Button name="GF_LFGWhisperButton" inherits="GF_ButtonTemplate" text="GF_INVITE">
-								<Size>
-									<AbsDimension x="55" y="22"/>
-								</Size>
-								<Anchors>
-									<Anchor point="BOTTOMRIGHT" relativeTo="GF_MainFrame" relativePoint="BOTTOMRIGHT">
-										<Offset>
-											<AbsDimension x="-10" y="0"/>
-										</Offset>
-									</Anchor>
-								</Anchors>
-								<Scripts>
-									<OnClick>
-										GF_GetWhoSendWhisperToAvailablePlayer()
-									</OnClick>
-								</Scripts>
-							</Button>
-							<EditBox name="GF_LFGWhoWhisperEditBox" letters="128" inherits="GF_AbstractEditBox">
-								<Size>
-									<AbsDimension x="150" y="22"/>
-								</Size>
-								<Anchors>
-									<Anchor point="RIGHT" relativeTo="GF_LFGWhisperButton" relativePoint="LEFT">
-										<Offset>
-											<AbsDimension x="-10" y="0"/>
-										</Offset>
-									</Anchor>
-								</Anchors>
-								<Scripts>
-									<OnEnter>
-										GF_ShowTooltip(this);
-									</OnEnter>
-									<OnLeave>
-										GameTooltip:Hide();
-									</OnLeave>
-									<OnLoad>
-										this:SetTextInsets(4,0,0,0);
-									</OnLoad>
-									<OnEditFocusLost>
-										GF_SavedVariables.searchlfgwhispertext = GF_LFGWhoWhisperEditBox:GetText();
-										this:HighlightText(string.len(this:GetText())+1);
-									</OnEditFocusLost>
-									<OnTabPressed>
-										GF_SavedVariables.searchlfgwhispertext = GF_LFGWhoWhisperEditBox:GetText();
-										this:ClearFocus();
-										this:HighlightText(string.len(this:GetText())+1);
-									</OnTabPressed>
-									<OnEnterPressed>
-										GF_SavedVariables.searchlfgwhispertext = GF_LFGWhoWhisperEditBox:GetText();
-										this:ClearFocus();
-										this:HighlightText(string.len(this:GetText())+1);
-									</OnEnterPressed>
-									<OnEscapePressed>
-										GF_SavedVariables.searchlfgwhispertext = GF_LFGWhoWhisperEditBox:GetText();
-										this:ClearFocus();
-										this:HighlightText(string.len(this:GetText())+1);
-									</OnEscapePressed>
-								</Scripts>
-							</EditBox>
-							<Slider name="GF_FrameAnnounceTimerSlider" inherits="OptionsSliderTemplate">
-								<Size>
-									<AbsDimension x="105" y="16"/>
-								</Size>
-								<Anchors>
-									<Anchor point="RIGHT" relativeTo="GF_LFGWhoWhisperEditBox" relativePoint="LEFT">
-										<Offset>
-											<AbsDimension x="-10" y="3"/>
+											<AbsDimension x="10" y="38"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
 								<Layers>
-									<Layer level="OVERLAY">
-										<FontString inherits="GameFontNormalSmall" name="GF_FrameAnnounceTimerSliderLabel" text="GF_ANNOUNCE_LFG_BTN">
+									<Layer level="ARTWORK">
+										<FontString inherits="GameFontNormalSmall" name="GF_PageLabel" nonspacewrap="false">
+											<Size>
+												<AbsDimension x="70" y="20"/>
+											</Size>
 											<Anchors>
-												<Anchor point="BOTTOM">
+												<Anchor point="BOTTOMRIGHT">
 													<Offset>
-														<AbsDimension x="0" y="-11"/>
+														<AbsDimension x="-20" y="-5"/>
+													</Offset>
+												</Anchor>
+											</Anchors>
+										</FontString>
+										<FontString inherits="GameFontNormalSmall" name="GF_ResultsLabel" nonspacewrap="false" text="GF_FOUND">
+											<Color r="0.9" g="0.9" b="0.9"/>
+											<Size>
+												<AbsDimension x="100" y="20"/>
+											</Size>
+											<Anchors>
+												<Anchor point="BOTTOM" relativeTo="GF_PageLabel" relativePoint="TOP">
+													<Offset>
+														<AbsDimension x="0" y="-2"/>
 													</Offset>
 												</Anchor>
 											</Anchors>
 										</FontString>
 									</Layer>
 								</Layers>
-								<Scripts>
-									<OnLoad>
-										getglobal(this:GetName().."High"):SetText("30");
-										getglobal(this:GetName().."Low"):SetText("2");
-										this:SetMinMaxValues(2,14);
-										this:SetValueStep(1);
-									</OnLoad>
-									<OnValueChanged>
-										if this:GetValue() > 10 then
-											GF_SavedVariables.announcetimer = (this:GetValue()-10)*300 + 600;
-											getglobal(this:GetName().."Label"):SetText((GF_SavedVariables.announcetimer/60).." -"..GF_MINUTES);
-										else
-											GF_SavedVariables.announcetimer = this:GetValue()*60;
-											getglobal(this:GetName().."Label"):SetText((GF_SavedVariables.announcetimer/60).." -"..GF_MINUTES);
-										end
-									</OnValueChanged>
-								</Scripts>
-							</Slider>
-							<Button name="GF_LFGWhoClassDropdown" inherits="GF_ButtonTemplate">
-								<Anchors>
-									<Anchor point="RIGHT" relativeTo="$parentPrev" relativePoint="LEFT">
-										<Offset>
-											<AbsDimension x="-45" y="0"/>
-										</Offset>
-									</Anchor>
-								</Anchors>
-								<Scripts>
-									<OnClick>
-										if not GF_LFGWhoClass:IsShown() then
-											GF_ShowDropdownList("LFGWhoClass")
-										else
-											GF_LFGWhoClass:Hide()
-										end
-									</OnClick>
-									<OnLeave>
-										if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGWhoClass")) then 
-											GF_LFGWhoClass:Hide()
-										end
-									</OnLeave>
-								</Scripts>
-								<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up" setAllPoints="true"/>
-								<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Down" setAllPoints="true"/>
-								<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD" setAllPoints="true"/>
-							</Button>
-							<Frame name="GF_LFGWhoClass" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true">
-								<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border">
-									<BackgroundInsets>
-										<AbsInset left="4" right="4" top="4" bottom="4"/>
-									</BackgroundInsets>
-									<EdgeSize>
-										<AbsValue val="16"/>
-									</EdgeSize>
-									<BorderColor r="0.6" g="0.6" b="0.6"/>
-								</Backdrop>
-								<Layers>
-									<Layer level ="BACKGROUND">
-										<Texture file="Interface\ChatFrame\ChatFrameBackground">
-											<Anchors>
-												<Anchor point="TOPLEFT">
-													<Offset x="4" y="-4"/>
-												</Anchor>
-												<Anchor point="BOTTOMRIGHT">
-													<Offset x="-4" y="4"/>
-												</Anchor>
-											</Anchors>
-											<Gradient orientation="VERTICAL">
-												<MinColor r="0" g="0" b="0" a="0.9"/>
-												<MaxColor r="0.2" g="0.2" b="0.2" a="0.9"/>
-											</Gradient>
-										</Texture>
-									</Layer>
-								</Layers>
-								<Scripts>
-									<OnLeave>
-										if not GetMouseFocus() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGWhoClass")) then 
-											GF_LFGWhoClass:Hide()
-										end
-									</OnLeave>
-								</Scripts>
+								<Frames>
+									<EditBox name="GF_LFGDescriptionEditBox" letters="256" inherits="GF_AbstractEditBox">
+										<Size>
+											<AbsDimension x="450" y="22"/>
+										</Size>
+										<Anchors>
+											<Anchor point="BOTTOMLEFT">
+												<Offset>
+													<AbsDimension x="5" y="-5"/>
+												</Offset>
+											</Anchor>
+										</Anchors>
+										<Layers>
+											<Layer level="ARTWORK">
+												<FontString inherits="GameFontNormalSmall" name="GF_WorldAnnounceMessageTextLabel" nonspacewrap="false" justifyH="LEFT"  text="GF_WORLD_SEND_TEXT">
+													<Color r="0.9" g="0.9" b="0.9"/>
+													<Anchors>
+														<Anchor point="BOTTOM" relativeTo="GF_LFGDescriptionEditBox" relativePoint="TOP">
+															<Offset>
+																<AbsDimension x="0" y="0"/>
+															</Offset>
+														</Anchor>
+													</Anchors>
+												</FontString>
+											</Layer>
+										</Layers>
+										<Scripts>
+											<OnLoad>
+												this:SetTextInsets(4,0,0,0);
+											</OnLoad>
+											<OnEditFocusGained>
+												if GF_LFGDescriptionEditBoxHasFocus[2] + .005 &lt; GetTime() then GF_LFGDescriptionEditBoxHasFocus = {true,GetTime()}; end
+												this:HighlightText(string.len(this:GetText())+1);
+											</OnEditFocusGained>
+											<OnEditFocusLost>
+												if GF_LFGDescriptionEditBoxHasFocus[2] + .005 &lt; GetTime() then GF_LFGDescriptionEditBoxHasFocus = {nil,GetTime()}; end
+												GF_SavedVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText();
+												this:HighlightText(string.len(this:GetText())+1);
+											</OnEditFocusLost>
+											<OnTabPressed>
+												GF_SavedVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText();
+												this:ClearFocus();
+												this:HighlightText(string.len(this:GetText())+1);
+											</OnTabPressed>
+											<OnEnterPressed>
+												GF_SavedVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText();
+												this:ClearFocus();
+												this:HighlightText(string.len(this:GetText())+1);
+											</OnEnterPressed>
+											<OnEscapePressed>
+												GF_SavedVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText();
+												this:ClearFocus();
+												this:HighlightText(string.len(this:GetText())+1);
+											</OnEscapePressed>
+										</Scripts>
+									</EditBox>
+									<Slider name="GF_FrameAnnounceTimerSlider" inherits="OptionsSliderTemplate">
+										<Size>
+											<AbsDimension x="105" y="15"/>
+										</Size>
+										<Anchors>
+											<Anchor point="LEFT" relativeTo="GF_LFGDescriptionEditBox" relativePoint="RIGHT">
+												<Offset>
+													<AbsDimension x="5" y="5i"/>
+												</Offset>
+											</Anchor>
+										</Anchors>
+										<Layers>
+											<Layer level="OVERLAY">
+												<FontString inherits="GameFontNormalSmall" name="GF_FrameAnnounceTimerSliderTopLabel" text="GF_ANNOUNCE_TIMER">
+													<Anchors>
+														<Anchor point="TOP">
+															<Offset>
+																<AbsDimension x="0" y="11"/>
+															</Offset>
+														</Anchor>
+													</Anchors>
+												</FontString>
+												<FontString inherits="GameFontNormalSmall" name="GF_FrameAnnounceTimerSliderBottomLabel">
+													<Anchors>
+														<Anchor point="BOTTOM">
+															<Offset>
+																<AbsDimension x="0" y="-11"/>
+															</Offset>
+														</Anchor>
+													</Anchors>
+												</FontString>
+											</Layer>
+										</Layers>
+										<Scripts>
+											<OnLoad>
+												getglobal(this:GetName().."High"):SetText("30");
+												getglobal(this:GetName().."Low"):SetText("2");
+												this:SetMinMaxValues(2,14);
+												this:SetValueStep(1);
+											</OnLoad>
+											<OnValueChanged>
+												if this:GetValue() > 10 then
+													GF_SavedVariables.announcetimer = (this:GetValue()-10)*300 + 600;
+													getglobal(this:GetName().."BottomLabel"):SetText((GF_SavedVariables.announcetimer/60).." -"..GF_MINUTES);
+												else
+													GF_SavedVariables.announcetimer = this:GetValue()*60;
+													getglobal(this:GetName().."BottomLabel"):SetText((GF_SavedVariables.announcetimer/60).." -"..GF_MINUTES);
+												end
+											</OnValueChanged>
+										</Scripts>
+									</Slider>
+									<Button name="GF_GroupsFrame_ResultsPrev">
+										<Size>
+											<AbsDimension x="25" y="25"/>
+										</Size>
+										<Anchors>
+											<Anchor point="RIGHT" relativeTo="GF_PageLabel" relativePoint="LEFT">
+												<Offset>
+													<AbsDimension x="3" y="0"/>
+												</Offset>
+											</Anchor>
+										</Anchors>
+										<Scripts>
+											<OnClick>
+												if GF_ResultsListOffset >0 then
+													GF_ResultsListOffset = GF_ResultsListOffset - GF_ResultsListOffsetSize;
+													GF_UpdateResults();
+												end
+											</OnClick>
+										</Scripts>
+										<NormalTexture file="Interface\Buttons\UI-SpellbookIcon-PrevPage-Up"/>
+										<PushedTexture file="Interface\Buttons\UI-SpellbookIcon-PrevPage-Down"/>
+										<DisabledTexture file="Interface\Buttons\UI-SpellbookIcon-PrevPage-Disabled"/>
+										<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD"/>
+									</Button>
+									<Button name="GF_GroupsFrame_ResultsNext">
+										<Size>
+											<AbsDimension x="25" y="25"/>
+										</Size>
+										<Anchors>
+											<Anchor point="LEFT" relativeTo="GF_PageLabel" relativePoint="RIGHT">
+												<Offset>
+													<AbsDimension x="-3" y="0"/>
+												</Offset>
+											</Anchor>
+										</Anchors>
+										<Scripts>
+											<OnClick>
+												if getn(GF_FilteredResultsList) >GF_ResultsListOffset + GF_ResultsListOffsetSize then
+													GF_ResultsListOffset = GF_ResultsListOffset + GF_ResultsListOffsetSize;
+													GF_UpdateResults();
+												end
+											</OnClick>
+										</Scripts>
+										<NormalTexture file="Interface\Buttons\UI-SpellbookIcon-NextPage-Up"/>
+										<PushedTexture file="Interface\Buttons\UI-SpellbookIcon-NextPage-Down"/>
+										<DisabledTexture file="Interface\Buttons\UI-SpellbookIcon-NextPage-Disabled"/>
+										<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD"/>
+									</Button>
+								</Frames>
 							</Frame>
-							<Button name="GF_LFGGetWhoButton" inherits="GF_ButtonTemplate" text="GF_GET_WHO">
-								<Size>
-									<AbsDimension x="90" y="24"/>
-								</Size>
-								<Anchors>
-									<Anchor point="RIGHT" relativeTo="GF_LFGWhoClassDropdown" relativePoint="LEFT">
-										<Offset>
-											<AbsDimension x="0" y="0"/>
-										</Offset>
-									</Anchor>
-								</Anchors>
-								<Scripts>
-									<OnClick>
-										GF_ToggleGetWho()
-									</OnClick>
-								</Scripts>
-							</Button>
 						</Frames>
 					</Frame>
 				</Frames>
 				<Scripts>
 					<OnLoad>	
-						for i = 2, 20 do
+						for i = 2, 22 do
 							getglobal("GF_NewItem"..i):SetPoint("TOP", "GF_NewItem"..(i-1), "BOTTOM", 0, 0);
 						end
-						GF_WorldAnnounceMessageTextLabel:SetPoint("BOTTOMLEFT", GF_GroupAutoCheckButtonTextLabel, "TOPRIGHT", 10, 7);
 					</OnLoad>
 				</Scripts>
 			</Frame>
@@ -2619,7 +2983,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							</Layer>
 						</Layers>
 						<Frames>
-							<EditBox name="$parentEditBox" inherits="GF_AbstractEditBox" letters="140">
+							<EditBox name="$parentEditBox" inherits="GF_AbstractEditBox" letters="250">
 								<Size>
 									<AbsDimension x="580" y="20"/>
 								</Size>
@@ -3757,7 +4121,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				GF_LFGDungeon:Hide()
 				GF_LFGRaid:Hide()
 				GF_LFGRole:Hide()
-				GF_LFGWhoClass:Hide()
+				GF_GetWhoClass:Hide()
 				GF_SearchList:Hide()
 			</OnHide>
 		</Scripts>
