@@ -1,6 +1,8 @@
 # GroupFinder
 Group finder Addon for Vanilla Wow 1.12.1 based on the CallToArms addon(with Turtle WoW support).  
 
+PS: 1/26/2026... I'll update this readme with more information soon. I changed a lot with the layouts, and the LFG/GetWho tools. As well as a more log filters. I have a few more things I'm working on.  
+
 I made this addon because I hate chat spam. I tried to make this addon as intuitive as possible, but it's probably pretty intimidating at first glance. Lots of checkboxes. Lots of edit boxes. Lots of dropdowns. I put as much as possible on the front page because the original CallToArms addon had too many pages to flip through and too many useless features.  
 
 NOTE: To people who might be interested in this addon. This isn't simply a group finder that searches world chat for groups. This is a massive chat filtering tool. It identifies four types of messages - Group messages, guild messages, trades messages, and Chat messages; And allows you to show/hide them individually(with a sortable chatlog window).  
@@ -45,7 +47,5 @@ The 'Get Who' and 'Invite' Edit Box is for whispering people who match the selec
 3) Type your message in the 'Invite' Edit Box(uses 'Announce' message if blank).  
 4) Press the 'Invite' button to whisper someone on the 'Get Who' list. The number of players available is shown on the 'Get Who' button.  
 Note: Will not message the same person more than once every 15 minutes.
-
-![Image](https://github.com/user-attachments/assets/782da809-509d-4101-b75c-3e56afa2ebf5)  
 
 Note: Turtle WoW only allows a /who every ~30 seconds, and blocks you from whispering to more than ~15 different players within some arbitrary period of time.  
