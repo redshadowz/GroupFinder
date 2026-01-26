@@ -1,6 +1,7 @@
-﻿local GF_CurrentVersion						= 550
+﻿local GF_CurrentVersion						= 560
 
 GF_SavedVariables 							= {}
+GF_PerCharVariables							= {}
 GF_RealmName								= GetRealmName()
 GF_PlayingOnTurtle							= nil
 local GF_Hardcore							= nil
@@ -11,6 +12,7 @@ GF_WhoQueue									= {}
 GF_WhoTable									= {}
 GF_WhoTable[GF_RealmName]					= {}
 GF_ClassWhoTable							= {}
+local GF_LFGLFMData							= {}
 local GF_ClassWhoQueue						= {}
 local GF_ClassWhoMatchingResults			= 0
 local GF_GetClassWhoState					= 1
@@ -35,6 +37,8 @@ GF_BlackListOffset							= 0
 GF_NumLFGSearchButtons						= 0
 GF_LogHistory								= {}
 GF_LogHistory[GF_RealmName]					= {}
+GF_LogFilters								= { [10]=true,["SYSTEM"] = true,["LOOT"] = true,["MONEY"] = true,["COMBAT_FACTION_CHANGE"] = true,["COMBAT_XP_GAIN"] = true,["COMBAT_HONOR_GAIN"] = true, }
+GF_ConvertMessagesToLinks					= nil
 
 local GF_OnStartupRunOnce					= true
 local GF_OnStartupQueueURequest				= nil
@@ -68,8 +72,9 @@ local GF_PreviousMessage					= {}
 local GF_MiniMapMessages					= {0,0,0,0,0,0,{}}
 local GF_LogMessageCodes = { GF_LOGGED_GROUPS, GF_LOGGED_NEW, GF_LOGGED_FILTERED, GF_LOGGED_CHAT, GF_LOGGED_TRADES, GF_LOGGED_LOOT, GF_LOGGED_SPAM, GF_LOGGED_BLACKLIST, GF_LOGGED_BELOWLEVEL, GF_LOGGED_ME, GF_LOGGED_GUILD }
 
-local GF_ChatChannelsGroups					= { }
+local GF_ChatChannelsGroups					= {}
 GF_WhisperLogCurrentButtonID				= 0
+GF_WhisperLogCurrentButtonName				= ""
 GF_WhisperLogData							= {}
 GF_WhisperLogData[GF_RealmName]				= {}
 GF_WhisperLogData[GF_RealmName]["Guild"]	= {}
@@ -78,20 +83,18 @@ local GF_Classes							= { [GF_PRIEST]="PRIEST",[GF_MAGE]="MAGE",[GF_WARLOCK]="W
 												["PRIEST"]=GF_PRIEST,["MAGE"]=GF_MAGE,["WARLOCK"]=GF_WARLOCK,["DRUID"]=GF_DRUID,["HUNTER"]=GF_HUNTER,["ROGUE"]=GF_ROGUE,["WARRIOR"]=GF_WARRIOR,["PALADIN"]=GF_PALADIN,["SHAMAN"]=GF_SHAMAN }
 local GF_ClassColors						= {	["PRIEST"]="ffffff",["MAGE"]="68ccef",["WARLOCK"]="9382c9",["DRUID"]="ff7c0a",["HUNTER"]="aad372",["ROGUE"]="fff468",["WARRIOR"]="c69b6d",["PALADIN"]="f48cba",["SHAMAN"]="0070dd" }
 local GF_ClassIDs = { "PRIEST", "MAGE", "WARLOCK", "DRUID", "HUNTER", "ROGUE", "WARRIOR", "PALADIN", "SHAMAN", ["PRIEST"]=1,["MAGE"]=2,["WARLOCK"]=3,["DRUID"]=4,["HUNTER"]=5,["ROGUE"]=6,["WARRIOR"]=7,["PALADIN"]=8,["SHAMAN"]=9 }
-local GF_TextColors = { ["SYSTEM"] = {"ffff00",255,255,0},["SAY"] = {"ffffff",255,255,255},["YELL"] = {"ff4040",255,64,64},["CHANNEL"] = {"ffc0c0",255,192,192},["GUILD"] = {"40ff40",64,255,64},["OFFICER"] = {"40c040",64,192,64},
-["WHISPER"] = {"ff80ff",255,128,255},["WHISPER_INFORM"] = {"ff80ff",255,128,255},["PARTY"] = {"aaaaff",170,170,255},["RAID"] = {"ff7f00",255,127,0},["RAID_LEADER"] = {"ff4809",255,72,9},["RAID_WARNING"] = {"ff4800",255,72,0},
-["BATTLEGROUND"] = {"ff7f00",255,127,0},["BATTLEGROUND_LEADER"] = {"ffdbb7",255,219,183},["LOOT"] = {"00aa00",0,170,0},["MONEY"] = {"ffff00",255,255,0},["EMOTE"] = {"ff8040",255,128,64}, ["TEXT_EMOTE"] = {"ff8040",255,128,64},
-["COMBAT_FACTION_CHANGE"] = {"8080ff",128,128,255},["COMBAT_XP_GAIN"] = {"6f6fff",111,111,255},["COMBAT_HONOR_GAIN"] = {"e0ca0a",224,202,10},["MONSTER_SAY"] = {"ffffff",255,255,255},["MONSTER_EMOTE"] = {"ff8040",255,128,64},["HARDCORE"] = {"a69973",166,153,115} }
+local GF_TextColors = { ["SYSTEM"] = {1,1,0},["SAY"] = {1,1,1},["YELL"] = {1,0.251,0.251},["CHANNEL"] = {1,0.753,0.753},["GUILD"] = {0.251,1,0.251},["OFFICER"] = {0.251,0.753,0.251},["WHISPER"] = {1,0.502,1},["WHISPER_INFORM"] = {1,0.502,1},
+["PARTY"] = {0.667,0.667,1},["RAID"] = {1,0.498,0},["RAID_LEADER"] = {1,0.282,0.0353},["RAID_WARNING"] = {1,0.282,0},["BATTLEGROUND"] = {1,0.498,0},["BATTLEGROUND_LEADER"] = {1,0.859,0.7176},["LOOT"] = {0,0.667,0},["MONEY"] = {1,1,0},["EMOTE"] = {1,0.502,0.251},
+["TEXT_EMOTE"] = {1,0.502,0.251},["COMBAT_FACTION_CHANGE"] = {0.502,0.502,1},["COMBAT_XP_GAIN"] = {0.4353,0.4353,1},["COMBAT_HONOR_GAIN"] = {0.8784,0.792,0.0392},["MONSTER_SAY"] = {1,1,1},["MONSTER_EMOTE"] = {1,0.502,0.251},["HARDCORE"] = {0.651,0.6,0.451} }
 local GF_TextBypass = { ["GUILD"] = "G",["OFFICER"] = "O",["WHISPER"] = "W",["WHISPER_INFORM"] = "To",["PARTY"] = "P",["RAID"] = "R",["RAID_LEADER"] = "RL",["RAID_WARNING"] = "RW", ["BATTLEGROUND"] = "BG",["BATTLEGROUND_LEADER"] = "BL",}
 local GF_TextBypassChatNameAlias = { ["OFFICER"] = "GUILD",["RAID"] = "PARTY",["RAID_LEADER"] = "PARTY",["RAID_WARNING"] = "PARTY",["BATTLEGROUND"] = "PARTY",["BATTLEGROUND_LEADER"] = "PARTY",["WHISPER_INFORM"] = "WHISPER", ["HARDCORE"] = "PARTY",}
 local GF_LootFilter = { ["MONEY"] = true,["LOOT"] = true,["COMBAT_FACTION_CHANGE"] = true,["COMBAT_XP_GAIN"] = true,["COMBAT_HONOR_GAIN"] = true }
-local ThingsToHide = { "GF_MainFrameCloseButton","GF_GroupFilterDropdownButton","GF_ChatFilterDropdownButton","GF_SearchListDropdown","GF_GroupsFrameDescriptionEditBox","GF_AutoFilterCheckButton","GF_PlaySoundOnResultsCheckButton",
-"GF_FrameUseWhoOnGroupsCheckButton","GF_ShowSearchButton","GF_SettingsFrameButton","GF_ShowBlacklistButton","GF_LogFrameButton","GF_AnnounceToLFGButton","GF_ResetLFGDescriptionButton",
-
-"GF_LogBottomButton","GF_LogDownButton","GF_LogUpButton","GF_LogShowGroups","GF_LogShowFiltered","GF_LogShowChat","GF_LogShowTrades","GF_LogShowGuild","GF_LogShowLoot","GF_LogShowSpam","GF_LogShowBlacklist","GF_LogShowBelowLevel","GF_LogShowWhisperHistory",
-
-"GF_GetWhoFrame","GF_LFGFrame","GF_MessageFrame","GF_GroupFilterDropdownMenu","GF_ChatFilterDropdownMenu","GF_SearchList","GF_LFGHardCoreDropdown", } -- "GF_HideMainFrameLeft", "GF_HideMainFrameRight",
+local ThingsToHide = { "GF_MainFrameCloseButton","GF_GroupChatOptionsFrame","GF_ShowSearchButton","GF_SettingsFrameButton","GF_ShowBlacklistButton","GF_LogFrameButton","GF_AnnounceToLFGButton","GF_ResetLFGDescriptionButton",
+"GF_LogBottomButton","GF_LogDownButton","GF_LogUpButton","GF_LogFilterDropdownButton","GF_LogChannelFilterDropdownButton","GF_LogShowWhisperHistory","GF_ConvertLogMessagesToURL",
+"GF_GetWhoFrame","GF_LFGFrame","GF_MessageFrame","GF_LogFilterDropdownMenu","GF_GroupFilterDropdownMenu","GF_ChatFilterDropdownMenu","GF_LFGHardCoreDropdown", } -- "GF_HideMainFrameLeft", "GF_HideMainFrameRight",
 local GF_DifficultyColors = { ["RED"] = "ff0000",["ORANGE"] = "ff8040",["YELLOW"] = "ffff00",["GREEN"] = "1eff00",["GREY"] = "808080", }
+local GF_TankClasses						= {	["DRUID"]=true,["WARRIOR"]=true,["PALADIN"]=true,["SHAMAN"]=true }
+local GF_HealingClasses						= {	["PRIEST"]=true,["DRUID"]=true,["PALADIN"]=true,["SHAMAN"]=true }
 
 function GF_LoadVariables()
 	if not GF_SavedVariables.version or GF_SavedVariables.version < GF_CurrentVersion then
@@ -107,7 +110,6 @@ function GF_LoadVariables()
 		if not GF_SavedVariables.showguilds then GF_SavedVariables.showguilds = true end
 		if not GF_SavedVariables.usewhoongroups then GF_SavedVariables.usewhoongroups = false end
 
-		if not GF_SavedVariables.autofilter then GF_SavedVariables.autofilter = false end
 		if not GF_SavedVariables.playsounds then GF_SavedVariables.playsounds = false end
 		if not GF_SavedVariables.showdungeons then GF_SavedVariables.showdungeons = true end
 		if not GF_SavedVariables.showraids then GF_SavedVariables.showraids = true end
@@ -116,15 +118,7 @@ function GF_LoadVariables()
 		if not GF_SavedVariables.showlfm then GF_SavedVariables.showlfm = true end
 		if not GF_SavedVariables.showlfg then GF_SavedVariables.showlfg = true end
 
-		if not GF_SavedVariables.searchtext then GF_SavedVariables.searchtext = "" end
-		if not GF_SavedVariables.searchbuttonstext then GF_SavedVariables.searchbuttonstext = {} end
-		if not GF_SavedVariables.searchlfgtext then GF_SavedVariables.searchlfgtext = "" end
-		if not GF_SavedVariables.searchlfgwhispertext then GF_SavedVariables.searchlfgwhispertext = "" end
-		if not GF_SavedVariables.getwhowhisperclass then GF_SavedVariables.getwhowhisperclass = GF_WARRIOR end
-		if not GF_SavedVariables.getwhowhisperlevel then GF_SavedVariables.getwhowhisperlevel = 60 end
 		if not GF_SavedVariables.announcetimer then GF_SavedVariables.announcetimer = 300 end
-		if not GF_SavedVariables.lfgauto then GF_SavedVariables.lfgauto = false end
-		if not GF_SavedVariables.lfgsize or not tonumber(GF_SavedVariables.lfgsize) then GF_SavedVariables.lfgsize = 1 end
 
 		if not GF_SavedVariables.logshowgroup then GF_SavedVariables.logshowgroup = true end
 		if not GF_SavedVariables.logshowfiltered then GF_SavedVariables.logshowfiltered = true end
@@ -137,6 +131,14 @@ function GF_LoadVariables()
 		if not GF_SavedVariables.logshowbelowlevel then GF_SavedVariables.logshowbelowlevel = true end
 		if not GF_SavedVariables.showwhisperlogs then GF_SavedVariables.showwhisperlogs = false end
 
+		if not GF_SavedVariables.logchannels then GF_SavedVariables.logchannels = true end
+		if not GF_SavedVariables.logparty then GF_SavedVariables.logparty = true end
+		if not GF_SavedVariables.logguild then GF_SavedVariables.logguild = true end
+		if not GF_SavedVariables.logwhisper then GF_SavedVariables.logwhisper = true end
+		if not GF_SavedVariables.logsay then GF_SavedVariables.logsay = true end
+		if not GF_SavedVariables.logyell then GF_SavedVariables.logyell = true end
+		if not GF_SavedVariables.loghardcore then GF_SavedVariables.loghardcore = true end
+
 		if not GF_SavedVariables.joinworld then GF_SavedVariables.joinworld = true end
 		if not GF_SavedVariables.spamfilter then GF_SavedVariables.spamfilter = true end
 		if not GF_SavedVariables.spamfilterduration then GF_SavedVariables.spamfilterduration = 15 end
@@ -148,7 +150,6 @@ function GF_LoadVariables()
 		if not GF_SavedVariables.blockmessagebelowlevel then GF_SavedVariables.blockmessagebelowlevel = 1 end
 
 		if not GF_SavedVariables.grouplistingduration then GF_SavedVariables.grouplistingduration = 30 end
-		if not GF_SavedVariables.autofilterlevelvar then GF_SavedVariables.autofilterlevelvar = 5 end
 		if not GF_SavedVariables.showgroupsnewonlytime then GF_SavedVariables.showgroupsnewonlytime = 3 end
 		if not GF_SavedVariables.FilterLevel then GF_SavedVariables.FilterLevel = 2 end
 		if not GF_SavedVariables.MainFrameUIScale then GF_SavedVariables.MainFrameUIScale = 1 end
@@ -178,9 +179,28 @@ function GF_LoadVariables()
 		if not GF_SavedVariables.lfgshown then GF_SavedVariables.lfgshown = false end
 		if not GF_SavedVariables.getwhoshown then GF_SavedVariables.getwhoshown = false end
 	end
+	if not GF_PerCharVariables then GF_PerCharVariables = {} end
+	if not GF_PerCharVariables.version or GF_PerCharVariables.version < GF_CurrentVersion then
+		GF_PerCharVariables.version = GF_CurrentVersion
+		if not GF_PerCharVariables.autofilter then GF_PerCharVariables.autofilter = false end
+		if not GF_PerCharVariables.autofilterlevelvar then GF_PerCharVariables.autofilterlevelvar = 5 end
+		if not GF_PerCharVariables.searchtext then GF_PerCharVariables.searchtext = "" end
+		if not GF_PerCharVariables.searchbuttonstext then GF_PerCharVariables.searchbuttonstext = {} end
+		if not GF_PerCharVariables.searchlfgtext then GF_PerCharVariables.searchlfgtext = "" end
+		if not GF_PerCharVariables.searchlfgwhispertext then GF_PerCharVariables.searchlfgwhispertext = "" end
+		if not GF_PerCharVariables.getwhowhisperclass then GF_PerCharVariables.getwhowhisperclass = GF_WARRIOR end
+		if not GF_PerCharVariables.getwhowhisperlevel then GF_PerCharVariables.getwhowhisperlevel = 0 end
+		if not GF_PerCharVariables.lfgauto then GF_PerCharVariables.lfgauto = false end
+		if not GF_PerCharVariables.lfgsize or not tonumber(GF_PerCharVariables.lfgsize) then GF_PerCharVariables.lfgsize = 1 end
+		if not GF_PerCharVariables.hardcore then GF_PerCharVariables.hardcore = 1 end
+
+		if not GF_PerCharVariables.lfglevel then GF_PerCharVariables.lfglevel = false end
+		if not GF_PerCharVariables.lfgdps then GF_PerCharVariables.lfgdps = true end
+		if not GF_PerCharVariables.lfgheal then GF_PerCharVariables.lfgheal = false end
+		if not GF_PerCharVariables.lfgtank then GF_SavedVariables.lfgtank = false end
+	end
 	if not GF_SavedVariables.friendsToRemove then GF_SavedVariables.friendsToRemove = {} end
-	if not GF_SavedVariables.hardcore or type(GF_SavedVariables.hardcore) == "boolean" then GF_SavedVariables.hardcore = 1 end
-	if not GF_BUTTONS_LIST.LFGSize[GF_SavedVariables.lfgsize] then GF_SavedVariables.lfgsize = 1 end
+	if not GF_BUTTONS_LIST.LFGSize[GF_PerCharVariables.lfgsize] then GF_PerCharVariables.lfgsize = 1 end
 	if not GF_MessageList then GF_MessageList = {} end
 	if not GF_MessageList[GF_RealmName] then GF_MessageList[GF_RealmName] = {} end
 	if not GF_BlackList then GF_BlackList = {} end
@@ -195,9 +215,6 @@ function GF_LoadVariables()
 		
 	if not GF_PreviousMessage then GF_PreviousMessage = {} end
 	if not GF_PlayerMessages then GF_PlayerMessages = {} end
-	if type(GF_SavedVariables.searchbuttonstext) ~= "table" then GF_SavedVariables.searchbuttonstext = {} end
-
-	if type(GF_SavedVariables.searchbuttonstext) ~= "table" then GF_SavedVariables.searchbuttonstext = {} end
 	if GF_WhoTable[GF_RealmName]["LOADED"][4] + 86400 < time() then -- Prune the WhoTable once per day
 		GF_WhoTable[GF_RealmName]["LOADED"] = { UnitLevel("player"), ({UnitClass("player")})[2], "", time() }
 		GF_PruneTheWhoTable()
@@ -208,6 +225,19 @@ function GF_LoadVariables()
 	end
 	for i=1, getn(GF_MessageList[GF_RealmName]) do
 		if not GF_MessageList[GF_RealmName][i] then break elseif tonumber(GF_MessageList[GF_RealmName][i]) then table.remove(GF_MessageList[GF_RealmName],i) i = i - 1 end
+	end
+	for i=1, getn(GF_WhisperLogData[GF_RealmName]) do
+		if type(GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][1]) ~= "table" then
+			for j=1, getn(GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]]) do
+				if string.find(GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j], " %[[TFrom]+%] |cff") then
+					GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j] = { GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j], "WHISPER" }
+				elseif string.find(GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j], " [O] |cff",1,1) then
+					GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j] = { GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j], "OFFICER" }
+				else
+					GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j] = { GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j], "GUILD" }
+				end
+			end
+		end
 	end
 	if not GetGuildRosterShowOffline() then
 		SetGuildRosterShowOffline(true)
@@ -243,6 +273,7 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 	this:RegisterEvent("CHAT_MSG_BATTLEGROUND_LEADER")
 	this:RegisterEvent("ADDON_LOADED")
 	this:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
+	this:RegisterEvent("PLAYER_LEVEL_UP")
 	
 	local old_ChatFrame_OnEvent = ChatFrame_OnEvent
 	function ChatFrame_OnEvent(event) -- arg1(message), arg2(sender), arg4("Channel#." "(City/Trade)" "channelName"), arg5, (nameOfPlayerWhoLooted), arg7(zoneChannel#), arg8(channel#), arg9("City/Trade" "channelName")
@@ -443,7 +474,6 @@ function GF_ShowTooltip()
 	end
 end
 function GF_ToggleMainFrame(tab)
-	GF_SearchList:Hide()
 	PlaySound("igCharacterInfoTab")
 	if GF_MainFrame:IsVisible() and tab ~= 3 and (not tab or (tab == 2 and GF_SavedVariables.mainframelogisopen) or (tab == 1 and not GF_SavedVariables.mainframelogisopen)) then
 		if GF_SavedVariables.mainframestatus == 0 then 
@@ -452,8 +482,6 @@ function GF_ToggleMainFrame(tab)
 			GF_SavedVariables.MainFrameYPos = ypos
 		end
 		GF_MainFrame:Hide() 
-		GF_SavedVariables.mainframeishidden = true
-		GF_SavedVariables.mainframestatus = 0
 	else
 		if tab == 1 then -- GroupsFrame
 			GF_GroupsFrame:Show()
@@ -475,6 +503,7 @@ function GF_ToggleMainFrame(tab)
 		end
 		GF_MainFrame:Show()
 		GF_SavedVariables.mainframeishidden = nil
+		if pfUI and pfUI.chat and pfUI.chat.urlcopy then pfUI.chat.urlcopy:SetWidth(700) pfUI.chat.urlcopy.text:SetWidth(680) end
 	end
 	GF_LFGWhoUpdateOffset()
 	GF_UpdateMainFrameHeight()
@@ -500,9 +529,11 @@ end
 function GF_UpdateMainFrameHeight()
 	if GF_SavedVariables.mainframestatus ~= 0 then
 		if GF_SavedVariables.mainframeheight then
+			GF_ResultsListOffset = 12 * math.ceil(GF_ResultsListOffset/GF_ResultsListOffsetSize)
 			GF_ResultsListOffsetSize = 12
 			GF_LogFrameInternalFrame:SetHeight(250)
 		else
+			GF_ResultsListOffset = 20 * math.ceil(GF_ResultsListOffset/GF_ResultsListOffsetSize)
 			GF_ResultsListOffsetSize = 20
 			GF_LogFrameInternalFrame:SetHeight(400)
 		end
@@ -528,7 +559,7 @@ function GF_UpdateMainFrameWidth()
 			GF_LogFrameInternalFrame:SetWidth(669)
 		end
 	else
-			for i=1, GF_ResultsBaseListOffsetSize do if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",0,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",0,0) end getglobal("GF_NewItem"..i):SetWidth(640) getglobal("GF_NewItem"..i.."NameLabel"):ClearAllPoints() getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("TOPLEFT",5,0) getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("BOTTOMRIGHT",getglobal("GF_NewItem"..i),"TOPRIGHT",-80,-16) end
+		for i=1, GF_ResultsBaseListOffsetSize do if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",0,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",0,0) end getglobal("GF_NewItem"..i):SetWidth(640) getglobal("GF_NewItem"..i.."NameLabel"):ClearAllPoints() getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("TOPLEFT",5,0) getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("BOTTOMRIGHT",getglobal("GF_NewItem"..i),"TOPRIGHT",-80,-16) end
 		GF_LogFrameInternalFrame:SetPoint("TOPLEFT",29,-64)
 		GF_LogFrameInternalFrame:SetWidth(669)
 	end
@@ -551,7 +582,7 @@ function GF_UpdateMainFramePosition()
 end
 function GF_UpdateMainFrame()
 	if GF_SavedVariables.mainframestatus ~= 0 then
-		for i=1, 34 do
+		for i=1, 22 do
 			getglobal(ThingsToHide[i]):Hide()
 		end
 		GF_MainFrame:SetAlpha(0)
@@ -584,7 +615,7 @@ function GF_UpdateMainFrame()
 			if word == "GF_MainFrame" then UISpecialFrames[id] = nil end
 		end
 	else
-		for i=1, 27 do
+		for i=1, 15 do
 			getglobal(ThingsToHide[i]):Show()
 		end
 		if GF_PlayingOnTurtle then GF_LFGHardCoreDropdown:Show() end
@@ -643,6 +674,7 @@ function GF_LFGWhoUpdateOffset()
 
 		GF_GetWhoFrameToggleButton:SetNormalTexture("Interface\\Buttons\\UI-Panel-Button-Up")
 		GF_LFGFrameToggleButton:SetNormalTexture("Interface\\Buttons\\UI-Panel-Button-Up")
+		GF_ResultsListOffset = 19 * math.ceil(GF_ResultsListOffset/GF_ResultsListOffsetSize)
 		GF_ResultsListOffsetSize = 19
 	elseif GF_SavedVariables.lfgshown then
 		GF_GetWhoFrame:Hide()
@@ -655,6 +687,7 @@ function GF_LFGWhoUpdateOffset()
 
 		GF_GetWhoFrameToggleButton:SetNormalTexture("Interface\\Buttons\\UI-Panel-Button-Disabled")
 		GF_LFGFrameToggleButton:SetNormalTexture("Interface\\Buttons\\UI-Panel-Button-Up")
+		GF_ResultsListOffset = 20 * math.ceil(GF_ResultsListOffset/GF_ResultsListOffsetSize)
 		GF_ResultsListOffsetSize = 20
 	elseif GF_SavedVariables.getwhoshown then
 		GF_GetWhoFrame:Show()
@@ -667,6 +700,7 @@ function GF_LFGWhoUpdateOffset()
 
 		GF_GetWhoFrameToggleButton:SetNormalTexture("Interface\\Buttons\\UI-Panel-Button-Up")
 		GF_LFGFrameToggleButton:SetNormalTexture("Interface\\Buttons\\UI-Panel-Button-Disabled")
+		GF_ResultsListOffset = 20 * math.ceil(GF_ResultsListOffset/GF_ResultsListOffsetSize)
 		GF_ResultsListOffsetSize = 20
 	else
 		GF_GetWhoFrame:Hide()
@@ -678,6 +712,7 @@ function GF_LFGWhoUpdateOffset()
 		GF_LFGFrameToggleButton:SetNormalTexture("Interface\\Buttons\\UI-Panel-Button-Disabled")
 		
 		GF_MessageFrame:SetPoint("BOTTOMLEFT",GF_MainFrame,"BOTTOMLEFT", 10, -5)
+		GF_ResultsListOffset = 22 * math.ceil(GF_ResultsListOffset/GF_ResultsListOffsetSize)
 		GF_ResultsListOffsetSize = 22
 	end
 end
@@ -688,11 +723,11 @@ function GF_AddChannelMessage(arg1,arg2,arg8,arg9) -- Message Handlers
 	for i=1,NUM_CHAT_WINDOWS do
 		if GF_ChatChannelsGroups[i].channel[arg9] then
 			if arg2 == UnitName("player") then
-				getglobal("ChatFrame"..i):AddMessage("["..arg8..". "..string.upper(string.sub(arg9,1,1))..string.sub(arg9,2).."] ".."|cff"..(GF_ClassColors[({UnitClass("player")})[2]] or "9d9d9d").."|Hplayer:"..arg2.."|h["..arg2..", "..UnitLevel("player").."]|h|r: "..arg1, GF_TextColors["CHANNEL"][2]/255, GF_TextColors["CHANNEL"][3]/255, GF_TextColors["CHANNEL"][4]/255) 
+				getglobal("ChatFrame"..i):AddMessage("["..arg8..". "..string.upper(string.sub(arg9,1,1))..string.sub(arg9,2).."] ".."|cff"..(GF_ClassColors[({UnitClass("player")})[2]] or "9d9d9d").."|Hplayer:"..arg2.."|h["..arg2..", "..UnitLevel("player").."]|h|r: "..arg1, GF_TextColors["CHANNEL"][1], GF_TextColors["CHANNEL"][2], GF_TextColors["CHANNEL"][3]) 
 			elseif GF_WhoTable[GF_RealmName][arg2] then
-				getglobal("ChatFrame"..i):AddMessage("["..arg8..". "..string.upper(string.sub(arg9,1,1))..string.sub(arg9,2).."] ".."|cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][arg2][2]] or "ffffff").."|Hplayer:"..arg2.."|h["..arg2..", "..GF_WhoTable[GF_RealmName][arg2][1].."]|h|r: "..arg1, GF_TextColors["CHANNEL"][2]/255, GF_TextColors["CHANNEL"][3]/255, GF_TextColors["CHANNEL"][4]/255) 
+				getglobal("ChatFrame"..i):AddMessage("["..arg8..". "..string.upper(string.sub(arg9,1,1))..string.sub(arg9,2).."] ".."|cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][arg2][2]] or "ffffff").."|Hplayer:"..arg2.."|h["..arg2..", "..GF_WhoTable[GF_RealmName][arg2][1].."]|h|r: "..arg1, GF_TextColors["CHANNEL"][1], GF_TextColors["CHANNEL"][2], GF_TextColors["CHANNEL"][3]) 
 			else
-				getglobal("ChatFrame"..i):AddMessage("["..arg8..". "..string.upper(string.sub(arg9,1,1))..string.sub(arg9,2).."] ".."|cff".."9d9d9d".."|Hplayer:"..arg2.."|h["..arg2.."]|h|r: "..arg1, GF_TextColors["CHANNEL"][2]/255, GF_TextColors["CHANNEL"][3]/255, GF_TextColors["CHANNEL"][4]/255)
+				getglobal("ChatFrame"..i):AddMessage("["..arg8..". "..string.upper(string.sub(arg9,1,1))..string.sub(arg9,2).."] ".."|cff".."9d9d9d".."|Hplayer:"..arg2.."|h["..arg2.."]|h|r: "..arg1, GF_TextColors["CHANNEL"][1], GF_TextColors["CHANNEL"][2], GF_TextColors["CHANNEL"][3])
 			end
 		end
 	end
@@ -702,11 +737,11 @@ function GF_AddChatMessage(arg1,arg2,event)
 	for i=1,NUM_CHAT_WINDOWS do
 		if GF_ChatChannelsGroups[i].group[event] or GF_ChatChannelsGroups[i].group[GF_TextBypassChatNameAlias[event]] then
 			if arg2 == UnitName("player") then
-				getglobal("ChatFrame"..i):AddMessage("["..(GF_TextBypass[event] or string.sub(event,1,1)).."] ".."|cff"..(GF_ClassColors[({UnitClass("player")})[2]] or "9d9d9d").."|Hplayer:"..arg2.."|h["..arg2..", "..UnitLevel("player").."]|h|r: "..arg1, GF_TextColors[event][2]/255, GF_TextColors[event][3]/255, GF_TextColors[event][4]/255)
+				getglobal("ChatFrame"..i):AddMessage("["..(GF_TextBypass[event] or string.sub(event,1,1)).."] ".."|cff"..(GF_ClassColors[({UnitClass("player")})[2]] or "9d9d9d").."|Hplayer:"..arg2.."|h["..arg2..", "..UnitLevel("player").."]|h|r: "..arg1, GF_TextColors[event][1], GF_TextColors[event][2], GF_TextColors[event][3])
 			elseif GF_WhoTable[GF_RealmName][arg2] then 
-				getglobal("ChatFrame"..i):AddMessage("["..(GF_TextBypass[event] or string.sub(event,1,1)).."] ".."|cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][arg2][2]] or "9d9d9d").."|Hplayer:"..arg2.."|h["..arg2..", "..GF_WhoTable[GF_RealmName][arg2][1].."]|h|r: "..arg1, GF_TextColors[event][2]/255, GF_TextColors[event][3]/255, GF_TextColors[event][4]/255)
+				getglobal("ChatFrame"..i):AddMessage("["..(GF_TextBypass[event] or string.sub(event,1,1)).."] ".."|cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][arg2][2]] or "9d9d9d").."|Hplayer:"..arg2.."|h["..arg2..", "..GF_WhoTable[GF_RealmName][arg2][1].."]|h|r: "..arg1, GF_TextColors[event][1], GF_TextColors[event][2], GF_TextColors[event][3])
 			else
-				getglobal("ChatFrame"..i):AddMessage("["..(GF_TextBypass[event] or string.sub(event,1,1)).."] ".."|cff9d9d9d|Hplayer:"..arg2.."|h["..arg2.."]|h|r: "..arg1, GF_TextColors[event][2]/255, GF_TextColors[event][3]/255, GF_TextColors[event][4]/255)
+				getglobal("ChatFrame"..i):AddMessage("["..(GF_TextBypass[event] or string.sub(event,1,1)).."] ".."|cff9d9d9d|Hplayer:"..arg2.."|h["..arg2.."]|h|r: "..arg1, GF_TextColors[event][1], GF_TextColors[event][2], GF_TextColors[event][3])
 			end
 		end
 	end
@@ -793,7 +828,7 @@ function GF_ShowGroupsOnMinimap(arg1,arg2)
 	end
 end
 function GF_AddLogMessage(arg1,logcode,add,arg2,arg8,arg9,event)
-	arg1 = GF_ChatReplaceHquestLevels(GF_ChatReplaceHplayer(gsub(gsub(gsub(gsub(" "..arg1.." "," (www%d-)%.([_A-Za-z0-9-]+)%.(%S+)%s?", " |cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r ")," (%a+)://(%S+)%s?", " |cffccccff|Hurl:%1://%2|h[%1://%2]|h|r ")," (%a+)%.(%a+)/(%S+)%s?", " |cffccccff|Hurl:%1.%2/%3|h[%1.%2/%3]|h|r ")," ([_A-Za-z0-9-]+)%.([_A-Za-z0-9-]+)%.(%S+)%s?", " |cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r ")))
+	arg1 = GF_ChatReplaceHquestLevels(GF_ChatReplaceHplayer(gsub(gsub(gsub(gsub(" "..arg1," (www%d-)%.([_A-Za-z0-9-]+)%.(%S+)%s?", " |cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r")," (%a+)://(%S+)", " |cffccccff|Hurl:%1://%2|h[%1://%2]|h|r")," (%a+)%.(%a+)/(%S+)", " |cffccccff|Hurl:%1.%2/%3|h[%1.%2/%3]|h|r")," ([_A-Za-z0-9-]+)%.([_A-Za-z0-9-]+)%.(%S+)", " |cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r")))
 	if add then
 		if GF_LootFilter[event] then
 			arg1 = "["..date("%H:%M").."]"..GF_LogMessageCodes[logcode]..arg1..""
@@ -818,27 +853,63 @@ function GF_AddLogMessage(arg1,logcode,add,arg2,arg8,arg9,event)
 		table.insert(GF_LogHistory[GF_RealmName],1, {arg1,logcode,event})
 		if getn(GF_LogHistory[GF_RealmName]) > 500 then table.remove(GF_LogHistory[GF_RealmName],501) end
 	end
-	if GF_LogCheckFilters(logcode) and GF_WhisperLogCurrentButtonID == 0 then
-		GF_Log:AddMessage(arg1, GF_TextColors[event][2]/255, GF_TextColors[event][3]/255, GF_TextColors[event][4]/255)
+	if GF_WhisperLogCurrentButtonID == 0 and GF_LogFilters[logcode] and GF_LogFilters[event] then
+		if GF_ConvertMessagesToLinks then
+			local _,_,startString,endString = string.find(arg1, "(.-|Hplayer.-|h|r )(.*)")
+			if startString then
+				endString = gsub(gsub(gsub(gsub(endString, "|[cC]%x+|%w+:%w+:[%w:]+|[h]", ""), "|[cC]%x+%p+%w+:(.-)|h.-|h|r", "%1"), "|[cC]%x+", ""), "|[hHrR]?", "")
+				GF_Log:AddMessage(startString.."|cffccccff|Hurl:"..endString.."|h"..endString.."|h|r", GF_TextColors[event][1], GF_TextColors[event][2], GF_TextColors[event][3])
+			else
+				GF_Log:AddMessage(arg1, GF_TextColors[event][1], GF_TextColors[event][2], GF_TextColors[event][3])
+			end
+		else
+			GF_Log:AddMessage(arg1, GF_TextColors[event][1], GF_TextColors[event][2], GF_TextColors[event][3])
+		end
 	end
-end
-function GF_LogCheckFilters(logcode) -- [1]Group,[2]New,[3]Chat,[4]Trades,[6]Loot,[7]Spam,[8]Blacklist,[9]BelowLvl,[10]Myself,[11]FilteredGroup
-	if (logcode == 10 or (GF_SavedVariables.logshowgroup and (logcode == 1 or logcode == 2)) or (GF_SavedVariables.logshowfiltered and logcode == 3) or (GF_SavedVariables.logshowchat and logcode == 4)
-	or (GF_SavedVariables.logshowtrades and logcode == 5) or (GF_SavedVariables.logshowloot and logcode == 6)	or (GF_SavedVariables.logshowspam and logcode == 7) or (GF_SavedVariables.logshowblacklist and logcode == 8)
-	or (GF_SavedVariables.logshowbelowlevel and logcode == 9)or (GF_SavedVariables.logshowguilds and logcode == 11)) then return true end
 end
 function GF_DisplayLog()
 	GF_Log:SetMaxLines(128)
 	local tempHistoryTable = {}
 	for i=1, getn(GF_LogHistory[GF_RealmName]) do
-		if GF_LogCheckFilters(GF_LogHistory[GF_RealmName][i][2]) then 
+		if GF_LogFilters[GF_LogHistory[GF_RealmName][i][2]] and GF_LogFilters[GF_LogHistory[GF_RealmName][i][3]] then 
 			table.insert(tempHistoryTable,1,GF_LogHistory[GF_RealmName][i])
 			if i == 128 then break end
 		end
 	end
-	for i=1, getn(tempHistoryTable) do
-		GF_Log:AddMessage(tempHistoryTable[i][1], GF_TextColors[tempHistoryTable[i][3]][2]/255, GF_TextColors[tempHistoryTable[i][3]][3]/255, GF_TextColors[tempHistoryTable[i][3]][4]/255)
+	if GF_ConvertMessagesToLinks then
+		for i=1, getn(tempHistoryTable) do
+			local _,_,startString,endString = string.find(tempHistoryTable[i][1], "(.-|Hplayer.-|h|r )(.*)")
+			if startString then
+				endString = gsub(gsub(gsub(gsub(endString, "|[cC]%x+|%w+:%w+:[%w:]+|[h]", ""), "|[cC]%x+%p+%w+:(.-)|h.-|h|r", "%1"), "|[cC]%x+", ""), "|[hHrR]?", "")
+				GF_Log:AddMessage(startString.."|cffccccff|Hurl:"..endString.."|h"..endString.."|h|r", GF_TextColors[tempHistoryTable[i][3]][1], GF_TextColors[tempHistoryTable[i][3]][2], GF_TextColors[tempHistoryTable[i][3]][3])
+			else
+				GF_Log:AddMessage(tempHistoryTable[i][1], GF_TextColors[tempHistoryTable[i][3]][1], GF_TextColors[tempHistoryTable[i][3]][2], GF_TextColors[tempHistoryTable[i][3]][3])
+			end
+		end
+	else
+		for i=1, getn(tempHistoryTable) do
+			GF_Log:AddMessage(tempHistoryTable[i][1], GF_TextColors[tempHistoryTable[i][3]][1], GF_TextColors[tempHistoryTable[i][3]][2], GF_TextColors[tempHistoryTable[i][3]][3])
+		end
 	end
+end
+function GF_GetLogFilters()
+	if GF_SavedVariables.logshowgroup then GF_LogFilters[1] = true GF_LogFilters[2] = true else GF_LogFilters[1] = nil GF_LogFilters[2] = nil end
+	if GF_SavedVariables.logshowfiltered then GF_LogFilters[3] = true else GF_LogFilters[3] = nil end
+	if GF_SavedVariables.logshowchat then GF_LogFilters[4] = true else GF_LogFilters[4] = nil end
+	if GF_SavedVariables.logshowtrades then GF_LogFilters[5] = true else GF_LogFilters[5] = nil end
+	if GF_SavedVariables.logshowguilds then GF_LogFilters[11] = true else GF_LogFilters[11] = nil end
+	if GF_SavedVariables.logshowloot then GF_LogFilters[6] = true else GF_LogFilters[6] = nil end
+	if GF_SavedVariables.logshowspam then GF_LogFilters[7] = true else GF_LogFilters[7] = nil end
+	if GF_SavedVariables.logshowblacklist then GF_LogFilters[8] = true else GF_LogFilters[8] = nil end
+	if GF_SavedVariables.logshowbelowlevel then GF_LogFilters[9] = true else GF_LogFilters[9] = nil end
+
+	if GF_SavedVariables.logchannels then GF_LogFilters["CHANNEL"] = true else GF_LogFilters["CHANNEL"] = nil end
+	if GF_SavedVariables.logparty then GF_LogFilters["PARTY"] = true GF_LogFilters["RAID"] = true GF_LogFilters["RAID_LEADER"] = true GF_LogFilters["RAID_WARNING"] = true GF_LogFilters["BATTLEGROUND"] = true GF_LogFilters["BATTLEGROUND_LEADER"] = true else GF_LogFilters["PARTY"] = nil GF_LogFilters["RAID"] = nil GF_LogFilters["RAID_LEADER"] = nil GF_LogFilters["RAID_WARNING"] = nil GF_LogFilters["BATTLEGROUND"] = nil GF_LogFilters["BATTLEGROUND_LEADER"] = nil end
+	if GF_SavedVariables.logguild then GF_LogFilters["GUILD"] = true GF_LogFilters["OFFICER"] = true else GF_LogFilters["GUILD"] = nil GF_LogFilters["OFFICER"] = nil end
+	if GF_SavedVariables.logwhisper then GF_LogFilters["WHISPER"] = true GF_LogFilters["WHISPER_INFORM"] = true else GF_LogFilters["WHISPER"] = nil GF_LogFilters["WHISPER_INFORM"] = nil end
+	if GF_SavedVariables.logsay then GF_LogFilters["SAY"] = true else GF_LogFilters["SAY"] = nil end
+	if GF_SavedVariables.logyell then GF_LogFilters["YELL"] = true else GF_LogFilters["YELL"] = nil end
+	if GF_SavedVariables.loghardcore then GF_LogFilters["HARDCORE"] = true else GF_LogFilters["HARDCORE"] = nil end
 end
 
 function GF_OnUpdate() -- OnUpdate, SendWho, WhoListUpdated, Announce, Broadcast, Update MessageList
@@ -957,7 +1028,7 @@ function GF_CheckForAnnounce()
 		if GF_LFGDescriptionEditBox:GetText() == "" then GF_TurnOffAnnounce(GF_NOTHING_TO_ANNOUNCE) return end
 		if GF_AutoAnnounceTimer > GF_SavedVariables.announcetimer then
 			GF_AutoAnnounceTimer = 0
-			if GF_Hardcore and GF_SavedVariables.hardcore ~= 3 then
+			if GF_Hardcore and GF_PerCharVariables.hardcore ~= 3 then
 				SendChatMessage(GF_LFGDescriptionEditBox:GetText(), "HARDCORE", nil, nil)
 			else 
 				SendChatMessage(GF_LFGDescriptionEditBox:GetText(), "CHANNEL", nil, GetChannelName(GF_CHANNEL_NAME))
@@ -1198,9 +1269,9 @@ function GF_OnEvent(event) -- OnEvent, LoadSettings, Bind Keys, Prune Tables
 			GF_TurnOffAnnounce(GF_JOINED_GROUP_ANNOUNCE_OFF)
 			GF_WasPartyLeaderBefore = nil
 		else
-			if GF_AutoAnnounceTimer and GF_NumPartyMembers >= GF_BUTTONS_LIST.LFGSize[GF_SavedVariables.lfgsize][4] then GF_TurnOffAnnounce(GF_NO_MORE_PLAYERS_NEEDED) end
+			if GF_AutoAnnounceTimer and GF_NumPartyMembers >= GF_BUTTONS_LIST.LFGSize[GF_PerCharVariables.lfgsize][4] then GF_TurnOffAnnounce(GF_NO_MORE_PLAYERS_NEEDED) end
 		end
-		if GF_SavedVariables.lfgauto then GF_FixLFGStrings(true) end
+		if GF_PerCharVariables.lfgauto then GF_FixLFGStrings(true) end
 		GF_UpdatePlayersInGroupList()
 	elseif event == "CHAT_MSG_WHISPER" or event == "CHAT_MSG_GUILD" or event == "CHAT_MSG_OFFICER" or event == "CHAT_MSG_WHISPER_INFORM" then
 		GF_WhisperReceivedAddToWhisperHistoryList(arg1,arg2,string.sub(event,10))
@@ -1242,6 +1313,9 @@ function GF_OnEvent(event) -- OnEvent, LoadSettings, Bind Keys, Prune Tables
 		if GF_AutoAnnounceTimer and event == "CHAT_MSG_SYSTEM" and string.find(arg1, GF_NOW_AFK) then GF_TurnOffAnnounce(GF_AFK_ANNOUNCE_OFF) end
 	elseif event == "WHO_LIST_UPDATE" then
 		GF_WhoListUpdated()
+	elseif event == "PLAYER_LEVEL_UP" then
+		GF_FixLFGStrings()
+		if GF_PerCharVariables.getwhowhisperlevel == 0 then GF_GetWhoLevelDropdownTextLabel:SetText(GF_LEVEL.." "..UnitLevel("player").."±") end
 	elseif event == "PLAYER_ENTERING_WORLD" and GF_OnStartupRunOnce then
 		GF_NumPartyMembers = GF_GetNumGroupMembers()
 		GF_OnStartupRunOnce = false
@@ -1267,6 +1341,8 @@ function GF_OnEvent(event) -- OnEvent, LoadSettings, Bind Keys, Prune Tables
 			GF_SavedVariables.MainFrameXPos = xpos
 			GF_SavedVariables.MainFrameYPos = ypos
 		end
+		GF_PerCharVariables.searchtext = GF_GroupsFrameDescriptionEditBox:GetText()
+		GF_PerCharVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText()
 	elseif event == "ADDON_LOADED" and arg1 == "pfQuest" then
 		local alt_QuestLogTitleButton_OnClick = QuestLogTitleButton_OnClick
 		function QuestLogTitleButton_OnClick(button, self)
@@ -1296,20 +1372,20 @@ function GF_LoadSettings()
 			break
 		end
 	end
-	if not GF_PlayingOnTurtle then GF_SavedVariables.hardcore = 1 end
+	if not GF_PlayingOnTurtle then GF_PerCharVariables.hardcore = 1 end
 	if GF_Hardcore then
 		GF_BUTTONS_LIST.LFGHardCore[1][4] = GF_HARDCORE_SEND_TEXT
 		table.insert(GF_BUTTONS_LIST.LFGHardCore, 2, { GF_SHOW_HARDCORE, 1, 60, GF_HARDCORE_SEND_TEXT, nil, true, })
 		table.remove(GF_BUTTONS_LIST.LFGHardCore, 4)
 	end
-	GF_LFGHardCoreDropdownTextLabel:SetText(GF_BUTTONS_LIST.LFGHardCore[GF_SavedVariables.hardcore][1])
-	GF_WorldAnnounceMessageTextLabel:SetText(GF_BUTTONS_LIST.LFGHardCore[GF_SavedVariables.hardcore][4])
+	GF_LFGHardCoreDropdownTextLabel:SetText(GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][1])
+	GF_WorldAnnounceMessageTextLabel:SetText(GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][4])
 
 	for i=1, getn(GF_MessageList[GF_RealmName]) do if not GF_MessageList[GF_RealmName][i].flags or type(GF_MessageList[GF_RealmName][i].flags) ~= "table" then GF_MessageList[GF_RealmName] = {} break end end
 	for name,_ in GF_PlayerMessages do if type(GF_PlayerMessages[name][1]) ~= "table" then GF_PlayerMessages = {} break end end
 
 	local SliderVariablesToSet = { GF_SavedVariables.MinimapArcOffset, GF_SavedVariables.MinimapRadiusOffset, GF_SavedVariables.MinimapMsgArcOffset, GF_SavedVariables.MinimapMsgRadiusOffset, GF_SavedVariables.FilterLevel, GF_SavedVariables.spamfilterduration,
-	GF_SavedVariables.MainFrameTransparency,GF_SavedVariables.autoblacklistminlevel,GF_SavedVariables.blockmessagebelowlevel,GF_SavedVariables.grouplistingduration,GF_SavedVariables.autofilterlevelvar, GF_SavedVariables.MainFrameUIScale, }
+	GF_SavedVariables.MainFrameTransparency,GF_SavedVariables.autoblacklistminlevel,GF_SavedVariables.blockmessagebelowlevel,GF_SavedVariables.grouplistingduration,GF_PerCharVariables.autofilterlevelvar, GF_SavedVariables.MainFrameUIScale, }
 	local SliderNames = { "GF_MinimapArcSlider", "GF_MinimapRadiusSlider", "GF_MinimapMsgArcSlider", "GF_MinimapMsgRadiusSlider", "GF_FilterLevelSlider", "GF_FrameSpamFilterDurationSlider",
 	"GF_FrameTransparencySlider", "GF_FrameSpamBlacklistMinLevelSlider", "GF_FrameBlockMessagesBelowLevelSlider", "GF_GroupListingDurationSlider", "GF_AutoFilterLevelSlider", "GF_UIScaleSlider", }
 	for i=1, 12 do getglobal(SliderNames[i]):SetValue(SliderVariablesToSet[i]) end
@@ -1318,27 +1394,30 @@ function GF_LoadSettings()
 	if GF_SavedVariables.showgroupsnewonlytime > 10 then GF_GroupNewTimeoutSlider:SetValue((GF_SavedVariables.showgroupsnewonlytime-10)/5 + 10) else GF_GroupNewTimeoutSlider:SetValue(GF_SavedVariables.showgroupsnewonlytime) end
 
 	local CheckButtonVariablesToSet = { GF_SavedVariables.showgroupsinchat, GF_SavedVariables.showgroupsinminimap, GF_SavedVariables.showgroupsnewonly, GF_SavedVariables.showchattexts, GF_SavedVariables.showtradestexts, GF_SavedVariables.showloottexts,
-	GF_SavedVariables.showguilds, GF_SavedVariables.autofilter, GF_SavedVariables.showdungeons, GF_SavedVariables.showraids, GF_SavedVariables.showquests, GF_SavedVariables.showother, GF_SavedVariables.showlfm, GF_SavedVariables.showlfg,
+	GF_SavedVariables.showguilds, GF_PerCharVariables.autofilter, GF_SavedVariables.showdungeons, GF_SavedVariables.showraids, GF_SavedVariables.showquests, GF_SavedVariables.showother, GF_SavedVariables.showlfm, GF_SavedVariables.showlfg,
 	GF_SavedVariables.logshowgroup,	GF_SavedVariables.logshowfiltered, GF_SavedVariables.logshowchat, GF_SavedVariables.logshowtrades, GF_SavedVariables.logshowguilds, GF_SavedVariables.logshowloot, GF_SavedVariables.logshowspam,
 	GF_SavedVariables.logshowblacklist,	GF_SavedVariables.logshowbelowlevel, GF_SavedVariables.joinworld, GF_SavedVariables.showformattedchat, GF_SavedVariables.usewhoongroups, GF_SavedVariables.systemfilter,
-	GF_SavedVariables.spamfilter,GF_SavedVariables.autoblacklist, GF_SavedVariables.playsounds, GF_SavedVariables.lfgauto, GF_SavedVariables.showwhisperlogs, GF_SavedVariables.mainframeheight, GF_SavedVariables.mainframewidth,
-	GF_SavedVariables.alwaysshowguild, GF_SavedVariables.questmod, GF_SavedVariables.purgepfdb,}
-	
+	GF_SavedVariables.spamfilter,GF_SavedVariables.autoblacklist, GF_SavedVariables.playsounds, GF_PerCharVariables.lfgauto, GF_SavedVariables.showwhisperlogs, GF_SavedVariables.mainframeheight, GF_SavedVariables.mainframewidth,
+	GF_SavedVariables.alwaysshowguild, GF_SavedVariables.questmod, GF_SavedVariables.purgepfdb, GF_SavedVariables.logchannels, GF_SavedVariables.logparty, GF_SavedVariables.logguild, GF_SavedVariables.logwhisper, GF_SavedVariables.logsay,
+	GF_SavedVariables.logyell, GF_SavedVariables.loghardcore, GF_PerCharVariables.lfglevel, GF_PerCharVariables.lfgdps, GF_PerCharVariables.lfgheal, GF_PerCharVariables.lfgtank, }
+
 	local CheckButtonNames = { "GF_ChatFilterGroupsInChatCheckButton", "GF_ChatFilterGroupsInMinimapCheckButton", "GF_ChatFilterGroupsNewOnlyCheckButton", "GF_ChatFilterShowChatCheckButton", "GF_ChatFilterShowTradesCheckButton",
 	"GF_ChatFilterShowLootCheckButton", "GF_ChatFilterShowGuildsCheckButton", "GF_AutoFilterCheckButton", "GF_GroupFilterShowDungeonCheckButton", "GF_GroupFilterShowRaidCheckButton", "GF_GroupFilterShowQuestCheckButton", "GF_GroupFilterShowOtherCheckButton",
-	"GF_GroupFilterShowLFMCheckButton", "GF_GroupFilterShowLFGCheckButton", "GF_LogShowGroups", "GF_LogShowFiltered", "GF_LogShowChat", "GF_LogShowTrades", "GF_LogShowGuild", "GF_LogShowLoot", "GF_LogShowSpam", "GF_LogShowBlacklist", "GF_LogShowBelowLevel",
-	"GF_FrameJoinWorldCheckButton", "GF_FrameShowFormattedChatCheckButton","GF_FrameUseWhoOnGroupsCheckButton", "GF_FrameSystemFilterCheckButton", "GF_FrameSpamFilterCheckButton", "GF_FrameAutoBlacklistCheckButton",	"GF_PlaySoundOnResultsCheckButton",
-	"GF_GroupAutoCheckButton", "GF_LogShowWhisperHistory", "GF_HideMainFrameHeight", "GF_HideMainFrameWidth", "GF_FrameAlwaysShowGuildCheckButton", "GF_FrameQuestModCheckButton", "GF_PurgePFDBCheckButton", }
-	for i=1, 37 do getglobal(CheckButtonNames[i]):SetChecked(CheckButtonVariablesToSet[i]) end
+	"GF_GroupsFrameShowLFMCheckButton", "GF_GroupsFrameShowLFGCheckButton", "GF_LogFilterShowGroups", "GF_LogFilterShowFiltered", "GF_LogFilterShowChat", "GF_LogFilterShowTrades", "GF_LogFilterShowGuild", "GF_LogFilterShowLoot", "GF_LogFilterShowSpam",
+	"GF_LogFilterShowBlacklist", "GF_LogFilterShowBelowLevel",	"GF_FrameJoinWorldCheckButton", "GF_FrameShowFormattedChatCheckButton","GF_FrameUseWhoOnGroupsCheckButton", "GF_FrameSystemFilterCheckButton", "GF_FrameSpamFilterCheckButton",
+	"GF_FrameAutoBlacklistCheckButton",	"GF_PlaySoundOnResultsCheckButton",	"GF_GroupAutoCheckButton", "GF_LogShowWhisperHistory", "GF_HideMainFrameHeight", "GF_HideMainFrameWidth", "GF_FrameAlwaysShowGuildCheckButton", "GF_FrameQuestModCheckButton",
+	"GF_PurgePFDBCheckButton", "GF_LogChannelFilterChannels", "GF_LogChannelFilterParty", "GF_LogChannelFilterGuild", "GF_LogChannelFilterWhisper", "GF_LogChannelFilterSay", "GF_LogChannelFilterYell", "GF_LogChannelFilterHardcore",
+	"GF_LFGMyRoleLevelCheckButton", "GF_LFGMyRoleDPSCheckButton", "GF_LFGMyRoleHealCheckButton", "GF_LFGMyRoleTankCheckButton", }
+	for i=1, 48 do getglobal(CheckButtonNames[i]):SetChecked(CheckButtonVariablesToSet[i]) end
 
- 	local TextToSet = { GF_SavedVariables.searchtext, GF_SavedVariables.searchlfgtext, GF_SavedVariables.searchlfgwhispertext }
+ 	local TextToSet = { GF_PerCharVariables.searchtext, GF_PerCharVariables.searchlfgtext, GF_PerCharVariables.searchlfgwhispertext }
 	local TextNames = { "GF_GroupsFrameDescriptionEditBox", "GF_LFGDescriptionEditBox", "GF_GetWhoWhisperEditBox" }
 	for i=1, 3 do getglobal(TextNames[i]):SetText(TextToSet[i]) end
 
-	if GF_SearchButtonHasValues() then GF_SearchListDropdown:LockHighlight() end
-	GF_LFGSizeDropdownTextLabel:SetText(GF_BUTTONS_LIST.LFGSize[GF_SavedVariables.lfgsize][1])
-	GF_GetWhoClassDropdownTextLabel:SetText(GF_SavedVariables.getwhowhisperclass)
-	GF_GetWhoLevelDropdownTextLabel:SetText(GF_LEVEL.." "..GF_SavedVariables.getwhowhisperlevel.."±")
+	if GF_SearchButtonHasValues() then GF_SearchListDropdown:LockHighlight() GF_SearchListClearButton:Show() end
+	GF_LFGSizeDropdownTextLabel:SetText(GF_BUTTONS_LIST.LFGSize[GF_PerCharVariables.lfgsize][1])
+	GF_GetWhoClassDropdownTextLabel:SetText(GF_PerCharVariables.getwhowhisperclass)
+	if GF_PerCharVariables.getwhowhisperlevel == 0 then GF_GetWhoLevelDropdownTextLabel:SetText(GF_LEVEL.." "..UnitLevel("player").."±") elseif GF_PerCharVariables.getwhowhisperlevel > 60 then GF_GetWhoLevelDropdownTextLabel:SetText(GF_LEVEL.." 60±") else GF_GetWhoLevelDropdownTextLabel:SetText(GF_LEVEL.." "..GF_PerCharVariables.getwhowhisperlevel.."±") end
 
 	GF_BUTTONS_LIST["LFGLFM"][2] = { GF_LFG_SPECS[({UnitClass("player")})[2]][1].." "..UnitClass("player").." LFG", 1, 60, }
 	GF_BUTTONS_LIST["LFGLFM"][3] = { GF_LFG_SPECS[({UnitClass("player")})[2]][2].." "..UnitClass("player").." LFG", 1, 60, }
@@ -1353,9 +1432,12 @@ function GF_LoadSettings()
 	GF_UpdateFriendsList()
 	GF_UpdateGuildiesList()
 	GF_WhisperHistoryUpdateFrame()
+	GF_GetLogFilters()
 	GF_DisplayLog()
 	GF_PruneTheClassWhoTable()
 	GF_ChatGetChannelsGroups()
+	GF_SetDropdownWidths()
+	GF_SetLFGRoleButtons()
 end
 function GF_JoinWorld(show)
 	if GF_SavedVariables.joinworld then
@@ -1375,6 +1457,69 @@ function GF_BindKey(bindKey, bindName)
 			if key1 == bindKey or key2 == bindKey then foundIKey = true end
 		end
 		if not foundIKey then SetBinding(bindKey,bindName) end
+	end
+end
+function GF_SetDropdownWidths()
+	if (GF_GroupFilterShowDungeonCheckButtonTextLabel:GetStringWidth() + 40) > GF_GroupFilterDropdownMenu:GetWidth() then GF_GroupFilterDropdownMenu:SetWidth((GF_GroupFilterShowDungeonCheckButtonTextLabel:GetStringWidth() + 40)) end
+	if (GF_GroupFilterShowRaidCheckButtonTextLabel:GetStringWidth() + 40) > GF_GroupFilterDropdownMenu:GetWidth() then GF_GroupFilterDropdownMenu:SetWidth((GF_GroupFilterShowRaidCheckButtonTextLabel:GetStringWidth() + 40)) end
+	if (GF_GroupFilterShowQuestCheckButtonTextLabel:GetStringWidth() + 40) > GF_GroupFilterDropdownMenu:GetWidth() then GF_GroupFilterDropdownMenu:SetWidth((GF_GroupFilterShowQuestCheckButtonTextLabel:GetStringWidth() + 40)) end
+	if (GF_GroupFilterShowOtherCheckButtonTextLabel:GetStringWidth() + 40) > GF_GroupFilterDropdownMenu:GetWidth() then GF_GroupFilterDropdownMenu:SetWidth((GF_GroupFilterShowOtherCheckButtonTextLabel:GetStringWidth() + 40)) end
+
+	if (GF_ShowGroupsInLabel:GetStringWidth() + 10) > GF_ChatFilterDropdownMenu:GetWidth() then GF_ChatFilterDropdownMenu:SetWidth((GF_ShowGroupsInLabel:GetStringWidth() + 10)) end
+	if (GF_ChatFilterGroupsInChatCheckButtonTextLabel:GetStringWidth() + 40) > GF_ChatFilterDropdownMenu:GetWidth() then GF_ChatFilterDropdownMenu:SetWidth((GF_ChatFilterGroupsInChatCheckButtonTextLabel:GetStringWidth() + 40)) end
+	if (GF_ChatFilterGroupsNewOnlyCheckButtonTextLabel:GetStringWidth() + 40) > GF_ChatFilterDropdownMenu:GetWidth() then GF_ChatFilterDropdownMenu:SetWidth((GF_ChatFilterGroupsNewOnlyCheckButtonTextLabel:GetStringWidth() + 40)) end
+	if (GF_ChatFilterGroupsInMinimapCheckButtonTextLabel:GetStringWidth() + 40) > GF_ChatFilterDropdownMenu:GetWidth() then GF_ChatFilterDropdownMenu:SetWidth((GF_ChatFilterGroupsInMinimapCheckButtonTextLabel:GetStringWidth() + 40)) end
+	if (GF_ShowChatTypesLabel:GetStringWidth() + 10) > GF_ChatFilterDropdownMenu:GetWidth() then GF_ChatFilterDropdownMenu:SetWidth((GF_ShowChatTypesLabel:GetStringWidth() + 10)) end
+	if (GF_ChatFilterShowChatCheckButtonTextLabel:GetStringWidth() + 40) > GF_ChatFilterDropdownMenu:GetWidth() then GF_ChatFilterDropdownMenu:SetWidth((GF_ChatFilterShowChatCheckButtonTextLabel:GetStringWidth() + 40)) end
+	if (GF_ChatFilterShowTradesCheckButtonTextLabel:GetStringWidth() + 40) > GF_ChatFilterDropdownMenu:GetWidth() then GF_ChatFilterDropdownMenu:SetWidth((GF_ChatFilterShowTradesCheckButtonTextLabel:GetStringWidth() + 40)) end
+	if (GF_ChatFilterShowLootCheckButtonTextLabel:GetStringWidth() + 40) > GF_ChatFilterDropdownMenu:GetWidth() then GF_ChatFilterDropdownMenu:SetWidth((GF_ChatFilterShowLootCheckButtonTextLabel:GetStringWidth() + 40)) end
+	if (GF_ChatFilterShowGuildsCheckButtonTextLabel:GetStringWidth() + 40) > GF_ChatFilterDropdownMenu:GetWidth() then GF_ChatFilterDropdownMenu:SetWidth((GF_ChatFilterShowGuildsCheckButtonTextLabel:GetStringWidth() + 40)) end
+
+	if (GF_LogFilterShowGroupsTextLabel:GetStringWidth() + 40) > GF_LogFilterDropdownMenu:GetWidth() then GF_LogFilterDropdownMenu:SetWidth((GF_LogFilterShowGroupsTextLabel:GetStringWidth() + 40)) end
+	if (GF_LogFilterShowFilteredTextLabel:GetStringWidth() + 40) > GF_LogFilterDropdownMenu:GetWidth() then GF_LogFilterDropdownMenu:SetWidth((GF_LogFilterShowFilteredTextLabel:GetStringWidth() + 40)) end
+	if (GF_LogFilterShowChatTextLabel:GetStringWidth() + 40) > GF_LogFilterDropdownMenu:GetWidth() then GF_LogFilterDropdownMenu:SetWidth((GF_LogFilterShowChatTextLabel:GetStringWidth() + 40)) end
+	if (GF_LogFilterShowTradesTextLabel:GetStringWidth() + 40) > GF_LogFilterDropdownMenu:GetWidth() then GF_LogFilterDropdownMenu:SetWidth((GF_LogFilterShowTradesTextLabel:GetStringWidth() + 40)) end
+	if (GF_LogFilterShowGuildTextLabel:GetStringWidth() + 40) > GF_LogFilterDropdownMenu:GetWidth() then GF_LogFilterDropdownMenu:SetWidth((GF_LogFilterShowGuildTextLabel:GetStringWidth() + 40)) end
+	if (GF_LogFilterShowLootTextLabel:GetStringWidth() + 40) > GF_LogFilterDropdownMenu:GetWidth() then GF_LogFilterDropdownMenu:SetWidth((GF_LogFilterShowLootTextLabel:GetStringWidth() + 40)) end
+	if (GF_LogFilterShowSpamTextLabel:GetStringWidth() + 40) > GF_LogFilterDropdownMenu:GetWidth() then GF_LogFilterDropdownMenu:SetWidth((GF_LogFilterShowSpamTextLabel:GetStringWidth() + 40)) end
+	if (GF_LogFilterShowBlacklistTextLabel:GetStringWidth() + 40) > GF_LogFilterDropdownMenu:GetWidth() then GF_LogFilterDropdownMenu:SetWidth((GF_LogFilterShowBlacklistTextLabel:GetStringWidth() + 40)) end
+	if (GF_LogFilterShowBelowLevelTextLabel:GetStringWidth() + 40) > GF_LogFilterDropdownMenu:GetWidth() then GF_LogFilterDropdownMenu:SetWidth((GF_LogFilterShowBelowLevelTextLabel:GetStringWidth() + 40)) end
+
+	if (GF_LogChannelFilterChannelsTextLabel:GetStringWidth() + 40) > GF_LogChannelFilterDropdownMenu:GetWidth() then GF_LogChannelFilterDropdownMenu:SetWidth((GF_LogChannelFilterChannelsTextLabel:GetStringWidth() + 40)) end
+	if (GF_LogChannelFilterPartyTextLabel:GetStringWidth() + 40) > GF_LogChannelFilterDropdownMenu:GetWidth() then GF_LogChannelFilterDropdownMenu:SetWidth((GF_LogChannelFilterPartyTextLabel:GetStringWidth() + 40)) end
+	if (GF_LogChannelFilterGuildTextLabel:GetStringWidth() + 40) > GF_LogChannelFilterDropdownMenu:GetWidth() then GF_LogChannelFilterDropdownMenu:SetWidth((GF_LogChannelFilterGuildTextLabel:GetStringWidth() + 40)) end
+	if (GF_LogChannelFilterWhisperTextLabel:GetStringWidth() + 40) > GF_LogChannelFilterDropdownMenu:GetWidth() then GF_LogChannelFilterDropdownMenu:SetWidth((GF_LogChannelFilterWhisperTextLabel:GetStringWidth() + 40)) end
+	if (GF_LogChannelFilterSayTextLabel:GetStringWidth() + 40) > GF_LogChannelFilterDropdownMenu:GetWidth() then GF_LogChannelFilterDropdownMenu:SetWidth((GF_LogChannelFilterSayTextLabel:GetStringWidth() + 40)) end
+	if (GF_LogChannelFilterYellTextLabel:GetStringWidth() + 40) > GF_LogChannelFilterDropdownMenu:GetWidth() then GF_LogChannelFilterDropdownMenu:SetWidth((GF_LogChannelFilterYellTextLabel:GetStringWidth() + 40)) end
+	if (GF_LogChannelFilterHardcoreTextLabel:GetStringWidth() + 40) > GF_LogChannelFilterDropdownMenu:GetWidth() then GF_LogChannelFilterDropdownMenu:SetWidth((GF_LogChannelFilterHardcoreTextLabel:GetStringWidth() + 40)) end
+end
+function GF_SetLFGRoleButtons()
+	if GF_TankClasses[({UnitClass("player")})[2]] then -- If tank... If heal then tank + heal + dps. Otherwise tank + dps.
+		if GF_HealingClasses[({UnitClass("player")})[2]] then
+			GF_LFGMyRoleDPSCheckButton:SetPoint("RIGHT", "GF_LFGMyRoleLevelCheckButton", "LEFT", -1*getglobal(GF_LFGMyRoleDPSCheckButton:GetName().."TextLabel"):GetStringWidth() -2, 0);
+			GF_LFGMyRoleHealCheckButton:SetPoint("RIGHT", "GF_LFGMyRoleDPSCheckButton", "LEFT", -1*getglobal(GF_LFGMyRoleHealCheckButton:GetName().."TextLabel"):GetStringWidth() -2, 0);
+			GF_LFGMyRoleTankCheckButton:SetPoint("RIGHT", "GF_LFGMyRoleHealCheckButton", "LEFT", -1*getglobal(GF_LFGMyRoleTankCheckButton:GetName().."TextLabel"):GetStringWidth() -2, 0);
+			GF_LFGMyRole:SetPoint("RIGHT", "GF_LFGMyRoleTankCheckButton", "LEFT", 0, 2);
+		else
+			GF_LFGMyRoleHealCheckButton:Hide()
+			GF_PerCharVariables.lfgheal = nil
+			GF_LFGMyRoleDPSCheckButton:SetPoint("RIGHT", "GF_LFGMyRoleLevelCheckButton", "LEFT", -1*getglobal(GF_LFGMyRoleDPSCheckButton:GetName().."TextLabel"):GetStringWidth() -2, 0);
+			GF_LFGMyRoleTankCheckButton:SetPoint("RIGHT", "GF_LFGMyRoleDPSCheckButton", "LEFT", -1*getglobal(GF_LFGMyRoleTankCheckButton:GetName().."TextLabel"):GetStringWidth() -2, 0);
+			GF_LFGMyRole:SetPoint("RIGHT", "GF_LFGMyRoleTankCheckButton", "LEFT", 0, 2);
+		end
+	elseif GF_HealingClasses[({UnitClass("player")})[2]] then -- If healer then heal + dps.
+		GF_LFGMyRoleTankCheckButton:Hide()
+		GF_PerCharVariables.lfgtank = nil
+		GF_LFGMyRoleDPSCheckButton:SetPoint("RIGHT", "GF_LFGMyRoleLevelCheckButton", "LEFT", -1*getglobal(GF_LFGMyRoleDPSCheckButton:GetName().."TextLabel"):GetStringWidth() -2, 0);
+		GF_LFGMyRoleHealCheckButton:SetPoint("RIGHT", "GF_LFGMyRoleDPSCheckButton", "LEFT", -1*getglobal(GF_LFGMyRoleHealCheckButton:GetName().."TextLabel"):GetStringWidth() -2, 0);
+		GF_LFGMyRole:SetPoint("RIGHT", "GF_LFGMyRoleHealCheckButton", "LEFT", 0, 2);
+	else
+		GF_LFGMyRoleHealCheckButton:Hide()
+		GF_PerCharVariables.lfgheal = nil
+		GF_LFGMyRoleTankCheckButton:Hide()
+		GF_PerCharVariables.lfgtank = nil
+		GF_LFGMyRoleDPSCheckButton:SetPoint("RIGHT", "GF_LFGMyRoleLevelCheckButton", "LEFT", -1*getglobal(GF_LFGMyRoleDPSCheckButton:GetName().."TextLabel"):GetStringWidth() -2, 0);
+		GF_LFGMyRole:SetPoint("RIGHT", "GF_LFGMyRoleDPSCheckButton", "LEFT", 0, 2);
 	end
 end
 function GF_PruneTheWhoTable()
@@ -1479,13 +1624,10 @@ end
 
 function GF_ApplyFiltersToGroupList() -- GroupsFrame functions
 	if GetMouseFocus() and GetMouseFocus():GetName() and (string.find(GetMouseFocus():GetName(), "GroupWhoButton") or string.find(GetMouseFocus():GetName(), "LFGInviteButton") or string.find(GetMouseFocus():GetName(), "LFMWhisperRequestInviteButton")) then return end
-	GF_SavedVariables.searchtext = GF_GroupsFrameDescriptionEditBox:GetText()
-	GF_SavedVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText()
-
 	GF_FilteredResultsList = {}
 	for i=1, getn(GF_MessageList[GF_RealmName]) do
 		if GF_MessageList[GF_RealmName][i] then
-			if GF_MessageList[GF_RealmName][i].dlevel == 0 then if GF_WhoTable[GF_RealmName][GF_MessageList[GF_RealmName][i].op] then GF_MessageList[GF_RealmName][i].dlevel = GF_WhoTable[GF_RealmName][GF_MessageList[GF_RealmName][i].op][1] elseif GF_MessageList[GF_RealmName][i].flags[1] == "SM" then GF_MessageList[GF_RealmName][i].dlevel = 35 end end
+			if GF_MessageList[GF_RealmName][i].dlevel == 0 and GF_WhoTable[GF_RealmName][GF_MessageList[GF_RealmName][i].op] then GF_MessageList[GF_RealmName][i].dlevel = GF_WhoTable[GF_RealmName][GF_MessageList[GF_RealmName][i].op][1] end
 			if (GF_MessageList[GF_RealmName][i].t + GF_SavedVariables.grouplistingduration*60) > time() and not GF_BlackList[GF_RealmName][GF_MessageList[GF_RealmName][i].op] and (not GF_WhoTable[GF_RealmName][GF_MessageList[GF_RealmName][i].op] or (GF_WhoTable[GF_RealmName][GF_MessageList[GF_RealmName][i].op][1] ~= nil and GF_Classes[GF_WhoTable[GF_RealmName][GF_MessageList[GF_RealmName][i].op][2]] ~= nil and GF_WhoTable[GF_RealmName][GF_MessageList[GF_RealmName][i].op][3] ~= nil)) then
 				if GF_EntryMatchesGroupFilterCriteria(GF_MessageList[GF_RealmName][i]) then
 					table.insert(GF_FilteredResultsList, GF_MessageList[GF_RealmName][i])
@@ -1498,11 +1640,14 @@ function GF_ApplyFiltersToGroupList() -- GroupsFrame functions
 	end	
 	if floor(GF_ResultsListOffset/GF_ResultsListOffsetSize) > floor(getn(GF_FilteredResultsList)/GF_ResultsListOffsetSize) then GF_ResultsListOffset = GF_ResultsListOffset - GF_ResultsListOffsetSize end
 	GF_UpdateResults()
+	if GF_SearchButtonHasValues() then GF_SearchListDropdown:LockHighlight() GF_SearchListClearButton:Show() else GF_SearchListDropdown:UnlockHighlight() GF_SearchListClearButton:Hide() end
 end
 function GF_UpdateResults()
 	local groupListLength = getn(GF_FilteredResultsList)
 	GF_MinimapIconTextLabel:SetText(groupListLength)
 	GF_MinimapIconTextLabel:Show()
+-- I'll have to reset the offset when I change the offsetsize... But I really want to keep the page I was on, so find page, then multiply by new offsetsize
+-- 
 	while GF_ResultsListOffset > (groupListLength + .1) do GF_ResultsListOffset = GF_ResultsListOffset - GF_ResultsListOffsetSize end
 	GF_ResultsLabel:SetText(GF_FOUND..groupListLength.." / "..getn(GF_MessageList[GF_RealmName]))
 	GF_PageLabel:SetText(GF_PAGE.." "..math.ceil((GF_ResultsListOffset + .1) / GF_ResultsListOffsetSize).." / "..math.max(math.ceil(groupListLength / GF_ResultsListOffsetSize),1))
@@ -1524,17 +1669,17 @@ function GF_UpdateResults()
 			if GF_WhoTable[GF_RealmName][GF_FilteredResultsList[i+GF_ResultsListOffset].op] then
 				local bottomtext
 				if GF_WhoTable[GF_RealmName][GF_FilteredResultsList[i+GF_ResultsListOffset].op][3] ~= "" then bottomtext = ", " else bottomtext = "" end
-				getglobal("GF_NewItem"..i.."NameLabel"):SetText(GF_GetDifficultyColor(GF_FilteredResultsList[i+GF_ResultsListOffset].dlevel)..GF_GetLevelString(GF_FilteredResultsList[i+GF_ResultsListOffset].dlevel,GF_FilteredResultsList[i+GF_ResultsListOffset].type,GF_FilteredResultsList[i+GF_ResultsListOffset].flags).."|cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][GF_FilteredResultsList[i+GF_ResultsListOffset].op][2]] or "ffffff")..GF_FilteredResultsList[i+GF_ResultsListOffset].op.."|r: "..GF_FilteredResultsList[i+GF_ResultsListOffset].message)
+				getglobal("GF_NewItem"..i.."NameLabel"):SetText(GF_GetDifficultyColor(GF_FilteredResultsList[i+GF_ResultsListOffset].dlevel)..GF_GetLevelString(GF_FilteredResultsList[i+GF_ResultsListOffset].dlevel,GF_FilteredResultsList[i+GF_ResultsListOffset].flags).."|cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][GF_FilteredResultsList[i+GF_ResultsListOffset].op][2]] or "ffffff")..GF_FilteredResultsList[i+GF_ResultsListOffset].op.."|r: "..GF_FilteredResultsList[i+GF_ResultsListOffset].message)
 				getglobal("GF_NewItem"..i.."MoreLabel"):SetText("Level "..GF_WhoTable[GF_RealmName][GF_FilteredResultsList[i+GF_ResultsListOffset].op][1].." "..GF_Classes[GF_WhoTable[GF_RealmName][GF_FilteredResultsList[i+GF_ResultsListOffset].op][2]]..bottomtext..GF_WhoTable[GF_RealmName][GF_FilteredResultsList[i+GF_ResultsListOffset].op][3])
 			else
-				getglobal("GF_NewItem"..i.."NameLabel"):SetText(GF_GetDifficultyColor(GF_FilteredResultsList[i+GF_ResultsListOffset].dlevel)..GF_GetLevelString(GF_FilteredResultsList[i+GF_ResultsListOffset].dlevel,GF_FilteredResultsList[i+GF_ResultsListOffset].type,GF_FilteredResultsList[i+GF_ResultsListOffset].flags)..GF_FilteredResultsList[i+GF_ResultsListOffset].op..": "..GF_FilteredResultsList[i+GF_ResultsListOffset].message)
+				getglobal("GF_NewItem"..i.."NameLabel"):SetText(GF_GetDifficultyColor(GF_FilteredResultsList[i+GF_ResultsListOffset].dlevel)..GF_GetLevelString(GF_FilteredResultsList[i+GF_ResultsListOffset].dlevel,GF_FilteredResultsList[i+GF_ResultsListOffset].flags)..GF_FilteredResultsList[i+GF_ResultsListOffset].op..": "..GF_FilteredResultsList[i+GF_ResultsListOffset].message)
 				getglobal("GF_NewItem"..i.."MoreLabel"):SetText("")
 			end
 			if (not GF_SavedVariables.mainframeheight or GF_SavedVariables.mainframestatus == 0) or i < 14 then
 				getglobal("GF_NewItem"..i):Show()
 				if GF_SavedVariables.mainframestatus == 0 and GF_FilteredResultsList[i+GF_ResultsListOffset].op ~= UnitName("player") then
-					if not GF_SavedVariables.usewhoongroups and not GF_UrgentWhoRequest[GF_FilteredResultsList[i+GF_ResultsListOffset].op] and (not GF_WhoTable[GF_RealmName][GF_FilteredResultsList[i+GF_ResultsListOffset].op]
-					or (GF_WhoTable[GF_RealmName][GF_FilteredResultsList[i+GF_ResultsListOffset].op][1] < 60 and GF_WhoTable[GF_RealmName][GF_FilteredResultsList[i+GF_ResultsListOffset].op][4] + 86400 < time())) then
+					if not GF_SavedVariables.usewhoongroups and not GF_UrgentWhoRequest[GF_FilteredResultsList[i+GF_ResultsListOffset].op] and not GF_SavedVariables.friendsToRemove[GF_FilteredResultsList[i+GF_ResultsListOffset].op] and
+					(not GF_WhoTable[GF_RealmName][GF_FilteredResultsList[i+GF_ResultsListOffset].op] or (GF_WhoTable[GF_RealmName][GF_FilteredResultsList[i+GF_ResultsListOffset].op][1] < 60 and GF_WhoTable[GF_RealmName][GF_FilteredResultsList[i+GF_ResultsListOffset].op][4] + 86400 < time())) then
 						getglobal("GF_NewItem"..i.."GroupWhoButton"):Show()
 					else
 						getglobal("GF_NewItem"..i.."GroupWhoButton"):Hide()
@@ -1563,7 +1708,7 @@ function GF_UpdateResults()
 	end
 end
 function GF_EntryMatchesGroupFilterCriteria(entry)
-	if ((GF_SavedVariables.searchtext == "" and not GF_SearchButtonHasValues() and (not GF_SavedVariables.autofilter or (entry.dlevel and entry.dlevel >= UnitLevel("player")-GF_SavedVariables.autofilterlevelvar and entry.dlevel <= UnitLevel("player")+GF_SavedVariables.autofilterlevelvar))) or ((GF_SavedVariables.searchtext ~= "" or GF_SearchButtonHasValues()) and GF_SearchMessageForTextString(string.lower(entry.message).." ",string.lower(GF_SavedVariables.searchtext)..",",entry))) and ((GF_SavedVariables.showlfg and entry.lfg) or (GF_SavedVariables.showlfm and not entry.lfg)) and ((not entry.hc and GF_BUTTONS_LIST.LFGHardCore[GF_SavedVariables.hardcore][5]) or (entry.hc and GF_BUTTONS_LIST.LFGHardCore[GF_SavedVariables.hardcore][6]))
+	if ((not GF_SearchButtonHasValues() and (not GF_PerCharVariables.autofilter or (entry.dlevel and entry.dlevel >= UnitLevel("player")-GF_PerCharVariables.autofilterlevelvar and entry.dlevel <= UnitLevel("player")+GF_PerCharVariables.autofilterlevelvar))) or ((GF_PerCharVariables.searchtext ~= "" or GF_SearchButtonHasValues()) and GF_SearchMessageForTextString(string.lower(entry.message).." ",string.lower(GF_PerCharVariables.searchtext)..",",entry))) and ((GF_SavedVariables.showlfg and entry.lfg) or (GF_SavedVariables.showlfm and not entry.lfg)) and ((not entry.hc and GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][5]) or (entry.hc and GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][6]))
 	and ((GF_SavedVariables.showdungeons and entry.type == "D") or (GF_SavedVariables.showraids and entry.type == "R") or (GF_SavedVariables.showquests and entry.type == "Q") or (GF_SavedVariables.showother and entry.type == "N")) then
 		return true
 	end
@@ -1576,8 +1721,9 @@ function GF_GetDifficultyColor(level)
 	elseif level - UnitLevel("player") * .95 > -3.05 then return "|cff"..GF_DifficultyColors["GREEN"]
 	else return "|cff"..GF_DifficultyColors["GREY"] end
 end
-function GF_GetLevelString(level,gtype,flags)
-	if flags[1] ~= "" then if level > 60 then return "[60]|r |cffffffff["..flags[1].."]|r " else return "["..level.."]|r |cffffffff["..flags[1].."]|r " end
+function GF_GetLevelString(level,flags)
+	if level == 0 then if flags[1] == "SM" then return "[35]|r |cffffffff["..flags[1].."]|r " elseif flags[1] == "" then return "[NA]|r " else return "[NA]|r |cffffffff["..flags[1].."]|r " end
+	elseif flags[1] ~= "" then if level > 60 then return "[60]|r |cffffffff["..flags[1].."]|r " else return "["..level.."]|r |cffffffff["..flags[1].."]|r " end
 	else return "["..level.."]|r " end
 end
 function GF_ListItem_OnMouseUp(id)
@@ -1665,12 +1811,12 @@ function GF_LFGInviteButton(frame,id)
 	getglobal(frame:GetName().."LFGInviteButton"):Hide()
 end
 function GF_LFMWhisperRequestInviteButton(frame,id)
-	local specName = ""
-	for i=1,3 do
-		_,_,_,_,findSpec = GetTalentInfo(i,GetNumTalents(i))
-		if findSpec > 0 then specName = GF_LFG_SPECS[({UnitClass("player")})[2]][i].." " break end
-	end
-	SendChatMessage("["..UnitLevel("player").." "..specName..UnitClass("player").."] "..GF_INVITE_PLEASE,"WHISPER",nil,GF_FilteredResultsList[GF_ResultsListOffset+id].op)
+	local specString = "["..UnitLevel("player").." "
+	if GF_PerCharVariables.lfgtank then specString = specString..GF_TANK.."/" end
+	if GF_PerCharVariables.lfgheal then specString = specString..GF_HEALER.."/" end
+	if GF_PerCharVariables.lfgdps then specString = specString..GF_DPS.."/" end
+	specString = string.sub(specString,1,-2)..gsub(string.sub(specString,-1,-1),"[/ ]","").." "..UnitClass("player").."] "
+	SendChatMessage(specString..GF_INVITE_PLEASE,"WHISPER",nil,GF_FilteredResultsList[GF_ResultsListOffset+id].op)
 	GF_RequestInviteTime[GF_FilteredResultsList[GF_ResultsListOffset+id].op] = time() + 120
 	getglobal(frame:GetName().."LFMWhisperRequestInviteButton"):Hide()
 end
@@ -1683,6 +1829,7 @@ function GF_WhisperHistoryButtonPressed(id,override,nolog) -- Whisper/Guild Hist
 	if id > 1 then getglobal("GF_WhisperHistoryButtonCheckButton"..id):Show() end
 	
 	GF_WhisperLogCurrentButtonID = id
+	GF_WhisperLogCurrentButtonName = getglobal("GF_WhisperHistoryButton"..id):GetText()
 	if nolog then return end
 	if id == 0 then
 		GF_DisplayLog()
@@ -1719,20 +1866,31 @@ function GF_WhisperReceivedAddToWhisperHistoryList(message,name,event)
 		else
 			message = "["..date("%m/%d").."] ["..date("%H:%M").."] |cff"..GF_ClassColors[({UnitClass("player")})[2]].."[|Hplayer:"..UnitName("player").."|h"..playerInitials.."]|h|r [To] |cff".."9d9d9d".."[|Hplayer:"..name.."|h"..name.."]:|h|r"..message
 		end
-		table.insert(GF_WhisperLogData[GF_RealmName]["Guild"],1,message)
+		table.insert(GF_WhisperLogData[GF_RealmName]["Guild"],1,{message,event})
 		if getn(GF_WhisperLogData[GF_RealmName]["Guild"]) > 128 then table.remove(GF_WhisperLogData[GF_RealmName]["Guild"],129) end
 	end
 	if event ~= "GUILD" and event ~= "OFFICER" then
-		table.insert(GF_WhisperLogData[GF_RealmName][name],1,message)
-		table.insert(GF_WhisperLogData[GF_RealmName]["Guild"],1,message)
+		table.insert(GF_WhisperLogData[GF_RealmName][name],1,{message,"WHISPER"})
+		table.insert(GF_WhisperLogData[GF_RealmName]["Guild"],1,{message,"WHISPER"})
 		if getn(GF_WhisperLogData[GF_RealmName][name]) > 128 then table.remove(GF_WhisperLogData[GF_RealmName][name],129) end
 		if getn(GF_WhisperLogData[GF_RealmName]["Guild"]) > 128 then table.remove(GF_WhisperLogData[GF_RealmName]["Guild"],129) end
-		if GF_WhisperLogCurrentButtonID > 1 and name == getglobal("GF_WhisperHistoryButton"..GF_WhisperLogCurrentButtonID):GetText() then GF_Log:AddMessage(message, GF_TextColors[event][2]/255, GF_TextColors[event][3]/255, GF_TextColors[event][4]/255) end
 		GF_WhisperHistoryUpdateFrame(name)
 	end
 	table.insert(GF_LogHistory[GF_RealmName],1,{message,10,event})
 	if getn(GF_LogHistory[GF_RealmName]) > 500 then table.remove(GF_LogHistory[GF_RealmName],501) end
-	if GF_WhisperLogCurrentButtonID < 2 then GF_Log:AddMessage(message, GF_TextColors[event][2]/255, GF_TextColors[event][3]/255, GF_TextColors[event][4]/255) end
+	if GF_WhisperLogCurrentButtonID < 2 or name == getglobal("GF_WhisperHistoryButton"..GF_WhisperLogCurrentButtonID):GetText() then
+		if GF_ConvertMessagesToLinks then
+			local _,_,startString,endString = string.find(message, "(.-|Hplayer.-|h|r )(.*)")
+			if startString then
+				endString = gsub(gsub(gsub(gsub(endString, "|[cC]%x+|%w+:%w+:[%w:]+|[h]", ""), "|[cC]%x+%p+%w+:(.-)|h.-|h|r", "%1"), "|[cC]%x+", ""), "|[hHrR]?", "")
+				GF_Log:AddMessage(startString.."|cffccccff|Hurl:"..endString.."|h"..endString.."|h|r", GF_TextColors[event][1], GF_TextColors[event][2], GF_TextColors[event][3])
+			else
+				GF_Log:AddMessage(message, GF_TextColors[event][1], GF_TextColors[event][2], GF_TextColors[event][3])
+			end
+		else
+			GF_Log:AddMessage(message, GF_TextColors[event][1], GF_TextColors[event][2], GF_TextColors[event][3])
+		end
+	end
 end
 function GF_WhisperHistoryUpdateFrame(name)
 	local numPriority = 0
@@ -1747,10 +1905,8 @@ function GF_WhisperHistoryUpdateFrame(name)
 	if name then
 		if nameWasPriority then
 			table.insert(GF_WhisperLogData[GF_RealmName],2,name)
-			if GF_WhisperLogCurrentButtonID > 1 then GF_WhisperHistoryButtonPressed(2,true,true) end
 		else
 			table.insert(GF_WhisperLogData[GF_RealmName],2+numPriority,name)
-			if GF_WhisperLogCurrentButtonID > 1 then GF_WhisperHistoryButtonPressed(2+numPriority,true,true) end
 		end
 	end
 	for i=2, 20 do
@@ -1765,25 +1921,26 @@ function GF_WhisperHistoryUpdateFrame(name)
 	end
 	for i=2, 20 do
 		if GF_WhisperLogData[GF_RealmName][i] then
-			if GF_WhisperLogData[GF_RealmName][i] == getglobal("GF_WhisperHistoryButton"..GF_WhisperLogCurrentButtonID):GetText() then GF_WhisperHistoryButtonPressed(i,true,true) end
+			if GF_WhisperLogData[GF_RealmName][i] == GF_WhisperLogCurrentButtonName then GF_WhisperHistoryButtonPressed(i,true,true) end
 		end
 	end
-	if getn(GF_WhisperLogData[GF_RealmName]) > 20 then table.remove(GF_WhisperLogData[GF_RealmName],21) end	
+	if getn(GF_WhisperLogData[GF_RealmName]) > 20 then table.remove(GF_WhisperLogData[GF_RealmName],21) end
 end
 function GF_WhisperHistoryDisplayLog(name)
 	GF_Log:SetMaxLines(128)
-	local tempHistoryTable = {}
-	for i=1, getn(GF_WhisperLogData[GF_RealmName][name]) do
-		table.insert(tempHistoryTable,1,GF_WhisperLogData[GF_RealmName][name][i])
-		if i == 128 then break end
-	end
-	for i=1, getn(tempHistoryTable) do
-		if string.find(tempHistoryTable[i], " %[[TFrom]+%] |cff") then
-			GF_Log:AddMessage(tempHistoryTable[i],1,128/255,1)
-		elseif string.find(tempHistoryTable[i], " [O] |cff",1,1) then
-			GF_Log:AddMessage(tempHistoryTable[i],64/255,192/255,64/255)
-		else
-			GF_Log:AddMessage(tempHistoryTable[i],64/255,1,64/255)
+	if GF_ConvertMessagesToLinks then
+		for i=getn(GF_WhisperLogData[GF_RealmName][name]), 1, -1 do
+			local _,_,startString,endString = string.find(GF_WhisperLogData[GF_RealmName][name][i][1], "(.-|Hplayer.-|h|r )(.*)")
+			if startString then
+				endString = gsub(gsub(gsub(gsub(endString, "|[cC]%x+|%w+:%w+:[%w:]+|[h]", ""), "|[cC]%x+%p+%w+:(.-)|h.-|h|r", "%1"), "|[cC]%x+", ""), "|[hHrR]?", "")
+				GF_Log:AddMessage(startString.."|cffccccff|Hurl:"..endString.."|h"..endString.."|h|r", GF_TextColors[GF_WhisperLogData[GF_RealmName][name][i][2]][1], GF_TextColors[GF_WhisperLogData[GF_RealmName][name][i][2]][2], GF_TextColors[GF_WhisperLogData[GF_RealmName][name][i][2]][3])
+			else
+				GF_Log:AddMessage(GF_WhisperLogData[GF_RealmName][name][i][1],GF_TextColors[GF_WhisperLogData[GF_RealmName][name][i][2]][1], GF_TextColors[GF_WhisperLogData[GF_RealmName][name][i][2]][2], GF_TextColors[GF_WhisperLogData[GF_RealmName][name][i][2]][3])
+			end
+		end
+	else
+		for i=getn(GF_WhisperLogData[GF_RealmName][name]), 1, -1 do
+			GF_Log:AddMessage(GF_WhisperLogData[GF_RealmName][name][i][1],GF_TextColors[GF_WhisperLogData[GF_RealmName][name][i][2]][1], GF_TextColors[GF_WhisperLogData[GF_RealmName][name][i][2]][2], GF_TextColors[GF_WhisperLogData[GF_RealmName][name][i][2]][3])
 		end
 	end
 end
@@ -1856,9 +2013,13 @@ end
 
 function GF_ToggleGetWho() -- GetWho functions
 	if not GF_ClassWhoRequest then
-		GF_GetWhoClassLevelList(GF_SavedVariables.getwhowhisperlevel, GF_SavedVariables.getwhowhisperclass, true)
-		if GF_NextAvailableWhoTime > time() then DEFAULT_CHAT_FRAME:AddMessage(GF_SENDING_GET_WHO..(GF_NextAvailableWhoTime - time())..GF_SECONDS, 1, 1, 0.5) end
+		GF_ClassWhoMatchingResults = 0
+		GF_GetWhoTotalNames:SetText(GF_ClassWhoMatchingResults)
+		GF_GetWhoName = ""
+		GF_GetWhoNameLabel:SetText("")
 		GF_GetWhoButton:SetText(GF_STOP_WHO)
+		GF_GetWhoClassLevelList(GF_PerCharVariables.getwhowhisperlevel, GF_PerCharVariables.getwhowhisperclass, true)
+		if GF_NextAvailableWhoTime > time() then DEFAULT_CHAT_FRAME:AddMessage(GF_SENDING_GET_WHO..(GF_NextAvailableWhoTime - time())..GF_SECONDS, 1, 1, 0.5) end
 	else
 		GF_ClassWhoRequest = nil
 		GF_GetWhoButton:SetText(GF_GET_WHO)
@@ -1870,6 +2031,7 @@ function GF_GetWhoClassLevelList(level,class,excludedungeonspvp)
 	end
 	GF_ClassWhoRequest = true
 	GF_ClassWhoMatchingResults = 0
+	if level == 0 then level = UnitLevel("player") end
 	GF_GetWhoParams = { level, class, excludedungeonspvp, }
 	GF_ClassWhoQueue = {}
 	GF_GetClassWhoState = 1
@@ -1975,7 +2137,7 @@ function GF_GetWhoSendWhisperToAvailablePlayer()
 end
 function GF_GetWhoSkipPlayer()
 	if GF_ClassWhoMatchingResults > 0 and GF_ClassWhoTable[GF_GetWhoName] and GF_ClassWhoTable[GF_GetWhoName][4] <= time() then
-		GF_ClassWhoTable[GF_GetWhoName][4] = time() + GF_GetWhoResetTimer
+		GF_ClassWhoTable[GF_GetWhoName][4] = time() + 300
 		GF_ClassWhoMatchingResults = GF_ClassWhoMatchingResults - 1
 		GF_GetWhoTotalNames:SetText(GF_ClassWhoMatchingResults)
 		GF_ClassWhoRequest = nil
@@ -2013,18 +2175,18 @@ function GF_FindDungeonLevel(whisperText,lfgText)
 	end
 end
 
-function GF_FixLFGStrings(lfmOnly) -- LFG Group Maker Functions
-	GF_SavedVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText()
-	local maxGroupSize = GF_BUTTONS_LIST.LFGSize[GF_SavedVariables.lfgsize][4]
-	if not lfmOnly then
+function GF_FixLFGStrings(groupSizeOnly) -- LFG Group Maker Functions
+	GF_PerCharVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText()
+	local maxGroupSize = GF_BUTTONS_LIST.LFGSize[GF_PerCharVariables.lfgsize][4]
+	if not groupSizeOnly then
 		local foundLFM
 		local foundDungeonRaid = {}
 		local foundRoles = {}
 		local foundStartOfText
 		local endOfFilter = 0
-		GF_SavedVariables.searchlfgtext = gsub(GF_SavedVariables.searchlfgtext, "[LFlf]+%d+[Mm]", "LFM")
+		GF_PerCharVariables.searchlfgtext = gsub(GF_PerCharVariables.searchlfgtext, "[LFlf]+%d+[Mm]", "LFM")
 		for i=1,getn(GF_BUTTONS_LIST.LFGLFM) do
-			foundStartOfText = string.find(GF_SavedVariables.searchlfgtext, GF_BUTTONS_LIST.LFGLFM[i][1])
+			foundStartOfText = string.find(GF_PerCharVariables.searchlfgtext, GF_BUTTONS_LIST.LFGLFM[i][1])
 			if foundStartOfText then
 				if i == 1 then
 					foundLFM = 1
@@ -2035,31 +2197,31 @@ function GF_FixLFGStrings(lfmOnly) -- LFG Group Maker Functions
 			end
 		end
 		for i=1,getn(GF_BUTTONS_LIST.LFGRole) do
-			foundStartOfText = string.find(GF_SavedVariables.searchlfgtext, GF_BUTTONS_LIST.LFGRole[i][1])
+			foundStartOfText = string.find(GF_PerCharVariables.searchlfgtext, GF_BUTTONS_LIST.LFGRole[i][1])
 			if foundStartOfText then
 				if foundStartOfText + string.len(GF_BUTTONS_LIST.LFGRole[i][1])-1 > endOfFilter then endOfFilter = foundStartOfText + string.len(GF_BUTTONS_LIST.LFGRole[i][1])-1 end
 				table.insert(foundRoles,GF_BUTTONS_LIST.LFGRole[i][1])
 			end
 		end
 		for i=1,getn(GF_BUTTONS_LIST.LFGDungeon) do
-			foundStartOfText = string.find(GF_SavedVariables.searchlfgtext, GF_BUTTONS_LIST.LFGDungeon[i][1]) or string.find(GF_SavedVariables.searchlfgtext, GF_BUTTONS_LIST.LFGDungeon[i][4])
+			foundStartOfText = string.find(GF_PerCharVariables.searchlfgtext, GF_BUTTONS_LIST.LFGDungeon[i][1])
 			if foundStartOfText then
 				if foundStartOfText + string.len(GF_BUTTONS_LIST.LFGDungeon[i][1])-1 > endOfFilter then endOfFilter = foundStartOfText + string.len(GF_BUTTONS_LIST.LFGDungeon[i][1])-1 end
-				if tonumber(maxGroupSize) > GF_BUTTONS_LIST.LFGDungeon[i][7] then maxGroupSize = GF_BUTTONS_LIST.LFGDungeon[i][7] end
+				if tonumber(maxGroupSize) > GF_BUTTONS_LIST.LFGDungeon[i][5] then maxGroupSize = GF_BUTTONS_LIST.LFGDungeon[i][5] end
 				table.insert(foundDungeonRaid,GF_BUTTONS_LIST.LFGDungeon[i][1])
 			end
 		end
 		for i=1,getn(GF_BUTTONS_LIST.LFGRaid) do
-			foundStartOfText = string.find(GF_SavedVariables.searchlfgtext, GF_BUTTONS_LIST.LFGRaid[i][1]) or string.find(GF_SavedVariables.searchlfgtext, GF_BUTTONS_LIST.LFGRaid[i][4])
+			foundStartOfText = string.find(GF_PerCharVariables.searchlfgtext, GF_BUTTONS_LIST.LFGRaid[i][1])
 			if foundStartOfText then
 				if foundStartOfText + string.len(GF_BUTTONS_LIST.LFGRaid[i][1])-1 > endOfFilter then endOfFilter = foundStartOfText + string.len(GF_BUTTONS_LIST.LFGRaid[i][1])-1 end
-				if tonumber(maxGroupSize) > GF_BUTTONS_LIST.LFGRaid[i][7] then maxGroupSize = GF_BUTTONS_LIST.LFGRaid[i][7] end
+				if tonumber(maxGroupSize) > GF_BUTTONS_LIST.LFGRaid[i][5] then maxGroupSize = GF_BUTTONS_LIST.LFGRaid[i][5] end
 				table.insert(foundDungeonRaid,GF_BUTTONS_LIST.LFGRaid[i][1])
 			end
 		end
 		local newText = ""
 		if foundLFM == 1 then
-			if GF_SavedVariables.lfgauto then
+			if GF_PerCharVariables.lfgauto then
 				newText = "LF"..maxGroupSize-GF_NumPartyMembers.."M"
 			else
 				newText = "LFM"
@@ -2073,10 +2235,18 @@ function GF_FixLFGStrings(lfmOnly) -- LFG Group Maker Functions
 				newText = newText..foundRoles[i].."/"
 			end
 		else
-			if foundLFM or getn(foundRoles) > 0 then newText = UnitLevel("player").." " end
-			for i=1, getn(foundRoles) do
-				newText = newText..foundRoles[i].."/"
+			if string.find(" "..string.lower(GF_PerCharVariables.searchlfgtext).." ", " lfg ") and not string.find(GF_PerCharVariables.searchlfgtext, GF_BUTTONS_LIST["LFGLFM"][2][1]) and not string.find(GF_PerCharVariables.searchlfgtext, GF_BUTTONS_LIST["LFGLFM"][3][1]) and not string.find(GF_PerCharVariables.searchlfgtext, GF_BUTTONS_LIST["LFGLFM"][4][1]) then
+				if GF_PerCharVariables.lfglevel then newText = newText..UnitLevel("player").." " end
+				if GF_PerCharVariables.lfgtank then newText = newText..GF_TANK.."/" end
+				if GF_PerCharVariables.lfgheal then newText = newText..GF_HEALER.."/" end
+				if GF_PerCharVariables.lfgdps then newText = newText..GF_DPS.."/" end
+				newText = string.sub(newText,1,-2)..gsub(string.sub(newText,-1,-1),"[/ ]","").." "--..UnitClass("player").." "
+			else
+				for i=1, getn(foundRoles) do
+					newText = newText..foundRoles[i].."/"
+				end
 			end
+-- don't display dps/heal if lfg with spec
 			if foundLFM then
 				newText = " "..newText.." "..foundLFM
 			end
@@ -2085,63 +2255,62 @@ function GF_FixLFGStrings(lfmOnly) -- LFG Group Maker Functions
 				newText = newText..foundDungeonRaid[i].."/"
 			end
 		end
-		GF_SavedVariables.searchlfgtext = gsub(gsub(gsub(gsub(gsub(gsub(newText..string.sub(GF_SavedVariables.searchlfgtext, endOfFilter+1), "[/ ]+$", ""), "^%s+", ""), "/%s+"," "),"%s/", ""),"//+", ""),"%s%s+", " ")
-		getglobal(GF_LFGDescriptionEditBox:GetName()):SetText(GF_SavedVariables.searchlfgtext)
+		GF_PerCharVariables.searchlfgtext = gsub(gsub(gsub(gsub(gsub(gsub(newText..string.sub(GF_PerCharVariables.searchlfgtext, endOfFilter+1), "[/ ]+$", ""), "^%s+", ""), "/%s+"," "),"%s/", ""),"//+", ""),"%s%s+", " ")
+		GF_LFGDescriptionEditBox:SetText(GF_PerCharVariables.searchlfgtext)
 	else
-		if GF_SavedVariables.lfgauto and (string.find(string.upper(GF_SavedVariables.searchlfgtext), "LF%d+M") or string.find(string.upper(GF_SavedVariables.searchlfgtext), "LFM")) then
-			GF_SavedVariables.searchlfgtext = gsub(GF_SavedVariables.searchlfgtext, "[Ll[Ff]+%d+[Mm]", "LFM")
+		if GF_PerCharVariables.lfgauto and (string.find(string.upper(GF_PerCharVariables.searchlfgtext), "LF%d+M") or string.find(string.upper(GF_PerCharVariables.searchlfgtext), "LFM")) then
+			GF_PerCharVariables.searchlfgtext = gsub(GF_PerCharVariables.searchlfgtext, "[Ll[Ff]+%d+[Mm]", "LFM")
 			local newText = "LF"..maxGroupSize-GF_NumPartyMembers.."M"
-			getglobal(GF_LFGDescriptionEditBox:GetName()):SetText(gsub(GF_SavedVariables.searchlfgtext, "[Ll][Ff][Mm]", newText))
+			GF_LFGDescriptionEditBox:SetText(gsub(GF_PerCharVariables.searchlfgtext, "[Ll][Ff][Mm]", newText))
 		end
 	end
 end
 function GF_ShowDropdownList(bframe)
 	local width = 0
 	GF_NumLFGSearchButtons = 0
-	GF_SavedVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText()
-	local LFGLFMFound
-	for _,dtable in pairs(GF_BUTTONS_LIST[bframe]) do
-		if UnitLevel("player") >= dtable[2] and UnitLevel("player") <= dtable[3] then
+	GF_PerCharVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText()
+	local foundLFMLFG
+	for i=1, getn(GF_BUTTONS_LIST[bframe]) do
+		if UnitLevel("player") >= GF_BUTTONS_LIST[bframe][i][2] and UnitLevel("player") <= GF_BUTTONS_LIST[bframe][i][3] then
 			GF_NumLFGSearchButtons = GF_NumLFGSearchButtons + 1
 			local button = getglobal("GF_"..bframe..GF_NumLFGSearchButtons) or CreateFrame("CheckButton", getglobal("GF_"..bframe):GetName()..GF_NumLFGSearchButtons, getglobal("GF_"..bframe), "GF_LFGDropdownCheckButtonTemplate_Label")
-			getglobal(button:GetName().."TextLabel"):SetText(dtable[1])
+			getglobal(button:GetName().."TextLabel"):SetText(GF_BUTTONS_LIST[bframe][i][1])
 			if getglobal(button:GetName().."TextLabel"):GetStringWidth() >= width then width = getglobal(button:GetName().."TextLabel"):GetStringWidth()+5 end
 			button:Show()
 			if bframe == "SearchList" then
-				if GF_SavedVariables.searchbuttonstext[dtable[4]] then
+				if GF_PerCharVariables.searchbuttonstext[GF_BUTTONS_LIST[bframe][i][4]] then
 					button:SetChecked(true)
 				else
 					button:SetChecked(false)
 				end
 			elseif bframe == "GetWhoClass" then
-				if GF_SavedVariables.getwhowhisperclass == dtable[1] then
+				if GF_PerCharVariables.getwhowhisperclass == GF_BUTTONS_LIST[bframe][i][1] then
 					button:SetChecked(true)
 				else
 					button:SetChecked(false)
 				end
 			elseif bframe == "GetWhoLevel" then
-				button:SetChecked(false)
+				if i == 1 and GF_PerCharVariables.getwhowhisperlevel == 0 then button:SetChecked(true) else button:SetChecked(false) end
 			elseif bframe == "LFGSize" then
-				if GF_BUTTONS_LIST.LFGSize[GF_SavedVariables.lfgsize][4] == dtable[4] then
+				if GF_BUTTONS_LIST.LFGSize[GF_PerCharVariables.lfgsize][4] == GF_BUTTONS_LIST[bframe][i][4] then
 					button:SetChecked(true)
 				else
 					button:SetChecked(false)
 				end
 			elseif bframe == "LFGHardCore" then
-				if GF_BUTTONS_LIST.LFGHardCore[GF_SavedVariables.hardcore][1] == dtable[1] then
+				if GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][1] == GF_BUTTONS_LIST[bframe][i][1] then
 					button:SetChecked(true)
 				else
 					button:SetChecked(false)
 				end
 			else
-				if dtable[1] == GF_CLEAR then
+				if GF_BUTTONS_LIST[bframe][i][1] == "LFM" and string.find(" "..string.lower(GF_PerCharVariables.searchlfgtext).." ", " lf%d+m ") then
+					foundLFMLFG = true
 					button:SetChecked(true)
+				elseif string.find(string.lower(GF_PerCharVariables.searchlfgtext), string.lower(GF_BUTTONS_LIST[bframe][i][1])) then
+					if bframe == "LFGLFM" and foundLFMLFG then button:SetChecked(false) else button:SetChecked(true) foundLFMLFG = true end
 				else
-					if string.find(GF_SavedVariables.searchlfgtext, dtable[1]) then
-						if bframe== "LFGLFM" and LFGLFMFound then button:SetChecked(false) else button:SetChecked(true) LFGLFMFound = true end
-					else
-						button:SetChecked(false)
-					end
+					button:SetChecked(false)
 				end
 			end
 		end
@@ -2172,74 +2341,303 @@ function GF_ShowDropdownList(bframe)
 	if GF_NumLFGSearchButtons > 0 then getglobal("GF_"..bframe):Show() end
 end
 function GF_AddRemoveSearch(bframe,entryname,add)
+	GF_PerCharVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText()
 	local _,_,frameName,frameID = string.find(bframe,"(%a+)(%d+)",4)
 	if frameName == "SearchList" then
-		if entryname == "Clear" then
-			GF_SavedVariables.searchbuttonstext = {}
-			GF_SavedVariables.searchtext = ""
-			GF_GroupsFrameDescriptionEditBox:SetText("")
-			GF_SearchList:Hide()
-		else
-			for i=1, getn(GF_BUTTONS_LIST[frameName]) do
-				if GF_BUTTONS_LIST[frameName][i][1] == entryname then
-					for j=4, getn(GF_BUTTONS_LIST[frameName][i]) do
-						if add then
-							GF_SavedVariables.searchbuttonstext[GF_BUTTONS_LIST[frameName][i][j]] = true
-						else
-							GF_SavedVariables.searchbuttonstext[GF_BUTTONS_LIST[frameName][i][j]] = nil
-						end
+		for i=1, getn(GF_BUTTONS_LIST[frameName]) do
+			if GF_BUTTONS_LIST[frameName][i][1] == entryname then
+				for j=4, getn(GF_BUTTONS_LIST[frameName][i]) do
+					if add then
+						GF_PerCharVariables.searchbuttonstext[GF_BUTTONS_LIST[frameName][i][j]] = true
+					else
+						GF_PerCharVariables.searchbuttonstext[GF_BUTTONS_LIST[frameName][i][j]] = nil
 					end
 				end
 			end
 		end
-		if GF_SearchButtonHasValues() then GF_SearchListDropdown:LockHighlight() else GF_SearchListDropdown:UnlockHighlight() end
+		if GF_SearchButtonHasValues() then GF_SearchListDropdown:LockHighlight() GF_SearchListClearButton:Show() else GF_SearchListDropdown:UnlockHighlight() GF_SearchListClearButton:Hide() end
 		GF_ApplyFiltersToGroupList()
 	else
 		for i=1, getn(GF_BUTTONS_LIST[frameName]) do
 			if GF_BUTTONS_LIST[frameName][i][1] == entryname then
 				if frameName == "GetWhoClass" then
-					GF_SavedVariables.getwhowhisperclass = entryname
-					GF_GetWhoClassDropdownTextLabel:SetText(GF_SavedVariables.getwhowhisperclass)
+					GF_PerCharVariables.getwhowhisperclass = entryname
+					GF_GetWhoClassDropdownTextLabel:SetText(GF_PerCharVariables.getwhowhisperclass)
 					GF_GetWhoClass:Hide()
+					break
 				elseif frameName == "GetWhoLevel" then
-					GF_SavedVariables.getwhowhisperlevel = GF_BUTTONS_LIST[frameName][i][4]
-					if GF_SavedVariables.getwhowhisperlevel == 0 then GF_SavedVariables.getwhowhisperlevel = UnitLevel("player") end
-					GF_GetWhoLevelDropdownTextLabel:SetText(GF_LEVEL.." "..GF_SavedVariables.getwhowhisperlevel.."±")
+					GF_PerCharVariables.getwhowhisperlevel = GF_BUTTONS_LIST[frameName][i][4]
+					if GF_PerCharVariables.getwhowhisperlevel == 0 then GF_GetWhoLevelDropdownTextLabel:SetText(GF_LEVEL.." "..UnitLevel("player").."±") elseif GF_PerCharVariables.getwhowhisperlevel > 60 then GF_GetWhoLevelDropdownTextLabel:SetText(GF_LEVEL.." 60±") else GF_GetWhoLevelDropdownTextLabel:SetText(GF_LEVEL.." "..GF_PerCharVariables.getwhowhisperlevel.."±") end					
 					GF_GetWhoLevel:Hide()
+					break
 				elseif frameName == "LFGSize" then
-					GF_SavedVariables.lfgsize = i
+					GF_PerCharVariables.lfgsize = i
 					GF_LFGSizeDropdownTextLabel:SetText(GF_BUTTONS_LIST.LFGSize[i][1])
 					GF_LFGSize:Hide()
 				elseif frameName == "LFGHardCore" then
-					GF_SavedVariables.hardcore = i
+					GF_PerCharVariables.hardcore = i
 					GF_LFGHardCoreDropdownTextLabel:SetText(GF_BUTTONS_LIST.LFGHardCore[i][1])
 					GF_WorldAnnounceMessageTextLabel:SetText(GF_BUTTONS_LIST.LFGHardCore[i][4])
-					if GF_Hardcore then if GF_SavedVariables.hardcore == 3 then DEFAULT_CHAT_FRAME:AddMessage(GF_WORLD_NOW_SENDING, 1, 1, 0.5) else DEFAULT_CHAT_FRAME:AddMessage(GF_HARDCORE_NOW_SENDING, 1, 1, 0.5) end end
+					if GF_Hardcore then if GF_PerCharVariables.hardcore == 3 then DEFAULT_CHAT_FRAME:AddMessage(GF_WORLD_NOW_SENDING, 1, 1, 0.5) else DEFAULT_CHAT_FRAME:AddMessage(GF_HARDCORE_NOW_SENDING, 1, 1, 0.5) end end
 					GF_LFGHardCore:Hide()
 					GF_ApplyFiltersToGroupList()
 				elseif frameName == "LFGLFM" then
+					--for j=2, getn(GF_BUTTONS_LIST[frameName]) do
+						--GF_PerCharVariables.searchlfgtext = gsub(string.lower(GF_PerCharVariables.searchlfgtext), GF_BUTTONS_LIST.LFGLFM[j][1].." ", "")
+					--end
+					--GF_PerCharVariables.searchlfgtext = gsub(string.lower(GF_PerCharVariables.searchlfgtext), "^lf%d?%d?m ", "")
+					--GF_PerCharVariables.searchlfgtext = GF_BUTTONS_LIST[frameName][i][1].." "..gsub(GF_PerCharVariables.searchlfgtext, "^%d+", "")
+					--GF_LFGLFM:Hide()
+				--else
+					--GF_PerCharVariables.searchlfgtext = GF_BUTTONS_LIST[frameName][i][1].." "..gsub(GF_PerCharVariables.searchlfgtext, "^%d+", "")
+				--end
 					if add then
-						for j=1, getn(GF_BUTTONS_LIST[frameName]) do
-							GF_SavedVariables.searchlfgtext = gsub(GF_SavedVariables.searchlfgtext, GF_BUTTONS_LIST.LFGLFM[j][1], "")
+						for j=1, getn(GF_BUTTONS_LIST[frameName]) do -- check lfglfm buttons, if
+							if i == 1 and string.find(" "..string.lower(GF_PerCharVariables.searchlfgtext).." ", " lfg ") or (i > 1 and i < 5) then
+								for k=1,3 do
+									local lfs,lfe = string.find(GF_PerCharVariables.searchlfgtext, GF_BUTTONS_LIST.LFGRole[k][1])
+									if lfs then
+										if string.find(string.sub(GF_PerCharVariables.searchlfgtext,1,lfs-1), " need[%s%p]+$") then
+											lfs = string.find(string.sub(GF_PerCharVariables.searchlfgtext,1,lfs-1), " need[%s%p]+$")
+										end
+										GF_PerCharVariables.searchlfgtext = string.sub(GF_PerCharVariables.searchlfgtext,1,lfs-1)..string.sub(GF_PerCharVariables.searchlfgtext,lfe+1)
+									end
+								end
+							end
+							GF_PerCharVariables.searchlfgtext = gsub(GF_PerCharVariables.searchlfgtext, GF_BUTTONS_LIST.LFGLFM[j][1], "")
 						end
-						GF_SavedVariables.searchlfgtext = gsub(GF_SavedVariables.searchlfgtext, "LF%d+M", "")
-						GF_SavedVariables.searchlfgtext = GF_BUTTONS_LIST[frameName][i][1].." "..gsub(GF_SavedVariables.searchlfgtext, "^%d+", "")
+						GF_PerCharVariables.searchlfgtext = gsub(GF_PerCharVariables.searchlfgtext, "^LF%d+M", "")
+						GF_PerCharVariables.searchlfgtext = GF_BUTTONS_LIST[frameName][i][1]..gsub(GF_PerCharVariables.searchlfgtext, "^%d+", "")
 						GF_LFGLFM:Hide()
+					elseif i == 1 then
+						GF_PerCharVariables.searchlfgtext = gsub(GF_PerCharVariables.searchlfgtext, "^LF%d+M", "")
 					end
 				else
-					GF_SavedVariables.searchlfgtext = GF_BUTTONS_LIST[frameName][i][1].." "..gsub(GF_SavedVariables.searchlfgtext, "^%d+", "")
-				end
-				if not add then GF_SavedVariables.searchlfgtext = gsub(gsub(gsub(gsub(GF_SavedVariables.searchlfgtext, "^%d+", ""),"for "..GF_BUTTONS_LIST[frameName][i][1],""),"need "..GF_BUTTONS_LIST[frameName][i][1],""),GF_BUTTONS_LIST[frameName][i][1],"") GF_LFGLFM:Hide() end
-				GF_LFGDescriptionEditBox:SetText(GF_SavedVariables.searchlfgtext)
+					GF_PerCharVariables.searchlfgtext = GF_BUTTONS_LIST[frameName][i][1]..gsub(GF_PerCharVariables.searchlfgtext, "^%d+", "")
+				end				
+				if not add then GF_PerCharVariables.searchlfgtext = gsub(gsub(gsub(gsub(GF_PerCharVariables.searchlfgtext, "^%d+", ""),"for "..GF_BUTTONS_LIST[frameName][i][1],""),"need "..GF_BUTTONS_LIST[frameName][i][1],""),GF_BUTTONS_LIST[frameName][i][1],"") GF_LFGLFM:Hide() end
+				GF_LFGDescriptionEditBox:SetText(GF_PerCharVariables.searchlfgtext)
+
+-- Instead of just throwing out a bunch of words and then fixing them. I could just detect the words and make an array and then rewrite the sentence
+				--if not add then GF_PerCharVariables.searchlfgtext = gsub(gsub(gsub(gsub(string.lower(GF_PerCharVariables.searchlfgtext), "^%d+", ""),"for "..string.lower(GF_BUTTONS_LIST[frameName][i][1]),""),"need "..string.lower(GF_BUTTONS_LIST[frameName][i][1]),""),string.lower(GF_BUTTONS_LIST[frameName][i][1]),"") GF_LFGLFM:Hide() end
+				--GF_LFGDescriptionEditBox:SetText(GF_PerCharVariables.searchlfgtext)
 			end
 		end
 		if frameName == "LFGSize" then GF_FixLFGStrings(true) else GF_FixLFGStrings() end
 	end
 end
+function GF_GetCurrentLFGLFMData()
+	GF_LFGLFMData = { foundlfm = false, foundlfg = false, dungeons = {}, raids = {}, roles = {}, }
+	local arg1 = " "..GF_LFGDescriptionEditBox:GetText().." "
+	local wordTable = {}
+	local lfs,lfe,wordString,tempVal,tempString
+
+	lfs = 1 -- To detect space/lf##m/letter(eg " lf15mbwl" = lfm bwl)
+	lfs,lfe,wordString = string.find(arg1," ([lLkK][fF]?%s?%d+[mM])[%p%s]",lfs) if wordString then arg1 = string.sub(arg1,1,lfs).."LFM "..string.sub(arg1,lfs+string.len(wordString)+1) foundlfm = true end
+
+	tempVal = 1
+	while true do -- Block letter repeats
+		lfs = strbyte(arg1,tempVal)
+		lfe = strbyte(arg1,tempVal+1)
+		if not lfe then break end
+		if lfs == lfe then
+			if (lfs >= 65 and lfs <= 90) or (lfs >= 97 and lfs <= 122) then
+				if lfs == strbyte(arg1,tempVal+2) then
+					table.insert(wordTable,strchar(lfs)) table.insert(wordTable,strchar(lfe)) tempVal=tempVal+2 for j=1,250 do if lfs ~= strbyte(arg1,tempVal+j) then tempVal=tempVal+j-1 break end end
+				else
+					table.insert(wordTable,strchar(lfs)) table.insert(wordTable,strchar(lfe)) tempVal=tempVal+1
+				end
+			else
+				table.insert(wordTable,strchar(lfs)) tempVal=tempVal+1 for j=1,250 do if lfs ~= strbyte(arg1,tempVal+j) then tempVal=tempVal+j-1 break end end
+			end
+		elseif lfe == 32 or lfe == 46 then -- Space or Period(to combine words like "D e a d m i n e s" or "D.E.A.D.M.I.N.E.S")
+			wordString = strbyte(arg1,tempVal-1)
+			if (wordString == 32 or wordString == 46) and wordString == strbyte(arg1,tempVal+3) then
+				table.insert(wordTable,strchar(lfs)) table.insert(wordTable,strchar(strbyte(arg1,tempVal+2))) tempVal=tempVal+2 for j=3,250,2 do if strbyte(arg1,tempVal+j) ~= 32 and strbyte(arg1,tempVal+j) ~= 46 then tempVal=tempVal+j-3 break else table.insert(wordTable,strchar(strbyte(arg1,tempVal+j-1))) end end
+			else
+				table.insert(wordTable,strchar(lfs))
+			end
+		elseif lfs == strbyte(arg1,tempVal+2) and lfs == strbyte(arg1,tempVal+4) and lfs ~= 32 and lfs ~= 46 then -- To prevent long 2-letter repetitions("hehehehe" becomes "hehe", "hahahahaha" becomes "haha")
+			if lfe == strbyte(arg1,tempVal+3) then
+				table.insert(wordTable,strchar(lfs)) table.insert(wordTable,strchar(lfe)) table.insert(wordTable,strchar(strbyte(arg1,tempVal+2))) table.insert(wordTable,strchar(strbyte(arg1,tempVal+3))) tempVal=tempVal+3 for j=2,250 do if strbyte(arg1,tempVal+j) ~= strbyte(arg1,tempVal+j-2) then tempVal=tempVal+j-1 break end end
+			else
+				table.insert(wordTable,strchar(lfs))
+			end
+		else
+			table.insert(wordTable,strchar(lfs))
+		end
+		tempVal = tempVal + 1
+	end
+	arg1 = table.concat(wordTable)
+	if string.sub(arg1,-1) ~= " " then arg1 = arg1.." " end
+	wordTable = {}
+
+	lfs = 2 -- To detect word/word with no space(eg "lfgscholo" = lfg scholo)
+	while true do
+		lfs,lfe,wordString = string.find(tempString,"(%a%a%a%a+)",lfs)
+		if wordString then
+			if not GF_WORD_WORD_REPLACE[wordString] and not GF_WORD_SPECIAL_EXCEPTIONS[wordString] then
+				tempVal = string.len(wordString) - 1
+				if tempVal > 11 then tempVal = 11 end
+				for i=tempVal, 3, -1 do
+					if GF_WORD_WORD_REPLACE[string.sub(wordString,1,i)] then 
+						arg1 = string.sub(arg1,1,lfs-1+i).." "..string.sub(arg1,lfe+1)
+						tempString = string.lower(arg1)
+						lfs = lfe + 1
+						break
+					elseif GF_WORD_WORD_REPLACE[string.sub(wordString,-i)] then
+						arg1 = string.sub(arg1,1,lfe-i).." "..string.sub(arg1,lfe+1-i)
+						tempString = string.lower(arg1)
+						lfs = lfe + 1
+						break
+					end
+				end
+				if lfs < lfe then
+					if GF_WORD_WORD_REPLACE[string.sub(wordString,1,2)] then
+						arg1 = string.sub(arg1,1,lfs+1).." "..string.sub(arg1,lfs+2)
+						tempString = string.lower(arg1)
+					elseif string.sub(wordString,-2) == "[lL][fF]" and GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString] or GF_WORD_QUEST[wordString] then
+						arg1 = string.sub(arg1,1,lfs-1)..string.sub(arg1,lfe-1)
+						tempString = string.lower(arg1)
+					end
+					lfs = lfe + 1
+				end
+			else
+				lfs = lfe + 1
+			end
+		else
+			break
+		end
+	end
+
+	lfs = 2 -- To fix single words
+	while true do lfs,lfe,wordString,tempString = string.find(arg1, "(.-)([%s%p%d]+)",lfs) if not wordString then break elseif GF_WORD_FIX_SINGLE_WORD[wordString] then arg1 = string.sub(arg1,1,lfs-1)..GF_WORD_FIX_SINGLE_WORD[wordString]..tempString..string.sub(arg1,lfe) lfs = lfs + string.len(GF_WORD_FIX_SINGLE_WORD[wordString]) else lfs = lfe+1 end end
+	lfs = 1 -- Add all words to the wordTable
+	while true do lfs,lfe,wordString = string.find(arg1, "(.-)[%s%p%d]+",lfs) if wordString then table.insert(wordTable, wordString) lfs = lfe+1 else break end end
+	
+-- I've trimmed sentence, fixed single words, and added all words into the wordtable...
+-- Now I need to fix multiwords, then detect dungeons/raids/roles/etc
+-- The issue is, I don't want to fix words that aren't related to dungeons/roles.. So I would
+
+	tempVal = getn(wordTable)
+	for j=0,3 do
+		lfs = 1
+		while lfs <= tempVal do
+			if wordTable[lfs+j] then
+				wordString = wordTable[lfs]
+				for k=1, j do wordString = wordString..wordTable[lfs+k] end
+				if GF_WORD_FIX_BEFORE_QUEST[wordString] then
+					wordTable[lfs] = GF_WORD_FIX_BEFORE_QUEST[wordString]
+					for k=1, j do table.remove(wordTable,lfs+1) tempVal=tempVal-1 end
+					if wordString ~= GF_WORD_FIX_BEFORE_QUEST[wordString] then
+						if lfs > 1 then lfs = lfs - 2 else lfs = lfs - 1 end
+					elseif lfs > 1 then
+						wordString = wordTable[lfs-1]
+						for k=1, j do if wordTable[lfs-1+k] then wordString = wordString..wordTable[lfs-1+k] end end
+						if GF_WORD_FIX_BEFORE_QUEST[wordString] then
+							wordTable[lfs-1] = GF_WORD_FIX_BEFORE_QUEST[wordString]
+							for k=1, j do if wordTable[lfs] then table.remove(wordTable,lfs) tempVal=tempVal-1 end end
+						end
+					end
+				elseif GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString] then
+					wordTable[lfs] = GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][1]
+					for k=1, j do table.remove(wordTable,lfs+1) tempVal=tempVal-1 end
+					table.insert(wordTable,lfs+1,GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][2]) tempVal=tempVal+1
+					if wordString ~= GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][1]..GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][2] then
+						if lfs > 1 then lfs = lfs - 2 else lfs = lfs - 1 end
+					elseif lfs > 1 then
+						wordString = wordTable[lfs-1]
+						for k=1, j do if wordTable[lfs-1+k] then wordString = wordString..wordTable[lfs-1+k] end end
+						if GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString] then
+							wordTable[lfs-1] = GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][1]
+							for k=1, j do if wordTable[lfs] then table.remove(wordTable,lfs) tempVal=tempVal-1 end end
+							table.insert(wordTable,lfs,GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][2]) tempVal=tempVal+1
+						end
+					end
+				elseif GF_WORD_FIX_QUEST_DUNGEON[wordString] then
+					wordTable[lfs] = GF_WORD_FIX_QUEST_DUNGEON[wordString]
+					for k=1, j do table.remove(wordTable,lfs+1) tempVal=tempVal-1 end
+					if wordString ~= GF_WORD_FIX_QUEST_DUNGEON[wordString] then
+						if lfs > 1 then lfs = lfs - 2 else lfs = lfs - 1 end
+					elseif lfs > 1 then
+						wordString = wordTable[lfs-1]
+						for k=1, j do if wordTable[lfs-1+k] then wordString = wordString..wordTable[lfs-1+k] end end
+						if GF_WORD_FIX_QUEST_DUNGEON[wordString] then
+							wordTable[lfs-1] = GF_WORD_FIX_QUEST_DUNGEON[wordString]
+							for k=1, j do if wordTable[lfs] then table.remove(wordTable,lfs) tempVal=tempVal-1 end end
+						end
+					end
+				--elseif GF_LANGUAGE_FOREIGN_COMMON_MULTIWORDS[wordString] then
+					--wordTable[lfs] = GF_LANGUAGE_FOREIGN_COMMON_MULTIWORDS[wordString]
+					--for k=1, j do table.remove(wordTable,lfs+1) tempVal=tempVal-1 end
+				end
+			end
+			lfs = lfs + 1
+		end
+	end
+	for j=0,7 do
+		for i=1, tempVal do
+			if wordTable[i+j] then
+				wordString = wordTable[i]
+				for k=1, j do wordString = wordString..wordTable[i+k] end
+				if not GF_GROUP_WORD_BYPASS[wordString] then
+					if GF_WORD_QUEST[wordString] then
+						if showanyway == true then print(wordString.." quest") end
+						if not GF_MessageData.foundQuest[1] or GF_WORD_QUEST[wordString][2] > GF_MessageData.foundQuest[1] or GF_MessageData.foundQuest[2] < j then GF_MessageData.foundQuest[1] = GF_WORD_QUEST[wordString][2] GF_MessageData.foundQuest[2] = j end
+						GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + .3 GF_MessageData.foundGuildExclusion = GF_MessageData.foundGuildExclusion + .1
+						if not GF_LFM_BYPASS[wordString] then
+							if GF_LFM_AFTER[wordTable[i+j+1]] or GF_LFM_BEFORE[wordTable[i-1]] or wordTable[i+j+2] and GF_LFM_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] or wordTable[i-2] and GF_LFM_BEFORE[wordTable[i-2]..wordTable[i-1]]
+							or wordTable[i-3] and GF_LFM_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] then
+								if GF_MessageData.foundLFM == 0 then GF_MessageData.foundLFM = 1 end GF_MessageData.foundLFMPreSuf = 1 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5 if showanyway == true then print(wordString.." triggername lfm 1/2 .. tradesex 1.5") end
+							end
+
+							if GF_LFG_AFTER[wordTable[i+j+1]] or GF_LFG_BEFORE[wordTable[i-1]] or wordTable[i+j+2] and GF_LFG_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] or wordTable[i-2] and GF_LFG_BEFORE[wordTable[i-2]..wordTable[i-1]] then
+								if GF_MessageData.foundLFG == 0 and GF_MessageData.foundLFMPreSuf == 0 then GF_MessageData.foundLFG = 1 end GF_MessageData.foundLFGPreSuf = 1 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5 if showanyway == true then print(wordString.." triggername lfg 1/2 .. tradesex 1.5") end
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+
+-- I could also just search the entire LFG message for groups
+
+	local lfs,lfe,wordString,tempVal
+	lfs = 1
+	while true do
+		lfs,lfe,wordString = string.find(string.lower(GF_LFGDescriptionEditBox:GetText())," for ([%w%s%p]+)",lfs)
+		if wordString then
+			tempVal = string.find(string.lower(GF_LFGDescriptionEditBox:GetText())," need ") or lfe
+			wordString = string.sub(wordString,1,tempVal)
+			for i=1,getn(GF_BUTTONS_LIST.LFGDungeon) do
+				if string.find(wordString, string.lower(GF_BUTTONS_LIST.LFGDungeon[i][1])) then
+					table.insert(GF_LFGLFMData["dungeons"],GF_BUTTONS_LIST.LFGDungeon[i][1])
+				end
+			end
+			for i=1,getn(GF_BUTTONS_LIST.LFGRaid) do
+				if string.find(wordString, string.lower(GF_BUTTONS_LIST.LFGRaid[i][1])) then
+					table.insert(GF_LFGLFMData["raids"],GF_BUTTONS_LIST.LFGRaid[i][1])
+				end
+			end
+			tempVal = string.find(string.lower(GF_LFGDescriptionEditBox:GetText())," need ") or lfe
+			wordString = string.sub(wordString,1,tempVal)
+			for i=1,getn(GF_BUTTONS_LIST.LFGDungeon) do
+				if string.find(wordString, string.lower(GF_BUTTONS_LIST.LFGDungeon[i][1])) then
+					table.insert(GF_LFGLFMData["dungeons"],GF_BUTTONS_LIST.LFGDungeon[i][1])
+				end
+			end
+
+		else
+			break
+		end
+	end
+end
 function GF_SearchButtonHasValues()
-	for word,_ in GF_SavedVariables.searchbuttonstext do
+	for word,_ in GF_PerCharVariables.searchbuttonstext do
 		return true
 	end
+	if GF_PerCharVariables.searchtext ~= "" then return true end
 end
 
 function GF_FindGroupsAndDisplayCustomChatMessages(event) -- Chat Filters and Group Finders
@@ -2369,19 +2767,17 @@ function GF_CheckForGroups(arg1,arg2,arg9,event,showanyway)
 	if GF_BlackList[GF_RealmName][arg2] and not GF_PlayersCurrentlyInGroup[arg2] and not GF_Friends[arg2] and not GF_Guildies[arg2] then return 8 end
 	GF_GetTypes(gsub(gsub(gsub(string.lower(gsub(gsub(gsub(arg1, "|[cC]%x+%p+(%w+)[%w:]+|+[hH]", " %1 >z"), "|[hr]", ""),"([a-z ][a-z])([A-Z])","%1 %2")),".gg/%w+", ""),"[\"#\$\%&\*,\.@\\\^_`~|]"," "),"'",""),showanyway)
 	if event == "HARDCORE" or string.lower(arg9) == "hardcore" then GF_MessageData.foundHC = true end
-	if GF_MessageData.foundGuild >= 3 then return GF_CheckForSpam(arg1,arg2) or 11
-	elseif GF_MessageData.foundTrades >= 3 then return GF_CheckForSpam(arg1,arg2) or 5
+	if GF_MessageData.foundGuild > 2.9 then return GF_CheckForSpam(arg1,arg2) or 11
+	elseif GF_MessageData.foundTrades > 2.9 then return GF_CheckForSpam(arg1,arg2) or 5
 	elseif GF_MessageData.foundLFM < GF_SavedVariables.FilterLevel and GF_MessageData.foundLFG < GF_SavedVariables.FilterLevel then
 		if GF_PlayingOnTurtle then GF_GetWhoData(arg2) end
 		return GF_CheckForSpam(arg1,arg2) or 4
-	elseif event == "SAY" then
-		return GF_CheckForSpam(arg1,arg2) or 4
 	end
 
-	local entry,foundInGroup = GF_GetGroupInformation(GF_CleanUpMessagesOfBadLinks(arg1),arg2)
+	local entry,foundInGroup = GF_GetGroupInformation(GF_CleanUpMessagesOfBadLinks(arg1),arg2,nil,event)
 	GF_GetWhoData(arg2,foundInGroup)
 	if foundInGroup then
-		table.insert(GF_MessageList[GF_RealmName],1,entry)
+		if event ~= "SAY" then table.insert(GF_MessageList[GF_RealmName],1,entry) end
 		if GF_UpdateAndRequestTimer > 5 then GF_UpdateAndRequestTimer = 4 end
 		if not GF_EntryMatchesGroupFilterCriteria(entry) then
 			foundInGroup = 3
@@ -2459,56 +2855,59 @@ function GF_GetTypes(arg1, showanyway)
 	while true do
 		lfs,lfe,wordString = string.find(arg1,"(%a%a%a%a+)",lfs)
 		if wordString then
-			tempVal = string.len(wordString) - 1
-			if tempVal > 11 then tempVal = 11 end
-			for i=tempVal, 3, -1 do
-				if GF_WORD_WORD_REPLACE[string.sub(wordString,1,i)] then 
-					if GF_WORD_SPECIAL_EXCEPTIONS[wordString] then
-						arg1 = string.sub(arg1,1,lfs-1)..wordString.." "..string.sub(arg1,lfe+1)
-						lfs = lfs + string.len(wordString)
-					elseif not GF_WORD_WORD_REPLACE[wordString] then
-						arg1 = string.sub(arg1,1,lfs-1)..string.sub(wordString,1,i).." "..string.sub(arg1,lfs+i)
-						lfs = lfs + (i-string.len(string.sub(wordString,1,i))) + string.len(wordString) + 1
-					end
-					break
-				elseif GF_WORD_WORD_REPLACE[string.sub(wordString,-i)] then
-					if GF_WORD_SPECIAL_EXCEPTIONS[wordString] then
-						arg1 = string.sub(arg1,1,lfs-1).." "..wordString..string.sub(arg1,lfe+1)
-						lfs = lfs + string.len(wordString)
-					elseif not GF_WORD_WORD_REPLACE[wordString] then
+			if not GF_WORD_WORD_REPLACE[wordString] and not GF_WORD_SPECIAL_EXCEPTIONS[wordString] then
+				tempVal = string.len(wordString) - 1
+				if tempVal > 11 then tempVal = 11 end
+				for i=tempVal, 3, -1 do
+					if GF_WORD_WORD_REPLACE[string.sub(wordString,1,i)] then
+						if tempVal-i > 2 and GF_WORD_SPECIAL_EXCEPTIONS[string.sub(wordString,1,i+3)] then
+							arg1 = string.sub(arg1,1,lfs-1)..string.sub(wordString,1,i+3).." "..string.sub(arg1,lfs+i+3)
+						elseif tempVal-i > 1 and GF_WORD_SPECIAL_EXCEPTIONS[string.sub(wordString,1,i+2)] then
+							arg1 = string.sub(arg1,1,lfs-1)..string.sub(wordString,1,i+2).." "..string.sub(arg1,lfs+i+2)
+						elseif tempVal-i > 0 and GF_WORD_SPECIAL_EXCEPTIONS[string.sub(wordString,1,i+1)] then
+							arg1 = string.sub(arg1,1,lfs-1)..string.sub(wordString,1,i+1).." "..string.sub(arg1,lfs+i+1)
+						else
+							arg1 = string.sub(arg1,1,lfs-1)..string.sub(wordString,1,i).." "..string.sub(arg1,lfs+i)
+						end
+						lfs = lfe + 1
+						break
+					elseif GF_WORD_WORD_REPLACE[string.sub(wordString,-i)] then
 						arg1 = string.sub(arg1,1,lfe-i).." "..string.sub(wordString,-i)..string.sub(arg1,lfe+1)
 						lfs = lfs + (i-string.len(string.sub(wordString,-i))) + string.len(wordString) + 1
+						break
 					end
-					break
 				end
-			end
-			if lfs < lfe then
-				if GF_WORD_WORD_REPLACE[string.sub(wordString,1,2)] then
-					arg1 = string.sub(arg1,1,lfs-1)..string.sub(wordString,1,2).." "..string.sub(arg1,lfs+2)
-					lfs = lfs + string.len(wordString) + 1
-				elseif string.sub(wordString,-2) == "lf" then
-					wordString = string.sub(wordString,1,-3)
-					if GF_WORD_FIX_SINGLE_WORD[wordString] then wordString = GF_WORD_FIX_SINGLE_WORD[wordString]
-					elseif GF_WORD_FIX_BEFORE_QUEST[wordString] then wordString = GF_WORD_FIX_BEFORE_QUEST[wordString] end
-					if GF_WORD_QUEST[wordString] then
-						arg1 = string.sub(arg1,1,lfs-1)..wordString.." lf"..string.sub(arg1,lfe+1)
-					else
-						if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end
-						if GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString] or GF_WORD_GROUP_BYPASS[wordString] then
+				if lfs < lfe then
+					if GF_WORD_WORD_REPLACE[string.sub(wordString,1,2)] then
+						arg1 = string.sub(arg1,1,lfs-1)..string.sub(wordString,1,2).." "..string.sub(arg1,lfs+2)
+						lfs = lfs + string.len(wordString) + 1
+					elseif GF_WORD_WORD_REPLACE[string.sub(wordString,-2)] then
+						wordString = string.sub(wordString,1,-3)
+						if GF_WORD_FIX_SINGLE_WORD[wordString] then wordString = GF_WORD_FIX_SINGLE_WORD[wordString]
+						elseif GF_WORD_FIX_BEFORE_QUEST[wordString] then wordString = GF_WORD_FIX_BEFORE_QUEST[wordString] end
+						if GF_WORD_QUEST[wordString] then
 							arg1 = string.sub(arg1,1,lfs-1)..wordString.." lf"..string.sub(arg1,lfe+1)
+						else
+							if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end
+							if GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString] or GF_WORD_GROUP_BYPASS[wordString] then
+								arg1 = string.sub(arg1,1,lfs-1)..wordString.." lf"..string.sub(arg1,lfe+1)
+							end
 						end
+						lfs = lfs + string.len(wordString) + 3
+					else
+						lfs = lfe + 1
 					end
-					lfs = lfs + string.len(wordString) + 3
-				else
-					lfs = lfs + string.len(wordString)
 				end
+			else
+				lfs = lfe + 1
 			end
 		else
 			break
 		end
 	end
 	lfs = 2 -- To fix single words
-	while true do lfs,lfe,wordString = string.find(arg1, "(.-)[%s%p%d]+",lfs) if not wordString then break elseif GF_WORD_FIX_SINGLE_WORD[wordString] then arg1 = string.sub(arg1,1,lfs-1)..GF_WORD_FIX_SINGLE_WORD[wordString]..string.sub(arg1,lfe) lfs = lfs + string.len(GF_WORD_FIX_SINGLE_WORD[wordString]) elseif GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString] then arg1 = string.sub(arg1,1,lfs-1)..GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString][1]..string.sub(arg1,lfe) lfs = lfs + string.len(GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString][1]) if languageID[GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString][2]] then languageID[GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString][2]] = languageID[GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString][2]] + 1 else languageID[GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString][2]] = 1 end else lfs = lfe+1 end end
+	while true do lfs,lfe,wordString,tempString = string.find(arg1, "(.-)([%s%p%d]+)",lfs) if not wordString then break elseif GF_WORD_FIX_SINGLE_WORD[wordString] then arg1 = string.sub(arg1,1,lfs-1)..GF_WORD_FIX_SINGLE_WORD[wordString]..tempString..string.sub(arg1,lfe) lfs = lfs + string.len(GF_WORD_FIX_SINGLE_WORD[wordString]) elseif GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString] then arg1 = string.sub(arg1,1,lfs-1)..GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString][1]..tempString..string.sub(arg1,lfe) lfs = lfs + string.len(GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString][1]) if languageID[GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString][2]] then languageID[GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString][2]] = languageID[GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString][2]] + 1 else languageID[GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString][2]] = 1 end else lfs = lfe+1 end end
+	
 	lfs = 1 -- To detect space/letter/number/letter/space combinations(eg " g2g " = gtg)
 	while true do lfs,lfe,wordString = string.find(arg1," (w?%a%s?%d%s?%ab?)[%p%s]",lfs) if wordString then wordString = gsub(wordString," ","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = string.sub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..string.sub(arg1,lfe) end lfs = lfs + string.len(wordString) + 1 else break end end
 	lfs = 1 -- To detect space/word/number+/space combinations(eg " k10" = lowerkarazhan)
@@ -2594,28 +2993,33 @@ function GF_GetTypes(arg1, showanyway)
 	while true do
 		lfs,lfe,wordString = string.find(arg1, "(.-)[%s%p%d]+",lfs)
 		if wordString then
-			if not GF_WORD_BYPASS_TRIGGER[languageID][wordString] then
-				table.insert(wordTable, wordString)
-				lfs = lfe+1
-			else
-				_,tempVal,tempString = string.find(arg1,"^(%a+)",lfe+1)
-				if GF_WORD_GROUP_BYPASS[wordString] then
-					if GF_WORD_GROUP_BYPASS[tempString] then
-						table.insert(wordTable, wordString) table.insert(wordTable, GF_WORD_GROUP_BYPASS[tempString])
-						lfs = tempVal+1
-					else
-						if GF_WORD_GROUP_BYPASS[wordTable[getn(wordTable)]] then wordTable[getn(wordTable)] = GF_WORD_GROUP_BYPASS[wordTable[getn(wordTable)]] end
-						table.insert(wordTable, wordString)
-						lfs = lfe+1
-					end
+			if strbyte(wordString) then
+				if not GF_WORD_BYPASS_TRIGGER[languageID][wordString] then
+					table.insert(wordTable, wordString)
+					lfs = lfe+1
 				else
-					if GF_WORD_QUEST_BYPASS[tempString] then
-						table.insert(wordTable, wordString) table.insert(wordTable, tempString)
-						lfs = tempVal+1
+					_,tempVal,tempString = string.find(arg1,"(%a+)",lfe+1)
+					if showanyway == true then print(tempString.." T") end
+					if GF_WORD_GROUP_BYPASS[wordString] then
+						if GF_WORD_GROUP_BYPASS[tempString] then
+							table.insert(wordTable, wordString) table.insert(wordTable, GF_WORD_GROUP_BYPASS[tempString])
+							lfs = tempVal+1
+						else
+							if GF_WORD_GROUP_BYPASS[wordTable[getn(wordTable)]] then wordTable[getn(wordTable)] = GF_WORD_GROUP_BYPASS[wordTable[getn(wordTable)]] end
+							table.insert(wordTable, wordString)
+							lfs = lfe+1
+						end
 					else
-						lfs = lfe+1
+						if GF_WORD_QUEST_BYPASS[tempString] then
+							table.insert(wordTable, wordString) table.insert(wordTable, tempString)
+							lfs = tempVal+1
+						else
+							lfs = lfe+1
+						end
 					end
 				end
+			else
+				lfs = lfe+1
 			end
 		else
 			break
@@ -2768,6 +3172,7 @@ function GF_GetTypes(arg1, showanyway)
 		for i=1,tempVal do lfe = lfe..wordTableTrade[i] if strbyte(wordTableTrade[i]) > 90 then lfs = true end end
 		if GF_WORD_TRADE_PHRASE[lfe] then GF_MessageData.foundTrades = 2 if showanyway == true then print("tradephrase trades 3") end end
 		if GF_WORD_GUILD_PHRASE[wordString] then GF_MessageData.foundGuild = 3 if showanyway == true then print("guildphrase guild 3") end end
+		if GF_GROUP_PHRASE[wordString] and GF_MessageData.foundLFM == 0 then GF_MessageData.foundLFM = 2 if showanyway == true then print("lfmphrase lfm 2") end end
 		if string.sub(arg1,-2) == "? " then
 			if (GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString] or GF_GROUP_PHRASE_QUESTION[wordString]) then GF_MessageData.foundLFG = 2 if showanyway == true then print("group? lfg 2") end
 			elseif GF_WORD_TRADE_QUESTION[lfe] then GF_MessageData.foundTrades = 2 if showanyway == true then print("trades? trades "..GF_WORD_TRADE_QUESTION[lfe]) end
@@ -2800,7 +3205,10 @@ function GF_GetTypes(arg1, showanyway)
 				elseif GF_GUILD_WORD_EXCLUSION[wordString] then GF_MessageData.foundGuildExclusion = GF_MessageData.foundGuildExclusion + GF_GUILD_WORD_EXCLUSION[wordString] if showanyway == true then print(wordString.." guildex") end end
 
 				if GF_WORD_LFM[wordString] then if GF_WORD_LFM[wordString] > GF_MessageData.foundLFM then GF_MessageData.foundLFM = GF_WORD_LFM[wordString] GF_MessageData.lfmlfgName = wordString if showanyway == true then print(wordString.." lfm") end end
-				elseif GF_WORD_LFG[wordString] then if GF_WORD_LFG[wordString] > GF_MessageData.foundLFG then GF_MessageData.foundLFG = GF_WORD_LFG[wordString] if showanyway == true then print(wordString.." lfg") end end end
+					if not GF_MessageData.foundQuest[1] then if GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] then GF_MessageData.foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] elseif GF_WORD_LEVEL_ZONE[wordTable[i-1]] then GF_MessageData.foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-1]] end end
+				elseif GF_WORD_LFG[wordString] then if GF_WORD_LFG[wordString] > GF_MessageData.foundLFG then GF_MessageData.foundLFG = GF_WORD_LFG[wordString] if showanyway == true then print(wordString.." lfg") end end
+					if not GF_MessageData.foundQuest[1] then if GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] then GF_MessageData.foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] elseif GF_WORD_LEVEL_ZONE[wordTable[i-1]] then GF_MessageData.foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-1]] end end
+				end
 
 				if GF_WORD_CLASSES[wordString] then GF_MessageData.foundClass = GF_WORD_CLASSES[wordString] table.insert(GF_MessageData.groupName,wordString)
 				elseif GF_WORD_DUNGEON[wordString] then
@@ -2915,7 +3323,7 @@ function GF_CheckForSpam(arg1,arg2,foundInGroup)
 			if GF_PlayerMessages[arg2][1][1] > time() then return 7 end -- Returns spam for the duration of the spam filter
 			if (string.len(arg1) > 30 and ((GF_PlayerMessages[arg2][1][1] + 120 > time() and string.find(arg1,string.sub(GF_PlayerMessages[arg2][2][1],math.random(math.ceil(string.len(GF_PlayerMessages[arg2][2][1])/4)),math.random(math.ceil(string.len(GF_PlayerMessages[arg2][2][1])/4))*-1),1,true)) or (GF_PlayerMessages[arg2][1][2] + 120 > time() and string.find(arg1,string.sub(GF_PlayerMessages[arg2][2][2],math.random(math.ceil(string.len(GF_PlayerMessages[arg2][2][2])/4)),math.random(math.ceil(string.len(GF_PlayerMessages[arg2][2][2])/4))*-1),1,true)) or (GF_PlayerMessages[arg2][1][3] + 120 > time() and string.find(arg1,string.sub(GF_PlayerMessages[arg2][2][3],math.random(math.ceil(string.len(GF_PlayerMessages[arg2][2][3])/4)),math.random(math.ceil(string.len(GF_PlayerMessages[arg2][2][3])/4))*-1),1,true))))
 			or (not foundInGroup and (GF_PlayerMessages[arg2][1][1] + 120 > time() and arg1 == GF_PlayerMessages[arg2][2][1]) and (GF_PlayerMessages[arg2][1][2] + 120 > time() and arg1 == GF_PlayerMessages[arg2][2][2])) then		-- Found Spammer
-				if GF_SavedVariables.autoblacklist and not GF_BlackList[GF_RealmName][arg2] and string.len(arg1) > 120 then
+				if GF_SavedVariables.autoblacklist and not GF_BlackList[GF_RealmName][arg2] and string.len(arg1) > 120 and arg1 == GF_PlayerMessages[arg2][2][1] and arg1 == GF_PlayerMessages[arg2][2][2] then
 					if GF_WhoTable[GF_RealmName][arg2] and GF_WhoTable[GF_RealmName][arg2][4] + 86400 > time() then -- Data must be less than a day old to autoblacklist or block lowlevel
 						if GF_WhoTable[GF_RealmName][arg2][1] <= GF_SavedVariables.autoblacklistminlevel then																																						-- Blacklist if below level filter
 							table.insert(GF_BlackList[GF_RealmName], 1, { arg2, "("..GF_WhoTable[GF_RealmName][arg2][1]..") "..arg1 })
@@ -2940,7 +3348,7 @@ function GF_CheckForSpam(arg1,arg2,foundInGroup)
 	end
 end
 
-function GF_GetGroupInformation(arg1,arg2,sentTime) -- Searches messages for Groups and similiar functions
+function GF_GetGroupInformation(arg1,arg2,sentTime,event) -- Searches messages for Groups and similiar functions
 	if (GF_SavedVariables.FilterLevel == 1 and (GF_MessageData.foundLFM >=1 or GF_MessageData.foundLFG >=1))
 	or (GF_SavedVariables.FilterLevel == 2 and (GF_MessageData.foundLFM >=2 or GF_MessageData.foundLFG >=2) and (GF_MessageData.foundRaid or GF_MessageData.foundDungeon or GF_MessageData.foundQuest[1] or GF_MessageData.foundPvP or GF_MessageData.foundClass))
 	or (GF_SavedVariables.FilterLevel == 3 and (GF_MessageData.foundLFM >=3 or GF_MessageData.foundLFG >=3) and (GF_MessageData.foundRaid or GF_MessageData.foundDungeon or GF_MessageData.foundQuest[1] or GF_MessageData.foundPvP or GF_MessageData.foundClass)) then
@@ -2973,11 +3381,11 @@ function GF_GetGroupInformation(arg1,arg2,sentTime) -- Searches messages for Gro
 				if GF_MessageList[GF_RealmName][i].t + GF_SavedVariables.showgroupsnewonlytime*60 > time() then
 					entry.t = GF_MessageList[GF_RealmName][i].t
 				else
-					table.remove(GF_MessageList[GF_RealmName], i)
+					if event ~= "SAY" then table.remove(GF_MessageList[GF_RealmName], i) end
 					return entry, 2
 				end
 			end
-			table.remove(GF_MessageList[GF_RealmName], i)
+			if event ~= "SAY" then table.remove(GF_MessageList[GF_RealmName], i) end
 			break
 		end
 	end
@@ -2991,9 +3399,9 @@ function GF_SearchMessageForTextString(msg,textstring,entry)
 		end
 	end
 	for i=1, getn(entry.flags) do
-		if GF_SavedVariables.searchbuttonstext[entry.flags[i]] then
+		if GF_PerCharVariables.searchbuttonstext[entry.flags[i]] then
 			if entry.flags[i] == "QUEST" then
-				if not GF_SavedVariables.autofilter or (entry.dlevel and entry.dlevel >= UnitLevel("player")-GF_SavedVariables.autofilterlevelvar and entry.dlevel <= UnitLevel("player")+GF_SavedVariables.autofilterlevelvar) then return true end
+				if not GF_PerCharVariables.autofilter or (entry.dlevel and entry.dlevel >= UnitLevel("player")-GF_PerCharVariables.autofilterlevelvar and entry.dlevel <= UnitLevel("player")+GF_PerCharVariables.autofilterlevelvar) then return true end
 			else
 				return true
 			end
@@ -3110,8 +3518,9 @@ function GetModifiedQuestName(entryname)
 			break
 		end
 	end
+
 	lfs = 2 -- To fix single words
-	while true do lfs,lfe,wordString = string.find(arg1, "(.-)[%s%p%d]+",lfs) if not wordString then break elseif GF_WORD_FIX_SINGLE_WORD[wordString] then arg1 = string.sub(arg1,1,lfs-1)..GF_WORD_FIX_SINGLE_WORD[wordString]..string.sub(arg1,lfe) lfs = lfs + string.len(GF_WORD_FIX_SINGLE_WORD[wordString]) elseif GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString] then arg1 = string.sub(arg1,1,lfs-1)..GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString][1]..string.sub(arg1,lfe) lfs = lfs + string.len(GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString][1]) if not languageID then languageID = GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString][2] end else lfs = lfe+1 end end
+	while true do lfs,lfe,wordString,tempString = string.find(arg1, "(.-)[%s%p%d]+",lfs) if not wordString then break elseif GF_WORD_FIX_SINGLE_WORD[wordString] then arg1 = string.sub(arg1,1,lfs-1)..GF_WORD_FIX_SINGLE_WORD[wordString]..tempString..string.sub(arg1,lfe) lfs = lfs + string.len(GF_WORD_FIX_SINGLE_WORD[wordString]) elseif GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString] then arg1 = string.sub(arg1,1,lfs-1)..GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString][1]..tempString..string.sub(arg1,lfe) lfs = lfs + string.len(GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString][1]) if not languageID then languageID = GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString][2] end else lfs = lfe+1 end end
 	lfs = 1 -- To detect space/letter/number/letter/space combinations(eg " g2g " = gtg)
 	while true do lfs,lfe,wordString = string.find(arg1," (w?%a%s?%d%s?%ab?)[%p%s]",lfs) if wordString then wordString = gsub(wordString," ","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = string.sub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..string.sub(arg1,lfe) end lfs = lfs + string.len(wordString) + 1 else break end end
 	lfs = 1 -- To detect space/word/number+/space combinations(eg " k10" = lowerkarazhan)
@@ -3163,7 +3572,7 @@ function GetModifiedQuestName(entryname)
 				table.insert(wordTable, wordString)
 				lfs = lfe+1
 			else
-				_,tempVal,tempString = string.find(arg1,"^(%a+)",lfe+1)
+				_,tempVal,tempString = string.find(arg1,"(%a+)",lfe+1)
 				if GF_WORD_GROUP_BYPASS[wordString] then
 					if GF_WORD_GROUP_BYPASS[tempString] then
 						table.insert(wordTable, wordString) table.insert(wordTable, GF_WORD_GROUP_BYPASS[tempString])
