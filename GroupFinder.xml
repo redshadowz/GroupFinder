@@ -1841,7 +1841,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnClick>
 				</Scripts>
 			</Button>
-			<Button name="GF_AnnounceToLFGButton" inherits="GF_ButtonTemplate" text="GF_ANNOUNCE_LFG_BTN">
+			<Button name="GF_AnnounceToLFGButton" inherits="GF_ButtonTemplate" text="GF_ANNOUNCE_ANNOUNCE_GROUP">
 				<Size>
 					<AbsDimension x="150" y="22"/>
 				</Size>
@@ -2802,11 +2802,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											<OnValueChanged>
 												if this:GetValue() > 10 then
 													GF_SavedVariables.announcetimer = (this:GetValue()-10)*300 + 600;
-													getglobal(this:GetName().."BottomLabel"):SetText((GF_SavedVariables.announcetimer/60).." -"..GF_MINUTES);
+													getglobal(this:GetName().."BottomLabel"):SetText((GF_SavedVariables.announcetimer/60).." -"..GF_MINUTES)
 												else
 													GF_SavedVariables.announcetimer = this:GetValue()*60;
-													getglobal(this:GetName().."BottomLabel"):SetText((GF_SavedVariables.announcetimer/60).." -"..GF_MINUTES);
+													getglobal(this:GetName().."BottomLabel"):SetText((GF_SavedVariables.announcetimer/60).." -"..GF_MINUTES)
 												end
+												if GF_AutoAnnounceTimer then GF_AnnounceToLFGButton:SetText(GF_ANNOUNCE_STOP_ANNOUNCE.."-"..GF_SavedVariables.announcetimer - GF_AutoAnnounceTimer) end
 											</OnValueChanged>
 										</Scripts>
 									</Slider>

@@ -211,7 +211,7 @@ GF_NO_WHISPER_TEXT = "No valid text to send."
 GF_NO_PLAYERS_TO_WHISPER = "No players in whisper queue"
 GF_WHISPER_TEXT_TOO_SHORT = "Whisper text must be at least 5 characters."
 
-GF_FRIEND_MSG_SYSTEM = "^|Hplayer ?:(%a+)|h.-|h(.*)"
+GF_FRIEND_MSG_SYSTEM = "|Hplayer ?:(%a+)|h.-|h(.*)"
 GF_HARDCORE_TRAGEDY_MSG_SYSTEM = "A tragedy has occurred"
 GF_HARDCORE_TRANSCENDED_MSG_SYSTEM = " has transcended death"
 GF_HARDCORE_LEVEL_MSG_SYSTEM = " has reached level"
@@ -227,7 +227,8 @@ GF_DELETE = "Delete" -- Blacklist delete button Label
 GF_DEFAULT_PLAYER_NOTE = "New player added. Click here to edit this note." -- Default Blacklist note
 
 -- Announce related buttons
-GF_ANNOUNCE_LFG_BTN = "Announce Group" -- Label for the group finder announce when turned off
+GF_ANNOUNCE_ANNOUNCE_GROUP = "Announce Group" -- Label for the group finder announce when turned off
+GF_ANNOUNCE_STOP_ANNOUNCE = "Stop Announcing" -- Label for the group finder announce when turned off
 GF_ANNOUNCE_TIMER = "Announce Timer" -- Label for the group finder announce when turned off
 GF_AUTO_ANNOUNCE_TURNED_ON = "Auto Announce ON." -- Internal text when I click the announce button to start announcing.
 GF_AUTO_ANNOUNCE_TURNED_OFF = "Auto Announce OFF" -- Internal text when I click the announce button to stop announcing
@@ -900,8 +901,8 @@ GF_WORD_FIX_SINGLE_WORD = { -- Single word changes. Mostly typos and simple word
 ["invtie"] = "invite",["invita"] = "invite",["inv"] = "invite",["ginv"] = "ginvite",["gadge"] = "gadget",["hyal"] = "hyjal",["hygal"] = "hyjal",["coupl"] = "couple",["weith"] = "with",["farmm"] = "farm",["levln"] = "leveling",["lvling"] = "leveling",
 ["joiin"] = "join",["jooin"] = "join",["lecel"] = "level",["lel"] = "lol",["leveel"] = "level",["lvlving"] = "leveling",["levl"] = "level",["levlers"] = "leveling",["levlin"] = "leveling",["levling"] = "leveling",
 ["lvel"] = "level",["lvlv"] = "level",["lvelin"] = "leveling",["lveln"] = "leveling",["lvln"] = "leveling",["lvl"] = "level",["lvlers"] = "leveling",["lvlin"] = "leveling",["trools"] = "trolls",["macke"] = "make",
-["fro"] = "for",["allys"] = "alliance",["loking"] = "looking",["lst"] = "last",["conjurived"] = "conjured",["bassin"] = "basin",["friendlly"] = "friendly",["disench"] = "disenchant",["classe"] = "class",
-["needd"] = "need",["goin"] = "going",
+["fro"] = "for",["allys"] = "alliance",["loking"] = "looking",["lst"] = "last",["conjurived"] = "conjured",["bassin"] = "basin",["friendlly"] = "friendly",["disench"] = "disenchant",["classe"] = "class",["accep"] = "accept",
+["needd"] = "need",["goin"] = "going",["clr"] = "clear",["specc"] = "spec",["specing"] = "spec",["speccing"] = "spec",
 
 ["mithrill"] = "mithril",["mythril"] = "mithril",["mythrin"] = "mithril",["moar"] = "more",["nead"] = "need",["acn"] = "can",["quequito"] = "queue",
 ["mre"] = "more",["mst"] = "most",["nec"] = "neck",["nedd"] = "need",["mele"] = "melee",["promie"] = "promise",["acitve"] = "active",["activ"] = "active",
@@ -1035,12 +1036,12 @@ GF_WORD_FIX_SINGLE_WORD = { -- Single word changes. Mostly typos and simple word
 ["brda"] = "brd",["brds"] = "brd",["brdd"] = "brd",["btd"] = "brd",["bdr"] = "brd",["dephts"] = "depths",["dephs"] = "depths",["emp"] = "emperor",["emperer"] = "emperor",["emporer"] = "emperor",
 ["vaul"] = "vault",["vaut"] = "vault",["vaault"] = "vault",["vauult"] = "vault",["vaultt"] = "vault",["valut"] = "vault",["vauly"] = "vault",
 
-["attument"] = "attunement",["attu"] = "attunement",["attun"] = "attunement",["attunment"] = "attunement",["atunment"] = "attunement",
+["attument"] = "attunement",["attu"] = "attunement",["atu"] = "attunement",["attun"] = "attunement",["attunment"] = "attunement",["atunment"] = "attunement",
 ["strath"] = "stratholme",["strth"] = "stratholme",["stratth"] = "stratholme",["srat"] = "strat",["strah"] = "strat",["strar"] = "strat",["srtath"] = "stratholme",
 ["scholo"] = "scholomance",["scho"] = "scholomance",["sco"] = "scholomance",["shool"] = "scholomance",["sholo"] = "scholomance",["shcolo"] = "scholomance",["scholol"] = "scholomance",["schol"] = "scholomance",
 ["scolo"] = "scholomance",["schoolo"] = "scholomance",["scholor"] = "scholomance",
 ["draki"] = "drakkisath",["drakk"] = "drakkisath",["drak"] = "drakkisath",
-["mual"] = "maul",["moul"] = "maul",["maule"] = "maul",["trib"] = "tribute",
+["dier"] = "dire",["mual"] = "maul",["moul"] = "maul",["maule"] = "maul",["trib"] = "tribute",
 ["lbs"] = "lbrs",["lvrs"] = "lbrs",["lbrd"] = "lbrs",["lbr"] = "lbrs",["lrbs"] = "lbrs",["lwbs"] = "lbrs",["lbd"] = "lbrs",
 ["ubers"] = "ubrs",["ubsr"] = "ubrs",["urbs"] = "ubrs",["ubs"] = "ubrs",["uber"] = "ubrs",["ubres"] = "ubrs",["ubbrs"] = "ubrs",["ubrd"] = "ubrs",["ubr"] = "ubrs",["ubrn"] = "ubrs",["ubts"] = "ubrs",["umbrs"] = "ubrs",["upbrs"] = "ubrs",
 
@@ -1065,7 +1066,7 @@ GF_WORD_FIX_SINGLE_WORD = { -- Single word changes. Mostly typos and simple word
 ["hfc"] = "hateforgequarry",["hrg"] = "hateforgequarry",["htq"] = "hateforgequarry",
 ["hijal"] = "hyjal",["hayja"] = "hyjal",["hyial"] = "hyjal",["hyall"] = "hyjal",["hyjia"] = "hyjal",["hyja"] = "hyjal",["hyjail"] = "hyjal",["hujal"] = "hyjal",["hylai"] = "hyjal",["hajar"] = "hyjal",
 ["ukh"] = "karazhan",["khara"] = "karazhan",["kz"] = "karazhan",["cara"] = "karazhan",["kata"] = "karazhan",["kharazan"] = "karazhan",["ksrs"] = "karazhan",["lkh"] = "karazhan",
-["smv"] = "swv",
+["smv"] = "swv",["swb"] = "swv",
 
 ["otarius"] = "ostarius",["larranikus"] = "larannikus",["larrannikus"] = "larannikus",["laranikkus"] = "larannikus",["laranikus"] = "larannikus",["leranikus"] = "larannikus",["concanius"] = "concavius",
 
@@ -1286,7 +1287,7 @@ GF_WORD_FIX_BEFORE_QUEST = { -- Word changes processed before quests.
 ["ulduman"] = "uldaman",["uldamn"] = "uldaman",["uldamann"] = "uldaman",["uldman"] = "uldaman",["oldaman"] = "uldaman",["ulaman"] = "uldaman",["uldamon"] = "uldaman",["uldraman"] = "uldaman",
 ["zulfarak"] = "zulfarrak",["zukfarrak"] = "zulfarrak",["zulfurrak"] = "zulfarrak",["zulforrak"] = "zulfarrak",["zulfurak"] = "zulfarrak",["ulzfarrak"] = "zulfarrak",["ulzfarak"] = "zulfarrak",
 ["zulforak"] = "zulfarrak",["zulfarrack"] = "zulfarrak",["zulfarrake"] = "zulfarrak",["zulfar"] = "zulfarrak",["zulfarrakrak"] = "zulfarrak",
-["sempletemple"] = "sunkentemple",["ataltemple"] = "atalhakkar",
+["sempletemple"] = "sunkentemple",["sunkedtemple"] = "sunkentemple",["ataltemple"] = "atalhakkar",
 ["blackrockdephs"] = "blackrockdepths",["blackrockdeeps"] = "blackrockdepths",["blackrockdepth"] = "blackrockdepths",["brdepths"] = "blackrockdepths",["emprun"] = "emperor",
 ["strartholme"] = "stratholme",["stratholm"] = "stratholme",["straholme"] = "stratholme",["strathholm"] = "stratholme",["strathholme"] = "stratholme",["starthome"] = "stratholme",["strathome"] = "stratholme",["startholme"] = "stratholme",
 ["srtatholme"] = "stratholme",["strathilme"] = "stratholme",["strathalme"] = "stratholme",["stratholem"] = "stratholme",["stratholome"] = "stratholme",["statholme"] = "stratholme",
@@ -1294,8 +1295,8 @@ GF_WORD_FIX_BEFORE_QUEST = { -- Word changes processed before quests.
 ["scholomansa"] = "scholomance",["solomance"] = "scholomance",["schololence"] = "scholomance",["schoolmance"] = "scholomance",["stratcholme"] = "scholomance",["shcolomance"] = "scholomance",["scholmance"] = "scholomance",
 ["blackockspire"] = "blackrockspire",["blackcockspire"] = "blackrockspire",["vaalthak"] = "valthalak",["drakisath"] = "drakkisath",["drakki"] = "drakkisath",
 ["smgrav"] = "smgy",["smgraver"] = "smgy",["monagy"] = "smgy",["monagrav"] = "smgy",["smlb"] = "smlib",["smlin"] = "smlib",["smarmo"] = "smarm",["monaarmo"] = "smarm",["monacath"] = "smcath",
-["diremail"] = "diremaul",["diremual"] = "diremaul",["diremau"] = "diremaul",["dmnt"] = "dmt",["eastdm"] = "dme",["northdm"] = "dmn",["westdm"] = "dmw",["eastdire"] = "dme",["northdire"] = "dmn",["westdire"] = "dmw",
-["dmemaul"] = "dme",["dmnmaul"] = "dmn",["dmwmaul"] = "dmw",["diretribute"] = "dmt",["direeast"] = "dme",["direnorth"] = "dmn",["direwest"] = "dmw",
+["diremail"] = "diremaul",["diermail"] = "diremaul",["diermaul"] = "diremaul",["diremual"] = "diremaul",["diremau"] = "diremaul",["dmnt"] = "dmt",["eastdm"] = "dme",["northdm"] = "dmn",["westdm"] = "dmw",["eastdire"] = "dme",
+["northdire"] = "dmn",["westdire"] = "dmw",["dmemaul"] = "dme",["dmnmaul"] = "dmn",["dmwmaul"] = "dmw",["diretribute"] = "dmt",["direeast"] = "dme",["direnorth"] = "dmn",["direwest"] = "dmw",
 
 -- Raids
 ["blackwinglare"] = "blackwinglair",["zulgrub"] = "zulgurub",["zulgurbu"] = "zulgurub",
@@ -1449,8 +1450,11 @@ GF_WORD_FIX_QUEST_DUNGEON = { -- Quest names converted to dungeons. Processed be
 ["maxwellsquest"] = "lbrs",["warlordscommand"] = "lbrs",["mothersmilk"] = "lbrs",["urokdoomhowl"] = "lbrs",["morgrayhoof"] = "lbrs",
 ["generaldrakkisathsdemise"] = "ubrs",["forhorde"] = "ubrs",["doomriggersclasp"] = "ubrs",["oculusillusions"] = "ubrs",["blackdragonchampion"] = "blackdragonchampion",["bloodofblackdragonchampion"] = "ubrs",["eggfreezing"] = "ubrs",
 ["darkstonetablet"] = "ubrs",["vivianlagraveandubrs"] = "ubrs",["eggcollection"] = "ubrs",["sealofascension"] = "ubrs",["blackhandscommand"] = "ubrs",["blackhandcommand"] = "ubrs",["demonforge"] = "ubrs",
-["eyeofemberseer"] = "ubrs",["attunementbwl"] = "ubrs",["bwlattunement"] = "ubrs",["bwattunement"] = "ubrs",["attunementtobwl"] = "ubrs",["attunementforbwl"] = "ubrs",["scarshieldquartermaster"] = "ubrs",
+["eyeofemberseer"] = "ubrs",["scarshieldquartermaster"] = "ubrs",
+["attunementbwl"] = "ubrs",["bwlattunement"] = "ubrs",["bwattunement"] = "ubrs",["attunementtobwl"] = "ubrs",["attunementforbwl"] = "ubrs",
+["attunementblackwinglair"] = "ubrs",["blackwinglairattunement"] = "ubrs",["attunementtoblackwinglair"] = "ubrs",["attunementforblackwinglair"] = "ubrs",
 ["attunementmc"] = "brd",["mcattunement"] = "brd",["attunementtomc"] = "brd",["attunementformc"] = "brd",
+["attunementmoltencore"] = "brd",["moltencoreattunement"] = "brd",["attunementtomoltencore"] = "brd",["attunementformoltencore"] = "brd",
 ["lethtendrissweb"] = "dmeast",["pusillin"] = "dme",["dmeandelderazjtordin"] = "dme",["arcanerefreshment"] = "dme",["magewaterquest"] = "dme",["magewaterrankquest"] = "dme",
 ["xoroth"] = "dmw",["dreadsteedofdmw"] = "dmw",["dreadsteeddmw"] = "dmw",["dreadsteedquest"] = "dmw",["dreadsteedrun"] = "dmw",["dreadsteedmat"] = "dmw",["dreadsteedsummon"] = "dmw",["warlockmountquest"] = "dmw",["warlockquestmount"] = "dmw",
 ["instigatorsenchantment"] = "dmw",["madnesswithin"] = "dmwest",["treasureofshendralar"] = "dmw",
@@ -1822,6 +1826,7 @@ GF_WORD_IGNORE = { -- Phrases to help prevent group false-positives.
 ["poorlevel"] = .5,["areterrorizing"] = .5,["whenyoufinish"] = .5,["arentmob"] = .5,["fortent"] = .5,["nopvp"] = .5,["whoisfuck"] = .5,["fuckwith"] = .5,["gamecrashed"] = .5,["fullwipe"] = .5,["tellmedid"] = .5,["doieven"] = .5,
 ["unstockcharacter"] = .5,["unstuckcharacter"] = .5,["buggedgame"] = .5,["raceclass"] = .5,["myownmessage"] = .5,["cantsay"] = .5,["icansay"] = .5,["butifi"] = .5,["separatewindow"] = .5,["separatechatwindow"] = .5,["lfsomegold"] = 1,
 ["heyimjust"] = .5,["cananyonedm"] = .5,["cananyonedmif"] = .5,["iftherewere"] = .5,["groupfilled"] = .5,["whypeopleislf"] = .5,["whyispeoplelf"] = .5,["whyarepeoplelf"] = .5,
+["thenyesyou"] = .5,["aslongasyou"] = .5,["aslongyou"] = .5,
 
 --[[
 [""] = .5,
@@ -1914,8 +1919,11 @@ GF_WORD_IGNORE = { -- Phrases to help prevent group false-positives.
 ["vaultsofincarnate"] = 2,["magtheridon"] = 2,["magtheridons"] = 2,["gruul"] = 2,["gruuls"] = 2,["tempestkeep"] = 2,["serpentshrine"] = 2,["blacktemple"] = 2,["sunwell"] = 2,
 }
 GF_WORD_IGNORE_BEFORE = { -- Up to two words before
+["bisfor"] = 1,
 }
 GF_WORD_IGNORE_AFTER = { -- Up to two words after
+["filled"] = 1,
+["groupfilled"] = 1,
 }
 
 GF_WORD_GUILD = {
@@ -2068,9 +2076,11 @@ GF_GUILD_FIRST_LAST = {
 ["F"] = { ["G"] = true, ["R"] = true, },
 ["looking"] = { ["G"] = true, },
 }
-GF_GUILD_LAST_TWO = {
-}
 GF_GUILD_FIRST_TWO = {
+["guildinvite"] = true,["inviteguild"] = true,
+}
+GF_GUILD_LAST_TWO = {
+["guildinvite"] = true,["inviteguild"] = true,
 }
 GF_WORD_GUILD_QUESTION = {
 ["OG"] = true,
@@ -2138,7 +2148,7 @@ GF_WORD_LFM = {
 --Misc words
 ["canusemore"] = 2,["comeanddo"] = 2,["comewithme"] = 2,["lastcallfor"] = 2,
 ["doesanyonehaveto"] = 2,["doyouneedtogo"] = 2,["ifanyoneneed"] = 2,["ifyouneedtojoin"] = 2,["pleasejoinmy"] = 2,["wejustneed"] = 2,["joinmein"] = 2,["joinusin"] = 2,
-["interestedinrunning"] = 2,["grouptocomplete"] = 2,["needtokillelite"] = 2,["weneedtokill"] = 2,["ineedtokill"] = 2,
+["interestedinrunning"] = 2,["grouptocomplete"] = 2,["needtokillelite"] = 2,["needtoclearelite"] = 2,["weneedtokill"] = 2,["ineedtokill"] = 2,
 
 ["moreneededfor"] = 2,["morepeoplefor"] = 2,["roomformore"] = 2,["roomforonemore"] = 2,["roomfortwomore"] = 2,["roomforthreemore"] = 2,
 ["needallfor"] = 2,["needanyonestealth"] = 2,["needgroupfor"] = 2,["needmorefor"] = 2,["needmoregroupmembers"] = 2,
@@ -2476,11 +2486,14 @@ GF_WORD_LEVEL_DETECT = {
 }
 GF_WORD_LEVEL_ZONE = {
 ["alterac"] = 38,["arathi"] = 38,["highlands"] = 38,["ashenvale"] = 25,["auberdine"] = 15,["azshara"] = 55,["badlands"] = 40,["barrens"] = 17,["blasted"] = 55,
-["cenarion"] = 60,["darkshore"] = 15,["darkshire"] = 28,["deadwind"] = 60,["desolace"] = 35,["morogh"] = 6,["durotar"] = 6,["duskwood"] = 28,
+["cenarion"] = 60,["darkshore"] = 15,["darkshire"] = 28,["deadwind"] = 60,["desolace"] = 35,["morogh"] = 7,["durotar"] = 7,["duskwood"] = 28,
 ["dustwallow"] = 40,["epl"] = 58,["feathermoon"] = 45,["felwood"] = 55,["feralas"] = 45,["glenshire"] = 16,["hillsbrad"] = 27,["hinterlands"] = 45,["hjyal"] = 60,["lakeshire"] = 22,["loch"] = 16,
-["modan"] = 16,["moonglade"] = 55,["mulgore"] = 6,["northwind"] = 32,["plaguelands"] = 58,["redridge"] = 22,["gorge"] = 50,["silithus"] = 58,["silverpine"] = 15,["sos"] = 38,["sorrows"] = 38,
-["stonetalon"] = 25,["stranglethorn"] = 36,["stv"] = 36,["swamp"] = 38,["tanaris"] = 45,["teldrassil"] = 6,["theramore"] = 40,["needles"] = 30,
-["kneedles"] = 30,["tirisfal"] = 6,["ungoro"] = 53,["westfall"] = 15,["wetlands"] = 26,["winterspring"] = 58,["wpl"] = 56,
+["modan"] = 16,["moonglade"] = 55,["mulgore"] = 7,["plaguelands"] = 58,["redridge"] = 22,["gorge"] = 50,["silithus"] = 58,["silverpine"] = 15,["sos"] = 38,["sorrows"] = 38,
+["stonetalon"] = 25,["stranglethorn"] = 36,["stv"] = 36,["swamp"] = 38,["tanaris"] = 45,["teldrassil"] = 7,["theramore"] = 40,["needles"] = 30,
+["kneedles"] = 30,["tirisfal"] = 7,["ungoro"] = 53,["westfall"] = 15,["wetlands"] = 26,["winterspring"] = 58,["wpl"] = 56,
+
+-- Turtle Level Zones
+["balor"] = 32,["lapidis"] = 52,["gillijim"] = 52,["reaches"] = 36,["thalassian"] = 7,["gilneas"] = 43,["ravenshire"] = 43,["northwind"] = 32,["telabim"] = 58,["blackstone"] = 7,["hyjal"] = 60,
 }
 GF_WORD_QUEST = {
 ["depthsofkarazhan"]={0,60,0},["felenergyirregularities"]={0,60,0},["mysteryofkarazhan"]={0,60,0},["upperbinding"]={0,60,0},["bloodsailcompound"] = {0,41,0},["byanymeansnecessary"] = {0,54,0},
@@ -3872,6 +3885,8 @@ GF_SystemMessageFilters = {
 	[7]	= "is already in a group.",
 	[8]	= "RMT",
 	[9]	= "Discord",
+	[10]= "turtlecraft",
+	[11]= "WDB folder",
 }
 GF_LootFilters = {
 	[1] = "Greed Roll",
