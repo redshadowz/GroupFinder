@@ -1047,7 +1047,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Anchors>
 						<Scripts>
 							<OnClick>
-								GF_SavedVariables.playsounds = this:GetChecked();
+								GF_PerCharVariables.playsounds = this:GetChecked();
 							</OnClick>
 							<OnLoad>
 								getglobal(this:GetName().."TextLabel"):SetText(GF_PLAY_SOUND);
@@ -1945,7 +1945,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if GF_SavedVariables.lfgshown then GF_SavedVariables.lfgshown = nil else GF_SavedVariables.lfgshown = true end
+										if GF_PerCharVariables.lfgshown then GF_PerCharVariables.lfgshown = nil else GF_PerCharVariables.lfgshown = true end
 										GF_LFGWhoUpdateOffset()
 										GF_UpdateMainFrameHeight()
 										GF_UpdateMainFrameWidth()
@@ -1968,7 +1968,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if GF_SavedVariables.getwhoshown then GF_SavedVariables.getwhoshown = nil else GF_SavedVariables.getwhoshown = true end
+										if GF_PerCharVariables.getwhoshown then GF_PerCharVariables.getwhoshown = nil else GF_PerCharVariables.getwhoshown = true end
 										GF_LFGWhoUpdateOffset()
 										GF_UpdateMainFrameHeight()
 										GF_UpdateMainFrameWidth()
@@ -4633,6 +4633,14 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				GF_LFGRole:Hide()
 				GF_GetWhoClass:Hide()
 				GF_SearchList:Hide()
+				GF_GetWhoFrame:Hide()
+				GF_LFGFrame:Hide()
+				GF_MessageFrame:Hide()
+				GF_LogFilterDropdownMenu:Hide()
+				GF_GroupFilterDropdownMenu:Hide()
+				GF_ChatFilterDropdownMenu:Hide()
+				GF_LFGHardCoreDropdown:Hide()
+
 				GF_SavedVariables.mainframeishidden = true
 				GF_SavedVariables.mainframestatus = 0
 				if pfUI and pfUI.chat and pfUI.chat.urlcopy then pfUI.chat.urlcopy:SetWidth(270) pfUI.chat.urlcopy.text:SetWidth(250) end

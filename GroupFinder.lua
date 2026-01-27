@@ -1,4 +1,4 @@
-﻿local GF_CurrentVersion						= 560
+﻿local GF_CurrentVersion						= 600
 
 GF_SavedVariables 							= {}
 GF_PerCharVariables							= {}
@@ -85,7 +85,7 @@ local GF_ClassColors						= {	["PRIEST"]="ffffff",["MAGE"]="68ccef",["WARLOCK"]=
 local GF_ClassIDs = { "PRIEST", "MAGE", "WARLOCK", "DRUID", "HUNTER", "ROGUE", "WARRIOR", "PALADIN", "SHAMAN", ["PRIEST"]=1,["MAGE"]=2,["WARLOCK"]=3,["DRUID"]=4,["HUNTER"]=5,["ROGUE"]=6,["WARRIOR"]=7,["PALADIN"]=8,["SHAMAN"]=9 }
 local GF_TextColors = { ["SYSTEM"] = {1,1,0},["SAY"] = {1,1,1},["YELL"] = {1,0.251,0.251},["CHANNEL"] = {1,0.753,0.753},["GUILD"] = {0.251,1,0.251},["OFFICER"] = {0.251,0.753,0.251},["WHISPER"] = {1,0.502,1},["WHISPER_INFORM"] = {1,0.502,1},
 ["PARTY"] = {0.667,0.667,1},["RAID"] = {1,0.498,0},["RAID_LEADER"] = {1,0.282,0.0353},["RAID_WARNING"] = {1,0.282,0},["BATTLEGROUND"] = {1,0.498,0},["BATTLEGROUND_LEADER"] = {1,0.859,0.7176},["LOOT"] = {0,0.667,0},["MONEY"] = {1,1,0},["EMOTE"] = {1,0.502,0.251},
-["TEXT_EMOTE"] = {1,0.502,0.251},["COMBAT_FACTION_CHANGE"] = {0.502,0.502,1},["COMBAT_XP_GAIN"] = {0.4353,0.4353,1},["COMBAT_HONOR_GAIN"] = {0.8784,0.792,0.0392},["MONSTER_SAY"] = {1,1,1},["MONSTER_EMOTE"] = {1,0.502,0.251},["HARDCORE"] = {0.651,0.6,0.451} }
+["TEXT_EMOTE"] = {1,0.502,0.251},["COMBAT_FACTION_CHANGE"] = {0.502,0.502,1},["COMBAT_XP_GAIN"] = {0.4353,0.4353,1},["COMBAT_HONOR_GAIN"] = {0.8784,0.792,0.0392},["MONSTER_SAY"] = {1,1,1},["MONSTER_EMOTE"] = {1,0.502,0.251},["HARDCORE"] = {0.902,0.8,0.502} } --["HARDCORE"] = {0.651,0.6,0.451} }
 local GF_TextBypass = { ["GUILD"] = "G",["OFFICER"] = "O",["WHISPER"] = "W",["WHISPER_INFORM"] = "To",["PARTY"] = "P",["RAID"] = "R",["RAID_LEADER"] = "RL",["RAID_WARNING"] = "RW", ["BATTLEGROUND"] = "BG",["BATTLEGROUND_LEADER"] = "BL",}
 local GF_TextBypassChatNameAlias = { ["OFFICER"] = "GUILD",["RAID"] = "PARTY",["RAID_LEADER"] = "PARTY",["RAID_WARNING"] = "PARTY",["BATTLEGROUND"] = "PARTY",["BATTLEGROUND_LEADER"] = "PARTY",["WHISPER_INFORM"] = "WHISPER", ["HARDCORE"] = "PARTY",}
 local GF_LootFilter = { ["MONEY"] = true,["LOOT"] = true,["COMBAT_FACTION_CHANGE"] = true,["COMBAT_XP_GAIN"] = true,["COMBAT_HONOR_GAIN"] = true }
@@ -110,7 +110,6 @@ function GF_LoadVariables()
 		if not GF_SavedVariables.showguilds then GF_SavedVariables.showguilds = true end
 		if not GF_SavedVariables.usewhoongroups then GF_SavedVariables.usewhoongroups = false end
 
-		if not GF_SavedVariables.playsounds then GF_SavedVariables.playsounds = false end
 		if not GF_SavedVariables.showdungeons then GF_SavedVariables.showdungeons = true end
 		if not GF_SavedVariables.showraids then GF_SavedVariables.showraids = true end
 		if not GF_SavedVariables.showquests then GF_SavedVariables.showquests = true end
@@ -175,9 +174,6 @@ function GF_LoadVariables()
 		if not GF_SavedVariables.mainframeishidden then GF_SavedVariables.mainframeishidden = true end -- if not hidden on login, show
 
 		if not GF_SavedVariables.logshowwhisperwindow then GF_SavedVariables.logshowwhisperwindow = true end
-
-		if not GF_SavedVariables.lfgshown then GF_SavedVariables.lfgshown = false end
-		if not GF_SavedVariables.getwhoshown then GF_SavedVariables.getwhoshown = false end
 	end
 	if not GF_PerCharVariables then GF_PerCharVariables = {} end
 	if not GF_PerCharVariables.version or GF_PerCharVariables.version < GF_CurrentVersion then
@@ -198,6 +194,11 @@ function GF_LoadVariables()
 		if not GF_PerCharVariables.lfgdps then GF_PerCharVariables.lfgdps = true end
 		if not GF_PerCharVariables.lfgheal then GF_PerCharVariables.lfgheal = false end
 		if not GF_PerCharVariables.lfgtank then GF_SavedVariables.lfgtank = false end
+
+		if not GF_PerCharVariables.playsounds then GF_PerCharVariables.playsounds = false end
+		if not GF_PerCharVariables.lfgshown then GF_PerCharVariables.lfgshown = false end
+		if not GF_PerCharVariables.getwhoshown then GF_PerCharVariables.getwhoshown = false end
+
 	end
 	if not GF_SavedVariables.friendsToRemove then GF_SavedVariables.friendsToRemove = {} end
 	if not GF_BUTTONS_LIST.LFGSize[GF_PerCharVariables.lfgsize] then GF_PerCharVariables.lfgsize = 1 end
@@ -662,7 +663,7 @@ function GF_UpdateMinimapIcon()
 end
 function GF_LFGWhoUpdateOffset()
 	GF_MessageFrame:Show()
-	if GF_SavedVariables.lfgshown and GF_SavedVariables.getwhoshown then
+	if GF_PerCharVariables.lfgshown and GF_PerCharVariables.getwhoshown then
 		GF_GetWhoFrame:Show()
 		GF_GetWhoFrameToggleButton:LockHighlight()
 		GF_LFGFrame:Show()
@@ -676,7 +677,7 @@ function GF_LFGWhoUpdateOffset()
 		GF_LFGFrameToggleButton:SetNormalTexture("Interface\\Buttons\\UI-Panel-Button-Up")
 		GF_ResultsListOffset = 19 * math.ceil(GF_ResultsListOffset/GF_ResultsListOffsetSize)
 		GF_ResultsListOffsetSize = 19
-	elseif GF_SavedVariables.lfgshown then
+	elseif GF_PerCharVariables.lfgshown then
 		GF_GetWhoFrame:Hide()
 		GF_GetWhoFrameToggleButton:UnlockHighlight()
 		GF_LFGFrame:Show()
@@ -689,7 +690,7 @@ function GF_LFGWhoUpdateOffset()
 		GF_LFGFrameToggleButton:SetNormalTexture("Interface\\Buttons\\UI-Panel-Button-Up")
 		GF_ResultsListOffset = 20 * math.ceil(GF_ResultsListOffset/GF_ResultsListOffsetSize)
 		GF_ResultsListOffsetSize = 20
-	elseif GF_SavedVariables.getwhoshown then
+	elseif GF_PerCharVariables.getwhoshown then
 		GF_GetWhoFrame:Show()
 		GF_GetWhoFrameToggleButton:LockHighlight()
 		GF_LFGFrame:Hide()
@@ -837,6 +838,8 @@ function GF_AddLogMessage(arg1,logcode,add,arg2,arg8,arg9,event)
 				arg1 = "["..date("%H:%M").."] "..GF_LogMessageCodes[logcode].."|cff"..(GF_ClassColors[({UnitClass("player")})[2]] or "9d9d9d").."|Hplayer:"..arg2.."|h["..arg2..", "..UnitLevel("player").."]:|h|r"..arg1
 			elseif GF_WhoTable[GF_RealmName][arg2] then 
 				arg1 = date("%H:%M").."] "..GF_LogMessageCodes[logcode].."|cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][arg2][2]] or "9d9d9d").."|Hplayer:"..arg2.."|h["..arg2..", "..GF_WhoTable[GF_RealmName][arg2][1].."]:|h|r"..arg1
+			elseif arg2 == "SYSTEM" then
+				arg1 = "["..date("%H:%M").."] "..GF_LogMessageCodes[logcode].."["..arg2.."]"..arg1
 			else
 				arg1 = "["..date("%H:%M").."] "..GF_LogMessageCodes[logcode].."|cff9d9d9d|Hplayer:"..arg2.."|h["..arg2.."]:|h|r"..arg1
 			end
@@ -1301,6 +1304,13 @@ function GF_OnEvent(event) -- OnEvent, LoadSettings, Bind Keys, Prune Tables
 						if GF_Classes[class] then GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], GetGuildInfo("player"), time() } end
 					end
 				end
+				for i=1, GetNumFriends() do
+					local name,level,class,_,online = GetFriendInfo(i)
+					if name then
+						if online then GF_Friends[name] = true else GF_Friends[name] = nil end
+						if GF_Classes[class] and level and level > 0 then GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], "", time()} end
+					end
+				end
 			end
 			if GF_SavedVariables.showformattedchat and GF_WhoTable[GF_RealmName][fname] then
 				for i=1,NUM_CHAT_WINDOWS do
@@ -1397,7 +1407,7 @@ function GF_LoadSettings()
 	GF_SavedVariables.showguilds, GF_PerCharVariables.autofilter, GF_SavedVariables.showdungeons, GF_SavedVariables.showraids, GF_SavedVariables.showquests, GF_SavedVariables.showother, GF_SavedVariables.showlfm, GF_SavedVariables.showlfg,
 	GF_SavedVariables.logshowgroup,	GF_SavedVariables.logshowfiltered, GF_SavedVariables.logshowchat, GF_SavedVariables.logshowtrades, GF_SavedVariables.logshowguilds, GF_SavedVariables.logshowloot, GF_SavedVariables.logshowspam,
 	GF_SavedVariables.logshowblacklist,	GF_SavedVariables.logshowbelowlevel, GF_SavedVariables.joinworld, GF_SavedVariables.showformattedchat, GF_SavedVariables.usewhoongroups, GF_SavedVariables.systemfilter,
-	GF_SavedVariables.spamfilter,GF_SavedVariables.autoblacklist, GF_SavedVariables.playsounds, GF_PerCharVariables.lfgauto, GF_SavedVariables.showwhisperlogs, GF_SavedVariables.mainframeheight, GF_SavedVariables.mainframewidth,
+	GF_SavedVariables.spamfilter,GF_SavedVariables.autoblacklist, GF_PerCharVariables.playsounds, GF_PerCharVariables.lfgauto, GF_SavedVariables.showwhisperlogs, GF_SavedVariables.mainframeheight, GF_SavedVariables.mainframewidth,
 	GF_SavedVariables.alwaysshowguild, GF_SavedVariables.questmod, GF_SavedVariables.purgepfdb, GF_SavedVariables.logchannels, GF_SavedVariables.logparty, GF_SavedVariables.logguild, GF_SavedVariables.logwhisper, GF_SavedVariables.logsay,
 	GF_SavedVariables.logyell, GF_SavedVariables.loghardcore, GF_PerCharVariables.lfglevel, GF_PerCharVariables.lfgdps, GF_PerCharVariables.lfgheal, GF_PerCharVariables.lfgtank, }
 
@@ -2706,14 +2716,16 @@ function GF_FindGroupsAndDisplayCustomChatMessages(event) -- Chat Filters and Gr
 			GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,nil}
 			return nil
 		else
-			if GF_SavedVariables.friendsToRemove[gsub(arg1,"(%a+)(.*)","%1")] then
-				GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,nil}
-				return nil
-			else
-				if string.find(arg1, GF_HARDCORE_TRAGEDY_MSG_SYSTEM) or string.find(arg1, GF_HARDCORE_TRANSCENDED_MSG_SYSTEM) then GF_AddLogMessage(arg1,4,true,"SYSTEM",arg8,arg9,event) end
-				GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,true}
-				return true
+			for name,_ in string.gfind(arg1, "(%w+)") do
+				if GF_SavedVariables.friendsToRemove[name] then
+					GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,nil}
+					return nil
+				end
 			end
+			
+			if string.find(arg1, GF_HARDCORE_TRAGEDY_MSG_SYSTEM) or string.find(arg1, GF_HARDCORE_TRANSCENDED_MSG_SYSTEM) or string.find(arg1, GF_HARDCORE_LEVEL_MSG_SYSTEM) then GF_AddLogMessage(arg1,4,true,"SYSTEM",arg8,arg9,"HARDCORE") end
+			GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,true}
+			return true
 		end
 	elseif arg2 == "" then
 		GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,true}
@@ -2725,7 +2737,7 @@ function GF_FindGroupsAndDisplayCustomChatMessages(event) -- Chat Filters and Gr
 		if logType == 5 or logType == 11 or logType < 4 then GF_PlayerMessages[arg2][1][1] = GF_PlayerMessages[arg2][1][1] + 1 end -- To block multiple messages in series
 		GF_AddLogMessage(GF_CleanUpMessagesOfBadLinks(arg1),logType,true,arg2,arg8,arg9,event)
 		if arg2 == UnitName("player") or (GF_SavedVariables.alwaysshowguild and (GF_Guildies[arg2] or GF_Friends[arg2] or GF_PlayersCurrentlyInGroup[arg2])) or GF_ChatCheckFilters(logType,arg1,event) then
-			if not GF_SavedVariables.showformattedchat then
+			if not GF_SavedVariables.showformattedchat or (event == "HARDCORE" and not GF_PlayingOnTurtle) then
 				GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,true}
 				return true
 			else
@@ -2781,7 +2793,7 @@ function GF_CheckForGroups(arg1,arg2,arg9,event,showanyway)
 		if GF_UpdateAndRequestTimer > 5 then GF_UpdateAndRequestTimer = 4 end
 		if not GF_EntryMatchesGroupFilterCriteria(entry) then
 			foundInGroup = 3
-		elseif GF_SavedVariables.playsounds then
+		elseif GF_PerCharVariables.playsounds then
 			PlaySoundFile( "Sound\\Interface\\PickUp\\PutDownRing.wav" )
 		end
 	end
@@ -2999,7 +3011,6 @@ function GF_GetTypes(arg1, showanyway)
 					lfs = lfe+1
 				else
 					_,tempVal,tempString = string.find(arg1,"(%a+)",lfe+1)
-					if showanyway == true then print(tempString.." T") end
 					if GF_WORD_GROUP_BYPASS[wordString] then
 						if GF_WORD_GROUP_BYPASS[tempString] then
 							table.insert(wordTable, wordString) table.insert(wordTable, GF_WORD_GROUP_BYPASS[tempString])
@@ -3242,6 +3253,10 @@ function GF_GetTypes(arg1, showanyway)
 
 					if GF_LFG_AFTER[wordTable[i+j+1]] or GF_LFG_BEFORE[wordTable[i-1]] or wordTable[i+j+2] and GF_LFG_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] or wordTable[i-2] and GF_LFG_BEFORE[wordTable[i-2]..wordTable[i-1]] then
 						if GF_MessageData.foundLFG == 0 and GF_MessageData.foundLFMPreSuf == 0 then GF_MessageData.foundLFG = 1 end if wordTable[i-1] and GF_LFMLFG_PREFIX_GUILD[wordTable[i-1]] then GF_MessageData.foundGuildExclusion = GF_MessageData.foundGuildExclusion + 1 end GF_MessageData.foundLFGPreSuf = 1 GF_MessageData.foundTradesExclusion = GF_MessageData.foundTradesExclusion + 1.5 if showanyway == true then print(wordString.." triggername lfg 1/2 .. tradesex 1.5") end
+					end
+
+					if GF_WORD_IGNORE_AFTER[wordTable[i+j+1]] or GF_WORD_IGNORE_BEFORE[wordTable[i-1]] or wordTable[i+j+2] and GF_WORD_IGNORE_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] or wordTable[i-2] and GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]] then
+						
 					end
 				end
 			end
