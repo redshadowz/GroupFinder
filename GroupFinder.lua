@@ -201,7 +201,6 @@ function GF_LoadVariables()
 
 	end
 	if not GF_SavedVariables.friendsToRemove then GF_SavedVariables.friendsToRemove = {} end
-	if not GF_BUTTONS_LIST.LFGSize[GF_PerCharVariables.lfgsize] then GF_PerCharVariables.lfgsize = 1 end
 	if not GF_MessageList then GF_MessageList = {} end
 	if not GF_MessageList[GF_RealmName] then GF_MessageList[GF_RealmName] = {} end
 	if not GF_BlackList then GF_BlackList = {} end
@@ -2194,91 +2193,95 @@ end
 function GF_FixLFGStrings(groupSizeOnly) -- LFG Group Maker Functions
 	GF_PerCharVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText()
 	local maxGroupSize = GF_BUTTONS_LIST.LFGSize[GF_PerCharVariables.lfgsize][4]
-	if not groupSizeOnly then
-		local foundLFM
-		local foundDungeonRaid = {}
-		local foundRoles = {}
-		local foundStartOfText
-		local endOfFilter = 0
-		GF_PerCharVariables.searchlfgtext = gsub(GF_PerCharVariables.searchlfgtext, "[LFlf]+%d+[Mm]", "LFM")
-		for i=1,getn(GF_BUTTONS_LIST.LFGLFM) do
-			foundStartOfText = string.find(GF_PerCharVariables.searchlfgtext, GF_BUTTONS_LIST.LFGLFM[i][1])
-			if foundStartOfText then
-				if i == 1 then
-					foundLFM = 1
-				elseif not foundLFM then
-					foundLFM = GF_BUTTONS_LIST.LFGLFM[i][1]
-				end
-				if foundStartOfText + string.len(GF_BUTTONS_LIST.LFGLFM[i][1])-1 > endOfFilter then endOfFilter = foundStartOfText + string.len(GF_BUTTONS_LIST.LFGLFM[i][1])-1 end
+	local foundLFM = 0
+	local foundDungeonRaid = {}
+	local foundRoles = {}
+	local foundEndOfText
+	local endOfFilter = 0
+	GF_PerCharVariables.searchlfgtext = gsub(GF_PerCharVariables.searchlfgtext, "[Ll]+[Ff]+%d?%d?[Mm]+", "LFM")
+	_,foundEndOfText = string.find(GF_PerCharVariables.searchlfgtext, "%(HC%)")
+	if foundEndOfText then endOfFilter = foundEndOfText end
+	for i=1,getn(GF_BUTTONS_LIST.LFGLFM) do
+		_,foundEndOfText = string.find(GF_PerCharVariables.searchlfgtext, GF_BUTTONS_LIST.LFGLFM[i][1])
+		if foundEndOfText then
+			foundLFM = i
+			if foundEndOfText > endOfFilter then endOfFilter = foundEndOfText end
+			break
+		end
+	end
+	for i=1,getn(GF_BUTTONS_LIST.LFGRole) do
+		_,foundEndOfText = string.find(GF_PerCharVariables.searchlfgtext, GF_BUTTONS_LIST.LFGRole[i][1])
+		if foundEndOfText then
+			if foundEndOfText > endOfFilter then endOfFilter = foundEndOfText end
+			table.insert(foundRoles,GF_BUTTONS_LIST.LFGRole[i][1])
+		end
+	end
+	for i=1,getn(GF_BUTTONS_LIST.LFGDungeon) do
+		_,foundEndOfText = string.find(GF_PerCharVariables.searchlfgtext, GF_BUTTONS_LIST.LFGDungeon[i][1])
+		if foundEndOfText then
+			if foundEndOfText > endOfFilter then endOfFilter = foundEndOfText end
+			if tonumber(maxGroupSize) > GF_BUTTONS_LIST.LFGDungeon[i][5] then maxGroupSize = GF_BUTTONS_LIST.LFGDungeon[i][5] end
+			table.insert(foundDungeonRaid,GF_BUTTONS_LIST.LFGDungeon[i][1])
+		end
+	end
+	for i=1,getn(GF_BUTTONS_LIST.LFGRaid) do
+		_,foundEndOfText = string.find(GF_PerCharVariables.searchlfgtext, GF_BUTTONS_LIST.LFGRaid[i][1])
+		if foundEndOfText then
+			if foundEndOfText > endOfFilter then endOfFilter = foundEndOfText end
+			if tonumber(maxGroupSize) > GF_BUTTONS_LIST.LFGRaid[i][5] then maxGroupSize = GF_BUTTONS_LIST.LFGRaid[i][5] end
+			table.insert(foundDungeonRaid,GF_BUTTONS_LIST.LFGRaid[i][1])
+		end
+	end
+	local newText = ""
+	if groupSizeOnly then
+		if foundLFM == 1 then
+			GF_PerCharVariables.searchlfgtext = gsub(GF_PerCharVariables.searchlfgtext, "LFM", "")
+			if GF_PerCharVariables.lfgauto then
+				GF_LFGDescriptionEditBox:SetText("LF"..(maxGroupSize-GF_NumPartyMembers).."M"..GF_PerCharVariables.searchlfgtext)
+			else
+				GF_LFGDescriptionEditBox:SetText("LFM"..GF_PerCharVariables.searchlfgtext)
 			end
 		end
-		for i=1,getn(GF_BUTTONS_LIST.LFGRole) do
-			foundStartOfText = string.find(GF_PerCharVariables.searchlfgtext, GF_BUTTONS_LIST.LFGRole[i][1])
-			if foundStartOfText then
-				if foundStartOfText + string.len(GF_BUTTONS_LIST.LFGRole[i][1])-1 > endOfFilter then endOfFilter = foundStartOfText + string.len(GF_BUTTONS_LIST.LFGRole[i][1])-1 end
-				table.insert(foundRoles,GF_BUTTONS_LIST.LFGRole[i][1])
-			end
-		end
-		for i=1,getn(GF_BUTTONS_LIST.LFGDungeon) do
-			foundStartOfText = string.find(GF_PerCharVariables.searchlfgtext, GF_BUTTONS_LIST.LFGDungeon[i][1])
-			if foundStartOfText then
-				if foundStartOfText + string.len(GF_BUTTONS_LIST.LFGDungeon[i][1])-1 > endOfFilter then endOfFilter = foundStartOfText + string.len(GF_BUTTONS_LIST.LFGDungeon[i][1])-1 end
-				if tonumber(maxGroupSize) > GF_BUTTONS_LIST.LFGDungeon[i][5] then maxGroupSize = GF_BUTTONS_LIST.LFGDungeon[i][5] end
-				table.insert(foundDungeonRaid,GF_BUTTONS_LIST.LFGDungeon[i][1])
-			end
-		end
-		for i=1,getn(GF_BUTTONS_LIST.LFGRaid) do
-			foundStartOfText = string.find(GF_PerCharVariables.searchlfgtext, GF_BUTTONS_LIST.LFGRaid[i][1])
-			if foundStartOfText then
-				if foundStartOfText + string.len(GF_BUTTONS_LIST.LFGRaid[i][1])-1 > endOfFilter then endOfFilter = foundStartOfText + string.len(GF_BUTTONS_LIST.LFGRaid[i][1])-1 end
-				if tonumber(maxGroupSize) > GF_BUTTONS_LIST.LFGRaid[i][5] then maxGroupSize = GF_BUTTONS_LIST.LFGRaid[i][5] end
-				table.insert(foundDungeonRaid,GF_BUTTONS_LIST.LFGRaid[i][1])
-			end
-		end
-		local newText = ""
+	else
 		if foundLFM == 1 then
 			if GF_PerCharVariables.lfgauto then
 				newText = "LF"..maxGroupSize-GF_NumPartyMembers.."M"
 			else
 				newText = "LFM"
 			end
-			if strlen(newText) > 0 and getn(foundDungeonRaid) > 0 then newText = newText.." for " else newText = newText.." " end
-			for i=1, getn(foundDungeonRaid) do
-				newText = newText..foundDungeonRaid[i].."/"
+			if getn(foundDungeonRaid) > 0 then
+				newText = newText.." for "
+				for i=1, getn(foundDungeonRaid) do
+					newText = newText.."/"..foundDungeonRaid[i]
+				end
+				if GF_Hardcore and GF_PerCharVariables.hardcore ~= 3 then newText = newText.." (HC)" end
 			end
-			if strlen(newText) > 0 and getn(foundRoles) > 0 then newText = newText.." need " else newText = newText.." " end
-			for i=1, getn(foundRoles) do
-				newText = newText..foundRoles[i].."/"
-			end
-		else
-			if string.find(" "..string.lower(GF_PerCharVariables.searchlfgtext).." ", " lfg ") and not string.find(GF_PerCharVariables.searchlfgtext, GF_BUTTONS_LIST["LFGLFM"][2][1]) and not string.find(GF_PerCharVariables.searchlfgtext, GF_BUTTONS_LIST["LFGLFM"][3][1]) and not string.find(GF_PerCharVariables.searchlfgtext, GF_BUTTONS_LIST["LFGLFM"][4][1]) then
-				if GF_PerCharVariables.lfglevel then newText = newText..UnitLevel("player").." " end
-				if GF_PerCharVariables.lfgtank then newText = newText..GF_TANK.."/" end
-				if GF_PerCharVariables.lfgheal then newText = newText..GF_HEALER.."/" end
-				if GF_PerCharVariables.lfgdps then newText = newText..GF_DPS.."/" end
-				newText = string.sub(newText,1,-2)..gsub(string.sub(newText,-1,-1),"[/ ]","").." "--..UnitClass("player").." "
-			else
+			if getn(foundRoles) > 0 then
+				newText = newText.." need "
 				for i=1, getn(foundRoles) do
-					newText = newText..foundRoles[i].."/"
+					newText = newText.."/"..foundRoles[i]
 				end
 			end
--- don't display dps/heal if lfg with spec
-			if foundLFM then
-				newText = " "..newText.." "..foundLFM
+		else
+			if foundLFM > 4 then
+				if GF_PerCharVariables.lfgtank then newText = newText.."/"..GF_TANK end
+				if GF_PerCharVariables.lfgheal then newText = newText.."/"..GF_HEALER end
+				if GF_PerCharVariables.lfgdps then newText = newText.."/"..GF_DPS end
+			else
+				for i=1, getn(foundRoles) do
+					newText = newText.."/"..foundRoles[i]
+				end
 			end
+			if GF_PerCharVariables.lfglevel and ((foundLFM ~= 0 and foundLFM < 5) or strlen(newText) > 0) then newText = UnitLevel("player").." "..newText end
+			if foundLFM > 0 then newText = " "..newText.." "..GF_BUTTONS_LIST.LFGLFM[foundLFM][1] end
 			if strlen(newText) > 0 and getn(foundDungeonRaid) > 0 then newText = newText.." for " else newText = newText.." " end
 			for i=1, getn(foundDungeonRaid) do
-				newText = newText..foundDungeonRaid[i].."/"
+				newText = newText.."/"..foundDungeonRaid[i]
 			end
+			if GF_Hardcore and GF_PerCharVariables.hardcore ~= 3 and strlen(newText) > 0 then newText = newText.." (HC)" end
 		end
-		GF_PerCharVariables.searchlfgtext = gsub(gsub(gsub(gsub(gsub(gsub(newText..string.sub(GF_PerCharVariables.searchlfgtext, endOfFilter+1), "[/ ]+$", ""), "^%s+", ""), "/%s+"," "),"%s/", ""),"//+", ""),"%s%s+", " ")
+		GF_PerCharVariables.searchlfgtext = gsub(gsub(gsub(gsub(gsub(gsub(gsub(newText..string.sub(GF_PerCharVariables.searchlfgtext, endOfFilter+1), "^[/ ]+", ""), "[/ ]+$", ""), "^[/ ]+", ""),"//+", ""), "/%s+"," "),"%s+/", " "),"%s%s+", " ")
 		GF_LFGDescriptionEditBox:SetText(GF_PerCharVariables.searchlfgtext)
-	else
-		if GF_PerCharVariables.lfgauto and (string.find(string.upper(GF_PerCharVariables.searchlfgtext), "LF%d+M") or string.find(string.upper(GF_PerCharVariables.searchlfgtext), "LFM")) then
-			GF_PerCharVariables.searchlfgtext = gsub(GF_PerCharVariables.searchlfgtext, "[Ll[Ff]+%d+[Mm]", "LFM")
-			local newText = "LF"..maxGroupSize-GF_NumPartyMembers.."M"
-			GF_LFGDescriptionEditBox:SetText(gsub(GF_PerCharVariables.searchlfgtext, "[Ll][Ff][Mm]", newText))
-		end
 	end
 end
 function GF_ShowDropdownList(bframe)
@@ -2331,30 +2334,32 @@ function GF_ShowDropdownList(bframe)
 			end
 		end
 	end
-	if getglobal("GF_"..bframe..(GF_NumLFGSearchButtons+1)) and getglobal("GF_"..bframe..(GF_NumLFGSearchButtons+1)):IsShown() then for i=1, 50 do if getglobal("GF_"..bframe..(GF_NumLFGSearchButtons+i)) then getglobal("GF_"..bframe..(GF_NumLFGSearchButtons+i)):Hide() else break end end end
-	getglobal("GF_"..bframe.."1"):SetPoint("TOPLEFT", getglobal("GF_"..bframe):GetName(), "TOPLEFT", 6, -4)
-	if (bframe == "SearchList" and GF_NumLFGSearchButtons <= 10) or (bframe ~= "SearchList" and GF_NumLFGSearchButtons <= 6) then
-		for i=1, GF_NumLFGSearchButtons do
-			getglobal("GF_"..bframe..i):SetPoint("TOP", getglobal("GF_"..bframe..(i-1)), "BOTTOM", 0, 6)
+	if GF_NumLFGSearchButtons > 0 then
+		if getglobal("GF_"..bframe..(GF_NumLFGSearchButtons+1)) and getglobal("GF_"..bframe..(GF_NumLFGSearchButtons+1)):IsShown() then for i=1, 50 do if getglobal("GF_"..bframe..(GF_NumLFGSearchButtons+i)) then getglobal("GF_"..bframe..(GF_NumLFGSearchButtons+i)):Hide() else break end end end
+		getglobal("GF_"..bframe.."1"):SetPoint("TOPLEFT", getglobal("GF_"..bframe):GetName(), "TOPLEFT", 6, -4)
+		if (bframe == "SearchList" and GF_NumLFGSearchButtons <= 10) or (bframe ~= "SearchList" and GF_NumLFGSearchButtons <= 6) then
+			for i=1, GF_NumLFGSearchButtons do
+				getglobal("GF_"..bframe..i):SetPoint("TOP", getglobal("GF_"..bframe..(i-1)), "BOTTOM", 0, 6)
+			end
+			getglobal("GF_"..bframe):SetHeight(12 + GF_NumLFGSearchButtons * 18)
+			getglobal("GF_"..bframe):SetWidth(width + 45)
+			getglobal("GF_"..bframe):ClearAllPoints()
+			getglobal("GF_"..bframe):SetPoint("TOPLEFT", getglobal("GF_"..bframe.."Dropdown"), "BOTTOMLEFT", 0, 4)
+		else
+			getglobal("GF_"..bframe.."2"):SetPoint("TOPLEFT", getglobal("GF_"..bframe):GetName(), "TOPLEFT", (width + 51), -4)
+			for i=3, GF_NumLFGSearchButtons, 2 do
+				getglobal("GF_"..bframe..i):SetPoint("TOP", getglobal("GF_"..bframe..(i-2)), "BOTTOM", 0, 6)
+			end
+			for i=4, GF_NumLFGSearchButtons, 2 do
+				getglobal("GF_"..bframe..i):SetPoint("TOP", getglobal("GF_"..bframe..(i-2)), "BOTTOM", 0, 6)
+			end
+			getglobal("GF_"..bframe):SetHeight(12 + ceil(GF_NumLFGSearchButtons/2) * 18)
+			getglobal("GF_"..bframe):SetWidth((width + 45) * 2)
+			getglobal("GF_"..bframe):ClearAllPoints()
+			getglobal("GF_"..bframe):SetPoint("TOPLEFT", getglobal("GF_"..bframe.."Dropdown"), "BOTTOMLEFT", -1*(width + 45), 4)
 		end
-		getglobal("GF_"..bframe):SetHeight(12 + GF_NumLFGSearchButtons * 18)
-		getglobal("GF_"..bframe):SetWidth(width + 45)
-		getglobal("GF_"..bframe):ClearAllPoints()
-		getglobal("GF_"..bframe):SetPoint("TOPLEFT", getglobal("GF_"..bframe.."Dropdown"), "BOTTOMLEFT", 0, 4)
-	else
-		getglobal("GF_"..bframe.."2"):SetPoint("TOPLEFT", getglobal("GF_"..bframe):GetName(), "TOPLEFT", (width + 51), -4)
-		for i=3, GF_NumLFGSearchButtons, 2 do
-			getglobal("GF_"..bframe..i):SetPoint("TOP", getglobal("GF_"..bframe..(i-2)), "BOTTOM", 0, 6)
-		end
-		for i=4, GF_NumLFGSearchButtons, 2 do
-			getglobal("GF_"..bframe..i):SetPoint("TOP", getglobal("GF_"..bframe..(i-2)), "BOTTOM", 0, 6)
-		end
-		getglobal("GF_"..bframe):SetHeight(12 + ceil(GF_NumLFGSearchButtons/2) * 18)
-		getglobal("GF_"..bframe):SetWidth((width + 45) * 2)
-		getglobal("GF_"..bframe):ClearAllPoints()
-		getglobal("GF_"..bframe):SetPoint("TOPLEFT", getglobal("GF_"..bframe.."Dropdown"), "BOTTOMLEFT", -1*(width + 45), 4)
+		if GF_NumLFGSearchButtons > 0 then getglobal("GF_"..bframe):Show() end
 	end
-	if GF_NumLFGSearchButtons > 0 then getglobal("GF_"..bframe):Show() end
 end
 function GF_AddRemoveSearch(bframe,entryname,add)
 	GF_PerCharVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText()
@@ -2431,7 +2436,7 @@ function GF_AddRemoveSearch(bframe,entryname,add)
 				else
 					GF_PerCharVariables.searchlfgtext = GF_BUTTONS_LIST[frameName][i][1]..gsub(GF_PerCharVariables.searchlfgtext, "^%d+", "")
 				end				
-				if not add then GF_PerCharVariables.searchlfgtext = gsub(gsub(gsub(gsub(GF_PerCharVariables.searchlfgtext, "^%d+", ""),"for "..GF_BUTTONS_LIST[frameName][i][1],""),"need "..GF_BUTTONS_LIST[frameName][i][1],""),GF_BUTTONS_LIST[frameName][i][1],"") GF_LFGLFM:Hide() end
+				if not add then GF_PerCharVariables.searchlfgtext = gsub(gsub(gsub(gsub(gsub(GF_PerCharVariables.searchlfgtext, "^%d+", ""),"for "..GF_BUTTONS_LIST[frameName][i][1],""),"need "..GF_BUTTONS_LIST[frameName][i][1],""),GF_BUTTONS_LIST[frameName][i][1],""),"/ "," ") GF_LFGLFM:Hide() end
 				GF_LFGDescriptionEditBox:SetText(GF_PerCharVariables.searchlfgtext)
 
 -- Instead of just throwing out a bunch of words and then fixing them. I could just detect the words and make an array and then rewrite the sentence
@@ -2439,7 +2444,7 @@ function GF_AddRemoveSearch(bframe,entryname,add)
 				--GF_LFGDescriptionEditBox:SetText(GF_PerCharVariables.searchlfgtext)
 			end
 		end
-		if frameName == "LFGSize" then GF_FixLFGStrings(true) else GF_FixLFGStrings() end
+		if frameName == "LFGSize" then GF_FixLFGStrings(true) else GF_LFGDescriptionEditBox:SetText(gsub(gsub(GF_PerCharVariables.searchlfgtext, "%(HC%)", ""),"%s%s+"," ")) GF_FixLFGStrings() end
 	end
 end
 function GF_GetCurrentLFGLFMData()
@@ -2721,7 +2726,7 @@ function GF_FindGroupsAndDisplayCustomChatMessages(event) -- Chat Filters and Gr
 			GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,nil}
 			return nil
 		else
-			for name,_ in string.gfind(arg1, "(%w+)") do
+			for name in string.gfind(arg1, "(%w+)") do
 				if GF_SavedVariables.friendsToRemove[name] then
 					GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,nil}
 					return nil
@@ -2816,7 +2821,7 @@ function GF_GetTypes(arg1, showanyway)
 	lfs = 1 -- To detect space/lf##m/letter(eg " lf15mbwl" = lfm bwl)
 	while true do lfs,lfe,wordString = string.find(arg1," ([lk]f?%s?%d+m)[%p%s]",lfs) if wordString then arg1 = string.sub(arg1,1,lfs).."lfm "..string.sub(arg1,lfs+string.len(wordString)+1) lfs = lfs + 4 GF_MessageData.foundLFM = 4 GF_MessageData.foundGuildExclusion = 3 GF_MessageData.foundTradesExclusion = 3 if showanyway == true then print("lf##m lfm 4 .. guildex 3... tradesex 3") end else break end end
 	lfs = 1 -- To detect space/number+/punctuation/number+/space for groups
-	while true do lfs,lfe,wordString,tempString = string.find(arg1,"[%p%s](%d+([=/])%d+) ",lfs) if wordString then if tempString == "=" then GF_MessageData.foundLFM = 2 lfs = lfe else arg1 = string.sub(arg1,1,lfs).."group"..string.sub(arg1,lfe) lfs = lfs + 6 end else break end end
+	while true do lfs,lfe,wordString,tempString = string.find(arg1,"[%p%s](%d%d?([=/])%d%d?) ",lfs) if wordString then if tempString == "=" then GF_MessageData.foundLFM = 2 lfs = lfe else arg1 = string.sub(arg1,1,lfs).."group"..string.sub(arg1,lfe) lfs = lfs + 6 end else break end end
 	lfs,lfe,wordString = string.find(arg1,"%d?%s?\-?([\+±])\-?%s?%d?")
 	if lfs then -- To detect "+- or ±"
 		if wordString == "±" then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 1 if showanyway == true then print("± trade 1") end
@@ -2924,7 +2929,7 @@ function GF_GetTypes(arg1, showanyway)
 	end
 	lfs = 2 -- To fix single words
 	while true do lfs,lfe,wordString,tempString = string.find(arg1, "(.-)([%s%p%d]+)",lfs) if not wordString then break elseif GF_WORD_FIX_SINGLE_WORD[wordString] then arg1 = string.sub(arg1,1,lfs-1)..GF_WORD_FIX_SINGLE_WORD[wordString]..tempString..string.sub(arg1,lfe) lfs = lfs + string.len(GF_WORD_FIX_SINGLE_WORD[wordString]) elseif GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString] then arg1 = string.sub(arg1,1,lfs-1)..GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString][1]..tempString..string.sub(arg1,lfe) lfs = lfs + string.len(GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString][1]) if languageID[GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString][2]] then languageID[GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString][2]] = languageID[GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString][2]] + 1 else languageID[GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString][2]] = 1 end else lfs = lfe+1 end end
-	
+
 	lfs = 1 -- To detect space/letter/number/letter/space combinations(eg " g2g " = gtg)
 	while true do lfs,lfe,wordString = string.find(arg1," (w?%a%s?%d%s?%ab?)[%p%s]",lfs) if wordString then wordString = gsub(wordString," ","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = string.sub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..string.sub(arg1,lfe) end lfs = lfs + string.len(wordString) + 1 else break end end
 	lfs = 1 -- To detect space/word/number+/space combinations(eg " k10" = lowerkarazhan)
@@ -2996,6 +3001,10 @@ function GF_GetTypes(arg1, showanyway)
 			break
 		end
 	end
+	lfs = 1 -- To detect word/letter/number combinations(eg "BMx2" = bm x2)
+	while true do lfs,lfe,wordString,tempString = string.find(arg1," (%a+)(%a%d+)[%p%s]",lfs) if wordString then if GF_WORD_LETTER_NUMBER_BEFORE_AFTER[tempString] and (GF_GROUP_IDS[wordString] or GF_LFMLFG_PREFIX_GUILD[wordString]) then arg1 = string.sub(arg1,1,lfs)..wordString.." "..GF_WORD_LETTER_NUMBER_BEFORE_AFTER[tempString].." "..string.sub(arg1,lfe) lfs = lfs + string.len(wordString..GF_WORD_LETTER_NUMBER_BEFORE_AFTER[tempString]) + 2 else lfs = lfe end else break end end
+	lfs = 1 -- To detect word/letter/number combinations(eg "BMx2" = bm x2)
+	while true do lfs,lfe,wordString,tempString = string.find(arg1," (%d+%a)(%a+)[%p%s]",lfs) if wordString then if GF_WORD_LETTER_NUMBER_BEFORE_AFTER[wordString] and GF_GROUP_IDS[tempString] then arg1 = string.sub(arg1,1,lfs)..GF_WORD_LETTER_NUMBER_BEFORE_AFTER[wordString].." "..tempString.." "..string.sub(arg1,lfe) lfs = lfs + string.len(GF_WORD_LETTER_NUMBER_BEFORE_AFTER[wordString]..tempString) + 2 else lfs = lfe end else break end end
 
 -- Find most common language
 	lfs = 0
@@ -3197,7 +3206,7 @@ function GF_GetTypes(arg1, showanyway)
 				if tempVal <= 4 and GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]] then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]] if showanyway == true then print("first two? trades "..GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]]) end
 				elseif not lfs then	GF_MessageData.foundTrades = GF_MessageData.foundTrades + 1.25 if showanyway == true then print("tradeonly? trades 1.25") end end
 			end
-		elseif tempVal > 2 then
+		elseif tempVal > 1 then
 			if tempVal <= 4 and GF_LFM_AFTER[wordTable[tempVal-1]..wordTable[tempVal]] then GF_MessageData.foundLFM = 2 if showanyway == true then print("word lfmafter lfm 2") end
 			elseif tempVal <= 4 and GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]] then GF_MessageData.foundTrades = GF_MessageData.foundTrades + GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]] if showanyway == true then print("first two trades "..GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]]) end
 			elseif not lfs then	GF_MessageData.foundTrades = GF_MessageData.foundTrades + 1.25 if showanyway == true then print("tradeonly trades 1.25") end end

@@ -2280,8 +2280,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Anchors>
 										<Scripts>
 											<OnClick>
-													GF_PerCharVariables.lfgauto = this:GetChecked();
-													GF_FixLFGStrings()
+												GF_PerCharVariables.lfgauto = this:GetChecked();
+												GF_FixLFGStrings(true)
 											</OnClick>
 											<OnLoad>
 												getglobal(this:GetName().."TextLabel"):SetText(GF_AUTO);
@@ -2298,6 +2298,10 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Anchors>
 										<Scripts>
 											<OnClick>
+												GF_LFGLFM:Hide()
+												GF_LFGDungeon:Hide()
+												GF_LFGRaid:Hide()
+												GF_LFGRole:Hide()
 												if not GF_LFGSize:IsShown() then
 													GF_ShowDropdownList("LFGSize")
 												else
@@ -2360,6 +2364,10 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Anchors>
 										<Scripts>
 											<OnClick>
+												GF_LFGSize:Hide()
+												GF_LFGDungeon:Hide()
+												GF_LFGRaid:Hide()
+												GF_LFGRole:Hide()
 												if not GF_LFGLFM:IsShown() then
 													GF_ShowDropdownList("LFGLFM")
 												else
@@ -2425,6 +2433,10 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Anchors>
 										<Scripts>
 											<OnClick>
+												GF_LFGSize:Hide()
+												GF_LFGLFM:Hide()
+												GF_LFGRaid:Hide()
+												GF_LFGRole:Hide()
 												if not GF_LFGDungeon:IsShown() then
 													GF_ShowDropdownList("LFGDungeon")
 												else
@@ -2490,6 +2502,10 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Anchors>
 										<Scripts>
 											<OnClick>
+												GF_LFGSize:Hide()
+												GF_LFGLFM:Hide()
+												GF_LFGDungeon:Hide()
+												GF_LFGRole:Hide()
 												if not GF_LFGRaid:IsShown() then
 													GF_ShowDropdownList("LFGRaid")
 												else
@@ -2555,6 +2571,10 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Anchors>
 										<Scripts>
 											<OnClick>
+												GF_LFGSize:Hide()
+												GF_LFGLFM:Hide()
+												GF_LFGDungeon:Hide()
+												GF_LFGRaid:Hide()
 												if not GF_LFGRole:IsShown() then
 													GF_ShowDropdownList("LFGRole")
 												else
@@ -4638,6 +4658,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				GF_LFGFrame:Hide()
 				GF_MessageFrame:Hide()
 				GF_LogFilterDropdownMenu:Hide()
+				GF_LogChannelFilterDropdownMenu:Hide()
 				GF_GroupFilterDropdownMenu:Hide()
 				GF_ChatFilterDropdownMenu:Hide()
 				GF_LFGHardCoreDropdown:Hide()
