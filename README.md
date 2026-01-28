@@ -1,7 +1,7 @@
 # GroupFinder
 Group finder Addon for Vanilla Wow 1.12.1 based on the CallToArms addon(with Turtle WoW support).  
 
-NOTE: To people who might be interested in this addon. This isn't simply a group finder that searches world chat for groups. This is a massive chat filtering tool.  
+This isn't simply a group finder that searches world chat for groups. This is a massive chat filtering tool that prevents chat spam and allows you to see only what you want to see. Also comes with unlimited Blacklist/Ignore, Chat Logs, Whisper Logs, and a Group Maker tool.  
 
 >[Auto Filter] - Shows only the groups near your level(default: 5 level difference).  
 [Play Sound] - Plays a sound when a group matches your filters.  
