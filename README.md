@@ -10,7 +10,7 @@ This isn't simply a group finder that searches world chat for groups. This is a 
 [Group Filters Dungeons/Raids/Quests/Other] - Shows/Hides groups for Dungeons, Raids, Quests, or Others.  
 ["Keywords"] - Enter text to filter groups. For multiple searches separate with commas. The dropdown auto-populates based on your level.  
 [Chat Filters] - Allows you to show/hide Guild Recruitment, Group, Trade, and Chat messages. Group messages can also be shown next to the minimap. All messages are recorded in the 'Log'.  
-[Auto /Who] - Searches for player levels through '/who' or through the friendslist(Turtle WoW limits /who to every ~30 seconds).  
+[Auto /Who] - Searches for player levels through '/who' or through the friendslist(Turtle WoW limits /who).  
 
 >[Announce Group] - Sends your LFG message to world chat and repeats every 2-30 minutes(Announce Timer).  
 [LFG Button] - Toggles a menu to generate a LFG message automatically. Just select LFM/LFG, Dungeon/Raid, roles, and group size.  
