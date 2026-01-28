@@ -1942,6 +1942,10 @@ function GF_WhisperHistoryUpdateFrame(name)
 			if GF_WhisperLogData[GF_RealmName][i+GF_WhisperLogOffset] == GF_WhisperLogCurrentButtonName then GF_WhisperHistoryButtonPressed(i,true,true) end
 		end
 	end
+	if GF_WhisperLogCurrentButtonID > 1 and getglobal("GF_WhisperHistoryButton"..GF_WhisperLogCurrentButtonID):GetText() ~= GF_WhisperLogCurrentButtonName then
+		getglobal("GF_WhisperHistoryButton"..GF_WhisperLogCurrentButtonID):UnlockHighlight()
+		getglobal("GF_WhisperHistoryButtonCheckButton"..GF_WhisperLogCurrentButtonID):Hide()
+	end
 	if getn(GF_WhisperLogData[GF_RealmName]) > 95 then table.remove(GF_WhisperLogData[GF_RealmName],96) end
 end
 function GF_WhisperHistoryDisplayLog(name)

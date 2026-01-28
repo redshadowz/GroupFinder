@@ -402,6 +402,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				<Scripts>
 					<OnClick>
 						GF_SavedVariables = {}
+						GF_PerCharVariables = {}
 						GF_LoadVariables()
 						GF_LoadSettings()
 						this:GetParent():Hide()
@@ -3905,7 +3906,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										<DisabledTexture file="Interface\Buttons\UI-SpellbookIcon-NextPage-Disabled"/>
 										<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD"/>
 									</Button>
-
 								</Frames>
 							</Frame>
 							<Button name="GF_ConvertLogMessagesToURL" inherits="GF_ButtonTemplate" text="GF_LOG_CONVERT_URL">
