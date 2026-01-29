@@ -2909,7 +2909,7 @@ function GF_GetTypes(arg1, showanyway)
 				table.insert(wordTable,strchar(lfs)) tempVal=tempVal+1 for j=1,250 do if lfs ~= strbyte(arg1,tempVal+j) then tempVal=tempVal+j-1 break end end
 			end
 		elseif lfe == 32 or lfe == 46 then -- Space or Period
-			if (strbyte(arg1,tempVal-1) == 32 or strbyte(arg1,tempVal-1) == 46 or strbyte(arg1,tempVal-1) == 60) and (strbyte(arg1,tempVal-1) == 32 or strbyte(arg1,tempVal-1) == 46 or strbyte(arg1,tempVal-1) == 60) then
+			if (strbyte(arg1,tempVal-1) == 32 or strbyte(arg1,tempVal-1) == 46 or strbyte(arg1,tempVal-1) == 60) and (strbyte(arg1,tempVal+3) == 32 or strbyte(arg1,tempVal+3) == 46 or strbyte(arg1,tempVal+3) == 60) then
 				table.insert(wordTable,strchar(lfs)) table.insert(wordTable,strchar(strbyte(arg1,tempVal+2))) tempVal=tempVal+2 for j=3,250,2 do if strbyte(arg1,tempVal+j) ~= 32 and strbyte(arg1,tempVal+j) ~= 46 and strbyte(arg1,tempVal+j) ~= 62 then tempVal=tempVal+j-3 break else table.insert(wordTable,strchar(strbyte(arg1,tempVal+j-1))) end end
 			else
 				table.insert(wordTable,strchar(lfs))
