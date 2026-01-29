@@ -69,10 +69,12 @@ local GF_RequestWhoDataPeriodicallyTimer	= 30
 GF_PlayerMessages							= {}
 GF_IncomingMessagePrune						= 0
 local GF_PreviousMessage					= {}
+local GF_PlayerSystemMessage				= {}
 local GF_MiniMapMessages					= {0,0,0,0,0,0,{}}
 local GF_LogMessageCodes = { GF_LOGGED_GROUPS, GF_LOGGED_NEW, GF_LOGGED_FILTERED, GF_LOGGED_CHAT, GF_LOGGED_TRADES, GF_LOGGED_LOOT, GF_LOGGED_SPAM, GF_LOGGED_BLACKLIST, GF_LOGGED_BELOWLEVEL, GF_LOGGED_ME, GF_LOGGED_GUILD }
 
 local GF_ChatChannelsGroups					= {}
+local GF_ChatJoinedChannels					= {}
 GF_WhisperLogCurrentButtonID				= 0
 GF_WhisperLogCurrentButtonName				= ""
 GF_WhisperLogData							= {}
@@ -257,7 +259,6 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 	this:RegisterEvent("PLAYER_ENTERING_WORLD")
 	this:RegisterEvent("RAID_ROSTER_UPDATE")
 	this:RegisterEvent("WHO_LIST_UPDATE")
-	this:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 	this:RegisterEvent("PLAYER_LEAVING_WORLD")
 	this:RegisterEvent("GUILD_ROSTER_UPDATE")
 	this:RegisterEvent("FRIENDLIST_UPDATE")
@@ -349,6 +350,16 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 	function ChatFrame_RemoveChannel(chatFrame,channel)
 		old_ChatFrame_RemoveChannel(chatFrame,channel)
 		GF_ChatGetChannelsGroups()
+	end
+	local old_JoinChannelByName = JoinChannelByName	
+	function JoinChannelByName(channel,a,b,c)
+		old_JoinChannelByName(channel,a,b,c)
+		GF_ChatJoinedChannels[string.lower(channel)] = true
+	end
+	local old_LeaveChannelByName = LeaveChannelByName	
+	function LeaveChannelByName(channel)
+		old_LeaveChannelByName(channel)
+		GF_ChatJoinedChannels[string.lower(channel)] = nil
 	end
 end
 function GF_HandleItemRefLinks(link,text,button)
@@ -760,6 +771,11 @@ function GF_ChatGetChannelsGroups()
 		end
 		if GF_PlayingOnTurtle and getglobal("TW_HARDCORE_CHAT"..i) == 1 then GF_ChatChannelsGroups[i].group["HARDCORE"] = true end
 	end
+	GF_ChatJoinedChannels = {}
+	local chanList = { GetChannelList() }
+	for i=1, getn(chanList) do
+		GF_ChatJoinedChannels[string.lower(chanList[i])] = true
+	end
 end
 function GF_ChatCheckFilters(logType,arg1,event)
 	if logType == 7 or logType == 8 or logType == 9 then
@@ -844,7 +860,7 @@ function GF_AddLogMessage(arg1,logcode,add,arg2,arg8,arg9,event)
 			elseif GF_WhoTable[GF_RealmName][arg2] then 
 				arg1 = "["..date("%H:%M").."] "..GF_LogMessageCodes[logcode].."|cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][arg2][2]] or "9d9d9d").."|Hplayer:"..arg2.."|h["..arg2..", "..GF_WhoTable[GF_RealmName][arg2][1].."]:|h|r"..arg1
 			elseif arg2 == "SYSTEM" then
-				arg1 = "["..date("%H:%M").."] "..GF_LogMessageCodes[logcode].."["..arg2.."]"..arg1
+				arg1 = "["..date("%H:%M").."] "..GF_LogMessageCodes[logcode]..string.sub(arg1,2)
 			else
 				arg1 = "["..date("%H:%M").."] "..GF_LogMessageCodes[logcode].."|cff9d9d9d|Hplayer:"..arg2.."|h["..arg2.."]:|h|r"..arg1
 			end
@@ -863,7 +879,7 @@ function GF_AddLogMessage(arg1,logcode,add,arg2,arg8,arg9,event)
 	end
 	if GF_WhisperLogCurrentButtonID == 0 and GF_LogFilters[logcode] and GF_LogFilters[event] then
 		if GF_ConvertMessagesToLinks then
-			local _,_,startString,endString = string.find(arg1, "(.-|Hplayer.-|h|r )(.*)")
+			local _,_,startString,endString = string.find(arg1, "(.-%].-|Hplayer.-|h|r )(.*)")
 			if startString then
 				endString = gsub(gsub(gsub(gsub(endString, "|[cC]%x+|%w+:%w+:[%w:]+|[h]", ""), "|[cC]%x+%p+%w+:(.-)|h.-|h|r", "%1"), "|[cC]%x+", ""), "|[hHrR]?", "")
 				GF_Log:AddMessage(startString.."|cffccccff|Hurl:"..endString.."|h"..endString.."|h|r", GF_TextColors[event][1], GF_TextColors[event][2], GF_TextColors[event][3])
@@ -886,7 +902,7 @@ function GF_DisplayLog()
 	end
 	if GF_ConvertMessagesToLinks then
 		for i=1, getn(tempHistoryTable) do
-			local _,_,startString,endString = string.find(tempHistoryTable[i][1], "(.-|Hplayer.-|h|r )(.*)")
+			local _,_,startString,endString = string.find(tempHistoryTable[i][1], "(.-%].-|Hplayer.-|h|r )(.*)")
 			if startString then
 				endString = gsub(gsub(gsub(gsub(endString, "|[cC]%x+|%w+:%w+:[%w:]+|[h]", ""), "|[cC]%x+%p+%w+:(.-)|h.-|h|r", "%1"), "|[cC]%x+", ""), "|[hHrR]?", "")
 				GF_Log:AddMessage(startString.."|cffccccff|Hurl:"..endString.."|h"..endString.."|h|r", GF_TextColors[tempHistoryTable[i][3]][1], GF_TextColors[tempHistoryTable[i][3]][2], GF_TextColors[tempHistoryTable[i][3]][3])
@@ -1033,6 +1049,7 @@ end
 function GF_CheckForAnnounce()
 	if GF_AutoAnnounceTimer then
 		GF_AutoAnnounceTimer = GF_AutoAnnounceTimer + 1
+		if not GF_ChatJoinedChannels[string.lower(GF_CHANNEL_NAME)] then GF_TurnOffAnnounce(GF_AUTO_ANNOUNCE_NOT_IN_CHANNEL) return end
 		if GF_LFGDescriptionEditBox:GetText() == "" then GF_TurnOffAnnounce(GF_NOTHING_TO_ANNOUNCE) return end
 		if GF_AutoAnnounceTimer > GF_SavedVariables.announcetimer then
 			GF_AutoAnnounceTimer = 0
@@ -1056,6 +1073,7 @@ function GF_TurnOffAnnounce(messageText)
 	DEFAULT_CHAT_FRAME:AddMessage(messageText, 1, 1, 0.5)
 end
 function GF_TurnOnAnnounce()
+	if not GF_ChatJoinedChannels[string.lower(GF_CHANNEL_NAME)] then GF_TurnOffAnnounce(GF_AUTO_ANNOUNCE_NOT_IN_CHANNEL) return end
 	GF_AutoAnnounceTimer = GF_SavedVariables.announcetimer
 	if UnitIsPartyLeader("player") then GF_WasPartyLeaderBefore = true end
 	GF_AnnounceToLFGButton:SetText(GF_ANNOUNCE_STOP_ANNOUNCE.."-"..GF_SavedVariables.announcetimer)
@@ -1292,8 +1310,6 @@ function GF_OnEvent(event) -- OnEvent, LoadSettings, Bind Keys, Prune Tables
 		GF_UpdateGuildiesList()
 	elseif (event == "FRIENDLIST_UPDATE" and GetNumFriends() ~= GF_CurrentNumFriends) then
 		GF_UpdateFriendsList()
-	elseif event == "ZONE_CHANGED_NEW_AREA" then
-		GF_JoinWorld()
 	elseif event == "PARTY_INVITE_REQUEST" then
 		if GF_RequestInviteTime[arg1] and GF_RequestInviteTime[arg1] > time() then AcceptGroupInvite() end
 	elseif event == "CHAT_MSG_ADDON" and arg1 == "GF" and arg4 ~= UnitName("player") then
@@ -1351,6 +1367,7 @@ function GF_OnEvent(event) -- OnEvent, LoadSettings, Bind Keys, Prune Tables
 		GF_BindKey("SHIFT-G", "GF_SHOW_GROUP")
 		GF_BindKey("SHIFT-L", "GF_SHOW_LOG")
 		SaveBindings(1)
+		GF_JoinWorld()
 	elseif event == "PLAYER_LEAVING_WORLD" then
 		if GF_SavedVariables.mainframestatus == 0 then
 			local _,_,_,xpos, ypos = GF_MainFrame:GetPoint()
@@ -1457,14 +1474,14 @@ function GF_LoadSettings()
 	GF_SetDropdownWidths()
 	GF_SetLFGRoleButtons()
 end
-function GF_JoinWorld(show)
+function GF_JoinWorld()
 	if GF_SavedVariables.joinworld then
 		local chanList = { GetChannelList() }
 		for i=1, getn(chanList) do
 			if string.lower(chanList[i]) == string.lower(GF_CHANNEL_NAME) then return true end
 		end
 		JoinChannelByName(GF_CHANNEL_NAME)
-		if show then ChatFrame_AddChannel(ChatFrame1, GF_CHANNEL_NAME) end
+		ChatFrame_AddChannel(ChatFrame1, GF_CHANNEL_NAME)
 	end
 end
 function GF_BindKey(bindKey, bindName)
@@ -1860,29 +1877,27 @@ end
 function GF_WhisperReceivedAddToWhisperHistoryList(message,name,event)
 	message = gsub(gsub(gsub(gsub(" "..message.." "," (www%d-)%.([_A-Za-z0-9-]+)%.(%S+)%s?", "|cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r ")," (%a+)://(%S+)%s?", "|cffccccff|Hurl:%1://%2|h[%1://%2]|h|r ")," (%a+)%.(%a+)/(%S+)%s?", "|cffccccff|Hurl:%1.%2/%3|h[%1.%2/%3]|h|r ")," ([_A-Za-z0-9-]+)%.([_A-Za-z0-9-]+)%.(%S+)%s?", "|cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r ")
 
-	local playerInitials = string.sub(UnitName("player"),1,1)..string.upper(string.sub(UnitName("player"),-1))
 	if not GF_WhisperLogData[GF_RealmName][name] then
 		GF_WhisperLogData[GF_RealmName][name] = {}
 		if GF_Friends[name] then GF_WhisperLogData[GF_RealmName][name].priority = true end
 	end
 	if event == "WHISPER_INFORM" then
 		if GF_WhoTable[GF_RealmName][name] and GF_WhoTable[GF_RealmName][name][1] then 
-			message = "["..date("%m/%d").."] ["..date("%H:%M").."] |cff"..GF_ClassColors[({UnitClass("player")})[2]].."[|Hplayer:"..UnitName("player").."|h"..playerInitials.."]|h|r [To] |cff"..GF_ClassColors[GF_WhoTable[GF_RealmName][name][2]].."[|Hplayer:"..name.."|h"..name..", "..GF_WhoTable[GF_RealmName][name][1].."]:|h|r"..message
+			message = "|cff"..GF_ClassColors[({UnitClass("player")})[2]].."|Hplayer:"..UnitName("player").."|h".."["..date("%m/%d").."]|h|r ["..date("%H:%M").."] [To] |cff"..GF_ClassColors[GF_WhoTable[GF_RealmName][name][2]].."[|Hplayer:"..name.."|h"..name..", "..GF_WhoTable[GF_RealmName][name][1].."]:|h|r"..message
 		else
-			message = "["..date("%m/%d").."] ["..date("%H:%M").."] |cff"..GF_ClassColors[({UnitClass("player")})[2]].."[|Hplayer:"..UnitName("player").."|h"..playerInitials.."]|h|r [To] |cff".."9d9d9d".."[|Hplayer:"..name.."|h"..name.."]:|h|r"..message
+			message = "|cff"..GF_ClassColors[({UnitClass("player")})[2]].."|Hplayer:"..UnitName("player").."|h".."["..date("%m/%d").."]|h|r ["..date("%H:%M").."] [To] |cff".."9d9d9d".."[|Hplayer:"..name.."|h"..name.."]:|h|r"..message
 		end
 	elseif event == "WHISPER" then
 		if GF_WhoTable[GF_RealmName][name] and GF_WhoTable[GF_RealmName][name][1] then 
-			message = "["..date("%m/%d").."] ["..date("%H:%M").."] |cff"..GF_ClassColors[({UnitClass("player")})[2]].."[|Hplayer:"..UnitName("player").."|h"..playerInitials.."]|h|r |cff"..GF_ClassColors[GF_WhoTable[GF_RealmName][name][2]].."[|Hplayer:"..name.."|h"..name..", "..GF_WhoTable[GF_RealmName][name][1].."]:|h|r"..message
+			message = "|cff"..GF_ClassColors[({UnitClass("player")})[2]].."|Hplayer:"..UnitName("player").."|h".."["..date("%m/%d").."]|h|r ["..date("%H:%M").."] |cff"..GF_ClassColors[GF_WhoTable[GF_RealmName][name][2]].."[|Hplayer:"..name.."|h"..name..", "..GF_WhoTable[GF_RealmName][name][1].."]:|h|r"..message
 		else
-			message = "["..date("%m/%d").."] ["..date("%H:%M").."] |cff"..GF_ClassColors[({UnitClass("player")})[2]].."[|Hplayer:"..UnitName("player").."|h"..playerInitials.."]|h|r |cff".."9d9d9d".."[|Hplayer:"..name.."|h"..name.."]:|h|r"..message
+			message = "|cff"..GF_ClassColors[({UnitClass("player")})[2]].."|Hplayer:"..UnitName("player").."|h".."["..date("%m/%d").."]|h|r ["..date("%H:%M").."] |cff".."9d9d9d".."[|Hplayer:"..name.."|h"..name.."]:|h|r"..message
 		end
 	elseif event == "GUILD" or event == "OFFICER" then
-		if event == "OFFICER" then playerInitials = "O]["..playerInitials end
 		if GF_WhoTable[GF_RealmName][name] and GF_WhoTable[GF_RealmName][name][1] and GF_WhoTable[GF_RealmName][name][2] then 
-			message = "["..date("%m/%d").."] ["..date("%H:%M").."] |cff"..GF_ClassColors[({UnitClass("player")})[2]].."[|Hplayer:"..UnitName("player").."|h"..playerInitials.."]|h|r [To] |cff"..GF_ClassColors[GF_WhoTable[GF_RealmName][name][2]].."[|Hplayer:"..name.."|h"..name..", "..GF_WhoTable[GF_RealmName][name][1].."]:|h|r"..message
+			message = "|cff"..GF_ClassColors[({UnitClass("player")})[2]].."|Hplayer:"..UnitName("player").."|h".."["..date("%m/%d").."]|h|r ["..date("%H:%M").."] "..GF_TextBypass[event].." |cff"..GF_ClassColors[GF_WhoTable[GF_RealmName][name][2]].."[|Hplayer:"..name.."|h"..name..", "..GF_WhoTable[GF_RealmName][name][1].."]:|h|r"..message
 		else
-			message = "["..date("%m/%d").."] ["..date("%H:%M").."] |cff"..GF_ClassColors[({UnitClass("player")})[2]].."[|Hplayer:"..UnitName("player").."|h"..playerInitials.."]|h|r [To] |cff".."9d9d9d".."[|Hplayer:"..name.."|h"..name.."]:|h|r"..message
+			message = "|cff"..GF_ClassColors[({UnitClass("player")})[2]].."|Hplayer:"..UnitName("player").."|h".."["..date("%m/%d").."]|h|r ["..date("%H:%M").."] "..GF_TextBypass[event].." |cff".."9d9d9d".."[|Hplayer:"..name.."|h"..name.."]:|h|r"..message
 		end
 		table.insert(GF_WhisperLogData[GF_RealmName]["Guild"],1,{message,event})
 		if getn(GF_WhisperLogData[GF_RealmName]["Guild"]) > 128 then table.remove(GF_WhisperLogData[GF_RealmName]["Guild"],129) end
@@ -1898,7 +1913,7 @@ function GF_WhisperReceivedAddToWhisperHistoryList(message,name,event)
 	if getn(GF_LogHistory[GF_RealmName]) > 500 then table.remove(GF_LogHistory[GF_RealmName],501) end
 	if GF_WhisperLogCurrentButtonID < 2 or name == getglobal("GF_WhisperHistoryButton"..GF_WhisperLogCurrentButtonID):GetText() then
 		if GF_ConvertMessagesToLinks then
-			local _,_,startString,endString = string.find(message, "(.-|Hplayer.-|h|r )(.*)")
+			local _,_,startString,endString = string.find(message, "(.-%].-|Hplayer.-|h|r )(.*)")
 			if startString then
 				endString = gsub(gsub(gsub(gsub(endString, "|[cC]%x+|%w+:%w+:[%w:]+|[h]", ""), "|[cC]%x+%p+%w+:(.-)|h.-|h|r", "%1"), "|[cC]%x+", ""), "|[hHrR]?", "")
 				GF_Log:AddMessage(startString.."|cffccccff|Hurl:"..endString.."|h"..endString.."|h|r", GF_TextColors[event][1], GF_TextColors[event][2], GF_TextColors[event][3])
@@ -1923,8 +1938,10 @@ function GF_WhisperHistoryUpdateFrame(name)
 	if name then
 		if nameWasPriority then
 			table.insert(GF_WhisperLogData[GF_RealmName],2,name)
+			GF_WhisperLogOffset = 0
 		else
 			table.insert(GF_WhisperLogData[GF_RealmName],2+numPriority,name)
+			GF_WhisperLogOffset = math.floor(numPriority/18) * 18
 		end
 	end
 	for i=2, 19 do
@@ -1952,7 +1969,7 @@ function GF_WhisperHistoryDisplayLog(name)
 	GF_Log:SetMaxLines(128)
 	if GF_ConvertMessagesToLinks then
 		for i=getn(GF_WhisperLogData[GF_RealmName][name]), 1, -1 do
-			local _,_,startString,endString = string.find(GF_WhisperLogData[GF_RealmName][name][i][1], "(.-|Hplayer.-|h|r )(.*)")
+			local _,_,startString,endString = string.find(GF_WhisperLogData[GF_RealmName][name][i][1], "(.-%].-|Hplayer.-|h|r )(.*)")
 			if startString then
 				endString = gsub(gsub(gsub(gsub(endString, "|[cC]%x+|%w+:%w+:[%w:]+|[h]", ""), "|[cC]%x+%p+%w+:(.-)|h.-|h|r", "%1"), "|[cC]%x+", ""), "|[hHrR]?", "")
 				GF_Log:AddMessage(startString.."|cffccccff|Hurl:"..endString.."|h"..endString.."|h|r", GF_TextColors[GF_WhisperLogData[GF_RealmName][name][i][2]][1], GF_TextColors[GF_WhisperLogData[GF_RealmName][name][i][2]][2], GF_TextColors[GF_WhisperLogData[GF_RealmName][name][i][2]][3])
@@ -1967,8 +1984,9 @@ function GF_WhisperHistoryDisplayLog(name)
 	end
 end
 function GF_WhisperHistoryPriorityListCheckButtonPressed(id,name,priority)
-	GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][id]].priority = priority
+	GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][id+GF_WhisperLogOffset]].priority = priority
 	GF_WhisperHistoryUpdateFrame(name)
+	-- 2 is first position, so if page 
 end
 
 function GF_UpdateBlackListItems() -- Blacklist functions
@@ -2671,13 +2689,16 @@ end
 function GF_FindGroupsAndDisplayCustomChatMessages(event) -- Chat Filters and Group Finders
 	event = gsub(event,"CHAT_MSG_","")
 	if not GF_TextColors[event] or string.lower(arg9) == "lft" then	return true end
-	if arg2 then arg2 = gsub(arg2,".* ","") end
+	if arg2 then arg2 = gsub(arg2,".* ","") else arg2 = "SYSTEM" end
 	if GF_TextBypass[event] then
 		if GF_SavedVariables.showformattedchat then return nil else return true end
 	elseif GF_PreviousMessage[arg2] and GF_PreviousMessage[arg2][1] == arg1 and GF_PreviousMessage[arg2][2] > GetTime() then
 		if GF_PreviousMessage[arg2][3] then return true end
 	elseif event == "EMOTE" or event == "TEXT_EMOTE" then
 		if GF_BlackList[GF_RealmName][arg2] and not GF_PlayersCurrentlyInGroup[arg2] and not GF_Friends[arg2] and not GF_Guildies[arg2] then
+			GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,nil}
+			return nil
+		elseif GF_SavedVariables.systemfilter and GF_CheckEmoteFilter(arg1) then
 			GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,nil}
 			return nil
 		elseif GF_CheckForSpam(arg1,arg2) then
@@ -2707,7 +2728,7 @@ function GF_FindGroupsAndDisplayCustomChatMessages(event) -- Chat Filters and Gr
 		if arg1 == ERR_FRIEND_WRONG_FACTION then
 			GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,nil}
 			return nil
-		elseif string.find(arg1, GF_WHO_MSG_SYSTEM) then
+		elseif string.find(arg1, "^%d+") then
 			for i=1, GetNumWhoResults() do
 				local name,guild,level,_,class = GetWhoInfo(i)
 				if GF_Classes[class] then
@@ -2729,10 +2750,29 @@ function GF_FindGroupsAndDisplayCustomChatMessages(event) -- Chat Filters and Gr
 			end
 			GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,true}
 			return true
-		elseif GF_SavedVariables.systemfilter and GF_CheckSystemMessageFilter(arg1) then
-			GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,nil}
-			return nil
 		else
+			if GF_SavedVariables.systemfilter then
+				if GF_CheckServerMessageFilter(arg1) then
+					GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,nil}
+					return nil
+				elseif GF_CheckSystemMessageFilter(arg1) then
+					for i=1, getn(GF_SystemMessageFilters) do
+						local lfs,lfe,wordString = string.find(arg1, GF_SystemMessageFilters[i])
+						if wordString then
+							if not GF_PlayerSystemMessage[wordString] then
+								GF_PlayerSystemMessage[wordString] = { [i] = GetTime() + 5 }
+								break
+							elseif not GF_PlayerSystemMessage[wordString][i] or GF_PlayerSystemMessage[wordString][i] < GetTime() then
+								GF_PlayerSystemMessage[wordString][i] = GetTime() + 5
+								break
+							else
+								GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,nil}
+								return nil
+							end
+						end
+					end
+				end
+			end
 			for name in string.gfind(arg1, "(%w+)") do
 				if GF_SavedVariables.friendsToRemove[name] then
 					GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,nil}
@@ -2740,13 +2780,14 @@ function GF_FindGroupsAndDisplayCustomChatMessages(event) -- Chat Filters and Gr
 				end
 			end
 			for i=1, getn(GF_HardcoreMessages) do
-				local lfs,lfe,wordString,tempString = string.find(arg1, GF_HardcoreMessages[i])
+				local lfs,lfe,wordString,tempString,tempVal = string.find(arg1, GF_HardcoreMessages[i])
 				if wordString then
+					if tempVal and GF_WhoTable[GF_RealmName][tempString] then GF_WhoTable[GF_RealmName][tempString][1] = tonumber(tempVal) end
 					lfs,lfe = string.find(wordString, tempString.." ",lfs)
 					GF_AddLogMessage(string.sub(string.sub(" "..wordString,1,lfs).."|cff9d9d9d|Hplayer:"..tempString.."|h["..tempString.."]|h|r"..string.sub(wordString,lfe),2),4,true,"SYSTEM",arg8,arg9,"HARDCORE")
 					break
 				end
-			end			
+			end
 			GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,true}
 			return true
 		end
@@ -2783,6 +2824,11 @@ function GF_BypassLootFilter(arg1)
 		return true
 	end
 end
+function GF_CheckServerMessageFilter(arg1)
+	for i=1, getn(GF_ServerMessageFilters) do
+		if string.find(arg1, GF_ServerMessageFilters[i]) then return true end
+	end
+end
 function GF_CheckSystemMessageFilter(arg1)
 	for i=1, getn(GF_SystemMessageFilters) do
 		if string.find(arg1, GF_SystemMessageFilters[i]) then return true end
@@ -2791,6 +2837,11 @@ end
 function GF_CheckMonsterEmoteFilter(arg1)
 	for i=1, getn(GF_MonsterEmoteFilters) do
 		if string.find(arg1, GF_MonsterEmoteFilters[i]) then return true end
+	end
+end
+function GF_CheckEmoteFilter(arg1)
+	for i=1, getn(GF_EmoteFilters) do
+		if string.find(arg1, GF_EmoteFilters[i]) then return true end
 	end
 end
 function GF_CheckForGroups(arg1,arg2,arg9,event,showanyway)
@@ -2832,7 +2883,7 @@ function GF_GetTypes(arg1, showanyway)
 	
 	if string.find(arg1, "%d+p[%p%s]") then GF_MessageData.foundLFM = 2 if showanyway == true then print("##p lfm 2") end end -- "10p heal" messages from chinese
 	lfs = 1 -- To detect space/lf##m/letter(eg " lf15mbwl" = lfm bwl)
-	while true do lfs,lfe,wordString = string.find(arg1," ([lk]f?%s?%d+m)[%p%s]",lfs) if wordString then arg1 = string.sub(arg1,1,lfs).."lfm "..string.sub(arg1,lfs+string.len(wordString)+1) lfs = lfs + 4 GF_MessageData.foundLFM = 4 GF_MessageData.foundGuildExclusion = 3 GF_MessageData.foundTradesExclusion = 3 if showanyway == true then print("lf##m lfm 4 .. guildex 3... tradesex 3") end else break end end
+	while true do lfs,lfe,wordString = string.find(arg1," ([lk]f?%s?%d+m)[%p%s]",lfs) if wordString then arg1 = string.sub(arg1,1,lfs).."lfm "..string.sub(arg1,lfs+string.len(wordString)+1) lfs = lfs + 4 GF_MessageData.foundLFM = 4 GF_MessageData.foundGuildExclusion = 2 GF_MessageData.foundTradesExclusion = 2 if showanyway == true then print("lf##m lfm 4 .. guildex 3... tradesex 3") end else break end end
 	lfs = 1 -- To detect space/number+/punctuation/number+/space for groups
 	while true do lfs,lfe,wordString,tempString = string.find(arg1,"[%p%s](%d%d?([=/])%d%d?) ",lfs) if wordString then if tempString == "=" then GF_MessageData.foundLFM = 2 lfs = lfe else arg1 = string.sub(arg1,1,lfs).."group"..string.sub(arg1,lfe) lfs = lfs + 6 end else break end end
 	lfs,lfe,wordString = string.find(arg1,"%d?%s?\-?([\+±])\-?%s?%d?")
@@ -2857,10 +2908,9 @@ function GF_GetTypes(arg1, showanyway)
 			else
 				table.insert(wordTable,strchar(lfs)) tempVal=tempVal+1 for j=1,250 do if lfs ~= strbyte(arg1,tempVal+j) then tempVal=tempVal+j-1 break end end
 			end
-		elseif lfe == 32 or lfe == 46 then
-			wordString = strbyte(arg1,tempVal-1)
-			if (wordString == 32 or wordString == 46) and wordString == strbyte(arg1,tempVal+3) then
-				table.insert(wordTable,strchar(lfs)) table.insert(wordTable,strchar(strbyte(arg1,tempVal+2))) tempVal=tempVal+2 for j=3,250,2 do if strbyte(arg1,tempVal+j) ~= 32 and strbyte(arg1,tempVal+j) ~= 46 then tempVal=tempVal+j-3 break else table.insert(wordTable,strchar(strbyte(arg1,tempVal+j-1))) end end
+		elseif lfe == 32 or lfe == 46 then -- Space or Period
+			if (strbyte(arg1,tempVal-1) == 32 or strbyte(arg1,tempVal-1) == 46 or strbyte(arg1,tempVal-1) == 60) and (strbyte(arg1,tempVal-1) == 32 or strbyte(arg1,tempVal-1) == 46 or strbyte(arg1,tempVal-1) == 60) then
+				table.insert(wordTable,strchar(lfs)) table.insert(wordTable,strchar(strbyte(arg1,tempVal+2))) tempVal=tempVal+2 for j=3,250,2 do if strbyte(arg1,tempVal+j) ~= 32 and strbyte(arg1,tempVal+j) ~= 46 and strbyte(arg1,tempVal+j) ~= 62 then tempVal=tempVal+j-3 break else table.insert(wordTable,strchar(strbyte(arg1,tempVal+j-1))) end end
 			else
 				table.insert(wordTable,strchar(lfs))
 			end
@@ -2972,7 +3022,7 @@ function GF_GetTypes(arg1, showanyway)
 	lfs = 2 -- To detect words between and next to "[] or ()" (eg "(human only)", "[item] for free").
 	while true do lfs,lfe,wordString = string.find(arg1, "[<%(%[](.-)[%)%]>]",lfs)
 		if wordString then
-			if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_BRACKET[wordString] then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_GUILD_BRACKET[wordString] if showanyway == true then print(wordString.." guild "..GF_GUILD_BRACKET[wordString]) end end
+			if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_BRACKET[gsub(wordString," ","")] then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_GUILD_BRACKET[gsub(wordString," ","")] if showanyway == true then print(wordString.." guild "..GF_GUILD_BRACKET[gsub(wordString," ","")]) end end
 			if strbyte(arg1,lfs) == 91 and strbyte(arg1,lfe) == 93 then -- "[]"
 				if GF_MessageData.foundLFM == 0 then if string.find(arg1, "^%]%s?%d+%s?\+",lfe) then GF_MessageData.foundLFM = 2 if showanyway == true then print("##+ lfm") end end end -- Group "] 2+"
 				if string.find(arg1, "^%]%s?[0-9\-]+%s?[gs]",lfe) then GF_MessageData.foundTrades = GF_MessageData.foundTrades + 1 if showanyway == true then print("##g trade 1") end end -- Trades "]2.5g"
@@ -3004,6 +3054,7 @@ function GF_GetTypes(arg1, showanyway)
 					for words in string.gfind(wordString, "(%a+)") do if GF_WORD_FIX_ITEM_NAME[words] then arg1 = string.sub(arg1,1,lfs)..GF_WORD_FIX_ITEM_NAME[words]..string.sub(arg1,lfe) break end end
 				end
 			elseif strbyte(arg1,lfs) == 60 and strbyte(arg1,lfe) == 62 then -- "<>"
+				wordTableGuild["BRACKETS"] = gsub(wordString," ","")
 				tempString = string.sub(arg1,1,lfs)
 				_,_,wordString = string.find(tempString, " (%a+)%s?<$") if wordString then if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_PREFIX_SUFFIX[wordString] then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_GUILD_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." guild "..GF_GUILD_PREFIX_SUFFIX[wordString]) end end end
 				_,_,wordString = string.find(arg1, "^>%s?(%a+)[%p%s]",lfe) if wordString then if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_PREFIX_SUFFIX[wordString] then GF_MessageData.foundGuild = GF_MessageData.foundGuild + GF_GUILD_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." guild "..GF_GUILD_PREFIX_SUFFIX[wordString]) end end end
@@ -3184,6 +3235,8 @@ function GF_GetTypes(arg1, showanyway)
 						if GF_WORD_FIX_GUILD[wordTableGuild[lfs+1]] then wordTableGuild[lfs+1] = GF_WORD_FIX_GUILD[wordTableGuild[lfs+1]][1] end
 						if lfs > 1 then lfs = lfs - 2 else lfs = lfs - 1 end
 					end
+				elseif wordTableGuild["BRACKETS"] == wordString then
+					for k=0, j do wordTableGuild[lfs+k] = "G" end
 				else
 					if GF_WORD_FIX_TRADE[wordString] then wordTableTrade[lfs] = GF_WORD_FIX_TRADE[wordString][1] for k=1, j do table.remove(wordTableTrade,lfs+k) table.insert(wordTableTrade,lfs+k,GF_WORD_FIX_TRADE[wordString][2]) end end
 					if GF_WORD_FIX_GUILD[wordString] then wordTableGuild[lfs] = GF_WORD_FIX_GUILD[wordString][1] for k=1, j do table.remove(wordTableGuild,lfs+k) table.insert(wordTableGuild,lfs+k,GF_WORD_FIX_GUILD[wordString][2]) end end
@@ -3247,8 +3300,16 @@ function GF_GetTypes(arg1, showanyway)
 
 				if GF_WORD_LFM[wordString] then if GF_WORD_LFM[wordString] > GF_MessageData.foundLFM then GF_MessageData.foundLFM = GF_WORD_LFM[wordString] GF_MessageData.lfmlfgName = wordString if showanyway == true then print(wordString.." lfm") end end
 					if not GF_MessageData.foundQuest[1] then if GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] then GF_MessageData.foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] elseif GF_WORD_LEVEL_ZONE[wordTable[i-1]] then GF_MessageData.foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-1]] end end
+					if GF_WORD_IGNORE_AFTER[wordTable[i+j+1]] then GF_MessageData.foundIgnore = GF_MessageData.foundIgnore + GF_WORD_IGNORE_AFTER[wordTable[i+j+1]] if showanyway == true then print(wordTable[i+j+1].." ignore "..GF_WORD_IGNORE_AFTER[wordTable[i+j+1]]) end
+					elseif GF_WORD_IGNORE_BEFORE[wordTable[i-1]] then GF_MessageData.foundIgnore = GF_MessageData.foundIgnore + GF_WORD_IGNORE_BEFORE[wordTable[i-1]] if showanyway == true then print(wordTable[i-1].." ignore "..GF_WORD_IGNORE_BEFORE[wordTable[i-1]]) end
+					elseif wordTable[i+j+2] and GF_WORD_IGNORE_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] then GF_MessageData.foundIgnore = GF_MessageData.foundIgnore + GF_WORD_IGNORE_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] if showanyway == true then print(wordTable[i+j+1]..wordTable[i+j+2].." ignore "..GF_WORD_IGNORE_AFTER[wordTable[i+j+1]..wordTable[i+j+2]]) end
+					elseif wordTable[i-2] and GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]] then GF_MessageData.foundIgnore = GF_MessageData.foundIgnore + GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]] if showanyway == true then print(wordTable[i-2]..wordTable[i-1].." ignore "..GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]]) end end
 				elseif GF_WORD_LFG[wordString] then if GF_WORD_LFG[wordString] > GF_MessageData.foundLFG then GF_MessageData.foundLFG = GF_WORD_LFG[wordString] if showanyway == true then print(wordString.." lfg") end end
 					if not GF_MessageData.foundQuest[1] then if GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] then GF_MessageData.foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] elseif GF_WORD_LEVEL_ZONE[wordTable[i-1]] then GF_MessageData.foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-1]] end end
+					if GF_WORD_IGNORE_AFTER[wordTable[i+j+1]] then GF_MessageData.foundIgnore = GF_MessageData.foundIgnore + GF_WORD_IGNORE_AFTER[wordTable[i+j+1]] if showanyway == true then print(wordTable[i+j+1].." ignore "..GF_WORD_IGNORE_AFTER[wordTable[i+j+1]]) end
+					elseif GF_WORD_IGNORE_BEFORE[wordTable[i-1]] then GF_MessageData.foundIgnore = GF_MessageData.foundIgnore + GF_WORD_IGNORE_BEFORE[wordTable[i-1]] if showanyway == true then print(wordTable[i-1].." ignore "..GF_WORD_IGNORE_BEFORE[wordTable[i-1]]) end
+					elseif wordTable[i+j+2] and GF_WORD_IGNORE_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] then GF_MessageData.foundIgnore = GF_MessageData.foundIgnore + GF_WORD_IGNORE_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] if showanyway == true then print(wordTable[i+j+1]..wordTable[i+j+2].." ignore "..GF_WORD_IGNORE_AFTER[wordTable[i+j+1]..wordTable[i+j+2]]) end
+					elseif wordTable[i-2] and GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]] then GF_MessageData.foundIgnore = GF_MessageData.foundIgnore + GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]] if showanyway == true then print(wordTable[i-2]..wordTable[i-1].." ignore "..GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]]) end end
 				end
 
 				if GF_WORD_CLASSES[wordString] then GF_MessageData.foundClass = GF_WORD_CLASSES[wordString] table.insert(GF_MessageData.groupName,wordString)
