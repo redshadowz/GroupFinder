@@ -894,10 +894,12 @@ end
 function GF_DisplayLog()
 	GF_Log:SetMaxLines(128)
 	local tempHistoryTable = {}
+	local counter = 0
 	for i=1, getn(GF_LogHistory[GF_RealmName]) do
 		if GF_LogFilters[GF_LogHistory[GF_RealmName][i][2]] and GF_LogFilters[GF_LogHistory[GF_RealmName][i][3]] then 
 			table.insert(tempHistoryTable,1,GF_LogHistory[GF_RealmName][i])
-			if i == 128 then break end
+			counter = counter + 1
+			if counter == 128 then break end
 		end
 	end
 	if GF_ConvertMessagesToLinks then
@@ -2914,6 +2916,13 @@ function GF_GetTypes(arg1, showanyway)
 			else
 				table.insert(wordTable,strchar(lfs))
 			end
+		elseif lfs >= 194 and lfs <= 210 and GF_WORD_ACCENT_ASCII_FIX[lfs] and GF_WORD_ACCENT_ASCII_FIX[lfs][lfe] then
+			if lfs == strbyte(arg1,tempVal+2) and lfe == strbyte(arg1,tempVal+3) then
+				table.insert(wordTable,GF_WORD_ACCENT_ASCII_FIX[lfs][lfe]) tempVal=tempVal+1 for j=1,250,2 do if lfs ~= strbyte(arg1,tempVal+j) and lfe ~= strbyte(arg1,tempVal+j+1) or not GF_WORD_ACCENT_ASCII_FIX[strbyte(arg1,tempVal+j)] or not GF_WORD_ACCENT_ASCII_FIX[strbyte(arg1,tempVal+j)][strbyte(arg1,tempVal+j+1)] then tempVal=tempVal+j-1 break end end
+			else -- was 12, saved 12/13, moved position to 13(14 at end)... check 14 and 15...
+				table.insert(wordTable,GF_WORD_ACCENT_ASCII_FIX[lfs][lfe])
+				tempVal = tempVal + 1
+			end
 		elseif lfs == strbyte(arg1,tempVal+2) and lfs == strbyte(arg1,tempVal+4) and lfs ~= 32 and lfs ~= 46 then
 			if lfe == strbyte(arg1,tempVal+3) then
 				table.insert(wordTable,strchar(lfs)) table.insert(wordTable,strchar(lfe)) table.insert(wordTable,strchar(strbyte(arg1,tempVal+2))) table.insert(wordTable,strchar(strbyte(arg1,tempVal+3))) tempVal=tempVal+3 for j=2,250 do if strbyte(arg1,tempVal+j) ~= strbyte(arg1,tempVal+j-2) then tempVal=tempVal+j-1 break end end
@@ -2921,12 +2930,7 @@ function GF_GetTypes(arg1, showanyway)
 				table.insert(wordTable,strchar(lfs))
 			end
 		else
-			if lfs >= 194 and lfs <= 210 and GF_WORD_ACCENT_ASCII_FIX[lfs] and GF_WORD_ACCENT_ASCII_FIX[lfs][lfe] then
-				table.insert(wordTable,GF_WORD_ACCENT_ASCII_FIX[lfs][lfe])
-				tempVal = tempVal + 1
-			else
-				table.insert(wordTable,strchar(lfs))
-			end
+			table.insert(wordTable,strchar(lfs))
 		end
 		tempVal = tempVal + 1
 	end
@@ -2991,7 +2995,7 @@ function GF_GetTypes(arg1, showanyway)
 		end
 	end
 	lfs = 2 -- To fix single words
-	while true do lfs,lfe,wordString,tempString = string.find(arg1, "(.-)([%s%p%d]+)",lfs) if not wordString then break elseif GF_WORD_FIX_SINGLE_WORD[wordString] then arg1 = string.sub(arg1,1,lfs-1)..GF_WORD_FIX_SINGLE_WORD[wordString]..tempString..string.sub(arg1,lfe+1) lfs = lfs + string.len(GF_WORD_FIX_SINGLE_WORD[wordString]..tempString)-1 elseif GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString] then if not languageID[GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString]] then languageID[GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString]] = 1 else languageID[GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString]] = languageID[GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString]] + 1 end lfs = lfe+1 else lfs = lfe+1 end end
+	while true do lfs,lfe,wordString,tempString = string.find(arg1, "(.-)([%s%p%d]+)",lfs) if not wordString then break elseif GF_WORD_FIX_SINGLE_WORD[wordString] then arg1 = string.sub(arg1,1,lfs-1)..GF_WORD_FIX_SINGLE_WORD[wordString]..tempString..string.sub(arg1,lfe+1) lfs = lfs + string.len(GF_WORD_FIX_SINGLE_WORD[wordString]..tempString)-1 elseif GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString] then if not languageID[GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString][2]] then languageID[GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString][2]] = 1 else languageID[GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString][2]] = languageID[GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString]] + 1 end lfs = lfe+1 else lfs = lfe+1 end end
 
 	lfs = 1 -- To detect space/letter/number/letter/space combinations(eg " g2g " = gtg)
 	while true do lfs,lfe,wordString = string.find(arg1," (w?%a%s?%d%s?%ab?)[%p%s]",lfs) if wordString then wordString = gsub(wordString," ","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = string.sub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..string.sub(arg1,lfe) end lfs = lfs + string.len(wordString) + 1 else break end end
@@ -4054,6 +4058,14 @@ function FindForeignLetters()
 end
 function ConvertForeignWords()
 -- remove if word is too short, remove punctuation, convert letters
+
+-- First database = add single words 3 characters or longer with the language family only(word = language)... remove any words that are the same across languages
+-- Second database = Broken down by language family... Replace word with word(word = word).. second database should include all words and store them within each language's family
+-- Run first datase on single-word after letter correction... Then immediately run translation. If "Translate" then add Arg1 to database and show the database Arg1 instead of normal Arg1(chat/log/groupsframe)
+-- The translation should do word replacement backwards(longest(4-word) to shortest(1-word)). Then it removes anything in the GF_WORD_BYPASS_TRIGGER based on the language family. Need to add more phrases.
+-- Error correction needs to eliminate all double-letter repeating(including normal letters)
+-- Two options, Translate and Show Translated... Translate will translate the message and show T in front of it in groupsframe, logsframe, and normal chat.. Show Translate will show/hide translated group messages.
+
 	local lfs,lfe,tempVal,wordString
 	local wordTable = {}
 	GF_SavedVariables.questconversion = {}
@@ -4069,8 +4081,12 @@ function ConvertForeignWords()
 				if not lfe then break end
 
 				if lfs >= 194 and lfs <= 210 and GF_WORD_ACCENT_ASCII_FIX[lfs] and GF_WORD_ACCENT_ASCII_FIX[lfs][lfe] then
-					table.insert(wordTable,GF_WORD_ACCENT_ASCII_FIX[lfs][lfe])
-					tempVal = tempVal + 1
+					if lfs == strbyte(arg1,tempVal+2) and lfe == strbyte(arg1,tempVal+3) then
+						table.insert(wordTable,GF_WORD_ACCENT_ASCII_FIX[lfs][lfe]) tempVal=tempVal+1 for j=1,250,2 do if lfs ~= strbyte(arg1,tempVal+j) and lfe ~= strbyte(arg1,tempVal+j+1) or not GF_WORD_ACCENT_ASCII_FIX[strbyte(arg1,tempVal+j)] or not GF_WORD_ACCENT_ASCII_FIX[strbyte(arg1,tempVal+j)][strbyte(arg1,tempVal+j+1)] then tempVal=tempVal+j-1 break end end
+					else
+						table.insert(wordTable,GF_WORD_ACCENT_ASCII_FIX[lfs][lfe])
+						tempVal = tempVal + 1
+					end
 				else
 					table.insert(wordTable,strchar(lfs))
 				end

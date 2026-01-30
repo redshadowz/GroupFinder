@@ -1077,6 +1077,83 @@ GF_WORD_FIX_SINGLE_WORD = { -- Single word changes. Mostly typos and simple word
 
 -- Slang/Curse
 ["shits"] = "shit",["shitty"] = "shit",["shity"] = "shit",["shhitty"] = "shit",
+
+-- German
+["mitstreiter"] = "comrade",["mitstreitern"] = "comrade",["raidear"] = "raid",["sind"] = "are",["verstärkung"] = "reinforcement",["weiter"] = "further",["wieder"] = "again",["alle"] = "all",["entspannt"] = "relaxed",["folgende"] = "following",
+["haben"] = "have",["klasse"] = "class",["klassen"] = "class",["meiner"] = "mine",["schlossknacken"] = "lockbox",["minden"] = "all",["laufen"] = "run",["zwei"] = "two",["auf"] = "on",["der"] = "the",["nach"] = "for",["noch"] = "more",
+["junge"] = "new",["und"] = "and",["questen"] = "quest",["deutsche"] = "german",["deutsch"] = "german",["deutschen"] = "german",["gesucht"] = "search",["suche"] = "search",["sucht"] = "search",["suchst"] = "searching",
+["montag"] = "monday",["dienstag"] = "tuesday",["mittwoch"] = "wednesday",["donnerstag"] = "thursday",["freitag"] = "friday",["samstag"] = "saturday",["sonntag"] = "sunday",["sprachige"] = "speaking",
+["sprachigen"] = "speaking",["raiden"] = "raid",["frischen"] = "fresh",["abenteuer"] = "adventure",["neues"] = "new",["neuer"] = "new",["allianz"] = "alliance",["willkommen"] = "welcoming",["entspannte"] = "relaxed",
+["spieler"] = "player",["aktive"] = "active",["gemeinschaft"] = "community",["heiler"] = "healer",
+["kreutfahrer"] = "crusader",["schliebkassette"] = "lockbox",
+
+["searchwird"] = "lf",["ichsearch"] = "lf",
+-- Slovenian
+["nekdo"] = "anyone",
+
+-- Swedish
+["dricks"] = "tip",["uppskattat"] = "appreciate",
+["norsk"] = "norwegian",["gratis"] = "free",
+
+-- Dutch
+["ereen"] = "there",["joineet"] = "join",
+
+-- Polish
+["pokskie"] = "polish",["polakow"] = "polish",["polska"] = "polish",["polskiej"] = "polish",["poszukuje"] = "lf",["dla"] = "for",["szuka"] = "lf",["szukam"] = "lf",
+["towarzyskiej"] = "socializing",["emerytow"] = "veteran",["luznej"] = "casual", ["levelingu"] = "leveling",
+["chetnych"] = "willing",["szeregi"] = "ranks",["raidowania"] = "raid",["odkrywajac"] = "discovering",["jego"] = "its",["ciekawostki"] = "curiosities",
+["wladcaognia"] = "firelord",["namniestraszny"] = "wearenotscared",["piwo"] = "beer",["mypijac"] = "wedrink",["wyzwania"] = "challenge",["kolejne"] = "next",
+
+-- Italian
+["italiana"] = "italian",["italiano"] = "italian",["cerca"] = "search",["nuova"] = "new",["italiani"] = "italian",["giocatori"] = "player",["creazione"] = "create",["interessato"] = "interested",["interesse"] = "interested",["cerco"] = "need",
+
+-- Spanish
+["varios"] = "various",["horarios"] = "schedules",["tiempo"] = "time",["agujas"] = "needles",["del"] = "of",["cambiar"] = "change",["historia"] = "history",["nececito"] = "need",["busco"] = "search",
+["espaola"] = "spanish",["espaol"] = "spanish",["hispana"] = "spanish",["espaoles"] = "spanish",["latina"] = "spanish",["chilean"] = "spanish",["espanola"] = "spanish",["espanol"] = "spanish",
+["alguna"] = "any",["alguan"] = "any",["algun"] = "any",["alguno"] = "any",["nuevos"] = "new",["nuevo"] = "new",["este"] = "this",["leveleando"] = "leveling",["lvleando"] = "leveling",
+["hablas"] = "speak",["habla"] = "speak",["activa"] = "active",
+["acceptamos"] = "accepting",["aceptamos"] = "accepting",["aventura"] = "adventure",["bienvenido"] = "welcome",["bienvenidos"] = "welcome",["buen"] = "good",["castellana"] = "spanish",
+["algumda"] = "any",["conquistar"] = "conquer",["contenido"] = "content",["dimanche"] = "sunday",["domingos"] = "sunday",["esta"] = "this",["hablante"] = "speak",
+["hermandad"] = "brotherhood",["hermandades"] = "brotherhood",["hispano"] = "spanish",["jugadores"] = "player",["necesita"] = "need",["necesitar"] = "need",["para"] = "for",["rollo"] = "vibes",
+["limpiando"] = "clearing",["tambien"] = "else",["también"] = "else",["todas"] = "all",["unete"] = "join",["alguien"] = "anyone",["recrutando"] = "recruiting",["reclutando"] = "recruiting",
+["encantamiento"] = "enchant",["miembros"] = "members",["niveles"] = "level",
+
+
+["buscamos"] = "lf",
+["lftodo"] = "lfall",
+["jugador"] = "player",
+["cualquier"] = "whatever",
+["nivel"] = "level",
+
+-- Portuguese
+["alguma"] = "any",["portuguesa"] = "portuguese",["aceptar"] = "accept",["encantar"] = "enchant",["busca"] = "lf",
+
+-- French
+["ouvertes"] = "open",["ouvre"] = "open",["plusieurs"] = "several",["semaine"] = "week",["chaque"] = "every",["tous"] = "all",["sont"] = "are",["portes"] = "doors",["sympathiques"] = "friendly",["toutmonde"] = "anyone",["veux"] = "you",["riches"] = "rich",
+["investis"] = "invested",["avecdes"] = "with",["dsirant"] = "desire",["dcouvrir"] = "discover",["francaise"] = "french",["qui"] = "that",["dbutant"] = "beginner",["andbutant"] = "beginner",["chasseur"] = "hunter",["merci"] = "thanks",
+["searchdune"] = "lf",["cherche"] = "search",["salut"] = "salute",["suis"] = "am",["actif"] = "active",["actifs"] = "active",["alors"] = "then",["francais"] = "french",["nous"] = "us",["qui"] = "who",["rejoins"] = "join",["gente"] = "people",
+["experimentes"] = "experience",["toi"] = "you",["quelques"] = "few",["contenu"] = "content",["joueur"] = "player",["joueurs"] = "player",["jusquau"] = "until",["avec"] = "with",["nous"] = "we",["reste"] = "rest",["quelques"] = "few",["depeche"]= "hurry",
+
+-- Hungarian
+["tagjait"] = "members",["keresi"] = "lf",["aktv"] = "active",["rdekel"] = "interested",["jelentkezzen"] = "apply",
+
+-- Swedish
+["svensk"] = "swedish",["skerfler"] = "lfm",["medlemmar"] = "members",["fokus"] = "focus",["och"] = "and",["mer"] = "more",["lutad"] = "leaning",
+["mndag"] = "monday",["tisdag"] = "tuesday",["onsdag"] = "wednesday",["torsdag"] = "thursday",["fredag"] = "friday",["lrdag"] = "saturday",["sndag"] = "sunday",
+
+-- Slavic
+["opzoeknaar"] = "lf",["letar"] = "lf",["vstuplyuv"] = "lf",["raidov"] = "raid",["igrokov"] = "player",
+
+-- Guild-related
+["rekrutuje"] = "recruiting",["recrutar"] = "recruiting",["recrute"] = "recruiting",["recrut"] = "recruiting",["rekrutiert"] = "recruiting",["recluta"] = "recruiting",["recruting"] = "recruiting",["recruterait"] = "recruiting",
+["recrutent"] = "recruiting",["recruteaza"] = "recruiting",["recuiting"] = "recruiting",["reqruiting"] = "recruiting",
+["gildia"] = "guild",["gilda"] = "guild",["guilde"] = "guild",["gildiy"] = "guild",["gildiyu"] = "guild",["gildenmitglieder"] = "guild",["gildii"] = "guild",["gildi"] = "guild",["gilduha"] = "guild",["guildy"] = "guild",["guidla"] = "guild",
+["gildiu"] = "guild",["gilden"] = "guild",["gildiya"] = "guild",["gildiyi"] = "guild",["gild"] = "guild",["guldia"] = "guild",["guilda"] = "guild",["guil"] = "guild",["guils"] = "guild",["guld"] = "guild",["guildiji"] = "guild",["guildes"] = "guild",
+["gildosi"] = "guild",["guile"] = "guild",["giuld"] = "guild",["duild"] = "guild",["gilds"] = "guild",["guildia"] = "guild",["gilde"] = "guild",["gildu"] = "guild",["guildi"] = "guild",["guildet"] = "guild",["gildie"] = "guild",
+["progresowania"] = "progression",["progresar"] = "progression",["progreso"] = "progression",["progresshez"] = "progression",["prog"] = "progression",["progressom"] = "progression",["progresando"] = "progressing",["progresowac"] = "progressing",
+["komunity"] = "community",["komunite"] = "community",["komunita"] = "community",["comunidad"] = "community",["comunidade"] = "community",["companheiros"] = "community",["compaeros"] = "community",
+["eventos"] = "event",
+["amigos"] = "friend",["actieve"] = "active",["nederlands"] = "dutch",["nederlandse"] = "dutch",["aktivity"] = "activity",
 }
 GF_WORD_FIX_BEFORE_QUEST = { -- Word changes processed before quests.
 -- Misc misspellings
@@ -1324,6 +1401,64 @@ GF_WORD_FIX_BEFORE_QUEST = { -- Word changes processed before quests.
 
 ["tusedays"] = "tuesday",
 ["signups"] = "signup",
+
+-- Foreign Trade Words
+["utc"] = .5,["cet"] = .5,["msk"] = 1,["est"] = 1,["ger"] = 1,["oceanic"] = .5,["aest"] = .5,["naandeu"] = 1,["euandna"] = 1,
+
+["zhdemvseh"] = 2,["proidives"] = 1,["cautammembri"] = 1,["anemariechipa"] = 1,["echipa"] = .5,["ishuG"] = 1,["yparxeikanenaG"] = 1,
+
+-- Slovak
+["eqipomnazaciatokzacinajucemu"] = 1,["eqipom"] = .25,["eqipomna"] = .25,["pomozezacinajucemu"] = 1,["zacinajucemu"] = .5,
+
+-- German
+["mitraid"] = 1,["zumraid"] = 1,["raidkader"] = 1,["motivierte"] = 1,["raidtage"] = 1,["joinwelt"] = 1,["werbeunterbrechung"] = 1,["yesttutruG"] = 3,["FnetteG"] = 1,["uneG"] = 1,["Fmitplayer"] = 1,
+["mitplayer"] = 1,["bistduzuverlssig"] = 1,["spaamzocken"] = 1,["dannkommzuuns"] = 1,["kommzuuns"] = 1,["wirfreuen"] = 1,["berjedeslevel"] = 1,["classoderrasse"] = 1,["Fdeute"] = 1,
+["frdengermanspeaking"] = 1,["hardcoreouchill"] = .5,["ouverttouslevel"] = .5,["Rpartirdulevel"] = 1.5,["eluneadore"] = .5,["unserercommunity"] = .5,["inunserercommunity"] = .5,
+["zumgemeinsamen"] = 1,["mainraidtage"] = 1,["immerabends"] = 1,["egalobrelaxedleveling"] = 1,["spaigraid"] = 1,["Fmit"] = 1,["compltersonroster"] = 2,["playermotivs"] = 1,["sbados"] = .5,
+["raidzeit"] = 1,["raidzeitmittwoch"] = 1,["ihrereihen"] = .5,["furtherihrereihen"] = .5,["strktfurtherihrereihen"] = .5,["gerneauchfrische"] = 1,
+["einnewadventure"] = .5,["einenfreshstart"] = .5,["Fdu"] = .5,["Fauchdu"] = .5,["raidgruppe"] = .5,["hiereineLG"] = .5,["wirstockenweiterauf"] = .5,["ordentlichegregewachsen"] = .5,
+
+-- Hungarian
+["keresek"] = 1,["mindenhungarian"] = .5,["felvetelthirdet"] = 1,["tarsasagbanjatszani"] = 1,["szivesenvrunkbarkit"] = 2,["hangulat"] = .5,["szeretnelvelunkjatszani"] = 2,
+["varunkszeretettel"] = 1,["szeretettelvrminden"] = 1,["keresiaktvhungariantagjait"] = 1,
+
+-- Finnish
+["finkilta"] = .5,["finnkilta"] = .5,["finjoukkue"] = .5,["finnjoukkue"] = .5,["maajoukue"] = 2,["maajoukkue"] = 2,["maajoukue"] = 2,["majoukkue"] = 2,["scouttaa"] = 2,["suomalaanen"] = 1,
+["joukkuesuomesta"] = 1,["skouta"] = 1,["skoutauusia"] = 1,["finnational"] = 2.5,["finnnational"] = 2.5,["finlandsnationalgroup"] = 2.5,["finlandnationalgroup"] = 2.5,["josontyls"] = 1,
+["hakeejseni"] = 3,["mitmuutamenoatoistaaseksi"] = 3,["skouttaa"] = 1,["teretulemast"] = 1,["finG"] = .5,["finplayer"] = .5,["newfinplayer"] = .5,["etsiiriveliihinsuusiakykyj"] = 1,
+["etsiiriveliihinsuusia"] = 2,["kykyj"] = 1,["skouttaauusiakykyj"] = 1,["uusiakykyj"] = 1,["pelityyli"] = 1,["sooloolijat"] = 1,["roolipelaajat"] = 1,["kaikkiteretulemast"] = 1,
+["suomibndi"] = 2,["etsiiuusia"] = 1,["etsii"] = 1,["kykyjetsii"] = 1,["uraatarjolla"] = 1,["maajoukkueessa"] = 1,["paikkaauki"] = 1,["skoutaa"] = 1,["uusia"] = .5,["riveihins"] = .5,
+["fysio"] = .5,["keskikentlle"] = .5,["joinmaajoukkue"] = 1.5,["joinmaajoukkuetoday"] = 1,["joinmaajoukkuetnn"] = 2,["suomikilta"] = 2,["suomikiltaa"] = 2,["raidaaako"] = 1.5,
+["questaako"] = 1.5,["pelaajilla"] = 1,["scoutaauusia"] = 1.5,["uusiajawanhoja"] = 1,["teretulemastkiltaan"] = 3,["kaikihoituu"] = 1,["suomipelaajia"] = 2,["kiltaan"] = 1,["haetaankiltaan"] = 2,
+["tulille"] = 1,["firmatarjoaa"] = .5,["tarjoaa"] = .5,["firma"] = .5,["scouttaavuoden"] = 1,["vvvalmistautuujascouttaavuoden"] = 1,["valmistautuu"] = 1,["ihmeellinenmaailma"] = 1,
+
+-- Spanish/Portuguese
+["comprometidos"] = 1,["semanalmente"] = 1,["sitequieresunir"] = 2,["anyonedelaG"] = 1,["abresusfiles"] = 1,["yrisas"] = .5,["todotipodeplayer"] = 1,
+["conunaG"] = 1,["nodudesenunirte"] = 1,["enunirte"] = 1,["manos"] = .5,["adventurepicacomienzaaqu"] = 1,["Fbrgroupe"] = 3,["Fmostodo"] = 1,["Fbrgroupe"] = 3,["Fmostodo"] = 1,["Foffi"] = .5,
+["abresuspuerta"] = 1,["pargentequeF"] = 2,["empezando"] = .5,["levear"] = 1,["bienvenido"] = .5,["hablahispana"] = 1,["bancodehermadad"] = 1,["interesados"] = 1,
+
+-- Polish
+["zapraszadowspolnej"] = 1,["rodakow"] = .5,["niezaleznieodpoziomu"] = 1,["zaczelismyP"] = 1,["obecnieczyscimy"] = .5,["calykontent"] = 1,["chcedolaczyc"] = 1,
+
+-- Slavic
+["raidov"] = 1,["ishet"] = 1,["novacek"] = 1,["raidereket"] = 1,["priednuysia"] = 1,["primet"] = 1,["reydinga"] = 1,["novaya"] = 1,["novayaG"] = 1,["nabirayet"] = 2,["nabiraet"] = 2,
+["nabirayetvsekh"] = 1,["nabiraem"] = 2,["zhelayushchikh"] = 1,["igrokov"] = 1,["zhelayushchikhigrokov"] = 1,["pervaya"] = .5,["edinstvennaya"] = .5,["pervayaiedinstvennaya"] = 1.5,
+["primite"] = .5,["primitevru"] = .5,["osvoenie"] = .5,["naosvoenie"] = 1,["speki"] = .5,["rassmotrim"] = 1,["vseklassy"] = 1,["vseklassyispeki"] = 2,["vsemklassam"] = 1,["unasvreide"] = 1,
+["prijmenovehrace"] = 1,["novehrace"] = .5,["pravidelneraidujemeveskerykontent"] = 1,["raidujemeveskerykontent"] = 1,["ishyrusskuyu"] = 1,["russianmockba"] = 1,["narodavrezerve"] = 1,
+["somcomboG"] = 1,["ishyLG"] = 1,["pomoshobshchenie"] = 1,["vesyolayaigra"] = 1,["prinimaemslubogolvl"] = 1,["prinimaem"] = .5,["ishyrusskuyu"] = 1,["dodajenoveclanove"] = 1,["otevrenaprovsechny"] = 2,
+["ishetplayerdlayraid"] = 1,["ishetplayer"] = 1,["vozmitevG"] = 1,["havorb"] = .5,["lubogolvla"] = 1,["nabor"] = .5,["otkritnabor"] = 2,["vedemnabor"] = 2,["vedetnabor"] = 2,["vedetsanabor"] = 2,
+["prohozhdeniyadanzhey"] = 1,["sovmestnoyprokachki"] = 1,["primemvsehzelaushih"] = 2,["vedemnaborigrokov"] = 3,["novacekciveteran"] = 2,["provodenabirgravziv"] = 2,["pohodova"] = 1,
+
+-- Italian
+["seiinterested"] = 1,["sehaiinterested"] = 1,["livelli"] = 1,["divertimentoassicurati"] = 1,
+
+-- Romanian
+["romni"] = 1,["jucatoriromni"] = 1,["pentrucontent"] = 1,["socialevenimente"] = 1,["sidistractie"] = 1,["pentruinfosauinvite"] = .5,["evenimente"] = .5,
+["rozwijajacejsieG"] = .5,["namilevelowac"] = .5,["levelowac"] = .5,["doswiadczeniemlorowym"] = .5,["naszegoOC"] = .5,
+
+-- Turkish
+["Gmiz"] = 2,["turkGmiz"] = .5,["kurulmustur"] = .5,["gelmekisteyenler"] = 1.5,["gelmek"] = .5,["kuruluyor"] = 1,["katilmakicinlutfen"] = .5,
+
 }
 GF_WORD_FIX_BEFORE_QUEST_SECOND = {
 -- Groups
@@ -3605,140 +3740,6 @@ GF_LANGUAGE_FOREIGN_COMMON_WORDS = {
 [""] = {"","bg"},
 --]]
 
--- German
---[[["mitstreiter"] = "comrade",["mitstreitern"] = "comrade",["raidear"] = "raid",["sind"] = "are",["verstärkung"] = "reinforcement",["weiter"] = "further",["wieder"] = "again",["alle"] = "all",["entspannt"] = "relaxed",["folgende"] = "following",
-["haben"] = "have",["klasse"] = "class",["klassen"] = "class",["meiner"] = "mine",["schlossknacken"] = "lockbox",["minden"] = "all",["laufen"] = "run",["zwei"] = "two",["auf"] = "on",["der"] = "the",["nach"] = "for",["noch"] = "more",
-["junge"] = "new",["und"] = "and",["questen"] = "quest",["deutsche"] = "german",["deutsch"] = "german",["deutschen"] = "german",["gesucht"] = "search",["suche"] = "search",["sucht"] = "search",["suchst"] = "searching",
-["montag"] = "monday",["dienstag"] = "tuesday",["mittwoch"] = "wednesday",["donnerstag"] = "thursday",["freitag"] = "friday",["samstag"] = "saturday",["sonntag"] = "sunday",["sprachige"] = "speaking",
-["sprachigen"] = "speaking",["raiden"] = "raid",["frischen"] = "fresh",["abenteuer"] = "adventure",["neues"] = "new",["neuer"] = "new",["allianz"] = "alliance",["willkommen"] = "welcoming",["entspannte"] = "relaxed",
-["spieler"] = "player",["aktive"] = "active",["gemeinschaft"] = "community",["heiler"] = "healer",
-["kreutfahrer"] = "crusader",["schliebkassette"] = "lockbox",
-
-["searchwird"] = "lf",["ichsearch"] = "lf",
--- Slovenian
-["nekdo"] = "anyone",
-
--- Swedish
-["dricks"] = "tip",["uppskattat"] = "appreciate",
-["norsk"] = "norwegian",["gratis"] = "free",
-
--- Dutch
-["ereen"] = "there",["joineet"] = "join",
-
--- Polish
-["pokskie"] = "polish",["polakow"] = "polish",["polska"] = "polish",["polskiej"] = "polish",["poszukuje"] = "lf",["dla"] = "for",["szuka"] = "lf",["szukam"] = "lf",
-["towarzyskiej"] = "socializing",["emerytow"] = "veteran",["luznej"] = "casual", ["levelingu"] = "leveling",
-["chetnych"] = "willing",["szeregi"] = "ranks",["raidowania"] = "raid",["odkrywajac"] = "discovering",["jego"] = "its",["ciekawostki"] = "curiosities",
-["wladcaognia"] = "firelord",["namniestraszny"] = "wearenotscared",["piwo"] = "beer",["mypijac"] = "wedrink",["wyzwania"] = "challenge",["kolejne"] = "next",
-
--- Italian
-["italiana"] = "italian",["italiano"] = "italian",["cerca"] = "search",["nuova"] = "new",["italiani"] = "italian",["giocatori"] = "player",["creazione"] = "create",["interessato"] = "interested",["interesse"] = "interested",["cerco"] = "need",
-
--- Spanish
-["varios"] = "various",["horarios"] = "schedules",["tiempo"] = "time",["agujas"] = "needles",["del"] = "of",["cambiar"] = "change",["historia"] = "history",["nececito"] = "need",["busco"] = "search",
-["espaola"] = "spanish",["espaol"] = "spanish",["hispana"] = "spanish",["espaoles"] = "spanish",["latina"] = "spanish",["chilean"] = "spanish",["espanola"] = "spanish",["espanol"] = "spanish",
-["alguna"] = "any",["alguan"] = "any",["algun"] = "any",["alguno"] = "any",["nuevos"] = "new",["nuevo"] = "new",["este"] = "this",["leveleando"] = "leveling",["lvleando"] = "leveling",
-["hablas"] = "speak",["habla"] = "speak",["activa"] = "active",
-["acceptamos"] = "accepting",["aceptamos"] = "accepting",["aventura"] = "adventure",["bienvenido"] = "welcome",["bienvenidos"] = "welcome",["buen"] = "good",["castellana"] = "spanish",
-["algumda"] = "any",["conquistar"] = "conquer",["contenido"] = "content",["dimanche"] = "sunday",["domingos"] = "sunday",["esta"] = "this",["hablante"] = "speak",
-["hermandad"] = "brotherhood",["hermandades"] = "brotherhood",["hispano"] = "spanish",["jugadores"] = "player",["necesita"] = "need",["necesitar"] = "need",["para"] = "for",["rollo"] = "vibes",
-["limpiando"] = "clearing",["tambien"] = "else",["también"] = "else",["todas"] = "all",["unete"] = "join",["alguien"] = "anyone",["recrutando"] = "recruiting",["reclutando"] = "recruiting",
-["encantamiento"] = "enchant",["miembros"] = "members",["niveles"] = "level",
-
-
-["buscamos"] = "lf",
-["lftodo"] = "lfall",
-["jugador"] = "player",
-["cualquier"] = "whatever",
-["nivel"] = "level",
-
--- Portuguese
-["alguma"] = "any",["portuguesa"] = "portuguese",["aceptar"] = "accept",["encantar"] = "enchant",["busca"] = "lf",
-
--- French
-["ouvertes"] = "open",["ouvre"] = "open",["plusieurs"] = "several",["semaine"] = "week",["chaque"] = "every",["tous"] = "all",["sont"] = "are",["portes"] = "doors",["sympathiques"] = "friendly",["toutmonde"] = "anyone",["veux"] = "you",["riches"] = "rich",
-["investis"] = "invested",["avecdes"] = "with",["dsirant"] = "desire",["dcouvrir"] = "discover",["francaise"] = "french",["qui"] = "that",["dbutant"] = "beginner",["andbutant"] = "beginner",["chasseur"] = "hunter",["merci"] = "thanks",
-["searchdune"] = "lf",["cherche"] = "search",["salut"] = "salute",["suis"] = "am",["actif"] = "active",["actifs"] = "active",["alors"] = "then",["francais"] = "french",["nous"] = "us",["qui"] = "who",["rejoins"] = "join",["gente"] = "people",
-["experimentes"] = "experience",["toi"] = "you",["quelques"] = "few",["contenu"] = "content",["joueur"] = "player",["joueurs"] = "player",["jusquau"] = "until",["avec"] = "with",["nous"] = "we",["reste"] = "rest",["quelques"] = "few",["depeche"]= "hurry",
-
--- Hungarian
-["tagjait"] = "members",["keresi"] = "lf",["aktv"] = "active",["rdekel"] = "interested",["jelentkezzen"] = "apply",
-
--- Swedish
-["svensk"] = "swedish",["skerfler"] = "lfm",["medlemmar"] = "members",["fokus"] = "focus",["och"] = "and",["mer"] = "more",["lutad"] = "leaning",
-["mndag"] = "monday",["tisdag"] = "tuesday",["onsdag"] = "wednesday",["torsdag"] = "thursday",["fredag"] = "friday",["lrdag"] = "saturday",["sndag"] = "sunday",
-
--- Slavic
-["opzoeknaar"] = "lf",["letar"] = "lf",["vstuplyuv"] = "lf",["raidov"] = "raid",["igrokov"] = "player",
-
--- Guild-related
-["rekrutuje"] = "recruiting",["recrutar"] = "recruiting",["recrute"] = "recruiting",["recrut"] = "recruiting",["rekrutiert"] = "recruiting",["recluta"] = "recruiting",["recruting"] = "recruiting",["recruterait"] = "recruiting",
-["recrutent"] = "recruiting",["recruteaza"] = "recruiting",["recuiting"] = "recruiting",["reqruiting"] = "recruiting",
-["gildia"] = "guild",["gilda"] = "guild",["guilde"] = "guild",["gildiy"] = "guild",["gildiyu"] = "guild",["gildenmitglieder"] = "guild",["gildii"] = "guild",["gildi"] = "guild",["gilduha"] = "guild",["guildy"] = "guild",["guidla"] = "guild",
-["gildiu"] = "guild",["gilden"] = "guild",["gildiya"] = "guild",["gildiyi"] = "guild",["gild"] = "guild",["guldia"] = "guild",["guilda"] = "guild",["guil"] = "guild",["guils"] = "guild",["guld"] = "guild",["guildiji"] = "guild",["guildes"] = "guild",
-["gildosi"] = "guild",["guile"] = "guild",["giuld"] = "guild",["duild"] = "guild",["gilds"] = "guild",["guildia"] = "guild",["gilde"] = "guild",["gildu"] = "guild",["guildi"] = "guild",["guildet"] = "guild",["gildie"] = "guild",
-["progresowania"] = "progression",["progresar"] = "progression",["progreso"] = "progression",["progresshez"] = "progression",["prog"] = "progression",["progressom"] = "progression",["progresando"] = "progressing",["progresowac"] = "progressing",
-["komunity"] = "community",["komunite"] = "community",["komunita"] = "community",["comunidad"] = "community",["comunidade"] = "community",["companheiros"] = "community",["compaeros"] = "community",
-["eventos"] = "event",
-["amigos"] = "friend",["actieve"] = "active",["nederlands"] = "dutch",["nederlandse"] = "dutch",["aktivity"] = "activity",
-
--- Foreign Trade Words
-["utc"] = .5,["cet"] = .5,["msk"] = 1,["est"] = 1,["ger"] = 1,["oceanic"] = .5,["aest"] = .5,["naandeu"] = 1,["euandna"] = 1,
-
-["zhdemvseh"] = 2,["proidives"] = 1,["cautammembri"] = 1,["anemariechipa"] = 1,["echipa"] = .5,["ishuG"] = 1,["yparxeikanenaG"] = 1,
-
--- Slovak
-["eqipomnazaciatokzacinajucemu"] = 1,["eqipom"] = .25,["eqipomna"] = .25,["pomozezacinajucemu"] = 1,["zacinajucemu"] = .5,
-
--- German
-["mitraid"] = 1,["zumraid"] = 1,["raidkader"] = 1,["motivierte"] = 1,["raidtage"] = 1,["joinwelt"] = 1,["werbeunterbrechung"] = 1,["yesttutruG"] = 3,["FnetteG"] = 1,["uneG"] = 1,["Fmitplayer"] = 1,
-["mitplayer"] = 1,["bistduzuverlssig"] = 1,["spaamzocken"] = 1,["dannkommzuuns"] = 1,["kommzuuns"] = 1,["wirfreuen"] = 1,["berjedeslevel"] = 1,["classoderrasse"] = 1,["Fdeute"] = 1,
-["frdengermanspeaking"] = 1,["hardcoreouchill"] = .5,["ouverttouslevel"] = .5,["Rpartirdulevel"] = 1.5,["eluneadore"] = .5,["unserercommunity"] = .5,["inunserercommunity"] = .5,
-["zumgemeinsamen"] = 1,["mainraidtage"] = 1,["immerabends"] = 1,["egalobrelaxedleveling"] = 1,["spaigraid"] = 1,["Fmit"] = 1,["compltersonroster"] = 2,["playermotivs"] = 1,["sbados"] = .5,
-["raidzeit"] = 1,["raidzeitmittwoch"] = 1,["ihrereihen"] = .5,["furtherihrereihen"] = .5,["strktfurtherihrereihen"] = .5,["gerneauchfrische"] = 1,
-["einnewadventure"] = .5,["einenfreshstart"] = .5,["Fdu"] = .5,["Fauchdu"] = .5,["raidgruppe"] = .5,["hiereineLG"] = .5,["wirstockenweiterauf"] = .5,["ordentlichegregewachsen"] = .5,
-
--- Hungarian
-["keresek"] = 1,["mindenhungarian"] = .5,["felvetelthirdet"] = 1,["tarsasagbanjatszani"] = 1,["szivesenvrunkbarkit"] = 2,["hangulat"] = .5,["szeretnelvelunkjatszani"] = 2,
-["varunkszeretettel"] = 1,["szeretettelvrminden"] = 1,["keresiaktvhungariantagjait"] = 1,
-
--- Finnish
-["finkilta"] = .5,["finnkilta"] = .5,["finjoukkue"] = .5,["finnjoukkue"] = .5,["maajoukue"] = 2,["maajoukkue"] = 2,["maajoukue"] = 2,["majoukkue"] = 2,["scouttaa"] = 2,["suomalaanen"] = 1,
-["joukkuesuomesta"] = 1,["skouta"] = 1,["skoutauusia"] = 1,["finnational"] = 2.5,["finnnational"] = 2.5,["finlandsnationalgroup"] = 2.5,["finlandnationalgroup"] = 2.5,["josontyls"] = 1,
-["hakeejseni"] = 3,["mitmuutamenoatoistaaseksi"] = 3,["skouttaa"] = 1,["teretulemast"] = 1,["finG"] = .5,["finplayer"] = .5,["newfinplayer"] = .5,["etsiiriveliihinsuusiakykyj"] = 1,
-["etsiiriveliihinsuusia"] = 2,["kykyj"] = 1,["skouttaauusiakykyj"] = 1,["uusiakykyj"] = 1,["pelityyli"] = 1,["sooloolijat"] = 1,["roolipelaajat"] = 1,["kaikkiteretulemast"] = 1,
-["suomibndi"] = 2,["etsiiuusia"] = 1,["etsii"] = 1,["kykyjetsii"] = 1,["uraatarjolla"] = 1,["maajoukkueessa"] = 1,["paikkaauki"] = 1,["skoutaa"] = 1,["uusia"] = .5,["riveihins"] = .5,
-["fysio"] = .5,["keskikentlle"] = .5,["joinmaajoukkue"] = 1.5,["joinmaajoukkuetoday"] = 1,["joinmaajoukkuetnn"] = 2,["suomikilta"] = 2,["suomikiltaa"] = 2,["raidaaako"] = 1.5,
-["questaako"] = 1.5,["pelaajilla"] = 1,["scoutaauusia"] = 1.5,["uusiajawanhoja"] = 1,["teretulemastkiltaan"] = 3,["kaikihoituu"] = 1,["suomipelaajia"] = 2,["kiltaan"] = 1,["haetaankiltaan"] = 2,
-["tulille"] = 1,["firmatarjoaa"] = .5,["tarjoaa"] = .5,["firma"] = .5,["scouttaavuoden"] = 1,["vvvalmistautuujascouttaavuoden"] = 1,["valmistautuu"] = 1,["ihmeellinenmaailma"] = 1,
-
--- Spanish/Portuguese
-["comprometidos"] = 1,["semanalmente"] = 1,["sitequieresunir"] = 2,["anyonedelaG"] = 1,["abresusfiles"] = 1,["yrisas"] = .5,["todotipodeplayer"] = 1,
-["conunaG"] = 1,["nodudesenunirte"] = 1,["enunirte"] = 1,["manos"] = .5,["adventurepicacomienzaaqu"] = 1,["Fbrgroupe"] = 3,["Fmostodo"] = 1,["Fbrgroupe"] = 3,["Fmostodo"] = 1,["Foffi"] = .5,
-["abresuspuerta"] = 1,["pargentequeF"] = 2,["empezando"] = .5,["levear"] = 1,["bienvenido"] = .5,["hablahispana"] = 1,["bancodehermadad"] = 1,["interesados"] = 1,
-
--- Polish
-["zapraszadowspolnej"] = 1,["rodakow"] = .5,["niezaleznieodpoziomu"] = 1,["zaczelismyP"] = 1,["obecnieczyscimy"] = .5,["calykontent"] = 1,["chcedolaczyc"] = 1,
-
--- Slavic
-["raidov"] = 1,["ishet"] = 1,["novacek"] = 1,["raidereket"] = 1,["priednuysia"] = 1,["primet"] = 1,["reydinga"] = 1,["novaya"] = 1,["novayaG"] = 1,["nabirayet"] = 2,["nabiraet"] = 2,
-["nabirayetvsekh"] = 1,["nabiraem"] = 2,["zhelayushchikh"] = 1,["igrokov"] = 1,["zhelayushchikhigrokov"] = 1,["pervaya"] = .5,["edinstvennaya"] = .5,["pervayaiedinstvennaya"] = 1.5,
-["primite"] = .5,["primitevru"] = .5,["osvoenie"] = .5,["naosvoenie"] = 1,["speki"] = .5,["rassmotrim"] = 1,["vseklassy"] = 1,["vseklassyispeki"] = 2,["vsemklassam"] = 1,["unasvreide"] = 1,
-["prijmenovehrace"] = 1,["novehrace"] = .5,["pravidelneraidujemeveskerykontent"] = 1,["raidujemeveskerykontent"] = 1,["ishyrusskuyu"] = 1,["russianmockba"] = 1,["narodavrezerve"] = 1,
-["somcomboG"] = 1,["ishyLG"] = 1,["pomoshobshchenie"] = 1,["vesyolayaigra"] = 1,["prinimaemslubogolvl"] = 1,["prinimaem"] = .5,["ishyrusskuyu"] = 1,["dodajenoveclanove"] = 1,["otevrenaprovsechny"] = 2,
-["ishetplayerdlayraid"] = 1,["ishetplayer"] = 1,["vozmitevG"] = 1,["havorb"] = .5,["lubogolvla"] = 1,["nabor"] = .5,["otkritnabor"] = 2,["vedemnabor"] = 2,["vedetnabor"] = 2,["vedetsanabor"] = 2,
-["prohozhdeniyadanzhey"] = 1,["sovmestnoyprokachki"] = 1,["primemvsehzelaushih"] = 2,["vedemnaborigrokov"] = 3,["novacekciveteran"] = 2,["provodenabirgravziv"] = 2,["pohodova"] = 1,
-
--- Italian
-["seiinterested"] = 1,["sehaiinterested"] = 1,["livelli"] = 1,["divertimentoassicurati"] = 1,
-
--- Romanian
-["romni"] = 1,["jucatoriromni"] = 1,["pentrucontent"] = 1,["socialevenimente"] = 1,["sidistractie"] = 1,["pentruinfosauinvite"] = .5,["evenimente"] = .5,
-["rozwijajacejsieG"] = .5,["namilevelowac"] = .5,["levelowac"] = .5,["doswiadczeniemlorowym"] = .5,["naszegoOC"] = .5,
-
--- Turkish
-["Gmiz"] = 2,["turkGmiz"] = .5,["kurulmustur"] = .5,["gelmekisteyenler"] = 1.5,["gelmek"] = .5,["kuruluyor"] = 1,["katilmakicinlutfen"] = .5,
---]]
 }
 GF_LANGUAGE_FOREIGN_COMMON_MULTIWORDS = {
 --[[
