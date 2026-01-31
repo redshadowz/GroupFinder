@@ -4042,7 +4042,7 @@ GF_HardcoreMessages = {
 [1]	= "((%a+) has reached level (%d+).-!)",
 [2]	= "((%a+) has transcended death.-level (%d+).-in.-%p)",
 [3]	= ".-(Hardcore character (%a+).-level (%d+).-%.)",
-[4]	= "((%a+) has laughed in the face of death in the Hardcore challenge. AnyName has begun the Inferno Challenge!)",
+--[4]	= " ((%a+) has laughed in the face of death in the Hardcore challenge. AnyName has begun the Inferno Challenge!)",
 }
 GF_QUEST_CONVERT = {
 

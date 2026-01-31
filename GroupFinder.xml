@@ -1929,7 +1929,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Scripts>
 									<OnClick>
 										if GF_PerCharVariables.lfgshown then GF_PerCharVariables.lfgshown = nil else GF_PerCharVariables.lfgshown = true end
-										GF_LFGWhoUpdateOffset()
+										GF_LFGGetWhoUpdateOffset()
 										GF_UpdateMainFrameHeight()
 										GF_UpdateMainFrameWidth()
 										GF_UpdateMainFrame()
@@ -1952,7 +1952,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Scripts>
 									<OnClick>
 										if GF_PerCharVariables.getwhoshown then GF_PerCharVariables.getwhoshown = nil else GF_PerCharVariables.getwhoshown = true end
-										GF_LFGWhoUpdateOffset()
+										GF_LFGGetWhoUpdateOffset()
 										GF_UpdateMainFrameHeight()
 										GF_UpdateMainFrameWidth()
 										GF_UpdateMainFrame()
@@ -4759,30 +4759,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				GF_SavedVariables.mainframestatus = 0
 				if pfUI and pfUI.chat and pfUI.chat.urlcopy then pfUI.chat.urlcopy:SetWidth(270) pfUI.chat.urlcopy.text:SetWidth(250) end
 			</OnHide>
-		</Scripts>
-	</Frame>
-	<Frame name="GF_SneakyFrame"  frameStrata="BACKGROUND" parent="UIParent">
-		<Size>
-			<AbsDimension x="1" y="1"/>
-		</Size>
-		<Anchors>
-			<Anchor point="TOPLEFT">
-				<Offset>
-					<AbsDimension x="0" y="0"/>
-				</Offset>
-			</Anchor>
-		</Anchors>
-		<Scripts>
-			<OnLoad>
-				this:Show()
-				GF_OnLoad()				
-			</OnLoad>
-			<OnEvent>
-				GF_OnEvent(event)
-			</OnEvent>
-			<OnUpdate>
-				GF_OnUpdate(arg1)
-			</OnUpdate>
 		</Scripts>
 	</Frame>
 </Ui>
