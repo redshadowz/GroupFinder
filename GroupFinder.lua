@@ -279,7 +279,7 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 	
 	local old_ChatFrame_OnEvent = ChatFrame_OnEvent
 	function ChatFrame_OnEvent(event) -- arg1(message), arg2(sender), arg4("Channel#." "(City/Trade)" "channelName"), arg5, (nameOfPlayerWhoLooted), arg7(zoneChannel#), arg8(channel#), arg9("City/Trade" "channelName")
-		if GF_FindGroupsAndDisplayCustomChatMessages(event) then old_ChatFrame_OnEvent(event) end
+		if GF_FindGroupsAndDisplayCustomChatMessages(event) then if GF_PreviousMessage[arg2] and GF_PreviousMessage[arg2][4] then arg1 = GF_PreviousMessage[arg2][4] end old_ChatFrame_OnEvent(event) end
 	end
 	local old_SendChatMessage = SendChatMessage
 	function SendChatMessage(arg1,arg2,arg3,arg4) -- arg1(message), arg2(chatType(WHISPER/GUILD/CHANNEL/SAY/PARTYETC)), arg3(language), arg4(targetname(or channelname)))
@@ -1253,10 +1253,12 @@ function GF_ParseIncomingAddonMessages(msg)
 		GF_TimeTillNextBroadcast = (math.random(80))/4
 		GF_AddonNeedToBroadcastSomething = true
 	elseif string.sub(msg,1,1) == ":" then -- (To Everyone) This is the who data from the names requested in "R".
-		for sentlevel,sentname,sentclass,sentguild,sentrecordedtime in string.gfind(msg, ":(%d+)([a-zA-Z]+)(%d)([a-zA-Z%s]+)(%d+)") do
-			if sentguild == "Z" then sentguild = "" end
-			if tonumber(sentrecordedtime) <= time() and (not GF_WhoTable[GF_RealmName][sentname] or tonumber(sentrecordedtime) > GF_WhoTable[GF_RealmName][sentname][4]) then
-				GF_WhoTable[GF_RealmName][sentname] = { tonumber(sentlevel), GF_ClassIDs[tonumber(sentclass)], sentguild, tonumber(sentrecordedtime) }
+		for sentlevel,sentname,sentclass,sentguild,senttime in string.gfind(msg, ":(%d+)([a-zA-Z]+)(%d)([a-zA-Z%s]+)(%d+)") do
+			if senttime then
+				if sentguild == "Z" then sentguild = "" end
+				if tonumber(senttime) <= time() and (not GF_WhoTable[GF_RealmName][sentname] or tonumber(senttime) > GF_WhoTable[GF_RealmName][sentname][4]) then
+					GF_WhoTable[GF_RealmName][sentname] = { tonumber(sentlevel), GF_ClassIDs[tonumber(sentclass)], sentguild, tonumber(senttime) }
+				end
 			end
 			GF_AddonAllNamesForResponseToLogin[sentname] = nil
 			GF_AddonNamesToBeSentAsARequest[sentname] = nil
@@ -1264,24 +1266,25 @@ function GF_ParseIncomingAddonMessages(msg)
 		end
 	elseif string.len(msg) > 2 then -- (To Everyone) This is the full group information. Which is sent separately from the who data.
 		for senttime,sentname,message in string.gfind(msg, "(%d+)([a-zA-Z]+):(.+)") do
-			GF_GetTypes(gsub(gsub(gsub(gsub(gsub(string.lower(gsub(gsub(gsub(gsub(" "..msg.." ", " |+h%[([%w%s%p]+)%]|+h|+r", " %1 "), "|c%x+|+(%w+)[%d:]+|+h", " %1 "), "|+h|+r", " "),"([a-z ][a-z])([A-Z])","%1 %2")),".gg/%w+", ""),"([%p%s])(%w%w+)([%p%s])","%1 %2 %3"),"[%s%.%[](%a)[%s%.](%a)[%s%.]","%1%2"),"%s%s+", " "),"[']", ""))
+			if senttime then
+				GF_GetTypes(gsub(gsub(gsub(gsub(gsub(string.lower(gsub(gsub(gsub(gsub(" "..msg.." ", " |+h%[([%w%s%p]+)%]|+h|+r", " %1 "), "|c%x+|+(%w+)[%d:]+|+h", " %1 "), "|+h|+r", " "),"([a-z ][a-z])([A-Z])","%1 %2")),".gg/%w+", ""),"([%p%s])(%w%w+)([%p%s])","%1 %2 %3"),"[%s%.%[](%a)[%s%.](%a)[%s%.]","%1%2"),"%s%s+", " "),"[']", ""))
+				for i=1, getn(GF_MessageList[GF_RealmName]) do
+					if GF_MessageList[GF_RealmName][i].op and GF_MessageList[GF_RealmName][i].op == sentname then
+						table.remove(GF_MessageList[GF_RealmName], i)
+						break
+					end
+				end
+				if getn(GF_MessageList[GF_RealmName]) > 0 then
+					for i=1, getn(GF_MessageList[GF_RealmName]) do
+						if tonumber(senttime) > GF_MessageList[GF_RealmName][i].t then table.insert(GF_MessageList[GF_RealmName], i, ({GF_GetGroupInformation(GF_CleanUpMessagesOfBadLinks(message),sentname,tonumber(senttime))})[1]) return end
+					end
+				end
+				table.insert(GF_MessageList[GF_RealmName], ({GF_GetGroupInformation(GF_CleanUpMessagesOfBadLinks(message),sentname,tonumber(senttime))})[1])
+			end
 			GF_AddonGroupDataToBeSentBuffer[sentname] = nil
 			GF_AddonAllNamesForResponseToLogin[sentname] = nil
 			GF_AddonNamesToBeSentAsARequest[sentname] = nil
 			GF_AddonWhoDataToBeSentBuffer[sentname] = nil
-
-			for i=1, getn(GF_MessageList[GF_RealmName]) do
-				if GF_MessageList[GF_RealmName][i].op and GF_MessageList[GF_RealmName][i].op == sentname then
-					table.remove(GF_MessageList[GF_RealmName], i)
-					break
-				end
-			end
-			if getn(GF_MessageList[GF_RealmName]) > 0 then
-				for i=1, getn(GF_MessageList[GF_RealmName]) do
-					if tonumber(senttime) > GF_MessageList[GF_RealmName][i].t then table.insert(GF_MessageList[GF_RealmName], i, ({GF_GetGroupInformation(GF_CleanUpMessagesOfBadLinks(message),sentname,tonumber(senttime))})[1]) return end
-				end
-			end
-			table.insert(GF_MessageList[GF_RealmName], ({GF_GetGroupInformation(GF_CleanUpMessagesOfBadLinks(message),sentname,tonumber(senttime))})[1])
 		end
 	end
 end
@@ -2787,7 +2790,8 @@ function GF_FindGroupsAndDisplayCustomChatMessages(event) -- Chat Filters and Gr
 					if tempVal and GF_WhoTable[GF_RealmName][tempString] then GF_WhoTable[GF_RealmName][tempString][1] = tonumber(tempVal) end
 					lfs,lfe = string.find(wordString, tempString.." ",lfs)
 					GF_AddLogMessage(string.sub(string.sub(" "..wordString,1,lfs).."|cff9d9d9d|Hplayer:"..tempString.."|h["..tempString.."]|h|r"..string.sub(wordString,lfe),2),4,true,"SYSTEM",arg8,arg9,"HARDCORE")
-					break
+					GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,true,string.sub(string.sub(" "..wordString,1,lfs).."|cff9d9d9d|Hplayer:"..tempString.."|h["..tempString.."]|h|r"..string.sub(wordString,lfe),2)}
+					return true
 				end
 			end
 			GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,true}
@@ -2853,12 +2857,12 @@ function GF_CheckForGroups(arg1,arg2,arg9,event,showanyway)
 -- "Say" messages will always be displayed unless flagged as spam.
 -- "Yell" and "Channel" messages will only display if allowed.
 	if GF_BlackList[GF_RealmName][arg2] and not GF_PlayersCurrentlyInGroup[arg2] and not GF_Friends[arg2] and not GF_Guildies[arg2] then return 8 end
-	GF_GetTypes(gsub(gsub(gsub(string.lower(gsub(gsub(gsub(arg1, "|[cC]%x+%p+(%w+)[%w:]+|+[hH]", " %1 >z"), "|[hr]", ""),"([a-z ][a-z])([A-Z])","%1 %2")),".gg/%w+", ""),"[\"#\$\%&\*,\.@\\\^_`~|]"," "),"'",""),showanyway)
+	GF_GetTypes(arg1,showanyway)
 	if event == "HARDCORE" or string.lower(arg9) == "hardcore" then GF_MessageData.foundHC = true end
 	if GF_MessageData.foundGuild > 2.9 then return GF_CheckForSpam(arg1,arg2) or 11
 	elseif GF_MessageData.foundTrades > 2.9 then return GF_CheckForSpam(arg1,arg2) or 5
 	elseif GF_MessageData.foundLFM < GF_SavedVariables.FilterLevel and GF_MessageData.foundLFG < GF_SavedVariables.FilterLevel then
-		if GF_PlayingOnTurtle then GF_GetWhoData(arg2) end
+		if GF_SavedVariables.showformattedchat and GF_PlayingOnTurtle then GF_GetWhoData(arg2) end
 		return GF_CheckForSpam(arg1,arg2) or 4
 	end
 
@@ -2877,8 +2881,8 @@ function GF_CheckForGroups(arg1,arg2,arg9,event,showanyway)
 end
 function GF_GetTypes(arg1, showanyway)
 	if showanyway == true then print(arg1) end
-	arg1 = " "..arg1.." "
-	GF_MessageData = { foundIgnore = 0,foundGuild = 0,foundGuildExclusion = 0,foundLFM = 0,foundLFMPreSuf = 0,foundLFG = 0,foundLFGPreSuf = 0,foundClass = nil,foundQuest = {},foundDungeon = nil,foundRaid = nil,foundTrades = 0,foundTradesExclusion = 0,foundPvP = nil,foundDFlags = {},foundPFlags = {},foundHC = nil,foundNotHC = nil, lfmlfgName = {}, groupName = {} }
+	arg1 = " "..gsub(gsub(gsub(string.lower(gsub(gsub(gsub(arg1, "|[cC]%x+%p+(%w+)[%w:]+|+[hH]", " %1 >z"), "|[hr]", ""),"([a-z ][a-z])([A-Z])","%1 %2")),".gg/%w+", ""),"[\"#\$\%&\*,\.@\\\^_`~|]"," "),"'","").." "
+	GF_MessageData = { arg1 = "", languageName = "en", foundIgnore = 0,foundGuild = 0,foundGuildExclusion = 0,foundLFM = 0,foundLFMPreSuf = 0,foundLFG = 0,foundLFGPreSuf = 0,foundClass = nil,foundQuest = {},foundDungeon = nil,foundRaid = nil,foundTrades = 0,foundTradesExclusion = 0,foundPvP = nil,foundDFlags = {},foundPFlags = {},foundHC = nil,foundNotHC = nil, lfmlfgName = {}, groupName = {} }
 	local wordTable,wordTableTrade,wordTableGuild = {},{},{}
 	local wordString,lfs,lfe,tempVal,tempString
 	local languageID = {}
@@ -2900,7 +2904,21 @@ function GF_GetTypes(arg1, showanyway)
 		lfs = strbyte(arg1,tempVal)
 		lfe = strbyte(arg1,tempVal+1)
 		if not lfe then break end
-		if lfs == lfe then
+		if lfs >= 194 then
+			if GF_WORD_ACCENT_ASCII_FIX[lfs] and GF_WORD_ACCENT_ASCII_FIX[lfs][lfe] then
+				if lfs == strbyte(arg1,tempVal+2) and lfe == strbyte(arg1,tempVal+3) then
+					table.insert(wordTable,GF_WORD_ACCENT_ASCII_FIX[lfs][lfe]) tempVal=tempVal+1 for j=1,250,2 do if lfs ~= strbyte(arg1,tempVal+j) and lfe ~= strbyte(arg1,tempVal+j+1) or not GF_WORD_ACCENT_ASCII_FIX[strbyte(arg1,tempVal+j)] or not GF_WORD_ACCENT_ASCII_FIX[strbyte(arg1,tempVal+j)][strbyte(arg1,tempVal+j+1)] then tempVal=tempVal+j-1 break end end
+				else
+					table.insert(wordTable,GF_WORD_ACCENT_ASCII_FIX[lfs][lfe])
+					tempVal = tempVal + 1
+				end
+			elseif GF_WORD_ASIAN_LANGUAGES[lfs] then -- Chinese characters are always 227-239 first byte, and then two more bytes that are 128-190ish
+				table.insert(wordTable,strchar(lfs)) table.insert(wordTable,strchar(lfe)) table.insert(wordTable,strchar(strbyte(arg1,tempVal+2)))
+				tempVal=tempVal+2
+			else
+				table.insert(wordTable,strchar(lfs))
+			end
+		elseif lfs == lfe then
 			if lfs >= 97 and lfs <= 122 then
 				if lfs == strbyte(arg1,tempVal+2) then
 					table.insert(wordTable,strchar(lfs)) table.insert(wordTable,strchar(lfe)) tempVal=tempVal+2 for j=1,250 do if lfs ~= strbyte(arg1,tempVal+j) then tempVal=tempVal+j-1 break end end
@@ -2915,13 +2933,6 @@ function GF_GetTypes(arg1, showanyway)
 				table.insert(wordTable,strchar(lfs)) table.insert(wordTable,strchar(strbyte(arg1,tempVal+2))) tempVal=tempVal+2 for j=3,250,2 do if strbyte(arg1,tempVal+j) ~= 32 and strbyte(arg1,tempVal+j) ~= 46 and strbyte(arg1,tempVal+j) ~= 62 then tempVal=tempVal+j-3 break else table.insert(wordTable,strchar(strbyte(arg1,tempVal+j-1))) end end
 			else
 				table.insert(wordTable,strchar(lfs))
-			end
-		elseif lfs >= 194 and lfs <= 210 and GF_WORD_ACCENT_ASCII_FIX[lfs] and GF_WORD_ACCENT_ASCII_FIX[lfs][lfe] then
-			if lfs == strbyte(arg1,tempVal+2) and lfe == strbyte(arg1,tempVal+3) then
-				table.insert(wordTable,GF_WORD_ACCENT_ASCII_FIX[lfs][lfe]) tempVal=tempVal+1 for j=1,250,2 do if lfs ~= strbyte(arg1,tempVal+j) and lfe ~= strbyte(arg1,tempVal+j+1) or not GF_WORD_ACCENT_ASCII_FIX[strbyte(arg1,tempVal+j)] or not GF_WORD_ACCENT_ASCII_FIX[strbyte(arg1,tempVal+j)][strbyte(arg1,tempVal+j+1)] then tempVal=tempVal+j-1 break end end
-			else -- was 12, saved 12/13, moved position to 13(14 at end)... check 14 and 15...
-				table.insert(wordTable,GF_WORD_ACCENT_ASCII_FIX[lfs][lfe])
-				tempVal = tempVal + 1
 			end
 		elseif lfs == strbyte(arg1,tempVal+2) and lfs == strbyte(arg1,tempVal+4) and lfs ~= 32 and lfs ~= 46 then
 			if lfe == strbyte(arg1,tempVal+3) then
@@ -2995,7 +3006,66 @@ function GF_GetTypes(arg1, showanyway)
 		end
 	end
 	lfs = 2 -- To fix single words
-	while true do lfs,lfe,wordString,tempString = string.find(arg1, "(.-)([%s%p%d]+)",lfs) if not wordString then break elseif GF_WORD_FIX_SINGLE_WORD[wordString] then arg1 = string.sub(arg1,1,lfs-1)..GF_WORD_FIX_SINGLE_WORD[wordString]..tempString..string.sub(arg1,lfe+1) lfs = lfs + string.len(GF_WORD_FIX_SINGLE_WORD[wordString]..tempString)-1 elseif GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString] then if not languageID[GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString][2]] then languageID[GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString][2]] = 1 else languageID[GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString][2]] = languageID[GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString]] + 1 end lfs = lfe+1 else lfs = lfe+1 end end
+	while true do lfs,lfe,wordString,tempString = string.find(arg1, "(.-)([%s%p%d]+)",lfs) if not wordString then break elseif GF_WORD_FIX_SINGLE_WORD[wordString] then arg1 = string.sub(arg1,1,lfs-1)..GF_WORD_FIX_SINGLE_WORD[wordString]..tempString..string.sub(arg1,lfe+1) lfs = lfs + string.len(GF_WORD_FIX_SINGLE_WORD[wordString]..tempString)-1 elseif GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString] then if not languageID[GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString]] then languageID[GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString]] = 1 else languageID[GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString]] = languageID[GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString]] + 1 end lfs = lfe+1 else lfs = lfe+1 end end
+
+-- Translation stuff
+	lfs = 0
+	for langID,totalLang in languageID do if totalLang > lfs then lfs = totalLang GF_MessageData.languageName = langID end end
+	if showanyway == true then print(GF_MessageData.languageName.." "..lfs) end
+
+--	local word1,word2,word3,word4,space1,space2,space3,space4
+--[[	tempVal = 4
+	lfs = 2 -- To do translation
+	while true do
+		if tempVal == 4 then
+			_,lfe,wordString,word1,space1,word2,space2,word3,space3,word4,space4 = string.find(arg1, "((.-)([%s%p%d]+)(.-)([%s%p%d]+)(.-)([%s%p%d]+)(.-)([%s%p%d]+))",lfs) -- 4 words
+			if not wordString then
+				tempVal = 3
+			else
+				lfs = lfs + string.len(word1..space1)
+			end
+		elseif tempVal == 3 then
+			_,lfe,wordString,word1,space1,word2,space2,word3,space3 = string.find(arg1, "((.-)([%s%p%d]+)(.-)([%s%p%d]+)(.-)([%s%p%d]+))",lfs) -- 3 words
+			if not wordString then
+				tempVal = 2
+			else
+				lfs = lfs + string.len(word1..space1)
+			end
+		elseif tempVal == 2 then
+			_,lfe,wordString,word1,space1,word2,space2 = string.find(arg1, "((.-)([%s%p%d]+)(.-)([%s%p%d]+))",lfs) -- 2 words
+			if not wordString then
+				tempVal = 1
+			else
+				lfs = lfs + string.len(word1..space1)
+			end
+		elseif tempVal == 1 then
+			_,lfe,wordString,word1,space1 = string.find(arg1, "((.-)([%s%p%d]+))",lfs) -- 1 word
+			if not wordString then
+				break
+			else
+				break
+			end
+		end
+	end--]]
+--print(GetTime())
+--for i=1, 1000 do
+--	lfs = 2 -- Add all words to the wordTable
+--	while true do
+--		lfs,lfe,wordString = string.find(arg1, "(.-)[%s%p%d]+",lfs)
+--		if wordString then
+--			lfs = lfe+1
+--		else
+--			break
+--		end
+--	end
+--end
+--print(GetTime())
+-- It's about 20-50 for 1000 of these, or 0.02 to 0.05 ms
+-- Just the string.find routine is 1-20 ms(2-10 typical)
+-- But it's only about 2-15 for 1000 of my data entry... and 2-15 for my checking.. so just this is more than my entire entry + fix
+-- I feel like there has to be a way to integrate the word replacer into get word
+
+-- So like, if I 
 
 	lfs = 1 -- To detect space/letter/number/letter/space combinations(eg " g2g " = gtg)
 	while true do lfs,lfe,wordString = string.find(arg1," (w?%a%s?%d%s?%ab?)[%p%s]",lfs) if wordString then wordString = gsub(wordString," ","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = string.sub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..string.sub(arg1,lfe) end lfs = lfs + string.len(wordString) + 1 else break end end
@@ -3074,22 +3144,13 @@ function GF_GetTypes(arg1, showanyway)
 	lfs = 1 -- To detect word/letter/number combinations(eg "BMx2" = bm x2)
 	while true do lfs,lfe,wordString,tempString = string.find(arg1," (%d+%a)(%a+)[%p%s]",lfs) if wordString then if GF_WORD_LETTER_NUMBER_BEFORE_AFTER[wordString] and GF_GROUP_IDS[tempString] then arg1 = string.sub(arg1,1,lfs)..GF_WORD_LETTER_NUMBER_BEFORE_AFTER[wordString].." "..tempString.." "..string.sub(arg1,lfe) lfs = lfs + string.len(GF_WORD_LETTER_NUMBER_BEFORE_AFTER[wordString]..tempString) + 2 else lfs = lfe end else break end end
 
--- Find most common language
-	lfs = 0
-	tempVal = "en"
-	for langID,totalLang in languageID do
-		if totalLang > lfs then lfs = totalLang tempVal = langID end
-	end
-	languageID = tempVal
-	if showanyway == true then print(languageID) end
-
 -- Quest Search
 	lfs = 2 -- Add all words to the wordTable
 	while true do
 		lfs,lfe,wordString = string.find(arg1, "(.-)[%s%p%d]+",lfs)
 		if wordString then
 			if strbyte(wordString) then
-				if not GF_WORD_BYPASS_TRIGGER[languageID][wordString] then
+				if not GF_WORD_BYPASS_TRIGGER[GF_MessageData.languageName][wordString] then
 					table.insert(wordTable, wordString)
 					lfs = lfe+1
 				else
@@ -3691,14 +3752,12 @@ function GetModifiedQuestName(entryname)
 		end
 	end
 
--- Process foreign languages here(full 0-3 cycle)
-	languageID = "en"
 -- Quest Search
 	lfs = 2 -- Add all words to the wordTable
 	while true do
 		lfs,lfe,wordString = string.find(arg1, "(.-)[%s%p%d]+",lfs)
 		if wordString then
-			if not GF_WORD_BYPASS_TRIGGER[languageID][wordString] then
+			if not GF_WORD_BYPASS_TRIGGER["en"][wordString] then
 				table.insert(wordTable, wordString)
 				lfs = lfe+1
 			else
@@ -4056,7 +4115,7 @@ function FindForeignLetters()
 	end
 	print(cnt)
 end
-function ConvertForeignWords()
+function ConvertForeignWords() -- /script ConvertForeignWords()
 -- remove if word is too short, remove punctuation, convert letters
 
 -- First database = add single words 3 characters or longer with the language family only(word = language)... remove any words that are the same across languages
@@ -4068,37 +4127,49 @@ function ConvertForeignWords()
 
 	local lfs,lfe,tempVal,wordString
 	local wordTable = {}
-	GF_SavedVariables.questconversion = {}
+	GF_SavedVariables.questconversion = { LanguageZZZ = {}, WordZZZ = {} }
 	local tempTable = {}
 	for entryname,wtable in GF_QUEST_CONVERT do
 		tempVal = 1
 		wordString = gsub(gsub(entryname,"^%p+",""),"'","")
-		if not string.find(wordString," ") then
-			wordString = wordString.." "
-			while true do
-				lfs = strbyte(wordString,tempVal)
-				lfe = strbyte(wordString,tempVal+1)
-				if not lfe then break end
 
-				if lfs >= 194 and lfs <= 210 and GF_WORD_ACCENT_ASCII_FIX[lfs] and GF_WORD_ACCENT_ASCII_FIX[lfs][lfe] then
-					if lfs == strbyte(arg1,tempVal+2) and lfe == strbyte(arg1,tempVal+3) then
-						table.insert(wordTable,GF_WORD_ACCENT_ASCII_FIX[lfs][lfe]) tempVal=tempVal+1 for j=1,250,2 do if lfs ~= strbyte(arg1,tempVal+j) and lfe ~= strbyte(arg1,tempVal+j+1) or not GF_WORD_ACCENT_ASCII_FIX[strbyte(arg1,tempVal+j)] or not GF_WORD_ACCENT_ASCII_FIX[strbyte(arg1,tempVal+j)][strbyte(arg1,tempVal+j+1)] then tempVal=tempVal+j-1 break end end
-					else
-						table.insert(wordTable,GF_WORD_ACCENT_ASCII_FIX[lfs][lfe])
-						tempVal = tempVal + 1
-					end
+		wordString = wordString.." "
+		while true do
+			lfs = strbyte(wordString,tempVal)
+			lfe = strbyte(wordString,tempVal+1)
+			if not lfe then break end
+
+			if lfs >= 194 and lfs <= 210 and GF_WORD_ACCENT_ASCII_FIX[lfs] and GF_WORD_ACCENT_ASCII_FIX[lfs][lfe] then
+				if lfs == strbyte(wordString,tempVal+2) and lfe == strbyte(wordString,tempVal+3) then
+					table.insert(wordTable,GF_WORD_ACCENT_ASCII_FIX[lfs][lfe]) tempVal=tempVal+1 for j=1,250,2 do if lfs ~= strbyte(wordString,tempVal+j) and lfe ~= strbyte(wordString,tempVal+j+1) or not GF_WORD_ACCENT_ASCII_FIX[strbyte(wordString,tempVal+j)] or not GF_WORD_ACCENT_ASCII_FIX[strbyte(wordString,tempVal+j)][strbyte(wordString,tempVal+j+1)] then tempVal=tempVal+j-1 break end end
 				else
-					table.insert(wordTable,strchar(lfs))
+					table.insert(wordTable,GF_WORD_ACCENT_ASCII_FIX[lfs][lfe])
+					tempVal = tempVal + 1
 				end
-				tempVal = tempVal + 1
+			else
+				table.insert(wordTable,strchar(lfs))
 			end
-			wordString = table.concat(wordTable)
-			wordString = gsub(gsub(wordString,"^an?[%s%p]",""),"[%s%p]an?$","")
-			wordTable = {}
-			if not string.find(wordString,"[%s%p]") and string.len(wordString) > 3 then if tempTable[wordString] then tempTable[wordString] = "1" else tempTable[wordString] = wtable end end
+			tempVal = tempVal + 1
+		end
+		wordString = table.concat(wordTable)
+		wordTable = {}
+		-- Need to save words without a/an space/%p in first database, and with in second database
+		-- if first database has same words, don't save
+		-- second database should be broken down by language
+		wordString = gsub(gsub(wordString,"^an?[%s%p]",""),"[%s%p]an?$","")
+		if not string.find(wordString,"^an?[%s%p]") and not string.find(wordString,"[%s%p]an?$") and not string.find(wordString,"[%s%p]") and string.len(wordString) > 2 then if tempTable[wordString] then tempTable[wordString][1] = "1" else tempTable[wordString] = wtable end end
+		if not GF_SavedVariables.questconversion["WordZZZ"][wtable[2]] then GF_SavedVariables.questconversion["WordZZZ"][wtable[2]] = {} end
+		if wtable[2] ~= "en" then
+			GF_SavedVariables.questconversion["WordZZZ"][wtable[2]][gsub(wordString,"[%s%p]","")] = wtable[1]
+			GF_SavedVariables.questconversion["WordZZZ"][wtable[2]][gsub(gsub(gsub(wordString,"^an?[%s%p]",""),"[%s%p]an?$",""),"[%s%p]","")] = wtable[1]
 		end
 	end
 	for entryname,wtable in tempTable do
-		if wtable ~= "1" then GF_SavedVariables.questconversion[entryname] = wtable end
+		if wtable[1] ~= "1" and wtable[2] ~= "en" then GF_SavedVariables.questconversion["LanguageZZZ"][entryname] = wtable[2] end
+	end
+end
+function CheckWords() -- /script CheckWords()
+	for entryname,wtable in GF_LANGUAGE_CONVERT do
+		GF_CheckForGroups(entryname,"R","World","CHAT_MSG_YELL",true)
 	end
 end

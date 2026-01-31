@@ -448,7 +448,7 @@ GF_WORD_BYPASS_TRIGGER = { -- Words to not include in the WordTable. lf/lfg/lfm/
 ["pl"] = {
 	["lf"] = true,["lfg"] = true,["lfm"] = true,["queue"] = true,["join"] = true,[""] = true,["a"] = true,["an"] = true,["the"] = true,["xd"] = true,["xdd"] = true,["hspell"] = true,["Z"] = true,
 },
-["pt-PT"] = {
+["pt-pt"] = {
 	["lf"] = true,["lfg"] = true,["lfm"] = true,["queue"] = true,["join"] = true,[""] = true,["a"] = true,["an"] = true,["the"] = true,["xd"] = true,["xdd"] = true,["hspell"] = true,["Z"] = true,
 },
 ["ro"] = {
@@ -1703,6 +1703,9 @@ GF_WORD_ACCENT_ASCII_FIX = { -- Accent character replace
 [210] = { [145] = "g", }
 
 --a b c d e f g h i j k l m n o p q r s t u v w x y z
+}
+GF_WORD_ASIAN_LANGUAGES = { -- Accent character replace
+[227] = true,[228] = true,[229] = true,[230] = true,[231] = true,[232] = true,[233] = true,[234] = true,[235] = true,[236] = true,[237] = true,[238] = true,[239] = true,
 }
 GF_WORD_IGNORE = { -- Phrases to help prevent group false-positives.
 ["abolishme"] = 1,["abolishmy"] = 1,["aboutspec"] = 1,["aboutthisquest"] = 1,["aboutthisqueue"] = 1,["abovelevel"] = .5,["acrosstheroom"] = 1,["actuallya"] = .5,["addhim"] = 1,
@@ -3648,7 +3651,6 @@ GF_TRADE_COMMON_WORDS = {
 
 GF_LANGUAGE_FOREIGN_COMMON_WORDS = {
 -- Imported
-
 -- French
 --[[
 [""] = {"","fr"},
@@ -4051,6 +4053,7 @@ GF_QUEST_CONVERT_NEGATIVE_ID = {
 }
 
 GF_LANGUAGE_CONVERT = {
+["起初我們並不熟悉， 漸漸地就熟悉起來了。"]=true,
 }
 -- Turtle additions
 GF_HIGH_ELF = "High Elf"
