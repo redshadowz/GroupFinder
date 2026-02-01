@@ -37,7 +37,7 @@ GF_BlackListOffset							= 0
 GF_NumLFGSearchButtons						= 0
 GF_LogHistory								= {}
 GF_LogHistory[GF_RealmName]					= {}
-GF_LogFilters								= { [10]=true,["SYSTEM"] = true,["LOOT"] = true,["MONEY"] = true,["COMBAT_FACTION_CHANGE"] = true,["COMBAT_XP_GAIN"] = true,["COMBAT_HONOR_GAIN"] = true, }
+GF_LogFilters								= { [10]=true,["LOOT"] = true,["MONEY"] = true,["COMBAT_FACTION_CHANGE"] = true,["COMBAT_XP_GAIN"] = true,["COMBAT_HONOR_GAIN"] = true, }
 GF_ConvertMessagesToLinks					= nil
 
 local GF_OnStartupRunOnce					= true
@@ -973,7 +973,7 @@ function GF_DisplayLog()
 		for i=1, getn(tempHistoryTable) do
 			local _,_,startString,endString = string.find(tempHistoryTable[i][1], "(.-%].-|Hplayer.-|h|r )(.*)")
 			if startString then
-				endString = gsub(gsub(gsub(gsub(endString, "|[cC]%x+|%w+:%w+:[%w:]+|[h]", ""), "|[cC]%x+%p+%w+:(.-)|h.-|h|r", "%1"), "|[cC]%x+", ""), "|[hHrR]?", "")
+				endString = gsub(gsub(gsub(gsub(endString, "|[cC]%x+|%w+:%w+:[%w:]+|[h]", ""), "|[cC]%x+%p+%w+:.-|h(.-)|h|r", "%1"), "|[cC]%x+", ""), "|[hHrR]?", "")
 				GF_Log:AddMessage(startString.."|cffccccff|Hurl:"..endString.."|h"..endString.."|h|r", GF_TextColors[tempHistoryTable[i][3]][1], GF_TextColors[tempHistoryTable[i][3]][2], GF_TextColors[tempHistoryTable[i][3]][3])
 			else
 				GF_Log:AddMessage(tempHistoryTable[i][1], GF_TextColors[tempHistoryTable[i][3]][1], GF_TextColors[tempHistoryTable[i][3]][2], GF_TextColors[tempHistoryTable[i][3]][3])
@@ -1002,7 +1002,7 @@ function GF_GetLogFilters()
 	if GF_SavedVariables.logwhisper then GF_LogFilters["WHISPER"] = true GF_LogFilters["WHISPER_INFORM"] = true else GF_LogFilters["WHISPER"] = nil GF_LogFilters["WHISPER_INFORM"] = nil end
 	if GF_SavedVariables.logsay then GF_LogFilters["SAY"] = true else GF_LogFilters["SAY"] = nil end
 	if GF_SavedVariables.logyell then GF_LogFilters["YELL"] = true else GF_LogFilters["YELL"] = nil end
-	if GF_SavedVariables.loghardcore then GF_LogFilters["HARDCORE"] = true else GF_LogFilters["HARDCORE"] = nil end
+	if GF_SavedVariables.loghardcore then GF_LogFilters["HARDCORE"] = true GF_LogFilters["SYSTEM"] = true else GF_LogFilters["HARDCORE"] = nil GF_LogFilters["SYSTEM"] = nil end
 end
 
 function GF_OnUpdate() -- OnUpdate, SendWho, WhoListUpdated, Announce, Broadcast, Update MessageList
@@ -1669,7 +1669,7 @@ function GF_UpdateFriendsList()
 		if GF_SavedVariables.friendsToRemove[name] then RemoveFriend(i) end
 	end
 	for name,_ in GF_SavedVariables.friendsToRemove do
-		if not GF_Friends[name] and GF_SavedVariables.friendsToRemove[name] + 30 < time() then GF_SavedVariables.friendsToRemove[name] = nil end
+		if not GF_Friends[name] and GF_SavedVariables.friendsToRemove[name] + 6 < time() then GF_SavedVariables.friendsToRemove[name] = nil end
 	end
 end
 function GF_UpdateGuildiesList()
@@ -2863,7 +2863,7 @@ function GF_CheckForSystem(arg1,arg2)
 				if GF_WhoTable[GF_RealmName][tempString] then GF_WhoTable[GF_RealmName][tempString][1] = tonumber(tempVal) end
 				lfs,lfe = string.find(" "..wordString, " "..tempString.." ",lfs)
 				if lfs then -- lfs will always be a space at at least position 2... lfe will be a space
-					GF_AddLogMessage(string.sub(string.sub(" "..wordString,1,lfs).."|cff9d9d9d|Hplayer:"..tempString.."|h["..tempString.."]|h|r "..string.sub(wordString,lfe),2),4,true,"SYSTEM",nil,nil,"HARDCORE")
+					GF_AddLogMessage(string.sub(string.sub(" "..wordString,1,lfs).."|cff9d9d9d|Hplayer:"..tempString.."|h["..tempString.."]|h|r "..string.sub(wordString,lfe),2),4,true,"SYSTEM",nil,nil,"SYSTEM")
 					GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,true,string.sub(string.sub(" "..wordString,1,lfs).."|cff9d9d9d|Hplayer:"..tempString.."|h["..tempString.."]|h|r "..string.sub(wordString,lfe),2)}
 					return true
 				end

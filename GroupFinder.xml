@@ -3731,7 +3731,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										<Scripts>
 											<OnClick>
 												GF_SavedVariables.loghardcore = this:GetChecked()
-												if GF_SavedVariables.loghardcore then GF_LogFilters["HARDCORE"] = true else GF_LogFilters["HARDCORE"] = nil end
+												if GF_SavedVariables.loghardcore then GF_LogFilters["HARDCORE"] = true GF_LogFilters["SYSTEM"] = true else GF_LogFilters["HARDCORE"] = nil GF_LogFilters["SYSTEM"] = nil end
 												if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 											</OnClick>
 											<OnLoad>
