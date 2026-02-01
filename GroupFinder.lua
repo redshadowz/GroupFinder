@@ -920,25 +920,25 @@ function GF_AddLogMessage(arg1,logcode,add,arg2,arg8,arg9,event)
 	arg1 = GF_ChatReplaceHquestLevels(GF_ChatReplaceHplayer(gsub(gsub(gsub(gsub(" "..arg1," (www%d-)%.([_A-Za-z0-9-]+)%.(%S+)%s?", " |cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r")," (%a+)://(%S+)", " |cffccccff|Hurl:%1://%2|h[%1://%2]|h|r")," (%a+)%.(%a+)/(%S+)", " |cffccccff|Hurl:%1.%2/%3|h[%1.%2/%3]|h|r")," ([_A-Za-z0-9-]+)%.([_A-Za-z0-9-]+)%.(%S+)", " |cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r")))
 	if add then
 		if GF_LootFilter[event] then
-			arg1 = "["..date("%H:%M").."]"..GF_LogMessageCodes[logcode]..arg1..""
+			arg1 = "["..date("%H:%M").."]"..GF_LogMessageCodes[logcode]..arg1
 		elseif event ~= "CHANNEL" then
 			if arg2 == UnitName("player") then
-				arg1 = "["..date("%H:%M").."] "..GF_LogMessageCodes[logcode].."|cff"..(GF_ClassColors[({UnitClass("player")})[2]] or "9d9d9d").."|Hplayer:"..arg2.."|h["..arg2..", "..UnitLevel("player").."]:|h|r"..arg1
+				arg1 = "["..date("%H:%M").."] "..GF_LogMessageCodes[logcode].." |cff"..(GF_ClassColors[({UnitClass("player")})[2]] or "9d9d9d").."|Hplayer:"..arg2.."|h["..arg2..", "..UnitLevel("player").."]:|h|r"..arg1
 			elseif GF_WhoTable[GF_RealmName][arg2] then 
-				arg1 = "["..date("%H:%M").."] "..GF_LogMessageCodes[logcode].."|cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][arg2][2]] or "9d9d9d").."|Hplayer:"..arg2.."|h["..arg2..", "..GF_WhoTable[GF_RealmName][arg2][1].."]:|h|r"..arg1
+				arg1 = "["..date("%H:%M").."] "..GF_LogMessageCodes[logcode].." |cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][arg2][2]] or "9d9d9d").."|Hplayer:"..arg2.."|h["..arg2..", "..GF_WhoTable[GF_RealmName][arg2][1].."]:|h|r"..arg1
 			elseif arg2 == "SYSTEM" then
-				arg1 = "["..date("%H:%M").."]"..arg1
+				arg1 = "["..date("%H:%M").."] "..GF_LogMessageCodes[logcode]..arg1
 			else
-				arg1 = "["..date("%H:%M").."] "..GF_LogMessageCodes[logcode].."|cff9d9d9d|Hplayer:"..arg2.."|h["..arg2.."]:|h|r"..arg1
+				arg1 = "["..date("%H:%M").."] "..GF_LogMessageCodes[logcode].." |cff9d9d9d|Hplayer:"..arg2.."|h["..arg2.."]:|h|r"..arg1
 			end
 		else
 			arg9 = arg8..". "..string.upper(string.sub(arg9,1,1))..string.lower(string.sub(string.gsub(arg9, " - .*", ""),2))
 			if arg2 == UnitName("player") then 
-				arg1 = "["..date("%H:%M").."] "..GF_LogMessageCodes[logcode].."["..arg9.."] ".."|cff"..(GF_ClassColors[({UnitClass("player")})[2]] or "9d9d9d").."|Hplayer:"..arg2.."|h["..arg2..", "..UnitLevel("player").."]:|h|r"..arg1
+				arg1 = "["..date("%H:%M").."] "..GF_LogMessageCodes[logcode].." ["..arg9.."] ".."|cff"..(GF_ClassColors[({UnitClass("player")})[2]] or "9d9d9d").."|Hplayer:"..arg2.."|h["..arg2..", "..UnitLevel("player").."]:|h|r"..arg1
 			elseif GF_WhoTable[GF_RealmName][arg2] then 
-				arg1 = "["..date("%H:%M").."] "..GF_LogMessageCodes[logcode].."["..arg9.."] ".."|cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][arg2][2]] or "9d9d9d").."|Hplayer:"..arg2.."|h["..arg2..", "..GF_WhoTable[GF_RealmName][arg2][1].."]:|h|r"..arg1
+				arg1 = "["..date("%H:%M").."] "..GF_LogMessageCodes[logcode].." ["..arg9.."] ".."|cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][arg2][2]] or "9d9d9d").."|Hplayer:"..arg2.."|h["..arg2..", "..GF_WhoTable[GF_RealmName][arg2][1].."]:|h|r"..arg1
 			else
-				arg1 = "["..date("%H:%M").."] "..GF_LogMessageCodes[logcode].."["..arg9.."] ".."|cff9d9d9d|Hplayer:"..arg2.."|h["..arg2.."]:|h|r"..arg1
+				arg1 = "["..date("%H:%M").."] "..GF_LogMessageCodes[logcode].." ["..arg9.."] ".."|cff9d9d9d|Hplayer:"..arg2.."|h["..arg2.."]:|h|r"..arg1
 			end
 		end
 		table.insert(GF_LogHistory[GF_RealmName],1, {arg1,logcode,event})
@@ -2860,11 +2860,16 @@ function GF_CheckForSystem(arg1,arg2)
 		for i=1, getn(GF_HardcoreMessages) do
 			local lfs,_,wordString,tempString,tempVal = string.find(arg1, GF_HardcoreMessages[i])
 			if tempVal then
-				if GF_WhoTable[GF_RealmName][tempString] then GF_WhoTable[GF_RealmName][tempString][1] = tonumber(tempVal) end
 				lfs,lfe = string.find(" "..wordString, " "..tempString.." ",lfs)
 				if lfs then -- lfs will always be a space at at least position 2... lfe will be a space
 					GF_AddLogMessage(string.sub(string.sub(" "..wordString,1,lfs).."|cff9d9d9d|Hplayer:"..tempString.."|h["..tempString.."]|h|r "..string.sub(wordString,lfe),2),4,true,"SYSTEM",nil,nil,"SYSTEM")
-					GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,true,string.sub(string.sub(" "..wordString,1,lfs).."|cff9d9d9d|Hplayer:"..tempString.."|h["..tempString.."]|h|r "..string.sub(wordString,lfe),2)}
+
+					if GF_WhoTable[GF_RealmName][tempString] then
+						GF_WhoTable[GF_RealmName][tempString][1] = tonumber(tempVal)
+						GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,true,string.sub(string.sub(" "..wordString,1,lfs).."|cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][arg2][2]] or "9d9d9d").."|Hplayer:"..tempString.."|h["..tempString.."]|h|r "..string.sub(wordString,lfe),2)}
+					else
+						GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,true,string.sub(string.sub(" "..wordString,1,lfs).."|cff9d9d9d|Hplayer:"..tempString.."|h["..tempString.."]|h|r "..string.sub(wordString,lfe),2)}
+					end
 					return true
 				end
 			end

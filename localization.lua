@@ -97,17 +97,17 @@ GF_LOG_YELL = "Yell"
 GF_LOG_HARDCORE = "Hardcore"
 
 -- Log Types
-GF_LOGGED_ME = "[M] " -- Text added to Log tab when a message is from myself
-GF_LOGGED_GROUPS = "[G] " -- Text added to Log tab when a message is a group
-GF_LOGGED_NEW = "[N] " -- Text added to Log tab when a message is new
-GF_LOGGED_FILTERED = "[F] " -- Text added to Log tab when a message is group that was filtered
-GF_LOGGED_CHAT = "[C] " -- Text added to Log tab when a message is chat
-GF_LOGGED_TRADES = "[T] " -- Text added to Log tab when a message is trades
-GF_LOGGED_GUILD = "[U] " -- Text added to Log tab when a message is guild recruitment
-GF_LOGGED_LOOT = "[L] " -- Text added to Log tab when a message is loot/money
-GF_LOGGED_SPAM = "[S] " -- Text added to Log tab when a message is spam
-GF_LOGGED_BLACKLIST = "[B] " -- Text added to Log tab when a message is blacklist
-GF_LOGGED_BELOWLEVEL = "[V] " -- Text added to Log tab when a message is level under threshold
+GF_LOGGED_ME = "[M]" -- Text added to Log tab when a message is from myself
+GF_LOGGED_GROUPS = "[G]" -- Text added to Log tab when a message is a group
+GF_LOGGED_NEW = "[N]" -- Text added to Log tab when a message is new
+GF_LOGGED_FILTERED = "[F]" -- Text added to Log tab when a message is group that was filtered
+GF_LOGGED_CHAT = "[C]" -- Text added to Log tab when a message is chat
+GF_LOGGED_TRADES = "[T]" -- Text added to Log tab when a message is trades
+GF_LOGGED_GUILD = "[U]" -- Text added to Log tab when a message is guild recruitment
+GF_LOGGED_LOOT = "[L]" -- Text added to Log tab when a message is loot/money
+GF_LOGGED_SPAM = "[S]" -- Text added to Log tab when a message is spam
+GF_LOGGED_BLACKLIST = "[B]" -- Text added to Log tab when a message is blacklist
+GF_LOGGED_BELOWLEVEL = "[V]" -- Text added to Log tab when a message is level under threshold
 
 -- Whisper/Guild Log
 GF_LOG_WHISPERLOG = "Whisper Log"
@@ -4021,12 +4021,9 @@ GF_SystemMessageFilters = {
 GF_ServerMessageFilters = {
 [1]	= "RMT",
 [2]	= "Discord",
-[3]= "turtlecraft",
-[4]= "WDB folder",
---[5]= " has reached level ",
---[6]= " has transcended death ",
---[7]= "Hardcore character ",
---[8]= " Hardcore challenge",
+[3] = "turtlecraft",
+[4] = "WDB folder",
+[5] = "Tune in to Everlook Broadcasting",
 }
 GF_EmoteFilters = {
 [1]	= "RESTED XP",
