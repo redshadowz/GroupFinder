@@ -656,7 +656,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 	</Frame>
 	<Button name="GF_BlackListTemplate" maxLines="1" virtual="true">
 		<Size>
-			<AbsDimension x="600" y="18"/>
+			<AbsDimension x="620" y="18"/>
 		</Size>
 		<Layers>
 			<Layer level="BACKGROUND">
@@ -691,12 +691,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</FontString>
 				<FontString inherits="GF_NormalFont" name="$parentNoteLabel" justifyH="LEFT">
 					<Size>
-						<AbsDimension x="485" y="18"/>
+						<AbsDimension x="505" y="18"/>
 					</Size>
 					<Anchors>
 						<Anchor point="LEFT">
 							<Offset>
-								<AbsDimension x="85" y="0"/>
+								<AbsDimension x="90" y="0"/>
 							</Offset>
 						</Anchor>
 					</Anchors>
@@ -717,14 +717,14 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						GF_DeletePlayer(this:GetParent():GetID())
+						GF_DeletePlayer(this:GetParent():GetID());
 					</OnClick>
 				</Scripts>
 			</Button>
 		</Frames>
 		<Scripts>
 			<OnClick>
-				GF_EditBlackListItem(this:GetName())
+				GF_EditBlackListItem(this:GetName());
 			</OnClick>
 		</Scripts>
 		<HighlightTexture file="Interface\FriendsFrame\UI-FriendsFrame-HighlightBar" alphaMode="ADD">
@@ -2679,25 +2679,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
-									<Button name="GF_ResetLFGDescriptionButton" inherits="GF_ButtonTemplate" text="GF_RESET">
-										<Size>
-											<AbsDimension x="60" y="22"/>
-										</Size>
-										<Anchors>
-											<Anchor point="RIGHT" relativeTo="GF_AnnounceToLFGButton" relativePoint="LEFT">
-												<Offset>
-													<AbsDimension x="0" y="0"/>
-												</Offset>
-											</Anchor>
-										</Anchors>
-										<Scripts>
-											<OnClick>
-												GF_PerCharVariables.searchlfgtext = ""
-												GF_LFGDescriptionEditBox:SetText("")
-												if GF_AutoAnnounceTimer then GF_TurnOffAnnounce(GF_AUTO_ANNOUNCE_TURNED_OFF) end
-											</OnClick>
-										</Scripts>
-									</Button>
 								</Frames>
 							</Frame>
 							<Frame name="GF_MessageFrame" enableMouse="true">
@@ -2944,7 +2925,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				<Anchors>
 					<Anchor point="TOP">
 						<Offset>
-							<AbsDimension x="0" y="-45"/>
+							<AbsDimension x="-10" y="-45"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -2996,9 +2977,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Anchors>
 						<Scripts>
 							<OnClick>
-								if GF_BlackListOffset > 0 then
-									GF_BlackListOffset = GF_BlackListOffset - 20
-									GF_UpdateBlackListItems()
+								if GF_BlackListOffset >0 then
+									GF_BlackListOffset = GF_BlackListOffset - 20;
+									GF_UpdateBlackListItems();
 								end
 							</OnClick>
 						</Scripts>
@@ -3021,8 +3002,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						<Scripts>
 							<OnClick>
 								if getn(GF_BlackList[GF_RealmName]) >GF_BlackListOffset + 20 then
-									GF_BlackListOffset = GF_BlackListOffset + 20
-									GF_UpdateBlackListItems()
+									GF_BlackListOffset = GF_BlackListOffset + 20;
+									GF_UpdateBlackListItems();
 								end
 							</OnClick>
 						</Scripts>
@@ -3034,9 +3015,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					<Frame name="GF_AddPlayerFrame" inherits="GF_DialogFrameTemplate_Blacklist" hidden="true">
 						<Scripts>
 							<OnLoad>
-								GF_AddPlayerFrameHeadingLabel:SetText(GF_ADD_PLAYER)
-								GF_AddPlayerFrameContentLabel:SetText(GF_ENTER_PLAYER_NAME)
-								GF_AddPlayerFrameEditBox:Show()
+								GF_AddPlayerFrameHeadingLabel:SetText(GF_ADD_PLAYER);
+								GF_AddPlayerFrameContentLabel:SetText(GF_ENTER_PLAYER_NAME);
+								GF_AddPlayerFrameEditBox:Show();
 							</OnLoad>
 						</Scripts>
 					</Frame>
@@ -3053,7 +3034,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Anchors>
 						<Scripts>
 							<OnClick>
-								GF_AddPlayerFrame:Show()
+								GF_AddPlayerFrame:Show();
 							</OnClick>
 						</Scripts>
 					</Button>
@@ -3096,30 +3077,30 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<FontString inherits="ChatFontNormal"/>
 								<Scripts>
 									<OnLoad>
-										this:SetTextInsets(4,0,0,0)
-										this:SetFocus()
+										this:SetTextInsets(4,0,0,0);
+										this:SetFocus();
 									</OnLoad>
 									<OnEditFocusLost>
 										GF_BlackListItemSaveChanges()
 										GF_BlackListItemEditFrame:Hide()
-										this:HighlightText(string.len(this:GetText())+1)
+										this:HighlightText(string.len(this:GetText())+1);
 									</OnEditFocusLost>
 									<OnTabPressed>
 										GF_BlackListItemSaveChanges()
-										this:ClearFocus()
+										this:ClearFocus();
 										GF_BlackListItemEditFrame:Hide()
-										this:HighlightText(string.len(this:GetText())+1)
+										this:HighlightText(string.len(this:GetText())+1);
 									</OnTabPressed>
 									<OnEnterPressed>
 										GF_BlackListItemSaveChanges()
-										this:ClearFocus()
+										this:ClearFocus();
 										GF_BlackListItemEditFrame:Hide()
-										this:HighlightText(string.len(this:GetText())+1)
+										this:HighlightText(string.len(this:GetText())+1);
 									</OnEnterPressed>
 									<OnEscapePressed>
-										this:ClearFocus()
+										this:ClearFocus();
 										GF_BlackListItemEditFrame:Hide()
-										this:HighlightText(string.len(this:GetText())+1)
+										this:HighlightText(string.len(this:GetText())+1);
 									</OnEscapePressed>
 								</Scripts>
 							</EditBox>
@@ -3129,7 +3110,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				<Scripts>
 					<OnLoad>
 						for i = 1, 20 do
-							getglobal("GF_BlackListItem"..i):SetPoint("TOP", 0, i*-18)
+							getglobal("GF_BlackListItem"..i):SetPoint("TOP", 0, i*-18);
 						end
 					</OnLoad>
 				</Scripts>
@@ -3276,7 +3257,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										end
 									</OnMouseWheel>
 								</Scripts>
-								<FontString justifyH="LEFT" font="Fonts\ARIALN.TTF">
+								<FontString justifyH="LEFT" inherits="GameFontNormal" font="Fonts\ARIALN.TTF">
 									<FontHeight>
 										<AbsValue val="14"/>
 									</FontHeight>
@@ -3941,28 +3922,15 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Offset>
 					</Anchor>
 				</Anchors>
-				<Layers>
-					<Layer level="ARTWORK">
-						<FontString inherits="GF_TitleFont" name="$parentTitleLabel" nonspacewrap="false" maxLines="1" hidden="true">
-							<Anchors>
-								<Anchor point="TOP">
-									<Offset>
-										<AbsDimension x="0" y="-3"/>
-									</Offset>
-								</Anchor>
-							</Anchors>
-						</FontString>
-					</Layer>
-				</Layers>
 				<Frames>
 					<Frame name="GF_SettingsFrameChatSettings" inherits="GF_OptionFrameBoxTemplate">
 						<Size>
-							<AbsDimension x="600" y="110"/>
+							<AbsDimension x="640" y="110"/>
 						</Size>
 						<Anchors>
 							<Anchor point="TOP">
 								<Offset>
-									<AbsDimension x="0" y="-60"/>
+									<AbsDimension x="5" y="-60"/>
 								</Offset>
 							</Anchor>
 						</Anchors>
@@ -4168,7 +4136,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</Frame>
 					<Frame name="GF_SettingsFrameGroupSettings" inherits="GF_OptionFrameBoxTemplate">
 						<Size>
-							<AbsDimension x="600" y="56"/>
+							<AbsDimension x="640" y="56"/>
 						</Size>
 						<Anchors>
 							<Anchor point="TOP" relativeTo="GF_SettingsFrameChatSettings" relativePoint="BOTTOM">
@@ -4277,7 +4245,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</Frame>
 					<Frame name="GF_SettingsFrameLFxSettings" inherits="GF_OptionFrameBoxTemplate">
 						<Size>
-							<AbsDimension x="600" y="70"/>
+							<AbsDimension x="640" y="70"/>
 						</Size>
 						<Anchors>
 							<Anchor point="TOP" relativeTo="GF_SettingsFrameGroupSettings" relativePoint="BOTTOM">
@@ -4413,7 +4381,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</Frame>
 					<Frame name="GF_SettingsFrameMinimapSettings" inherits="GF_OptionFrameBoxTemplate">
 						<Size>
-							<AbsDimension x="600" y="100"/>
+							<AbsDimension x="640" y="100"/>
 						</Size>
 						<Anchors>
 							<Anchor point="TOP" relativeTo="GF_SettingsFrameLFxSettings" relativePoint="BOTTOM">
@@ -4553,7 +4521,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</Frame>
 					<Frame name="GF_SettingsFrameOtherSettings" inherits="GF_OptionFrameBoxTemplate">
 						<Size>
-							<AbsDimension x="600" y="40"/>
+							<AbsDimension x="640" y="40"/>
 						</Size>
 						<Anchors>
 							<Anchor point="TOP" relativeTo="GF_SettingsFrameMinimapSettings" relativePoint="BOTTOM">
@@ -4597,14 +4565,14 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<Button name="GF_ResetAllSettingsButton" inherits="GF_ButtonTemplate" text="GF_RESET_ALL_SETTINGS">
+							<Button name="GF_ResetAllSettingsButton" inherits="GF_ButtonTemplate" text="GF_RESET_SETTINGS">
 								<Size>
 									<AbsDimension x="120" y="21"/>
 								</Size>
 								<Anchors>
 									<Anchor point="TOPRIGHT">
 										<Offset>
-											<AbsDimension x="-35" y="-10"/>
+											<AbsDimension x="-15" y="-10"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
