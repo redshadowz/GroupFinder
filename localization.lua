@@ -113,7 +113,6 @@ GF_LOGGED_BELOWLEVEL = "[V]" -- Text added to Log tab when a message is level un
 GF_LOG_WHISPERLOG = "Whisper Log"
 GF_LOG_SHOWLOG = "Show Log"
 GF_LOG_GUILDWHISPERS = "Guild+Whisper"
-GF_WHISPER_FORMAT = "Error: Wrong whisper format."
 
 -- Group-related buttons and texts
 GF_KEYWORDS_DROPDOWN_DESCR = "Keywords:" -- Label to the left of the GF_GroupsFrameDescriptionEditBox on group frame
@@ -4040,7 +4039,7 @@ GF_HardcoreMessages = {
 [1]	= "((%a+) has reached level (%d+).-!)",
 [2]	= "((%a+) has transcended death.-level (%d+).-in.-%p)",
 [3]	= ".-(Hardcore character (%a+).-level (%d+).-%.)",
---[4]	= " ((%a+) has laughed in the face of death in the Hardcore challenge. AnyName has begun the Inferno Challenge!)",
+[4] = ".- Hardcore challenge%. ((%a+).*)",
 -- Demonian has laughed in the face of death in the Hardcore challenge. Demonian has begun the Inferno Challenge!
 }
 GF_QUEST_CONVERT = {

@@ -202,7 +202,7 @@ function GF_LoadVariables()
 		if not GF_PerCharVariables.hardcore then GF_PerCharVariables.hardcore = 1 end
 
 		if not GF_PerCharVariables.lfglevel then GF_PerCharVariables.lfglevel = false end
-		if not GF_PerCharVariables.lfgdps then GF_PerCharVariables.lfgdps = true end
+		if not GF_PerCharVariables.lfgdps then GF_PerCharVariables.lfgdps = false end
 		if not GF_PerCharVariables.lfgheal then GF_PerCharVariables.lfgheal = false end
 		if not GF_PerCharVariables.lfgtank then GF_SavedVariables.lfgtank = false end
 
@@ -2286,9 +2286,7 @@ function GF_FixLFGStrings(groupSizeOnly) -- LFG Group Maker Functions
 	local foundRoles = {}
 	local foundEndOfText
 	local endOfFilter = 0
-	GF_PerCharVariables.searchlfgtext = gsub(GF_PerCharVariables.searchlfgtext, "[Ll]+[Ff]+%d?%d?[Mm]+", "LFM")
-	_,foundEndOfText = string.find(GF_PerCharVariables.searchlfgtext, "%(HC%)")
-	if foundEndOfText then endOfFilter = foundEndOfText end
+	GF_PerCharVariables.searchlfgtext = gsub(gsub(gsub(GF_PerCharVariables.searchlfgtext, "[Ll]+[Ff]+%d?%d?[Mm]+", "LFM"), "%(HC%)", ""),"%s%s+"," ")
 	for i=1,getn(GF_BUTTONS_LIST.LFGLFM) do
 		_,foundEndOfText = string.find(GF_PerCharVariables.searchlfgtext, GF_BUTTONS_LIST.LFGLFM[i][1])
 		if foundEndOfText then
@@ -2342,8 +2340,8 @@ function GF_FixLFGStrings(groupSizeOnly) -- LFG Group Maker Functions
 				for i=1, getn(foundDungeonRaid) do
 					newText = newText.."/"..foundDungeonRaid[i]
 				end
-				if GF_Hardcore and GF_PerCharVariables.hardcore ~= 3 then newText = newText.." (HC)" end
 			end
+			if GF_Hardcore and GF_PerCharVariables.hardcore ~= 3 and strlen(newText) > 0 then newText = newText.." (HC)" end
 			if getn(foundRoles) > 0 then
 				newText = newText.." need "
 				for i=1, getn(foundRoles) do
@@ -2360,13 +2358,13 @@ function GF_FixLFGStrings(groupSizeOnly) -- LFG Group Maker Functions
 					newText = newText.."/"..foundRoles[i]
 				end
 			end
-			if GF_PerCharVariables.lfglevel and ((foundLFM ~= 0 and foundLFM < 5) or strlen(newText) > 0) then newText = UnitLevel("player").." "..newText end
+			if GF_PerCharVariables.lfglevel and ((foundLFM ~= 0 and foundLFM < 6) or strlen(newText) > 0) then newText = UnitLevel("player").." "..newText end
 			if foundLFM > 0 then newText = " "..newText.." "..GF_BUTTONS_LIST.LFGLFM[foundLFM][1] end
 			if strlen(newText) > 0 and getn(foundDungeonRaid) > 0 then newText = newText.." for " else newText = newText.." " end
 			for i=1, getn(foundDungeonRaid) do
 				newText = newText.."/"..foundDungeonRaid[i]
 			end
-			if GF_Hardcore and GF_PerCharVariables.hardcore ~= 3 and strlen(newText) > 0 then newText = newText.." (HC)" end
+			if GF_Hardcore and GF_PerCharVariables.hardcore ~= 3 and strlen(newText) > 1 then newText = newText.." (HC)" end
 		end
 		GF_PerCharVariables.searchlfgtext = gsub(gsub(gsub(gsub(gsub(gsub(gsub(newText.." "..string.sub(GF_PerCharVariables.searchlfgtext, endOfFilter+1), "^[/ ]+", ""), "[/ ]+$", ""), "^[/ ]+", ""),"//+", ""), "/%s+"," "),"%s+/", " "),"%s%s+", " ")
 		GF_LFGDescriptionEditBox:SetText(GF_PerCharVariables.searchlfgtext)
@@ -2505,14 +2503,11 @@ function GF_AddRemoveSearch(bframe,entryname,add)
 					--GF_PerCharVariables.searchlfgtext = GF_BUTTONS_LIST[frameName][i][1].." "..gsub(GF_PerCharVariables.searchlfgtext, "^%d+", "")
 				--end
 					if add then
-						for j=1, getn(GF_BUTTONS_LIST[frameName]) do -- check lfglfm buttons, if
-							if i == 1 and string.find(" "..string.lower(GF_PerCharVariables.searchlfgtext).." ", " lfg ") or (i > 1 and i < 5) then
+						for j=1, getn(GF_BUTTONS_LIST[frameName]) do -- check lfglfm buttons
+							if i == 1 and not string.find(" "..string.lower(GF_PerCharVariables.searchlfgtext).." ", "lf%d?%d?m ") or (i > 1 and i < 5) then -- If setting to LFM and I'm LFG then remove roles
 								for k=1,3 do
 									local lfs,lfe = string.find(GF_PerCharVariables.searchlfgtext, GF_BUTTONS_LIST.LFGRole[k][1])
 									if lfs then
-										if string.find(string.sub(GF_PerCharVariables.searchlfgtext,1,lfs-1), " need[%s%p]+$") then
-											lfs = string.find(string.sub(GF_PerCharVariables.searchlfgtext,1,lfs-1), " need[%s%p]+$")
-										end
 										GF_PerCharVariables.searchlfgtext = string.sub(GF_PerCharVariables.searchlfgtext,1,lfs-1)..string.sub(GF_PerCharVariables.searchlfgtext,lfe+1)
 									end
 								end
@@ -2526,7 +2521,7 @@ function GF_AddRemoveSearch(bframe,entryname,add)
 						GF_PerCharVariables.searchlfgtext = gsub(GF_PerCharVariables.searchlfgtext, "^LF%d+M", "")
 					end
 				else
-					GF_PerCharVariables.searchlfgtext = GF_BUTTONS_LIST[frameName][i][1]..gsub(GF_PerCharVariables.searchlfgtext, "^%d+", "")
+					GF_PerCharVariables.searchlfgtext = GF_BUTTONS_LIST[frameName][i][1].." "..gsub(GF_PerCharVariables.searchlfgtext, "^%d+", "")
 				end				
 				if not add then GF_PerCharVariables.searchlfgtext = gsub(gsub(gsub(gsub(gsub(GF_PerCharVariables.searchlfgtext, "^%d+", ""),"for "..GF_BUTTONS_LIST[frameName][i][1],""),"need "..GF_BUTTONS_LIST[frameName][i][1],""),GF_BUTTONS_LIST[frameName][i][1],""),"/ "," ") GF_LFGLFM:Hide() end
 				GF_LFGDescriptionEditBox:SetText(GF_PerCharVariables.searchlfgtext)
@@ -2537,6 +2532,7 @@ function GF_AddRemoveSearch(bframe,entryname,add)
 			end
 		end
 		if frameName == "LFGSize" then GF_FixLFGStrings(true) else GF_LFGDescriptionEditBox:SetText(gsub(gsub(GF_PerCharVariables.searchlfgtext, "%(HC%)", ""),"%s%s+"," ")) GF_FixLFGStrings() end
+		if GF_PerCharVariables.searchlfgtext ~= "" then GF_LFGDescriptionClearButton:Show() else GF_LFGDescriptionClearButton:Hide() end
 	end
 end
 function GF_GetCurrentLFGLFMData()
@@ -2892,13 +2888,17 @@ function GF_CheckForSystem(arg1,arg2)
 		end
 		for i=1, getn(GF_HardcoreMessages) do
 			local lfs,lfe,wordString,tempString,tempVal = string.find(arg1, GF_HardcoreMessages[i])
-			if tempVal then
+			if tempString then
 				lfs,lfe = string.find(" "..wordString, " "..tempString.." ",lfs)
 				if lfs then -- lfs will always be a space at at least position 2... lfe will be a space
 					GF_AddLogMessage(string.sub(string.sub(" "..wordString,1,lfs).."|cff9d9d9d|Hplayer:"..tempString.."|h["..tempString.."]|h|r "..string.sub(wordString,lfe),2),4,true,"SYSTEM",nil,nil,"SYSTEM")
 
 					if GF_WhoTable[GF_RealmName][tempString] then
-						GF_WhoTable[GF_RealmName][tempString][1] = tonumber(tempVal)
+						if tempVal then
+							GF_WhoTable[GF_RealmName][tempString][1] = tonumber(tempVal)
+						else 
+							GF_WhoTable[GF_RealmName][tempString][1] = 60
+						end
 						GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,true,string.sub(string.sub(" "..wordString,1,lfs).."|cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][tempString][2]] or "9d9d9d").."|Hplayer:"..tempString.."|h["..tempString.."]|h|r "..string.sub(wordString,lfe),2)}
 					else
 						GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,true,string.sub(string.sub(" "..wordString,1,lfs).."|cff9d9d9d|Hplayer:"..tempString.."|h["..tempString.."]|h|r "..string.sub(wordString,lfe),2)}
