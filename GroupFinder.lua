@@ -1,4 +1,4 @@
-﻿local GF_CurrentVersion						= 600
+﻿local GF_CurrentVersion						= 7000
 
 GF_SavedVariables 							= {}
 GF_PerCharVariables							= {}
@@ -93,7 +93,7 @@ local GF_TextBypassChatNameAlias = { ["OFFICER"] = "GUILD",["RAID"] = "PARTY",["
 local GF_LootFilter = { ["MONEY"] = true,["LOOT"] = true,["COMBAT_FACTION_CHANGE"] = true,["COMBAT_XP_GAIN"] = true,["COMBAT_HONOR_GAIN"] = true }
 local ThingsToHide = { "GF_MainFrameCloseButton","GF_GroupChatOptionsFrame","GF_ShowSearchButton","GF_SettingsFrameButton","GF_ShowBlacklistButton","GF_LogFrameButton","GF_AnnounceToLFGButton",
 "GF_LogBottomButton","GF_LogDownButton","GF_LogUpButton","GF_LogFilterDropdownButton","GF_LogChannelFilterDropdownButton","GF_LogShowWhisperHistory","GF_ConvertLogMessagesToURL",
-"GF_GetWhoFrame","GF_LFGFrame","GF_MessageFrame","GF_LogFilterDropdownMenu","GF_GroupFilterDropdownMenu","GF_ChatFilterDropdownMenu","GF_LFGHardCoreDropdown", } -- "GF_HideMainFrameLeft", "GF_HideMainFrameRight",
+"GF_GetWhoFrame","GF_LFGFrame","GF_MessageFrame","GF_LogFilterDropdownMenu","GF_GroupFilterDropdownMenu","GF_ChatFilterDropdownMenu","GF_LFGHardCoreDropdown","GF_GroupChannelName","GF_BlockList","GF_AutoBlacklistDropdownMenu", }
 local GF_DifficultyColors = { ["RED"] = "ff0000",["ORANGE"] = "ff8040",["YELLOW"] = "ffff00",["GREEN"] = "1eff00",["GREY"] = "808080", }
 local GF_TankClasses						= {	["DRUID"]=true,["WARRIOR"]=true,["PALADIN"]=true,["SHAMAN"]=true }
 local GF_HealingClasses						= {	["PRIEST"]=true,["DRUID"]=true,["PALADIN"]=true,["SHAMAN"]=true }
@@ -102,12 +102,30 @@ local self = CreateFrame'Frame'
 self:Hide()
 self:SetScript('OnUpdate', function() GF_OnUpdate() end)
 self:SetScript('OnEvent', function() this[event](this) end)
+GF_IconMovingFrame = CreateFrame'Frame'
+GF_IconMovingFrame:Hide()
+GF_IconMovingFrame:SetScript('OnUpdate', function() GF_IconDraggingOnUpdate() end)
 for _, event in {'ADDON_LOADED','PLAYER_ENTERING_WORLD','PLAYER_LEAVING_WORLD','PARTY_MEMBERS_CHANGED','PARTY_LEADER_CHANGED','RAID_ROSTER_UPDATE','PARTY_INVITE_REQUEST','FRIENDLIST_UPDATE','GUILD_ROSTER_UPDATE',
 'WHO_LIST_UPDATE',	'UPDATE_MOUSEOVER_UNIT','PLAYER_LEVEL_UP','CHAT_MSG_ADDON','CHAT_MSG_PARTY','CHAT_MSG_GUILD','CHAT_MSG_OFFICER','CHAT_MSG_WHISPER','CHAT_MSG_WHISPER_INFORM','CHAT_MSG_RAID','CHAT_MSG_RAID_LEADER',
 'CHAT_MSG_RAID_WARNING','CHAT_MSG_BATTLEGROUND','CHAT_MSG_BATTLEGROUND_LEADER','CHAT_MSG_SYSTEM'} do
 	self:RegisterEvent(event)
 end
 function GF_LoadVariables()
+	if not GF_MessageList then GF_MessageList = {} end
+	if not GF_MessageList[GF_RealmName] then GF_MessageList[GF_RealmName] = {} end
+	if not GF_BlackList then GF_BlackList = {} end
+	if not GF_BlackList[GF_RealmName] then GF_BlackList[GF_RealmName] = {} end
+	if not GF_LogHistory[GF_RealmName] then GF_LogHistory[GF_RealmName] = {} end
+	if not GF_WhoTable then GF_WhoTable = {} end
+	if not GF_WhoTable[GF_RealmName] then GF_WhoTable[GF_RealmName] = {} end
+	if not GF_WhoTable[GF_RealmName]["LOADED"] then GF_WhoTable[GF_RealmName]["LOADED"] = { UnitLevel("player"), ({UnitClass("player")})[2], "", time() - 1 } end
+	if not GF_WhisperLogData then GF_WhisperLogData = {} end
+	if not GF_WhisperLogData[GF_RealmName] then GF_WhisperLogData[GF_RealmName] = {} table.insert(GF_WhisperLogData[GF_RealmName], "Guild") end
+	if not GF_WhisperLogData[GF_RealmName]["Guild"] then GF_WhisperLogData[GF_RealmName]["Guild"] = {""} end
+	if not GF_PreviousMessage then GF_PreviousMessage = {} end
+	if not GF_PlayerMessages then GF_PlayerMessages = {} end
+
+	if not GF_SavedVariables then GF_SavedVariables = {} end
 	if not GF_SavedVariables.version or GF_SavedVariables.version < GF_CurrentVersion then
 		GF_SavedVariables.version = GF_CurrentVersion
 		if not GF_SavedVariables.addonsendtimeout then GF_SavedVariables.addonsendtimeout = 0 end
@@ -164,8 +182,9 @@ function GF_LoadVariables()
 		if not GF_SavedVariables.FilterLevel then GF_SavedVariables.FilterLevel = 2 end
 		if not GF_SavedVariables.MainFrameUIScale then GF_SavedVariables.MainFrameUIScale = 1 end
 		if not GF_SavedVariables.MainFrameTransparency then GF_SavedVariables.MainFrameTransparency = 1 end
-		if not GF_SavedVariables.MinimapArcOffset then GF_SavedVariables.MinimapArcOffset = 282 end
-		if not GF_SavedVariables.MinimapRadiusOffset then GF_SavedVariables.MinimapRadiusOffset = 84 end
+		if not GF_SavedVariables.MinimapIconXPos then GF_SavedVariables.MinimapIconXPos = 11 end
+		if not GF_SavedVariables.MinimapIconYPos then GF_SavedVariables.MinimapIconYPos = -72 end
+		if not GF_SavedVariables.squareminimap then GF_SavedVariables.squareminimap = false end
 		if not GF_SavedVariables.MinimapMsgArcOffset then GF_SavedVariables.MinimapMsgArcOffset = 345 end
 		if not GF_SavedVariables.MinimapMsgRadiusOffset then GF_SavedVariables.MinimapMsgRadiusOffset = 90 end
 
@@ -185,6 +204,41 @@ function GF_LoadVariables()
 		if not GF_SavedVariables.mainframeishidden then GF_SavedVariables.mainframeishidden = true end -- if not hidden on login, show
 
 		if not GF_SavedVariables.logshowwhisperwindow then GF_SavedVariables.logshowwhisperwindow = true end
+
+		if not GF_SavedVariables.groupchannelname then if GF_KNOWN_SERVERS_LIST[GF_RealmName] then GF_SavedVariables.groupchannelname = GF_WORLD_CHANNEL_NAME else GF_SavedVariables.groupchannelname = GF_LFG_CHANNEL_NAME end end
+		if not GF_SavedVariables.blocklist then GF_SavedVariables.blocklist = {} end
+
+		if not GF_SavedVariables.clickcombos then GF_SavedVariables.clickcombos = true end
+		if not GF_SavedVariables.usefriendslist then if GF_KNOWN_SERVERS_LIST[GF_RealmName] then GF_SavedVariables.usefriendslist = true else GF_SavedVariables.usefriendslist = false end end
+		if not GF_SavedVariables.normalfonts then GF_SavedVariables.normalfonts = true end
+		if not GF_SavedVariables.blacklisttrades then GF_SavedVariables.blacklisttrades = false end
+		if not GF_SavedVariables.blacklistguild then GF_SavedVariables.blacklistguild = false end
+		if not GF_SavedVariables.blacklistchat then GF_SavedVariables.blacklistchat = false end
+		if not GF_SavedVariables.blacklistforeign then GF_SavedVariables.blacklistforeign = true end
+		if not GF_SavedVariables.iconpriority then GF_SavedVariables.iconpriority = false end
+		if not GF_SavedVariables.friendsToRemove then GF_SavedVariables.friendsToRemove = {} end
+
+		for name,_ in GF_PlayerMessages do if type(GF_PlayerMessages[name][1]) ~= "table" then GF_PlayerMessages = {} break end end -- Get rid of older style PlayerMessages - Could get rid of in final release
+		for i=1, getn(GF_LogHistory[GF_RealmName]) do -- Get rid of older style LogHistory entries - Could get rid of in final release
+			if not GF_LogHistory[GF_RealmName][i] then break elseif not GF_LogHistory[GF_RealmName][i][3] then table.remove(GF_LogHistory[GF_RealmName],i) i = i - 1 end
+		end
+		for i=1, getn(GF_MessageList[GF_RealmName]) do -- Get rid of broken Messagelist entries caused by changes to the Addon sharing algorithm - Could get rid of in final release
+			if not GF_MessageList[GF_RealmName][i].flags or type(GF_MessageList[GF_RealmName][i].flags) ~= "table" then GF_MessageList[GF_RealmName] = {} break end
+			if not GF_MessageList[GF_RealmName][i] then break elseif tonumber(GF_MessageList[GF_RealmName][i]) then table.remove(GF_MessageList[GF_RealmName],i) i = i - 1 end
+		end
+		for i=1, getn(GF_WhisperLogData[GF_RealmName]) do -- Convert older style Whisper Log entries - Could get rid of in final release
+			if type(GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][1]) ~= "table" then
+				for j=1, getn(GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]]) do
+					if string.find(GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j], " %[[TFrom]+%] |cff") then
+						GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j] = { GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j], "WHISPER" }
+					elseif string.find(GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j], " [O] |cff",1,1) then
+						GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j] = { GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j], "OFFICER" }
+					else
+						GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j] = { GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j], "GUILD" }
+					end
+				end
+			end
+		end
 	end
 	if not GF_PerCharVariables then GF_PerCharVariables = {} end
 	if not GF_PerCharVariables.version or GF_PerCharVariables.version < GF_CurrentVersion then
@@ -200,141 +254,67 @@ function GF_LoadVariables()
 		if not GF_PerCharVariables.lfgauto then GF_PerCharVariables.lfgauto = false end
 		if not GF_PerCharVariables.lfgsize or not tonumber(GF_PerCharVariables.lfgsize) then GF_PerCharVariables.lfgsize = 1 end
 		if not GF_PerCharVariables.hardcore then GF_PerCharVariables.hardcore = 1 end
+		if not GF_PerCharVariables.disablehardcore then GF_PerCharVariables.disablehardcore = false end
 
 		if not GF_PerCharVariables.lfglevel then GF_PerCharVariables.lfglevel = false end
 		if not GF_PerCharVariables.lfgdps then GF_PerCharVariables.lfgdps = false end
 		if not GF_PerCharVariables.lfgheal then GF_PerCharVariables.lfgheal = false end
-		if not GF_PerCharVariables.lfgtank then GF_SavedVariables.lfgtank = false end
+		if not GF_PerCharVariables.lfgtank then GF_PerCharVariables.lfgtank = false end
 
 		if not GF_PerCharVariables.playsounds then GF_PerCharVariables.playsounds = false end
 		if not GF_PerCharVariables.lfgshown then GF_PerCharVariables.lfgshown = false end
 		if not GF_PerCharVariables.getwhoshown then GF_PerCharVariables.getwhoshown = false end
-
 	end
-	if not GF_SavedVariables.friendsToRemove then GF_SavedVariables.friendsToRemove = {} end
-	if not GF_MessageList then GF_MessageList = {} end
-	if not GF_MessageList[GF_RealmName] then GF_MessageList[GF_RealmName] = {} end
-	if not GF_BlackList then GF_BlackList = {} end
-	if not GF_BlackList[GF_RealmName] then GF_BlackList[GF_RealmName] = {} end
-	if not GF_LogHistory[GF_RealmName] then GF_LogHistory[GF_RealmName] = {} end
-	if not GF_WhoTable then GF_WhoTable = {} end
-	if not GF_WhoTable[GF_RealmName] then GF_WhoTable[GF_RealmName] = {} end
-	if not GF_WhoTable[GF_RealmName]["LOADED"] then GF_WhoTable[GF_RealmName]["LOADED"] = { UnitLevel("player"), ({UnitClass("player")})[2], "", time() - 1 } end
-	if not GF_WhisperLogData then GF_WhisperLogData = {} end
-	if not GF_WhisperLogData[GF_RealmName] then GF_WhisperLogData[GF_RealmName] = {} table.insert(GF_WhisperLogData[GF_RealmName], "Guild") end
-	if not GF_WhisperLogData[GF_RealmName]["Guild"] then GF_WhisperLogData[GF_RealmName]["Guild"] = {""} end
-		
-	if not GF_PreviousMessage then GF_PreviousMessage = {} end
-	if not GF_PlayerMessages then GF_PlayerMessages = {} end
-	for name,_ in GF_PlayerMessages do if type(GF_PlayerMessages[name][1]) ~= "table" then GF_PlayerMessages = {} break end end -- Get rid of older style PlayerMessages - Could get rid of in final release
 	if GF_WhoTable[GF_RealmName]["LOADED"][4] + 86400 < time() then -- Prune the WhoTable once per day
 		GF_WhoTable[GF_RealmName]["LOADED"] = { UnitLevel("player"), ({UnitClass("player")})[2], "", time() }
 		GF_PruneTheWhoTable()
 	end
 	GF_LogHistory[GF_RealmName].lastLogin = time()
-	for i=1, getn(GF_LogHistory[GF_RealmName]) do -- Get rid of older style LogHistory entries - Could get rid of in final release
-		if not GF_LogHistory[GF_RealmName][i] then break elseif not GF_LogHistory[GF_RealmName][i][3] then table.remove(GF_LogHistory[GF_RealmName],i) i = i - 1 end
-	end
-	for i=1, getn(GF_MessageList[GF_RealmName]) do -- Get rid of broken Messagelist entries caused by changes to the Addon sharing algorithm - Could get rid of in final release
-		if not GF_MessageList[GF_RealmName][i].flags or type(GF_MessageList[GF_RealmName][i].flags) ~= "table" then GF_MessageList[GF_RealmName] = {} break end
-		if not GF_MessageList[GF_RealmName][i] then break elseif tonumber(GF_MessageList[GF_RealmName][i]) then table.remove(GF_MessageList[GF_RealmName],i) i = i - 1 end
-	end
-	for i=1, getn(GF_WhisperLogData[GF_RealmName]) do -- Convert older style Whisper Log entries - Could get rid of in final release
-		if type(GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][1]) ~= "table" then
-			for j=1, getn(GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]]) do
-				if string.find(GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j], " %[[TFrom]+%] |cff") then
-					GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j] = { GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j], "WHISPER" }
-				elseif string.find(GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j], " [O] |cff",1,1) then
-					GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j] = { GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j], "OFFICER" }
-				else
-					GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j] = { GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j], "GUILD" }
-				end
-			end
-		end
-	end
 	if not GetGuildRosterShowOffline() then -- Hide and then redisplay the Guild Roster to trigger a scan for Guild Level/Class data
 		SetGuildRosterShowOffline(true)
 		SetGuildRosterShowOffline(false)
 	end
 end
 function GF_LoadSettings()
-	if GF_AutoFilterCheckButtonTextLabel:GetStringWidth() > 52 then 
-		for i=0,19 do
-			getglobal("GF_WhisperHistoryButton"..i):SetFont(getglobal("GF_WhisperHistoryButton"..i):GetFont(),12)
-		end
-		for i=1,20 do
-			getglobal("GF_BlackListItem"..i.."NameLabel"):SetFont(getglobal("GF_BlackListItem"..i.."NameLabel"):GetFont(),10)
-			getglobal("GF_BlackListItem"..i.."NoteLabel"):SetFont(getglobal("GF_BlackListItem"..i.."NoteLabel"):GetFont(),10)
-			getglobal("GF_BlackListItem"..i.."DeleteButton"):SetFont(getglobal("GF_BlackListItem"..i.."DeleteButton"):GetFont(),10)
-		end
-		for i=1,22 do
-			getglobal("GF_NewItem"..i.."NameLabel"):SetFont(getglobal("GF_NewItem"..i.."NameLabel"):GetFont(),12)
-			getglobal("GF_NewItem"..i.."MoreLabel"):SetFont(getglobal("GF_NewItem"..i.."MoreLabel"):GetFont(),12)
-			getglobal("GF_NewItem"..i.."MoreLeftLabel"):SetFont(getglobal("GF_NewItem"..i.."MoreLeftLabel"):GetFont(),12)
-			getglobal("GF_NewItem"..i.."GroupWhoButton"):SetFont(getglobal("GF_NewItem"..i.."GroupWhoButton"):GetFont(),12)
-			getglobal("GF_NewItem"..i.."LFGInviteButton"):SetFont(getglobal("GF_NewItem"..i.."LFGInviteButton"):GetFont(),12)
-			getglobal("GF_NewItem"..i.."LFMWhisperRequestInviteButton"):SetFont(getglobal("GF_NewItem"..i.."LFMWhisperRequestInviteButton"):GetFont(),12)
-		end
-		local frameNames = { "GF_AutoFilterCheckButtonTextLabel","GF_PlaySoundOnResultsCheckButtonTextLabel","GF_GroupsFrameShowLFMCheckButtonTextLabel","GF_GroupsFrameShowLFGCheckButtonTextLabel",	"GF_LFGHardCoreDropdownTextLabel",
-		"GF_ChatFilterDropdownButtonTextLabel","GF_GroupFilterDropdownButtonTextLabel","GF_FrameUseWhoOnGroupsCheckButtonTextLabel","GF_GroupsFrameDescriptionEditBoxTextLabel","GF_GetWhoClassDropdownTextLabel","GF_GetWhoLevelDropdownTextLabel",
-		"GF_GroupAutoCheckButtonTextLabel","GF_LFGSizeDropdownTextLabel","GF_LFGLFMDropdownTextLabel","GF_LFGDungeonDropdownTextLabel","GF_LFGRaidDropdownTextLabel","GF_LFGRoleDropdownTextLabel","GF_LFGMyRoleLevelCheckButtonTextLabel",
-		"GF_LFGMyRoleTankCheckButtonTextLabel","GF_LFGMyRoleHealCheckButtonTextLabel","GF_LFGMyRoleDPSCheckButtonTextLabel","GF_GroupFilterShowDungeonCheckButtonTextLabel","GF_GroupFilterShowRaidCheckButtonTextLabel",
-		"GF_GroupFilterShowQuestCheckButtonTextLabel","GF_GroupFilterShowOtherCheckButtonTextLabel","GF_ChatFilterGroupsInChatCheckButtonTextLabel","GF_ChatFilterGroupsNewOnlyCheckButtonTextLabel","GF_ChatFilterGroupsInMinimapCheckButtonTextLabel",
-		"GF_ChatFilterShowChatCheckButtonTextLabel","GF_ChatFilterShowTradesCheckButtonTextLabel","GF_ChatFilterShowLootCheckButtonTextLabel","GF_ChatFilterShowGuildsCheckButtonTextLabel","GF_LogFilterDropdownButtonTextLabel",
-		"GF_LogChannelFilterDropdownButtonTextLabel","GF_FrameJoinWorldCheckButtonTextLabel","GF_FrameSpamFilterCheckButtonTextLabel","GF_FrameSystemFilterCheckButtonTextLabel","GF_FrameAutoBlacklistCheckButtonTextLabel",
-		"GF_FrameShowFormattedChatCheckButtonTextLabel","GF_FrameAlwaysShowGuildCheckButtonTextLabel","GF_FrameQuestModCheckButtonTextLabel","GF_PurgePFDBCheckButtonTextLabel", }
-		for i=1, getn(frameNames) do getglobal(frameNames[i]):SetFont(getglobal(frameNames[i]):GetFont(),10) end
-		frameNames = { "GF_GetWhoTotalNames","GF_AnnounceToLFGButton","GF_GetWhoButton","GF_GetWhoSkipButton","GF_GetWhoWhisperButton","GF_GetWhoNameLabel","GF_PageLabel","GF_ResultsLabel","GF_FrameAnnounceTimerSliderBottomLabel",
-		"GF_ShowSearchButton","GF_SettingsFrameButton","GF_ShowBlacklistButton","GF_LogFrameButton","GF_LFGFrameToggleButton","GF_GetWhoFrameToggleButton",
-		"GF_ConvertLogMessagesToURL","GF_UIScaleSliderUpdateButton","GF_ResetAllSettingsButton", "GF_AddPlayerButton", "GF_BlackListFramePageLabel", "GF_FilterLevelSliderLabel", }
-		for i=1, getn(frameNames) do getglobal(frameNames[i]):SetFont(getglobal(frameNames[i]):GetFont(),11) end
-		frameNames = {"GF_LFGMyRole","GF_WorldAnnounceMessageTextLabel","GF_FrameAnnounceTimerSliderTopLabel","GF_ShowGroupsInLabel","GF_ShowChatTypesLabel","GF_LogShowWhisperHistoryLabel","GF_LogFrameInternalFrameTitle","GF_ShowMainFrameLabel", }
-		for i=1, getn(frameNames) do getglobal(frameNames[i]):SetFont(getglobal(frameNames[i]):GetFont(),12) end
-		for i=1,6 do
-			getglobal("GF_MinimapMessageFrameA"..i):SetFont(getglobal("GF_MinimapMessageFrameA"..i):GetFont(),8)
-			getglobal("GF_MinimapMessageFrameB"..i):SetFont(getglobal("GF_MinimapMessageFrameB"..i):GetFont(),8)
-		end
-		GF_Log:SetFont(GF_Log:GetFont(),12)
-		GF_ChatFilterDropdownButton:SetPoint("TOPRIGHT", GF_MainFrameCloseButton, "BOTTOMRIGHT", -1*getglobal(GF_ChatFilterDropdownButton:GetName().."TextLabel"):GetStringWidth() -15, 6)
-	end
-
 	if GF_TURTLE_SERVERS_LIST[GF_RealmName] then GF_AddTurtleWoWDungeonsRaids() GF_WhoCooldownTime = 30 GF_PlayingOnTurtle = true end -- See if I'm not Turtle servers.
 	for i=1, 100 do -- Look for Hardcore spell. If the spell also has "Challenge" subtext, assume it is a Turtle server.
 		if GetSpellName(i, BOOKTYPE_SPELL) == GF_HARDCORE_SPELL_NAME then local _,spellRank = GetSpellName(i, BOOKTYPE_SPELL) GF_Hardcore = true if spellRank == GF_HARDCORE_TURTLE_SUBTEXT then GF_AddTurtleWoWDungeonsRaids() GF_WhoCooldownTime = 30 GF_PlayingOnTurtle = true end break end
 	end
 	if not GF_PlayingOnTurtle then GF_PerCharVariables.hardcore = 1 end
-	if GF_Hardcore then GF_BUTTONS_LIST.LFGHardCore[1][4] = GF_HARDCORE_SEND_TEXT table.insert(GF_BUTTONS_LIST.LFGHardCore, 2, { GF_SHOW_HARDCORE, 1, 60, GF_HARDCORE_SEND_TEXT, nil, true, }) table.remove(GF_BUTTONS_LIST.LFGHardCore, 4) end
+	if GF_Hardcore then GF_BUTTONS_LIST.LFGHardCore[1][4] = true table.insert(GF_BUTTONS_LIST.LFGHardCore, 2, { GF_SHOW_HARDCORE, 1, 60, true, nil, true, }) table.remove(GF_BUTTONS_LIST.LFGHardCore, 4) end
 	GF_LFGHardCoreDropdownTextLabel:SetText(GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][1])
-	GF_WorldAnnounceMessageTextLabel:SetText(GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][4])
+	if GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][4] and not GF_PerCharVariables.disablehardcore then GF_WorldAnnounceMessageTextLabel:SetText(GF_HARDCORE_SEND_TEXT) else GF_WorldAnnounceMessageTextLabel:SetText(GF_WORLD_SEND_TEXT.." "..GF_SavedVariables.groupchannelname.." "..GF_LOG_CHANNEL) end
 
-	local VarsToSet = { GF_SavedVariables.MinimapArcOffset, GF_SavedVariables.MinimapRadiusOffset, GF_SavedVariables.MinimapMsgArcOffset, GF_SavedVariables.MinimapMsgRadiusOffset, GF_SavedVariables.FilterLevel, GF_SavedVariables.spamfilterduration,
+	local VarsToSet = { GF_SavedVariables.MinimapMsgArcOffset, GF_SavedVariables.MinimapMsgRadiusOffset, GF_SavedVariables.FilterLevel, GF_SavedVariables.spamfilterduration,
 	GF_SavedVariables.MainFrameTransparency,GF_SavedVariables.autoblacklistminlevel,GF_SavedVariables.blockmessagebelowlevel,GF_SavedVariables.grouplistingduration,GF_PerCharVariables.autofilterlevelvar, GF_SavedVariables.MainFrameUIScale, }
-	local VarNames = { "GF_MinimapArcSlider", "GF_MinimapRadiusSlider", "GF_MinimapMsgArcSlider", "GF_MinimapMsgRadiusSlider", "GF_FilterLevelSlider", "GF_FrameSpamFilterDurationSlider",
-	"GF_FrameTransparencySlider", "GF_FrameSpamBlacklistMinLevelSlider", "GF_FrameBlockMessagesBelowLevelSlider", "GF_GroupListingDurationSlider", "GF_AutoFilterLevelSlider", "GF_UIScaleSlider", }
+	local VarNames = { "GF_MinimapMsgArcSlider","GF_MinimapMsgRadiusSlider","GF_FilterLevelSlider","GF_FrameSpamFilterDurationSlider",
+	"GF_FrameTransparencySlider","GF_FrameSpamBlacklistMinLevelSlider","GF_FrameBlockMessagesBelowLevelSlider","GF_GroupListingDurationSlider","GF_AutoFilterLevelSlider","GF_UIScaleSlider", }
 	for i=1, getn(VarNames) do getglobal(VarNames[i]):SetValue(VarsToSet[i]) end
 
 	if GF_SavedVariables.announcetimer > 600 then GF_FrameAnnounceTimerSlider:SetValue((GF_SavedVariables.announcetimer-600)/300 + 10) else	GF_FrameAnnounceTimerSlider:SetValue(GF_SavedVariables.announcetimer/60)end
 	if GF_SavedVariables.showgroupsnewonlytime > 10 then GF_GroupNewTimeoutSlider:SetValue((GF_SavedVariables.showgroupsnewonlytime-10)/5 + 10) else GF_GroupNewTimeoutSlider:SetValue(GF_SavedVariables.showgroupsnewonlytime) end
 
-	VarsToSet = { GF_SavedVariables.showgroupsinchat, GF_SavedVariables.showgroupsinminimap, GF_SavedVariables.showgroupsnewonly, GF_SavedVariables.showchattexts, GF_SavedVariables.showtradestexts, GF_SavedVariables.showloottexts,
+	VarsToSet = { GF_SavedVariables.showgroupsinchat,GF_SavedVariables.showgroupsinminimap,GF_SavedVariables.showgroupsnewonly,GF_SavedVariables.showchattexts, GF_SavedVariables.showtradestexts, GF_SavedVariables.showloottexts,
 	GF_SavedVariables.showguilds, GF_PerCharVariables.autofilter, GF_SavedVariables.showdungeons, GF_SavedVariables.showraids, GF_SavedVariables.showquests, GF_SavedVariables.showother, GF_SavedVariables.showlfm, GF_SavedVariables.showlfg,
 	GF_SavedVariables.logshowgroup,	GF_SavedVariables.logshowfiltered, GF_SavedVariables.logshowchat, GF_SavedVariables.logshowtrades, GF_SavedVariables.logshowguilds, GF_SavedVariables.logshowloot, GF_SavedVariables.logshowspam,
-	GF_SavedVariables.logshowblacklist,	GF_SavedVariables.logshowbelowlevel, GF_SavedVariables.joinworld, GF_SavedVariables.showformattedchat, GF_SavedVariables.usewhoongroups, GF_SavedVariables.systemfilter,
-	GF_SavedVariables.spamfilter,GF_SavedVariables.autoblacklist, GF_PerCharVariables.playsounds, GF_PerCharVariables.lfgauto, GF_SavedVariables.showwhisperlogs, GF_SavedVariables.mainframeheight, GF_SavedVariables.mainframewidth,
+	GF_SavedVariables.logshowblacklist,	GF_SavedVariables.logshowbelowlevel, GF_SavedVariables.joinworld, GF_SavedVariables.showformattedchat, GF_SavedVariables.usewhoongroups, GF_SavedVariables.systemfilter,GF_SavedVariables.squareminimap,
+	GF_SavedVariables.spamfilter,GF_SavedVariables.autoblacklist, GF_PerCharVariables.playsounds, GF_PerCharVariables.lfgauto, GF_SavedVariables.showwhisperlogs,GF_SavedVariables.mainframeheight, GF_SavedVariables.mainframewidth,
 	GF_SavedVariables.alwaysshowguild, GF_SavedVariables.questmod, GF_SavedVariables.purgepfdb, GF_SavedVariables.logchannels, GF_SavedVariables.logparty, GF_SavedVariables.logguild, GF_SavedVariables.logwhisper, GF_SavedVariables.logsay,
-	GF_SavedVariables.logyell, GF_SavedVariables.loghardcore, GF_PerCharVariables.lfglevel, GF_PerCharVariables.lfgdps, GF_PerCharVariables.lfgheal, GF_PerCharVariables.lfgtank, }
+	GF_SavedVariables.logyell, GF_SavedVariables.loghardcore, GF_PerCharVariables.lfglevel, GF_PerCharVariables.lfgdps, GF_PerCharVariables.lfgheal, GF_PerCharVariables.lfgtank,GF_SavedVariables.clickcombos,GF_PerCharVariables.disablehardcore,
+	GF_SavedVariables.usefriendslist,GF_SavedVariables.normalfonts,GF_SavedVariables.blacklisttrades,GF_SavedVariables.blacklistguild,GF_SavedVariables.blacklistchat,GF_SavedVariables.blacklistforeign,GF_SavedVariables.iconpriority, }
 
-	VarNames = { "GF_ChatFilterGroupsInChatCheckButton", "GF_ChatFilterGroupsInMinimapCheckButton", "GF_ChatFilterGroupsNewOnlyCheckButton", "GF_ChatFilterShowChatCheckButton", "GF_ChatFilterShowTradesCheckButton",
-	"GF_ChatFilterShowLootCheckButton", "GF_ChatFilterShowGuildsCheckButton", "GF_AutoFilterCheckButton", "GF_GroupFilterShowDungeonCheckButton", "GF_GroupFilterShowRaidCheckButton", "GF_GroupFilterShowQuestCheckButton", "GF_GroupFilterShowOtherCheckButton",
-	"GF_GroupsFrameShowLFMCheckButton", "GF_GroupsFrameShowLFGCheckButton", "GF_LogFilterShowGroups", "GF_LogFilterShowFiltered", "GF_LogFilterShowChat", "GF_LogFilterShowTrades", "GF_LogFilterShowGuild", "GF_LogFilterShowLoot", "GF_LogFilterShowSpam",
-	"GF_LogFilterShowBlacklist", "GF_LogFilterShowBelowLevel",	"GF_FrameJoinWorldCheckButton", "GF_FrameShowFormattedChatCheckButton","GF_FrameUseWhoOnGroupsCheckButton", "GF_FrameSystemFilterCheckButton", "GF_FrameSpamFilterCheckButton",
-	"GF_FrameAutoBlacklistCheckButton",	"GF_PlaySoundOnResultsCheckButton",	"GF_GroupAutoCheckButton", "GF_LogShowWhisperHistory", "GF_HideMainFrameHeight", "GF_HideMainFrameWidth", "GF_FrameAlwaysShowGuildCheckButton", "GF_FrameQuestModCheckButton",
-	"GF_PurgePFDBCheckButton", "GF_LogChannelFilterChannels", "GF_LogChannelFilterParty", "GF_LogChannelFilterGuild", "GF_LogChannelFilterWhisper", "GF_LogChannelFilterSay", "GF_LogChannelFilterYell", "GF_LogChannelFilterHardcore",
-	"GF_LFGMyRoleLevelCheckButton", "GF_LFGMyRoleDPSCheckButton", "GF_LFGMyRoleHealCheckButton", "GF_LFGMyRoleTankCheckButton", }
+	VarNames = { "GF_ChatFilterGroupsInChatCheckButton","GF_ChatFilterGroupsInMinimapCheckButton","GF_ChatFilterGroupsNewOnlyCheckButton","GF_ChatFilterShowChatCheckButton","GF_ChatFilterShowTradesCheckButton","GF_ChatFilterShowLootCheckButton",
+	"GF_ChatFilterShowGuildsCheckButton","GF_AutoFilterCheckButton","GF_GroupFilterShowDungeonCheckButton","GF_GroupFilterShowRaidCheckButton","GF_GroupFilterShowQuestCheckButton","GF_GroupFilterShowOtherCheckButton","GF_GroupsFrameShowLFMCheckButton",
+	"GF_GroupsFrameShowLFGCheckButton","GF_LogFilterShowGroups","GF_LogFilterShowFiltered","GF_LogFilterShowChat","GF_LogFilterShowTrades","GF_LogFilterShowGuild","GF_LogFilterShowLoot","GF_LogFilterShowSpam","GF_LogFilterShowBlacklist",
+	"GF_LogFilterShowBelowLevel","GF_AutoJoinGroupChannelCheckButton","GF_FrameShowFormattedChatCheckButton","GF_FrameUseWhoOnGroupsCheckButton","GF_FrameSystemFilterCheckButton","GF_SquareMinimapCheckButton","GF_FrameSpamFilterCheckButton",
+	"GF_AutomaticBlacklistCheckButton","GF_PlaySoundOnResultsCheckButton","GF_GroupAutoCheckButton","GF_LogShowWhisperHistory","GF_HideMainFrameHeight","GF_HideMainFrameWidth","GF_AlwaysShowGuildFriendsCheckButton","GF_FrameQuestModCheckButton",
+	"GF_PurgePFDBCheckButton","GF_LogChannelFilterChannels","GF_LogChannelFilterParty","GF_LogChannelFilterGuild","GF_LogChannelFilterWhisper","GF_LogChannelFilterSay","GF_LogChannelFilterYell","GF_LogChannelFilterHardcore",
+	"GF_LFGMyRoleLevelCheckButton","GF_LFGMyRoleDPSCheckButton","GF_LFGMyRoleHealCheckButton","GF_LFGMyRoleTankCheckButton","GF_UseClickCombosCheckButton","GF_DisableHardcoreCheckButton","GF_UseFriendsListCheckButton","GF_UseNormalFontsCheckButton",
+	"GF_AutoBlacklistTradesCheckButton","GF_AutoBlacklistGuildCheckButton","GF_AutoBlacklistChatCheckButton","GF_AutoBlacklistForeignCheckButton","GF_MinimapIconPriorityCheckButton", }
 	for i=1, getn(VarNames) do getglobal(VarNames[i]):SetChecked(VarsToSet[i]) end
 
- 	VarsToSet = { GF_PerCharVariables.searchtext, GF_PerCharVariables.searchlfgtext, GF_PerCharVariables.searchlfgwhispertext, GF_BUTTONS_LIST.LFGSize[GF_PerCharVariables.lfgsize][1], GF_PerCharVariables.getwhowhisperclass, }
-	VarNames = { "GF_GroupsFrameDescriptionEditBox", "GF_LFGDescriptionEditBox", "GF_GetWhoWhisperEditBox", "GF_LFGSizeDropdownTextLabel", "GF_GetWhoClassDropdownTextLabel", }
+ 	VarsToSet = { GF_PerCharVariables.searchtext, GF_PerCharVariables.searchlfgtext, GF_PerCharVariables.searchlfgwhispertext, GF_BUTTONS_LIST.LFGSize[GF_PerCharVariables.lfgsize][1], GF_PerCharVariables.getwhowhisperclass, GF_SavedVariables.groupchannelname }
+	VarNames = { "GF_GroupsFrameDescriptionEditBox","GF_LFGDescriptionEditBox","GF_GetWhoWhisperEditBox","GF_LFGSizeDropdownTextLabel","GF_GetWhoClassDropdownTextLabel","GF_GroupChannelEditBox", }
 	for i=1, getn(VarNames) do getglobal(VarNames[i]):SetText(VarsToSet[i]) end
 
 	if GF_SearchButtonHasValues() then GF_SearchListDropdown:LockHighlight() GF_SearchListClearButton:Show() end
@@ -352,6 +332,7 @@ function GF_LoadSettings()
 	if GF_SavedVariables.MainFrameXPos then GF_MainFrame:SetPoint("TOPLEFT",UIParent,"TOPLEFT", GF_SavedVariables.MainFrameXPos, GF_SavedVariables.MainFrameYPos) end
 	if GF_SavedVariables.mainframestatus ~= 0 and not GF_SavedVariables.mainframeishidden then GF_ToggleMainFrame() end
 	if GF_SavedVariables.purgepfdb and GF_SavedVariables.showformattedchat then pfUI_playerDB = {} end
+	if GF_SavedVariables.iconpriority then GF_RelevelMinimapIcons(Minimap) end
 	GF_UpdateMinimapIcon()
 	GF_UpdateFriendsList()
 	GF_UpdateGuildiesList()
@@ -360,8 +341,72 @@ function GF_LoadSettings()
 	GF_DisplayLog()
 	GF_PruneTheClassWhoTable()
 	GF_ChatGetChannelsGroups()
+	GF_SetStringSize()
 	GF_SetDropdownWidths()
 	GF_SetLFGRoleButtons()
+end
+function GF_SetStringSize()
+	local fontName,fontSizeNormal,fontSizeMinimap,fontSizeLarge,fontSizeButton
+	if GF_SavedVariables.normalfonts then fontName = ChatFontNormal:GetFont() else fontName = "Fonts\\ARIALN.TTF" end
+	GF_UIScaleSliderLabel:SetText("Group Finder")
+	GF_UIScaleSliderLabel:SetFont(fontName,12) -- 76
+
+	if GF_UIScaleSliderLabel:GetStringWidth() > 70 then fontSizeNormal = 10 fontSizeLarge = 12 fontSizeButton = 11 fontSizeMinimap = 8
+	elseif GF_UIScaleSliderLabel:GetStringWidth() > 65 then fontSizeNormal = 11 fontSizeLarge = 13 fontSizeButton = 12 fontSizeMinimap = 10
+	elseif GF_UIScaleSliderLabel:GetStringWidth() > 60 then fontSizeNormal = 12 fontSizeLarge = 14 fontSizeButton = 12 fontSizeMinimap = 10
+	else fontSizeNormal = 13 fontSizeLarge = 15 fontSizeButton = 13 fontSizeMinimap = 11 end
+	for i=0,19 do
+		getglobal("GF_WhisperHistoryButton"..i):SetFont(fontName,fontSizeLarge)
+	end
+	for i=1,20 do
+		getglobal("GF_BlackListItem"..i.."NameLabel"):SetFont(fontName,fontSizeNormal)
+		getglobal("GF_BlackListItem"..i.."NoteLabel"):SetFont(fontName,fontSizeNormal)
+		getglobal("GF_BlackListItem"..i.."DeleteButton"):SetFont(fontName,fontSizeNormal)
+	end
+	for i=1,22 do
+		getglobal("GF_NewItem"..i.."NameLabel"):SetFont(fontName,fontSizeLarge)
+		getglobal("GF_NewItem"..i.."MoreLabel"):SetFont(fontName,fontSizeLarge)
+		getglobal("GF_NewItem"..i.."MoreLeftLabel"):SetFont(fontName,fontSizeLarge)
+		getglobal("GF_NewItem"..i.."GroupWhoButton"):SetFont(fontName,fontSizeLarge)
+		getglobal("GF_NewItem"..i.."LFGInviteButton"):SetFont(fontName,fontSizeLarge)
+		getglobal("GF_NewItem"..i.."LFMWhisperRequestInviteButton"):SetFont(fontName,fontSizeLarge)
+	end
+	local frameNames = { "GF_AutoFilterCheckButtonTextLabel","GF_PlaySoundOnResultsCheckButtonTextLabel","GF_GroupsFrameShowLFMCheckButtonTextLabel","GF_GroupsFrameShowLFGCheckButtonTextLabel","GF_LFGHardCoreDropdownTextLabel",
+	"GF_ChatFilterDropdownButtonTextLabel","GF_GroupFilterDropdownButtonTextLabel","GF_FrameUseWhoOnGroupsCheckButtonTextLabel","GF_GroupsFrameDescriptionEditBoxTextLabel","GF_GetWhoClassDropdownTextLabel","GF_GetWhoLevelDropdownTextLabel",
+	"GF_GroupAutoCheckButtonTextLabel","GF_LFGSizeDropdownTextLabel","GF_LFGLFMDropdownTextLabel","GF_LFGDungeonDropdownTextLabel","GF_LFGRaidDropdownTextLabel","GF_LFGRoleDropdownTextLabel","GF_LFGMyRoleLevelCheckButtonTextLabel",
+	"GF_LFGMyRoleTankCheckButtonTextLabel","GF_LFGMyRoleHealCheckButtonTextLabel","GF_LFGMyRoleDPSCheckButtonTextLabel","GF_GroupFilterShowDungeonCheckButtonTextLabel","GF_GroupFilterShowRaidCheckButtonTextLabel",
+	"GF_MinimapIconPriorityCheckButtonTextLabel","GF_GroupFilterShowQuestCheckButtonTextLabel","GF_GroupFilterShowOtherCheckButtonTextLabel","GF_ChatFilterGroupsInChatCheckButtonTextLabel","GF_ChatFilterGroupsNewOnlyCheckButtonTextLabel",
+	"GF_ChatFilterGroupsInMinimapCheckButtonTextLabel","GF_ChatFilterShowChatCheckButtonTextLabel","GF_ChatFilterShowTradesCheckButtonTextLabel","GF_ChatFilterShowLootCheckButtonTextLabel","GF_ChatFilterShowGuildsCheckButtonTextLabel",
+	"GF_LogFilterDropdownButtonTextLabel","GF_LogChannelFilterDropdownButtonTextLabel","GF_AutoJoinGroupChannelCheckButtonTextLabel","GF_FrameSpamFilterCheckButtonTextLabel","GF_FrameSystemFilterCheckButtonTextLabel",
+	"GF_AutomaticBlacklistCheckButtonTextLabel","GF_FrameShowFormattedChatCheckButtonTextLabel","GF_AlwaysShowGuildFriendsCheckButtonTextLabel","GF_FrameQuestModCheckButtonTextLabel","GF_PurgePFDBCheckButtonTextLabel",
+	"GF_UseClickCombosCheckButtonTextLabel","GF_UseFriendsListCheckButtonTextLabel","GF_DisableHardcoreCheckButtonTextLabel","GF_AutoBlacklistTradesCheckButtonTextLabel","GF_AutoBlacklistGuildCheckButtonTextLabel",
+	"GF_AutoBlacklistChatCheckButtonTextLabel","GF_AutoBlacklistForeignCheckButtonTextLabel","GF_UseNormalFontsCheckButtonTextLabel","GF_BlockListDropdownTextLabel","GF_SquareMinimapCheckButtonTextLabel" }
+	for i=1, getn(frameNames) do getglobal(frameNames[i]):SetFont(fontName,fontSizeNormal) end
+	frameNames = { "GF_GetWhoTotalNames","GF_AnnounceToLFGButton","GF_GetWhoButton","GF_GetWhoSkipButton","GF_GetWhoWhisperButton","GF_GetWhoNameLabel","GF_PageLabel","GF_ResultsLabel","GF_ShowSearchButton","GF_SettingsFrameButton",
+	"GF_ShowBlacklistButton","GF_LogFrameButton","GF_LFGFrameToggleButton","GF_GetWhoFrameToggleButton","GF_ConvertLogMessagesToURL","GF_UIScaleSliderUpdateButton","GF_ResetAllSettingsButton","GF_AddPlayerButton","GF_BlackListFramePageLabel", }
+	for i=1, getn(frameNames) do getglobal(frameNames[i]):SetFont(fontName,fontSizeButton) end
+	frameNames = {"GF_LFGMyRole","GF_WorldAnnounceMessageTextLabel","GF_ShowGroupsInLabel","GF_ShowChatTypesLabel","GF_LogShowWhisperHistoryLabel","GF_LogFrameInternalFrameTitle","GF_ShowMainFrameLabel",
+	"GF_GroupChannelNameTextLabel","GF_BlockListTextLabel", "GF_BlockListAddButton", }
+	for i=1, getn(frameNames) do getglobal(frameNames[i]):SetFont(fontName,fontSizeLarge) end
+	for i=1,6 do
+		getglobal("GF_MinimapMessageFrameA"..i):SetFont(fontName,fontSizeMinimap)
+		getglobal("GF_MinimapMessageFrameB"..i):SetFont(fontName,fontSizeMinimap)
+	end
+	GF_Log:SetFont(fontName,fontSizeLarge) -- /script print(GameFontNormal:GetFont())  SetFont("Fonts\\ARIALN.TTF",14,"OUTLINE")
+	GF_ChatFilterDropdownButton:SetPoint("TOPRIGHT", GF_MainFrameCloseButton, "BOTTOMRIGHT", -1*getglobal(GF_ChatFilterDropdownButton:GetName().."TextLabel"):GetStringWidth() -15, 6)
+
+	frameNames = { "GF_GroupNewTimeoutSlider","GF_FilterLevelSlider","GF_MinimapMsgArcSlider","GF_UIScaleSlider","GF_FrameTransparencySlider","GF_GroupListingDurationSlider","GF_AutoFilterLevelSlider","GF_FrameAnnounceTimerSlider",
+	"GF_FrameBlockMessagesBelowLevelSlider","GF_MinimapMsgRadiusSlider","GF_FrameSpamFilterDurationSlider","GF_FrameSpamBlacklistMinLevelSlider", }
+	for i=1, getn(frameNames) do
+		getglobal(frameNames[i].."Text"):SetFont(fontName,fontSizeNormal)
+		getglobal(frameNames[i].."Label"):SetFont(fontName,fontSizeNormal)
+		getglobal(frameNames[i].."High"):SetFont(fontName,fontSizeNormal)
+		getglobal(frameNames[i].."Low"):SetFont(fontName,fontSizeNormal)
+	end
+	GF_LogFilterDropdownButton:SetPoint("LEFT", "GF_LogFrameInternalFrameTitle", "RIGHT", 5, 0)
+	GF_LFGMyRoleLevelCheckButton:SetPoint("RIGHT", -1*getglobal(GF_LFGMyRoleLevelCheckButton:GetName().."TextLabel"):GetStringWidth() -2, -3)
+	GF_ChatFilterDropdownButton:SetPoint("TOPRIGHT", GF_MainFrameCloseButton, "BOTTOMRIGHT", -1*getglobal(GF_ChatFilterDropdownButton:GetName().."TextLabel"):GetStringWidth() -15, 6)
+	GF_UIScaleSliderLabel:SetText("")
 end
 
 function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
@@ -463,7 +508,7 @@ function GF_HandleItemRefLinks(link,text,button) -- Will have to update when I a
 		local name = string.sub(gsub(link, "([^%s]*)%s+([^%s]*)", "%2"),8)
 		if name and string.len(name) > 0 then 
 			if button == "LeftButton" then
-				if IsControlKeyDown() then
+				if GF_SavedVariables.clickcombos and IsControlKeyDown() then
 					for i=1, GetNumRaidMembers() do
 						if UnitName("raid"..i) == name then
 							TargetUnit("raid"..i)
@@ -498,7 +543,7 @@ function GF_HandleItemRefLinks(link,text,button) -- Will have to update when I a
 						return true
 					end
 				end
-			elseif button == "RightButton" and IsAltKeyDown() then
+			elseif GF_SavedVariables.clickcombos and button == "RightButton" and IsAltKeyDown() then
 				InviteByName(name)
 				return true
 			end
@@ -663,12 +708,12 @@ function GF_UpdateMainFrameWidth()
 			end
 			GF_LogFrameInternalFrame:SetWidth(350)
 		else
-			for i=1, GF_ResultsBaseListOffsetSize do if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",0,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",0,0) end getglobal("GF_NewItem"..i):SetWidth(640) getglobal("GF_NewItem"..i.."NameLabel"):ClearAllPoints() getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("TOPLEFT",5,0) getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("BOTTOMRIGHT",getglobal("GF_NewItem"..i),"TOPRIGHT",-5,-16) end
+			for i=1, GF_ResultsBaseListOffsetSize do if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",0,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",0,0) end getglobal("GF_NewItem"..i):SetWidth(635) getglobal("GF_NewItem"..i.."NameLabel"):ClearAllPoints() getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("TOPLEFT",5,0) getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("BOTTOMRIGHT",getglobal("GF_NewItem"..i),"TOPRIGHT",-5,-16) end
 			GF_LogFrameInternalFrame:SetPoint("TOPLEFT",29,-64)
 			GF_LogFrameInternalFrame:SetWidth(669)
 		end
 	else
-		for i=1, GF_ResultsBaseListOffsetSize do if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",0,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",0,0) end getglobal("GF_NewItem"..i):SetWidth(640) getglobal("GF_NewItem"..i.."NameLabel"):ClearAllPoints() getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("TOPLEFT",5,0) getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("BOTTOMRIGHT",getglobal("GF_NewItem"..i),"TOPRIGHT",-80,-16) end
+		for i=1, GF_ResultsBaseListOffsetSize do if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",0,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",0,0) end getglobal("GF_NewItem"..i):SetWidth(635) getglobal("GF_NewItem"..i.."NameLabel"):ClearAllPoints() getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("TOPLEFT",5,0) getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("BOTTOMRIGHT",getglobal("GF_NewItem"..i),"TOPRIGHT",-80,-16) end
 		GF_LogFrameInternalFrame:SetPoint("TOPLEFT",29,-64)
 		GF_LogFrameInternalFrame:SetWidth(669)
 	end
@@ -759,15 +804,46 @@ function GF_UpdateMinimapIcon()
 	local xpos = (0 - ((GF_SavedVariables.MinimapMsgRadiusOffset) * cos(GF_SavedVariables.MinimapMsgArcOffset + (180 - (180*Minimap:GetRight()/GetScreenWidth()))))) - 55
 	local ypos = ((GF_SavedVariables.MinimapMsgRadiusOffset) * sin(GF_SavedVariables.MinimapMsgArcOffset + (180 - (180*Minimap:GetTop()/GetScreenHeight())))) - 55
 
-	GF_MinimapIcon:SetPoint("TOPLEFT", "Minimap", "TOPLEFT",
-		55 - ((GF_SavedVariables.MinimapRadiusOffset) * cos(GF_SavedVariables.MinimapArcOffset)),
-		((GF_SavedVariables.MinimapRadiusOffset) * sin(GF_SavedVariables.MinimapArcOffset)) - 55)
+	GF_MoveMinimapIcon()
 	GF_MinimapMessageFrameA1:SetPoint(relativepos, "Minimap", relativepos,xpos,ypos)
 	GF_MinimapMessageFrameA2:SetPoint(relativepos, "Minimap", relativepos,xpos,ypos+42*directionMultiplier)
 	GF_MinimapMessageFrameA3:SetPoint(relativepos, "Minimap", relativepos,xpos,ypos+84*directionMultiplier)
 	GF_MinimapMessageFrameA4:SetPoint(relativepos, "Minimap", relativepos,xpos,ypos+126*directionMultiplier)
 	GF_MinimapMessageFrameA5:SetPoint(relativepos, "Minimap", relativepos,xpos,ypos+168*directionMultiplier)
 	GF_MinimapMessageFrameA6:SetPoint(relativepos, "Minimap", relativepos,xpos,ypos+210*directionMultiplier)
+end
+function GF_RelevelMinimapIcons(frame)
+	local children = { frame:GetChildren() }
+	for _,child in pairs(children) do
+		if child:GetName() ~= "GF_MinimapIcon" then child:SetFrameStrata("BACKGROUND") end
+		GF_RelevelMinimapIcons(child)
+	end
+end
+function GF_SetPFUIAddonButtons()
+	if pfUI and pfUI.addonbuttons and pfUI_cache and pfUI_cache["abuttons"] and pfUI_cache["abuttons"]["del"] then
+		if GF_SavedVariables.iconpriority then
+			table.insert(pfUI_cache["abuttons"]["del"],"GF_MinimapIcon")
+			--SlashCmdList["PFABP"]("del GF_MinimapIcon")
+		else
+			for i=1, getn(pfUI_cache["abuttons"]["del"]) do if pfUI_cache["abuttons"]["del"][i] == "GF_MinimapIcon" then pfUI_cache["abuttons"]["del"][i] = nil end end
+			--SlashCmdList["PFABP"]("add GF_MinimapIcon")
+		end
+	end
+end
+function GF_IconDraggingOnUpdate()
+	local xpos,ypos = GetCursorPosition()
+	xpos = Minimap:GetLeft()-xpos/Minimap:GetEffectiveScale()+70
+	ypos = ypos/Minimap:GetEffectiveScale()-Minimap:GetBottom()-70
+	GF_SavedVariables.MinimapIconXPos = xpos
+	GF_SavedVariables.MinimapIconYPos = ypos
+	GF_MoveMinimapIcon()
+end
+function GF_MoveMinimapIcon()
+	if GF_SavedVariables.squareminimap then
+		GF_MinimapIcon:SetPoint("TOPLEFT","Minimap","TOPLEFT",52-math.max(-82,math.min(110 * cos(math.deg(math.atan2(GF_SavedVariables.MinimapIconYPos,GF_SavedVariables.MinimapIconXPos))),84)),math.max(-86,math.min(110 * sin(math.deg(math.atan2(GF_SavedVariables.MinimapIconYPos,GF_SavedVariables.MinimapIconXPos))),82))-52)
+	else
+		GF_MinimapIcon:SetPoint("TOPLEFT","Minimap","TOPLEFT",52-80*cos(math.deg(math.atan2(GF_SavedVariables.MinimapIconYPos,GF_SavedVariables.MinimapIconXPos))),80*sin(math.deg(math.atan2(GF_SavedVariables.MinimapIconYPos,GF_SavedVariables.MinimapIconXPos)))-52)
+	end
 end
 function GF_LFGGetWhoUpdateOffset()
 	GF_MessageFrame:Show()
@@ -873,7 +949,9 @@ function GF_ChatGetChannelsGroups() -- How do other servers handle Hardcore grou
 	GF_ChatJoinedChannels = {}
 	local chanList = { GetChannelList() }
 	for i=1, getn(chanList) do
-		GF_ChatJoinedChannels[string.lower(chanList[i])] = true
+		if not tonumber(chanList[i]) then 
+			GF_ChatJoinedChannels[string.lower(chanList[i])] = i/2
+		end
 	end
 end
 function GF_ChatCheckFilters(logType,arg1,event)
@@ -1049,6 +1127,7 @@ function GF_OnUpdate() -- OnUpdate, SendWho, WhoListUpdated, Announce, Broadcast
 		GF_CheckForAnnounce()
 		GF_SendWhoIfNameInQueue()
 		GF_UpdateWhoDataViaFriendsList()
+		--GF_RelevelMinimapIcons(Minimap)
 	end
 end
 function GF_SendWhoIfNameInQueue()
@@ -1138,7 +1217,7 @@ end
 function GF_GetWhoData(arg2,groupfound)
 	if GF_SavedVariables.usewhoongroups and (not GF_WhoQueue[name] or GF_WhoQueue[name] + 60 < time()) and (groupfound or GF_SavedVariables.showformattedchat)
 	and (not GF_WhoTable[GF_RealmName][arg2] or GF_WhoTable[GF_RealmName][arg2][4] + 1209600 < time() or (GF_WhoTable[GF_RealmName][arg2][1] < 60 and GF_WhoTable[GF_RealmName][arg2][4] + 86400 < time())) then -- If level 60, get new whodata after 14 days(for guild name changes). If below level 60, get new data every 24 hours.
-		if GF_PlayingOnTurtle and not GF_SavedVariables.friendsToRemove[name] then GF_AddNameToWhoQueue(arg2,groupfound,true) else GF_AddNameToWhoQueue(arg2,groupfound) end
+		if GF_SavedVariables.usefriendslist and not GF_SavedVariables.friendsToRemove[name] then GF_AddNameToWhoQueue(arg2,groupfound,true) else GF_AddNameToWhoQueue(arg2,groupfound) end
 	else
 		return GF_WhoTable[GF_RealmName][arg2]
 	end
@@ -1146,7 +1225,7 @@ end
 function GF_UpdateWhoDataViaFriendsList()
 	GF_UpdateWhoDataViaFriendsListTimer = GF_UpdateWhoDataViaFriendsListTimer - 1
 	if GF_UpdateWhoDataViaFriendsListTimer < 0 then
-		GF_UpdateWhoDataViaFriendsListTimer = 2
+		GF_UpdateWhoDataViaFriendsListTimer = 1
 		local highestPriorityName
 		local highestPriorityTime = time() + 999999
 		for name,data in GF_SavedVariables.friendsToRemove do if data > time() then if data < highestPriorityTime then highestPriorityTime = data highestPriorityName = name end end end
@@ -1159,14 +1238,14 @@ end
 function GF_CheckForAnnounce()
 	if GF_AutoAnnounceTimer then
 		GF_AutoAnnounceTimer = GF_AutoAnnounceTimer + 1
-		if not GF_ChatJoinedChannels[string.lower(GF_CHANNEL_NAME)] then GF_TurnOffAnnounce(GF_AUTO_ANNOUNCE_NOT_IN_CHANNEL) return end
+		if not GF_ChatJoinedChannels[string.lower(GF_GroupChannelEditBox:GetText())] then GF_TurnOffAnnounce(GF_AUTO_ANNOUNCE_NOT_IN_CHANNEL) return end
 		if GF_LFGDescriptionEditBox:GetText() == "" then GF_TurnOffAnnounce(GF_NOTHING_TO_ANNOUNCE) return end
 		if GF_AutoAnnounceTimer > GF_SavedVariables.announcetimer then
 			GF_AutoAnnounceTimer = 0
-			if GF_Hardcore and GF_PerCharVariables.hardcore ~= 3 then
+			if not GF_PerCharVariables.disablehardcore and GF_Hardcore and GF_PerCharVariables.hardcore ~= 3 then
 				SendChatMessage(GF_LFGDescriptionEditBox:GetText(), "HARDCORE", nil, nil)
 			else 
-				SendChatMessage(GF_LFGDescriptionEditBox:GetText(), "CHANNEL", nil, GetChannelName(GF_CHANNEL_NAME))
+				SendChatMessage(GF_LFGDescriptionEditBox:GetText(), "CHANNEL", nil, GF_ChatJoinedChannels[string.lower(GF_GroupChannelEditBox:GetText())])
 			end
 			DEFAULT_CHAT_FRAME:AddMessage(GF_SENT..GF_LFGDescriptionEditBox:GetText(), 1, 1, 0.5)
 			GF_AnnounceToLFGButton:SetText(GF_ANNOUNCE_STOP_ANNOUNCE.."-"..GF_SavedVariables.announcetimer - GF_AutoAnnounceTimer)
@@ -1183,7 +1262,7 @@ function GF_TurnOffAnnounce(messageText)
 	DEFAULT_CHAT_FRAME:AddMessage(messageText, 1, 1, 0.5)
 end
 function GF_TurnOnAnnounce()
-	if not GF_ChatJoinedChannels[string.lower(GF_CHANNEL_NAME)] then GF_TurnOffAnnounce(GF_AUTO_ANNOUNCE_NOT_IN_CHANNEL) return end
+	if not GF_ChatJoinedChannels[string.lower(GF_GroupChannelEditBox:GetText())] then GF_TurnOffAnnounce(GF_AUTO_ANNOUNCE_NOT_IN_CHANNEL) return end
 	GF_AutoAnnounceTimer = GF_SavedVariables.announcetimer
 	if UnitIsPartyLeader("player") then GF_WasPartyLeaderBefore = true end
 	GF_AnnounceToLFGButton:SetText(GF_ANNOUNCE_STOP_ANNOUNCE.."-"..GF_SavedVariables.announcetimer)
@@ -1195,7 +1274,7 @@ function GF_UpdateGroupsFrame()
 		GF_UpdateAndRequestTimer = 30
 		for i=1, getn(GF_MessageList[GF_RealmName]) do
 			if GF_SavedVariables.usewhoongroups and not GF_WhoTable[GF_RealmName][GF_MessageList[GF_RealmName][i].op] and not GF_WhoQueue[GF_MessageList[GF_RealmName][i].op] then
-				if GF_PlayingOnTurtle then if not GF_SavedVariables.friendsToRemove[name] and (not GF_FriendUnknown[name] or GF_FriendUnknown[name] + 900 > time()) then GF_AddNameToWhoQueue(GF_MessageList[GF_RealmName][i].op,true,true) end else GF_AddNameToWhoQueue(GF_MessageList[GF_RealmName][i].op,true) end
+				if GF_SavedVariables.usefriendslist then if not GF_SavedVariables.friendsToRemove[name] and (not GF_FriendUnknown[name] or GF_FriendUnknown[name] + 900 > time()) then GF_AddNameToWhoQueue(GF_MessageList[GF_RealmName][i].op,true,true) end else GF_AddNameToWhoQueue(GF_MessageList[GF_RealmName][i].op,true) end
 			end
 			if GF_AddonMakeAListOfGroupsForSending and not GF_AddonOPSentNamesOnLogin[GF_MessageList[GF_RealmName][i].op] then
 				GF_AddonGroupDataToBeSentBuffer[GF_MessageList[GF_RealmName][i].op] = GF_MessageList[GF_RealmName][i]
@@ -1363,9 +1442,10 @@ function GF_ParseIncomingAddonMessages(msg)
 	elseif string.sub(msg,1,1) == ":" then -- (To Everyone) This is the who data from the names requested in "R".
 		for sentlevel,sentname,sentclass,sentguild,senttime in string.gfind(msg, ":(%d+)([a-zA-Z]+)(%d)([a-zA-Z%s]+)(%d+)") do
 			if senttime then
+				senttime = tonumber(senttime)
 				if sentguild == "Z" then sentguild = "" end
-				if tonumber(senttime) <= time() and (not GF_WhoTable[GF_RealmName][sentname] or tonumber(senttime) > GF_WhoTable[GF_RealmName][sentname][4]) then
-					GF_WhoTable[GF_RealmName][sentname] = { tonumber(sentlevel), GF_ClassIDs[tonumber(sentclass)], sentguild, tonumber(senttime) }
+				if senttime <= time() and GF_ClassIDs[tonumber(sentclass)] and (not GF_WhoTable[GF_RealmName][sentname] or senttime > GF_WhoTable[GF_RealmName][sentname][4]) then
+					GF_WhoTable[GF_RealmName][sentname] = { tonumber(sentlevel), GF_ClassIDs[tonumber(sentclass)], sentguild, senttime }
 				end
 			end
 			GF_AddonAllNamesForResponseToLogin[sentname] = nil
@@ -1375,7 +1455,8 @@ function GF_ParseIncomingAddonMessages(msg)
 	elseif string.len(msg) > 2 then -- (To Everyone) This is the full group information. Which is sent separately from the who data.
 		for senttime,sentname,message in string.gfind(msg, "(%d+)([a-zA-Z]+):(.+)") do
 			if senttime then
-				GF_GetTypes(gsub(gsub(gsub(gsub(gsub(string.lower(gsub(gsub(gsub(gsub(" "..msg.." ", " |+h%[([%w%s%p]+)%]|+h|+r", " %1 "), "|c%x+|+(%w+)[%d:]+|+h", " %1 "), "|+h|+r", " "),"([a-z ][a-z])([A-Z])","%1 %2")),".gg/%w+", ""),"([%p%s])(%w%w+)([%p%s])","%1 %2 %3"),"[%s%.%[](%a)[%s%.](%a)[%s%.]","%1%2"),"%s%s+", " "),"[']", ""))
+				senttime = tonumber(senttime)
+				GF_GetTypes(gsub(gsub(gsub(gsub(gsub(string.lower(gsub(gsub(gsub(gsub(" "..message.." ", " |+h%[([%w%s%p]+)%]|+h|+r", " %1 "), "|c%x+|+(%w+)[%d:]+|+h", " %1 "), "|+h|+r", " "),"([a-z ][a-z])([A-Z])","%1 %2")),".gg/%w+", ""),"([%p%s])(%w%w+)([%p%s])","%1 %2 %3"),"[%s%.%[](%a)[%s%.](%a)[%s%.]","%1%2"),"%s%s+", " "),"[']", ""))
 				for i=1, getn(GF_MessageList[GF_RealmName]) do
 					if GF_MessageList[GF_RealmName][i].op and GF_MessageList[GF_RealmName][i].op == sentname then
 						table.remove(GF_MessageList[GF_RealmName], i)
@@ -1384,10 +1465,10 @@ function GF_ParseIncomingAddonMessages(msg)
 				end
 				if getn(GF_MessageList[GF_RealmName]) > 0 then
 					for i=1, getn(GF_MessageList[GF_RealmName]) do
-						if tonumber(senttime) > GF_MessageList[GF_RealmName][i].t then table.insert(GF_MessageList[GF_RealmName], i, ({GF_GetGroupInformation(GF_CleanUpMessagesOfBadLinks(message),sentname,tonumber(senttime))})[1]) return end
+						if senttime > GF_MessageList[GF_RealmName][i].t then table.insert(GF_MessageList[GF_RealmName], i, ({GF_GetGroupInformation(GF_CleanUpMessagesOfBadLinks(message),sentname,senttime)})[1]) return end
 					end
 				end
-				table.insert(GF_MessageList[GF_RealmName], ({GF_GetGroupInformation(GF_CleanUpMessagesOfBadLinks(message),sentname,tonumber(senttime))})[1])
+				table.insert(GF_MessageList[GF_RealmName], ({GF_GetGroupInformation(GF_CleanUpMessagesOfBadLinks(message),sentname,senttime)})[1])
 			end
 			GF_AddonGroupDataToBeSentBuffer[sentname] = nil
 			GF_AddonAllNamesForResponseToLogin[sentname] = nil
@@ -1446,6 +1527,7 @@ function self:PLAYER_LEAVING_WORLD()
 	GF_PerCharVariables.searchtext = GF_GroupsFrameDescriptionEditBox:GetText()
 	GF_PerCharVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText()
 	GF_PerCharVariables.searchlfgwhispertext = GF_GetWhoWhisperEditBox:GetText()
+	GF_SavedVariables.groupchannelname = GF_GroupChannelEditBox:GetText()
 end
 function self:PARTY_MEMBERS_CHANGED()
 	GF_UpdateGroup()
@@ -1529,13 +1611,14 @@ function self:CHAT_MSG_SYSTEM()
 end
 
 function GF_JoinWorld() -- Event-related
+	GF_SavedVariables.groupchannelname = GF_GroupChannelEditBox:GetText()
 	if GF_SavedVariables.joinworld then
 		local chanList = { GetChannelList() }
 		for i=1, getn(chanList) do
-			if string.lower(chanList[i]) == string.lower(GF_CHANNEL_NAME) then return true end
+			if string.lower(chanList[i]) == string.lower(GF_SavedVariables.groupchannelname) then return true end
 		end
-		JoinChannelByName(GF_CHANNEL_NAME)
-		ChatFrame_AddChannel(ChatFrame1, GF_CHANNEL_NAME)
+		JoinChannelByName(GF_SavedVariables.groupchannelname)
+		ChatFrame_AddChannel(ChatFrame1, GF_SavedVariables.groupchannelname)
 	end
 end
 function GF_BindKey(bindKey, bindName)
@@ -1581,6 +1664,11 @@ function GF_SetDropdownWidths() -- Could clean this up with some "For" tables of
 	if (GF_LogChannelFilterSayTextLabel:GetStringWidth() + 40) > GF_LogChannelFilterDropdownMenu:GetWidth() then GF_LogChannelFilterDropdownMenu:SetWidth((GF_LogChannelFilterSayTextLabel:GetStringWidth() + 40)) end
 	if (GF_LogChannelFilterYellTextLabel:GetStringWidth() + 40) > GF_LogChannelFilterDropdownMenu:GetWidth() then GF_LogChannelFilterDropdownMenu:SetWidth((GF_LogChannelFilterYellTextLabel:GetStringWidth() + 40)) end
 	if (GF_LogChannelFilterHardcoreTextLabel:GetStringWidth() + 40) > GF_LogChannelFilterDropdownMenu:GetWidth() then GF_LogChannelFilterDropdownMenu:SetWidth((GF_LogChannelFilterHardcoreTextLabel:GetStringWidth() + 40)) end
+
+	if (GF_AutoBlacklistTradesCheckButtonTextLabel:GetStringWidth() + 40) > GF_AutoBlacklistDropdownMenu:GetWidth() then GF_AutoBlacklistDropdownMenu:SetWidth((GF_AutoBlacklistTradesCheckButtonTextLabel:GetStringWidth() + 40)) end
+	if (GF_AutoBlacklistGuildCheckButtonTextLabel:GetStringWidth() + 40) > GF_AutoBlacklistDropdownMenu:GetWidth() then GF_AutoBlacklistDropdownMenu:SetWidth((GF_AutoBlacklistGuildCheckButtonTextLabel:GetStringWidth() + 40)) end
+	if (GF_AutoBlacklistChatCheckButtonTextLabel:GetStringWidth() + 40) > GF_AutoBlacklistDropdownMenu:GetWidth() then GF_AutoBlacklistDropdownMenu:SetWidth((GF_AutoBlacklistChatCheckButtonTextLabel:GetStringWidth() + 40)) end
+	if (GF_AutoBlacklistForeignCheckButtonTextLabel:GetStringWidth() + 40) > GF_AutoBlacklistDropdownMenu:GetWidth() then GF_AutoBlacklistDropdownMenu:SetWidth((GF_AutoBlacklistForeignCheckButtonTextLabel:GetStringWidth() + 40)) end
 end
 function GF_SetLFGRoleButtons()
 	if GF_TankClasses[({UnitClass("player")})[2]] then -- If tank... If heal then tank + heal + dps. Otherwise tank + dps.
@@ -1888,7 +1976,7 @@ function GF_ResultItem_Hover_Off(frame)
 	GameTooltip:Hide()
 end
 function GF_GetGroupWhoButton(frame,id)
-	if GF_PlayingOnTurtle and not GF_SavedVariables.friendsToRemove[name] then
+	if GF_SavedVariables.usefriendslist and not GF_SavedVariables.friendsToRemove[name] then
 		GF_AddNameToWhoQueue(GF_FilteredResultsList[GF_ResultsListOffset+id].op,true,true)
 		getglobal(frame:GetName().."GroupWhoButton"):Hide()
 	elseif not GF_UrgentWhoRequest[GF_FilteredResultsList[GF_ResultsListOffset+id].op] then
@@ -2341,7 +2429,7 @@ function GF_FixLFGStrings(groupSizeOnly) -- LFG Group Maker Functions
 					newText = newText.."/"..foundDungeonRaid[i]
 				end
 			end
-			if GF_Hardcore and GF_PerCharVariables.hardcore ~= 3 and strlen(newText) > 0 then newText = newText.." (HC)" end
+			if not GF_PerCharVariables.disablehardcore and GF_Hardcore and GF_PerCharVariables.hardcore ~= 3 and strlen(newText) > 0 then newText = newText.." (HC)" end
 			if getn(foundRoles) > 0 then
 				newText = newText.." need "
 				for i=1, getn(foundRoles) do
@@ -2364,7 +2452,7 @@ function GF_FixLFGStrings(groupSizeOnly) -- LFG Group Maker Functions
 			for i=1, getn(foundDungeonRaid) do
 				newText = newText.."/"..foundDungeonRaid[i]
 			end
-			if GF_Hardcore and GF_PerCharVariables.hardcore ~= 3 and strlen(newText) > 1 then newText = newText.." (HC)" end
+			if not GF_PerCharVariables.disablehardcore and GF_Hardcore and GF_PerCharVariables.hardcore ~= 3 and strlen(newText) > 1 then newText = newText.." (HC)" end
 		end
 		GF_PerCharVariables.searchlfgtext = gsub(gsub(gsub(gsub(gsub(gsub(gsub(newText.." "..string.sub(GF_PerCharVariables.searchlfgtext, endOfFilter+1), "^[/ ]+", ""), "[/ ]+$", ""), "^[/ ]+", ""),"//+", ""), "/%s+"," "),"%s+/", " "),"%s%s+", " ")
 		GF_LFGDescriptionEditBox:SetText(GF_PerCharVariables.searchlfgtext)
@@ -2488,10 +2576,15 @@ function GF_AddRemoveSearch(bframe,entryname,add)
 				elseif frameName == "LFGHardCore" then
 					GF_PerCharVariables.hardcore = i
 					GF_LFGHardCoreDropdownTextLabel:SetText(GF_BUTTONS_LIST.LFGHardCore[i][1])
-					GF_WorldAnnounceMessageTextLabel:SetText(GF_BUTTONS_LIST.LFGHardCore[i][4])
-					if GF_Hardcore then if GF_PerCharVariables.hardcore == 3 then DEFAULT_CHAT_FRAME:AddMessage(GF_WORLD_NOW_SENDING, 1, 1, 0.5) else DEFAULT_CHAT_FRAME:AddMessage(GF_HARDCORE_NOW_SENDING, 1, 1, 0.5) end end
+					if GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][4] and not GF_PerCharVariables.disablehardcore then GF_WorldAnnounceMessageTextLabel:SetText(GF_HARDCORE_SEND_TEXT) else GF_WorldAnnounceMessageTextLabel:SetText(GF_WORLD_SEND_TEXT.." "..GF_SavedVariables.groupchannelname.." "..GF_LOG_CHANNEL) end
+					if not GF_PerCharVariables.disablehardcore and GF_Hardcore then if GF_PerCharVariables.hardcore == 3 then DEFAULT_CHAT_FRAME:AddMessage(GF_WORLD_NOW_SENDING, 1, 1, 0.5) else DEFAULT_CHAT_FRAME:AddMessage(GF_HARDCORE_NOW_SENDING, 1, 1, 0.5) end end
 					GF_LFGHardCore:Hide()
 					GF_ApplyFiltersToGroupList()
+				elseif frameName == "GroupChannelName" then
+					GF_GroupChannelEditBox:SetText(entryname)
+					GF_SavedVariables.groupchannelname = GF_GroupChannelEditBox:GetText()
+					if GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][4] and not GF_PerCharVariables.disablehardcore then GF_WorldAnnounceMessageTextLabel:SetText(GF_HARDCORE_SEND_TEXT) else GF_WorldAnnounceMessageTextLabel:SetText(GF_WORLD_SEND_TEXT.." "..GF_SavedVariables.groupchannelname.." "..GF_LOG_CHANNEL) end
+					GF_GroupChannelName:Hide()
 				elseif frameName == "LFGLFM" then
 					--for j=2, getn(GF_BUTTONS_LIST[frameName]) do
 						--GF_PerCharVariables.searchlfgtext = gsub(string.lower(GF_PerCharVariables.searchlfgtext), GF_BUTTONS_LIST.LFGLFM[j][1].." ", "")
@@ -2860,6 +2953,12 @@ function GF_CheckForSystem(arg1,arg2)
 			end
 		end
 	else
+		for name in string.gfind(arg1, "(%w+)") do
+			if GF_SavedVariables.friendsToRemove[name] then
+				GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,nil}
+				return nil
+			end
+		end
 		if GF_SavedVariables.systemfilter then
 			for i=1, getn(GF_ServerMessageFilters) do -- Block Server Spam about RMT or WDB folders or Discord servers or whatever
 				if string.find(arg1, GF_ServerMessageFilters[i]) then GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,nil} return nil end
@@ -2879,31 +2978,25 @@ function GF_CheckForSystem(arg1,arg2)
 					end
 				end
 			end
-		end
-		for name in string.gfind(arg1, "(%w+)") do
-			if GF_SavedVariables.friendsToRemove[name] then
-				GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,nil}
-				return nil
-			end
-		end
-		for i=1, getn(GF_HardcoreMessages) do
-			local lfs,lfe,wordString,tempString,tempVal = string.find(arg1, GF_HardcoreMessages[i])
-			if tempString then
-				lfs,lfe = string.find(" "..wordString, " "..tempString.." ",lfs)
-				if lfs then -- lfs will always be a space at at least position 2... lfe will be a space
-					GF_AddLogMessage(string.sub(string.sub(" "..wordString,1,lfs).."|cff9d9d9d|Hplayer:"..tempString.."|h["..tempString.."]|h|r "..string.sub(wordString,lfe),2),4,true,"SYSTEM",nil,nil,"SYSTEM")
+			for i=1, getn(GF_HardcoreMessages) do
+				local lfs,lfe,wordString,tempString,tempVal = string.find(arg1, GF_HardcoreMessages[i])
+				if tempString then
+					lfs,lfe = string.find(" "..wordString, " "..tempString.." ",lfs)
+					if lfs then -- lfs will always be a space at at least position 2... lfe will be a space
+						GF_AddLogMessage(string.sub(string.sub(" "..wordString,1,lfs).."|cff9d9d9d|Hplayer:"..tempString.."|h["..tempString.."]|h|r "..string.sub(wordString,lfe),2),4,true,"SYSTEM",nil,nil,"SYSTEM")
 
-					if GF_WhoTable[GF_RealmName][tempString] then
-						if tempVal then
-							GF_WhoTable[GF_RealmName][tempString][1] = tonumber(tempVal)
-						else 
-							GF_WhoTable[GF_RealmName][tempString][1] = 60
+						if GF_WhoTable[GF_RealmName][tempString] then
+							if tempVal then
+								GF_WhoTable[GF_RealmName][tempString][1] = tonumber(tempVal)
+							else 
+								GF_WhoTable[GF_RealmName][tempString][1] = 60
+							end
+							GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,true,string.sub(string.sub(" "..wordString,1,lfs).."|cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][tempString][2]] or "9d9d9d").."|Hplayer:"..tempString.."|h["..tempString.."]|h|r "..string.sub(wordString,lfe),2)}
+						else
+							GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,true,string.sub(string.sub(" "..wordString,1,lfs).."|cff9d9d9d|Hplayer:"..tempString.."|h["..tempString.."]|h|r "..string.sub(wordString,lfe),2)}
 						end
-						GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,true,string.sub(string.sub(" "..wordString,1,lfs).."|cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][tempString][2]] or "9d9d9d").."|Hplayer:"..tempString.."|h["..tempString.."]|h|r "..string.sub(wordString,lfe),2)}
-					else
-						GF_PreviousMessage[arg2] = {arg1,GetTime() + .25,true,string.sub(string.sub(" "..wordString,1,lfs).."|cff9d9d9d|Hplayer:"..tempString.."|h["..tempString.."]|h|r "..string.sub(wordString,lfe),2)}
+						return true
 					end
-					return true
 				end
 			end
 		end
@@ -2923,7 +3016,7 @@ function GF_CheckForGroups(arg1,arg2,arg9,event,showanyway)
 	if GF_MessageData.foundGuild > 2.9 then return GF_CheckForSpam(arg1,arg2) or 11
 	elseif GF_MessageData.foundTrades > 2.9 then return GF_CheckForSpam(arg1,arg2) or 5
 	elseif GF_MessageData.foundLFM < GF_SavedVariables.FilterLevel and GF_MessageData.foundLFG < GF_SavedVariables.FilterLevel then
-		if GF_SavedVariables.showformattedchat and GF_PlayingOnTurtle then GF_GetWhoData(arg2) end
+		if GF_SavedVariables.showformattedchat and GF_SavedVariables.usefriendslist then GF_GetWhoData(arg2) end
 		return GF_CheckForSpam(arg1,arg2) or 4
 	end
 
@@ -2942,8 +3035,8 @@ function GF_CheckForGroups(arg1,arg2,arg9,event,showanyway)
 end
 function GF_GetTypes(arg1, showanyway)
 	if showanyway == true then print(arg1) end
+	GF_MessageData = { message = arg1, languageName = "en", foundIgnore = 0,foundGuild = 0,foundGuildExclusion = 0,foundLFM = 0,foundLFMPreSuf = 0,foundLFG = 0,foundLFGPreSuf = 0,foundClass = nil,foundQuest = {},foundDungeon = nil,foundRaid = nil,foundTrades = 0,foundTradesExclusion = 0,foundPvP = nil,foundDFlags = {},foundPFlags = {},foundHC = nil,foundNotHC = nil, lfmlfgName = {}, groupName = {} }
 	arg1 = " "..gsub(gsub(gsub(string.lower(gsub(gsub(gsub(arg1, "|[cC]%x+%p+(%w+)[%w:]+|+[hH]", " %1 >z"), "|[hr]", ""),"([a-z ][a-z])([A-Z])","%1 %2")),".gg/%w+", ""),"[\"#\$\%&\*,\.@\\\^_`~|]"," "),"'","").." "
-	GF_MessageData = { arg1 = "", languageName = "en", foundIgnore = 0,foundGuild = 0,foundGuildExclusion = 0,foundLFM = 0,foundLFMPreSuf = 0,foundLFG = 0,foundLFGPreSuf = 0,foundClass = nil,foundQuest = {},foundDungeon = nil,foundRaid = nil,foundTrades = 0,foundTradesExclusion = 0,foundPvP = nil,foundDFlags = {},foundPFlags = {},foundHC = nil,foundNotHC = nil, lfmlfgName = {}, groupName = {} }
 	local wordTable,wordTableTrade,wordTableGuild = {},{},{}
 	local wordString,lfs,lfe,tempVal,tempString
 	local languageID = {}
@@ -3575,7 +3668,8 @@ function GF_CheckForSpam(arg1,arg2,foundInGroup)
 			if GF_PlayerMessages[arg2][1][1] > time() then return 7 end -- Returns spam for the duration of the spam filter
 			if (string.len(arg1) > 30 and ((GF_PlayerMessages[arg2][1][1] + 120 > time() and string.find(arg1,string.sub(GF_PlayerMessages[arg2][2][1],math.random(math.ceil(string.len(GF_PlayerMessages[arg2][2][1])/4)),math.random(math.ceil(string.len(GF_PlayerMessages[arg2][2][1])/4))*-1),1,true)) or (GF_PlayerMessages[arg2][1][2] + 120 > time() and string.find(arg1,string.sub(GF_PlayerMessages[arg2][2][2],math.random(math.ceil(string.len(GF_PlayerMessages[arg2][2][2])/4)),math.random(math.ceil(string.len(GF_PlayerMessages[arg2][2][2])/4))*-1),1,true)) or (GF_PlayerMessages[arg2][1][3] + 120 > time() and string.find(arg1,string.sub(GF_PlayerMessages[arg2][2][3],math.random(math.ceil(string.len(GF_PlayerMessages[arg2][2][3])/4)),math.random(math.ceil(string.len(GF_PlayerMessages[arg2][2][3])/4))*-1),1,true))))
 			or (not foundInGroup and (GF_PlayerMessages[arg2][1][1] + 120 > time() and arg1 == GF_PlayerMessages[arg2][2][1]) and (GF_PlayerMessages[arg2][1][2] + 120 > time() and arg1 == GF_PlayerMessages[arg2][2][2])) then		-- Found Spammer
-				if GF_SavedVariables.autoblacklist and not GF_BlackList[GF_RealmName][arg2] and string.len(arg1) > 120 and arg1 == GF_PlayerMessages[arg2][2][1] and arg1 == GF_PlayerMessages[arg2][2][2] then
+				if GF_SavedVariables.autoblacklist and not GF_BlackList[GF_RealmName][arg2] and string.len(arg1) > 120 and arg1 == GF_PlayerMessages[arg2][2][1] and arg1 == GF_PlayerMessages[arg2][2][2] and GF_MessageData.message == arg1 and
+				((GF_SavedVariables.blacklisttrades and GF_MessageData.foundTrades > 2.9) or (GF_SavedVariables.blacklistguild and GF_MessageData.foundGuild > 2.9) or (GF_SavedVariables.blacklistchat and GF_MessageData.foundGuild < 3 and GF_MessageData.foundTrades < 3) or (GF_SavedVariables.blacklistforeign and GF_MessageData.languageName ~= "en")) then
 					if GF_WhoTable[GF_RealmName][arg2] and GF_WhoTable[GF_RealmName][arg2][4] + 86400 > time() then -- Data must be less than a day old to autoblacklist or block lowlevel
 						if GF_WhoTable[GF_RealmName][arg2][1] <= GF_SavedVariables.autoblacklistminlevel then																																						-- Blacklist if below level filter
 							table.insert(GF_BlackList[GF_RealmName], 1, { arg2, "("..GF_WhoTable[GF_RealmName][arg2][1]..") "..arg1 })
@@ -3584,7 +3678,7 @@ function GF_CheckForSpam(arg1,arg2,foundInGroup)
 							return 8	
 						end
 					else
-						if GF_SavedVariables.usewhoongroups and not GF_WhoQueue[name] then GF_WhoTable[GF_RealmName][arg2] = nil if GF_PlayingOnTurtle and not GF_SavedVariables.friendsToRemove[name] then GF_AddNameToWhoQueue(arg2,true,true) else GF_AddNameToWhoQueue(arg2,true) end end
+						if GF_SavedVariables.usewhoongroups and not GF_WhoQueue[name] then GF_WhoTable[GF_RealmName][arg2] = nil if GF_SavedVariables.usefriendslist and not GF_SavedVariables.friendsToRemove[name] then GF_AddNameToWhoQueue(arg2,true,true) else GF_AddNameToWhoQueue(arg2,true) end end
 					end
 				end
 				table.insert(GF_PlayerMessages[arg2][1],1,GF_PlayerMessages[arg2][1][1] + GF_SavedVariables.spamfilterduration)

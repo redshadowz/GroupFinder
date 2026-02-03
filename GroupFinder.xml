@@ -2,14 +2,9 @@
 C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 	<Script file="localization.lua"/>
 	<Script file="GroupFinder.lua"/>
-	<FontString name="GF_NormalFont" inherits="GameFontNormal" font="Fonts\ARIALN.TTF" virtual="true"><FontHeight><AbsValue val="12"/></FontHeight><Shadow><Offset><AbsDimension x="1" y="-1"/></Offset><Color r="0" g="0" b="0" a="0.5"/></Shadow></FontString>
-	<FontString name="GF_NormalFontSmall" inherits="GameFontNormal" font="Fonts\ARIALN.TTF" virtual="true"><FontHeight><AbsValue val="10"/></FontHeight><Shadow><Offset><AbsDimension x="1" y="-1"/></Offset><Color r="0" g="0" b="0" a="0.5"/></Shadow></FontString>
-	<FontString name="GF_NormalFontLarge" inherits="GameFontNormal" font="Fonts\ARIALN.TTF" virtual="true"><FontHeight><AbsValue val="14"/></FontHeight><Shadow><Offset><AbsDimension x="1" y="-1"/></Offset><Color r="0" g="0" b="0" a="0.5"/></Shadow></FontString>
-	<FontString name="GF_TitleFont" inherits="GF_NormalFontLarge" virtual="true"><Color r="0.9" g="0.9" b="0.9"/></FontString>
+	<FontString name="GF_NormalFont" inherits="GameFontNormal" virtual="true"><Shadow><Offset><AbsDimension x="1" y="-1"/></Offset><Color r="0" g="0" b="0" a="0.5"/></Shadow></FontString>
+	<FontString name="GF_TitleFont" inherits="GF_NormalFont" virtual="true"><Color r="0.9" g="0.9" b="0.9"/></FontString>
 	<Button name="GF_GrayButton_Whisper" inherits="UIPanelButtonGrayTemplate" hidden="true" virtual="true">
-		<NormalFont font="Fonts\ARIALN.TTF"><FontHeight><AbsValue val="14"/></FontHeight></NormalFont>
-		<HighlightFont font="Fonts\ARIALN.TTF"><FontHeight><AbsValue val="14"/></FontHeight></HighlightFont>
-		<DisabledFont font="Fonts\ARIALN.TTF"><FontHeight><AbsValue val="14"/></FontHeight></DisabledFont>
 		<Size>
 			<AbsDimension x="100" y="20"/>
 		</Size>
@@ -72,7 +67,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 		</Size>
 		<Layers>
 			<Layer level="OVERLAY">
-				<FontString inherits="GF_NormalFontLarge" name="$parentTextLabel" justifyH="RIGHT">
+				<FontString inherits="GF_NormalFont" name="$parentTextLabel" justifyH="RIGHT">
 					<Anchors>
 						<Anchor point="TOPRIGHT" relativePoint="TOPLEFT">
 							<Offset>
@@ -119,9 +114,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</FontString>
 			</Layer>
 		</Layers>
-		<NormalFont font="Fonts\ARIALN.TTF"><FontHeight><AbsValue val="14"/></FontHeight></NormalFont>
-		<HighlightFont font="Fonts\ARIALN.TTF"><FontHeight><AbsValue val="14"/></FontHeight></HighlightFont>
-		<DisabledFont font="Fonts\ARIALN.TTF"><FontHeight><AbsValue val="14"/></FontHeight></DisabledFont>
 		<Scripts>
 			<OnEnter>
 				GF_ShowTooltip(this)
@@ -137,9 +129,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				this:SetFrameLevel(GF_MainFrame:GetFrameLevel() + 1)
 			</OnLoad>
 		</Scripts>
-		<NormalFont font="Fonts\ARIALN.TTF"><FontHeight><AbsValue val="12"/></FontHeight></NormalFont>
-		<HighlightFont font="Fonts\ARIALN.TTF"><FontHeight><AbsValue val="12"/></FontHeight></HighlightFont>
-		<DisabledFont font="Fonts\ARIALN.TTF"><FontHeight><AbsValue val="12"/></FontHeight></DisabledFont>
 	</Button>
 	<CheckButton name="GF_CheckButtonTemplate_Label" inherits="UICheckButtonTemplate" virtual="true">
 		<Size>
@@ -499,7 +488,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Texture>
 			</Layer>
 			<Layer level="OVERLAY">
-				<FontString inherits="GF_NormalFontLarge" name="$parentNameLabel" justifyH="LEFT" maxLines="1">
+				<FontString inherits="GF_NormalFont" name="$parentNameLabel" justifyH="LEFT" maxLines="1">
 					<Anchors>
 						<Anchor point="TOPLEFT">
 							<Offset>
@@ -513,7 +502,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Anchor>
 					</Anchors>
 				</FontString>
-				<FontString inherits="GF_NormalFontLarge" name="$parentMoreLabel" justifyH="LEFT" hidden="true">
+				<FontString inherits="GF_NormalFont" name="$parentMoreLabel" justifyH="LEFT" hidden="true">
 					<Size>
 						<AbsDimension x="580" y="16"/>
 					</Size>
@@ -526,7 +515,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</Anchors>
 					<Color r="1.0" g="1.0" b="1.0"/>
 				</FontString>
-				<FontString inherits="GF_NormalFontLarge" name="$parentMoreLeftLabel" justifyH="RIGHT">
+				<FontString inherits="GF_NormalFont" name="$parentMoreLeftLabel" justifyH="RIGHT">
 					<Size>
 						<AbsDimension x="0" y="16"/>
 					</Size>
@@ -744,16 +733,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 		<Size>
 			<AbsDimension x="256" y="16"/>
 		</Size>
-		<FontString font="Fonts\arialn.ttf" justifyH="RIGHT" nonspacewrap="false">
-			<FontHeight>
-				<AbsValue val="10"/>
-			</FontHeight>
-			<Shadow>
-				<Offset>
-					<AbsDimension x="1" y="-1"/>
-				</Offset>
-				<Color r="0" g="0" b="0" a="0.5"/>
-			</Shadow>
+		<FontString justifyH="RIGHT" nonspacewrap="false">
 			<Color r="1" g="1" b="1" a="1"/>
 		</FontString>
 	</MessageFrame>
@@ -761,16 +741,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 		<Size>
 			<AbsDimension x="256" y="16"/>
 		</Size>
-		<FontString font="Fonts\arialn.ttf" justifyH="RIGHT" nonspacewrap="false" maxLines="2">
-			<FontHeight>
-				<AbsValue val="10"/>
-			</FontHeight>
-			<Shadow>
-				<Offset>
-					<AbsDimension x="1" y="-1"/>
-				</Offset>
-				<Color r="0" g="0" b="0" a="0.5"/>
-			</Shadow>
+		<FontString justifyH="RIGHT" nonspacewrap="false" maxLines="2">
 			<Color r="1" g="1" b="1" a="1"/>
 		</FontString>
 	</MessageFrame>
@@ -786,8 +757,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 	<MessageFrame name="GF_MinimapMessageFrameB5" inherits="GF_MinimapMessageFrameTemplateB"><Anchors><Anchor point="TOP" relativeTo="GF_MinimapMessageFrameA5" relativePoint="BOTTOM"/></Anchors></MessageFrame>
 	<MessageFrame name="GF_MinimapMessageFrameA6" inherits="GF_MinimapMessageFrameTemplateA"></MessageFrame>
 	<MessageFrame name="GF_MinimapMessageFrameB6" inherits="GF_MinimapMessageFrameTemplateB"><Anchors><Anchor point="TOP" relativeTo="GF_MinimapMessageFrameA6" relativePoint="BOTTOM"/></Anchors></MessageFrame>
-
-	<Button name="GF_MinimapIcon" enableMouse="true" frameStrata="LOW" toplevel="true" parent="Minimap">
+	<Button name="GF_MinimapIcon" enableMouse="true" frameStrata="LOW" toplevel="true" parent="Minimap" movable="true">
 		<Size>
 			<AbsDimension x="33" y="33"/>
 		</Size>
@@ -841,29 +811,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 		</Layers>
 		<Scripts>
 			<OnClick>
-				if arg1 == "LeftButton" then
-					if IsShiftKeyDown() then
-						if not GF_SavedVariables.showchattexts then
-							GF_SavedVariables.showchattexts = true
-							DEFAULT_CHAT_FRAME:AddMessage(GF_CHAT_ON)
-						else
-							GF_SavedVariables.showchattexts = nil
-							DEFAULT_CHAT_FRAME:AddMessage(GF_CHAT_OFF)
-						end
-						GF_ShowChatCheckButton:SetChecked(GF_SavedVariables.showchattexts)
-					else
-						GF_ToggleMainFrame()
-					end
-				else
-					if GF_GroupsInChatCheckButton:GetChecked() then 
-						GF_SavedVariables.showgroupsinchat = nil
-						DEFAULT_CHAT_FRAME:AddMessage(GF_CHAT_GROUP_OFF)
-					else
-						GF_SavedVariables.showgroupsinchat = true
-						DEFAULT_CHAT_FRAME:AddMessage(GF_CHAT_GROUP_ON)
-					end
-					GF_GroupsInChatCheckButton:SetChecked(GF_SavedVariables.showgroupsinchat)
-				end
+				GF_ToggleMainFrame()
 			</OnClick>
 			<OnEnter>
 				GF_ShowTooltip(this)
@@ -874,16 +822,19 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			<OnLoad>
 				GF_MinimapIconBgTexture:SetVertexColor( 0.5, 0.25, 0.25 )
 				this:RegisterForClicks("LeftButtonUp","RightButtonUp")
+				this:RegisterForDrag("LeftButton")
 				this:Show()
 			</OnLoad>
 			<OnDragStart>
-				this:StartMoving()
+				GF_IconMovingFrame:Show()
+				GF_IconDraggingOnUpdate()
 			</OnDragStart>
 			<OnDragStop>
-				this:StopMovingOrSizing()
+				GF_IconMovingFrame:Hide()
 			</OnDragStop>
 		</Scripts>
 	</Button>
+
 	<Frame name="GF_MainFrame" movable="true" toplevel="true" enableMouse="true" hidden="true" frameStrata="MEDIUM" parent="UIParent">
 		<Size>
 			<AbsDimension x="700" y="500"/>
@@ -1108,7 +1059,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								end
 							</OnClick>
 							<OnLeave>
-								if not GetMouseFocus() or not GetMouseFocus():GetName() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "GF_GroupFilter")) then 
+								if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "GF_GroupFilter") then 
 									GF_GroupFilterDropdownMenu:Hide()
 								end
 							</OnLeave>
@@ -1234,7 +1185,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Frames>
 						<Scripts>
 							<OnLeave>
-								if not GetMouseFocus() or not GetMouseFocus():GetName() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "GF_GroupFilter")) then 
+								if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "GF_GroupFilter") then 
 									GF_GroupFilterDropdownMenu:Hide()
 								end
 							</OnLeave>
@@ -1257,7 +1208,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								end
 							</OnClick>
 							<OnLeave>
-								if not GetMouseFocus() or not GetMouseFocus():GetName() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGHardCore")) then 
+								if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "LFGHardCore") then 
 									GF_LFGHardCore:Hide()
 								end
 							</OnLeave>
@@ -1279,13 +1230,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								end
 							</OnClick>
 							<OnLeave>
-								if not GetMouseFocus() or not GetMouseFocus():GetName() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "GF_ChatFilter")) then 
+								if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "GF_ChatFilter") then 
 									GF_ChatFilterDropdownMenu:Hide()
 								end
 							</OnLeave>
 							<OnLoad>
 								getglobal(this:GetName().."TextLabel"):SetText(GF_CHAT_FILTERS)
-								this:SetPoint("TOPRIGHT", GF_MainFrameCloseButton, "BOTTOMRIGHT", -1*getglobal(this:GetName().."TextLabel"):GetStringWidth() -15, 6)
 							</OnLoad>
 						</Scripts>
 						<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up" setAllPoints="true"/>
@@ -1473,7 +1423,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Frames>
 						<Scripts>
 							<OnLeave>
-								if not GetMouseFocus() or not GetMouseFocus():GetName() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "GF_ChatFilter")) then 
+								if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "GF_ChatFilter") then 
 									GF_ChatFilterDropdownMenu:Hide()
 								end
 							</OnLeave>
@@ -1519,7 +1469,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								end
 							</OnClick>
 							<OnLeave>
-								if not GetMouseFocus() or not GetMouseFocus():GetName() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "SearchList")) then 
+								if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "SearchList") then 
 									GF_SearchList:Hide()
 								end
 							</OnLeave>
@@ -1558,7 +1508,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Layers>
 						<Scripts>
 							<OnLeave>
-								if not GetMouseFocus() or not GetMouseFocus():GetName() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "SearchList")) then 
+								if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "SearchList") then 
 									GF_SearchList:Hide()
 								end
 							</OnLeave>
@@ -1630,7 +1580,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								GF_ApplyFiltersToGroupList()
 							</OnClick>
 							<OnLeave>
-								if not GetMouseFocus() or not GetMouseFocus():GetName() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "SearchList")) then 
+								if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "SearchList") then 
 									GF_SearchList:Hide()
 								end
 							</OnLeave>
@@ -1666,7 +1616,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Layers>
 						<Scripts>
 							<OnLeave>
-								if not GetMouseFocus() or not GetMouseFocus():GetName() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGHardCore")) then 
+								if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "LFGHardCore") then 
 									GF_LFGHardCore:Hide()
 								end
 							</OnLeave>
@@ -1869,12 +1819,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</Button>
 			<Frame name="GF_GroupsFrame">
 				<Size>
-					<AbsDimension x="615" y="380"/>
+					<AbsDimension x="640" y="380"/>
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT">
 						<Offset>
-							<AbsDimension x="55" y="-65"/>
+							<AbsDimension x="60" y="-65"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -2024,7 +1974,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												end
 											</OnClick>
 											<OnLeave>
-												if not GetMouseFocus() or not GetMouseFocus():GetName() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "GetWhoClass")) then 
+												if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "GetWhoClass") then 
 													GF_GetWhoClass:Hide()
 												end
 											</OnLeave>
@@ -2063,7 +2013,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Layers>
 										<Scripts>
 											<OnLeave>
-												if not GetMouseFocus() or not GetMouseFocus():GetName() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "GetWhoClass")) then 
+												if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "GetWhoClass") then 
 													GF_GetWhoClass:Hide()
 												end
 											</OnLeave>
@@ -2086,7 +2036,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												end
 											</OnClick>
 											<OnLeave>
-												if not GetMouseFocus() or not GetMouseFocus():GetName() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "GetWhoLevel")) then 
+												if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "GetWhoLevel") then 
 													GF_GetWhoLevel:Hide()
 												end
 											</OnLeave>
@@ -2125,7 +2075,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Layers>
 										<Scripts>
 											<OnLeave>
-												if not GetMouseFocus() or not GetMouseFocus():GetName() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "GetWhoLevel")) then 
+												if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "GetWhoLevel") then 
 													GF_GetWhoLevel:Hide()
 												end
 											</OnLeave>
@@ -2313,7 +2263,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												end
 											</OnClick>
 											<OnLeave>
-												if not GetMouseFocus() or not GetMouseFocus():GetName() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGSize")) then 
+												if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "LFGSize") then 
 													GF_LFGSize:Hide()
 												end
 											</OnLeave>
@@ -2352,7 +2302,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Layers>
 										<Scripts>
 											<OnLeave>
-												if not GetMouseFocus() or not GetMouseFocus():GetName() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGSize")) then 
+												if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "LFGSize") then 
 													GF_LFGSize:Hide()
 												end
 											</OnLeave>
@@ -2360,9 +2310,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</Frame>
 									<Button name="GF_LFGLFMDropdown" inherits="GF_ButtonTemplate">
 										<Anchors>
-											<Anchor point="LEFT" relativeTo="GF_GroupAutoCheckButtonTextLabel" relativePoint="RIGHT">
+											<Anchor point="LEFT" relativeTo="GF_LFGSizeDropdownTextLabel" relativePoint="RIGHT">
 												<Offset>
-													<AbsDimension x="70" y="0"/>
+													<AbsDimension x="5" y="0"/>
 												</Offset>
 											</Anchor>
 										</Anchors>
@@ -2379,7 +2329,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												end
 											</OnClick>
 											<OnLeave>
-												if not GetMouseFocus() or not GetMouseFocus():GetName() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGLFM")) then 
+												if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "LFGLFM") then 
 													GF_LFGLFM:Hide()
 												end
 											</OnLeave>
@@ -2421,7 +2371,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Layers>
 										<Scripts>
 											<OnLeave>
-												if not GetMouseFocus() or not GetMouseFocus():GetName() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGLFM")) then 
+												if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "LFGLFM") then 
 													GF_LFGLFM:Hide()
 												end
 											</OnLeave>
@@ -2448,7 +2398,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												end
 											</OnClick>
 											<OnLeave>
-												if not GetMouseFocus() or not GetMouseFocus():GetName() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGDungeon")) then 
+												if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "LFGDungeon") then 
 													GF_LFGDungeon:Hide()
 												end
 											</OnLeave>
@@ -2490,7 +2440,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Layers>
 										<Scripts>
 											<OnLeave>
-												if not GetMouseFocus() or not GetMouseFocus():GetName() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGDungeon")) then 
+												if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "LFGDungeon") then 
 													GF_LFGDungeon:Hide()
 												end
 											</OnLeave>
@@ -2517,7 +2467,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												end
 											</OnClick>
 											<OnLeave>
-												if not GetMouseFocus() or not GetMouseFocus():GetName() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGRaid")) then 
+												if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "LFGRaid") then 
 													GF_LFGRaid:Hide()
 												end
 											</OnLeave>
@@ -2559,7 +2509,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Layers>
 										<Scripts>
 											<OnLeave>
-												if not GetMouseFocus() or not GetMouseFocus():GetName() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGRaid")) then 
+												if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "LFGRaid") then 
 													GF_LFGRaid:Hide()
 												end
 											</OnLeave>
@@ -2586,7 +2536,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												end
 											</OnClick>
 											<OnLeave>
-												if not GetMouseFocus() or not GetMouseFocus():GetName() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGRole")) then 
+												if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "LFGRole") then 
 													GF_LFGRole:Hide()
 												end
 											</OnLeave>
@@ -2628,7 +2578,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Layers>
 										<Scripts>
 											<OnLeave>
-												if not GetMouseFocus() or not GetMouseFocus():GetName() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "LFGRole")) then 
+												if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "LFGRole") then 
 													GF_LFGRole:Hide()
 												end
 											</OnLeave>
@@ -2642,7 +2592,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											</OnClick>
 											<OnLoad>
 												getglobal(this:GetName().."TextLabel"):SetText(GF_LEVEL)
-												this:SetPoint("RIGHT", -1*getglobal(this:GetName().."TextLabel"):GetStringWidth() -2, -3)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -2735,7 +2684,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Anchors>
 										<Layers>
 											<Layer level="ARTWORK">
-												<FontString inherits="GF_TitleFont" name="GF_WorldAnnounceMessageTextLabel" nonspacewrap="false" justifyH="LEFT"  text="GF_WORLD_SEND_TEXT">
+												<FontString inherits="GF_TitleFont" name="GF_WorldAnnounceMessageTextLabel" nonspacewrap="false" justifyH="LEFT">
 													<Color r="0.9" g="0.9" b="0.9"/>
 													<Anchors>
 														<Anchor point="BOTTOM" relativeTo="GF_LFGDescriptionEditBox" relativePoint="TOP">
@@ -2812,16 +2761,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Anchors>
 										<Layers>
 											<Layer level="OVERLAY">
-												<FontString inherits="GF_NormalFontLarge" name="GF_FrameAnnounceTimerSliderTopLabel" text="GF_ANNOUNCE_TIMER">
-													<Anchors>
-														<Anchor point="TOP">
-															<Offset>
-																<AbsDimension x="0" y="11"/>
-															</Offset>
-														</Anchor>
-													</Anchors>
-												</FontString>
-												<FontString inherits="GF_NormalFont" name="GF_FrameAnnounceTimerSliderBottomLabel">
+												<FontString inherits="GF_NormalFont" name="GF_FrameAnnounceTimerSliderLabel">
 													<Anchors>
 														<Anchor point="BOTTOM">
 															<Offset>
@@ -2838,20 +2778,15 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												getglobal(this:GetName().."Low"):SetText("2")
 												this:SetMinMaxValues(2,14)
 												this:SetValueStep(1)
-												getglobal(this:GetName().."Low"):SetFont("Fonts\ARIALN.TTF",12)
-												getglobal(this:GetName().."Low"):SetTextHeight("12")
-												getglobal(this:GetName().."High"):SetFont("Fonts\ARIALN.TTF", 12)
-												getglobal(this:GetName().."High"):SetTextHeight("12")
-												getglobal(this:GetName().."Text"):SetFont("Fonts\ARIALN.TTF", 10)
-												getglobal(this:GetName().."Text"):SetTextHeight("10")
+												getglobal(this:GetName().."Text"):SetText(GF_ANNOUNCE_TIMER)
 											</OnLoad>
 											<OnValueChanged>
 												if this:GetValue() > 10 then
 													GF_SavedVariables.announcetimer = (this:GetValue()-10)*300 + 600
-													getglobal(this:GetName().."BottomLabel"):SetText((GF_SavedVariables.announcetimer/60).." -"..GF_MINUTES)
+													getglobal(this:GetName().."Label"):SetText((GF_SavedVariables.announcetimer/60).." -"..GF_MINUTES)
 												else
 													GF_SavedVariables.announcetimer = this:GetValue()*60
-													getglobal(this:GetName().."BottomLabel"):SetText((GF_SavedVariables.announcetimer/60).." -"..GF_MINUTES)
+													getglobal(this:GetName().."Label"):SetText((GF_SavedVariables.announcetimer/60).." -"..GF_MINUTES)
 												end
 												if GF_AutoAnnounceTimer then GF_AnnounceToLFGButton:SetText(GF_ANNOUNCE_STOP_ANNOUNCE.."-"..GF_SavedVariables.announcetimer - GF_AutoAnnounceTimer) end
 											</OnValueChanged>
@@ -3257,17 +3192,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										end
 									</OnMouseWheel>
 								</Scripts>
-								<FontString justifyH="LEFT" inherits="GameFontNormal" font="Fonts\ARIALN.TTF">
-									<FontHeight>
-										<AbsValue val="14"/>
-									</FontHeight>
-									<Shadow>
-										<Offset>
-											<AbsDimension x="1" y="-1"/>
-										</Offset>
-										<Color r="0" g="0" b="0" a="0.5"/>
-									</Shadow>
-								</FontString>
+								<FontString justifyH="LEFT" inherits="GameFontNormal"/>
 							</ScrollingMessageFrame>
 							<Button name="GF_LogFilterDropdownButton" inherits="GF_ButtonTemplate">
 								<Anchors>
@@ -3286,13 +3211,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										end
 									</OnClick>
 									<OnLeave>
-										if not GetMouseFocus() or not GetMouseFocus():GetName() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "GF_LogFilter")) then 
+										if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "GF_LogFilter") then 
 											GF_LogFilterDropdownMenu:Hide()
 										end
 									</OnLeave>
 									<OnLoad>
 										GF_LogFrameInternalFrameTitle:SetText(GF_LOG_AND_MONITOR)
-										this:SetPoint("LEFT", "GF_LogFrameInternalFrameTitle", "RIGHT", 5, 0)
 										getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_FILTERS)
 									</OnLoad>
 								</Scripts>
@@ -3513,7 +3437,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Frames>
 								<Scripts>
 									<OnLeave>
-										if not GetMouseFocus() or not GetMouseFocus():GetName() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "GF_LogFilter")) then 
+										if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "GF_LogFilter") then 
 											GF_LogFilterDropdownMenu:Hide()
 										end
 									</OnLeave>
@@ -3536,7 +3460,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										end
 									</OnClick>
 									<OnLeave>
-										if not GetMouseFocus() or not GetMouseFocus():GetName() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "GF_LogChannelFilter")) then 
+										if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "GF_LogChannelFilter") then 
 											GF_LogChannelFilterDropdownMenu:Hide()
 										end
 									</OnLeave>
@@ -3723,7 +3647,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Frames>
 								<Scripts>
 									<OnLeave>
-										if not GetMouseFocus() or not GetMouseFocus():GetName() or (GetMouseFocus() and GetMouseFocus():GetName() and not string.find(GetMouseFocus():GetName(), "GF_LogChannelFilter")) then 
+										if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "GF_LogChannelFilter") then 
 											GF_LogChannelFilterDropdownMenu:Hide()
 										end
 									</OnLeave>
@@ -3925,94 +3849,418 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				<Frames>
 					<Frame name="GF_SettingsFrameChatSettings" inherits="GF_OptionFrameBoxTemplate">
 						<Size>
-							<AbsDimension x="640" y="110"/>
+							<AbsDimension x="650" y="160"/>
 						</Size>
 						<Anchors>
-							<Anchor point="TOP">
+							<Anchor point="TOPLEFT">
 								<Offset>
-									<AbsDimension x="5" y="-60"/>
+									<AbsDimension x="10" y="-62"/>
 								</Offset>
 							</Anchor>
 						</Anchors>
 						<Frames>
-							<CheckButton name="GF_FrameJoinWorldCheckButton" inherits="GF_CheckButtonTemplate_Label">
+							<EditBox name="GF_GroupChannelEditBox" letters="50" inherits="GF_AbstractEditBox">
+								<Size>
+									<AbsDimension x="160" y="22"/>
+								</Size>
 								<Anchors>
 									<Anchor point="TOPLEFT">
 										<Offset>
-											<AbsDimension x="24" y="-5"/>
+											<AbsDimension x="17" y="-20"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Layers>
+									<Layer level="ARTWORK">
+										<FontString inherits="GF_NormalFont" name="GF_GroupChannelNameTextLabel" nonspacewrap="false" justifyH="LEFT"  text="GF_GROUP_CHANNEL_NAME">
+											<Color r="0.9" g="0.9" b="0.9"/>
+											<Anchors>
+												<Anchor point="BOTTOM" relativeTo="GF_GroupChannelEditBox" relativePoint="TOP">
+													<Offset>
+														<AbsDimension x="0" y="0"/>
+													</Offset>
+												</Anchor>
+											</Anchors>
+										</FontString>
+									</Layer>
+								</Layers>
+								<Scripts>
+									<OnEnter>
+										GF_ShowTooltip(this)
+									</OnEnter>
+									<OnLeave>
+										GameTooltip:Hide()
+									</OnLeave>
+									<OnLoad>
+										this:SetTextInsets(4,0,0,0)
+									</OnLoad>
+									<OnEditFocusGained>
+										this:HighlightText(string.len(this:GetText())+1)
+									</OnEditFocusGained>
+									<OnEditFocusLost>
+										if string.len(GF_GroupChannelEditBox:GetText()) > 1 then GF_SavedVariables.groupchannelname = GF_GroupChannelEditBox:GetText() else GF_GroupChannelEditBox:SetText(GF_SavedVariables.groupchannelname) end
+										if GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][4] and not GF_PerCharVariables.disablehardcore then GF_WorldAnnounceMessageTextLabel:SetText(GF_HARDCORE_SEND_TEXT) else GF_WorldAnnounceMessageTextLabel:SetText(GF_WORLD_SEND_TEXT.." "..GF_SavedVariables.groupchannelname.." "..GF_LOG_CHANNEL) end
+										this:HighlightText(string.len(this:GetText())+1)
+									</OnEditFocusLost>
+									<OnTabPressed>
+										if string.len(GF_GroupChannelEditBox:GetText()) > 1 then GF_SavedVariables.groupchannelname = GF_GroupChannelEditBox:GetText() else GF_GroupChannelEditBox:SetText(GF_SavedVariables.groupchannelname) end
+										if GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][4] and not GF_PerCharVariables.disablehardcore then GF_WorldAnnounceMessageTextLabel:SetText(GF_HARDCORE_SEND_TEXT) else GF_WorldAnnounceMessageTextLabel:SetText(GF_WORLD_SEND_TEXT.." "..GF_SavedVariables.groupchannelname.." "..GF_LOG_CHANNEL) end
+										this:ClearFocus()
+										this:HighlightText(string.len(this:GetText())+1)
+									</OnTabPressed>
+									<OnEnterPressed>
+										if string.len(GF_GroupChannelEditBox:GetText()) > 1 then GF_SavedVariables.groupchannelname = GF_GroupChannelEditBox:GetText() else GF_GroupChannelEditBox:SetText(GF_SavedVariables.groupchannelname) end
+										if GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][4] and not GF_PerCharVariables.disablehardcore then GF_WorldAnnounceMessageTextLabel:SetText(GF_HARDCORE_SEND_TEXT) else GF_WorldAnnounceMessageTextLabel:SetText(GF_WORLD_SEND_TEXT.." "..GF_SavedVariables.groupchannelname.." "..GF_LOG_CHANNEL) end
+										this:ClearFocus()
+										this:HighlightText(string.len(this:GetText())+1)
+									</OnEnterPressed>
+									<OnEscapePressed>
+										if string.len(GF_GroupChannelEditBox:GetText()) > 1 then GF_SavedVariables.groupchannelname = GF_GroupChannelEditBox:GetText() else GF_GroupChannelEditBox:SetText(GF_SavedVariables.groupchannelname) end
+										if GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][4] and not GF_PerCharVariables.disablehardcore then GF_WorldAnnounceMessageTextLabel:SetText(GF_HARDCORE_SEND_TEXT) else GF_WorldAnnounceMessageTextLabel:SetText(GF_WORLD_SEND_TEXT.." "..GF_SavedVariables.groupchannelname.." "..GF_LOG_CHANNEL) end
+										this:ClearFocus()
+										this:HighlightText(string.len(this:GetText())+1)
+									</OnEscapePressed>
+								</Scripts>
+							</EditBox>
+							<Button name="GF_GroupChannelNameDropdown" inherits="GF_ButtonTemplate">
+								<Anchors>
+									<Anchor point="LEFT" relativeTo="GF_GroupChannelEditBox" relativePoint="RIGHT">
+										<Offset>
+											<AbsDimension x="0" y="0"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										if not GF_GroupChannelName:IsShown() then
+											GF_ShowDropdownList("GroupChannelName")
+										else
+											GF_GroupChannelName:Hide()
+										end
+									</OnClick>
+									<OnLeave>
+										if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "GroupChannelName") then 
+											GF_GroupChannelName:Hide()
+										end
+									</OnLeave>
+								</Scripts>
+								<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up" setAllPoints="true"/>
+								<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Down" setAllPoints="true"/>
+								<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD" setAllPoints="true"/>
+							</Button>
+							<Frame name="GF_GroupChannelName" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true">
+								<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border">
+									<BackgroundInsets>
+										<AbsInset left="4" right="4" top="4" bottom="4"/>
+									</BackgroundInsets>
+									<EdgeSize>
+										<AbsValue val="16"/>
+									</EdgeSize>
+									<BorderColor r="0.6" g="0.6" b="0.6"/>
+								</Backdrop>
+								<Layers>
+									<Layer level ="BACKGROUND">
+										<Texture file="Interface\ChatFrame\ChatFrameBackground">
+											<Anchors>
+												<Anchor point="TOPLEFT">
+													<Offset x="4" y="-4"/>
+												</Anchor>
+												<Anchor point="BOTTOMRIGHT">
+													<Offset x="-4" y="4"/>
+												</Anchor>
+											</Anchors>
+											<Gradient orientation="VERTICAL">
+												<MinColor r="0" g="0" b="0" a="0.9"/>
+												<MaxColor r="0.2" g="0.2" b="0.2" a="0.9"/>
+											</Gradient>
+										</Texture>
+									</Layer>
+								</Layers>
+								<Scripts>
+									<OnLeave>
+										if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "GroupChannelName") then 
+											GF_GroupChannelName:Hide()
+										end
+									</OnLeave>
+								</Scripts>
+							</Frame>
+							<CheckButton name="GF_AutoJoinGroupChannelCheckButton" inherits="GF_CheckButtonTemplate_Label">
+								<Anchors>
+									<Anchor point="LEFT" relativeTo="GF_GroupChannelNameDropdown" relativePoint="RIGHT">
+										<Offset>
+											<AbsDimension x="0" y="0"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
 								<Scripts>
 									<OnClick>
 										GF_SavedVariables.joinworld = this:GetChecked()
-										if GF_SavedVariables.joinworld then GF_JoinWorld() else LeaveChannelByName(GF_CHANNEL_NAME) end
+										if GF_SavedVariables.joinworld then GF_JoinWorld() else LeaveChannelByName(GF_GroupChannelEditBox:GetText()) end
 									</OnClick>
 									<OnLoad>
-										getglobal(this:GetName().."TextLabel"):SetText(GF_JOIN_WORLD)
+										getglobal(this:GetName().."TextLabel"):SetText(GF_AUTO_JOIN_GROUP_CHANNEL)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_FrameSpamFilterCheckButton" inherits="GF_CheckButtonTemplate_Label">
+							<EditBox name="GF_BlockListEditBox" letters="50" inherits="GF_AbstractEditBox">
+								<Size>
+									<AbsDimension x="160" y="22"/>
+								</Size>
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="GF_FrameJoinWorldCheckButton">
+									<Anchor point="TOPLEFT">
 										<Offset>
-											<AbsDimension x="0" y="-25"/>
+											<AbsDimension x="355" y="-20"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Layers>
+									<Layer level="ARTWORK">
+										<FontString inherits="GF_NormalFont" name="GF_BlockListTextLabel" nonspacewrap="false" justifyH="LEFT"  text="GF_ADD_TO_BLOCK_LIST">
+											<Color r="0.9" g="0.9" b="0.9"/>
+											<Anchors>
+												<Anchor point="BOTTOM" relativeTo="GF_BlockListEditBox" relativePoint="TOP">
+													<Offset>
+														<AbsDimension x="0" y="0"/>
+													</Offset>
+												</Anchor>
+											</Anchors>
+										</FontString>
+									</Layer>
+								</Layers>
+								<Scripts>
+									<OnEnter>
+										GF_ShowTooltip(this)
+									</OnEnter>
+									<OnLeave>
+										GameTooltip:Hide()
+									</OnLeave>
+									<OnLoad>
+										this:SetTextInsets(4,0,0,0)
+									</OnLoad>
+									<OnEditFocusGained>
+										this:HighlightText(string.len(this:GetText())+1)
+									</OnEditFocusGained>
+									<OnEditFocusLost>
+										GF_SavedVariables.blocklist = GF_BlockListEditBox:GetText()
+										this:HighlightText(string.len(this:GetText())+1)
+									</OnEditFocusLost>
+									<OnTabPressed>
+										GF_SavedVariables.blocklist = GF_BlockListEditBox:GetText()
+										this:ClearFocus()
+										this:HighlightText(string.len(this:GetText())+1)
+									</OnTabPressed>
+									<OnEnterPressed>
+										GF_SavedVariables.blocklist = GF_BlockListEditBox:GetText()
+										this:ClearFocus()
+										this:HighlightText(string.len(this:GetText())+1)
+									</OnEnterPressed>
+									<OnEscapePressed>
+										GF_SavedVariables.blocklist = GF_BlockListEditBox:GetText()
+										this:ClearFocus()
+										this:HighlightText(string.len(this:GetText())+1)
+									</OnEscapePressed>
+								</Scripts>
+							</EditBox>
+							<Button name="GF_BlockListAddButton" inherits="GF_ButtonTemplate" text="GF_ADD">
+								<Size>
+									<AbsDimension x="50" y="27"/>
+								</Size>
+								<Anchors>
+									<Anchor point="LEFT" relativeTo="GF_BlockListEditBox" relativePoint="RIGHT">
+										<Offset>
+											<AbsDimension x="0" y="0"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										GF_SavedVariables.spamfilter = this:GetChecked()
-										if not GF_SavedVariables.spamfilter then
-											GF_FrameAutoBlacklistCheckButton:SetChecked(false)
-											GF_SavedVariables.autoblacklist = false
+									</OnClick>
+								</Scripts>
+							</Button>
+							<Button name="GF_BlockListDropdown" inherits="GF_ButtonTemplate">
+								<Anchors>
+									<Anchor point="LEFT" relativeTo="GF_BlockListAddButton" relativePoint="RIGHT">
+										<Offset>
+											<AbsDimension x="0" y="0"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										if not GF_BlockList:IsShown() then
+											GF_ShowDropdownList("BlockList")
+										else
+											GF_BlockList:Hide()
 										end
 									</OnClick>
+									<OnLeave>
+										if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "BlockList") then 
+											GF_BlockList:Hide()
+										end
+									</OnLeave>
 									<OnLoad>
-										getglobal(this:GetName().."TextLabel"):SetText(GF_SPAM_FILTER)
+										getglobal(this:GetName().."TextLabel"):SetText(GF_BLOCK_LIST)
 									</OnLoad>
 								</Scripts>
-							</CheckButton>
-							<CheckButton name="GF_FrameSystemFilterCheckButton" inherits="GF_CheckButtonTemplate_Label">
+								<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up" setAllPoints="true"/>
+								<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Down" setAllPoints="true"/>
+								<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD" setAllPoints="true"/>
+							</Button>
+							<Frame name="GF_BlockList" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true">
+								<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border">
+									<BackgroundInsets>
+										<AbsInset left="4" right="4" top="4" bottom="4"/>
+									</BackgroundInsets>
+									<EdgeSize>
+										<AbsValue val="16"/>
+									</EdgeSize>
+									<BorderColor r="0.6" g="0.6" b="0.6"/>
+								</Backdrop>
+								<Layers>
+									<Layer level ="BACKGROUND">
+										<Texture file="Interface\ChatFrame\ChatFrameBackground">
+											<Anchors>
+												<Anchor point="TOPLEFT">
+													<Offset x="4" y="-4"/>
+												</Anchor>
+												<Anchor point="BOTTOMRIGHT">
+													<Offset x="-4" y="4"/>
+												</Anchor>
+											</Anchors>
+											<Gradient orientation="VERTICAL">
+												<MinColor r="0" g="0" b="0" a="0.9"/>
+												<MaxColor r="0.2" g="0.2" b="0.2" a="0.9"/>
+											</Gradient>
+										</Texture>
+									</Layer>
+								</Layers>
+								<Scripts>
+									<OnLeave>
+										if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "BlockList") then 
+											GF_BlockList:Hide()
+										end
+									</OnLeave>
+								</Scripts>
+							</Frame>
+							<Slider name="GF_FrameSpamFilterDurationSlider" inherits="GF_OptionsSliderTemplate">
+								<Size>
+									<AbsDimension x="190" y="16"/>
+								</Size>
 								<Anchors>
-									<Anchor point="TOP">
+									<Anchor point="BOTTOMLEFT">
 										<Offset>
-											<AbsDimension x="-65" y="-5"/>
+											<AbsDimension x="15" y="20" />
 										</Offset>
 									</Anchor>
 								</Anchors>
+								<Layers>
+									<Layer level="OVERLAY">
+										<FontString inherits="GF_NormalFont" name="GF_FrameSpamFilterDurationSliderLabel">
+											<Anchors>
+												<Anchor point="BOTTOM">
+													<Offset>
+														<AbsDimension x="0" y="-11"/>
+													</Offset>
+												</Anchor>
+											</Anchors>
+										</FontString>
+									</Layer>
+								</Layers>
 								<Scripts>
-									<OnClick>
-										GF_SavedVariables.systemfilter = this:GetChecked()
-									</OnClick>
 									<OnLoad>
-										getglobal(this:GetName().."TextLabel"):SetText(GF_SYSTEM_FILTER)
+										getglobal(this:GetName().."High"):SetText("120")
+										getglobal(this:GetName().."Low"):SetText("5")
+										this:SetMinMaxValues(5,120)
+										this:SetValueStep(5)
+										getglobal(this:GetName().."Text"):SetText(GF_SPAM_FILTER_TIMER)
 									</OnLoad>
+									<OnValueChanged>
+										GF_SavedVariables.spamfilterduration = this:GetValue()
+										getglobal(this:GetName().."Label"):SetText(GF_SavedVariables.spamfilterduration..GF_SECONDS)
+									</OnValueChanged>
 								</Scripts>
-							</CheckButton>
-							<CheckButton name="GF_FrameAutoBlacklistCheckButton" inherits="GF_CheckButtonTemplate_Label">
+							</Slider>
+							<Slider name="GF_FrameSpamBlacklistMinLevelSlider" inherits="GF_OptionsSliderTemplate">
+								<Size>
+									<AbsDimension x="190" y="16"/>
+								</Size>
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="GF_FrameSystemFilterCheckButton">
+									<Anchor point="LEFT" relativeTo="GF_FrameSpamFilterDurationSlider" relativePoint="RIGHT">
 										<Offset>
-											<AbsDimension x="0" y="-25"/>
+											<AbsDimension x="30" y="0" />
 										</Offset>
 									</Anchor>
 								</Anchors>
+								<Layers>
+									<Layer level="OVERLAY">
+										<FontString inherits="GF_NormalFont" name="GF_FrameSpamBlacklistMinLevelSliderLabel">
+											<Anchors>
+												<Anchor point="BOTTOM">
+													<Offset>
+														<AbsDimension x="0" y="-11"/>
+													</Offset>
+												</Anchor>
+											</Anchors>
+										</FontString>
+									</Layer>
+								</Layers>
 								<Scripts>
-									<OnClick>
-										GF_SavedVariables.autoblacklist = this:GetChecked()
-									</OnClick>
 									<OnLoad>
-										getglobal(this:GetName().."TextLabel"):SetText(GF_AUTO_BLACKLIST)
+										getglobal(this:GetName().."High"):SetText("60")
+										getglobal(this:GetName().."Low"):SetText("1")
+										this:SetMinMaxValues(1,60)
+										this:SetValueStep(1)
+										getglobal(this:GetName().."Text"):SetText(GF_BLACKLIST_MINLEVEL)
 									</OnLoad>
+									<OnValueChanged>
+										GF_SavedVariables.autoblacklistminlevel = this:GetValue()
+										getglobal(this:GetName().."Label"):SetText(GF_LEVEL.." "..this:GetValue())
+									</OnValueChanged>
 								</Scripts>
-							</CheckButton>
+							</Slider>
+							<Slider name="GF_FrameBlockMessagesBelowLevelSlider" inherits="GF_OptionsSliderTemplate">
+								<Size>
+									<AbsDimension x="180" y="16"/>
+								</Size>
+								<Anchors>
+									<Anchor point="LEFT" relativeTo="GF_FrameSpamBlacklistMinLevelSlider" relativePoint="RIGHT">
+										<Offset>
+											<AbsDimension x="30" y="0" />
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Layers>
+									<Layer level="OVERLAY">
+										<FontString inherits="GF_NormalFont" name="GF_FrameBlockMessagesBelowLevelSliderLabel">
+											<Anchors>
+												<Anchor point="BOTTOM">
+													<Offset>
+														<AbsDimension x="0" y="-11"/>
+													</Offset>
+												</Anchor>
+											</Anchors>
+										</FontString>
+									</Layer>
+								</Layers>
+								<Scripts>
+									<OnLoad>
+										getglobal(this:GetName().."High"):SetText("60")
+										getglobal(this:GetName().."Low"):SetText("1")
+										this:SetMinMaxValues(1,60)
+										this:SetValueStep(1)
+										getglobal(this:GetName().."Text"):SetText(GF_BLOCK_BELOW_LEVEL)
+									</OnLoad>
+									<OnValueChanged>
+										GF_SavedVariables.blockmessagebelowlevel = this:GetValue()
+										getglobal(this:GetName().."Label"):SetText(GF_LEVEL.." "..this:GetValue())
+									</OnValueChanged>
+								</Scripts>
+							</Slider>
 							<CheckButton name="GF_FrameShowFormattedChatCheckButton" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
-									<Anchor point="TOPRIGHT">
+									<Anchor point="TOPLEFT">
 										<Offset>
-											<AbsDimension x="-163" y="-5"/>
+											<AbsDimension x="20" y="-48"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -4025,11 +4273,28 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_FrameAlwaysShowGuildCheckButton" inherits="GF_CheckButtonTemplate_Label">
+							<CheckButton name="GF_FrameSystemFilterCheckButton" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="GF_FrameShowFormattedChatCheckButton">
+									<Anchor point="TOP">
 										<Offset>
-											<AbsDimension x="0" y="-25"/>
+											<AbsDimension x="-60" y="-48"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										GF_SavedVariables.systemfilter = this:GetChecked()
+									</OnClick>
+									<OnLoad>
+										getglobal(this:GetName().."TextLabel"):SetText(GF_SYSTEM_FILTER)
+									</OnLoad>
+								</Scripts>
+							</CheckButton>
+							<CheckButton name="GF_AlwaysShowGuildFriendsCheckButton" inherits="GF_CheckButtonTemplate_Label">
+								<Anchors>
+									<Anchor point="TOPRIGHT">
+										<Offset>
+											<AbsDimension x="-155" y="-48"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -4042,101 +4307,209 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<Slider name="GF_FrameSpamFilterDurationSlider" inherits="GF_OptionsSliderTemplate">
-								<Size>
-									<AbsDimension x="160" y="16"/>
-								</Size>
+							<CheckButton name="GF_UseNormalFontsCheckButton" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
-									<Anchor point="BOTTOMLEFT">
+									<Anchor point="TOPLEFT" relativeTo="GF_AlwaysShowGuildFriendsCheckButton" relativePoint="BOTTOMLEFT">
 										<Offset>
-											<AbsDimension x="24" y="21" />
+											<AbsDimension x="0" y="-8"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
 								<Scripts>
+									<OnClick>
+										GF_SavedVariables.normalfonts = this:GetChecked()
+										GF_SetStringSize()
+									</OnClick>
 									<OnLoad>
-										getglobal(this:GetName().."High"):SetText("120")
-										getglobal(this:GetName().."Low"):SetText("5")
-										this:SetMinMaxValues(5,120)
-										this:SetValueStep(5)
-										getglobal(this:GetName().."Low"):SetFont("Fonts\ARIALN.TTF",12)
-										getglobal(this:GetName().."Low"):SetTextHeight("12")
-										getglobal(this:GetName().."High"):SetFont("Fonts\ARIALN.TTF", 12)
-										getglobal(this:GetName().."High"):SetTextHeight("12")
-										getglobal(this:GetName().."Text"):SetFont("Fonts\ARIALN.TTF", 10)
-										getglobal(this:GetName().."Text"):SetTextHeight("10")
+										getglobal(this:GetName().."TextLabel"):SetText(GF_USE_NORMAL_FONTS)
 									</OnLoad>
-									<OnValueChanged>
-										GF_SavedVariables.spamfilterduration = this:GetValue()
-										getglobal(this:GetName().."Text"):SetText(GF_SPAM_FILTER_TIMER.." - "..GF_SavedVariables.spamfilterduration..GF_SECONDS)
-									</OnValueChanged>
 								</Scripts>
-							</Slider>
-							<Slider name="GF_FrameSpamBlacklistMinLevelSlider" inherits="GF_OptionsSliderTemplate">
-								<Size>
-									<AbsDimension x="160" y="16"/>
-								</Size>
+							</CheckButton>
+							<CheckButton name="GF_FrameSpamFilterCheckButton" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
-									<Anchor point="BOTTOM">
+									<Anchor point="TOPLEFT" relativeTo="GF_FrameShowFormattedChatCheckButton" relativePoint="BOTTOMLEFT">
 										<Offset>
-											<AbsDimension x="0" y="21" />
+											<AbsDimension x="0" y="-8"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
 								<Scripts>
+									<OnClick>
+										GF_SavedVariables.spamfilter = this:GetChecked()
+										if not GF_SavedVariables.spamfilter then
+											GF_AutomaticBlacklistCheckButton:SetChecked(false)
+											GF_SavedVariables.autoblacklist = false
+										end
+									</OnClick>
 									<OnLoad>
-										getglobal(this:GetName().."High"):SetText("60")
-										getglobal(this:GetName().."Low"):SetText("1")
-										this:SetMinMaxValues(1,60)
-										this:SetValueStep(1)
-										getglobal(this:GetName().."Low"):SetFont("Fonts\ARIALN.TTF",12)
-										getglobal(this:GetName().."Low"):SetTextHeight("12")
-										getglobal(this:GetName().."High"):SetFont("Fonts\ARIALN.TTF", 12)
-										getglobal(this:GetName().."High"):SetTextHeight("12")
-										getglobal(this:GetName().."Text"):SetFont("Fonts\ARIALN.TTF", 10)
-										getglobal(this:GetName().."Text"):SetTextHeight("10")
+										getglobal(this:GetName().."TextLabel"):SetText(GF_SPAM_FILTER)
 									</OnLoad>
-									<OnValueChanged>
-										GF_SavedVariables.autoblacklistminlevel = this:GetValue()
-										getglobal(this:GetName().."Text"):SetText(GF_BLACKLIST_MINLEVEL.." - "..this:GetValue())
-									</OnValueChanged>
 								</Scripts>
-							</Slider>
-							<Slider name="GF_FrameBlockMessagesBelowLevelSlider" inherits="GF_OptionsSliderTemplate">
-								<Size>
-									<AbsDimension x="160" y="16"/>
-								</Size>
+							</CheckButton>
+							<CheckButton name="GF_AutomaticBlacklistCheckButton" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
-									<Anchor point="BOTTOMRIGHT">
+									<Anchor point="TOPLEFT" relativeTo="GF_FrameSystemFilterCheckButton" relativePoint="BOTTOMLEFT">
 										<Offset>
-											<AbsDimension x="-24" y="21" />
+											<AbsDimension x="0" y="-8"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
 								<Scripts>
+									<OnClick>
+										GF_SavedVariables.autoblacklist = this:GetChecked()
+									</OnClick>
 									<OnLoad>
-										getglobal(this:GetName().."High"):SetText("60")
-										getglobal(this:GetName().."Low"):SetText("1")
-										this:SetMinMaxValues(1,60)
-										this:SetValueStep(1)
-										getglobal(this:GetName().."Low"):SetFont("Fonts\ARIALN.TTF",12)
-										getglobal(this:GetName().."Low"):SetTextHeight("12")
-										getglobal(this:GetName().."High"):SetFont("Fonts\ARIALN.TTF", 12)
-										getglobal(this:GetName().."High"):SetTextHeight("12")
-										getglobal(this:GetName().."Text"):SetFont("Fonts\ARIALN.TTF", 10)
-										getglobal(this:GetName().."Text"):SetTextHeight("10")
+										getglobal(this:GetName().."TextLabel"):SetText(GF_AUTO_BLACKLIST)
 									</OnLoad>
-									<OnValueChanged>
-										GF_SavedVariables.blockmessagebelowlevel = this:GetValue()
-										getglobal(this:GetName().."Text"):SetText(GF_BLOCK_BELOW_LEVEL.." - "..this:GetValue())
-									</OnValueChanged>
 								</Scripts>
-							</Slider>
+							</CheckButton>
+							<Button name="GF_AutoBlacklistDropdownButton" inherits="GF_ButtonTemplate">
+								<Anchors>
+									<Anchor point="LEFT" relativeTo="GF_AutomaticBlacklistCheckButtonTextLabel" relativePoint="RIGHT">
+										<Offset>
+											<AbsDimension x="10" y="0"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										if not GF_AutoBlacklistDropdownMenu:IsShown() then
+											GF_AutoBlacklistDropdownMenu:Show()
+										else
+											GF_AutoBlacklistDropdownMenu:Hide()
+										end
+									</OnClick>
+									<OnLeave>
+										if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "AutoBlacklist") then 
+											GF_AutoBlacklistDropdownMenu:Hide()
+										end
+									</OnLeave>
+								</Scripts>
+								<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up" setAllPoints="true"/>
+								<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Down" setAllPoints="true"/>
+								<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD" setAllPoints="true"/>
+							</Button>
+							<Frame name="GF_AutoBlacklistDropdownMenu" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true">
+								<Size>
+									<AbsDimension y="88"/>
+								</Size>
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GF_AutoBlacklistDropdownButton" relativePoint="BOTTOMLEFT">
+										<Offset>
+											<AbsDimension x="0" y="4"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border">
+									<BackgroundInsets>
+										<AbsInset left="4" right="4" top="4" bottom="4"/>
+									</BackgroundInsets>
+									<EdgeSize>
+										<AbsValue val="16"/>
+									</EdgeSize>
+									<BorderColor r="0.6" g="0.6" b="0.6"/>
+								</Backdrop>
+								<Layers>
+									<Layer level ="BACKGROUND">
+										<Texture file="Interface\ChatFrame\ChatFrameBackground">
+											<Anchors>
+												<Anchor point="TOPLEFT">
+													<Offset x="4" y="-4"/>
+												</Anchor>
+												<Anchor point="BOTTOMRIGHT">
+													<Offset x="-4" y="4"/>
+												</Anchor>
+											</Anchors>
+											<Gradient orientation="VERTICAL">
+												<MinColor r="0" g="0" b="0" a="0.9"/>
+												<MaxColor r="0.2" g="0.2" b="0.2" a="0.9"/>
+											</Gradient>
+										</Texture>
+									</Layer>
+								</Layers>
+								<Frames>
+									<CheckButton name="GF_AutoBlacklistTradesCheckButton" inherits="GF_CheckButtonTemplate_Label">
+										<Anchors>
+											<Anchor point="TOPLEFT">
+												<Offset>
+													<AbsDimension x="6" y="-4"/>
+												</Offset>
+											</Anchor>
+										</Anchors>
+										<Scripts>
+											<OnClick>
+												GF_SavedVariables.blacklisttrades = this:GetChecked()
+											</OnClick>
+											<OnLoad>
+												getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_TRADES)
+											</OnLoad>
+										</Scripts>
+									</CheckButton>
+									<CheckButton name="GF_AutoBlacklistGuildCheckButton" inherits="GF_CheckButtonTemplate_Label">
+										<Anchors>
+											<Anchor point="TOP" relativeTo="GF_AutoBlacklistTradesCheckButton" relativePoint="BOTTOM">
+												<Offset>
+													<AbsDimension x="0" y="6"/>
+												</Offset>
+											</Anchor>
+										</Anchors>
+										<Scripts>
+											<OnClick>
+												GF_SavedVariables.blacklistguild = this:GetChecked()
+											</OnClick>
+											<OnLoad>
+												getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_GUILD)
+											</OnLoad>
+										</Scripts>
+									</CheckButton>
+									<CheckButton name="GF_AutoBlacklistChatCheckButton" inherits="GF_CheckButtonTemplate_Label">
+										<Anchors>
+											<Anchor point="TOP" relativeTo="GF_AutoBlacklistGuildCheckButton" relativePoint="BOTTOM">
+												<Offset>
+													<AbsDimension x="0" y="6"/>
+												</Offset>
+											</Anchor>
+										</Anchors>
+										<Scripts>
+											<OnClick>
+												GF_SavedVariables.blacklistchat = this:GetChecked()
+											</OnClick>
+											<OnLoad>
+												getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_CHAT)
+											</OnLoad>
+										</Scripts>
+									</CheckButton>
+									<CheckButton name="GF_AutoBlacklistForeignCheckButton" inherits="GF_CheckButtonTemplate_Label">
+										<Anchors>
+											<Anchor point="TOP" relativeTo="GF_AutoBlacklistChatCheckButton" relativePoint="BOTTOM">
+												<Offset>
+													<AbsDimension x="0" y="6"/>
+												</Offset>
+											</Anchor>
+										</Anchors>
+										<Scripts>
+											<OnClick>
+												GF_SavedVariables.blacklistforeign = this:GetChecked()
+											</OnClick>
+											<OnLoad>
+												getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_FOREIGN)
+											</OnLoad>
+										</Scripts>
+									</CheckButton>
+								</Frames>
+								<Scripts>
+									<OnLeave>
+										if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "AutoBlacklist") then 
+											GF_AutoBlacklistDropdownMenu:Hide()
+										end
+									</OnLeave>
+								</Scripts>
+							</Frame>
 						</Frames>
 					</Frame>
 					<Frame name="GF_SettingsFrameGroupSettings" inherits="GF_OptionFrameBoxTemplate">
 						<Size>
-							<AbsDimension x="640" y="56"/>
+							<AbsDimension x="650" y="56"/>
 						</Size>
 						<Anchors>
 							<Anchor point="TOP" relativeTo="GF_SettingsFrameChatSettings" relativePoint="BOTTOM">
@@ -4148,121 +4521,131 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						<Frames>
 							<Slider name="GF_GroupListingDurationSlider" inherits="GF_OptionsSliderTemplate">
 								<Size>
-									<AbsDimension x="160" y="16"/>
+									<AbsDimension x="142" y="16"/>
 								</Size>
 								<Anchors>
 									<Anchor point="TOPLEFT">
 										<Offset>
-											<AbsDimension x="24" y="-21" />
+											<AbsDimension x="15" y="-19" />
 										</Offset>
 									</Anchor>
 								</Anchors>
+								<Layers>
+									<Layer level="OVERLAY">
+										<FontString inherits="GF_NormalFont" name="GF_GroupListingDurationSliderLabel">
+											<Anchors>
+												<Anchor point="BOTTOM">
+													<Offset>
+														<AbsDimension x="0" y="-11"/>
+													</Offset>
+												</Anchor>
+											</Anchors>
+										</FontString>
+									</Layer>
+								</Layers>
 								<Scripts>
 									<OnLoad>
 										getglobal(this:GetName().."High"):SetText("60")
 										getglobal(this:GetName().."Low"):SetText("15")
 										this:SetMinMaxValues(15,60)
 										this:SetValueStep(15)
-										getglobal(this:GetName().."Low"):SetFont("Fonts\ARIALN.TTF",12)
-										getglobal(this:GetName().."Low"):SetTextHeight("12")
-										getglobal(this:GetName().."High"):SetFont("Fonts\ARIALN.TTF", 12)
-										getglobal(this:GetName().."High"):SetTextHeight("12")
-										getglobal(this:GetName().."Text"):SetFont("Fonts\ARIALN.TTF", 10)
-										getglobal(this:GetName().."Text"):SetTextHeight("10")
+										getglobal(this:GetName().."Text"):SetText(GF_GROUP_LIST_DURATION)
 									</OnLoad>
 									<OnValueChanged>
 										GF_SavedVariables.grouplistingduration = this:GetValue()
-										getglobal(this:GetName().."Text"):SetText(GF_GROUP_LIST_DURATION.." - "..this:GetValue()..GF_MINUTES)
+										getglobal(this:GetName().."Label"):SetText(this:GetValue()..GF_MINUTES)
 									</OnValueChanged>
 								</Scripts>
 							</Slider>
 							<Slider name="GF_AutoFilterLevelSlider" inherits="GF_OptionsSliderTemplate">
 								<Size>
-									<AbsDimension x="160" y="16"/>
+									<AbsDimension x="142" y="16"/>
 								</Size>
 								<Anchors>
-									<Anchor point="TOP">
+									<Anchor point="LEFT" relativeTo="GF_GroupListingDurationSlider" relativePoint="RIGHT">
 										<Offset>
-											<AbsDimension x="0" y="-21" />
+											<AbsDimension x="18" y="0" />
 										</Offset>
 									</Anchor>
 								</Anchors>
+								<Layers>
+									<Layer level="OVERLAY">
+										<FontString inherits="GF_NormalFont" name="GF_AutoFilterLevelSliderLabel">
+											<Anchors>
+												<Anchor point="BOTTOM">
+													<Offset>
+														<AbsDimension x="0" y="-11"/>
+													</Offset>
+												</Anchor>
+											</Anchors>
+										</FontString>
+									</Layer>
+								</Layers>
 								<Scripts>
 									<OnLoad>
 										getglobal(this:GetName().."High"):SetText("10")
 										getglobal(this:GetName().."Low"):SetText("3")
 										this:SetMinMaxValues(3,10)
 										this:SetValueStep(1)
-										getglobal(this:GetName().."Low"):SetFont("Fonts\ARIALN.TTF",12)
-										getglobal(this:GetName().."Low"):SetTextHeight("12")
-										getglobal(this:GetName().."High"):SetFont("Fonts\ARIALN.TTF", 12)
-										getglobal(this:GetName().."High"):SetTextHeight("12")
-										getglobal(this:GetName().."Text"):SetFont("Fonts\ARIALN.TTF", 10)
-										getglobal(this:GetName().."Text"):SetTextHeight("10")
+										getglobal(this:GetName().."Text"):SetText(GF_AUTO_FILTER_LEVEL)
 									</OnLoad>
 									<OnValueChanged>
 										GF_PerCharVariables.autofilterlevelvar = this:GetValue()
-										getglobal(this:GetName().."Text"):SetText(GF_AUTO_FILTER_LEVEL.." - "..this:GetValue())
+										getglobal(this:GetName().."Label"):SetText(this:GetValue().." "..GF_LEVELS)
 									</OnValueChanged>
 								</Scripts>
 							</Slider>
 							<Slider name="GF_GroupNewTimeoutSlider" inherits="GF_OptionsSliderTemplate">
 								<Size>
-									<AbsDimension x="160" y="16"/>
+									<AbsDimension x="142" y="16"/>
 								</Size>
 								<Anchors>
-									<Anchor point="TOPRIGHT">
+									<Anchor point="LEFT" relativeTo="GF_AutoFilterLevelSlider" relativePoint="RIGHT">
 										<Offset>
-											<AbsDimension x="-24" y="-21" />
+											<AbsDimension x="18" y="0" />
 										</Offset>
 									</Anchor>
 								</Anchors>
+								<Layers>
+									<Layer level="OVERLAY">
+										<FontString inherits="GF_NormalFont" name="GF_GroupNewTimeoutSliderLabel">
+											<Anchors>
+												<Anchor point="BOTTOM">
+													<Offset>
+														<AbsDimension x="0" y="-11"/>
+													</Offset>
+												</Anchor>
+											</Anchors>
+										</FontString>
+									</Layer>
+								</Layers>
 								<Scripts>
 									<OnLoad>
 										getglobal(this:GetName().."High"):SetText("30")
 										getglobal(this:GetName().."Low"):SetText("1")
 										this:SetMinMaxValues(1,14)
 										this:SetValueStep(1)
-										getglobal(this:GetName().."Low"):SetFont("Fonts\ARIALN.TTF",12)
-										getglobal(this:GetName().."Low"):SetTextHeight("12")
-										getglobal(this:GetName().."High"):SetFont("Fonts\ARIALN.TTF", 12)
-										getglobal(this:GetName().."High"):SetTextHeight("12")
-										getglobal(this:GetName().."Text"):SetFont("Fonts\ARIALN.TTF", 10)
-										getglobal(this:GetName().."Text"):SetTextHeight("10")
+										getglobal(this:GetName().."Text"):SetText(GF_NEW_GROUP_TIMEOUT)
 									</OnLoad>
 									<OnValueChanged>
 										if this:GetValue() > 10 then
 											GF_SavedVariables.showgroupsnewonlytime = (this:GetValue()-10)*5 + 10
-											getglobal(this:GetName().."Text"):SetText(GF_NEW_GROUP_TIMEOUT.." - "..GF_SavedVariables.showgroupsnewonlytime..GF_MINUTES)
+											getglobal(this:GetName().."Label"):SetText(GF_SavedVariables.showgroupsnewonlytime..GF_MINUTES)
 										else
 											GF_SavedVariables.showgroupsnewonlytime = this:GetValue()
-											getglobal(this:GetName().."Text"):SetText(GF_NEW_GROUP_TIMEOUT.." - "..GF_SavedVariables.showgroupsnewonlytime..GF_MINUTES)
+											getglobal(this:GetName().."Label"):SetText(GF_SavedVariables.showgroupsnewonlytime..GF_MINUTES)
 										end
 									</OnValueChanged>
 								</Scripts>
 							</Slider>
-						</Frames>
-					</Frame>
-					<Frame name="GF_SettingsFrameLFxSettings" inherits="GF_OptionFrameBoxTemplate">
-						<Size>
-							<AbsDimension x="640" y="70"/>
-						</Size>
-						<Anchors>
-							<Anchor point="TOP" relativeTo="GF_SettingsFrameGroupSettings" relativePoint="BOTTOM">
-								<Offset>
-									<AbsDimension x="0" y="-15"/>
-								</Offset>
-							</Anchor>
-						</Anchors>
-						<Frames>
 							<Slider name="GF_FilterLevelSlider" inherits="GF_OptionsSliderTemplate">
 								<Size>
-									<AbsDimension x="160" y="16"/>
+									<AbsDimension x="142" y="16"/>
 								</Size>
 								<Anchors>
-									<Anchor point="TOPLEFT">
+									<Anchor point="LEFT" relativeTo="GF_GroupNewTimeoutSlider" relativePoint="RIGHT">
 										<Offset>
-											<AbsDimension x="24" y="-21" />
+											<AbsDimension x="18" y="0" />
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -4281,17 +4664,11 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Layers>
 								<Scripts>
 									<OnLoad>
-										getglobal(this:GetName().."Text"):SetText(GF_ADJUST_FILTER_LEVEL)
 										getglobal(this:GetName().."High"):SetText("Max")
 										getglobal(this:GetName().."Low"):SetText("Min")
 										this:SetMinMaxValues(1,3)
 										this:SetValueStep(1)
-										getglobal(this:GetName().."Low"):SetFont("Fonts\ARIALN.TTF",12)
-										getglobal(this:GetName().."Low"):SetTextHeight("12")
-										getglobal(this:GetName().."High"):SetFont("Fonts\ARIALN.TTF", 12)
-										getglobal(this:GetName().."High"):SetTextHeight("12")
-										getglobal(this:GetName().."Text"):SetFont("Fonts\ARIALN.TTF", 10)
-										getglobal(this:GetName().."Text"):SetTextHeight("10")
+										getglobal(this:GetName().."Text"):SetText(GF_ADJUST_FILTER_LEVEL)
 									</OnLoad>
 									<OnValueChanged>
 										GF_SavedVariables.FilterLevel = this:GetValue()
@@ -4299,29 +4676,130 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnValueChanged>
 								</Scripts>
 							</Slider>
-							<Slider name="GF_UIScaleSlider" inherits="GF_OptionsSliderTemplate">
+						</Frames>
+					</Frame>
+					<Frame name="GF_SettingsFrameLFxSettings" inherits="GF_OptionFrameBoxTemplate">
+						<Size>
+							<AbsDimension x="650" y="105"/>
+						</Size>
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="GF_SettingsFrameGroupSettings" relativePoint="BOTTOMLEFT">
+								<Offset>
+									<AbsDimension x="0" y="-15"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Frames>
+							<Slider name="GF_MinimapMsgArcSlider" inherits="GF_OptionsSliderTemplate">
 								<Size>
-									<AbsDimension x="160" y="16"/>
+									<AbsDimension x="190" y="16"/>
 								</Size>
 								<Anchors>
-									<Anchor point="TOP">
+									<Anchor point="BOTTOMLEFT">
 										<Offset>
-											<AbsDimension x="0" y="-21" />
+											<AbsDimension x="10" y="25" />
 										</Offset>
 									</Anchor>
 								</Anchors>
+								<Layers>
+									<Layer level="OVERLAY">
+										<FontString inherits="GF_NormalFont" name="GF_MinimapMsgArcSliderLabel">
+											<Anchors>
+												<Anchor point="BOTTOM">
+													<Offset>
+														<AbsDimension x="0" y="-11"/>
+													</Offset>
+												</Anchor>
+											</Anchors>
+										</FontString>
+									</Layer>
+								</Layers>
+								<Scripts>
+									<OnLoad>
+										getglobal(this:GetName().."High"):SetText("360")
+										getglobal(this:GetName().."Low"):SetText("0")
+										this:SetMinMaxValues(0,360)
+										this:SetValueStep(1)
+										getglobal(this:GetName().."Text"):SetText(GF_MINIMAP_TEXT_ANGLE)
+									</OnLoad>
+									<OnValueChanged>
+										GF_SavedVariables.MinimapMsgArcOffset = this:GetValue()
+										getglobal(this:GetName().."Label"):SetText(this:GetValue())
+										GF_UpdateMinimapIcon()
+										GF_MinimapMessageFrameA1:AddMessage("|cff".."ffffff"..GF_MAIN_HEADER.. "|r", 1, 0.8, 0)
+									</OnValueChanged>
+								</Scripts>
+							</Slider>
+							<Slider name="GF_MinimapMsgRadiusSlider" inherits="GF_OptionsSliderTemplate">
+								<Size>
+									<AbsDimension x="190" y="16"/>
+								</Size>
+								<Anchors>
+									<Anchor point="BOTTOM">
+										<Offset>
+											<AbsDimension x="0" y="25" />
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Layers>
+									<Layer level="OVERLAY">
+										<FontString inherits="GF_NormalFont" name="GF_MinimapMsgRadiusSliderLabel">
+											<Anchors>
+												<Anchor point="BOTTOM">
+													<Offset>
+														<AbsDimension x="0" y="-11"/>
+													</Offset>
+												</Anchor>
+											</Anchors>
+										</FontString>
+									</Layer>
+								</Layers>
+								<Scripts>
+									<OnLoad>
+										getglobal(this:GetName().."High"):SetText("160")
+										getglobal(this:GetName().."Low"):SetText("0")
+										this:SetMinMaxValues(0,160)
+										this:SetValueStep(1)
+										getglobal(this:GetName().."Text"):SetText(GF_MINIMAP_TEXT_RADIUS)
+									</OnLoad>
+									<OnValueChanged>
+										GF_SavedVariables.MinimapMsgRadiusOffset = this:GetValue()
+										getglobal(this:GetName().."Label"):SetText(this:GetValue())
+										GF_UpdateMinimapIcon()
+										GF_MinimapMessageFrameA1:AddMessage("|cff".."ffffff"..GF_MAIN_HEADER.. "|r", 1, 0.8, 0)
+									</OnValueChanged>
+								</Scripts>
+							</Slider>
+							<Slider name="GF_UIScaleSlider" inherits="GF_OptionsSliderTemplate">
+								<Size>
+									<AbsDimension x="190" y="16"/>
+								</Size>
+								<Anchors>
+									<Anchor point="BOTTOMRIGHT">
+										<Offset>
+											<AbsDimension x="-15" y="25" />
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Layers>
+									<Layer level="OVERLAY">
+										<FontString inherits="GF_NormalFont" name="GF_UIScaleSliderLabel">
+											<Anchors>
+												<Anchor point="BOTTOM">
+													<Offset>
+														<AbsDimension x="0" y="-11"/>
+													</Offset>
+												</Anchor>
+											</Anchors>
+										</FontString>
+									</Layer>
+								</Layers>
 								<Scripts>
 									<OnLoad>
 										getglobal(this:GetName().."High"):SetText("1")
 										getglobal(this:GetName().."Low"):SetText(".8")
 										this:SetMinMaxValues(.8,1)
 										this:SetValueStep(.2)
-										getglobal(this:GetName().."Low"):SetFont("Fonts\ARIALN.TTF",12)
-										getglobal(this:GetName().."Low"):SetTextHeight("12")
-										getglobal(this:GetName().."High"):SetFont("Fonts\ARIALN.TTF", 12)
-										getglobal(this:GetName().."High"):SetTextHeight("12")
-										getglobal(this:GetName().."Text"):SetFont("Fonts\ARIALN.TTF", 10)
-										getglobal(this:GetName().."Text"):SetTextHeight("10")
 									</OnLoad>
 									<OnValueChanged>
 										GF_SavedVariables.MainFrameUIScale = this:GetValue()
@@ -4331,12 +4809,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							</Slider>
 							<Button name="GF_UIScaleSliderUpdateButton" inherits="GF_ButtonTemplate" text="GF_UISCALE_UPDATE">
 								<Size>
-									<AbsDimension x="100" y="27"/>
+									<AbsDimension x="100" y="25"/>
 								</Size>
 								<Anchors>
-									<Anchor point="Top" relativeTo="GF_UIScaleSlider" relativePoint="BOTTOM">
+									<Anchor point="TOP" relativeTo="GF_UIScaleSlider" relativePoint="BOTTOM">
 										<Offset>
-											<AbsDimension x="0" y="0"/>
+											<AbsDimension x="0" y="5"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -4348,183 +4826,87 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							</Button>
 							<Slider name="GF_FrameTransparencySlider" inherits="GF_OptionsSliderTemplate">
 								<Size>
-									<AbsDimension x="160" y="16"/>
+									<AbsDimension x="190" y="16"/>
 								</Size>
 								<Anchors>
 									<Anchor point="TOPRIGHT">
 										<Offset>
-											<AbsDimension x="-24" y="-21" />
+											<AbsDimension x="-15" y="-19" />
 										</Offset>
 									</Anchor>
 								</Anchors>
+								<Layers>
+									<Layer level="OVERLAY">
+										<FontString inherits="GF_NormalFont" name="GF_FrameTransparencySliderLabel">
+											<Anchors>
+												<Anchor point="BOTTOM">
+													<Offset>
+														<AbsDimension x="0" y="-11"/>
+													</Offset>
+												</Anchor>
+											</Anchors>
+										</FontString>
+									</Layer>
+								</Layers>
 								<Scripts>
 									<OnLoad>
 										getglobal(this:GetName().."High"):SetText("100")
 										getglobal(this:GetName().."Low"):SetText("20")
 										this:SetMinMaxValues(0.2,1)
 										this:SetValueStep(0.005)
-										getglobal(this:GetName().."Low"):SetFont("Fonts\ARIALN.TTF",12)
-										getglobal(this:GetName().."Low"):SetTextHeight("12")
-										getglobal(this:GetName().."High"):SetFont("Fonts\ARIALN.TTF", 12)
-										getglobal(this:GetName().."High"):SetTextHeight("12")
-										getglobal(this:GetName().."Text"):SetFont("Fonts\ARIALN.TTF", 10)
-										getglobal(this:GetName().."Text"):SetTextHeight("10")
+										getglobal(this:GetName().."Text"):SetText(GF_ADJUST_TRANSPARENCY)
 									</OnLoad>
 									<OnValueChanged>
 										GF_SavedVariables.MainFrameTransparency = this:GetValue()
-										getglobal(this:GetName().."Text"):SetText(GF_ADJUST_TRANSPARENCY.." - "..math.floor(this:GetValue()*100))
+										getglobal(this:GetName().."Label"):SetText(math.floor(this:GetValue()*100).."%")
 										GF_MainFrame:SetAlpha(this:GetValue())
 									</OnValueChanged>
 								</Scripts>
 							</Slider>
-						</Frames>
-					</Frame>
-					<Frame name="GF_SettingsFrameMinimapSettings" inherits="GF_OptionFrameBoxTemplate">
-						<Size>
-							<AbsDimension x="640" y="100"/>
-						</Size>
-						<Anchors>
-							<Anchor point="TOP" relativeTo="GF_SettingsFrameLFxSettings" relativePoint="BOTTOM">
-								<Offset>
-									<AbsDimension x="0" y="-15"/>
-								</Offset>
-							</Anchor>
-						</Anchors>
-						<Frames>
-							<Slider name="GF_MinimapArcSlider"  inherits="GF_OptionsSliderTemplate">
-								<Size>
-									<AbsDimension x="360" y="16"/>
-								</Size>
+							<CheckButton name="GF_SquareMinimapCheckButton" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="TOPLEFT">
 										<Offset>
-											<AbsDimension x="24" y="-21" />
+											<AbsDimension x="30" y="-13"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
 								<Scripts>
+									<OnClick>
+										GF_SavedVariables.squareminimap = this:GetChecked()
+										GF_MoveMinimapIcon()
+									</OnClick>
 									<OnLoad>
-										getglobal(this:GetName().."High"):SetText("360")
-										getglobal(this:GetName().."Low"):SetText("0")
-										this:SetMinMaxValues(0,360)
-										this:SetValueStep(1)
-										getglobal(this:GetName().."Low"):SetFont("Fonts\ARIALN.TTF",12)
-										getglobal(this:GetName().."Low"):SetTextHeight("12")
-										getglobal(this:GetName().."High"):SetFont("Fonts\ARIALN.TTF", 12)
-										getglobal(this:GetName().."High"):SetTextHeight("12")
-										getglobal(this:GetName().."Text"):SetFont("Fonts\ARIALN.TTF", 10)
-										getglobal(this:GetName().."Text"):SetTextHeight("10")
+										getglobal(this:GetName().."TextLabel"):SetText(GF_SQUARE_MINIMAP)
 									</OnLoad>
-									<OnValueChanged>
-										GF_SavedVariables.MinimapArcOffset = this:GetValue()
-										getglobal(this:GetName().."Text"):SetText(GF_ICON.." - "..GF_ADJUST_ANGLE.." - "..this:GetValue())
-										GF_UpdateMinimapIcon()
-									</OnValueChanged>
 								</Scripts>
-							</Slider>
-							<Slider name="GF_MinimapRadiusSlider"  inherits="GF_OptionsSliderTemplate">
-								<Size>
-									<AbsDimension x="160" y="16"/>
-								</Size>
+							</CheckButton>
+							<CheckButton name="GF_MinimapIconPriorityCheckButton" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
-									<Anchor point="TOPRIGHT">
+									<Anchor point="TOP">
 										<Offset>
-											<AbsDimension x="-24" y="-21" />
+											<AbsDimension x="-60" y="-13"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
 								<Scripts>
+									<OnClick>
+										GF_SavedVariables.iconpriority = this:GetChecked()
+										GF_SetPFUIAddonButtons()
+									</OnClick>
 									<OnLoad>
-										getglobal(this:GetName().."High"):SetText("160")
-										getglobal(this:GetName().."Low"):SetText("0")
-										this:SetMinMaxValues(0,160)
-										this:SetValueStep(1)
-										getglobal(this:GetName().."Low"):SetFont("Fonts\ARIALN.TTF",12)
-										getglobal(this:GetName().."Low"):SetTextHeight("12")
-										getglobal(this:GetName().."High"):SetFont("Fonts\ARIALN.TTF", 12)
-										getglobal(this:GetName().."High"):SetTextHeight("12")
-										getglobal(this:GetName().."Text"):SetFont("Fonts\ARIALN.TTF", 10)
-										getglobal(this:GetName().."Text"):SetTextHeight("10")
+										getglobal(this:GetName().."TextLabel"):SetText(GF_MINIMAP_ICON_PRIO)
 									</OnLoad>
-									<OnValueChanged>
-										GF_SavedVariables.MinimapRadiusOffset = this:GetValue()
-										getglobal(this:GetName().."Text"):SetText(GF_ICON.." - "..GF_ADJUST_RADIUS.." - "..this:GetValue())
-										GF_UpdateMinimapIcon()
-									</OnValueChanged>
 								</Scripts>
-							</Slider>
-							<Slider name="GF_MinimapMsgArcSlider" inherits="GF_OptionsSliderTemplate">
-								<Size>
-									<AbsDimension x="360" y="16"/>
-								</Size>
-								<Anchors>
-									<Anchor point="TOPLEFT">
-										<Offset>
-											<AbsDimension x="24" y="-66" />
-										</Offset>
-									</Anchor>
-								</Anchors>
-								<Scripts>
-									<OnLoad>
-										getglobal(this:GetName().."High"):SetText("360")
-										getglobal(this:GetName().."Low"):SetText("0")
-										this:SetMinMaxValues(0,360)
-										this:SetValueStep(1)
-										getglobal(this:GetName().."Low"):SetFont("Fonts\ARIALN.TTF",12)
-										getglobal(this:GetName().."Low"):SetTextHeight("12")
-										getglobal(this:GetName().."High"):SetFont("Fonts\ARIALN.TTF", 12)
-										getglobal(this:GetName().."High"):SetTextHeight("12")
-										getglobal(this:GetName().."Text"):SetFont("Fonts\ARIALN.TTF", 10)
-										getglobal(this:GetName().."Text"):SetTextHeight("10")
-									</OnLoad>
-									<OnValueChanged>
-										GF_SavedVariables.MinimapMsgArcOffset = this:GetValue()
-										getglobal(this:GetName().."Text"):SetText(GF_MINIMAP_GROUP_TEXT.." - "..GF_ADJUST_ANGLE.." - "..this:GetValue())
-										GF_UpdateMinimapIcon()
-										GF_MinimapMessageFrameA1:AddMessage("|cff".."ffffff"..GF_MAIN_HEADER.. "|r", 1, 0.8, 0)
-									</OnValueChanged>
-								</Scripts>
-							</Slider>
-							<Slider name="GF_MinimapMsgRadiusSlider" inherits="GF_OptionsSliderTemplate">
-								<Size>
-									<AbsDimension x="160" y="16"/>
-								</Size>
-								<Anchors>
-									<Anchor point="TOPRIGHT">
-										<Offset>
-											<AbsDimension x="-24" y="-66" />
-										</Offset>
-									</Anchor>
-								</Anchors>
-								<Scripts>
-									<OnLoad>
-										getglobal(this:GetName().."High"):SetText("160")
-										getglobal(this:GetName().."Low"):SetText("0")
-										this:SetMinMaxValues(0,160)
-										this:SetValueStep(1)
-										getglobal(this:GetName().."Low"):SetFont("Fonts\ARIALN.TTF",12)
-										getglobal(this:GetName().."Low"):SetTextHeight("12")
-										getglobal(this:GetName().."High"):SetFont("Fonts\ARIALN.TTF", 12)
-										getglobal(this:GetName().."High"):SetTextHeight("12")
-										getglobal(this:GetName().."Text"):SetFont("Fonts\ARIALN.TTF", 10)
-										getglobal(this:GetName().."Text"):SetTextHeight("10")
-									</OnLoad>
-									<OnValueChanged>
-										GF_SavedVariables.MinimapMsgRadiusOffset = this:GetValue()
-										getglobal(this:GetName().."Text"):SetText(GF_MINIMAP_TEXT.." - "..GF_ADJUST_RADIUS.." - "..this:GetValue())
-										GF_UpdateMinimapIcon()
-										GF_MinimapMessageFrameA1:AddMessage("|cff".."ffffff"..GF_MAIN_HEADER.. "|r", 1, 0.8, 0)
-									</OnValueChanged>
-								</Scripts>
-							</Slider>
+							</CheckButton>
 						</Frames>
 					</Frame>
 					<Frame name="GF_SettingsFrameOtherSettings" inherits="GF_OptionFrameBoxTemplate">
 						<Size>
-							<AbsDimension x="640" y="40"/>
+							<AbsDimension x="650" y="70"/>
 						</Size>
 						<Anchors>
-							<Anchor point="TOP" relativeTo="GF_SettingsFrameMinimapSettings" relativePoint="BOTTOM">
+							<Anchor point="TOPLEFT" relativeTo="GF_SettingsFrameLFxSettings" relativePoint="BOTTOMLEFT">
 								<Offset>
 									<AbsDimension x="0" y="-15"/>
 								</Offset>
@@ -4535,7 +4917,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Anchors>
 									<Anchor point="TOPLEFT">
 										<Offset>
-											<AbsDimension x="24" y="-8"/>
+											<AbsDimension x="20" y="-10"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -4550,9 +4932,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							</CheckButton>
 							<CheckButton name="GF_PurgePFDBCheckButton" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
-									<Anchor point="TOP">
+									<Anchor point="TOPLEFT" relativeTo="GF_FrameQuestModCheckButton" relativePoint="BOTTOMLEFT">
 										<Offset>
-											<AbsDimension x="-85" y="-8"/>
+											<AbsDimension x="0" y="-5"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -4565,14 +4947,66 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<Button name="GF_ResetAllSettingsButton" inherits="GF_ButtonTemplate" text="GF_RESET_SETTINGS">
-								<Size>
-									<AbsDimension x="120" y="21"/>
-								</Size>
+							<CheckButton name="GF_UseFriendsListCheckButton" inherits="GF_CheckButtonTemplate_Label">
+								<Anchors>
+									<Anchor point="TOP">
+										<Offset>
+											<AbsDimension x="-60" y="-10"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										GF_SavedVariables.usefriendslist = this:GetChecked()
+									</OnClick>
+									<OnLoad>
+										getglobal(this:GetName().."TextLabel"):SetText(GF_USE_FRIENDS_LIST_WHO)
+									</OnLoad>
+								</Scripts>
+							</CheckButton>
+							<CheckButton name="GF_DisableHardcoreCheckButton" inherits="GF_CheckButtonTemplate_Label">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GF_UseFriendsListCheckButton" relativePoint="BOTTOMLEFT">
+										<Offset>
+											<AbsDimension x="0" y="-5"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										GF_PerCharVariables.disablehardcore = this:GetChecked()
+										if GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][4] and not GF_PerCharVariables.disablehardcore then GF_WorldAnnounceMessageTextLabel:SetText(GF_HARDCORE_SEND_TEXT) else GF_WorldAnnounceMessageTextLabel:SetText(GF_WORLD_SEND_TEXT.." "..GF_SavedVariables.groupchannelname.." "..GF_LOG_CHANNEL) end
+									</OnClick>
+									<OnLoad>
+										getglobal(this:GetName().."TextLabel"):SetText(GF_DISABLE_HARDCORE_SETTINGS)
+									</OnLoad>
+								</Scripts>
+							</CheckButton>
+							<CheckButton name="GF_UseClickCombosCheckButton" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="TOPRIGHT">
 										<Offset>
-											<AbsDimension x="-15" y="-10"/>
+											<AbsDimension x="-155" y="-10"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										GF_SavedVariables.clickcombos = this:GetChecked()
+									</OnClick>
+									<OnLoad>
+										getglobal(this:GetName().."TextLabel"):SetText(GF_USE_CLICK_COMBOS)
+									</OnLoad>
+								</Scripts>
+							</CheckButton>
+							<Button name="GF_ResetAllSettingsButton" inherits="GF_ButtonTemplate" text="GF_RESET_SETTINGS">
+								<Size>
+									<AbsDimension x="160" y="25"/>
+								</Size>
+								<Anchors>
+									<Anchor point="BOTTOMRIGHT">
+										<Offset>
+											<AbsDimension x="-25" y="12"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -4604,7 +5038,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						GF_SettingsFrameChatSettingsTitle:SetText(GF_CHAT_SETTINGS)
 						GF_SettingsFrameGroupSettingsTitle:SetText(GF_GROUP_SETTINGS)
 						GF_SettingsFrameLFxSettingsTitle:SetText(GF_DISPLAY_SETTINGS)
-						GF_SettingsFrameMinimapSettingsTitle:SetText(GF_MINIMAP_SETTINGS)
 						GF_SettingsFrameOtherSettingsTitle:SetText(GF_OTHER_SETTINGS)
 					</OnLoad>
 				</Scripts>
@@ -4722,6 +5155,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				GF_GroupFilterDropdownMenu:Hide()
 				GF_ChatFilterDropdownMenu:Hide()
 				GF_LFGHardCoreDropdown:Hide()
+				GF_GroupChannelName:Hide()
+				GF_BlockList:Hide()
+				GF_AutoBlacklistDropdownMenu:Hide()
 
 				GF_SavedVariables.mainframeishidden = true
 				GF_SavedVariables.mainframestatus = 0

@@ -1,5 +1,9 @@
-GF_CHANNEL_NAME	= "World"
+GF_WORLD_CHANNEL_NAME = "World"
+GF_LFG_CHANNEL_NAME = "LookingForGroup"
+GF_GENERAL_CHANNEL_NAME = "General"
+GF_TRADE_CHANNEL_NAME = "Trade"
 GF_TURTLE_SERVERS_LIST = { ["Nordanaar"] = true, ["Tel'Abim"] = true, ["Ambershire"] = true }
+GF_KNOWN_SERVERS_LIST = { ["Nordanaar"] = true, ["Tel'Abim"] = true, ["Ambershire"] = true }
 GF_HARDCORE_SPELL_NAME = "Hardcore"
 GF_HARDCORE_TURTLE_SUBTEXT = "Challenge"
 
@@ -34,13 +38,6 @@ GF_25_MAN	= "25-man"
 GF_30_MAN	= "30-man"
 GF_40_MAN	= "40-man"
 
---if GetLocale() == "zhCN" then
---elseif GetLocale() == "zhTW" then
---elseif GetLocale() == "deDE" then
---elseif GetLocale() == "esES" then
---elseif GetLocale() == "frFR" then
---end
-
 -- Binding Names
 BINDING_HEADER_GF_MAIN_HEADER	= "Group Finder" -- Main window title
 BINDING_NAME_GF_SHOW_FRAME= "Toggle Main Window" -- Bindings Name
@@ -54,7 +51,7 @@ GF_MORE_FEATURES = "More" -- Label for "More" frame(Settings/Log/Blacklist)
 GF_CHAT_FILTERS = "Chat Filters"
 GF_GROUP_FILTERS = "Group Filters"
 GF_SHOW_GROUPS_IN = "Show groups in"
-GF_WORLD_SEND_TEXT = "Message that gets announced to the World Channel"
+GF_WORLD_SEND_TEXT = "Message that gets announced to the"
 GF_HARDCORE_SEND_TEXT = "Message that gets announced to the Hardcore Channel"
 GF_WORLD_NOW_SENDING = "GF: Now sending announcements to the World Channel"
 GF_HARDCORE_NOW_SENDING = "GF: Now sending announcements to the Hardcore Channel"
@@ -62,6 +59,7 @@ GF_CHAT = "Chat"
 GF_MINIMAP = "Minimap"
 GF_NEW_ONLY = "New only"
 GF_SHOW = "Show"
+GF_ADD = "Add"
 GF_SHOW_CHAT = "Chat"
 GF_SHOW_TRADES = "Trades"
 GF_SHOW_LOOT = "Loots"
@@ -88,8 +86,10 @@ GF_LOG_FILTERS = "Log Filters"
 GF_LOG_CHANNEL_FILTERS = "Channel Filters"
 GF_LOG_CONVERT_URL = "Convert messages to links"
 GF_LOG_RESET_MESSAGES = "Reset Messages"
+GF_LOG_FOREIGN = "Foreign"
 
 GF_LOG_CHANNELS = "Channels"
+GF_LOG_CHANNEL = "Channel"
 GF_LOG_SAY = "Say"
 GF_LOG_WHISPER = "Whisper"
 GF_LOG_PARTY = "Party"
@@ -138,18 +138,21 @@ GF_DISPLAY_SETTINGS = "Display settings" -- Label for filter section of Settings
 GF_GROUP_SETTINGS = "Group settings" -- Label for minimap section of Settings tab
 GF_MINIMAP_SETTINGS = "Minimap settings" -- Label for minimap section of Settings tab
 GF_OTHER_SETTINGS = "Other settings" -- Label for minimap section of Settings tab
-GF_ICON = "Minimap icon" -- Label for Minimap adjust icon adjust/radius
-GF_MINIMAP_GROUP_TEXT = "Minimap group text" -- Label for Minimap adjust icon text adjust/radius
-GF_MINIMAP_TEXT = "Minimap text" -- Label for Minimap adjust icon text adjust/radius
-GF_ADJUST_ANGLE = "Adjust angle" -- Label for Minimap adjust icon adjust/radius
-GF_ADJUST_RADIUS = "Adjust radius" -- Label for Minimap adjust icon text adjust/radius
-GF_ADJUST_TRANSPARENCY = "Adjust window transparency" -- Label for adjust transparency on Settings tab
+GF_MINIMAP_ICON_ANGLE = "Minimap icon angle" -- Label for Minimap adjust icon adjust/radius
+GF_MINIMAP_ICON_RADIUS = "Minimap icon radius" -- Label for Minimap adjust icon adjust/radius
+GF_MINIMAP_TEXT_ANGLE = "Minimap text angle" -- Label for Minimap adjust icon text adjust/radius
+GF_MINIMAP_TEXT_RADIUS = "Minimap text radius" -- Label for Minimap adjust icon text adjust/radius
+GF_ADJUST_TRANSPARENCY = "Window transparency" -- Label for adjust transparency on Settings tab
 GF_ADJUST_UISCALE = "Adjust window scale" -- Label for adjust transparency on Settings tab
 GF_UISCALE_UPDATE = "Update" -- Label for update UIScale
-GF_RESET_SETTINGS = "Reset settings" -- Label for Reset Settings
+GF_RESET_SETTINGS = "Reset all settings" -- Label for Reset Settings
 GF_ARE_YOU_SURE_RESET_SETTINGS = "Are you sure you want to reset all settings?" -- Label for Reset All Settings
 GF_YOUR_SETTINGS_RESET = "Your settings have been reset." -- Label for Reset All Settings
-
+GF_GROUP_CHANNEL_NAME = "Group Channel Name"
+GF_AUTO_JOIN_GROUP_CHANNEL = "Join the group channel"
+GF_ADD_TO_BLOCK_LIST = "Add words to the block list"
+GF_BLOCK_LIST = "Block list"
+GF_DISABLE_HARDCORE_SETTINGS = "Disable Hardcore Settings"
 GF_ADJUST_FILTER_LEVEL = "Group Filtering" -- Label for Filter slider on Settings tab
 GF_FilterLevelNotes = {}
 GF_FilterLevelNotes[1] = "Not Strict"
@@ -158,20 +161,24 @@ GF_FilterLevelNotes[3] = "Very Strict"
 
 -- Other Settings
 GF_USE_WHO_ON_GROUPS = "Auto /Who"
-GF_JOIN_WORLD = "Join World channel"
 GF_SYSTEM_FILTER = "Enable System Filtering"
 GF_SPAM_FILTER = "Enable Spam Filtering"
 GF_AUTO_BLACKLIST = "Enable Auto Blacklist"
 GF_SHOW_ORIGINAL_CHAT = "Show Formatted Chat"
 GF_ALWAYS_SHOW_GUILD = "Always Show Guild/Friends"
-GF_SPAM_FILTER_TIMER = "Spam flag clear time"
-GF_BLACKLIST_MINLEVEL = "Auto Blacklist maximum level"
-GF_BLOCK_BELOW_LEVEL = "Block messages below level"
+GF_SPAM_FILTER_TIMER = "Spam block time"
+GF_BLACKLIST_MINLEVEL = "Auto blacklist up to"
+GF_BLOCK_BELOW_LEVEL = "Block messages below"
 GF_GROUP_LIST_DURATION = "Group display time"
-GF_AUTO_FILTER_LEVEL = "Auto Filter level range"
+GF_AUTO_FILTER_LEVEL = "Auto Filter range"
 GF_NEW_GROUP_TIMEOUT = "\"New Listing\" duration"
-GF_QUEST_MOD = "Use Native Quest Mod"
-GF_PURGE_PFDB = "Purge PFUI player databases on Login"
+GF_QUEST_MOD = "Use native quest mod"
+GF_PURGE_PFDB = "Purge PFUI player databases on login"
+GF_USE_NORMAL_FONTS = "Use Normal Fonts"
+GF_USE_CLICK_COMBOS = "Use click Combinations"
+GF_USE_FRIENDS_LIST_WHO = "Use friendslist for /who"
+GF_MINIMAP_ICON_PRIO = "Minimap icon prio"
+GF_SQUARE_MINIMAP = "Square Minimap"
 
 -- Group Maker related buttons and texts
 GF_AUTO = "Auto"
@@ -195,6 +202,7 @@ GF_GET_WHO = "Get Who"
 GF_STOP_WHO = "Stop Who"
 GF_INVITE = "Invite"
 GF_LEVEL = "Level"
+GF_LEVELS = "levels"
 GF_WHISPER = "Whisper"
 GF_SKIP = "Skip"
 GF_REQUEST = "Request"
@@ -247,11 +255,18 @@ GF_NOW_AFK = "You are now AFK" -- The text the client receives when it goes afk(
 GF_TIME_AGO = " ago" -- Label for righttext on group list, showing how many minutes ago group was found
 GF_TIME_JUST_NOW = "Just now" -- Text for righttext on group list, "Found ## minutes ago"
 
+--if GetLocale() == "zhCN" then
+--elseif GetLocale() == "zhTW" then
+--elseif GetLocale() == "deDE" then
+--elseif GetLocale() == "esES" then
+--elseif GetLocale() == "frFR" then
+--end
+
 GF_GenTooltips = {
 
 GF_MinimapIcon = { 
 	tooltip1 = "Group Finder",
-	tooltip2 = "Left-Click to open. Shift-click to toggle \"Show Chat\". Right-click to toggle \" Show groups in Chat\".",
+	tooltip2 = "Click to open",
 	anchor	= "TOPRIGHT",
 	relativePoint	= "TOPLEFT" },
 
@@ -278,10 +293,7 @@ GF_ChatFilterShowGuildsCheckButton = {
 	tooltip2 = "When checked, guild recruitment messages will be shown. Otherwise they will be hidden." },
 GF_FrameUseWhoOnGroupsCheckButton = {
 	tooltip1 = "Use who on groups",
-	tooltip2 = "When checked, will use /who automatically to find class/level/guild information." },
-GF_FrameUseWhoOnGroupsCheckButtonTurtle = {
-	tooltip1 = "Use who on groups",
-	tooltip2 = "When checked, will find class/level information automatically via the Friends List(this will add then remove names from your friends list)." },
+	tooltip2 = "When checked, will use /who or the friendslist to find class/level/guild information." },
 
 GF_AutoFilterCheckButton = {
 	tooltip1 = "Auto-Filter",
@@ -348,7 +360,7 @@ GF_AnnounceToLFGButton = {
 	tooltip1 = "Announce",
 	tooltip2 = "Announces your group to the world channel automatically. Stops announcing if you go afk or if your group is full or if you lose party leader(doesn't require party leader)." },
 
-GF_FrameJoinWorldCheckButton = {
+GF_AutoJoinGroupChannelCheckButton = {
 	tooltip1 = "Join World",
 	tooltip2 = "When checked, you will join the World Channel automatically." },
 GF_PlaySoundOnResultsCheckButton = {
@@ -360,13 +372,13 @@ GF_FrameSystemFilterCheckButton = {
 GF_FrameSpamFilterCheckButton = {
 	tooltip1 = "Spam Filter",
 	tooltip2 = "When checked, long messages repeated more than once, and short messages repeated more than twice within two minutes will be blocked. In addition, all messages from the player will be blocked for the duration of the 'spam flag clear time'. Excludes friends, guildies, and party members." },
-GF_FrameAutoBlacklistCheckButton = {
+GF_AutomaticBlacklistCheckButton = {
 	tooltip1 = "Blacklist Filter",
-	tooltip2 = "When checked, players who repeat the same message repeatedly(more than 120 characters) and who are below the 'auto blacklist maximum level' will be permanently added to the blacklist." },
+	tooltip2 = "When checked, players who repeat the same message repeatedly(more than 30 characters) and who are below the 'auto blacklist maximum level' will be permanently added to the blacklist." },
 GF_FrameShowFormattedChatCheckButton = {
 	tooltip1 = "Show Formatted Chat",
 	tooltip2 = "When checked, channel messages will be formatted to show Level/Class when available." },
-GF_FrameAlwaysShowGuildCheckButton = {
+GF_AlwaysShowGuildFriendsCheckButton = {
 	tooltip1 = "Always Show Guild/Friends",
 	tooltip2 = "When checked, \"channel\" and \"yell\" messages from guildies/friends/party members will always be shown. Ignoring chat filters." },
 GF_FrameQuestModCheckButton = {
@@ -403,6 +415,34 @@ GF_LogFilterShowBlacklist = {
 GF_LogFilterShowBelowLevel = {
 	tooltip1 = "Show Below Level",
 	tooltip2 = "Logs will include [V] Messages from players below your threshold." },
+
+GF_GroupChannelEditBox = {
+	tooltip1 = "Group Channel Name",
+	tooltip2 = "Enter the name of the channel used for group announcements." },
+GF_BlockListEditBox = {
+	tooltip1 = "Block List",
+	tooltip2 = "Add words/Phrases to block. These are not case-sensitive and can be up to four words long." },
+GF_UseNormalFontsCheckButton = {
+	tooltip1 = "Use Normal Fonts",
+	tooltip2 = "Turning this off changes to the Arial font if you're not already using it." },
+GF_UseFriendsListCheckButton = {
+	tooltip1 = "Use friendslist for /who",
+	tooltip2 = "Auto /who will get player level/class data by adding/removing that player from your friendslist instead of using /who(this is much faster than /who)." },
+GF_DisableHardcoreCheckButton = {
+	tooltip1 = "Disable hardcore settings",
+	tooltip2 = "Will always use non-hardcore settings even if you are hardcore." },
+GF_UseClickCombosCheckButton = {
+	tooltip1 = "Use click combinations",
+	tooltip2 = "Ctrl-Left Click for '/target <playername>' and Alt-Right Click for '/invite <playername>." },
+GF_MinimapIconPriorityCheckButton = {
+	tooltip1 = "Minimap icon prio",
+	tooltip2 = "Keeps the minimap icon on top of other minimap icons and prevents it from being docked by PFUI. NOTE: Requires a UI restart to turn on for some reason." },
+GF_MinimapIconPriorityCheckButton = {
+	tooltip1 = "Minimap icon prio",
+	tooltip2 = "Keeps the minimap icon on top of other minimap icons and prevents it from being docked by PFUI. NOTE: Requires a UI restart to turn on for some reason." },
+GF_SquareMinimapCheckButton = {
+	tooltip1 = "Square Minimap",
+	tooltip2 = "Will adjust for a square minimap when moving the minimap button." },
 
 GF_HideMainFrameHeight = {
 	tooltip1 = "Toggles display height",
@@ -4000,9 +4040,17 @@ GF_BUTTONS_LIST = {
 [7] = { GF_40_MAN, 1, 60, 40, },
 	},
 	["LFGHardCore"] = {
-[1] = { GF_SHOW_NORMAL_HC, 1, 60, GF_WORLD_SEND_TEXT, true, true, },
-[2] = { GF_SHOW_NORMAL, 1, 60, GF_WORLD_SEND_TEXT, true, nil, },
-[3] = { GF_SHOW_HARDCORE, 1, 60, GF_WORLD_SEND_TEXT, nil, true, },
+[1] = { GF_SHOW_NORMAL_HC, 1, 60, nil, true, true, },
+[2] = { GF_SHOW_NORMAL, 1, 60, nil, true, nil, },
+[3] = { GF_SHOW_HARDCORE, 1, 60, nil, nil, true, },
+	},
+	["BlockList"] = {
+	},
+	["GroupChannelName"] = {
+[1] = { GF_WORLD_CHANNEL_NAME, 1, 60, 5, },
+[2] = { GF_LFG_CHANNEL_NAME, 1, 60, 10, },
+[3] = { GF_TRADE_CHANNEL_NAME, 1, 60, 10, },
+[4] = { GF_GENERAL_CHANNEL_NAME, 1, 60, 10, },
 	},
 }
 GF_MonsterEmoteFilters = {
@@ -4098,7 +4146,6 @@ function GF_AddTurtleWoWDungeonsRaids()
 		for i=1, getn(GF_TurtleGroupButtonsListDungeons) do table.insert(GF_BUTTONS_LIST.LFGDungeon, 29, GF_TurtleGroupButtonsListDungeons[i]) end
 		for i=1, getn(GF_TurtleGroupButtonsListRaids) do table.insert(GF_BUTTONS_LIST.LFGRaid, 8, GF_TurtleGroupButtonsListRaids[i]) end
 		table.insert(GF_BUTTONS_LIST.LFGSize, 3, { GF_12_MAN, 1, 60, 12, } )
-		GF_GenTooltips["GF_FrameUseWhoOnGroupsCheckButton"].tooltip2 = GF_GenTooltips["GF_FrameUseWhoOnGroupsCheckButtonTurtle"].tooltip2
 	-- ["arugalsfolly"]={60108,22,209,130},["betrayalfromwithin"]={40560,30,15,15},["herosreward"]={40675,10,14,16},
 	end
 end
