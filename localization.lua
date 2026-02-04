@@ -421,7 +421,7 @@ GF_GroupChannelEditBox = {
 	tooltip2 = "Enter the name of the channel used for group announcements." },
 GF_BlockListEditBox = {
 	tooltip1 = "Block List",
-	tooltip2 = "Add words/Phrases to block. These are not case-sensitive and can be up to four words long." },
+	tooltip2 = "Add words to the block list(not case-sensitive). This cannot include numbers or more than two repeating letters(messages are trimmed before detection)." },
 GF_UseNormalFontsCheckButton = {
 	tooltip1 = "Use Normal Fonts",
 	tooltip2 = "Turning this off changes to the Arial font if you're not already using it." },
@@ -2035,6 +2035,7 @@ GF_WORD_IGNORE_AFTER = { -- Up to two words after
 ["femaledruid"] = 1,["femalehunter"] = 1,["femalemage"] = 1,["femalepaladin"] = 1,["femalepriest"] = 1,["femalerogue"] = 1,["femaleshaman"] = 1,["femalewarlock"] = 1,["femalewarrior"] = 1,
 ["maledruid"] = 1,["malehunter"] = 1,["malemage"] = 1,["malepaladin"] = 1,["malepriest"] = 1,["malerogue"] = 1,["maleshaman"] = 1,["malewarlock"] = 1,["malewarrior"] = 1,
 }
+GF_WORD_BLOCK_LIST = {} -- The blocklist... This gets added to on startup
 
 GF_WORD_GUILD = {
 ["G"] = 102,["FG"] = 1,["GF"] = 1,["R"] = 2,["P"] = 1,["B"] = .25,["C"] = .5,["D"] = 1,["O"] = .1,

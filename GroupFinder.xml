@@ -4041,27 +4041,35 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										this:HighlightText(string.len(this:GetText())+1)
 									</OnEditFocusGained>
 									<OnEditFocusLost>
-										GF_SavedVariables.blocklist = GF_BlockListEditBox:GetText()
-										this:HighlightText(string.len(this:GetText())+1)
 									</OnEditFocusLost>
 									<OnTabPressed>
-										GF_SavedVariables.blocklist = GF_BlockListEditBox:GetText()
 										this:ClearFocus()
-										this:HighlightText(string.len(this:GetText())+1)
 									</OnTabPressed>
 									<OnEnterPressed>
-										GF_SavedVariables.blocklist = GF_BlockListEditBox:GetText()
-										this:ClearFocus()
-										this:HighlightText(string.len(this:GetText())+1)
+										if string.len(this:GetText()) > 0 then
+											for i=1,getn(GF_SavedVariables.blocklist) do
+												if string.lower(GF_SavedVariables.blocklist[i]) == string.lower(this:GetText()) then
+													table.remove(GF_BUTTONS_LIST["BlockList"],i)
+													table.remove(GF_SavedVariables.blocklist,i)
+													break
+												end
+											end
+											table.insert(GF_BUTTONS_LIST["BlockList"],1,{this:GetText()})
+											table.insert(GF_SavedVariables.blocklist,1,this:GetText())
+											GF_WORD_BLOCK_LIST[string.lower(this:GetText())] = true
+											this:SetText("")
+											this:HighlightText(string.len(this:GetText())+1)
+										else
+											this:ClearFocus()
+										end
 									</OnEnterPressed>
 									<OnEscapePressed>
-										GF_SavedVariables.blocklist = GF_BlockListEditBox:GetText()
+										GF_BlockListEditBox:SetText("")
 										this:ClearFocus()
-										this:HighlightText(string.len(this:GetText())+1)
 									</OnEscapePressed>
 								</Scripts>
 							</EditBox>
-							<Button name="GF_BlockListAddButton" inherits="GF_ButtonTemplate" text="GF_ADD">
+							<Button name="GF_BlockAddListButton" inherits="GF_ButtonTemplate" text="GF_ADD">
 								<Size>
 									<AbsDimension x="50" y="27"/>
 								</Size>
@@ -4079,7 +4087,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							</Button>
 							<Button name="GF_BlockListDropdown" inherits="GF_ButtonTemplate">
 								<Anchors>
-									<Anchor point="LEFT" relativeTo="GF_BlockListAddButton" relativePoint="RIGHT">
+									<Anchor point="LEFT" relativeTo="GF_BlockAddListButton" relativePoint="RIGHT">
 										<Offset>
 											<AbsDimension x="0" y="0"/>
 										</Offset>
@@ -4867,7 +4875,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Anchors>
 									<Anchor point="TOPLEFT">
 										<Offset>
-											<AbsDimension x="30" y="-13"/>
+											<AbsDimension x="50" y="-13"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -4885,7 +4893,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Anchors>
 									<Anchor point="TOP">
 										<Offset>
-											<AbsDimension x="-60" y="-13"/>
+											<AbsDimension x="-50" y="-13"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -4893,6 +4901,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									<OnClick>
 										GF_SavedVariables.iconpriority = this:GetChecked()
 										GF_SetPFUIAddonButtons()
+										if GF_SavedVariables.iconpriority then if pfMinimap then GF_RelevelMinimapIcons(pfMinimap) else GF_RelevelMinimapIcons(Minimap) end end
 									</OnClick>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_MINIMAP_ICON_PRIO)
@@ -5006,7 +5015,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Anchors>
 									<Anchor point="BOTTOMRIGHT">
 										<Offset>
-											<AbsDimension x="-25" y="12"/>
+											<AbsDimension x="-25" y="8"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
