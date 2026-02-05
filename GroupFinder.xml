@@ -3899,24 +3899,24 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnEditFocusGained>
 									<OnEditFocusLost>
 										if string.len(GF_GroupChannelEditBox:GetText()) > 1 then GF_SavedVariables.groupchannelname = GF_GroupChannelEditBox:GetText() else GF_GroupChannelEditBox:SetText(GF_SavedVariables.groupchannelname) end
-										if GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][4] and not GF_PerCharVariables.disablehardcore then GF_WorldAnnounceMessageTextLabel:SetText(GF_HARDCORE_SEND_TEXT) else GF_WorldAnnounceMessageTextLabel:SetText(GF_WORLD_SEND_TEXT.." "..GF_SavedVariables.groupchannelname.." "..GF_LOG_CHANNEL) end
+										if GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][4] then GF_WorldAnnounceMessageTextLabel:SetText(GF_HARDCORE_SEND_TEXT) else GF_WorldAnnounceMessageTextLabel:SetText(GF_WORLD_SEND_TEXT.." "..GF_SavedVariables.groupchannelname.." "..GF_LOG_CHANNEL) end
 										this:HighlightText(string.len(this:GetText())+1)
 									</OnEditFocusLost>
 									<OnTabPressed>
 										if string.len(GF_GroupChannelEditBox:GetText()) > 1 then GF_SavedVariables.groupchannelname = GF_GroupChannelEditBox:GetText() else GF_GroupChannelEditBox:SetText(GF_SavedVariables.groupchannelname) end
-										if GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][4] and not GF_PerCharVariables.disablehardcore then GF_WorldAnnounceMessageTextLabel:SetText(GF_HARDCORE_SEND_TEXT) else GF_WorldAnnounceMessageTextLabel:SetText(GF_WORLD_SEND_TEXT.." "..GF_SavedVariables.groupchannelname.." "..GF_LOG_CHANNEL) end
+										if GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][4] then GF_WorldAnnounceMessageTextLabel:SetText(GF_HARDCORE_SEND_TEXT) else GF_WorldAnnounceMessageTextLabel:SetText(GF_WORLD_SEND_TEXT.." "..GF_SavedVariables.groupchannelname.." "..GF_LOG_CHANNEL) end
 										this:ClearFocus()
 										this:HighlightText(string.len(this:GetText())+1)
 									</OnTabPressed>
 									<OnEnterPressed>
 										if string.len(GF_GroupChannelEditBox:GetText()) > 1 then GF_SavedVariables.groupchannelname = GF_GroupChannelEditBox:GetText() else GF_GroupChannelEditBox:SetText(GF_SavedVariables.groupchannelname) end
-										if GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][4] and not GF_PerCharVariables.disablehardcore then GF_WorldAnnounceMessageTextLabel:SetText(GF_HARDCORE_SEND_TEXT) else GF_WorldAnnounceMessageTextLabel:SetText(GF_WORLD_SEND_TEXT.." "..GF_SavedVariables.groupchannelname.." "..GF_LOG_CHANNEL) end
+										if GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][4] then GF_WorldAnnounceMessageTextLabel:SetText(GF_HARDCORE_SEND_TEXT) else GF_WorldAnnounceMessageTextLabel:SetText(GF_WORLD_SEND_TEXT.." "..GF_SavedVariables.groupchannelname.." "..GF_LOG_CHANNEL) end
 										this:ClearFocus()
 										this:HighlightText(string.len(this:GetText())+1)
 									</OnEnterPressed>
 									<OnEscapePressed>
 										if string.len(GF_GroupChannelEditBox:GetText()) > 1 then GF_SavedVariables.groupchannelname = GF_GroupChannelEditBox:GetText() else GF_GroupChannelEditBox:SetText(GF_SavedVariables.groupchannelname) end
-										if GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][4] and not GF_PerCharVariables.disablehardcore then GF_WorldAnnounceMessageTextLabel:SetText(GF_HARDCORE_SEND_TEXT) else GF_WorldAnnounceMessageTextLabel:SetText(GF_WORLD_SEND_TEXT.." "..GF_SavedVariables.groupchannelname.." "..GF_LOG_CHANNEL) end
+										if GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][4] then GF_WorldAnnounceMessageTextLabel:SetText(GF_HARDCORE_SEND_TEXT) else GF_WorldAnnounceMessageTextLabel:SetText(GF_WORLD_SEND_TEXT.." "..GF_SavedVariables.groupchannelname.." "..GF_LOG_CHANNEL) end
 										this:ClearFocus()
 										this:HighlightText(string.len(this:GetText())+1)
 									</OnEscapePressed>
@@ -4053,10 +4053,11 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 													table.remove(GF_SavedVariables.blocklist,i)
 													break
 												end
+												if i > 59 then table.remove(GF_BUTTONS_LIST["BlockList"],60) table.remove(GF_SavedVariables.blocklist,60) end
 											end
 											table.insert(GF_BUTTONS_LIST["BlockList"],1,{this:GetText()})
 											table.insert(GF_SavedVariables.blocklist,1,this:GetText())
-											GF_WORD_BLOCK_LIST[string.lower(this:GetText())] = true
+											GF_WORD_BLOCK_LIST[GF_FormatBlockListWords(this:GetText())] = true
 											this:SetText("")
 											this:HighlightText(string.len(this:GetText())+1)
 										else
@@ -4082,6 +4083,23 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
+										if string.len(GF_BlockListEditBox:GetText()) > 0 then
+											for i=1,getn(GF_SavedVariables.blocklist) do
+												if string.lower(GF_SavedVariables.blocklist[i]) == string.lower(GF_BlockListEditBox:GetText()) then
+													table.remove(GF_BUTTONS_LIST["BlockList"],i)
+													table.remove(GF_SavedVariables.blocklist,i)
+													break
+												end
+												if i > 59 then table.remove(GF_BUTTONS_LIST["BlockList"],60) table.remove(GF_SavedVariables.blocklist,60) end
+											end
+											table.insert(GF_BUTTONS_LIST["BlockList"],1,{GF_BlockListEditBox:GetText()})
+											table.insert(GF_SavedVariables.blocklist,1,GF_BlockListEditBox:GetText())
+											GF_WORD_BLOCK_LIST[GF_FormatBlockListWords(GF_BlockListEditBox:GetText())] = true
+											GF_BlockListEditBox:SetText("")
+											GF_BlockListEditBox:HighlightText(string.len(GF_BlockListEditBox:GetText())+1)
+										else
+											GF_BlockListEditBox:ClearFocus()
+										end
 									</OnClick>
 								</Scripts>
 							</Button>
@@ -4984,7 +5002,18 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Scripts>
 									<OnClick>
 										GF_PerCharVariables.disablehardcore = this:GetChecked()
-										if GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][4] and not GF_PerCharVariables.disablehardcore then GF_WorldAnnounceMessageTextLabel:SetText(GF_HARDCORE_SEND_TEXT) else GF_WorldAnnounceMessageTextLabel:SetText(GF_WORLD_SEND_TEXT.." "..GF_SavedVariables.groupchannelname.." "..GF_LOG_CHANNEL) end
+										if GF_PerCharVariables.disablehardcore then
+											GF_BUTTONS_LIST.LFGHardCore[1][4] = nil
+											GF_BUTTONS_LIST.LFGHardCore[2] = {GF_SHOW_NORMAL,1,60,nil,true,nil}
+											GF_BUTTONS_LIST.LFGHardCore[3] = {GF_SHOW_HARDCORE,1,60,nil,nil,true}
+										else
+											GF_BUTTONS_LIST.LFGHardCore[1][4] = true
+											GF_BUTTONS_LIST.LFGHardCore[2] = {GF_SHOW_HARDCORE,1,60,true,nil,true}
+											GF_BUTTONS_LIST.LFGHardCore[3] = {GF_SHOW_NORMAL,1,60,nil,true,nil}
+											if GF_PerCharVariables.hardcore == 3 then DEFAULT_CHAT_FRAME:AddMessage(GF_WORLD_NOW_SENDING, 1, 1, 0.5) else DEFAULT_CHAT_FRAME:AddMessage(GF_HARDCORE_NOW_SENDING, 1, 1, 0.5) end
+										end
+										if GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][4] then GF_WorldAnnounceMessageTextLabel:SetText(GF_HARDCORE_SEND_TEXT) else GF_WorldAnnounceMessageTextLabel:SetText(GF_WORLD_SEND_TEXT.." "..GF_SavedVariables.groupchannelname.." "..GF_LOG_CHANNEL) end
+										GF_LFGHardCoreDropdownTextLabel:SetText(GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][1])
 									</OnClick>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_DISABLE_HARDCORE_SETTINGS)
