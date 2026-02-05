@@ -194,11 +194,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				GameTooltip:Hide()
 			</OnLeave>
 			<OnClick>
-				if this:GetChecked() then
-					GF_AddRemoveSearch(this:GetName(), getglobal(this:GetName().."TextLabel"):GetText(), true)
-				else
-					GF_AddRemoveSearch(this:GetName(), getglobal(this:GetName().."TextLabel"):GetText(), nil)
-				end
+				GF_ChatFunctions(gsub(this:GetName(),"%d","").."AddRemove",getglobal(this:GetName().."TextLabel"):GetText(),this:GetID(),this:GetChecked())
 				if GF_AutoAnnounceTimer and string.find(this:GetName(),"LFG") then GF_TurnOffAnnounce(GF_AUTO_ANNOUNCE_SETTINGS_CHANGED) end
 			</OnClick>
 		</Scripts>

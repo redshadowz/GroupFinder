@@ -3331,7 +3331,7 @@ function GF_WhisperHistoryUpdateFrame(name)
 	while true do
 		if not name or not GF_WhisperLogData[GF_RealmName][counter] or counter == 96 then break end
 		if GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][counter]].priority then numPriority = numPriority+1 end
-		if name == GF_WhisperLogData[GF_RealmName][counter] then if GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][counter]].priority then nameWasPriority = true end table.remove(GF_WhisperLogData[GF_RealmName],counter) GF_WhisperLogData[GF_RealmName][name] = nil else counter = counter+1 end
+		if name == GF_WhisperLogData[GF_RealmName][counter] then if GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][counter]].priority then nameWasPriority = true end table.remove(GF_WhisperLogData[GF_RealmName],counter) else counter = counter+1 end
 	end
 	if name then
 		if nameWasPriority then
@@ -3614,7 +3614,6 @@ function GF_FindDungeonLevel(whisperText,lfgText)
 end
 
 function GF_FixLFGStrings(groupSizeOnly) -- LFG Group Maker Functions
-	GF_PerCharVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText()
 	local maxGroupSize = GF_BUTTONS_LIST.LFGSize[GF_PerCharVariables.lfgsize][4]
 	local foundLFM = 0
 	local foundDungeonRaid = {}
@@ -3716,6 +3715,7 @@ function GF_ShowDropdownList(bframe)
 			local button = getglobal("GF_"..bframe..GF_NumLFGSearchButtons)
 			if not button then 
 				button = CreateFrame("CheckButton", getglobal("GF_"..bframe):GetName()..GF_NumLFGSearchButtons, getglobal("GF_"..bframe), "GF_LFGDropdownCheckButtonTemplate_Label")
+				button:SetID(i)
 				if GF_AutoFilterCheckButtonTextLabel:GetStringWidth() > 52 then getglobal(button:GetName().."TextLabel"):SetFont(getglobal(button:GetName().."TextLabel"):GetFont(),10) end
 			end
 			getglobal(button:GetName().."TextLabel"):SetText(GF_BUTTONS_LIST[bframe][i][1])
@@ -3784,117 +3784,6 @@ function GF_ShowDropdownList(bframe)
 			getglobal("GF_"..bframe):SetPoint("TOPLEFT", getglobal("GF_"..bframe.."Dropdown"), "BOTTOMLEFT", -1*(width + 45), 4)
 		end
 		if GF_NumLFGSearchButtons > 0 then getglobal("GF_"..bframe):Show() end
-	end
-end
-function GF_AddRemoveSearch(bframe,entryname,add)
-	GF_PerCharVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText()
-	local _,_,frameName,frameID = string.find(bframe,"(%a+)(%d+)",4)
-	if frameName == "SearchList" then
-		for i=1, getn(GF_BUTTONS_LIST[frameName]) do
-			if GF_BUTTONS_LIST[frameName][i][1] == entryname then
-				for j=4, getn(GF_BUTTONS_LIST[frameName][i]) do
-					if add then
-						GF_PerCharVariables.searchbuttonstext[GF_BUTTONS_LIST[frameName][i][j]] = true
-					else
-						GF_PerCharVariables.searchbuttonstext[GF_BUTTONS_LIST[frameName][i][j]] = nil
-					end
-				end
-			end
-		end
-		if GF_SearchButtonHasValues() then GF_SearchListDropdown:LockHighlight() GF_SearchListClearButton:Show() else GF_SearchListDropdown:UnlockHighlight() GF_SearchListClearButton:Hide() end
-		GF_ApplyFiltersToGroupList()
-	else
-		for i=1, getn(GF_BUTTONS_LIST[frameName]) do
-			if GF_BUTTONS_LIST[frameName][i][1] == entryname then
-				if frameName == "GetWhoClass" then
-					GF_PerCharVariables.getwhowhisperclass = entryname
-					GF_GetWhoClassDropdownTextLabel:SetText(GF_PerCharVariables.getwhowhisperclass)
-					GF_GetWhoClass:Hide()
-					break
-				elseif frameName == "GetWhoLevel" then
-					GF_PerCharVariables.getwhowhisperlevel = GF_BUTTONS_LIST[frameName][i][4]
-					if GF_PerCharVariables.getwhowhisperlevel == 0 then GF_GetWhoLevelDropdownTextLabel:SetText(GF_LEVEL.." "..UnitLevel("player").."±") elseif GF_PerCharVariables.getwhowhisperlevel > 60 then GF_GetWhoLevelDropdownTextLabel:SetText(GF_LEVEL.." 60±") else GF_GetWhoLevelDropdownTextLabel:SetText(GF_LEVEL.." "..GF_PerCharVariables.getwhowhisperlevel.."±") end					
-					GF_GetWhoLevel:Hide()
-					break
-				elseif frameName == "LFGSize" then
-					GF_PerCharVariables.lfgsize = i
-					GF_LFGSizeDropdownTextLabel:SetText(GF_BUTTONS_LIST.LFGSize[i][1])
-					GF_LFGSize:Hide()
-				elseif frameName == "LFGHardCore" then
-					if GF_Hardcore then
-						if GF_PerCharVariables.disablehardcore then
-							GF_BUTTONS_LIST.LFGHardCore[1][4] = nil
-							GF_BUTTONS_LIST.LFGHardCore[2] = {GF_SHOW_NORMAL,1,60,nil,true,nil}
-							GF_BUTTONS_LIST.LFGHardCore[3] = {GF_SHOW_HARDCORE,1,60,nil,nil,true}
-						else
-							GF_BUTTONS_LIST.LFGHardCore[1][4] = true
-							GF_BUTTONS_LIST.LFGHardCore[2] = {GF_SHOW_HARDCORE,1,60,true,nil,true}
-							GF_BUTTONS_LIST.LFGHardCore[3] = {GF_SHOW_NORMAL,1,60,nil,true,nil}
-							if GF_PerCharVariables.hardcore < 3 and i == 3 then DEFAULT_CHAT_FRAME:AddMessage(GF_WORLD_NOW_SENDING, 1, 1, 0.5) elseif GF_PerCharVariables.hardcore == 3 and i < 3 then DEFAULT_CHAT_FRAME:AddMessage(GF_HARDCORE_NOW_SENDING, 1, 1, 0.5) end
-						end
-					end	
-					GF_PerCharVariables.hardcore = i
-					if GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][4] then GF_WorldAnnounceMessageTextLabel:SetText(GF_HARDCORE_SEND_TEXT) else GF_WorldAnnounceMessageTextLabel:SetText(GF_WORLD_SEND_TEXT.." "..GF_SavedVariables.groupchannelname.." "..GF_LOG_CHANNEL) end
-					GF_LFGHardCoreDropdownTextLabel:SetText(GF_BUTTONS_LIST.LFGHardCore[i][1])
-					GF_LFGHardCore:Hide()
-					GF_ApplyFiltersToGroupList()
-				elseif frameName == "GroupChannelName" then
-					GF_GroupChannelEditBox:SetText(entryname)
-					GF_SavedVariables.groupchannelname = GF_GroupChannelEditBox:GetText()
-					if GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][4] then GF_WorldAnnounceMessageTextLabel:SetText(GF_HARDCORE_SEND_TEXT) else GF_WorldAnnounceMessageTextLabel:SetText(GF_WORLD_SEND_TEXT.." "..GF_SavedVariables.groupchannelname.." "..GF_LOG_CHANNEL) end
-					GF_GroupChannelName:Hide()
-				elseif frameName == "BlockList" then
-					table.remove(GF_BUTTONS_LIST["BlockList"],i)
-					table.remove(GF_SavedVariables.blocklist,i)
-					GF_WORD_BLOCK_LIST[entryname] = nil
-					GF_BlockList:Hide()
-					return
-				elseif frameName == "LFGLFM" then
-					--for j=2, getn(GF_BUTTONS_LIST[frameName]) do
-						--GF_PerCharVariables.searchlfgtext = gsub(string.lower(GF_PerCharVariables.searchlfgtext), GF_BUTTONS_LIST.LFGLFM[j][1].." ", "")
-					--end
-					--GF_PerCharVariables.searchlfgtext = gsub(string.lower(GF_PerCharVariables.searchlfgtext), "^lf%d?%d?m ", "")
-					--GF_PerCharVariables.searchlfgtext = GF_BUTTONS_LIST[frameName][i][1].." "..gsub(GF_PerCharVariables.searchlfgtext, "^%d+", "")
-					--GF_LFGLFM:Hide()
-				--else
-					--GF_PerCharVariables.searchlfgtext = GF_BUTTONS_LIST[frameName][i][1].." "..gsub(GF_PerCharVariables.searchlfgtext, "^%d+", "")
-				--end
-					if add then
-						for j=1, getn(GF_BUTTONS_LIST[frameName]) do -- check lfglfm buttons
-							if i == 1 and not string.find(" "..string.lower(GF_PerCharVariables.searchlfgtext).." ", "lf%d?%d?m ") or (i > 1 and i < 5) then -- If setting to LFM and I'm LFG then remove roles
-								for k=1,3 do
-									local lfs,lfe = string.find(GF_PerCharVariables.searchlfgtext, " need "..GF_BUTTONS_LIST.LFGRole[k][1])
-									if lfs then
-										GF_PerCharVariables.searchlfgtext = string.sub(GF_PerCharVariables.searchlfgtext,1,lfs-1)..string.sub(GF_PerCharVariables.searchlfgtext,lfe+1)
-									else
-										lfs,lfe = string.find(GF_PerCharVariables.searchlfgtext, GF_BUTTONS_LIST.LFGRole[k][1])
-										if lfs then
-											GF_PerCharVariables.searchlfgtext = string.sub(GF_PerCharVariables.searchlfgtext,1,lfs-1)..string.sub(GF_PerCharVariables.searchlfgtext,lfe+1)
-										end
-									end
-								end
-							end
-							GF_PerCharVariables.searchlfgtext = gsub(GF_PerCharVariables.searchlfgtext, GF_BUTTONS_LIST.LFGLFM[j][1], "")
-						end
-						GF_PerCharVariables.searchlfgtext = gsub(GF_PerCharVariables.searchlfgtext, "^LF%d+M", "")
-						GF_PerCharVariables.searchlfgtext = GF_BUTTONS_LIST[frameName][i][1]..gsub(GF_PerCharVariables.searchlfgtext, "^%d+", "")
-						GF_LFGLFM:Hide()
-					elseif i == 1 then
-						GF_PerCharVariables.searchlfgtext = gsub(GF_PerCharVariables.searchlfgtext, "^LF%d+M", "")
-					end
-				else
-					GF_PerCharVariables.searchlfgtext = GF_BUTTONS_LIST[frameName][i][1].." "..gsub(GF_PerCharVariables.searchlfgtext, "^%d+", "")
-				end				
-				if not add then GF_PerCharVariables.searchlfgtext = gsub(gsub(gsub(gsub(gsub(GF_PerCharVariables.searchlfgtext, "^%d+", ""),"for "..GF_BUTTONS_LIST[frameName][i][1],""),"need "..GF_BUTTONS_LIST[frameName][i][1],""),GF_BUTTONS_LIST[frameName][i][1],""),"/ "," ") GF_LFGLFM:Hide() end
-				GF_LFGDescriptionEditBox:SetText(GF_PerCharVariables.searchlfgtext)
-
--- Instead of just throwing out a bunch of words and then fixing them. I could just detect the words and make an array and then rewrite the sentence
-				--if not add then GF_PerCharVariables.searchlfgtext = gsub(gsub(gsub(gsub(string.lower(GF_PerCharVariables.searchlfgtext), "^%d+", ""),"for "..string.lower(GF_BUTTONS_LIST[frameName][i][1]),""),"need "..string.lower(GF_BUTTONS_LIST[frameName][i][1]),""),string.lower(GF_BUTTONS_LIST[frameName][i][1]),"") GF_LFGLFM:Hide() end
-				--GF_LFGDescriptionEditBox:SetText(GF_PerCharVariables.searchlfgtext)
-			end
-		end
-		if frameName == "LFGSize" then GF_FixLFGStrings(true) else GF_LFGDescriptionEditBox:SetText(gsub(gsub(GF_PerCharVariables.searchlfgtext, "%(HC%)", ""),"%s%s+"," ")) GF_FixLFGStrings() end
-		if GF_PerCharVariables.searchlfgtext ~= "" then GF_LFGDescriptionClearButton:Show() else GF_LFGDescriptionClearButton:Hide() end
 	end
 end
 function GF_GetCurrentLFGLFMData()
@@ -4109,6 +3998,119 @@ function GF_SearchButtonHasValues()
 		return true
 	end
 	if GF_PerCharVariables.searchtext ~= "" then return true end
+end
+
+function GF_ButtonListFunctions(fName,entryName,entryID,add) -- Functions for Button Add/Remove
+	GF_PerCharVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText()
+	getglobal(fName)(entryName,entryID,add)
+end
+function GF_SearchListAddRemove(entryName,entryID,add)
+	for i=4, getn(GF_BUTTONS_LIST["SearchList"][entryID]) do
+		GF_PerCharVariables.searchbuttonstext[GF_BUTTONS_LIST["SearchList"][entryID][i]] = add
+	end
+	if GF_SearchButtonHasValues() then GF_SearchListDropdown:LockHighlight() GF_SearchListClearButton:Show() else GF_SearchListDropdown:UnlockHighlight() GF_SearchListClearButton:Hide() end
+	GF_ApplyFiltersToGroupList()
+end
+function GF_GetWhoClassAddRemove(entryName,entryID,add)
+	GF_PerCharVariables.getwhowhisperclass = entryName
+	GF_GetWhoClassDropdownTextLabel:SetText(GF_PerCharVariables.getwhowhisperclass)
+	GF_GetWhoClass:Hide()
+end
+function GF_GetWhoLevelAddRemove(entryName,entryID,add)
+	GF_PerCharVariables.getwhowhisperlevel = GF_BUTTONS_LIST["GetWhoLevel"][entryID][4]
+	if GF_PerCharVariables.getwhowhisperlevel == 0 then GF_GetWhoLevelDropdownTextLabel:SetText(GF_LEVEL.." "..UnitLevel("player").."±") elseif GF_PerCharVariables.getwhowhisperlevel > 60 then GF_GetWhoLevelDropdownTextLabel:SetText(GF_LEVEL.." 60±") else GF_GetWhoLevelDropdownTextLabel:SetText(GF_LEVEL.." "..GF_PerCharVariables.getwhowhisperlevel.."±") end					
+	GF_GetWhoLevel:Hide()
+end
+function GF_LFGSizeAddRemove(entryName,entryID,add)
+	GF_PerCharVariables.lfgsize = entryID
+	GF_LFGSizeDropdownTextLabel:SetText(GF_BUTTONS_LIST.LFGSize[entryID][1])
+	GF_FixLFGStrings(true)
+	GF_LFGSize:Hide()
+end
+function GF_LFGLFMAddRemove(entryName,entryID,add)
+	GF_PerCharVariables.searchlfgtext = gsub(GF_PerCharVariables.searchlfgtext, "^[lL][fF]%d+[mM]", "LFM")
+	if add then
+		for i=1, getn(GF_BUTTONS_LIST["LFGLFM"]) do -- Remove LFM/LFG and Roles then add new LFM/LFG
+			if entryID == 1 and not string.find(GF_PerCharVariables.searchlfgtext, "^LFM") or (entryID > 1 and entryID < 5) then -- If setting to LFM and I'm LFG then remove roles
+				for k=1,3 do
+					local lfs,lfe = string.find(GF_PerCharVariables.searchlfgtext, " need "..GF_BUTTONS_LIST.LFGRole[k][1])
+					if lfs then
+						GF_PerCharVariables.searchlfgtext = string.sub(GF_PerCharVariables.searchlfgtext,1,lfs-1)..string.sub(GF_PerCharVariables.searchlfgtext,lfe+1)
+					else
+						lfs,lfe = string.find(GF_PerCharVariables.searchlfgtext, GF_BUTTONS_LIST.LFGRole[k][1])
+						if lfs then
+							GF_PerCharVariables.searchlfgtext = string.sub(GF_PerCharVariables.searchlfgtext,1,lfs-1)..string.sub(GF_PerCharVariables.searchlfgtext,lfe+1)
+						end
+					end
+				end
+			end
+			GF_PerCharVariables.searchlfgtext = gsub(GF_PerCharVariables.searchlfgtext, GF_BUTTONS_LIST.LFGLFM[i][1], "")
+		end
+		GF_PerCharVariables.searchlfgtext = GF_BUTTONS_LIST["LFGLFM"][entryID][1].." "..gsub(GF_PerCharVariables.searchlfgtext, "^%d+", "")
+	else
+		GF_LFGCommonCleanup(entryName)
+	end
+	GF_FixLFGStrings()
+	GF_LFGLFM:Hide()
+ end
+function GF_LFGDungeonAddRemove(entryName,entryID,add)
+	if add then
+		GF_PerCharVariables.searchlfgtext = GF_BUTTONS_LIST["LFGDungeon"][entryID][1].." "..gsub(GF_PerCharVariables.searchlfgtext, "^%d+", "")
+	else
+		GF_LFGCommonCleanup(entryName)
+	end
+	GF_FixLFGStrings()
+end
+function GF_LFGRaidAddRemove(entryName,entryID,add)
+	if add then
+		GF_PerCharVariables.searchlfgtext = GF_BUTTONS_LIST["LFGRaid"][entryID][1].." "..gsub(GF_PerCharVariables.searchlfgtext, "^%d+", "")
+	else
+		GF_LFGCommonCleanup(entryName)
+	end
+	GF_FixLFGStrings()
+end
+function GF_LFGRoleAddRemove(entryName,entryID,add)
+	if add then
+		GF_PerCharVariables.searchlfgtext = GF_BUTTONS_LIST["LFGRole"][entryID][1].." "..gsub(GF_PerCharVariables.searchlfgtext, "^%d+", "")
+	else
+		GF_LFGCommonCleanup(entryName)
+	end
+	GF_FixLFGStrings()
+end
+function GF_GroupChannelNameAddRemove(entryName,entryID,add)
+	GF_GroupChannelEditBox:SetText(entryName)
+	GF_SavedVariables.groupchannelname = entryName
+	if GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][4] then GF_WorldAnnounceMessageTextLabel:SetText(GF_HARDCORE_SEND_TEXT) else GF_WorldAnnounceMessageTextLabel:SetText(GF_WORLD_SEND_TEXT.." "..GF_SavedVariables.groupchannelname.." "..GF_LOG_CHANNEL) end
+	GF_GroupChannelName:Hide()
+end
+function GF_BlockListAddRemove(entryName,entryID,add)
+	table.remove(GF_BUTTONS_LIST["BlockList"],entryID)
+	table.remove(GF_SavedVariables.blocklist,entryID)
+	GF_WORD_BLOCK_LIST[entryName] = nil
+	GF_BlockList:Hide()
+end
+function GF_LFGHardCoreAddRemove(entryName,entryID,add)
+	if GF_Hardcore then
+		if GF_PerCharVariables.disablehardcore then
+			GF_BUTTONS_LIST.LFGHardCore[1][4] = nil
+			GF_BUTTONS_LIST.LFGHardCore[2] = {GF_SHOW_NORMAL,1,60,nil,true,nil}
+			GF_BUTTONS_LIST.LFGHardCore[3] = {GF_SHOW_HARDCORE,1,60,nil,nil,true}
+		else
+			GF_BUTTONS_LIST.LFGHardCore[1][4] = true
+			GF_BUTTONS_LIST.LFGHardCore[2] = {GF_SHOW_HARDCORE,1,60,true,nil,true}
+			GF_BUTTONS_LIST.LFGHardCore[3] = {GF_SHOW_NORMAL,1,60,nil,true,nil}
+			if GF_PerCharVariables.hardcore < 3 and entryID == 3 then DEFAULT_CHAT_FRAME:AddMessage(GF_WORLD_NOW_SENDING, 1, 1, 0.5) elseif GF_PerCharVariables.hardcore == 3 and entryID < 3 then DEFAULT_CHAT_FRAME:AddMessage(GF_HARDCORE_NOW_SENDING, 1, 1, 0.5) end
+		end
+	end	
+	GF_PerCharVariables.hardcore = entryID
+	if GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][4] then GF_WorldAnnounceMessageTextLabel:SetText(GF_HARDCORE_SEND_TEXT) else GF_WorldAnnounceMessageTextLabel:SetText(GF_WORLD_SEND_TEXT.." "..GF_SavedVariables.groupchannelname.." "..GF_LOG_CHANNEL) end
+	GF_LFGHardCoreDropdownTextLabel:SetText(GF_BUTTONS_LIST.LFGHardCore[entryID][1])
+	GF_LFGHardCore:Hide()
+	GF_ApplyFiltersToGroupList()
+end
+function GF_LFGCommonCleanup(entryName)
+	GF_PerCharVariables.searchlfgtext = gsub(gsub(gsub(gsub(gsub(gsub(gsub(GF_PerCharVariables.searchlfgtext, "^%d+", ""),"for "..entryName,""),"need "..entryName,""),entryName,""),"/ "," "), "%(HC%)", ""),"%s%s+"," ")
+	if GF_PerCharVariables.searchlfgtext ~= "" then GF_LFGDescriptionClearButton:Show() else GF_LFGDescriptionClearButton:Hide() end
 end
 
 function GF_GetGroupInformation(arg1,arg2,sentTime,event) -- Searches messages for Groups and similiar functions
