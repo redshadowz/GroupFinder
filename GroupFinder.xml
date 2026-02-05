@@ -194,7 +194,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				GameTooltip:Hide()
 			</OnLeave>
 			<OnClick>
-				GF_ChatFunctions(gsub(this:GetName(),"%d","").."AddRemove",getglobal(this:GetName().."TextLabel"):GetText(),this:GetID(),this:GetChecked())
+				GF_ButtonListFunctions(gsub(this:GetName(),"%d","").."AddRemove",getglobal(this:GetName().."TextLabel"):GetText(),GF_ButtonIDAliases[string.sub(gsub(this:GetName(),"%d",""),4)][getglobal(this:GetName().."TextLabel"):GetText()],this:GetChecked())
 				if GF_AutoAnnounceTimer and string.find(this:GetName(),"LFG") then GF_TurnOffAnnounce(GF_AUTO_ANNOUNCE_SETTINGS_CHANGED) end
 			</OnClick>
 		</Scripts>
@@ -1198,7 +1198,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						<Scripts>
 							<OnClick>
 								if not GF_LFGHardCore:IsShown() then
-									GF_ShowDropdownList("LFGHardCore")
+									GF_ButtonListFunctions(gsub(this:GetName(),"%d","").."Show")
 								else
 									GF_LFGHardCore:Hide()
 								end
@@ -1459,7 +1459,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						<Scripts>
 							<OnClick>
 								if not GF_SearchList:IsShown() then
-									GF_ShowDropdownList("SearchList")
+									GF_ButtonListFunctions(gsub(this:GetName(),"%d","").."Show")
 								else
 									GF_SearchList:Hide()
 								end
@@ -1964,7 +1964,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										<Scripts>
 											<OnClick>
 												if not GF_GetWhoClass:IsShown() then
-													GF_ShowDropdownList("GetWhoClass")
+													GF_ButtonListFunctions(gsub(this:GetName(),"%d","").."Show")
 												else
 													GF_GetWhoClass:Hide()
 												end
@@ -2026,7 +2026,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										<Scripts>
 											<OnClick>
 												if not GF_GetWhoLevel:IsShown() then
-													GF_ShowDropdownList("GetWhoLevel")
+													GF_ButtonListFunctions(gsub(this:GetName(),"%d","").."Show")
 												else
 													GF_GetWhoLevel:Hide()
 												end
@@ -2253,7 +2253,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												GF_LFGRaid:Hide()
 												GF_LFGRole:Hide()
 												if not GF_LFGSize:IsShown() then
-													GF_ShowDropdownList("LFGSize")
+													GF_ButtonListFunctions(gsub(this:GetName(),"%d","").."Show")
 												else
 													GF_LFGSize:Hide()
 												end
@@ -2319,7 +2319,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												GF_LFGRaid:Hide()
 												GF_LFGRole:Hide()
 												if not GF_LFGLFM:IsShown() then
-													GF_ShowDropdownList("LFGLFM")
+													GF_ButtonListFunctions(gsub(this:GetName(),"%d","").."Show")
 												else
 													GF_LFGLFM:Hide()
 												end
@@ -2388,7 +2388,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												GF_LFGRaid:Hide()
 												GF_LFGRole:Hide()
 												if not GF_LFGDungeon:IsShown() then
-													GF_ShowDropdownList("LFGDungeon")
+													GF_ButtonListFunctions(gsub(this:GetName(),"%d","").."Show")
 												else
 													GF_LFGDungeon:Hide()
 												end
@@ -2457,7 +2457,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												GF_LFGDungeon:Hide()
 												GF_LFGRole:Hide()
 												if not GF_LFGRaid:IsShown() then
-													GF_ShowDropdownList("LFGRaid")
+													GF_ButtonListFunctions(gsub(this:GetName(),"%d","").."Show")
 												else
 													GF_LFGRaid:Hide()
 												end
@@ -2526,7 +2526,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												GF_LFGDungeon:Hide()
 												GF_LFGRaid:Hide()
 												if not GF_LFGRole:IsShown() then
-													GF_ShowDropdownList("LFGRole")
+													GF_ButtonListFunctions(gsub(this:GetName(),"%d","").."Show")
 												else
 													GF_LFGRole:Hide()
 												end
@@ -3929,7 +3929,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Scripts>
 									<OnClick>
 										if not GF_GroupChannelName:IsShown() then
-											GF_ShowDropdownList("GroupChannelName")
+											GF_ButtonListFunctions(gsub(this:GetName(),"%d","").."Show")
 										else
 											GF_GroupChannelName:Hide()
 										end
@@ -4110,7 +4110,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Scripts>
 									<OnClick>
 										if not GF_BlockList:IsShown() then
-											GF_ShowDropdownList("BlockList")
+											GF_ButtonListFunctions(gsub(this:GetName(),"%d","").."Show")
 										else
 											GF_BlockList:Hide()
 										end

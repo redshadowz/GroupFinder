@@ -3929,15 +3929,15 @@ GF_BUTTONS_LIST = {
 [36] = { "PvP", 1, 60, "PVP" },
 	},
 	["GetWhoClass"] = {
-[1] = { GF_WARRIOR, 1, 60, },
-[2] = { GF_ROGUE, 1, 60, },
-[3] = { GF_HUNTER, 1, 60, },
-[4] = { GF_MAGE, 1, 60, },
-[5] = { GF_WARLOCK, 1, 60, },
-[6] = { GF_PRIEST, 1, 60, },
-[7] = { GF_DRUID, 1, 60, },
-[8] = { GF_PALADIN, 1, 60, },
-[9] = { GF_SHAMAN, 1, 60, },
+[1] = { GF_WARRIOR},
+[2] = { GF_ROGUE},
+[3] = { GF_HUNTER},
+[4] = { GF_MAGE},
+[5] = { GF_WARLOCK},
+[6] = { GF_PRIEST},
+[7] = { GF_DRUID},
+[8] = { GF_PALADIN},
+[9] = { GF_SHAMAN},
 	},
 	["GetWhoLevel"] = {
 [1] = { "Current Level", 1, 60, 0 },
@@ -3972,20 +3972,20 @@ GF_BUTTONS_LIST = {
 [30] = { "60 Raid", 60, 60, 63, },
 	},
 	["LFGLFM"] = {
-[1] = { "LFM", 1, 60, },
-[2] = { "Spec1 LFG", 1, 60, },
-[3] = { "Spec2 LFG", 1, 60, },
-[4] = { "Spec3 LFG", 1, 60, },
-[5] = { "Class LFG", 1, 60, },
-[6] = { "LFG", 1, 60, },
+[1] = {"LFM"},
+[2] = {"Spec1 LFG"},
+[3] = {"Spec2 LFG"},
+[4] = {"Spec3 LFG"},
+[5] = {"Class LFG"},
+[6] = {"LFG"},
 	},
 	["LFGRole"] = {
-[1] = { GF_TANK, 1, 60, },
-[2] = { GF_HEALER, 1, 60, },
-[3] = { GF_DPS, 1, 60, },
-[4] = { GF_MELEE, 1, 60, },
-[5] = { GF_RANGE, 1, 60, },
-[6] = { GF_CASTER, 1, 60, },
+[1] = { GF_TANK},
+[2] = { GF_HEALER},
+[3] = { GF_DPS},
+[4] = { GF_MELEE},
+[5] = { GF_RANGE},
+[6] = { GF_CASTER},
 	},
 	["LFGDungeon"] = {
 [1] = { "Ragefire Chasm", 11, 18, 15, 5, },
@@ -4048,11 +4048,29 @@ GF_BUTTONS_LIST = {
 	["BlockList"] = {
 	},
 	["GroupChannelName"] = {
-[1] = { GF_WORLD_CHANNEL_NAME, 1, 60, 5, },
-[2] = { GF_LFG_CHANNEL_NAME, 1, 60, 10, },
-[3] = { GF_TRADE_CHANNEL_NAME, 1, 60, 10, },
-[4] = { GF_GENERAL_CHANNEL_NAME, 1, 60, 10, },
+[1] = { GF_WORLD_CHANNEL_NAME},
+[2] = { GF_LFG_CHANNEL_NAME},
+[3] = { GF_TRADE_CHANNEL_NAME},
+[4] = { GF_GENERAL_CHANNEL_NAME},
 	},
+}
+GF_LFG_GROUP_ZONES = {
+["Ahn'Qiraj"] = true,["Alterac Valley"] = true,["Arathi Basin"] = true,["Black Morass"] = true,["Blackfathom Deeps"] = true,["Blackrock Depths"] = true,["Blackrock Spire"] = true,["Blackwing Lair"] = true,["Crescent Grove"] = true,
+["Dire Maul"] = true,["Dragonmaw Retreat"] = true,["Emerald Sanctum"] = true,["Gilneas City"] = true,["Gnomeregan"] = true,["Hateforge Quarry"] = true,["Karazhan Crypt"] = true,["Lower Karazhan"] = true,["Maraudon"] = true,["Molten Core"] = true,
+["Naxxramas"] = true,["Onyxia's Lair"] = true,["Ragefire Chasm"] = true,["Razorfen Downs"] = true,["Razorfen Kraul"] = true,["Ruins of Ahn'Qiraj"] = true,["Scarlet Monastery"] = true,["Scholomance"] = true,["Shadowfang Keep"] = true,
+["Stormwind Vault"] = true,["Stormwrought Ruins"] = true,["Stratholme"] = true,["The Deadmines"] = true,["The Stockade"] = true,["The Temple of Atal'Hakkar"] = true,["Uldaman"] = true,["Upper Karazhan"] = true,["Wailing Caverns"] = true,
+["Warsong Gulch"] = true,["Zul'Farrak"] = true,["Zul'Gurub"] = true,
+}
+GF_RACE_CLASS_COMBOS = {
+[GF_DRUID] = {["Night Elf"]=true,["Tauren"]=true},
+[GF_HUNTER] = {["Human"]=true,["Night Elf"]=true,["Dwarf"]=true,["Gnome"]=true,["Undead"]=true,["Orc"]=true,["Troll"]=true,["Tauren"]=true,["High Elf"]=true,["Goblin"]=true},
+[GF_MAGE] = {["Human"]=true,["Dwarf"]=true,["Gnome"]=true,["Undead"]=true,["Orc"]=true,["Troll"]=true,["High Elf"]=true,["Goblin"]=true},
+[GF_PALADIN] = {["Human"]=true,["Dwarf"]=true,["High Elf"]=true},
+[GF_PRIEST] = {["Human"]=true,["Night Elf"]=true,["Dwarf"]=true,["Undead"]=true,["Troll"]=true,["High Elf"]=true},
+[GF_ROGUE] = {["Human"]=true,["Night Elf"]=true,["Dwarf"]=true,["Gnome"]=true,["Undead"]=true,["Orc"]=true,["Troll"]=true,["Tauren"]=true,["High Elf"]=true,["Goblin"]=true},
+[GF_SHAMAN] = {["Orc"]=true,["Troll"]=true,["Tauren"]=true},
+[GF_WARLOCK] = {["Human"]=true,["Gnome"]=true,["Undead"]=true,["Orc"]=true,["Troll"]=true,["Goblin"]=true},
+[GF_WARRIOR] = {["Human"]=true,["Night Elf"]=true,["Dwarf"]=true,["Gnome"]=true,["Undead"]=true,["Orc"]=true,["Troll"]=true,["Tauren"]=true,["High Elf"]=true,["Goblin"]=true,},
 }
 GF_MonsterEmoteFilters = {
 [1]	= "attempts to run away in fear",
@@ -4100,7 +4118,6 @@ GF_QUEST_CONVERT_NEGATIVE_ID = {
 }
 
 GF_LANGUAGE_CONVERT = {
-["起初我們並不熟悉， 漸漸地就熟悉起來了。"]=true,
 }
 -- Turtle additions
 GF_HIGH_ELF = "High Elf"
