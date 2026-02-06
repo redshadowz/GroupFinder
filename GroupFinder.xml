@@ -202,8 +202,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 	<Frame name="GF_OptionFrameBoxTemplate" inherits="OptionFrameBoxTemplate" virtual="true">
 		<Scripts>
 			<OnLoad>
-				this:SetBackdropBorderColor(0.4, 0.4, 0.4)
-				this:SetBackdropColor(0.15, 0.15, 0.15)
+				this:SetBackdropBorderColor(0.4,0.4,0.4)
+				this:SetBackdropColor(0.15,0.15,0.15)
 			</OnLoad>
 		</Scripts>
 	</Frame>
@@ -228,7 +228,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</EdgeSize>
 		</Backdrop>
 		<Size>
-			<AbsDimension x="320" y="240"/>
+			<AbsDimension x="320" y="140"/>
 		</Size>
 		<Anchors>
 			<Anchor point="TOP">
@@ -239,26 +239,14 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 		</Anchors>
 		<Layers>
 			<Layer level="ARTWORK">
-				<FontString inherits="GF_NormalFont" name="$parentHeadingLabel" nonspacewrap="false">
-					<Size>
-						<AbsDimension x="300" y="32"/>
-					</Size>
-					<Anchors>
-						<Anchor point="TOP">
-							<Offset>
-								<AbsDimension x="0" y="-16"/>
-							</Offset>
-						</Anchor>
-					</Anchors>
-				</FontString>
 				<FontString inherits="GF_NormalFont" name="$parentContentLabel" nonspacewrap="false">
 					<Size>
-						<AbsDimension x="300" y="96"/>
+						<AbsDimension x="300" y="20"/>
 					</Size>
 					<Anchors>
 						<Anchor point="TOP">
 							<Offset>
-								<AbsDimension x="0" y="-32"/>
+								<AbsDimension x="0" y="-25"/>
 							</Offset>
 						</Anchor>
 					</Anchors>
@@ -271,9 +259,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					<AbsDimension x="200" y="20"/>
 				</Size>
 				<Anchors>
-					<Anchor point="TOP" >
+					<Anchor point="CENTER" >
 						<Offset>
-							<AbsDimension x="0" y="-128"/>
+							<AbsDimension x="0" y="5"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -500,7 +488,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</FontString>
 				<FontString inherits="GF_NormalFont" name="$parentMoreLabel" justifyH="LEFT" hidden="true">
 					<Size>
-						<AbsDimension x="580" y="16"/>
+						<AbsDimension x="300" y="16"/>
 					</Size>
 					<Anchors>
 						<Anchor point="LEFT">
@@ -549,9 +537,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						GameTooltip:Hide()
 						GF_ResultItem_Hover_Off(this:GetParent())
 					</OnLeave>
-					<OnMouseUp>
-						GF_ListItem_OnMouseUp(this:GetParent():GetID())
-					</OnMouseUp>
+					<OnMouseDown>
+						GF_ToggleDropDownMenu(this,this:GetParent():GetID())
+					</OnMouseDown>
 				</Scripts>
 			</Frame>
 			<Button name="$parentGroupWhoButton" inherits="GF_ButtonTemplate" text="GF_WHO" hidden="true">
@@ -628,9 +616,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</Button>
 		</Frames>
 		<Scripts>
-			<OnMouseUp>
-				GF_ListItem_OnMouseUp(this:GetID())
-			</OnMouseUp>
+			<OnMouseDown>
+				GF_ToggleDropDownMenu(this,this:GetID())
+			</OnMouseDown>
 			<OnEnter>
 				GF_ResultItem_Hover_On(this,this:GetID())
 			</OnEnter>
@@ -702,14 +690,14 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						GF_DeletePlayer(this:GetParent():GetID());
+						GF_DeletePlayer(this:GetParent():GetID())
 					</OnClick>
 				</Scripts>
 			</Button>
 		</Frames>
 		<Scripts>
 			<OnClick>
-				GF_EditBlackListItem(this:GetName());
+				GF_EditBlackListItem(this:GetName())
 			</OnClick>
 		</Scripts>
 		<HighlightTexture file="Interface\FriendsFrame\UI-FriendsFrame-HighlightBar" alphaMode="ADD">
@@ -2906,8 +2894,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						<Scripts>
 							<OnClick>
 								if GF_BlackListOffset >0 then
-									GF_BlackListOffset = GF_BlackListOffset - 20;
-									GF_UpdateBlackListItems();
+									GF_BlackListOffset = GF_BlackListOffset - 20
+									GF_UpdateBlackListItems()
 								end
 							</OnClick>
 						</Scripts>
@@ -2930,8 +2918,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						<Scripts>
 							<OnClick>
 								if getn(GF_BlackList[GF_RealmName]) >GF_BlackListOffset + 20 then
-									GF_BlackListOffset = GF_BlackListOffset + 20;
-									GF_UpdateBlackListItems();
+									GF_BlackListOffset = GF_BlackListOffset + 20
+									GF_UpdateBlackListItems()
 								end
 							</OnClick>
 						</Scripts>
@@ -2943,9 +2931,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					<Frame name="GF_AddPlayerFrame" inherits="GF_DialogFrameTemplate_Blacklist" hidden="true">
 						<Scripts>
 							<OnLoad>
-								GF_AddPlayerFrameHeadingLabel:SetText(GF_ADD_PLAYER);
-								GF_AddPlayerFrameContentLabel:SetText(GF_ENTER_PLAYER_NAME);
-								GF_AddPlayerFrameEditBox:Show();
+								GF_AddPlayerFrameContentLabel:SetText(GF_ENTER_PLAYER_NAME)
+								GF_AddPlayerFrameEditBox:Show()
 							</OnLoad>
 						</Scripts>
 					</Frame>
@@ -2962,7 +2949,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Anchors>
 						<Scripts>
 							<OnClick>
-								GF_AddPlayerFrame:Show();
+								GF_AddPlayerFrame:Show()
 							</OnClick>
 						</Scripts>
 					</Button>
@@ -3005,30 +2992,30 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<FontString inherits="ChatFontNormal"/>
 								<Scripts>
 									<OnLoad>
-										this:SetTextInsets(4,0,0,0);
-										this:SetFocus();
+										this:SetTextInsets(4,0,0,0)
+										this:SetFocus()
 									</OnLoad>
 									<OnEditFocusLost>
 										GF_BlackListItemSaveChanges()
 										GF_BlackListItemEditFrame:Hide()
-										this:HighlightText(string.len(this:GetText())+1);
+										this:HighlightText(string.len(this:GetText())+1)
 									</OnEditFocusLost>
 									<OnTabPressed>
 										GF_BlackListItemSaveChanges()
-										this:ClearFocus();
+										this:ClearFocus()
 										GF_BlackListItemEditFrame:Hide()
-										this:HighlightText(string.len(this:GetText())+1);
+										this:HighlightText(string.len(this:GetText())+1)
 									</OnTabPressed>
 									<OnEnterPressed>
 										GF_BlackListItemSaveChanges()
-										this:ClearFocus();
+										this:ClearFocus()
 										GF_BlackListItemEditFrame:Hide()
-										this:HighlightText(string.len(this:GetText())+1);
+										this:HighlightText(string.len(this:GetText())+1)
 									</OnEnterPressed>
 									<OnEscapePressed>
-										this:ClearFocus();
+										this:ClearFocus()
 										GF_BlackListItemEditFrame:Hide()
-										this:HighlightText(string.len(this:GetText())+1);
+										this:HighlightText(string.len(this:GetText())+1)
 									</OnEscapePressed>
 								</Scripts>
 							</EditBox>
@@ -3038,7 +3025,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				<Scripts>
 					<OnLoad>
 						for i = 1, 20 do
-							getglobal("GF_BlackListItem"..i):SetPoint("TOP", 0, i*-18);
+							getglobal("GF_BlackListItem"..i):SetPoint("TOP", 0, i*-18)
 						end
 					</OnLoad>
 				</Scripts>
@@ -5153,6 +5140,147 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							<OnEditFocusLost>
 								GF_UrlCopyFrame:Hide()
 							</OnEditFocusLost>
+						</Scripts>
+					</EditBox>
+				</Frames>
+			</Frame>
+			<Frame name="GF_EditPlayerNoteFrame" inherits="GF_OptionFrameBoxTemplate" toplevel="true" enableMouse="true" frameStrata="DIALOG" hidden="true">
+				<Size>
+					<AbsDimension x="320" y="80"/>
+				</Size>
+				<Anchors>
+					<Anchor point="CENTER">
+						<Offset>
+							<AbsDimension x="0" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border">
+					<BackgroundInsets>
+						<AbsInset left="4" right="4" top="4" bottom="4"/>
+					</BackgroundInsets>
+					<EdgeSize>
+						<AbsValue val="16"/>
+					</EdgeSize>
+					<BorderColor r="0.6" g="0.6" b="0.6"/>
+				</Backdrop>
+				<Layers>
+					<Layer level ="BACKGROUND">
+						<Texture file="Interface\ChatFrame\ChatFrameBackground">
+							<Anchors>
+								<Anchor point="TOPLEFT">
+									<Offset x="4" y="-4"/>
+								</Anchor>
+								<Anchor point="BOTTOMRIGHT">
+									<Offset x="-4" y="4"/>
+								</Anchor>
+							</Anchors>
+							<Gradient orientation="VERTICAL">
+								<MinColor r="0" g="0" b="0" a="0.9"/>
+								<MaxColor r="0.2" g="0.2" b="0.2" a="0.9"/>
+							</Gradient>
+						</Texture>
+					</Layer>
+					<Layer level="ARTWORK">
+						<FontString name="$parentTitleLabel" justifyH="LEFT" inherits="GF_NormalFont" nonspacewrap="false">
+							<Anchors>
+								<Anchor point="TOPLEFT">
+									<Offset>
+										<AbsDimension x="15" y="-8"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>										
+					</Layer>
+				</Layers>
+				<Frames>
+					<Button name="$parentCloseButton" inherits="UIPanelCloseButton">
+						<Anchors>
+							<Anchor point="TOPRIGHT">
+								<Offset>
+									<AbsDimension x="3" y="2"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								GF_EditPlayerNoteFrame:Hide()
+							</OnClick>
+						</Scripts>
+					</Button>
+					<Button name="GF_PlayerNoteFrameOKButton" inherits="GF_ButtonTemplate" text="GF_OK">
+						<Size>
+							<AbsDimension x="50" y="25"/>
+						</Size>
+						<Anchors>
+							<Anchor point="BOTTOMRIGHT">
+								<Offset>
+									<AbsDimension x="-20" y="7"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								GF_PlayerNotes[GF_EditPlayerNoteFrameTitleLabel:GetText()] = GF_EditPlayerNoteFrameEditBox:GetText()
+								GF_UpdateResults()
+								GF_EditPlayerNoteFrame:Hide()
+							</OnClick>
+						</Scripts>
+					</Button>
+					<Button name="GF_PlayerNoteFrameDeleteButton" inherits="GF_ButtonTemplate" text="GF_DELETE">
+						<Size>
+							<AbsDimension x="50" y="25"/>
+						</Size>
+						<Anchors>
+							<Anchor point="BOTTOMLEFT">
+								<Offset>
+									<AbsDimension x="15" y="7"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								GF_PlayerNotes[GF_EditPlayerNoteFrameTitleLabel:GetText()] = ""
+								GF_UpdateResults()
+								GF_EditPlayerNoteFrame:Hide()
+							</OnClick>
+						</Scripts>
+					</Button>
+					<EditBox name="$parentEditBox" inherits="GF_AbstractEditBox" letters="100">
+						<Size>
+							<AbsDimension x="280" y="50"/>
+						</Size>
+						<Anchors>
+							<Anchor point="TOP" >
+								<Offset>
+									<AbsDimension x="0" y="-8"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<FontString inherits="ChatFontNormal"/>
+						<Scripts>
+							<OnLoad>
+								this:SetTextInsets(4,0,0,0)
+								this:SetFocus()
+							</OnLoad>
+							<OnShow>
+								this:SetFocus()
+								this:HighlightText(string.len(this:GetText())+1)
+							</OnShow>
+							<OnEditFocusLost>
+								GF_EditPlayerNoteFrame:Hide()
+							</OnEditFocusLost>
+							<OnTabPressed>
+								GF_EditPlayerNoteFrame:Hide()
+							</OnTabPressed>
+							<OnEnterPressed>
+								GF_PlayerNotes[GF_EditPlayerNoteFrameTitleLabel:GetText()] = GF_EditPlayerNoteFrameEditBox:GetText()
+								GF_UpdateResults()
+								GF_EditPlayerNoteFrame:Hide()
+							</OnEnterPressed>
+							<OnEscapePressed>
+								GF_EditPlayerNoteFrame:Hide()
+							</OnEscapePressed>
 						</Scripts>
 					</EditBox>
 				</Frames>

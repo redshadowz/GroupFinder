@@ -73,6 +73,8 @@ local GF_ProcessedFirstMessage				= {}
 local GF_PlayerSystemMessage				= {}
 local GF_MiniMapMessages					= {0,0,0,0,0,0,{}}
 local GF_LogMessageCodes = { GF_LOGGED_GROUPS, GF_LOGGED_NEW, GF_LOGGED_FILTERED, GF_LOGGED_CHAT, GF_LOGGED_TRADES, GF_LOGGED_LOOT, GF_LOGGED_SPAM, GF_LOGGED_BLACKLIST, GF_LOGGED_BELOWLEVEL, GF_LOGGED_ME, GF_LOGGED_GUILD }
+local info 									= {}
+GF_PlayerNotes								= {}
 
 local GF_BaseFontSize						= 12
 local GF_ChatChannelsGroups					= {}
@@ -125,6 +127,7 @@ function GF_LoadVariables()
 	if not GF_WhisperLogData[GF_RealmName]["Guild"] then GF_WhisperLogData[GF_RealmName]["Guild"] = {""} end
 	if not GF_PreviousMessage then GF_PreviousMessage = {} end
 	if not GF_PlayerMessages then GF_PlayerMessages = {} end
+	if not GF_PlayerNotes then GF_PlayerNotes = {} end
 
 	if not GF_SavedVariables then GF_SavedVariables = {} end
 	if not GF_SavedVariables.version or GF_SavedVariables.version < GF_CurrentVersion then
@@ -398,11 +401,12 @@ function GF_SetStringSize()
 	"GF_ChatFilterGroupsInMinimapCheckButtonTextLabel","GF_ChatFilterShowChatCheckButtonTextLabel","GF_ChatFilterShowTradesCheckButtonTextLabel","GF_ChatFilterShowLootCheckButtonTextLabel","GF_ChatFilterShowGuildsCheckButtonTextLabel",
 	"GF_LogFilterDropdownButtonTextLabel","GF_LogChannelFilterDropdownButtonTextLabel","GF_AutoJoinGroupChannelCheckButtonTextLabel","GF_FrameSpamFilterCheckButtonTextLabel","GF_FrameSystemFilterCheckButtonTextLabel",
 	"GF_AutomaticBlacklistCheckButtonTextLabel","GF_FrameShowFormattedChatCheckButtonTextLabel","GF_AlwaysShowGuildFriendsCheckButtonTextLabel","GF_FrameQuestModCheckButtonTextLabel","GF_PurgePFDBCheckButtonTextLabel",
-	"GF_UseClickCombosCheckButtonTextLabel","GF_UseFriendsListCheckButtonTextLabel","GF_DisableHardcoreCheckButtonTextLabel","GF_AutoBlacklistTradesCheckButtonTextLabel","GF_AutoBlacklistGuildCheckButtonTextLabel",
+	"GF_UseClickCombosCheckButtonTextLabel","GF_UseFriendsListCheckButtonTextLabel","GF_DisableHardcoreCheckButtonTextLabel","GF_AutoBlacklistTradesCheckButtonTextLabel","GF_AutoBlacklistGuildCheckButtonTextLabel","GF_EditPlayerNoteFrameTitleLabel",
 	"GF_AutoBlacklistChatCheckButtonTextLabel","GF_AutoBlacklistForeignCheckButtonTextLabel","GF_UseNormalFontsCheckButtonTextLabel","GF_BlockListDropdownTextLabel","GF_SquareMinimapCheckButtonTextLabel","GF_MinimapIconTextLabel", }
 	for i=1, getn(frameNames) do getglobal(frameNames[i]):SetFont(fontName,GF_BaseFontSize) end
-	frameNames = { "GF_GetWhoTotalNames","GF_AnnounceToLFGButton","GF_GetWhoButton","GF_GetWhoSkipButton","GF_GetWhoWhisperButton","GF_GetWhoNameLabel","GF_PageLabel","GF_ResultsLabel","GF_ShowSearchButton","GF_SettingsFrameButton",
-	"GF_ShowBlacklistButton","GF_LogFrameButton","GF_LFGFrameToggleButton","GF_GetWhoFrameToggleButton","GF_ConvertLogMessagesToURL","GF_UIScaleSliderUpdateButton","GF_ResetAllSettingsButton","GF_AddPlayerButton","GF_BlackListFramePageLabel", }
+	frameNames = { "GF_GetWhoTotalNames","GF_AnnounceToLFGButton","GF_GetWhoButton","GF_GetWhoSkipButton","GF_GetWhoWhisperButton","GF_GetWhoNameLabel","GF_PageLabel","GF_ResultsLabel","GF_ShowSearchButton",	"GF_SettingsFrameButton",
+	"GF_PlayerNoteFrameOKButton","GF_PlayerNoteFrameDeleteButton","GF_ShowBlacklistButton","GF_LogFrameButton","GF_LFGFrameToggleButton","GF_GetWhoFrameToggleButton","GF_ConvertLogMessagesToURL","GF_UIScaleSliderUpdateButton",
+	"GF_ResetAllSettingsButton","GF_AddPlayerButton","GF_BlackListFramePageLabel", }
 	for i=1, getn(frameNames) do getglobal(frameNames[i]):SetFont(fontName,fontSizeButton) end
 	frameNames = {"GF_LFGMyRole","GF_WorldAnnounceMessageTextLabel","GF_ShowGroupsInLabel","GF_ShowChatTypesLabel","GF_LogShowWhisperHistoryLabel","GF_LogFrameInternalFrameTitle","GF_ShowMainFrameLabel",
 	"GF_GroupChannelNameTextLabel","GF_BlockListTextLabel","GF_BlockAddListButton", }
@@ -708,7 +712,8 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 			GF_BlackList[GF_RealmName][name] = true
 			GF_UpdateBlackListItems()
 		end
-		old_AddIgnore(name)
+		GF_AddChatMessage(name..GF_NOW_BEING_IGNORED,"SYSTEM","SYSTEM")
+		--old_AddIgnore(name)
 	end
 	local old_SendWho = SendWho
 	function SendWho(...)
@@ -3070,8 +3075,6 @@ function GF_UpdateResults()
 	local groupListLength = getn(GF_FilteredResultsList)
 	GF_MinimapIconTextLabel:SetText(groupListLength)
 	GF_MinimapIconTextLabel:Show()
--- I'll have to reset the offset when I change the offsetsize... But I really want to keep the page I was on, so find page, then multiply by new offsetsize
--- 
 	while GF_ResultsListOffset > (groupListLength + .1) do GF_ResultsListOffset = GF_ResultsListOffset - GF_ResultsListOffsetSize end
 	GF_ResultsLabel:SetText(GF_FOUND..groupListLength.." / "..getn(GF_MessageList[GF_RealmName]))
 	GF_PageLabel:SetText(GF_PAGE.." "..math.ceil((GF_ResultsListOffset + .1) / GF_ResultsListOffsetSize).." / "..math.max(math.ceil(groupListLength / GF_ResultsListOffsetSize),1))
@@ -3150,22 +3153,93 @@ function GF_GetLevelString(level,flags)
 	elseif flags[1] ~= "" then if level > 60 then return "[60]|r |cffffffff["..flags[1].."]|r " else return "["..level.."]|r |cffffffff["..flags[1].."]|r " end
 	else return "["..level.."]|r " end
 end
-function GF_ListItem_OnMouseUp(id)
+
+function GF_ToggleDropDownMenu(frame,id)
 	if not GF_HandleItemRefLinks("player:"..GF_FilteredResultsList[GF_ResultsListOffset+id].op,text,arg1) then
-		if (arg1 == "RightButton") then
+		if arg1 == "RightButton" then
 			HideDropDownMenu(1)
 			if GF_FilteredResultsList[GF_ResultsListOffset+id].op ~= UnitName("player") then
-				FriendsDropDown.initialize = FriendsFrameDropDown_Initialize
-				FriendsDropDown.displayMode = "MENU"
-				FriendsDropDown.name = GF_FilteredResultsList[GF_ResultsListOffset+id].op
-				ToggleDropDownMenu(1, nil, FriendsDropDown, "cursor")
-				return
+				GameTooltip:Hide()
+				GF_DropDownMenu = CreateFrame("Frame", "GF_DropDownMenu", frame, "UIDropDownMenuTemplate")
+				GF_DropDownMenu.name = GF_FilteredResultsList[GF_ResultsListOffset+id].op
+				UIDropDownMenu_Initialize(GF_DropDownMenu, GF_CreateDropDownMenu, "MENU")
+				ToggleDropDownMenu(1, nil, GF_DropDownMenu, "cursor")
 			end
 		else
 			CloseDropDownMenus(1)
 			GF_ListItemAuxLeft_ShowTooltip(getglobal("GF_NewItem"..id),id,true)
 		end
 	end
+end
+function GF_CreateDropDownMenu()
+-- isTitle,text,notCheckable,hasArrow,disabled,func,value,owner,icon,checked,tooltipTitle,tooltipText, --tCoordLeft,tCoordRight,tCoordTop,tCoordBottom,justifyH,r,g,b,notClickable,textR,textG,textB,hasOpacity,opacity,opacityFunc,cancelFunc,swatchFunc,keepShownOnClick,hasColorSwatch
+-- whisper, invite, target, ignore, cancel
+	info = {}
+	info.isTitle = true
+	info.text = GF_DropDownMenu.name
+	info.notCheckable = true
+	UIDropDownMenu_AddButton(info, 1)
+
+	info = {}
+	info.isTitle = nil
+	info.notCheckable = true
+	info.hasArrow = false
+	info.disabled = nil
+	info.text = GF_EDIT_NOTE
+	info.func = function() GF_EditPlayerNote(GF_DropDownMenu.name) end
+	info.value = nil
+	UIDropDownMenu_AddButton(info, 1)	
+
+	info = {}
+	info.isTitle = nil
+	info.notCheckable = true
+	info.hasArrow = false
+	info.disabled = nil
+	info.text = WHISPER
+	info.func = function() ChatFrame_SendTell(GF_DropDownMenu.name) end
+	info.value = nil
+	UIDropDownMenu_AddButton(info, 1)
+
+	info = {}
+	info.isTitle = nil
+	info.notCheckable = true
+	info.hasArrow = false
+	info.disabled = nil
+	info.text = PARTY_INVITE
+	info.func = function() InviteByName(GF_DropDownMenu.name) end
+	info.value = nil
+	UIDropDownMenu_AddButton(info, 1)	
+
+	info = {}
+	info.isTitle = nil
+	info.notCheckable = true
+	info.hasArrow = false
+	info.disabled = nil
+	info.text = WHO
+	info.func = function()
+		for i=1, getn(GF_UrgentWhoRequest) do
+			if GF_UrgentWhoRequest[i] == GF_DropDownMenu.name then table.remove(GF_UrgentWhoRequest, i) break end
+		end
+		if GF_NextAvailableWhoTime + 1 > time() then 
+			DEFAULT_CHAT_FRAME:AddMessage(GF_SENDING_WHO_FOR..GF_DropDownMenu.name.." - "..math.ceil(GF_NextAvailableWhoTime - time() + getn(GF_UrgentWhoRequest) * 30)..GF_SECONDS, 1, 1, 0.5)
+		else
+			DEFAULT_CHAT_FRAME:AddMessage(GF_SENDING_WHO_FOR..GF_DropDownMenu.name, 1, 1, 0.5)
+		end
+		table.insert(GF_UrgentWhoRequest,GF_DropDownMenu.name)
+		GF_UrgentWhoRequest[GF_DropDownMenu.name] = time()
+	end
+	info.value = nil
+	UIDropDownMenu_AddButton(info, 1)	
+
+	info = {}
+	info.isTitle = nil
+	info.notCheckable = true
+	info.hasArrow = false
+	info.disabled = nil
+	info.text = IGNORE
+	info.func = function() AddIgnore(GF_DropDownMenu.name) end
+	info.value = nil
+	UIDropDownMenu_AddButton(info, 1)	
 end
 function GF_ListItemAuxLeft_ShowTooltip(frame,id,showall)
 	if not id then return end
@@ -3188,6 +3262,9 @@ function GF_ListItemAuxLeft_ShowTooltip(frame,id,showall)
 		if GF_PlayerMessages[GF_FilteredResultsList[GF_ResultsListOffset+id].op][2][3] and GF_PlayerMessages[GF_FilteredResultsList[GF_ResultsListOffset+id].op][2][3] ~= GF_FilteredResultsList[GF_ResultsListOffset+id].message and GF_PlayerMessages[GF_FilteredResultsList[GF_ResultsListOffset+id].op][2][1] ~= GF_PlayerMessages[GF_FilteredResultsList[GF_ResultsListOffset+id].op][2][2] and GF_PlayerMessages[GF_FilteredResultsList[GF_ResultsListOffset+id].op][2][2] ~= GF_PlayerMessages[GF_FilteredResultsList[GF_ResultsListOffset+id].op][2][3] and GF_PlayerMessages[GF_FilteredResultsList[GF_ResultsListOffset+id].op][2][3] ~= "ZZZzzz123654" then
 			GameTooltip:AddLine(GF_PlayerMessages[GF_FilteredResultsList[GF_ResultsListOffset+id].op][2][3], 0.9, 0.9, 1.0, 1, 1)
 		end
+	end
+	if GF_PlayerNotes[GF_FilteredResultsList[GF_ResultsListOffset+id].op] and GF_PlayerNotes[GF_FilteredResultsList[GF_ResultsListOffset+id].op] ~= "" then
+		GameTooltip:AddLine(GF_PLAYER_NOTE..GF_PlayerNotes[GF_FilteredResultsList[GF_ResultsListOffset+id].op],1,1,0,1,1)
 	end
 	GameTooltip:Show()
 end
@@ -3243,6 +3320,11 @@ function GF_LFMWhisperRequestInviteButton(frame,id)
 	SendChatMessage(specString..GF_INVITE_PLEASE,"WHISPER",nil,GF_FilteredResultsList[GF_ResultsListOffset+id].op)
 	GF_RequestInviteTime[GF_FilteredResultsList[GF_ResultsListOffset+id].op] = time() + 120
 	getglobal(frame:GetName().."LFMWhisperRequestInviteButton"):Hide()
+end
+function GF_EditPlayerNote(name)
+	GF_EditPlayerNoteFrameTitleLabel:SetText(name)
+	GF_EditPlayerNoteFrameEditBox:SetText(GF_PlayerNotes[name] or "")
+	GF_EditPlayerNoteFrame:Show()
 end
 
 function GF_WhisperHistoryButtonPressed(id,override,nolog) -- Whisper/Guild History Functions
