@@ -1346,7 +1346,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										GF_SavedVariables.showchattexts = this:GetChecked()
 									</OnClick>
 									<OnLoad>
-										getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_CHAT)
+										getglobal(this:GetName().."TextLabel"):SetText(GF_CHAT)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -1363,7 +1363,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										GF_SavedVariables.showtradestexts = this:GetChecked()
 									</OnClick>
 									<OnLoad>
-										getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_TRADES)
+										getglobal(this:GetName().."TextLabel"):SetText(GF_TRADES)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -1380,7 +1380,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										GF_SavedVariables.showloottexts = this:GetChecked()
 									</OnClick>
 									<OnLoad>
-										getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_LOOT)
+										getglobal(this:GetName().."TextLabel"):SetText(GF_LOOT)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -1397,7 +1397,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										GF_SavedVariables.showguilds = this:GetChecked()
 									</OnClick>
 									<OnLoad>
-										getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_GUILDS)
+										getglobal(this:GetName().."TextLabel"):SetText(GF_GUILDS)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
