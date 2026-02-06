@@ -686,7 +686,7 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 	local old_ChatFrame_OnEvent = ChatFrame_OnEvent
 	function ChatFrame_OnEvent(event) -- arg1(message), arg2(sender), arg4("Channel#." "(City/Trade)" "channelName"), arg5, (nameOfPlayerWhoLooted), arg7(zoneChannel#), arg8(channel#), arg9("City/Trade" "channelName")
 		if not arg2 or arg2 == "" then arg2 = "SYSTEM" end
-		if not arg1 or not GF_TextColors[string.sub(event,10)] or (event == "CHAT_MSG_CHANNEL" and string.lower(arg9) == "lft") then old_ChatFrame_OnEvent(event) return end
+		if not arg1 or not GF_TextColors[string.sub(event,10)] or string.lower(arg9) == "lft" then old_ChatFrame_OnEvent(event) return end
 		if not GF_ProcessedFirstMessage[arg2] then
 			GF_ChatFunctions("GF_"..event,event,arg1,arg2,arg8,arg9)
 			if GF_SavedVariables.showformattedchat and GF_PreviousMessage[arg2] and GF_PreviousMessage[arg2][1] then
@@ -1562,7 +1562,7 @@ function GF_UpdateGroupsFrame()
 		GF_UpdateAndRequestTimer = 30
 		for i=1, getn(GF_MessageList[GF_RealmName]) do
 			if GF_SavedVariables.usewhoongroups and not GF_WhoTable[GF_RealmName][GF_MessageList[GF_RealmName][i].op] and not GF_WhoQueue[GF_MessageList[GF_RealmName][i].op] then
-				if GF_SavedVariables.usefriendslist then if not GF_SavedVariables.friendsToRemove[name] and (not GF_FriendUnknown[name] or GF_FriendUnknown[name] + 900 > time()) then GF_AddNameToWhoQueue(GF_MessageList[GF_RealmName][i].op,true,true) end else GF_AddNameToWhoQueue(GF_MessageList[GF_RealmName][i].op,true) end
+				if GF_SavedVariables.usefriendslist then if not GF_SavedVariables.friendsToRemove[name] and (not GF_FriendUnknown[name] or GF_FriendUnknown[name] + 900 < time()) then GF_AddNameToWhoQueue(GF_MessageList[GF_RealmName][i].op,true,true) end else GF_AddNameToWhoQueue(GF_MessageList[GF_RealmName][i].op,true) end
 			end
 			if GF_AddonMakeAListOfGroupsForSending and not GF_AddonOPSentNamesOnLogin[GF_MessageList[GF_RealmName][i].op] and GF_MessageList[GF_RealmName][i].t + 300 > time() then
 				GF_AddonGroupDataToBeSentBuffer[GF_MessageList[GF_RealmName][i].op] = GF_MessageList[GF_RealmName][i]
@@ -2098,10 +2098,7 @@ function GF_CheckForSystem(arg1)
 				end
 				for i=1, GetNumFriends() do
 					local name,level,class,_,online = GetFriendInfo(i)
-					if name then
-						if online then GF_Friends[name] = true else GF_Friends[name] = nil end
-						if GF_Classes[class] and level and level > 0 then GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], "", time()} end
-					end
+					if not online or not name or name == UNKNOWN or not class or class == UNKNOWN then else GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], "", time()} end
 				end
 			end
 			if GF_WhoTable[GF_RealmName][wordString] then
@@ -3018,14 +3015,9 @@ function GF_UpdateFriendsList()
 	GF_Friends = {}
 	for i=1, GetNumFriends() do
 		local name,level,class,_,online = GetFriendInfo(i)
-		if name then
-			if class and GF_Classes[class] and level and level > 0 then
-				if online then GF_Friends[name] = true else GF_Friends[name] = nil end
-				GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], "", time()}
-			elseif not GF_FriendUnknown[name] then
-				GF_FriendUnknown[name] = time()
-			end
-		end
+		if not online or not name or name == UNKNOWN or not class or class == UNKNOWN then GF_FriendUnknown[name] = time() GF_Friends[name] = nil break end
+		GF_Friends[name] = true
+		GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], "", time()}
 		if GF_SavedVariables.friendsToRemove[name] then RemoveFriend(i) GF_BlockingFriendsListUpdates = nil end
 	end
 	for name,_ in GF_SavedVariables.friendsToRemove do
