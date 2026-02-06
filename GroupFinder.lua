@@ -47,8 +47,8 @@ local GF_AddonAllNamesForResponseToLogin	= {}
 local GF_AddonNamesToBeSentAsARequest		= {}
 local GF_AddonOPSentNamesOnLogin			= {}
 local GF_AddonGroupDataToBeSentBuffer		= {}
+local GF_AddonMakeAListOfGroupsForSending	= nil
 local GF_AddonListOfGuildAndPartyMembersWithAddon = {}
-local GF_AddonTimeSinceLastUpdate			= 0
 local GF_AddonNamesFromWhoSinceLoggedOn		= {}
 local GF_AddonNeedToBroadcastSomething		= nil
 
@@ -61,7 +61,7 @@ local GF_Guildies							= {}
 local GF_CurrentNumFriends					= 0
 local GF_CurrentNumGuildies					= 0
 local GF_UpdateTicker						= 0
-local GF_TimeTillNextBroadcast				= 5
+local GF_TimeTillNextBroadcast				= 1
 local GF_UpdateAndRequestTimer				= 1
 local GF_UpdateWhoDataViaFriendsListTimer	= 1
 local GF_BlockingFriendsListUpdates			= nil
@@ -363,14 +363,17 @@ function GF_LoadSettings()
 end
 function GF_SetStringSize()
 	local fontName,fontSizeMinimap,fontSizeLarge,fontSizeButton
+	local fontAdjust = 0
 	if GF_SavedVariables.normalfonts then fontName = ChatFontNormal:GetFont() else fontName = "Fonts\\ARIALN.TTF" end
-	GF_UIScaleSliderLabel:SetText("Group Finder")
-	GF_UIScaleSliderLabel:SetFont(fontName,12)
+	GF_UIScaleSliderLabel:SetText("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 ")
+	for i = 0, 100 do
+		GF_UIScaleSliderLabel:SetFont(fontName,14-i)
+		if GF_UIScaleSliderLabel:GetStringWidth() > 450 then fontAdjust = fontAdjust + 1 else break end
+	end
+	GF_BaseFontSize = 13 - fontAdjust fontSizeLarge = 15 - fontAdjust fontSizeButton = 13 - fontAdjust fontSizeMinimap = 11 - fontAdjust
+	
+--	14 = 444, 13 = 417(6%/7%), 12 = 369(17%/14%), 11 = 343, 10 = 313
 
-	if GF_UIScaleSliderLabel:GetStringWidth() > 70 then GF_BaseFontSize = 10 fontSizeLarge = 12 fontSizeButton = 11 fontSizeMinimap = 8
-	elseif GF_UIScaleSliderLabel:GetStringWidth() > 65 then GF_BaseFontSize = 11 fontSizeLarge = 13 fontSizeButton = 12 fontSizeMinimap = 10
-	elseif GF_UIScaleSliderLabel:GetStringWidth() > 60 then GF_BaseFontSize = 12 fontSizeLarge = 14 fontSizeButton = 12 fontSizeMinimap = 10
-	else GF_BaseFontSize = 13 fontSizeLarge = 15 fontSizeButton = 13 fontSizeMinimap = 11 end
 	for i=0,19 do
 		getglobal("GF_WhisperHistoryButton"..i):SetFont(fontName,fontSizeLarge)
 	end
@@ -396,7 +399,7 @@ function GF_SetStringSize()
 	"GF_LogFilterDropdownButtonTextLabel","GF_LogChannelFilterDropdownButtonTextLabel","GF_AutoJoinGroupChannelCheckButtonTextLabel","GF_FrameSpamFilterCheckButtonTextLabel","GF_FrameSystemFilterCheckButtonTextLabel",
 	"GF_AutomaticBlacklistCheckButtonTextLabel","GF_FrameShowFormattedChatCheckButtonTextLabel","GF_AlwaysShowGuildFriendsCheckButtonTextLabel","GF_FrameQuestModCheckButtonTextLabel","GF_PurgePFDBCheckButtonTextLabel",
 	"GF_UseClickCombosCheckButtonTextLabel","GF_UseFriendsListCheckButtonTextLabel","GF_DisableHardcoreCheckButtonTextLabel","GF_AutoBlacklistTradesCheckButtonTextLabel","GF_AutoBlacklistGuildCheckButtonTextLabel",
-	"GF_AutoBlacklistChatCheckButtonTextLabel","GF_AutoBlacklistForeignCheckButtonTextLabel","GF_UseNormalFontsCheckButtonTextLabel","GF_BlockListDropdownTextLabel","GF_SquareMinimapCheckButtonTextLabel" }
+	"GF_AutoBlacklistChatCheckButtonTextLabel","GF_AutoBlacklistForeignCheckButtonTextLabel","GF_UseNormalFontsCheckButtonTextLabel","GF_BlockListDropdownTextLabel","GF_SquareMinimapCheckButtonTextLabel","GF_MinimapIconTextLabel", }
 	for i=1, getn(frameNames) do getglobal(frameNames[i]):SetFont(fontName,GF_BaseFontSize) end
 	frameNames = { "GF_GetWhoTotalNames","GF_AnnounceToLFGButton","GF_GetWhoButton","GF_GetWhoSkipButton","GF_GetWhoWhisperButton","GF_GetWhoNameLabel","GF_PageLabel","GF_ResultsLabel","GF_ShowSearchButton","GF_SettingsFrameButton",
 	"GF_ShowBlacklistButton","GF_LogFrameButton","GF_LFGFrameToggleButton","GF_GetWhoFrameToggleButton","GF_ConvertLogMessagesToURL","GF_UIScaleSliderUpdateButton","GF_ResetAllSettingsButton","GF_AddPlayerButton","GF_BlackListFramePageLabel", }
@@ -1215,7 +1218,7 @@ function GF_AddChatMessage(arg1,arg2,event)
 end
 function GF_ChatGetChannelsGroups() -- How do other servers handle Hardcore group toggles? Addon might not work on other servers with Hardcore.. I could simply enable all channels and only turn off if known
 	for i=1,NUM_CHAT_WINDOWS do
-		GF_ChatChannelsGroups[i] = { ["channel"] = {},["group"] = { }, }
+		GF_ChatChannelsGroups[i] = { ["channel"] = {},["group"] = { ["HARDCORE"] = true }, }
 		local channellist = { GetChatWindowChannels(i) }
 		for j=1, getn(channellist) do
 			GF_ChatChannelsGroups[i].channel[string.lower(channellist[j])] = true
@@ -1224,7 +1227,7 @@ function GF_ChatGetChannelsGroups() -- How do other servers handle Hardcore grou
 		for j=1, getn(channellist) do
 			GF_ChatChannelsGroups[i].group[channellist[j]] = true
 		end
-		if GF_PlayingOnTurtle and getglobal("TW_HARDCORE_CHAT"..i) and getglobal("TW_HARDCORE_CHAT"..i) == 1 then GF_ChatChannelsGroups[i].group["HARDCORE"] = true end
+		if GF_PlayingOnTurtle and getglobal("TW_HARDCORE_CHAT"..i) and getglobal("TW_HARDCORE_CHAT"..i) == 0 then GF_ChatChannelsGroups[i].group["HARDCORE"] = nil end
 	end
 	GF_ChatJoinedChannels = {}
 	local chanList = { GetChannelList() }
@@ -1446,7 +1449,7 @@ function GF_WhoListUpdated()
 		if GF_Classes[class] then
 			GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], guild, time() }
 			GF_AddonWhoDataToBeSentBuffer[name] = GF_WhoTable[GF_RealmName][name]
-			GF_AddonNamesFromWhoSinceLoggedOn[name] = true
+			GF_AddonNamesFromWhoSinceLoggedOn[name] = time()
 		end
 		if GF_UrgentWhoRequest[name] then GF_UrgentWhoRequest[name] = nil if GF_UpdateAndRequestTimer > 4 then GF_UpdateAndRequestTimer = 5 end end
 		if GF_IsGuildieOrPartyMemberUsingAddon() then GF_AddonNeedToBroadcastSomething = true end
@@ -1556,7 +1559,13 @@ function GF_UpdateGroupsFrame()
 			if GF_SavedVariables.usewhoongroups and not GF_WhoTable[GF_RealmName][GF_MessageList[GF_RealmName][i].op] and not GF_WhoQueue[GF_MessageList[GF_RealmName][i].op] then
 				if GF_SavedVariables.usefriendslist then if not GF_SavedVariables.friendsToRemove[name] and (not GF_FriendUnknown[name] or GF_FriendUnknown[name] + 900 > time()) then GF_AddNameToWhoQueue(GF_MessageList[GF_RealmName][i].op,true,true) end else GF_AddNameToWhoQueue(GF_MessageList[GF_RealmName][i].op,true) end
 			end
+			if GF_AddonMakeAListOfGroupsForSending and not GF_AddonOPSentNamesOnLogin[GF_MessageList[GF_RealmName][i].op] and GF_MessageList[GF_RealmName][i].t + 300 > time() then
+				GF_AddonGroupDataToBeSentBuffer[GF_MessageList[GF_RealmName][i].op] = GF_MessageList[GF_RealmName][i]
+				GF_AddonNeedToBroadcastSomething = true
+			end
 		end
+		GF_AddonMakeAListOfGroupsForSending = nil
+		GF_AddonOPSentNamesOnLogin = {}
 		GF_ApplyFiltersToGroupList()
 	else
 		local timeMin, timeSec
@@ -1572,7 +1581,7 @@ function GF_UpdateGroupsFrame()
 	end
 end
 
-function GF_RequestAdditionalWhoDataUpdates() -- Data-Sharing algorithm
+function GF_RequestAdditionalWhoDataUpdates() -- Data-Sharing algorithm.... Every 300 seconds you make a list of names in 'GF_AddonNamesToBeSentAsARequest' if the 'GF_MessageList' doesn't have a 'GF_WhoTable' and 'usewhoongroups' is true
 	GF_RequestWhoDataPeriodicallyTimer = GF_RequestWhoDataPeriodicallyTimer - 1
 	if GF_RequestWhoDataPeriodicallyTimer < 0 then
 		GF_RequestWhoDataPeriodicallyTimer = 300
@@ -1599,7 +1608,7 @@ function GF_CheckForBroadCast()
 			if GF_OnStartupQueueURequest then
 				for i=GF_OnStartupQueueURequest, getn(GF_MessageList[GF_RealmName]) do
 					if counter > 2 then GF_AddonNeedToBroadcastSomething = true GF_OnStartupQueueURequest = i return end
-					if (GF_MessageList[GF_RealmName][i].type == "D" or GF_MessageList[GF_RealmName][i].type == "R") and GF_MessageList[GF_RealmName][i].t + 300 > time() then
+					if GF_MessageList[GF_RealmName][i].t + 300 > time() then
 						addonsendstring = addonsendstring..":"..GF_MessageList[GF_RealmName][i].op
 						if string.len(addonsendstring) > 240 then
 							if GetGuildInfo("player") then SendAddonMessage("GF", addonsendstring, "GUILD") end
@@ -1618,7 +1627,7 @@ function GF_CheckForBroadCast()
 
 			for name,entry in pairs(GF_AddonGroupDataToBeSentBuffer) do -- Send Group Data
 				GF_AddonGroupDataToBeSentBuffer[name] = nil
-				if (entry.type == "D" or entry.type == "R") and entry.t + 300 > time() then
+				if name then
 					if sendType == 1 or sendType == 3 then SendAddonMessage("GF", entry.t..entry.op..":"..entry.message, "GUILD") end
 					if sendType > 1 then SendAddonMessage("GF", entry.t..entry.op..":"..entry.message, "PARTY") end
 					if GF_WhoTable[GF_RealmName][entry.op] then GF_AddonAllNamesForResponseToLogin[entry.op] = true end
@@ -1628,7 +1637,7 @@ function GF_CheckForBroadCast()
 			end
 
 			addonsendstring = "W" -- Send Group Name List
-			for name,exists in pairs(GF_AddonAllNamesForResponseToLogin) do
+			for name,_ in pairs(GF_AddonAllNamesForResponseToLogin) do
 				if name then addonsendstring = addonsendstring..":"..name end
 				GF_AddonAllNamesForResponseToLogin[name] = nil
 				if string.len(addonsendstring) > 240 then
@@ -1641,8 +1650,8 @@ function GF_CheckForBroadCast()
 			if string.len(addonsendstring) > 1 then if sendType == 1 or sendType == 3 then SendAddonMessage("GF", addonsendstring, "GUILD") end if sendType > 1 then SendAddonMessage("GF", addonsendstring, "PARTY") end end
 			
 			addonsendstring = "R" -- Send Request Name List
-			for name,whodata in pairs(GF_AddonNamesToBeSentAsARequest) do
-				if whodata then addonsendstring = addonsendstring..":"..name end
+			for name,_ in pairs(GF_AddonNamesToBeSentAsARequest) do
+				if name then addonsendstring = addonsendstring..":"..name end
 				GF_AddonNamesToBeSentAsARequest[name] = nil
 				if string.len(addonsendstring) > 240 then
 					if sendType == 1 or sendType == 3 then SendAddonMessage("GF", addonsendstring, "GUILD") end if sendType > 1 then SendAddonMessage("GF", addonsendstring, "PARTY") end
@@ -1656,7 +1665,7 @@ function GF_CheckForBroadCast()
 			addonsendstring = "" -- Return WhoData for Requested Names
 			for name,whodata in pairs(GF_AddonWhoDataToBeSentBuffer) do
 				GF_AddonWhoDataToBeSentBuffer[name] = nil
-				if whodata then
+				if name then
 					if whodata[3] == "" then whodata[3] = "Z" end
 					addonsendstring = addonsendstring..":"..whodata[1]..name..GF_ClassIDs[whodata[2]]..whodata[3]..whodata[4]
 					if string.len(addonsendstring) > 202 then
@@ -1680,77 +1689,72 @@ function GF_ParseIncomingAddonMessages(msg)
 --You send the full information for the names I requested(and will repeatedly send until all the names are sent, checking off any info sent by others).
 --When I /who, the name is added to the "W" broadcast list. This list is resent every 30 seconds.
 	--print(msg)
+
+-- This system prevents groups and "W" from being sent for multiple "U"'s... The issue is that, if multiple people log on within 1-30 seconds(random), where one needs all groups and the other needs none, it will send none.
 	if string.sub(msg,1,1) == "U" then -- (From OP) Sent on login with a list of names from OP's group list(up to 240 characters).
 		for name in string.gfind(string.sub(msg,3), "(%w+)") do
 			GF_AddonOPSentNamesOnLogin[name] = true
+			GF_AddonAllNamesForResponseToLogin[name] = nil
 		end
-		if GF_AddonTimeSinceLastUpdate + 60 < time() then
-			for name in GF_AddonNamesFromWhoSinceLoggedOn do
-				if not GF_AddonOPSentNamesOnLogin[name] and not GF_AddonWhoDataToBeSentBuffer[name] and GF_WhoTable[GF_RealmName][name][4] + 900 > time() then
-					GF_AddonAllNamesForResponseToLogin[name] = true
-				else
-					GF_AddonNamesFromWhoSinceLoggedOn[name] = nil
-				end
+		for name in GF_AddonNamesFromWhoSinceLoggedOn do
+			if GF_AddonNamesFromWhoSinceLoggedOn[name] + 3600 < time() then -- If my 'GF_AddonNamesFromWhoSinceLoggedOn' is more than an hour old, delete it.
+				GF_AddonNamesFromWhoSinceLoggedOn[name] = nil
+			elseif not GF_AddonOPSentNamesOnLogin[name] and not GF_AddonWhoDataToBeSentBuffer[name] and GF_WhoTable[GF_RealmName][name][4] + 900 > time() then
+				GF_AddonAllNamesForResponseToLogin[name] = true
 			end
-			GF_AddonTimeSinceLastUpdate = time()
 		end
 		GF_TimeTillNextBroadcast = (math.random(80))/4 -- Assuming up to 333ms lag, up to 100 different random slots for responses. To keep down on the spam.
-		GF_RequestWhoDataPeriodicallyTimer = 60
-		for i=1, getn(GF_MessageList[GF_RealmName]) do -- Create a list of groups to send(everything not included in the U message)
-			if not GF_AddonOPSentNamesOnLogin[GF_MessageList[GF_RealmName][i].op] then GF_AddonGroupDataToBeSentBuffer[GF_MessageList[GF_RealmName][i].op] = GF_MessageList[GF_RealmName][i] end
-		end
+		GF_RequestWhoDataPeriodicallyTimer = 300
+		GF_AddonMakeAListOfGroupsForSending = true
 		GF_UpdateAndRequestTimer = 0
 		GF_AddonNeedToBroadcastSomething = true
-	elseif string.sub(msg,1,1) == "W" then -- (To Everyone) Sent as a reply to "U". Sends a list of names on your who list excluding those sent by the OP or other players(up to 240 characters).
-		for sentname in string.gfind(msg, ":(%w+)") do
+	elseif string.sub(msg,1,1) == "W" then -- (To Everyone) A list of names available to be requested(up to 240 characters). Add to 'GF_AddonNamesToBeSentAsARequest' if the name is not in 'GF_WhoTable'. Then delete from 'GF_AddonAllNamesForResponseToLogin'.
+		for sentname in string.gfind(msg, ":(%w+)") do -- This works 100% correctly. 'GF_AddonAllNamesForResponseToLogin' is removed either when responding with a "R" message or when receiving either a ":" or full group message.
 			if not GF_WhoTable[GF_RealmName][sentname] then GF_AddonNamesToBeSentAsARequest[sentname] = true end
 			GF_AddonAllNamesForResponseToLogin[sentname] = nil
 		end
 		GF_TimeTillNextBroadcast = (math.random(80))/4
 		GF_AddonNeedToBroadcastSomething = true
-	elseif string.sub(msg,1,1) == "R" then -- (To Everyone) Sent as a reply to "W". Sends a list of names from the "W" message that you don't have information for(up to 240 characters).
-		for sentname in string.gfind(msg, ":(%w+)") do
-			if GF_WhoTable[GF_RealmName][sentname] and (GF_WhoTable[GF_RealmName][sentname][1] == 60 or GF_WhoTable[GF_RealmName][sentname][4] + 86400 > time()) then GF_AddonWhoDataToBeSentBuffer[sentname] = GF_WhoTable[GF_RealmName][sentname] end
+	elseif string.sub(msg,1,1) == "R" then -- (To Everyone) The list of names requested(up to 240 characters). Add to 'GF_AddonWhoDataToBeSentBuffer' if I have 'GF_WhoTable'. Then delete the names I was going to request('GF_AddonNamesToBeSentAsARequest').
+		for sentname in string.gfind(msg, ":(%w+)") do -- This works 100% correctly. 'GF_AddonWhoDataToBeSentBuffer' is removed when sending or receiving a ":" message or a full group message.
+			if GF_WhoTable[GF_RealmName][sentname] and (GF_WhoTable[GF_RealmName][sentname][1] == 60 or GF_WhoTable[GF_RealmName][sentname][4] + 86400 > time()) then
+				GF_AddonWhoDataToBeSentBuffer[sentname] = GF_WhoTable[GF_RealmName][sentname]
+			end
 			GF_AddonNamesToBeSentAsARequest[sentname] = nil
 		end
 		GF_TimeTillNextBroadcast = (math.random(80))/4
 		GF_AddonNeedToBroadcastSomething = true
-	elseif string.sub(msg,1,1) == ":" then -- (To Everyone) This is the who data from the names requested in "R".
-		for sentlevel,sentname,sentclass,sentguild,senttime in string.gfind(msg, ":(%d+)([a-zA-Z]+)(%d)([a-zA-Z%s]+)(%d+)") do
-			if senttime then
-				senttime = tonumber(senttime)
-				if sentguild == "Z" then sentguild = "" end
-				if senttime <= time() and GF_ClassIDs[tonumber(sentclass)] and (not GF_WhoTable[GF_RealmName][sentname] or senttime > GF_WhoTable[GF_RealmName][sentname][4]) then
-					GF_WhoTable[GF_RealmName][sentname] = { tonumber(sentlevel), GF_ClassIDs[tonumber(sentclass)], sentguild, senttime }
-				end
+	elseif string.sub(msg,1,1) == ":" then -- (To Everyone) This is 'GF_WhoTable' data. Add to your 'GF_WhoTable' and delete from 'GF_AddonAllNamesForResponseToLogin', 'GF_AddonNamesToBeSentAsARequest', and 'GF_AddonWhoDataToBeSentBuffer'.
+		for sentlevel,sentname,sentclass,sentguild,senttime in string.gfind(msg, ":(%d+)([a-zA-Z]+)(%d)([a-zA-Z%s]+)(%d+)") do -- This works 100% correctly.
+			if sentguild == "Z" then sentguild = "" end
+			if tonumber(senttime) <= time() and GF_ClassIDs[tonumber(sentclass)] and (not GF_WhoTable[GF_RealmName][sentname] or tonumber(senttime) > GF_WhoTable[GF_RealmName][sentname][4]) then
+				GF_WhoTable[GF_RealmName][sentname] = { tonumber(sentlevel), GF_ClassIDs[tonumber(sentclass)], sentguild, tonumber(senttime) }
 			end
 			GF_AddonAllNamesForResponseToLogin[sentname] = nil
 			GF_AddonNamesToBeSentAsARequest[sentname] = nil
 			GF_AddonWhoDataToBeSentBuffer[sentname] = nil
 		end
-	elseif string.len(msg) > 2 then -- (To Everyone) This is the full group information. Which is sent separately from the who data.
-		for senttime,sentname,message in string.gfind(msg, "(%d+)([a-zA-Z]+):(.+)") do
-			if senttime then
-				senttime = tonumber(senttime)
-				GF_GetTypes(gsub(gsub(gsub(gsub(gsub(string.lower(gsub(gsub(gsub(gsub(" "..message.." ", " |+h%[([%w%s%p]+)%]|+h|+r", " %1 "), "|c%x+|+(%w+)[%d:]+|+h", " %1 "), "|+h|+r", " "),"([a-z ][a-z])([A-Z])","%1 %2")),".gg/%w+", ""),"([%p%s])(%w%w+)([%p%s])","%1 %2 %3"),"[%s%.%[](%a)[%s%.](%a)[%s%.]","%1%2"),"%s%s+", " "),"[']", ""))
-				for i=1, getn(GF_MessageList[GF_RealmName]) do
-					if GF_MessageList[GF_RealmName][i].op and GF_MessageList[GF_RealmName][i].op == sentname then
-						table.remove(GF_MessageList[GF_RealmName], i)
-						break
-					end
+	elseif string.len(msg) > 2 then -- (To Everyone) Add group information to your 'GF_MessageList' and delete from 'GF_AddonAllNamesForResponseToLogin', 'GF_AddonNamesToBeSentAsARequest', 'GF_AddonWhoDataToBeSentBuffer', 'GF_AddonGroupDataToBeSentBuffer'.
+		for senttime,sentname,message in string.gfind(msg, "(%d+)([a-zA-Z]+):(.+)") do -- This works 100% correctly.
+			GF_GetTypes(gsub(gsub(gsub(gsub(gsub(string.lower(gsub(gsub(gsub(gsub(" "..message.." ", " |+h%[([%w%s%p]+)%]|+h|+r", " %1 "), "|c%x+|+(%w+)[%d:]+|+h", " %1 "), "|+h|+r", " "),"([a-z ][a-z])([A-Z])","%1 %2")),".gg/%w+", ""),"([%p%s])(%w%w+)([%p%s])","%1 %2 %3"),"[%s%.%[](%a)[%s%.](%a)[%s%.]","%1%2"),"%s%s+", " "),"[']", ""))
+			for i=1, getn(GF_MessageList[GF_RealmName]) do
+				if GF_MessageList[GF_RealmName][i].op and GF_MessageList[GF_RealmName][i].op == sentname then
+					table.remove(GF_MessageList[GF_RealmName], i)
+					break
 				end
-				if getn(GF_MessageList[GF_RealmName]) > 0 then
-					for i=1, getn(GF_MessageList[GF_RealmName]) do
-						if senttime > GF_MessageList[GF_RealmName][i].t then table.insert(GF_MessageList[GF_RealmName], i, ({GF_GetGroupInformation(GF_CleanUpMessagesOfBadLinks(message),sentname,senttime)})[1]) return end
-					end
-				end
-				table.insert(GF_MessageList[GF_RealmName], ({GF_GetGroupInformation(GF_CleanUpMessagesOfBadLinks(message),sentname,senttime)})[1])
 			end
+			if getn(GF_MessageList[GF_RealmName]) > 0 then
+				for i=1, getn(GF_MessageList[GF_RealmName]) do
+					if tonumber(senttime) > GF_MessageList[GF_RealmName][i].t then table.insert(GF_MessageList[GF_RealmName], i, ({GF_GetGroupInformation(GF_CleanUpMessagesOfBadLinks(message),sentname,tonumber(senttime))})[1]) return end
+				end
+			end
+			table.insert(GF_MessageList[GF_RealmName], ({GF_GetGroupInformation(GF_CleanUpMessagesOfBadLinks(message),sentname,tonumber(senttime))})[1])
 			GF_AddonGroupDataToBeSentBuffer[sentname] = nil
 			GF_AddonAllNamesForResponseToLogin[sentname] = nil
 			GF_AddonNamesToBeSentAsARequest[sentname] = nil
 			GF_AddonWhoDataToBeSentBuffer[sentname] = nil
 		end
+		if GF_UpdateAndRequestTimer > 5 then GF_UpdateAndRequestTimer = 1 end
 	end
 end
 
@@ -1774,7 +1778,7 @@ function self:ADDON_LOADED() -- Event handlers called directly
 	self:UnregisterEvent("ADDON_LOADED")
 end
 function self:CHAT_MSG_ADDON()
-	if arg1 == "GF" and arg4 ~= UnitName("player") then GF_AddonListOfGuildAndPartyMembersWithAddon[arg4] = true GF_ParseIncomingAddonMessages(arg2) end
+	if arg1 == "GF" and arg4 ~= UnitName("player") then GF_AddonListOfGuildAndPartyMembersWithAddon[arg4] = true GF_ParseIncomingAddonMessages(arg2,arg4) end
 end
 function self:FRIENDLIST_UPDATE()
 	if GetNumFriends() ~= GF_CurrentNumFriends then GF_UpdateFriendsList() end
@@ -1837,7 +1841,7 @@ function self:WHO_LIST_UPDATE()
 	GF_WhoListUpdated()
 end
 
-function self:CHAT_MSG_BATTLEGROUND() -- Chat events. These are only to make sure messages are only processed once
+function self:CHAT_MSG_BATTLEGROUND() -- Chat events. These are to make sure messages are only processed once
 	GF_ProcessedFirstMessage[arg2] = nil
 end
 function self:CHAT_MSG_BATTLEGROUND_LEADER()
@@ -2069,7 +2073,7 @@ function GF_CheckForSystem(arg1)
 			if GF_Classes[class] then
 				GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], guild, time() }
 				GF_AddonWhoDataToBeSentBuffer[name] = GF_WhoTable[GF_RealmName][name]
-				GF_AddonNamesFromWhoSinceLoggedOn[name] = true
+				GF_AddonNamesFromWhoSinceLoggedOn[name] = time()
 			end
 			if GF_UrgentWhoRequest[name] then GF_UrgentWhoRequest[name] = nil GF_UpdateAndRequestTimer = .5 end
 			if GF_IsGuildieOrPartyMemberUsingAddon() then GF_AddonNeedToBroadcastSomething = true end
@@ -3753,7 +3757,7 @@ function GF_BlockListAddRemove(entryName,entryID,add)
 end
 function GF_GroupChannelNameAddRemove(entryName,entryID,add)
 	GF_GroupChannelEditBox:SetText(entryName)
-	GF_SavedVariables.groupchannelname = entryName
+	GF_JoinWorld()
 	if GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][4] then GF_WorldAnnounceMessageTextLabel:SetText(GF_HARDCORE_SEND_TEXT) else GF_WorldAnnounceMessageTextLabel:SetText(GF_WORLD_SEND_TEXT.." "..GF_SavedVariables.groupchannelname.." "..GF_LOG_CHANNEL) end
 	GF_GroupChannelName:Hide()
 end

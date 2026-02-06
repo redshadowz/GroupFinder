@@ -787,7 +787,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Texture>
 			</Layer>
 			<Layer level="OVERLAY">
-				<FontString name="$parentTextLabel" font="Fonts\arialn.ttf" outline="NORMAL" nonspacewrap="false">
+				<FontString name="$parentTextLabel" outline="NORMAL" nonspacewrap="false">
 					<Size>
 						<AbsDimension x="32" y="32"/>
 					</Size>
@@ -798,9 +798,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							</Offset>
 						</Anchor>
 					</Anchors>
-					<FontHeight>
-						<AbsValue val="12"/>
-					</FontHeight>
 					<Color r="1" g="1" b="1"/>
 				</FontString>
 			</Layer>
