@@ -777,14 +777,18 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 		GF_ChatGetChannelsGroups()
 	end
 	local old_JoinChannelByName = JoinChannelByName	
-	function JoinChannelByName(channel,a,b,c)
-		old_JoinChannelByName(channel,a,b,c)
+	function JoinChannelByName(channel,a2,a3,a4)
+		old_JoinChannelByName(channel,a2,a3,a4)
 		GF_ChatJoinedChannels[string.lower(channel)] = true
 	end
 	local old_LeaveChannelByName = LeaveChannelByName	
 	function LeaveChannelByName(channel)
 		old_LeaveChannelByName(channel)
 		GF_ChatJoinedChannels[string.lower(channel)] = nil
+	end
+	local old_UIErrorsFrame_OnEvent = UIErrorsFrame_OnEvent	
+	function UIErrorsFrame_OnEvent(event,message,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9)
+		if not GF_SavedVariables.systemfilter or not GF_Error_Messages[message] then old_UIErrorsFrame_OnEvent(event,message,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9) end
 	end
 end
 function GF_HandleItemRefLinks(link,text,button) -- Will have to update when I add feature to turn off click combinations

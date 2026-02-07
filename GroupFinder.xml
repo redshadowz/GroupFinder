@@ -3807,7 +3807,13 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Scripts>
 									<OnClick>
 										if GF_ConvertMessagesToLinks then GF_ConvertMessagesToLinks = nil GF_ConvertLogMessagesToURL:SetText(GF_LOG_CONVERT_URL) else GF_ConvertMessagesToLinks = true GF_ConvertLogMessagesToURL:SetText(GF_LOG_RESET_MESSAGES) end
-										if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() elseif GF_WhisperLogCurrentButtonID == 1 then GF_WhisperHistoryDisplayLog("Guild") else GF_WhisperHistoryDisplayLog(getglobal("GF_WhisperHistoryButton"..GF_WhisperLogCurrentButtonID):GetText()) end
+										for i=GF_Log:GetCurrentScroll(),1000 do
+											if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() elseif GF_WhisperLogCurrentButtonID == 1 then GF_WhisperHistoryDisplayLog("Guild") else GF_WhisperHistoryDisplayLog(getglobal("GF_WhisperHistoryButton"..GF_WhisperLogCurrentButtonID):GetText()) end
+											for j=1, i do
+												GF_Log:ScrollUp()
+											end
+											break
+										end
 									</OnClick>
 								</Scripts>
 							</Button>
