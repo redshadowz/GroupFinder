@@ -685,10 +685,10 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 	SLASH_GroupFinderCOMMAND2 = "/groupfinder"
 	local old_ChatFrame_OnEvent = ChatFrame_OnEvent
 	function ChatFrame_OnEvent(event) -- arg1(message), arg2(sender), arg4("Channel#." "(City/Trade)" "channelName"), arg5, (nameOfPlayerWhoLooted), arg7(zoneChannel#), arg8(channel#), arg9("City/Trade" "channelName")
-		if not arg2 or arg2 == "" then arg2 = "SYSTEM" end
 		if not arg1 or not GF_TextColors[string.sub(event,10)] or string.lower(arg9) == "lft" then old_ChatFrame_OnEvent(event) return end
+		if not arg2 or arg2 == "" then arg2 = "SYSTEM" end
 		if not GF_ProcessedFirstMessage[arg2] then
-			GF_ChatFunctions("GF_"..event,event,arg1,arg2,arg8,arg9)
+			GF_ChatFunctions(event,arg1,arg2,arg8,arg9)
 			if GF_SavedVariables.showformattedchat and GF_PreviousMessage[arg2] and GF_PreviousMessage[arg2][1] then
 				if GF_PreviousMessage[arg2][2] then arg1 = GF_PreviousMessage[arg2][2] end
 				if event == "CHAT_MSG_CHANNEL" then GF_AddChannelMessage(arg1,arg2,arg8,arg9) else GF_AddChatMessage(arg1,arg2,string.sub(event,10)) end
@@ -1926,8 +1926,8 @@ function self:CHAT_MSG_YELL()
 	GF_ProcessedFirstMessage[arg2] = nil
 end
 
-function GF_ChatFunctions(fName,event,arg1,arg2,arg8,arg9) -- Functions above reset the chat processing below. Don't have to worry about lag and timers this way.
-	getglobal(fName)(event,arg1,arg2,arg8,arg9)
+function GF_ChatFunctions(event,arg1,arg2,arg8,arg9) -- Functions above reset the chat processing below. Don't have to worry about lag and timers this way.
+	getglobal("GF_"..event)(event,arg1,arg2,arg8,arg9)
 end
 
 function GF_CHAT_MSG_BATTLEGROUND()
