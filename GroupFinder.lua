@@ -93,7 +93,7 @@ local GF_ClassIDs = { "PRIEST", "MAGE", "WARLOCK", "DRUID", "HUNTER", "ROGUE", "
 local GF_TextColors = { ["SYSTEM"] = {1,1,0},["SAY"] = {1,1,1},["YELL"] = {1,0.251,0.251},["CHANNEL"] = {1,0.753,0.753},["GUILD"] = {0.251,1,0.251},["OFFICER"] = {0.251,0.753,0.251},["WHISPER"] = {1,0.502,1},["WHISPER_INFORM"] = {1,0.502,1},
 ["PARTY"] = {0.667,0.667,1},["RAID"] = {1,0.498,0},["RAID_LEADER"] = {1,0.859,0.718},["RAID_WARNING"] = {1,0.859,0.718},["BATTLEGROUND"] = {1,0.498,0},["BATTLEGROUND_LEADER"] = {1,0.859,0.7176},["LOOT"] = {0,0.667,0},["MONEY"] = {1,1,0},
 ["EMOTE"] = {1,0.502,0.251},["TEXT_EMOTE"] = {1,0.502,0.251},["COMBAT_FACTION_CHANGE"] = {0.502,0.502,1},["COMBAT_XP_GAIN"] = {0.4353,0.4353,1},["COMBAT_HONOR_GAIN"] = {0.8784,0.792,0.0392},["MONSTER_SAY"] = {1,1,1},
-["MONSTER_EMOTE"] = {1,0.502,0.251},["MONSTER_YELL"] = {1,0.251,0.251},["HARDCORE"] = {0.902,0.8,0.502} } --["HARDCORE"] = {0.651,0.6,0.451} }
+["MONSTER_EMOTE"] = {1,0.502,0.251},["MONSTER_YELL"] = {1,0.251,0.251},["HARDCORE"] = {0.902,0.8,0.502}, ["HAT_LINE"] = {1,1,0}, } --["HARDCORE"] = {0.651,0.6,0.451} }
 local EventIDAlias = { ["SAY"] = "[S]",["YELL"] = "[Y]",["GUILD"] = "[G]",["OFFICER"] = "[O]",["WHISPER"] = "",["WHISPER_INFORM"] = "[To]",["PARTY"] = "[P]",["RAID"] = "[R]",["RAID_LEADER"] = "[RL]",["RAID_WARNING"] = "[RW]",
 ["BATTLEGROUND"] = "[BG]",["BATTLEGROUND_LEADER"] = "[BL]",}
 local GF_TextBypassChatNameAlias = { ["OFFICER"] = "GUILD",["RAID"] = "PARTY",["RAID_LEADER"] = "PARTY",["RAID_WARNING"] = "PARTY",["BATTLEGROUND"] = "PARTY",["BATTLEGROUND_LEADER"] = "PARTY",["WHISPER_INFORM"] = "WHISPER", ["HARDCORE"] = "PARTY",}
@@ -674,9 +674,9 @@ end
 
 function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 	for _, event in {'PLAYER_ENTERING_WORLD','PLAYER_LEAVING_WORLD','PARTY_MEMBERS_CHANGED','PARTY_LEADER_CHANGED','RAID_ROSTER_UPDATE','PARTY_INVITE_REQUEST','FRIENDLIST_UPDATE','GUILD_ROSTER_UPDATE','WHO_LIST_UPDATE',
-	'UPDATE_MOUSEOVER_UNIT',	'PLAYER_LEVEL_UP','CHAT_MSG_ADDON','CHAT_MSG_SYSTEM','CHAT_MSG_WHISPER','CHAT_MSG_WHISPER_INFORM','CHAT_MSG_LOOT','CHAT_MSG_MONEY','CHAT_MSG_COMBAT_XP_GAIN','CHAT_MSG_COMBAT_HONOR_GAIN',
-	'CHAT_MSG_HARDCORE',	'CHAT_MSG_SAY','CHAT_MSG_YELL','CHAT_MSG_GUILD','CHAT_MSG_OFFICER','CHAT_MSG_PARTY','CHAT_MSG_RAID','CHAT_MSG_RAID_LEADER','CHAT_MSG_RAID_WARNING','CHAT_MSG_BATTLEGROUND','CHAT_MSG_BATTLEGROUND_LEADER',
-	'CHAT_MSG_EMOTE',	'CHAT_MSG_TEXT_EMOTE','CHAT_MSG_MONSTER_SAY','CHAT_MSG_MONSTER_EMOTE','CHAT_MSG_MONSTER_YELL','CHAT_MSG_CHANNEL','CHAT_MSG_COMBAT_FACTION_CHANGE', } do
+	'UPDATE_MOUSEOVER_UNIT','PLAYER_LEVEL_UP','CHAT_MSG_ADDON','CHAT_MSG_SYSTEM','CHAT_MSG_WHISPER','CHAT_MSG_WHISPER_INFORM','CHAT_MSG_LOOT','CHAT_MSG_MONEY','CHAT_MSG_COMBAT_XP_GAIN','CHAT_MSG_COMBAT_HONOR_GAIN',
+	'CHAT_MSG_HARDCORE','CHAT_MSG_SAY','CHAT_MSG_YELL','CHAT_MSG_GUILD','CHAT_MSG_OFFICER','CHAT_MSG_PARTY','CHAT_MSG_RAID','CHAT_MSG_RAID_LEADER','CHAT_MSG_RAID_WARNING','CHAT_MSG_BATTLEGROUND','CHAT_MSG_BATTLEGROUND_LEADER',
+	'CHAT_MSG_EMOTE','CHAT_MSG_TEXT_EMOTE','CHAT_MSG_MONSTER_SAY','CHAT_MSG_MONSTER_EMOTE','CHAT_MSG_MONSTER_YELL','CHAT_MSG_CHANNEL','CHAT_MSG_COMBAT_FACTION_CHANGE','EXECUTE_CHAT_LINE','ZONE_CHANGED', } do
 		self:RegisterEvent(event)
 	end
 
@@ -685,7 +685,7 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 	SLASH_GroupFinderCOMMAND2 = "/groupfinder"
 	local old_ChatFrame_OnEvent = ChatFrame_OnEvent
 	function ChatFrame_OnEvent(event) -- arg1(message), arg2(sender), arg4("Channel#." "(City/Trade)" "channelName"), arg5, (nameOfPlayerWhoLooted), arg7(zoneChannel#), arg8(channel#), arg9("City/Trade" "channelName")
-		if not arg1 or not GF_TextColors[string.sub(event,10)] or string.lower(arg9) == "lft" then old_ChatFrame_OnEvent(event) return end
+		if not arg1 or not GF_TextColors[string.sub(event,10)] or (arg9 and string.lower(arg9) == "lft") then old_ChatFrame_OnEvent(event) return end
 		if not arg2 or arg2 == "" then arg2 = "SYSTEM" end
 		if not GF_ProcessedFirstMessage[arg2] then
 			GF_ChatFunctions(event,arg1,arg2,arg8,arg9)
@@ -1789,6 +1789,9 @@ end
 function self:CHAT_MSG_ADDON()
 	if arg1 == "GF" and arg4 ~= UnitName("player") then GF_AddonListOfGuildAndPartyMembersWithAddon[arg4] = true GF_ParseIncomingAddonMessages(arg2,arg4) end
 end
+function self:EXECUTE_CHAT_LINE()
+	GF_ProcessedFirstMessage["SYSTEM"] = nil
+end
 function self:FRIENDLIST_UPDATE()
 	if GetNumFriends() ~= GF_CurrentNumFriends then GF_UpdateFriendsList() end
 end
@@ -1804,7 +1807,8 @@ end
 function self:PARTY_LEADER_CHANGED()
 	GF_UpdateGroup()
 end
-function self:PLAYER_ENTERING_WORLD()
+function self:PLAYER_ENTERING_WORLD() -- When logging in in a group, PLAYER_ENTERING_WORLD > PARTY_MEMBERS_CHANGED > PARTY_MEMBERS_CHANGED again > ZONE_CHANGED_NEW_AREA... When party member goes offline, PARTY_MEMBERS_CHANGED... online, PARTY_MEMBERS_CHANGED
+-- When switching to raid, PARTY_MEMBERS_CHANGED > RAID_ROSTER_UPDATE... when raid member goes offline PARTY_MEMBERS_CHANGED > RAID_ROSTER_UPDATE... online PARTY_MEMBERS_CHANGED > RAID_ROSTER_UPDATE... reloading UI does nothing
 	GF_NumPartyMembers = GF_GetNumGroupMembers()
 	GF_LoadVariables()
 	GF_LoadSettings()
@@ -1849,7 +1853,20 @@ end
 function self:WHO_LIST_UPDATE()
 	GF_WhoListUpdated()
 end
+function self:ZONE_CHANGED()
+-- Turn whisper log into a button, create group log button, move convert messages to links and make smaller... default to whisper log on startup
+-- Use the same buttons but change them to group names(will have to create an array with group names since they can only be 12 characters long)
+-- There are 27 baseline dungeons, plus 8 turtle dungeons(currently)... Then 7 raids + 3 turtle raids... plus world bosses... ~3 pages.. reset to page 1 when flipping between whisper and groups
+-- Date/time, your name/level, date/level of the people in the group, items that dropped and winner names.
 
+-- Data structure needs to be easily sortable, and also minimal, so that I can store a lot of groups.
+-- GF_GroupHistory = [1] = { [1] = "InstanceID", [2] = time(), [3] = { ["playername1"] = { [1] = level, [2] = ClassID}, }, [4] = { ["itemid"] = "playername", } } ... [playername1] = { [1] = #ofpreviousgroups, [2] = time() }... Include duration?
+-- Create groups when a green item or higher drops. Only include names that roll. Finish group when leaving group. If group exists, update group when PARTY_MEMBERS_CHANGED or RAID_ROSTER_UPDATE
+-- Add "times seen" to playernote... Which clicking playernames, show list of items won, and search for groups of only that player... Remove playername if haven't seen them in more than X days... Keep only X # of groups
+
+	--GF_UpdateGroup()
+end
+	
 function self:CHAT_MSG_BATTLEGROUND() -- Chat events. These are to make sure messages are only processed once
 	GF_ProcessedFirstMessage[arg2] = nil
 end
@@ -1954,6 +1971,9 @@ end
 function GF_CHAT_MSG_COMBAT_XP_GAIN()
 	GF_AddLogMessage(arg1,6,true,"SYSTEM",arg8,arg9,string.sub(event,10))
 	if GF_SavedVariables.showloottexts then GF_PreviousMessage["SYSTEM"] = {true} else GF_PreviousMessage["SYSTEM"] = {} end
+end
+function GF_EXECUTE_CHAT_LINE()
+	if GF_SystemMessageFiltersStrings[arg1] then GF_PreviousMessage["SYSTEM"] = {} else GF_PreviousMessage[arg2] = {true} end
 end
 function GF_CHAT_MSG_EMOTE()
 	GF_CheckForEmotes(arg1,arg2)

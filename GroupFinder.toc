@@ -3,6 +3,6 @@
 ## DefaultState: Enabled
 ## Notes: LFG AddOn
 ## LoadOnDemand: 0
-## SavedVariables: GF_SavedVariables, GF_BlackList, GF_MessageList, GF_PlayerMessages, GF_WhoTable, GF_ClassWhoTable, GF_IncomingMessagePrune, GF_LogHistory, GF_WhisperLogData, GF_PlayerNotes
+## SavedVariables: GF_SavedVariables, GF_BlackList, GF_MessageList, GF_PlayerMessages, GF_WhoTable, GF_ClassWhoTable, GF_IncomingMessagePrune, GF_LogHistory, GF_WhisperLogData, GF_PlayerNotes, GF_GroupHistory
 ## SavedVariablesPerCharacter: GF_PerCharVariables
 GroupFinder.xml
