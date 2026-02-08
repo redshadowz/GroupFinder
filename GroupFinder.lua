@@ -10,7 +10,6 @@ local GF_NextAvailableWhoTime				= 0
 local GF_UrgentWhoRequest					= {}
 GF_WhoQueue									= {}
 GF_WhoTable									= {}
-GF_WhoTable[GF_RealmName]					= {}
 GF_ClassWhoTable							= {}
 local GF_LFGLFMData							= {}
 local GF_ClassWhoQueue						= {} -- Who queue of /who searches. Searches
@@ -28,16 +27,13 @@ GF_LFGDescriptionEditBoxHasFocus			= { nil,0 }
 GF_ButtonIDAliases 							= {}
 
 GF_MessageList								= {}
-GF_MessageList[GF_RealmName]				= {}
 GF_BlackList								= {}
-GF_BlackList[GF_RealmName]					= {}
 GF_FilteredResultsList						= {}
 GF_ResultsBaseListOffsetSize				= 22
 GF_ResultsListOffset						= 0
 GF_ResultsListOffsetSize					= GF_ResultsBaseListOffsetSize
 GF_BlackListOffset							= 0
 GF_LogHistory								= {}
-GF_LogHistory[GF_RealmName]					= {}
 GF_LogFilters								= { [10]=true,["LOOT"] = true,["MONEY"] = true,["COMBAT_FACTION_CHANGE"] = true,["COMBAT_XP_GAIN"] = true,["COMBAT_HONOR_GAIN"] = true, }
 GF_ConvertMessagesToLinks					= nil
 
@@ -82,9 +78,8 @@ local GF_ChatJoinedChannels					= {}
 GF_WhisperLogCurrentButtonID				= 0
 GF_WhisperLogCurrentButtonName				= ""
 GF_WhisperLogData							= {}
-GF_WhisperLogData[GF_RealmName]				= {}
-GF_WhisperLogData[GF_RealmName]["Guild"]	= {}
 GF_WhisperLogOffset							= 0
+GF_GroupHistory								= {}
 local GF_MessageData						= { foundIgnore = 0,foundGuild = 0,foundGuildExclusion = 0,foundLFM = 0,foundLFMPreSuf = 0,foundLFG = 0,foundLFGPreSuf = 0,foundClass = nil,foundQuest = {},foundDungeon = nil,foundRaid = nil,foundTrades = 0,foundTradesExclusion = 0,foundPvP = nil,foundDFlags = {},foundPFlags = {},foundHC = nil,foundNotHC = nil, lfmlfgName = {}, groupName = {} }
 local GF_Classes							= { [GF_PRIEST]="PRIEST",[GF_MAGE]="MAGE",[GF_WARLOCK]="WARLOCK",[GF_DRUID]="DRUID",[GF_HUNTER]="HUNTER",[GF_ROGUE]="ROGUE",[GF_WARRIOR]="WARRIOR",[GF_PALADIN]="PALADIN",[GF_SHAMAN]="SHAMAN",
 												["PRIEST"]=GF_PRIEST,["MAGE"]=GF_MAGE,["WARLOCK"]=GF_WARLOCK,["DRUID"]=GF_DRUID,["HUNTER"]=GF_HUNTER,["ROGUE"]=GF_ROGUE,["WARRIOR"]=GF_WARRIOR,["PALADIN"]=GF_PALADIN,["SHAMAN"]=GF_SHAMAN }
@@ -125,6 +120,9 @@ function GF_LoadVariables()
 	if not GF_WhisperLogData then GF_WhisperLogData = {} end
 	if not GF_WhisperLogData[GF_RealmName] then GF_WhisperLogData[GF_RealmName] = {} table.insert(GF_WhisperLogData[GF_RealmName], "Guild") end
 	if not GF_WhisperLogData[GF_RealmName]["Guild"] then GF_WhisperLogData[GF_RealmName]["Guild"] = {""} end
+	if not GF_GroupHistory then GF_GroupHistory = {} end
+	if not GF_GroupHistory[GF_RealmName] then GF_GroupHistory[GF_RealmName] = {} table.insert(GF_GroupHistory[GF_RealmName], "Groups") end
+	if not GF_GroupHistory[GF_RealmName]["Groups"] then GF_GroupHistory[GF_RealmName]["Groups"] = {""} end
 	if not GF_PreviousMessage then GF_PreviousMessage = {} end
 	if not GF_PlayerMessages then GF_PlayerMessages = {} end
 	if not GF_PlayerNotes then GF_PlayerNotes = {} end
@@ -363,6 +361,7 @@ function GF_LoadSettings()
 	GF_SetStringSize()
 	GF_SetDropdownWidths()
 	GF_SetLFGRoleButtons()
+	GF_AddNamesToGroupHistoryList()
 end
 function GF_SetStringSize()
 	local fontName,fontSizeMinimap,fontSizeLarge,fontSizeButton
@@ -671,6 +670,11 @@ function GF_FormatBlockListWords(arg1)
 	for i=1,tempVal do wordString = wordString..wordTable[i] end
 	return wordString
 end
+function GF_AddNamesToGroupHistoryList()
+	for i=1, getn(GF_GroupHistoryNames) do
+		if not GF_GroupHistory[GF_RealmName][GF_GroupHistoryNames[i][1]] then table.insert(GF_GroupHistory[GF_RealmName], GF_GroupHistoryNames[i][1]) GF_GroupHistory[GF_RealmName][GF_GroupHistoryNames[i][1]] = {""} end
+	end
+end
 
 function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 	for _, event in {'PLAYER_ENTERING_WORLD','PLAYER_LEAVING_WORLD','PARTY_MEMBERS_CHANGED','PARTY_LEADER_CHANGED','RAID_ROSTER_UPDATE','PARTY_INVITE_REQUEST','FRIENDLIST_UPDATE','GUILD_ROSTER_UPDATE','WHO_LIST_UPDATE',
@@ -724,6 +728,7 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 	function FriendsFrame_OnEvent(...)
 		if GF_BlockingFriendsListUpdates and event == "FRIENDLIST_UPDATE" then
 			GF_UpdateFriendsList()
+			old_FriendsFrame_OnEvent(event)
 		elseif event ~= "WHO_LIST_UPDATE" or WhoFrame:IsVisible() then
 			old_FriendsFrame_OnEvent(event)
 		end
@@ -1520,12 +1525,31 @@ function GF_UpdateWhoDataViaFriendsList()
 		GF_UpdateWhoDataViaFriendsListTimer = 1
 		local highestPriorityName
 		local highestPriorityTime = time() + 999999
-		for name,data in GF_SavedVariables.friendsToRemove do if data > time() then if data < highestPriorityTime then highestPriorityTime = data highestPriorityName = name end end end
+		for name,data in GF_SavedVariables.friendsToRemove do if data > time() then if data < highestPriorityTime and (not GF_FriendUnknown[name] or GF_FriendUnknown[name] + 900 < time()) then highestPriorityTime = data highestPriorityName = name end end end
 		if highestPriorityName then
 			AddFriend(highestPriorityName)
 			GF_BlockingFriendsListUpdates = true
 			GF_SavedVariables.friendsToRemove[highestPriorityName] = time() return
 		end
+	end
+end
+function GF_UpdateFriendsList()
+-- System just blocks all messages until the friend is removed
+-- Basically, I add friend, then when it does a friendslist update, it runs this... if it finds a friendtoremove, it removes them
+-- then when the friend is removed, it fires another friendslistupdate, this looks to see who isn't a friend and on the removelist, and removes them.
+-- So it's basically automatic.
+
+	GF_CurrentNumFriends = GetNumFriends()
+	GF_Friends = {}
+	for i=1, GetNumFriends() do
+		local name,level,class,_,online = GetFriendInfo(i)
+		if not online or not name or name == UNKNOWN or not class or class == UNKNOWN then GF_FriendUnknown[name] = time() GF_Friends[name] = nil if GF_SavedVariables.friendsToRemove[name] then RemoveFriend(i) GF_BlockingFriendsListUpdates = nil end break end
+		GF_Friends[name] = true
+		GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], "", time()}
+		if GF_SavedVariables.friendsToRemove[name] then RemoveFriend(i) GF_BlockingFriendsListUpdates = nil end
+	end
+	for name,_ in GF_SavedVariables.friendsToRemove do
+		if not GF_Friends[name] and GF_SavedVariables.friendsToRemove[name] + 6 < time() then GF_SavedVariables.friendsToRemove[name] = nil end
 	end
 end
 function GF_CheckForAnnounce()
@@ -1866,6 +1890,19 @@ function self:ZONE_CHANGED()
 -- Add "times seen" to playernote... Which clicking playernames, show list of items won, and search for groups of only that player... Remove playername if haven't seen them in more than X days... Keep only X # of groups
 
 	--GF_UpdateGroup()
+
+-- add new GF_GroupHistoryNames entries to position 1, when adding turtle names to GF_GroupHistoryNames, table.sort
+-- List of names updates when you click the button(click GF_GroupHistoryUpdateFrame or GF_WhisperHistoryUpdateFrame in xml)... always defaults to whispers(this is how it works currently)
+-- Instead of purely pruning time(), only prune if more than X# of groups in that category
+-- when switching, GF_WhisperHistoryButtonPressed(1) after GF_GroupHistoryUpdateFrame if GF_WhisperLogCurrentButtonID not 0 
+-- GF_GroupFinishedAddToGroupHistoryList - This just adds the entry to the GF_GroupHistory... Need to also make a "CurrentGroup" which saves current group data and is kept when going offline
+-- CurrentGroup - Is finalized and added to GF_GroupHistory when leaving a group... If I rejoin the same group(GF_GroupHistory[1]) within X minutes, table.remove that group.
+-- Also finalize group if an item drops in a different dungeon/zone... Name the dungeon the name of the zone(show button name as alias, anything without an alias is just labeled "other")
+-- When adding to GF_GroupHistory with GF_GroupHistoryUpdateFrame, move that name up... so that it always show most recent dungeons first... priority works the same way.
+-- GF_GroupHistoryUpdateFrame - Works essentially the same way with only minor changes
+-- GF_GroupHistoryDisplayLog - This just needs to read player names then item names and display them... It would be nice if it push all druids/priest/mages/etc together, but you would have to make a list of each class then display in order
+-- The problem is, I wanted to add a feature to show all groups with playername... To make it easy, I wanted to leave [2] of groupdata by names, so i can just see if name is there. I could table.sort by name https://wowwiki-archive.fandom.com/wiki/API_sort
+-- Show number of times someone died in the group? Show N or G for rolls(master loot shows only who looted item).
 end
 	
 function self:CHAT_MSG_BATTLEGROUND() -- Chat events. These are to make sure messages are only processed once
@@ -3035,6 +3072,15 @@ function GF_PruneTheWhoTable()
 			end
 		end
 	end
+-- This deletes old groups, both within the main groups log, but also
+-- I don't need "Groups" entry, change to "Other"... "All Groups" uses the base 1-128 entries
+	for realm,groupdata in GF_GroupHistory do -- Delete old entries
+		for name, gData in GF_GroupHistory[realm] do
+			if gData[2] and gData[4] + 2592000 < time() then -- Keep GroupHistory Playerdata for 30 days after the last group
+				GF_WhoTable[realm][name] = nil
+			end
+		end
+	end
 	for realm,_ in GF_MessageList do
 		for i=1, getn(GF_MessageList[realm]) do
 			if GF_MessageList[realm][i] then
@@ -3090,25 +3136,6 @@ function GF_UpdateGroup()
 		end
 	end
 	if GF_NumPartyMembers == 1 then GF_ApplyFiltersToGroupList() end
-end
-function GF_UpdateFriendsList()
--- System just blocks all messages until the friend is removed
--- Basically, I add friend, then when it does a friendslist update, it runs this... if it finds a friendtoremove, it removes them
--- then when the friend is removed, it fires another friendslistupdate, this looks to see who isn't a friend and on the removelist, and removes them.
--- So it's basically automatic.
-
-	GF_CurrentNumFriends = GetNumFriends()
-	GF_Friends = {}
-	for i=1, GetNumFriends() do
-		local name,level,class,_,online = GetFriendInfo(i)
-		if not online or not name or name == UNKNOWN or not class or class == UNKNOWN then GF_FriendUnknown[name] = time() GF_Friends[name] = nil break end
-		GF_Friends[name] = true
-		GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], "", time()}
-		if GF_SavedVariables.friendsToRemove[name] then RemoveFriend(i) GF_BlockingFriendsListUpdates = nil end
-	end
-	for name,_ in GF_SavedVariables.friendsToRemove do
-		if not GF_Friends[name] and GF_SavedVariables.friendsToRemove[name] + 6 < time() then GF_SavedVariables.friendsToRemove[name] = nil end
-	end
 end
 function GF_UpdateGuildiesList()
 	GF_CurrentNumGuildies = GetNumGuildMembers()
@@ -3427,9 +3454,9 @@ function GF_WhisperHistoryButtonPressed(id,override,nolog) -- Whisper/Guild Hist
 	if id == 0 then
 		GF_DisplayLog()
 	elseif id == 1 then
-		GF_WhisperHistoryDisplayLog("Guild")
+		if GF_SavedVariables.showwhisperlogs == 1 then GF_WhisperHistoryDisplayLog("Guild") elseif GF_SavedVariables.showwhisperlogs == 2 then GF_GroupHistoryDisplayLog("Group") end
 	else
-		GF_WhisperHistoryDisplayLog(getglobal("GF_WhisperHistoryButton"..id):GetText())
+		if GF_SavedVariables.showwhisperlogs == 1 then GF_WhisperHistoryDisplayLog(getglobal("GF_WhisperHistoryButton"..id):GetText()) elseif GF_SavedVariables.showwhisperlogs == 2 then GF_GroupHistoryDisplayLog(getglobal("GF_WhisperHistoryButton"..id):GetText()) end
 	end
 end
 function GF_WhisperReceivedAddToWhisperHistoryList(message,name,event)
@@ -3483,6 +3510,8 @@ function GF_WhisperReceivedAddToWhisperHistoryList(message,name,event)
 		end
 	end
 end
+function GF_GroupFinishedAddToGroupHistoryList(message,name,event)
+end
 function GF_WhisperHistoryUpdateFrame(name)
 	local numPriority = 0
 	local nameWasPriority
@@ -3523,6 +3552,8 @@ function GF_WhisperHistoryUpdateFrame(name)
 	end
 	if getn(GF_WhisperLogData[GF_RealmName]) > 95 then GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][96]] = nil table.remove(GF_WhisperLogData[GF_RealmName],96) end
 end
+function GF_GroupHistoryUpdateFrame(name)
+end
 function GF_WhisperHistoryDisplayLog(name)
 	GF_Log:SetMaxLines(128)
 	if GF_ConvertMessagesToLinks then
@@ -3541,10 +3572,16 @@ function GF_WhisperHistoryDisplayLog(name)
 		end
 	end
 end
+function GF_GroupHistoryDisplayLog(name)
+end
 function GF_WhisperHistoryPriorityListCheckButtonPressed(id,name,priority)
-	GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][id+GF_WhisperLogOffset]].priority = priority
-	GF_WhisperHistoryUpdateFrame(name)
-	-- 2 is first position, so if page 
+	if GF_SavedVariables.showwhisperlogs == 1 then
+		GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][id+GF_WhisperLogOffset]].priority = priority
+		GF_WhisperHistoryUpdateFrame(name)
+	elseif GF_SavedVariables.showwhisperlogs == 2 then
+		GF_GroupHistory[GF_RealmName][GF_GroupHistory[GF_RealmName][id+GF_WhisperLogOffset]].priority = priority
+		GF_GroupHistoryUpdateFrame(name)
+	end
 end
 
 function GF_UpdateBlackListItems() -- Blacklist functions

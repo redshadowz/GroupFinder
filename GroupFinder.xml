@@ -3777,7 +3777,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if GF_SavedVariables.showwhisperlogs == 1 then GF_SavedVariables.showwhisperlogs = nil else GF_SavedVariables.showwhisperlogs = 1 end
+										if GF_SavedVariables.showwhisperlogs == 1 then GF_SavedVariables.showwhisperlogs = nil else GF_SavedVariables.showwhisperlogs = 1 GF_WhisperLogOffset = 0 GF_WhisperHistoryUpdateFrame() end
 										GF_UpdateWhisperFrame()
 									</OnClick>
 								</Scripts>
@@ -3795,7 +3795,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if GF_SavedVariables.showwhisperlogs == 2 then GF_SavedVariables.showwhisperlogs = nil else GF_SavedVariables.showwhisperlogs = 2 end
+										if GF_SavedVariables.showwhisperlogs == 2 then GF_SavedVariables.showwhisperlogs = nil else GF_SavedVariables.showwhisperlogs = 2 GF_WhisperLogOffset = 0 GF_GroupHistoryUpdateFrame() end
 										GF_UpdateWhisperFrame()
 									</OnClick>
 								</Scripts>

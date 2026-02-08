@@ -4166,6 +4166,38 @@ GF_Error_Messages = {
 [SPELL_FAILED_UNIT_NOT_BEHIND] = true,
 [SPELL_FAILED_UNIT_NOT_INFRONT] = true,
 }
+GF_GroupHistoryNames = { -- Name of the dungeon. Minimum level to show. Update the list when you level up.
+[1] = { "RagefireC", 10 },
+[2] = { "Deadmines", 15 },
+[3] = { "WCaverns", 15 },
+[4] = { "BlackfathomD", 20 },
+[5] = { "ShadowfangK", 20 },
+[6] = { "Stockades", 20 },
+[7] = { "Gnomeregan", 25 },
+[8] = { "RFKraul", 25 },
+[9] = { "SMGraveyard", 26 },
+[10] = { "SMLibrary", 29 },
+[11] = { "SMArmory", 34 },
+[12] = { "SMCathedral", 35 },
+[13] = { "RFDowns", 35 },
+[14] = { "Uldaman", 36 },
+[15] = { "Zul'Farrak", 40 },
+[16] = { "Maraudon", 42 },
+[17] = { "SunkenTemple", 47 },
+[18] = { "BlackRDepths", 47 },
+[19] = { "BlackRSpire", 50 },
+[20] = { "Dire Maul", 50 },
+[21] = { "Scholomance", 54 },
+[22] = { "Stratholme", 54 },
+[23] = { "Zul'Gurub", 58 },
+[24] = { "AQ20", 58 },
+[25] = { "Molten Core", 58 },
+[26] = { "Onyxia", 58 },
+[27] = { "BlackwingL", 58 },
+[28] = { "AQ40", 58 },
+[29] = { "Naxxramas", 58 },
+[30] = { "World Bosses", 58 },
+}
 GF_QUEST_CONVERT = {
 
 }
@@ -4213,12 +4245,25 @@ local GF_TurtleGroupButtonsListRaids = {
 [2] = { "Upper Karazhan", 1, 60, 63, 40, },
 [3] = { "Emerald Sanctum", 1, 60, 63, 40, },
 }
+local GF_TurtleGroupLogNames = {
+[1] = { "DragonmawR", 24 },
+[2] = { "CrescentG", 30 },
+[3] = { "Stormwrought", 30 },
+[4] = { "Gilneas City", 38 },
+[5] = { "HateforgeQ", 48 },
+[6] = { "SWVault", 55 },
+[7] = { "Black Morass", 60 },
+[8] = { "Kara Crypt", 60 },
+[9] = { "Karazhan", 58 },
+[10] = { "ESanctum", 58},
+}
 function GF_AddTurtleWoWDungeonsRaids()
 	if not GF_PlayingOnTurtle then
 		for i=1, getn(GF_TurtleSearchList) do table.insert(GF_BUTTONS_LIST.SearchList, 27, GF_TurtleSearchList[i]) end
 		for i=1, getn(GF_TurtleGroupButtonsListGetWhoLevel) do table.insert(GF_BUTTONS_LIST.GetWhoLevel, 29, GF_TurtleGroupButtonsListGetWhoLevel[i]) end
 		for i=1, getn(GF_TurtleGroupButtonsListDungeons) do table.insert(GF_BUTTONS_LIST.LFGDungeon, GF_TurtleGroupButtonsListDungeons[i]) end
 		for i=1, getn(GF_TurtleGroupButtonsListRaids) do table.insert(GF_BUTTONS_LIST.LFGRaid, GF_TurtleGroupButtonsListRaids[i]) end
+		for i=1, getn(GF_TurtleGroupLogNames) do table.insert(GF_GroupHistoryNames, GF_TurtleGroupLogNames[i]) end
 		table.insert(GF_BUTTONS_LIST.LFGSize, 3, { GF_12_MAN, 1, 60, 12, } )
 	-- ["arugalsfolly"]={60108,22,209,130},["betrayalfromwithin"]={40560,30,15,15},["herosreward"]={40675,10,14,16},
 	end
