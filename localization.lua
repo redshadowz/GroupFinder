@@ -87,7 +87,6 @@ GF_LOG_BLACKLIST = "Blacklist"
 GF_LOG_BELOWLEVEL = "Level"
 GF_LOG_FILTERS = "Log Filters"
 GF_LOG_CHANNEL_FILTERS = "Channel Filters"
-GF_LOG_CONVERT_URL = "Convert messages to links"
 GF_LOG_RESET_MESSAGES = "Reset Messages"
 GF_LOG_FOREIGN = "Foreign"
 
@@ -112,10 +111,12 @@ GF_LOGGED_SPAM = "[S]" -- Text added to Log tab when a message is spam
 GF_LOGGED_BLACKLIST = "[B]" -- Text added to Log tab when a message is blacklist
 GF_LOGGED_BELOWLEVEL = "[V]" -- Text added to Log tab when a message is level under threshold
 
--- Whisper/Guild Log
+-- Whisper/Guild/Group Log
 GF_LOG_WHISPERLOG = "Whisper Log"
 GF_LOG_SHOWLOG = "Show Log"
 GF_LOG_GUILDWHISPERS = "Guild+Whisper"
+GF_LOG_GROUPLOG = "Group Log"
+GF_LOG_CONVERT_URL = "Convert to links"
 
 -- Group-related buttons and texts
 GF_KEYWORDS_DROPDOWN_DESCR = "Keywords:" -- Label to the left of the GF_GroupsFrameDescriptionEditBox on group frame
@@ -453,7 +454,7 @@ GF_HideMainFrameHeight = {
 GF_HideMainFrameWidth = {
 	tooltip1 = "Toggles display width",
 	tooltip2 = "Reduces the width of the group list and log." },
-GF_LogShowWhisperHistory = {
+GF_LogShowWhisperHistoryCheckButton = {
 	tooltip1 = "Toggles the Guild/Whisper History Window",
 	tooltip2 = "This shows a list of recent whisper and guild activity." },
 }

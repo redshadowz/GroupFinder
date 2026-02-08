@@ -815,7 +815,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</OnDragStop>
 		</Scripts>
 	</Button>
-
 	<Frame name="GF_MainFrame" movable="true" toplevel="true" enableMouse="true" hidden="true" frameStrata="MEDIUM" parent="UIParent">
 		<Size>
 			<AbsDimension x="700" y="500"/>
@@ -3633,34 +3632,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLeave>
 								</Scripts>
 							</Frame>
-							<CheckButton name="GF_LogShowWhisperHistory" inherits="GF_CheckButtonTemplate_Label">
-								<Anchors>
-									<Anchor point="TOPRIGHT" relativeTo="GF_LogFrame" relativePoint="TOPRIGHT">
-										<Offset>
-											<AbsDimension x="0" y="-46"/>
-										</Offset>
-									</Anchor>
-								</Anchors>
-								<Layers>
-									<Layer level="OVERLAY">
-										<FontString inherits="GF_TitleFont" name="GF_LogShowWhisperHistoryLabel" text="GF_LOG_WHISPERLOG">
-											<Anchors>
-												<Anchor point="RIGHT">
-													<Offset>
-														<AbsDimension x="-28" y="2"/>
-													</Offset>
-												</Anchor>
-											</Anchors>
-										</FontString>
-									</Layer>
-								</Layers>
-								<Scripts>
-									<OnClick>
-										GF_SavedVariables.showwhisperlogs = this:GetChecked()
-										GF_UpdateWhisperFrame()
-									</OnClick>
-								</Scripts>
-							</CheckButton>
 							<Frame name = "GF_WhisperHistoryButtonLog" hidden="true">
 								<Size>
 									<AbsDimension x="100" y="435"/>
@@ -3793,20 +3764,56 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</Button>
 								</Frames>
 							</Frame>
-							<Button name="GF_ConvertLogMessagesToURL" inherits="GF_ButtonTemplate" text="GF_LOG_CONVERT_URL">
+							<Button name="GF_WhisperLogButton" inherits="GF_ButtonTemplate" text="GF_LOG_WHISPERLOG">
 								<Size>
-									<AbsDimension x="190" y="20"/>
+									<AbsDimension x="110" y="20"/>
 								</Size>
 								<Anchors>
-									<Anchor point="RIGHT" relativeTo="GF_LogShowWhisperHistoryLabel" relativePoint="LEFT">
+									<Anchor point="TOPRIGHT" relativeTo="GF_LogFrame" relativePoint="TOPRIGHT">
 										<Offset>
-											<AbsDimension x="-10" y="0"/>
+											<AbsDimension x="-3" y="-45"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if GF_ConvertMessagesToLinks then GF_ConvertMessagesToLinks = nil GF_ConvertLogMessagesToURL:SetText(GF_LOG_CONVERT_URL) else GF_ConvertMessagesToLinks = true GF_ConvertLogMessagesToURL:SetText(GF_LOG_RESET_MESSAGES) end
+										if GF_SavedVariables.showwhisperlogs == 1 then GF_SavedVariables.showwhisperlogs = nil else GF_SavedVariables.showwhisperlogs = 1 end
+										GF_UpdateWhisperFrame()
+									</OnClick>
+								</Scripts>
+							</Button>
+							<Button name="GF_GroupLogButton" inherits="GF_ButtonTemplate" text="GF_LOG_GROUPLOG">
+								<Size>
+									<AbsDimension x="95" y="20"/>
+								</Size>
+								<Anchors>
+									<Anchor point="RIGHT" relativeTo="GF_WhisperLogButton" relativePoint="LEFT">
+										<Offset>
+											<AbsDimension x="0" y="0"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										if GF_SavedVariables.showwhisperlogs == 2 then GF_SavedVariables.showwhisperlogs = nil else GF_SavedVariables.showwhisperlogs = 2 end
+										GF_UpdateWhisperFrame()
+									</OnClick>
+								</Scripts>
+							</Button>
+							<Button name="GF_ConvertLogMessagesToURL" inherits="GF_ButtonTemplate" text="GF_LOG_CONVERT_URL">
+								<Size>
+									<AbsDimension x="125" y="20"/>
+								</Size>
+								<Anchors>
+									<Anchor point="RIGHT" relativeTo="GF_GroupLogButton" relativePoint="LEFT">
+										<Offset>
+											<AbsDimension x="0" y="0"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										if GF_ConvertMessagesToLinks then GF_ConvertMessagesToLinks = nil GF_ConvertLogMessagesToURL:SetText(GF_LOG_CONVERT_URL) GF_ConvertLogMessagesToURL:UnlockHighlight() else GF_ConvertMessagesToLinks = true GF_ConvertLogMessagesToURL:SetText(GF_LOG_RESET_MESSAGES) GF_ConvertLogMessagesToURL:LockHighlight() end
 										for i=GF_Log:GetCurrentScroll(),1000 do
 											if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() elseif GF_WhisperLogCurrentButtonID == 1 then GF_WhisperHistoryDisplayLog("Guild") else GF_WhisperHistoryDisplayLog(getglobal("GF_WhisperHistoryButton"..GF_WhisperLogCurrentButtonID):GetText()) end
 											for j=1, i do
