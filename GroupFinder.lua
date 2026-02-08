@@ -94,7 +94,7 @@ local EventIDAlias = { ["SAY"] = "[S]",["YELL"] = "[Y]",["GUILD"] = "[G]",["OFFI
 local GF_TextBypassChatNameAlias = { ["OFFICER"] = "GUILD",["RAID"] = "PARTY",["RAID_LEADER"] = "PARTY",["RAID_WARNING"] = "PARTY",["BATTLEGROUND"] = "PARTY",["BATTLEGROUND_LEADER"] = "PARTY",["WHISPER_INFORM"] = "WHISPER", ["HARDCORE"] = "PARTY",}
 local GF_LootFilter = { ["MONEY"] = true,["LOOT"] = true,["COMBAT_FACTION_CHANGE"] = true,["COMBAT_XP_GAIN"] = true,["COMBAT_HONOR_GAIN"] = true }
 local ThingsToHide = { "GF_MainFrameCloseButton","GF_GroupChatOptionsFrame","GF_ShowSearchButton","GF_SettingsFrameButton","GF_ShowBlacklistButton","GF_LogFrameButton","GF_AnnounceToLFGButton",
-"GF_LogBottomButton","GF_LogDownButton","GF_LogUpButton","GF_LogFilterDropdownButton","GF_LogChannelFilterDropdownButton","GF_ConvertLogMessagesToURL",
+"GF_LogBottomButton","GF_LogDownButton","GF_LogUpButton","GF_LogFilterDropdownButton","GF_LogChannelFilterDropdownButton","GF_ConvertLogMessagesToURL","GF_WhisperLogButton","GF_GroupLogButton",
 "GF_GetWhoFrame","GF_LFGFrame","GF_MessageFrame","GF_LogFilterDropdownMenu","GF_GroupFilterDropdownMenu","GF_ChatFilterDropdownMenu","GF_LFGHardCoreDropdown","GF_GroupChannelName","GF_BlockList","GF_AutoBlacklistDropdownMenu", }
 local GF_DifficultyColors = { ["RED"] = "ff0000",["ORANGE"] = "ff8040",["YELLOW"] = "ffff00",["GREEN"] = "1eff00",["GREY"] = "808080", }
 local GF_TankClasses						= {	["DRUID"]=true,["WARRIOR"]=true,["PALADIN"]=true,["SHAMAN"]=true }
@@ -952,13 +952,13 @@ function GF_ToggleMainFrame(tab)
 		GF_SavedVariables.mainframeishidden = nil
 		if pfUI and pfUI.chat and pfUI.chat.urlcopy then pfUI.chat.urlcopy:SetWidth(700) pfUI.chat.urlcopy.text:SetWidth(680) end
 	end
-	GF_LFGGetWhoUpdateOffset()
 	GF_UpdateMainFrameHeight()
 	GF_UpdateMainFrameWidth()
 	GF_UpdateMainFramePosition()
 	GF_UpdateMainFrame()
 	GF_UpdateWhisperFrame()
 	GF_UpdateResults()
+	GF_LFGGetWhoUpdateOffset()
 end
 function GF_UpdateWhisperFrame()
 	if GF_SavedVariables.mainframestatus == 0 then
@@ -986,7 +986,6 @@ function GF_UpdateMainFrameHeight()
 			GF_LogFrameInternalFrame:SetHeight(400)
 		end
 	else
-		GF_LFGGetWhoUpdateOffset()
 		GF_LogFrameInternalFrame:SetHeight(440)
 	end
 end
@@ -1063,7 +1062,7 @@ function GF_UpdateMainFrame()
 			if word == "GF_MainFrame" then UISpecialFrames[id] = nil end
 		end
 	else
-		for i=1, 14 do
+		for i=1, 16 do
 			getglobal(ThingsToHide[i]):Show()
 		end
 		if GF_PlayingOnTurtle then GF_LFGHardCoreDropdown:Show() end
@@ -1525,7 +1524,7 @@ function GF_UpdateWhoDataViaFriendsList()
 		GF_UpdateWhoDataViaFriendsListTimer = 1
 		local highestPriorityName
 		local highestPriorityTime = time() + 999999
-		for name,data in GF_SavedVariables.friendsToRemove do if data > time() then if data < highestPriorityTime and (not GF_FriendUnknown[name] or GF_FriendUnknown[name] + 900 < time()) then highestPriorityTime = data highestPriorityName = name end end end
+		for name,data in GF_SavedVariables.friendsToRemove do if data > time() then if data < highestPriorityTime and (not GF_FriendUnknown[highestPriorityName] or GF_FriendUnknown[highestPriorityName] + 900 < time()) then highestPriorityTime = data highestPriorityName = name end end end
 		if highestPriorityName then
 			AddFriend(highestPriorityName)
 			GF_BlockingFriendsListUpdates = true
@@ -1543,13 +1542,17 @@ function GF_UpdateFriendsList()
 	GF_Friends = {}
 	for i=1, GetNumFriends() do
 		local name,level,class,_,online = GetFriendInfo(i)
-		if not online or not name or name == UNKNOWN or not class or class == UNKNOWN then GF_FriendUnknown[name] = time() GF_Friends[name] = nil if GF_SavedVariables.friendsToRemove[name] then RemoveFriend(i) GF_BlockingFriendsListUpdates = nil end break end
-		GF_Friends[name] = true
-		GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], "", time()}
+		if online and name and name ~= UNKNOWN and class and class ~= UNKNOWN then
+			GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], "", time()}
+			if not GF_SavedVariables.friendsToRemove[name] then GF_Friends[name] = true end
+		else
+			GF_Friends[name] = nil
+			if GF_SavedVariables.friendsToRemove[name] then GF_FriendUnknown[name] = time() end
+		end
 		if GF_SavedVariables.friendsToRemove[name] then RemoveFriend(i) GF_BlockingFriendsListUpdates = nil end
 	end
 	for name,_ in GF_SavedVariables.friendsToRemove do
-		if not GF_Friends[name] and GF_SavedVariables.friendsToRemove[name] + 6 < time() then GF_SavedVariables.friendsToRemove[name] = nil end
+		if not GF_Friends[name] and GF_SavedVariables.friendsToRemove[name] + 2 < time() then GF_SavedVariables.friendsToRemove[name] = nil end
 	end
 end
 function GF_CheckForAnnounce()
@@ -1591,7 +1594,7 @@ function GF_UpdateGroupsFrame()
 		GF_UpdateAndRequestTimer = 30
 		for i=1, getn(GF_MessageList[GF_RealmName]) do
 			if GF_SavedVariables.usewhoongroups and not GF_WhoTable[GF_RealmName][GF_MessageList[GF_RealmName][i].op] and not GF_WhoQueue[GF_MessageList[GF_RealmName][i].op] then
-				if GF_SavedVariables.usefriendslist then if not GF_SavedVariables.friendsToRemove[name] and (not GF_FriendUnknown[name] or GF_FriendUnknown[name] + 900 < time()) then GF_AddNameToWhoQueue(GF_MessageList[GF_RealmName][i].op,true,true) end else GF_AddNameToWhoQueue(GF_MessageList[GF_RealmName][i].op,true) end
+				if GF_SavedVariables.usefriendslist then if not GF_SavedVariables.friendsToRemove[GF_MessageList[GF_RealmName][i].op] and (not GF_FriendUnknown[GF_MessageList[GF_RealmName][i].op] or GF_FriendUnknown[GF_MessageList[GF_RealmName][i].op] + 900 < time()) then GF_AddNameToWhoQueue(GF_MessageList[GF_RealmName][i].op,true,true) end else GF_AddNameToWhoQueue(GF_MessageList[GF_RealmName][i].op,true) end
 			end
 			if GF_AddonMakeAListOfGroupsForSending and not GF_AddonOPSentNamesOnLogin[GF_MessageList[GF_RealmName][i].op] and GF_MessageList[GF_RealmName][i].t + 300 > time() then
 				GF_AddonGroupDataToBeSentBuffer[GF_MessageList[GF_RealmName][i].op] = GF_MessageList[GF_RealmName][i]
