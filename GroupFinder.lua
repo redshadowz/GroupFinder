@@ -315,7 +315,7 @@ function GF_LoadSettings()
 	GF_SavedVariables.showguilds, GF_PerCharVariables.autofilter, GF_SavedVariables.showdungeons, GF_SavedVariables.showraids, GF_SavedVariables.showquests, GF_SavedVariables.showother, GF_SavedVariables.showlfm, GF_SavedVariables.showlfg,
 	GF_SavedVariables.logshowgroup,	GF_SavedVariables.logshowfiltered, GF_SavedVariables.logshowchat, GF_SavedVariables.logshowtrades, GF_SavedVariables.logshowguilds, GF_SavedVariables.logshowloot, GF_SavedVariables.logshowspam,
 	GF_SavedVariables.logshowblacklist,	GF_SavedVariables.logshowbelowlevel, GF_SavedVariables.joinworld, GF_SavedVariables.showformattedchat, GF_SavedVariables.usewhoongroups, GF_SavedVariables.systemfilter,GF_SavedVariables.squareminimap,
-	GF_SavedVariables.spamfilter,GF_SavedVariables.autoblacklist, GF_PerCharVariables.playsounds, GF_PerCharVariables.lfgauto, GF_SavedVariables.showwhisperlogs,GF_SavedVariables.mainframeheight, GF_SavedVariables.mainframewidth,
+	GF_SavedVariables.spamfilter,GF_SavedVariables.autoblacklist, GF_PerCharVariables.playsounds, GF_PerCharVariables.lfgauto,GF_SavedVariables.mainframeheight, GF_SavedVariables.mainframewidth,
 	GF_SavedVariables.alwaysshowguild, GF_SavedVariables.questmod, GF_SavedVariables.purgepfdb, GF_SavedVariables.logchannels, GF_SavedVariables.logparty, GF_SavedVariables.logguild, GF_SavedVariables.logwhisper, GF_SavedVariables.logsay,
 	GF_SavedVariables.logyell, GF_SavedVariables.loghardcore, GF_PerCharVariables.lfglevel, GF_PerCharVariables.lfgdps, GF_PerCharVariables.lfgheal, GF_PerCharVariables.lfgtank,GF_SavedVariables.clickcombos,GF_PerCharVariables.disablehardcore,
 	GF_SavedVariables.usefriendslist,GF_SavedVariables.normalfonts,GF_SavedVariables.blacklisttrades,GF_SavedVariables.blacklistguild,GF_SavedVariables.blacklistchat,GF_SavedVariables.blacklistforeign,GF_SavedVariables.iconpriority, }
@@ -728,6 +728,7 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 	function FriendsFrame_OnEvent(...)
 		if GF_BlockingFriendsListUpdates and event == "FRIENDLIST_UPDATE" then
 			GF_UpdateFriendsList()
+			old_FriendsFrame_OnEvent(event)
 		elseif event ~= "WHO_LIST_UPDATE" or WhoFrame:IsVisible() then
 			old_FriendsFrame_OnEvent(event)
 		end
@@ -1061,7 +1062,7 @@ function GF_UpdateMainFrame()
 			if word == "GF_MainFrame" then UISpecialFrames[id] = nil end
 		end
 	else
-		for i=1, 16 do
+		for i=1, 15 do
 			getglobal(ThingsToHide[i]):Show()
 		end
 		if GF_PlayingOnTurtle then GF_LFGHardCoreDropdown:Show() end
@@ -1532,26 +1533,27 @@ function GF_UpdateWhoDataViaFriendsList()
 	end
 end
 function GF_UpdateFriendsList()
--- System just blocks all messages until the friend is removed
--- Basically, I add friend, then when it does a friendslist update, it runs this... if it finds a friendtoremove, it removes them
--- then when the friend is removed, it fires another friendslistupdate, this looks to see who isn't a friend and on the removelist, and removes them.
--- So it's basically automatic.
-
 	GF_CurrentNumFriends = GetNumFriends()
 	GF_Friends = {}
 	for i=1, GetNumFriends() do
 		local name,level,class,_,online = GetFriendInfo(i)
-		if online and name and name ~= UNKNOWN and class and class ~= UNKNOWN then
-			GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], "", time()}
-			if not GF_SavedVariables.friendsToRemove[name] then GF_Friends[name] = true end
-		else
-			GF_Friends[name] = nil
-			if GF_SavedVariables.friendsToRemove[name] then GF_FriendUnknown[name] = time() end
+		if name then
+			if name == UNKNOWN then
+				GF_Friends[name] = nil
+				RemoveFriend(i)
+				GF_BlockingFriendsListUpdates = nil
+			elseif GF_ClassColors[GF_Classes[class]] and level and level ~= 0 then
+				GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], "", time()}
+				if online and not GF_SavedVariables.friendsToRemove[name] then GF_Friends[name] = true end
+			else
+				GF_Friends[name] = nil
+				if GF_SavedVariables.friendsToRemove[name] then GF_FriendUnknown[name] = time() end
+			end
 		end
 		if GF_SavedVariables.friendsToRemove[name] then RemoveFriend(i) GF_BlockingFriendsListUpdates = nil end
 	end
 	for name,_ in GF_SavedVariables.friendsToRemove do
-		if not GF_Friends[name] and GF_SavedVariables.friendsToRemove[name] + 2 < time() then GF_SavedVariables.friendsToRemove[name] = nil end
+		if not GF_Friends[name] and (GF_SavedVariables.friendsToRemove[name] + 2 < time() or GF_SavedVariables.friendsToRemove[name] + 50 < time()) then GF_SavedVariables.friendsToRemove[name] = nil end
 	end
 end
 function GF_CheckForAnnounce()
