@@ -59,7 +59,7 @@ local GF_CurrentNumGuildies					= 0
 local GF_UpdateTicker						= 0
 local GF_TimeTillNextBroadcast				= 1
 local GF_UpdateAndRequestTimer				= 1
-local GF_UpdateWhoDataViaFriendsListTimer	= 1
+local GF_UpdateWhoDataViaFriendsListTimer	= 5
 local GF_BlockingFriendsListUpdates			= nil
 local GF_RequestWhoDataPeriodicallyTimer	= 30
 GF_PlayerMessages							= {}
@@ -728,7 +728,6 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 	function FriendsFrame_OnEvent(...)
 		if GF_BlockingFriendsListUpdates and event == "FRIENDLIST_UPDATE" then
 			GF_UpdateFriendsList()
-			old_FriendsFrame_OnEvent(event)
 		elseif event ~= "WHO_LIST_UPDATE" or WhoFrame:IsVisible() then
 			old_FriendsFrame_OnEvent(event)
 		end
