@@ -4068,9 +4068,9 @@ GF_ServerMessageFilters = {
 [3] = "turtlecraft",
 [4] = "WDB folder",
 [5] = "Tune in to Everlook Broadcasting",
-[6]= " seems to be sobering up.$",
-[7]= " looks drunk.$",
-[8]= " looks completely smashed.$",
+[6]= " seems to be sobering up.",
+[7]= " looks drunk.",
+[8]= " looks completely smashed.",
 }
 GF_EmoteFilters = {
 [1]	= "RESTED XP",
