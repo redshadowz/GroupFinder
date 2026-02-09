@@ -1,7 +1,5 @@
 GF_WORLD_CHANNEL_NAME = "World"
 GF_LFG_CHANNEL_NAME = "LookingForGroup"
-GF_GENERAL_CHANNEL_NAME = "General"
-GF_TRADE_CHANNEL_NAME = "Trade"
 GF_TURTLE_SERVERS_LIST = { ["Nordanaar"] = true, ["Tel'Abim"] = true, ["Ambershire"] = true }
 GF_KNOWN_SERVERS_LIST = { ["Nordanaar"] = true, ["Tel'Abim"] = true, ["Ambershire"] = true }
 GF_HARDCORE_SPELL_NAME = "Hardcore"
@@ -9,7 +7,7 @@ GF_HARDCORE_TURTLE_SUBTEXT = "Challenge"
 
 -- Class List
 GF_PRIEST	= "Priest"
-GF_MAGE= "Mage"
+GF_MAGE		= "Mage"
 GF_WARLOCK	= "Warlock"
 GF_DRUID	= "Druid"
 GF_HUNTER	= "Hunter"
@@ -23,7 +21,7 @@ GF_HUMAN	= "Human"
 GF_NIGHT_ELF= "Night Elf"
 GF_DWARF	= "Dwarf"
 GF_GNOME	= "Gnome"
-GF_ORC= "Orc"
+GF_ORC		= "Orc"
 GF_UNDEAD	= "Undead"
 GF_TROLL	= "Troll"
 GF_TAUREN	= "Tauren"
@@ -56,8 +54,6 @@ GF_HARDCORE_SEND_TEXT = "Message that gets announced to the Hardcore Channel"
 GF_WORLD_NOW_SENDING = "GF: Now sending announcements to the World Channel"
 GF_HARDCORE_NOW_SENDING = "GF: Now sending announcements to the Hardcore Channel"
 GF_NOW_BEING_IGNORED = " is now blacklisted. Groups and messages will be ignored."
-GF_CHAT = "Chat"
-GF_MINIMAP = "Minimap"
 GF_NEW_ONLY = "New only"
 GF_SHOW = "Show"
 GF_ADD = "Add"
@@ -76,27 +72,13 @@ GF_QUEST_IS_LEVEL_TEXT = " is level "
 
 -- Log Filters
 GF_LOG_AND_MONITOR = "Chat Log" -- Label at top of Log frame
-GF_LOG_GROUP = "Group"
 GF_LOG_FILTERED = "Filtered"
-GF_LOG_CHAT = "Chat"
-GF_LOG_TRADES = "Trades"
-GF_LOG_GUILD = "Guild"
-GF_LOG_LOOT = "Loot"
 GF_LOG_SPAM = "Spam"
-GF_LOG_BLACKLIST = "Blacklist"
-GF_LOG_BELOWLEVEL = "Level"
 GF_LOG_FILTERS = "Log Filters"
 GF_LOG_CHANNEL_FILTERS = "Channel Filters"
 GF_LOG_RESET_MESSAGES = "Reset Messages"
 GF_LOG_FOREIGN = "Foreign"
-
-GF_LOG_CHANNELS = "Channels"
 GF_LOG_CHANNEL = "Channel"
-GF_LOG_SAY = "Say"
-GF_LOG_WHISPER = "Whisper"
-GF_LOG_PARTY = "Party"
-GF_LOG_YELL = "Yell"
-GF_LOG_HARDCORE = "Hardcore"
 
 -- Log Types
 GF_LOGGED_ME = "[M]" -- Text added to Log tab when a message is from myself
@@ -201,13 +183,9 @@ GF_MYROLES = "My Roles"
 GF_LFG = "LFG"
 
 -- Getwho-related buttons and texts
-GF_WHO = "Who"
 GF_GET_WHO = "Get Who"
 GF_STOP_WHO = "Stop Who"
-GF_INVITE = "Invite"
-GF_LEVEL = "Level"
 GF_LEVELS = "levels"
-GF_WHISPER = "Whisper"
 GF_SKIP = "Skip"
 GF_REQUEST = "Request"
 GF_INVITE_PLEASE = "Invite Please"
@@ -225,12 +203,10 @@ GF_FRIEND_MSG_SYSTEM = "|Hplayer ?:(%a+)|h.-|h(.*)"
 
 -- Blacklist buttons and texts
 GF_OK = "Ok" -- Popup Dialog Button
-GF_CANCEL = "Cancel" -- Popup Dialog Button
 GF_ENTER_PLAYER_NAME = "Enter the name of the player to be blacklisted:" -- Label for blacklist add player popup
 GF_ADD_PLAYER = "Add player" -- Blacklist add player button Label
 GF_INVALID_PLAYER_NAME = " is an invalid player name." -- Blacklist tried to add invalid player name
 GF_EDIT_PLAYER = "Edit player information" -- Blacklist Edit button Label
-GF_DELETE = "Delete" -- Blacklist delete button Label
 GF_DEFAULT_PLAYER_NOTE = "New player added. Click here to edit this note." -- Default Blacklist note
 
 -- Announce related buttons
@@ -243,7 +219,6 @@ GF_NOTHING_TO_ANNOUNCE = "Nothing to announce: Setting Auto Announce to OFF" -- 
 GF_NOTHING_TO_ANNOUNCE2 = "Nothing to announce" -- If GF_LFGDescriptionEditBox is empty then can't start announce
 GF_AUTO_ANNOUNCE_SETTINGS_CHANGED = "Settings Changed: Turning Auto Announce OFF" -- If GF_LFGDescriptionEditBox is empty then can't start announce
 GF_AUTO_ANNOUNCE_NOT_IN_CHANNEL = "You are not in the World Channel"
-GF_RESET = "Reset"
 GF_SENT = "Sent: "
 GF_ANNOUNCED_LFG_EXT = "Announced LFG message to the LFG channel" -- Minimap text when your group is announced.
 GF_AFK_ANNOUNCE_OFF = "You are AFK: Turning Auto Announce OFF" -- Text when announce is on and you are AFK.
@@ -255,7 +230,6 @@ GF_SECONDS = " seconds"
 GF_MIN = " min"
 GF_MINUTE = " minute"
 GF_MINUTES = " minutes"
-GF_NOW_AFK = "You are now AFK" -- The text the client receives when it goes afk(used to turn off announce).
 GF_TIME_AGO = " ago" -- Label for righttext on group list, showing how many minutes ago group was found
 GF_TIME_JUST_NOW = "Just now" -- Text for righttext on group list, "Found ## minutes ago"
 
@@ -4050,10 +4024,10 @@ GF_BUTTONS_LIST = {
 	["BlockList"] = {
 	},
 	["GroupChannelName"] = {
-[1] = { GF_WORLD_CHANNEL_NAME},
-[2] = { GF_LFG_CHANNEL_NAME},
-[3] = { GF_TRADE_CHANNEL_NAME},
-[4] = { GF_GENERAL_CHANNEL_NAME},
+[1] = { GF_WORLD_CHANNEL_NAME },
+[2] = { GF_LFG_CHANNEL_NAME },
+[3] = { TRADE },
+[4] = { GENERAL},
 	},
 }
 GF_LFG_GROUP_ZONES = {
@@ -4097,6 +4071,9 @@ GF_ServerMessageFilters = {
 [3] = "turtlecraft",
 [4] = "WDB folder",
 [5] = "Tune in to Everlook Broadcasting",
+[6]= " seems to be sobering up.$",
+[7]= " looks drunk.$",
+[8]= " looks completely smashed.$",
 }
 GF_EmoteFilters = {
 [1]	= "RESTED XP",

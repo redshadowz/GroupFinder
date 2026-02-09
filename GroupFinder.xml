@@ -303,7 +303,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnClick>
 				</Scripts>
 			</Button>
-			<Button name="$parentCloseButton" inherits="GF_ButtonTemplate" text="GF_CANCEL">
+			<Button name="$parentCloseButton" inherits="GF_ButtonTemplate" text="CANCEL">
 				<Size>
 					<AbsDimension x="80" y="32"/>
 				</Size>
@@ -386,7 +386,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnHide>
 				</Scripts>
 			</Button>
-			<Button name="$parentCloseButton" inherits="GF_ButtonTemplate" text="GF_CANCEL">
+			<Button name="$parentCloseButton" inherits="GF_ButtonTemplate" text="CANCEL">
 				<Size>
 					<AbsDimension x="80" y="32"/>
 				</Size>
@@ -542,7 +542,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnMouseDown>
 				</Scripts>
 			</Frame>
-			<Button name="$parentGroupWhoButton" inherits="GF_ButtonTemplate" text="GF_WHO" hidden="true">
+			<Button name="$parentGroupWhoButton" inherits="GF_ButtonTemplate" text="WHO" hidden="true">
 				<Anchors>
 					<Anchor point="TOPRIGHT">
 						<Offset>
@@ -566,7 +566,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLeave>
 				</Scripts>
 			</Button>
-			<Button name="$parentLFGInviteButton" inherits="GF_ButtonTemplate" text="GF_INVITE" hidden="true">
+			<Button name="$parentLFGInviteButton" inherits="GF_ButtonTemplate" text="PARTY_INVITE" hidden="true">
 				<Anchors>
 					<Anchor point="RIGHT" relativeTo="$parentGroupWhoButton" relativePoint="LEFT">
 						<Offset>
@@ -677,7 +677,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</Layer>
 		</Layers>
 		<Frames>
-			<Button name="$parentDeleteButton" inherits="GF_ButtonTemplate" text="GF_DELETE">
+			<Button name="$parentDeleteButton" inherits="GF_ButtonTemplate" text="DELETE">
 				<Size>
 					<AbsDimension x="50" y="18"/>
 				</Size>
@@ -1293,7 +1293,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										GF_SavedVariables.showgroupsnewonly = GF_ChatFilterGroupsNewOnlyCheckButton:SetChecked(false)
 									</OnClick>
 									<OnLoad>
-										getglobal(this:GetName().."TextLabel"):SetText(GF_CHAT)
+										getglobal(this:GetName().."TextLabel"):SetText(CHAT_LABEL)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -1328,7 +1328,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										GF_SavedVariables.showgroupsinminimap = this:GetChecked()
 									</OnClick>
 									<OnLoad>
-										getglobal(this:GetName().."TextLabel"):SetText(GF_MINIMAP)
+										getglobal(this:GetName().."TextLabel"):SetText(MINIMAP_LABEL)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -1345,7 +1345,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										GF_SavedVariables.showchattexts = this:GetChecked()
 									</OnClick>
 									<OnLoad>
-										getglobal(this:GetName().."TextLabel"):SetText(GF_CHAT)
+										getglobal(this:GetName().."TextLabel"):SetText(CHAT_LABEL)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -1868,7 +1868,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnClick>
 								</Scripts>
 							</Button>
-							<Button name="GF_GetWhoFrameToggleButton" inherits="GF_ButtonTemplate" text="GF_WHO">
+							<Button name="GF_GetWhoFrameToggleButton" inherits="GF_ButtonTemplate" text="WHO">
 								<Size>
 									<AbsDimension x="40" y="22"/>
 								</Size>
@@ -2063,7 +2063,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</Frame>
 									<EditBox name="GF_GetWhoWhisperEditBox" letters="128" inherits="GF_AbstractEditBox">
 										<Size>
-											<AbsDimension x="210" y="22"/>
+											<AbsDimension x="200" y="22"/>
 										</Size>
 										<Anchors>
 											<Anchor point="LEFT" relativeTo="GF_GetWhoLevelDropdown" relativePoint="RIGHT">
@@ -2075,7 +2075,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										<Frames>
 											<Button name="GF_GetWhoNameLabel" enableMouse="true" toplevel="true" justifyH="LEFT">
 												<Size>
-													<AbsDimension x="102" y="20"/>
+													<AbsDimension x="112" y="20"/>
 												</Size>
 												<Anchors>
 													<Anchor point="LEFT" relativeTo="GF_GetWhoWhisperEditBox" relativePoint="RIGHT">
@@ -2088,6 +2088,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 													<OnMouseDown>
 														GF_ToggleGetWhoDropDownMenu(this,this:GetParent():GetID())
 													</OnMouseDown>
+													<OnLoad>
+														this:Disable()
+													</OnLoad>
 												</Scripts>
 											</Button>
 										</Frames>
@@ -2160,7 +2163,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											</OnClick>
 										</Scripts>
 									</Button>
-									<Button name="GF_GetWhoWhisperButton" inherits="GF_ButtonTemplate" text="GF_WHISPER">
+									<Button name="GF_GetWhoWhisperButton" inherits="GF_ButtonTemplate" text="WHISPER">
 										<Size>
 											<AbsDimension x="65" y="24"/>
 										</Size>
@@ -2574,7 +2577,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 													GF_FixLFGStrings()
 											</OnClick>
 											<OnLoad>
-												getglobal(this:GetName().."TextLabel"):SetText(GF_LEVEL)
+												getglobal(this:GetName().."TextLabel"):SetText(LEVEL)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -3260,7 +3263,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 											</OnClick>
 											<OnLoad>
-												getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_GROUP)
+												getglobal(this:GetName().."TextLabel"):SetText(GROUP)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -3298,7 +3301,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 											</OnClick>
 											<OnLoad>
-												getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_CHAT)
+												getglobal(this:GetName().."TextLabel"):SetText(CHAT_LABEL)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -3317,7 +3320,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 											</OnClick>
 											<OnLoad>
-												getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_TRADES)
+												getglobal(this:GetName().."TextLabel"):SetText(GF_TRADES)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -3336,7 +3339,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 											</OnClick>
 											<OnLoad>
-												getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_GUILD)
+												getglobal(this:GetName().."TextLabel"):SetText(CHAT_MSG_GUILD)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -3355,7 +3358,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 											</OnClick>
 											<OnLoad>
-												getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_LOOT)
+												getglobal(this:GetName().."TextLabel"):SetText(CHAT_MSG_LOOT)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -3393,7 +3396,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 											</OnClick>
 											<OnLoad>
-												getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_BLACKLIST)
+												getglobal(this:GetName().."TextLabel"):SetText(GF_BLACK_LIST)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -3412,7 +3415,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 											</OnClick>
 											<OnLoad>
-												getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_BELOWLEVEL)
+												getglobal(this:GetName().."TextLabel"):SetText(LEVEL)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -3508,7 +3511,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 											</OnClick>
 											<OnLoad>
-												getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_CHANNELS)
+												getglobal(this:GetName().."TextLabel"):SetText(CHANNELS)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -3527,7 +3530,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 											</OnClick>
 											<OnLoad>
-												getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_PARTY)
+												getglobal(this:GetName().."TextLabel"):SetText(PARTY)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -3546,7 +3549,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 											</OnClick>
 											<OnLoad>
-												getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_GUILD)
+												getglobal(this:GetName().."TextLabel"):SetText(CHAT_MSG_GUILD)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -3565,7 +3568,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 											</OnClick>
 											<OnLoad>
-												getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_WHISPER)
+												getglobal(this:GetName().."TextLabel"):SetText(WHISPER)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -3584,7 +3587,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 											</OnClick>
 											<OnLoad>
-												getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_SAY)
+												getglobal(this:GetName().."TextLabel"):SetText(CHAT_MSG_SAY)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -3603,7 +3606,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 											</OnClick>
 											<OnLoad>
-												getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_YELL)
+												getglobal(this:GetName().."TextLabel"):SetText(CHAT_MSG_YELL)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -3622,7 +3625,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 											</OnClick>
 											<OnLoad>
-												getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_HARDCORE)
+												getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_HARDCORE)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -3808,9 +3811,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									<AbsDimension x="125" y="20"/>
 								</Size>
 								<Anchors>
-									<Anchor point="LEFT" relativeTo="GF_LogChannelFilterDropdownButtonTextLabel" relativePoint="RIGHT">
+									<Anchor point="RIGHT" relativeTo="GF_GroupLogButton" relativePoint="LEFT">
 										<Offset>
-											<AbsDimension x="25" y="0"/>
+											<AbsDimension x="-30" y="0"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -4236,7 +4239,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 									<OnValueChanged>
 										GF_SavedVariables.autoblacklistminlevel = this:GetValue()
-										getglobal(this:GetName().."Label"):SetText(GF_LEVEL.." "..this:GetValue())
+										getglobal(this:GetName().."Label"):SetText(LEVEL.." "..this:GetValue())
 									</OnValueChanged>
 								</Scripts>
 							</Slider>
@@ -4274,7 +4277,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 									<OnValueChanged>
 										GF_SavedVariables.blockmessagebelowlevel = this:GetValue()
-										getglobal(this:GetName().."Label"):SetText(GF_LEVEL.." "..this:GetValue())
+										getglobal(this:GetName().."Label"):SetText(LEVEL.." "..this:GetValue())
 									</OnValueChanged>
 								</Scripts>
 							</Slider>
@@ -4463,7 +4466,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												GF_SavedVariables.blacklisttrades = this:GetChecked()
 											</OnClick>
 											<OnLoad>
-												getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_TRADES)
+												getglobal(this:GetName().."TextLabel"):SetText(GF_TRADES)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -4480,7 +4483,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												GF_SavedVariables.blacklistguild = this:GetChecked()
 											</OnClick>
 											<OnLoad>
-												getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_GUILD)
+												getglobal(this:GetName().."TextLabel"):SetText(CHAT_MSG_GUILD)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -4497,7 +4500,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												GF_SavedVariables.blacklistchat = this:GetChecked()
 											</OnClick>
 											<OnLoad>
-												getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_CHAT)
+												getglobal(this:GetName().."TextLabel"):SetText(CHAT_LABEL)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -5243,7 +5246,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							</OnClick>
 						</Scripts>
 					</Button>
-					<Button name="GF_PlayerNoteFrameDeleteButton" inherits="GF_ButtonTemplate" text="GF_DELETE">
+					<Button name="GF_PlayerNoteFrameDeleteButton" inherits="GF_ButtonTemplate" text="DELETE">
 						<Size>
 							<AbsDimension x="50" y="25"/>
 						</Size>
