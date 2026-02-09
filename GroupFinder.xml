@@ -4332,7 +4332,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_UseNormalFontsCheckButton" inherits="GF_CheckButtonTemplate_Label">
+							<CheckButton name="GF_UseArialFontCheckButton" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeTo="GF_AlwaysShowGuildFriendsCheckButton" relativePoint="BOTTOMLEFT">
 										<Offset>
@@ -4342,11 +4342,11 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										GF_SavedVariables.normalfonts = this:GetChecked()
+										GF_SavedVariables.arialfont = this:GetChecked()
 										GF_SetStringSize()
 									</OnClick>
 									<OnLoad>
-										getglobal(this:GetName().."TextLabel"):SetText(GF_USE_NORMAL_FONTS)
+										getglobal(this:GetName().."TextLabel"):SetText(GF_USE_ARIAL_FONT)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
