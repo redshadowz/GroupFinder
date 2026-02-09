@@ -373,11 +373,11 @@ function GF_SetStringSize()
 		if GF_UIScaleSliderLabel:GetStringWidth() > 450 then fontAdjust = fontAdjust + 1 else break end
 	end
 	GF_BaseFontSize = 13 - fontAdjust fontSizeLarge = 15 - fontAdjust fontSizeButton = 13 - fontAdjust fontSizeMinimap = 11 - fontAdjust
-	
+
 --	14 = 444, 13 = 417(6%/7%), 12 = 369(17%/14%), 11 = 343, 10 = 313
 
 	for i=0,19 do
-		getglobal("GF_WhisperHistoryButton"..i):SetFont(fontName,fontSizeLarge)
+		getglobal("GF_WhisperHistoryButton"..i):SetFont(fontName,fontSizeButton)
 	end
 	for i=1,20 do
 		getglobal("GF_BlackListItem"..i.."NameLabel"):SetFont(fontName,GF_BaseFontSize)
@@ -392,6 +392,7 @@ function GF_SetStringSize()
 		getglobal("GF_NewItem"..i.."LFGInviteButton"):SetFont(fontName,fontSizeLarge)
 		getglobal("GF_NewItem"..i.."LFMWhisperRequestInviteButton"):SetFont(fontName,fontSizeLarge)
 	end
+
 	local frameNames = { "GF_AutoFilterCheckButtonTextLabel","GF_PlaySoundOnResultsCheckButtonTextLabel","GF_GroupsFrameShowLFMCheckButtonTextLabel","GF_GroupsFrameShowLFGCheckButtonTextLabel","GF_LFGHardCoreDropdownTextLabel",
 	"GF_ChatFilterDropdownButtonTextLabel","GF_GroupFilterDropdownButtonTextLabel","GF_FrameUseWhoOnGroupsCheckButtonTextLabel","GF_GroupsFrameDescriptionEditBoxTextLabel","GF_GetWhoClassDropdownTextLabel","GF_GetWhoLevelDropdownTextLabel",
 	"GF_GroupAutoCheckButtonTextLabel","GF_LFGSizeDropdownTextLabel","GF_LFGLFMDropdownTextLabel","GF_LFGDungeonDropdownTextLabel","GF_LFGRaidDropdownTextLabel","GF_LFGRoleDropdownTextLabel","GF_LFGMyRoleLevelCheckButtonTextLabel",
@@ -401,7 +402,7 @@ function GF_SetStringSize()
 	"GF_LogFilterDropdownButtonTextLabel","GF_LogChannelFilterDropdownButtonTextLabel","GF_AutoJoinGroupChannelCheckButtonTextLabel","GF_FrameSpamFilterCheckButtonTextLabel","GF_FrameSystemFilterCheckButtonTextLabel",
 	"GF_AutomaticBlacklistCheckButtonTextLabel","GF_FrameShowFormattedChatCheckButtonTextLabel","GF_AlwaysShowGuildFriendsCheckButtonTextLabel","GF_FrameQuestModCheckButtonTextLabel","GF_PurgePFDBCheckButtonTextLabel",
 	"GF_UseClickCombosCheckButtonTextLabel","GF_UseFriendsListCheckButtonTextLabel","GF_DisableHardcoreCheckButtonTextLabel","GF_AutoBlacklistTradesCheckButtonTextLabel","GF_AutoBlacklistGuildCheckButtonTextLabel","GF_EditPlayerNoteFrameTitleLabel",
-	"GF_AutoBlacklistChatCheckButtonTextLabel","GF_AutoBlacklistForeignCheckButtonTextLabel","GF_UseNormalFontsCheckButtonTextLabel","GF_BlockListDropdownTextLabel","GF_SquareMinimapCheckButtonTextLabel","GF_MinimapIconTextLabel", }
+	"GF_AutoBlacklistChatCheckButtonTextLabel","GF_AutoBlacklistForeignCheckButtonTextLabel","GF_UseNormalFontsCheckButtonTextLabel","GF_BlockListDropdownTextLabel","GF_SquareMinimapCheckButtonTextLabel", }
 	for i=1, getn(frameNames) do getglobal(frameNames[i]):SetFont(fontName,GF_BaseFontSize) end
 	frameNames = { "GF_GetWhoTotalNames","GF_AnnounceToLFGButton","GF_GetWhoButton","GF_GetWhoSkipButton","GF_GetWhoWhisperButton","GF_GetWhoNameLabel","GF_PageLabel","GF_ResultsLabel","GF_ShowSearchButton",	"GF_SettingsFrameButton",
 	"GF_PlayerNoteFrameOKButton","GF_PlayerNoteFrameDeleteButton","GF_ShowBlacklistButton","GF_LogFrameButton","GF_LFGFrameToggleButton","GF_GetWhoFrameToggleButton","GF_ConvertLogMessagesToURL","GF_UIScaleSliderUpdateButton",
@@ -414,6 +415,7 @@ function GF_SetStringSize()
 		getglobal("GF_MinimapMessageFrameA"..i):SetFont(fontName,fontSizeMinimap)
 		getglobal("GF_MinimapMessageFrameB"..i):SetFont(fontName,fontSizeMinimap)
 	end
+	GF_MinimapIconTextLabel:SetFont(fontName,fontSizeMinimap)
 	GF_Log:SetFont(fontName,fontSizeLarge)
 	GF_ChatFilterDropdownButton:SetPoint("TOPRIGHT", GF_MainFrameCloseButton, "BOTTOMRIGHT", -1*getglobal(GF_ChatFilterDropdownButton:GetName().."TextLabel"):GetStringWidth() -15, 6)
 
@@ -721,7 +723,7 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 	end
 	local old_SendWho = SendWho
 	function SendWho(...)
-		GF_NextAvailableWhoTime = time() + GF_WhoCooldownTime
+		GF_NextAvailableWhoTime = time() + 5
 		old_SendWho(unpack(arg))
 	end
 	local old_FriendsFrame_OnEvent = FriendsFrame_OnEvent
@@ -814,7 +816,7 @@ function GF_HandleItemRefLinks(link,text,button) -- Will have to update when I a
 							return true
 						end
 					end
-					TargetByName(name)
+					TargetByName(name,1)
 					return true
 				elseif IsShiftKeyDown() then
 					if GF_LFGDescriptionEditBoxHasFocus[1] then
@@ -1470,7 +1472,7 @@ function GF_WhoListUpdated()
 		GF_TimeTillNextBroadcast = 0
 		if GF_ClassWhoRequest and not GF_ClassWhoTable[name] and not GF_PlayersCurrentlyInGroup[name] and level >= GF_GetWhoParams[1]-GF_GetWhoLevelRange and level <= GF_GetWhoParams[1]+GF_GetWhoLevelRange
 		and class == GF_GetWhoParams[2] and (not GF_GetWhoParams[3] or (GF_GetWhoParams[3] and not GF_LFG_GROUP_ZONES[zone])) then
-			GF_ClassWhoTable[name] = { level, class, zone, time() }
+			GF_ClassWhoTable[name] = { level, GF_Classes[class], zone, time() }
 			GF_ClassWhoMatchingResults = GF_ClassWhoMatchingResults + 1
 		end
 	end
@@ -1481,19 +1483,20 @@ function GF_WhoListUpdated()
 				GF_GetWhoTotalNames:SetText(GF_ClassWhoMatchingResults)
 				GF_CreateGetWhoQueueList(GF_GetWhoParams[1], GF_GetWhoParams[2])
 				GF_GetWhoButton:SetText(GF_STOP_WHO)
-				for name,entry in pairs(GF_ClassWhoTable) do if entry[4] <= time() then GF_GetWhoName = name GF_GetWhoNameLabel:SetText(name.."("..entry[1]..")") break end end
+				for name,entry in pairs(GF_ClassWhoTable) do if entry[4] <= time() then GF_GetWhoName = name GF_GetWhoNameLabel:SetText(GF_CreateGetWhoNameLink(name)) break end end
 			else
 				GF_ClassWhoRequest = nil
 				GF_GetWhoButton:SetText(GF_GET_WHO)
 				GF_GetWhoTotalNames:SetText(GF_ClassWhoMatchingResults)
-				for name,entry in pairs(GF_ClassWhoTable) do if entry[4] <= time() then GF_GetWhoName = name GF_GetWhoNameLabel:SetText(name.."("..entry[1]..")") break end end
+				for name,entry in pairs(GF_ClassWhoTable) do if entry[4] <= time() then GF_GetWhoName = name GF_GetWhoNameLabel:SetText(GF_CreateGetWhoNameLink(name)) break end end
 			end
 		else
 			GF_GetWhoTotalNames:SetText(GF_ClassWhoMatchingResults)
-			for name,entry in pairs(GF_ClassWhoTable) do if entry[4] <= time() then GF_GetWhoName = name GF_GetWhoNameLabel:SetText(name.."("..entry[1]..")") break end end
+			for name,entry in pairs(GF_ClassWhoTable) do if entry[4] <= time() then GF_GetWhoName = name GF_GetWhoNameLabel:SetText(GF_CreateGetWhoNameLink(name)) break end end
 		end
 	end
 	SetWhoToUI(0)
+	GF_NextAvailableWhoTime = time() + GF_WhoCooldownTime
 end
 function GF_AddNameToWhoQueue(name,addToTopOfList,useFriends)
 	for i=1, getn(GF_WhoQueue) do
@@ -3078,13 +3081,13 @@ function GF_PruneTheWhoTable()
 	end
 -- This deletes old groups, both within the main groups log, but also
 -- I don't need "Groups" entry, change to "Other"... "All Groups" uses the base 1-128 entries
-	for realm,groupdata in GF_GroupHistory do -- Delete old entries
-		for name, gData in GF_GroupHistory[realm] do
-			if gData[2] and gData[4] + 2592000 < time() then -- Keep GroupHistory Playerdata for 30 days after the last group
-				GF_WhoTable[realm][name] = nil
-			end
-		end
-	end
+--	for realm,groupdata in GF_GroupHistory do -- Delete old entries
+--		for name, gData in GF_GroupHistory[realm] do
+--			if gData[2] and gData[4] + 2592000 < time() then -- Keep GroupHistory Playerdata for 30 days after the last group
+--				GF_WhoTable[realm][name] = nil
+--			end
+--		end
+--	end
 	for realm,_ in GF_MessageList do
 		for i=1, getn(GF_MessageList[realm]) do
 			if GF_MessageList[realm][i] then
@@ -3263,7 +3266,7 @@ function GF_GetLevelString(level,flags)
 	else return "["..level.."]|r " end
 end
 function GF_ToggleDropDownMenu(frame,id)
-	if not GF_HandleItemRefLinks("player:"..GF_FilteredResultsList[GF_ResultsListOffset+id].op,text,arg1) then
+	if not GF_HandleItemRefLinks("player:"..GF_FilteredResultsList[GF_ResultsListOffset+id].op,GF_FilteredResultsList[GF_ResultsListOffset+id].message,arg1) then
 		if arg1 == "RightButton" then
 			HideDropDownMenu(1)
 			if GF_FilteredResultsList[GF_ResultsListOffset+id].op ~= UnitName("player") then
@@ -3735,7 +3738,7 @@ function GF_GetWhoSendWhisperToAvailablePlayer()
 		GF_ClassWhoRequest = nil
 		GF_ClassWhoQueue = {}
 		GF_GetWhoButton:SetText(GF_GET_WHO)
-		for name,entry in pairs(GF_ClassWhoTable) do if entry[4] <= time() then GF_GetWhoName = name GF_GetWhoNameLabel:SetText(name.."("..entry[1]..")") return end end
+		for name,entry in pairs(GF_ClassWhoTable) do if entry[4] <= time() then GF_GetWhoName = name GF_GetWhoNameLabel:SetText(GF_CreateGetWhoNameLink(name)) return end end
 		GF_GetWhoName = ""
 		GF_GetWhoNameLabel:SetText("")
 	end
@@ -3749,9 +3752,85 @@ function GF_GetWhoSkipPlayer()
 		GF_ClassWhoQueue = {}
 		GF_GetWhoButton:SetText(GF_GET_WHO)
 	end
-	for name,entry in pairs(GF_ClassWhoTable) do if entry[4] <= time() then GF_GetWhoName = name GF_GetWhoNameLabel:SetText(name.."("..entry[1]..")") return end end
+	for name,entry in pairs(GF_ClassWhoTable) do if entry[4] <= time() then GF_GetWhoName = name GF_GetWhoNameLabel:SetText(GF_CreateGetWhoNameLink(name)) return end end
 	GF_GetWhoName = ""
 	GF_GetWhoNameLabel:SetText("")
+end
+function GF_ToggleGetWhoDropDownMenu()
+	if not GF_HandleItemRefLinks("player:"..GF_GetWhoName,GF_GetWhoName,arg1) then
+		if arg1 == "RightButton" then
+			HideDropDownMenu(1)
+			GameTooltip:Hide()
+			GF_GetWhoDropDownMenu = CreateFrame("Frame", "GF_GetWhoDropDownMenu", frame, "UIDropDownMenuTemplate")
+			GF_GetWhoDropDownMenu.name = GF_GetWhoName
+			UIDropDownMenu_Initialize(GF_GetWhoDropDownMenu, GF_CreateGetWhoDropDownMenu, "MENU")
+			ToggleDropDownMenu(1, nil, GF_GetWhoDropDownMenu, "cursor")
+		else
+			CloseDropDownMenus(1)
+			TargetByName(GF_GetWhoName,1)
+		end
+	end
+end
+function GF_CreateGetWhoDropDownMenu()
+	info = {}
+	info.isTitle = true
+	info.text = GF_GetWhoDropDownMenu.name
+	info.notCheckable = true
+	UIDropDownMenu_AddButton(info, 1)
+
+	info = {}
+	info.isTitle = nil
+	info.notCheckable = true
+	info.hasArrow = false
+	info.disabled = nil
+	info.text = WHISPER
+	info.func = function() ChatFrame_SendTell(GF_GetWhoDropDownMenu.name) end
+	info.value = nil
+	UIDropDownMenu_AddButton(info, 1)
+
+	info = {}
+	info.isTitle = nil
+	info.notCheckable = true
+	info.hasArrow = false
+	info.disabled = nil
+	info.text = PARTY_INVITE
+	info.func = function() InviteByName(GF_GetWhoDropDownMenu.name) end
+	info.value = nil
+	UIDropDownMenu_AddButton(info, 1)	
+
+	info = {}
+	info.isTitle = nil
+	info.notCheckable = true
+	info.hasArrow = false
+	info.disabled = nil
+	info.text = WHO
+	info.func = function()
+		for i=1, getn(GF_UrgentWhoRequest) do
+			if GF_UrgentWhoRequest[i] == GF_GetWhoDropDownMenu.name then table.remove(GF_UrgentWhoRequest, i) break end
+		end
+		if GF_NextAvailableWhoTime + 1 > time() then 
+			DEFAULT_CHAT_FRAME:AddMessage(GF_SENDING_WHO_FOR..GF_GetWhoDropDownMenu.name.." - "..math.ceil(GF_NextAvailableWhoTime - time() + getn(GF_UrgentWhoRequest) * 30)..GF_SECONDS, 1, 1, 0.5)
+		else
+			DEFAULT_CHAT_FRAME:AddMessage(GF_SENDING_WHO_FOR..GF_GetWhoDropDownMenu.name, 1, 1, 0.5)
+		end
+		table.insert(GF_UrgentWhoRequest,GF_GetWhoDropDownMenu.name)
+		GF_UrgentWhoRequest[GF_GetWhoDropDownMenu.name] = time()
+	end
+	info.value = nil
+	UIDropDownMenu_AddButton(info, 1)	
+
+	info = {}
+	info.isTitle = nil
+	info.notCheckable = true
+	info.hasArrow = false
+	info.disabled = nil
+	info.text = CANCEL
+	info.func = function() CloseDropDownMenus(1) end
+	info.value = nil
+	UIDropDownMenu_AddButton(info, 1)	
+end
+function GF_CreateGetWhoNameLink(name)
+	return "|cff"..(GF_ClassColors[GF_ClassWhoTable[name][2]] or "ffffff").."|Hplayer:"..name.."|h"..name.."("..GF_ClassWhoTable[name][1]..")|h|r"
 end
 
 function GF_FixLFGStrings(groupSizeOnly) -- LFG Group Maker Functions

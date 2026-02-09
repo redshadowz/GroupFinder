@@ -2072,22 +2072,25 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												</Offset>
 											</Anchor>
 										</Anchors>
-										<Layers>
-											<Layer level="ARTWORK">
-												<FontString inherits="GF_NormalFont" name="GF_GetWhoNameLabel" justifyH="LEFT" nonspacewrap="false">
-													<Size>
-														<AbsDimension x="170" y="20"/>
-													</Size>
-													<Anchors>
-														<Anchor point="LEFT" relativePoint="RIGHT">
-															<Offset>
-																<AbsDimension x="5" y="0"/>
-															</Offset>
-														</Anchor>
-													</Anchors>
-												</FontString>
-											</Layer>
-										</Layers>
+										<Frames>
+											<Button name="GF_GetWhoNameLabel" enableMouse="true" toplevel="true" justifyH="LEFT">
+												<Size>
+													<AbsDimension x="102" y="20"/>
+												</Size>
+												<Anchors>
+													<Anchor point="LEFT" relativeTo="GF_GetWhoWhisperEditBox" relativePoint="RIGHT">
+														<Offset>
+															<AbsDimension x="0" y="0"/>
+														</Offset>
+													</Anchor>
+												</Anchors>
+												<Scripts>
+													<OnMouseDown>
+														GF_ToggleGetWhoDropDownMenu(this,this:GetParent():GetID())
+													</OnMouseDown>
+												</Scripts>
+											</Button>
+										</Frames>
 										<Scripts>
 											<OnEnter>
 												GF_ShowTooltip(this)
@@ -3805,9 +3808,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									<AbsDimension x="125" y="20"/>
 								</Size>
 								<Anchors>
-									<Anchor point="RIGHT" relativeTo="GF_GroupLogButton" relativePoint="LEFT">
+									<Anchor point="LEFT" relativeTo="GF_LogChannelFilterDropdownButtonTextLabel" relativePoint="RIGHT">
 										<Offset>
-											<AbsDimension x="0" y="0"/>
+											<AbsDimension x="25" y="0"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
