@@ -730,7 +730,6 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 	function FriendsFrame_OnEvent(...)
 		if GF_BlockingFriendsListUpdates and event == "FRIENDLIST_UPDATE" then
 			GF_UpdateFriendsList()
-			old_FriendsFrame_OnEvent(event)
 		elseif event ~= "WHO_LIST_UPDATE" or WhoFrame:IsVisible() then
 			old_FriendsFrame_OnEvent(event)
 		end
@@ -1525,13 +1524,15 @@ function GF_UpdateWhoDataViaFriendsList()
 	GF_UpdateWhoDataViaFriendsListTimer = GF_UpdateWhoDataViaFriendsListTimer - 1
 	if GF_UpdateWhoDataViaFriendsListTimer < 0 then
 		GF_UpdateWhoDataViaFriendsListTimer = 1
-		local highestPriorityName
-		local highestPriorityTime = time() + 999999
-		for name,data in GF_SavedVariables.friendsToRemove do if data > time() then if data < highestPriorityTime and (not GF_FriendUnknown[highestPriorityName] or GF_FriendUnknown[highestPriorityName] + 900 < time()) then highestPriorityTime = data highestPriorityName = name end end end
-		if highestPriorityName then
-			AddFriend(highestPriorityName)
-			GF_BlockingFriendsListUpdates = true
-			GF_SavedVariables.friendsToRemove[highestPriorityName] = time() return
+		if not FriendsFrame:IsVisible() then
+			local highestPriorityName
+			local highestPriorityTime = time() + 999999
+			for name,data in GF_SavedVariables.friendsToRemove do if data > time() then if data < highestPriorityTime and (not GF_FriendUnknown[highestPriorityName] or GF_FriendUnknown[highestPriorityName] + 900 < time()) then highestPriorityTime = data highestPriorityName = name end end end
+			if highestPriorityName then
+				AddFriend(highestPriorityName)
+				GF_BlockingFriendsListUpdates = true
+				GF_SavedVariables.friendsToRemove[highestPriorityName] = time() return
+			end
 		end
 	end
 end
@@ -3757,17 +3758,19 @@ function GF_GetWhoSkipPlayer()
 	GF_GetWhoNameLabel:SetText("")
 end
 function GF_ToggleGetWhoDropDownMenu()
-	if not GF_HandleItemRefLinks("player:"..GF_GetWhoName,GF_GetWhoName,arg1) then
-		if arg1 == "RightButton" then
-			HideDropDownMenu(1)
-			GameTooltip:Hide()
-			GF_GetWhoDropDownMenu = CreateFrame("Frame", "GF_GetWhoDropDownMenu", frame, "UIDropDownMenuTemplate")
-			GF_GetWhoDropDownMenu.name = GF_GetWhoName
-			UIDropDownMenu_Initialize(GF_GetWhoDropDownMenu, GF_CreateGetWhoDropDownMenu, "MENU")
-			ToggleDropDownMenu(1, nil, GF_GetWhoDropDownMenu, "cursor")
-		else
-			CloseDropDownMenus(1)
-			TargetByName(GF_GetWhoName,1)
+	if GF_ClassWhoTable[GF_GetWhoName] then
+		if not GF_HandleItemRefLinks("player:"..GF_GetWhoName,GF_GetWhoName,arg1) then
+			if arg1 == "RightButton" then
+				HideDropDownMenu(1)
+				GameTooltip:Hide()
+				GF_GetWhoDropDownMenu = CreateFrame("Frame", "GF_GetWhoDropDownMenu", frame, "UIDropDownMenuTemplate")
+				GF_GetWhoDropDownMenu.name = GF_GetWhoName
+				UIDropDownMenu_Initialize(GF_GetWhoDropDownMenu, GF_CreateGetWhoDropDownMenu, "MENU")
+				ToggleDropDownMenu(1, nil, GF_GetWhoDropDownMenu, "cursor")
+			else
+				CloseDropDownMenus(1)
+				TargetByName(GF_GetWhoName,1)
+			end
 		end
 	end
 end
