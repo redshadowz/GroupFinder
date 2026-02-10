@@ -95,7 +95,7 @@ local GF_TextBypassChatNameAlias = { ["OFFICER"] = "GUILD",["RAID"] = "PARTY",["
 local GF_LootFilter = { ["MONEY"] = true,["LOOT"] = true,["COMBAT_FACTION_CHANGE"] = true,["COMBAT_XP_GAIN"] = true,["COMBAT_HONOR_GAIN"] = true }
 local ThingsToHide = { "GF_MainFrameCloseButton","GF_GroupChatOptionsFrame","GF_ShowSearchButton","GF_SettingsFrameButton","GF_ShowBlacklistButton","GF_LogFrameButton","GF_AnnounceToLFGButton",
 "GF_LogBottomButton","GF_LogDownButton","GF_LogUpButton","GF_LogFilterDropdownButton","GF_LogChannelFilterDropdownButton","GF_ConvertLogMessagesToURL","GF_WhisperLogButton","GF_GroupLogButton",
-"GF_GetWhoFrame","GF_LFGFrame","GF_MessageFrame","GF_LogFilterDropdownMenu","GF_GroupFilterDropdownMenu","GF_ChatFilterDropdownMenu","GF_LFGHardCoreDropdown","GF_GroupChannelName","GF_BlockList","GF_AutoBlacklistDropdownMenu", }
+"GF_GetWhoFrame","GF_LFGFrame","GF_MessageFrame","GF_LogFilterDropdownMenu","GF_GroupFilterDropdownMenu","GF_ChatFilterDropdownMenu","GF_LFGHardCoreDropdown","GF_FontName","GF_GroupChannelName","GF_BlockList","GF_AutoBlacklistDropdownMenu", }
 local GF_DifficultyColors = { ["RED"] = "ff0000",["ORANGE"] = "ff8040",["YELLOW"] = "ffff00",["GREEN"] = "1eff00",["GREY"] = "808080", }
 local GF_TankClasses						= {	["DRUID"]=true,["WARRIOR"]=true,["PALADIN"]=true,["SHAMAN"]=true }
 local GF_HealingClasses						= {	["PRIEST"]=true,["DRUID"]=true,["PALADIN"]=true,["SHAMAN"]=true }
@@ -213,7 +213,7 @@ function GF_LoadVariables()
 
 		if not GF_SavedVariables.clickcombos then GF_SavedVariables.clickcombos = true end
 		if not GF_SavedVariables.usefriendslist then if GF_KNOWN_SERVERS_LIST[GF_RealmName] then GF_SavedVariables.usefriendslist = true else GF_SavedVariables.usefriendslist = false end end
-		if not GF_SavedVariables.arialfont then GF_SavedVariables.arialfont = false end
+		if not GF_SavedVariables.fontname then GF_SavedVariables.fontname = 1 end
 		if not GF_SavedVariables.blacklisttrades then GF_SavedVariables.blacklisttrades = false end
 		if not GF_SavedVariables.blacklistguild then GF_SavedVariables.blacklistguild = false end
 		if not GF_SavedVariables.blacklistchat then GF_SavedVariables.blacklistchat = false end
@@ -279,6 +279,23 @@ function GF_LoadVariables()
 		SetGuildRosterShowOffline(false)
 	end
 	for i=1,getn(GF_SavedVariables.blocklist) do table.insert(GF_BUTTONS_LIST["BlockList"],{GF_SavedVariables.blocklist[i]}) GF_WORD_BLOCK_LIST[GF_FormatBlockListWords(GF_SavedVariables.blocklist[i])] = true end
+	
+	GF_BUTTONS_LIST["FontName"][1][2] = ChatFontNormal:GetFont()
+	if pfUI and pfUI.gui and pfUI.gui.dropdowns and pfUI.gui.dropdowns.fonts then
+		local tempTable = {}
+		for i=1, getn(pfUI.gui.dropdowns.fonts) do
+			for fontPath,fontName in string.gfind(pfUI.gui.dropdowns.fonts[i], "(.*):(.*)") do
+				table.insert(tempTable,{fontName,fontPath})
+			end
+		end
+		if getn(tempTable) > 4 then
+			for i=2, getn(GF_BUTTONS_LIST["FontName"]) do GF_BUTTONS_LIST["FontName"][i] = nil end
+			for i=1, getn(tempTable) do
+				table.insert(GF_BUTTONS_LIST["FontName"],{tempTable[i][1],tempTable[i][2]})
+			end
+		end
+	end
+	if type(GF_SavedVariables.fontname) ~= "number" or GF_SavedVariables.fontname > getn(GF_BUTTONS_LIST["FontName"]) then GF_SavedVariables.fontname = 1 end
 end
 function GF_LoadSettings()
 	if GF_TURTLE_SERVERS_LIST[GF_RealmName] then GF_AddTurtleWoWDungeonsRaids() GF_WhoCooldownTime = 30 GF_PlayingOnTurtle = true end -- See if I'm not Turtle servers.
@@ -319,7 +336,7 @@ function GF_LoadSettings()
 	GF_SavedVariables.spamfilter,GF_SavedVariables.autoblacklist, GF_PerCharVariables.playsounds, GF_PerCharVariables.lfgauto,GF_SavedVariables.mainframeheight, GF_SavedVariables.mainframewidth,
 	GF_SavedVariables.alwaysshowguild, GF_SavedVariables.questmod, GF_SavedVariables.purgepfdb, GF_SavedVariables.logchannels, GF_SavedVariables.logparty, GF_SavedVariables.logguild, GF_SavedVariables.logwhisper, GF_SavedVariables.logsay,
 	GF_SavedVariables.logyell, GF_SavedVariables.loghardcore, GF_PerCharVariables.lfglevel, GF_PerCharVariables.lfgdps, GF_PerCharVariables.lfgheal, GF_PerCharVariables.lfgtank,GF_SavedVariables.clickcombos,GF_PerCharVariables.disablehardcore,
-	GF_SavedVariables.usefriendslist,GF_SavedVariables.arialfont,GF_SavedVariables.blacklisttrades,GF_SavedVariables.blacklistguild,GF_SavedVariables.blacklistchat,GF_SavedVariables.blacklistforeign,GF_SavedVariables.iconpriority, }
+	GF_SavedVariables.usefriendslist,GF_SavedVariables.blacklisttrades,GF_SavedVariables.blacklistguild,GF_SavedVariables.blacklistchat,GF_SavedVariables.blacklistforeign,GF_SavedVariables.iconpriority, }
 
 	VarNames = { "GF_ChatFilterGroupsInChatCheckButton","GF_ChatFilterGroupsInMinimapCheckButton","GF_ChatFilterGroupsNewOnlyCheckButton","GF_ChatFilterShowChatCheckButton","GF_ChatFilterShowTradesCheckButton","GF_ChatFilterShowLootCheckButton",
 	"GF_ChatFilterShowGuildsCheckButton","GF_AutoFilterCheckButton","GF_GroupFilterShowDungeonCheckButton","GF_GroupFilterShowRaidCheckButton","GF_GroupFilterShowQuestCheckButton","GF_GroupFilterShowOtherCheckButton","GF_GroupsFrameShowLFMCheckButton",
@@ -327,12 +344,12 @@ function GF_LoadSettings()
 	"GF_LogFilterShowBelowLevel","GF_AutoJoinGroupChannelCheckButton","GF_FrameShowFormattedChatCheckButton","GF_FrameUseWhoOnGroupsCheckButton","GF_FrameSystemFilterCheckButton","GF_SquareMinimapCheckButton","GF_FrameSpamFilterCheckButton",
 	"GF_AutomaticBlacklistCheckButton","GF_PlaySoundOnResultsCheckButton","GF_GroupAutoCheckButton","GF_HideMainFrameHeight","GF_HideMainFrameWidth","GF_AlwaysShowGuildFriendsCheckButton","GF_FrameQuestModCheckButton",
 	"GF_PurgePFDBCheckButton","GF_LogChannelFilterChannels","GF_LogChannelFilterParty","GF_LogChannelFilterGuild","GF_LogChannelFilterWhisper","GF_LogChannelFilterSay","GF_LogChannelFilterYell","GF_LogChannelFilterHardcore",
-	"GF_LFGMyRoleLevelCheckButton","GF_LFGMyRoleDPSCheckButton","GF_LFGMyRoleHealCheckButton","GF_LFGMyRoleTankCheckButton","GF_UseClickCombosCheckButton","GF_DisableHardcoreCheckButton","GF_UseFriendsListCheckButton","GF_UseArialFontCheckButton",
+	"GF_LFGMyRoleLevelCheckButton","GF_LFGMyRoleDPSCheckButton","GF_LFGMyRoleHealCheckButton","GF_LFGMyRoleTankCheckButton","GF_UseClickCombosCheckButton","GF_DisableHardcoreCheckButton","GF_UseFriendsListCheckButton",
 	"GF_AutoBlacklistTradesCheckButton","GF_AutoBlacklistGuildCheckButton","GF_AutoBlacklistChatCheckButton","GF_AutoBlacklistForeignCheckButton","GF_MinimapIconPriorityCheckButton", }
 	for i=1, getn(VarNames) do getglobal(VarNames[i]):SetChecked(VarsToSet[i]) end
 
- 	VarsToSet = { GF_PerCharVariables.searchtext, GF_PerCharVariables.searchlfgtext, GF_PerCharVariables.searchlfgwhispertext, GF_BUTTONS_LIST.LFGSize[GF_PerCharVariables.lfgsize][1], GF_PerCharVariables.getwhowhisperclass, GF_SavedVariables.groupchannelname }
-	VarNames = { "GF_GroupsFrameDescriptionEditBox","GF_LFGDescriptionEditBox","GF_GetWhoWhisperEditBox","GF_LFGSizeDropdownTextLabel","GF_GetWhoClassDropdownTextLabel","GF_GroupChannelEditBox", }
+ 	VarsToSet = { GF_PerCharVariables.searchtext, GF_PerCharVariables.searchlfgtext, GF_PerCharVariables.searchlfgwhispertext, GF_BUTTONS_LIST.LFGSize[GF_PerCharVariables.lfgsize][1], GF_PerCharVariables.getwhowhisperclass, GF_SavedVariables.groupchannelname,"Font:  "..GF_BUTTONS_LIST["FontName"][GF_SavedVariables.fontname][1], }
+	VarNames = { "GF_GroupsFrameDescriptionEditBox","GF_LFGDescriptionEditBox","GF_GetWhoWhisperEditBox","GF_LFGSizeDropdownTextLabel","GF_GetWhoClassDropdownTextLabel","GF_GroupChannelEditBox","GF_FontNameDropdownTextLabel",}
 	for i=1, getn(VarNames) do getglobal(VarNames[i]):SetText(VarsToSet[i]) end
 
 	if GF_SearchButtonHasValues() then GF_SearchListDropdown:LockHighlight() GF_SearchListClearButton:Show() end
@@ -367,15 +384,28 @@ end
 function GF_SetStringSize()
 	local fontName,fontSizeMinimap,fontSizeLarge,fontSizeButton
 	local fontAdjust = 0
-	if GF_SavedVariables.arialfont then fontName = "Fonts\\ARIALN.TTF" else fontName = ChatFontNormal:GetFont() end
-	GF_UIScaleSliderLabel:SetText("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 ")
-	for i = 0, 100 do
-		GF_UIScaleSliderLabel:SetFont(fontName,14-i)
-		if GF_UIScaleSliderLabel:GetStringWidth() > 450 then fontAdjust = fontAdjust + 1 else break end
-	end
-	GF_BaseFontSize = 13 - fontAdjust fontSizeLarge = 15 - fontAdjust fontSizeButton = 13 - fontAdjust fontSizeMinimap = 10 - fontAdjust
+	fontName = GF_BUTTONS_LIST["FontName"][GF_SavedVariables.fontname][2]
 
---	14 = 444, 13 = 417(6%/7%), 12 = 369(17%/14%), 11 = 343, 10 = 313
+	GF_UIScaleSliderLabel:SetText("Join the group channel")
+	for i = 0, 100 do --
+		GF_UIScaleSliderLabel:SetFont(fontName,20-i)
+		if GF_UIScaleSliderLabel:GetStringWidth() < 126 then GF_BaseFontSize = 20-i break end
+	end
+	GF_UIScaleSliderLabel:SetText("LF1M Shaman AQ15  2SR > MS > OS  Books HR  Can summon")
+	for i = 0, 100 do --
+		GF_UIScaleSliderLabel:SetFont(fontName,20-i)
+		if GF_UIScaleSliderLabel:GetStringWidth() < 365 then fontSizeLarge = 20-i break end
+	end
+	GF_UIScaleSliderLabel:SetText("Druidsarebis")
+	for i = 0, 100 do -- 
+		GF_UIScaleSliderLabel:SetFont(fontName,20-i)
+		if GF_UIScaleSliderLabel:GetStringWidth() < 80 then fontSizeButton = 20-i break end
+	end
+	GF_UIScaleSliderLabel:SetText("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 ")
+	for i = 0, 100 do --
+		GF_UIScaleSliderLabel:SetFont(fontName,20-i)
+		if GF_UIScaleSliderLabel:GetStringWidth() < 332 then fontSizeMinimap = 20-i break end
+	end
 
 	for i=0,19 do
 		getglobal("GF_WhisperHistoryButton"..i):SetFont(fontName,fontSizeButton)
@@ -401,16 +431,17 @@ function GF_SetStringSize()
 	"GF_MinimapIconPriorityCheckButtonTextLabel","GF_GroupFilterShowQuestCheckButtonTextLabel","GF_GroupFilterShowOtherCheckButtonTextLabel","GF_ChatFilterGroupsInChatCheckButtonTextLabel","GF_ChatFilterGroupsNewOnlyCheckButtonTextLabel",
 	"GF_ChatFilterGroupsInMinimapCheckButtonTextLabel","GF_ChatFilterShowChatCheckButtonTextLabel","GF_ChatFilterShowTradesCheckButtonTextLabel","GF_ChatFilterShowLootCheckButtonTextLabel","GF_ChatFilterShowGuildsCheckButtonTextLabel",
 	"GF_LogFilterDropdownButtonTextLabel","GF_LogChannelFilterDropdownButtonTextLabel","GF_AutoJoinGroupChannelCheckButtonTextLabel","GF_FrameSpamFilterCheckButtonTextLabel","GF_FrameSystemFilterCheckButtonTextLabel",
-	"GF_AutomaticBlacklistCheckButtonTextLabel","GF_FrameShowFormattedChatCheckButtonTextLabel","GF_AlwaysShowGuildFriendsCheckButtonTextLabel","GF_FrameQuestModCheckButtonTextLabel","GF_PurgePFDBCheckButtonTextLabel",
+	"GF_AutomaticBlacklistCheckButtonTextLabel","GF_FrameShowFormattedChatCheckButtonTextLabel","GF_AlwaysShowGuildFriendsCheckButtonTextLabel","GF_FrameQuestModCheckButtonTextLabel","GF_PurgePFDBCheckButtonTextLabel","GF_ResetAllSettingsDialogHeadingLabel",
 	"GF_UseClickCombosCheckButtonTextLabel","GF_UseFriendsListCheckButtonTextLabel","GF_DisableHardcoreCheckButtonTextLabel","GF_AutoBlacklistTradesCheckButtonTextLabel","GF_AutoBlacklistGuildCheckButtonTextLabel","GF_EditPlayerNoteFrameTitleLabel",
-	"GF_AutoBlacklistChatCheckButtonTextLabel","GF_AutoBlacklistForeignCheckButtonTextLabel","GF_UseArialFontCheckButtonTextLabel","GF_BlockListDropdownTextLabel","GF_SquareMinimapCheckButtonTextLabel", }
+	"GF_AutoBlacklistChatCheckButtonTextLabel","GF_AutoBlacklistForeignCheckButtonTextLabel","GF_FontNameDropdownTextLabel","GF_BlockListDropdownTextLabel","GF_SquareMinimapCheckButtonTextLabel","GF_AddPlayerFrameContentLabel",
+	"GF_SettingsFrameChatSettingsTitle","GF_SettingsFrameGroupSettingsTitle","GF_SettingsFrameLFxSettingsTitle","GF_SettingsFrameOtherSettingsTitle","GF_PageLabel",}
 	for i=1, getn(frameNames) do getglobal(frameNames[i]):SetFont(fontName,GF_BaseFontSize) end
-	frameNames = { "GF_GetWhoTotalNames","GF_AnnounceToLFGButton","GF_GetWhoButton","GF_GetWhoSkipButton","GF_GetWhoWhisperButton","GF_GetWhoNameLabel","GF_PageLabel","GF_ResultsLabel","GF_ShowSearchButton",	"GF_SettingsFrameButton",
-	"GF_PlayerNoteFrameOKButton","GF_PlayerNoteFrameDeleteButton","GF_ShowBlacklistButton","GF_LogFrameButton","GF_LFGFrameToggleButton","GF_GetWhoFrameToggleButton","GF_ConvertLogMessagesToURL","GF_UIScaleSliderUpdateButton",
-	"GF_ResetAllSettingsButton","GF_AddPlayerButton","GF_BlackListFramePageLabel","GF_WhisperLogButton","GF_GroupLogButton","GF_MinimapIconTextLabel" }
+	frameNames = { "GF_GetWhoTotalNames","GF_AnnounceToLFGButton","GF_GetWhoButton","GF_GetWhoSkipButton","GF_GetWhoWhisperButton","GF_GetWhoNameLabel","GF_ShowSearchButton",	"GF_SettingsFrameButton","GF_PlayerNoteFrameOKButton",
+	"GF_PlayerNoteFrameDeleteButton","GF_ShowBlacklistButton","GF_LogFrameButton","GF_LFGFrameToggleButton","GF_GetWhoFrameToggleButton","GF_ConvertLogMessagesToURL","GF_UIScaleSliderUpdateButton","GF_ResetAllSettingsDialogCloseButton",
+	"GF_ResetAllSettingsButton","GF_AddPlayerButton","GF_BlackListFramePageLabel","GF_WhisperLogButton","GF_GroupLogButton","GF_MinimapIconTextLabel","GF_AddPlayerFrameOkButton","GF_AddPlayerFrameCloseButton","GF_ResetAllSettingsDialogOkButton",}
 	for i=1, getn(frameNames) do getglobal(frameNames[i]):SetFont(fontName,fontSizeButton) end
 	frameNames = {"GF_LFGMyRole","GF_WorldAnnounceMessageTextLabel","GF_ShowGroupsInLabel","GF_ShowChatTypesLabel","GF_LogFrameInternalFrameTitle","GF_ShowMainFrameLabel",
-	"GF_GroupChannelNameTextLabel","GF_BlockListTextLabel","GF_BlockAddListButton", }
+	"GF_GroupChannelNameTextLabel","GF_BlockListTextLabel","GF_BlockAddListButton","GF_ResultsLabel", }
 	for i=1, getn(frameNames) do getglobal(frameNames[i]):SetFont(fontName,fontSizeLarge) end
 	for i=1,6 do
 		getglobal("GF_MinimapMessageFrameA"..i):SetFont(fontName,fontSizeMinimap)
@@ -3948,7 +3979,9 @@ function GF_GetDropDownButtons(fName,maxSize,showAll,MatchLFG) -- Create dropdow
 		if not button then
 			button = CreateFrame("CheckButton", getglobal("GF_"..fName):GetName()..i, getglobal("GF_"..fName), "GF_LFGDropdownCheckButtonTemplate_Label")
 			button:SetID(i)
-			getglobal(button:GetName().."TextLabel"):SetFont(getglobal(button:GetName().."TextLabel"):GetFont(),GF_BaseFontSize)
+			getglobal(button:GetName().."TextLabel"):SetFont(GF_BUTTONS_LIST["FontName"][GF_SavedVariables.fontname][2],GF_BaseFontSize)
+		else
+			getglobal(button:GetName().."TextLabel"):SetFont(GF_BUTTONS_LIST["FontName"][GF_SavedVariables.fontname][2],GF_BaseFontSize)
 		end
 		getglobal(button:GetName().."TextLabel"):SetText(buttons[i][1])
 		if getglobal(button:GetName().."TextLabel"):GetStringWidth()+5 > width then width = getglobal(button:GetName().."TextLabel"):GetStringWidth()+5 end
@@ -3988,6 +4021,9 @@ function GF_GetWhoLevelDropdownShow()
 end
 function GF_BlockListDropdownShow()
 	GF_GetDropDownButtons("BlockList",15,true)
+end
+function GF_FontNameDropdownShow()
+	GF_GetDropDownButtons("FontName",6,true)
 end
 function GF_GroupChannelNameDropdownShow()
 	GF_GetDropDownButtons("GroupChannelName",6,true)
@@ -4042,6 +4078,12 @@ function GF_BlockListAddRemove(entryName,entryID,add)
 	table.remove(GF_SavedVariables.blocklist,entryID)
 	GF_WORD_BLOCK_LIST[entryName] = nil
 	GF_BlockList:Hide()
+end
+function GF_FontNameAddRemove(entryName,entryID,add)
+	GF_FontNameDropdownTextLabel:SetText("Font:  "..entryName)
+	GF_SavedVariables.fontname = entryID
+	GF_FontName:Hide()
+	GF_SetStringSize()
 end
 function GF_GroupChannelNameAddRemove(entryName,entryID,add)
 	GF_GroupChannelEditBox:SetText(entryName)
