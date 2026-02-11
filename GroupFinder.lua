@@ -1454,16 +1454,16 @@ function GF_CheckForDelayedMessages()
 		while true do
 			if GF_LogHistory[GF_RealmName]["Delay"][i] then
 				if GF_LogHistory[GF_RealmName]["Delay"][i][1] == "Log" and (GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][6]] or GF_LogHistory[GF_RealmName]["Delay"][i][2] + 20 < time()) then
-					if GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][6]][1] < GF_SavedVariables.blockmessagebelowlevel then GF_LogHistory[GF_RealmName]["Delay"][i][4] = 9 end
+					if GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][6]] and GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][6]][1] < GF_SavedVariables.blockmessagebelowlevel then GF_LogHistory[GF_RealmName]["Delay"][i][4] = 9 end
 					GF_AddLogMessage(GF_ChatReplaceHplayer(GF_LogHistory[GF_RealmName]["Delay"][i][3]),GF_LogHistory[GF_RealmName]["Delay"][i][4],GF_LogHistory[GF_RealmName]["Delay"][i][5],GF_LogHistory[GF_RealmName]["Delay"][i][6],GF_LogHistory[GF_RealmName]["Delay"][i][7],GF_LogHistory[GF_RealmName]["Delay"][i][8],GF_LogHistory[GF_RealmName]["Delay"][i][9],true)
 					table.remove(GF_LogHistory[GF_RealmName]["Delay"],i)
 				elseif GF_LogHistory[GF_RealmName]["Delay"][i][1] == "Channel" and (GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][4]] or GF_LogHistory[GF_RealmName]["Delay"][i][2] + 20 < time()) then
-					if GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][4]][1] >= GF_SavedVariables.blockmessagebelowlevel then
+					if not GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][4]] or GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][4]][1] >= GF_SavedVariables.blockmessagebelowlevel then
 						GF_AddChannelMessage(GF_ChatReplaceHplayer(GF_LogHistory[GF_RealmName]["Delay"][i][3]),GF_LogHistory[GF_RealmName]["Delay"][i][4],GF_LogHistory[GF_RealmName]["Delay"][i][5],GF_LogHistory[GF_RealmName]["Delay"][i][6],true)
 					end
 					table.remove(GF_LogHistory[GF_RealmName]["Delay"],i)
 				elseif GF_LogHistory[GF_RealmName]["Delay"][i][1] == "Chat" and (GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][4]] or GF_LogHistory[GF_RealmName]["Delay"][i][2] + 20 < time()) then
-					if GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][4]][1] >= GF_SavedVariables.blockmessagebelowlevel then
+					if not GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][4]] or GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][4]][1] >= GF_SavedVariables.blockmessagebelowlevel then
 						GF_AddChatMessage(GF_ChatReplaceHplayer(GF_LogHistory[GF_RealmName]["Delay"][i][3]),GF_LogHistory[GF_RealmName]["Delay"][i][4],GF_LogHistory[GF_RealmName]["Delay"][i][5],true)
 					end
 					table.remove(GF_LogHistory[GF_RealmName]["Delay"],i)
@@ -4899,6 +4899,30 @@ function FindForeignLetters()
 	end
 	print(cnt)
 end
+function FindForeignLettersDouble()
+	local lfs,lfe,tempVal
+	local wordTable = {}
+	GF_SavedVariables.questconversion = {}
+	for languageID,wtable in GF_LANGUAGE_CONVERT do
+		for entryname,word in wtable do
+			tempVal = 1
+			while true do
+				lfs = strbyte(entryname,tempVal)
+				lfe = strbyte(entryname,tempVal+1)
+				if not lfe then break end
+				if lfs > 122 then
+					if lfs >= 194 and lfs <= 197 or lfs >= 208 and lfs <= 210 then
+						if not (GF_WORD_ACCENT_ASCII_FIX[lfs] and GF_WORD_ACCENT_ASCII_FIX[lfs][lfe]) then
+							GF_SavedVariables.questconversion[entryname] = { word, lfs, lfe, strchar(lfs)..strchar(lfe)}
+						end
+						tempVal = tempVal + 1
+					end
+				end
+				tempVal = tempVal + 1
+			end
+		end
+	end
+end
 function ConvertForeignWords() -- /script ConvertForeignWords()
 -- remove if word is too short, remove punctuation, convert letters
 
@@ -4950,6 +4974,71 @@ function ConvertForeignWords() -- /script ConvertForeignWords()
 	end
 	for entryname,wtable in tempTable do
 		if wtable[1] ~= "1" and wtable[2] ~= "en" then GF_SavedVariables.questconversion["LanguageZZZ"][entryname] = wtable[2] end
+	end
+end
+function ConvertForeignWordsDouble() -- /script ConvertForeignWordsDouble()
+-- remove if word is too short, remove punctuation, convert letters
+
+-- First database = add single words 3 characters or longer with the language family only(word = language)... remove any words that are the same across languages
+-- Second database = Broken down by language family... Replace word with word(word = word).. second database should include all words and store them within each language's family
+-- Run first datase on single-word after letter correction... Then immediately run translation. If "Translate" then add Arg1 to database and show the database Arg1 instead of normal Arg1(chat/log/groupsframe)
+-- The translation should do word replacement backwards(longest(4-word) to shortest(1-word)). Then it removes anything in the GF_WORD_BYPASS_TRIGGER based on the language family. Need to add more phrases.
+-- Error correction needs to eliminate all double-letter repeating(including normal letters)
+-- Two options, Translate and Show Translated... Translate will translate the message and show T in front of it in groupsframe, logsframe, and normal chat.. Show Translate will show/hide translated group messages.
+
+	local lfs,lfe,tempVal,wordString
+	local wordTable = {}
+	GF_SavedVariables.questconversion = {}
+	local tempTable = {}
+	for languageID,wtable in GF_LANGUAGE_CONVERT do
+		GF_SavedVariables.questconversion[languageID] = {}
+		for entryname,word in wtable do
+			tempVal = 1
+			wordString = gsub(gsub(entryname,"^%p+",""),"'","")
+
+			wordString = wordString.." "
+			while true do
+				lfs = strbyte(wordString,tempVal)
+				lfe = strbyte(wordString,tempVal+1)
+				if not lfe then break end
+
+				if lfs >= 194 and lfs <= 210 and GF_WORD_ACCENT_ASCII_FIX[lfs] and GF_WORD_ACCENT_ASCII_FIX[lfs][lfe] then
+					if lfs == strbyte(wordString,tempVal+2) and lfe == strbyte(wordString,tempVal+3) then
+						table.insert(wordTable,GF_WORD_ACCENT_ASCII_FIX[lfs][lfe]) tempVal=tempVal+1 for j=1,250,2 do if lfs ~= strbyte(wordString,tempVal+j) and lfe ~= strbyte(wordString,tempVal+j+1) or not GF_WORD_ACCENT_ASCII_FIX[strbyte(wordString,tempVal+j)] or not GF_WORD_ACCENT_ASCII_FIX[strbyte(wordString,tempVal+j)][strbyte(wordString,tempVal+j+1)] then tempVal=tempVal+j-1 break end end
+					else
+						table.insert(wordTable,GF_WORD_ACCENT_ASCII_FIX[lfs][lfe])
+						tempVal = tempVal + 1
+					end
+				else
+					table.insert(wordTable,strchar(lfs))
+				end
+				tempVal = tempVal + 1
+			end
+			wordString = table.concat(wordTable)
+			wordTable = {}
+			if not GF_SavedVariables.questconversion[languageID][gsub(wordString,"[%s%p]","")] then
+				GF_SavedVariables.questconversion[languageID][gsub(wordString,"[%s%p]","")] = word
+			else
+				wordString = gsub(wordString,"[%s%p]","")
+				if string.len(wordString) < string.len(GF_SavedVariables.questconversion[languageID][wordString]) then GF_SavedVariables.questconversion[languageID][gsub(wordString,"[%s%p]","")] = word end
+			end
+				
+			
+			-- Need to save words without a/an space/%p in first database, and with in second database
+			-- if first database has same words, don't save
+			-- second database should be broken down by language
+			
+			-- Trim wordString of ascii characters and save into tempTable database.
+			
+			--.. then Trim wordString of a/an
+			--wordString = gsub(gsub(wordString,"^an?[%s%p]",""),"[%s%p]an?$","")
+			--if not string.find(wordString,"^an?[%s%p]") and not string.find(wordString,"[%s%p]an?$") and not string.find(wordString,"[%s%p]") and string.len(wordString) > 2 then if tempTable[wordString] then tempTable[wordString][1] = "1" else tempTable[wordString] = wtable end end
+			--if not GF_SavedVariables.questconversion["WordZZZ"][wtable[2]] then GF_SavedVariables.questconversion["WordZZZ"][wtable[2]] = {} end
+			--if wtable[2] ~= "en" then
+				--GF_SavedVariables.questconversion["WordZZZ"][wtable[2]][gsub(wordString,"[%s%p]","")] = wtable[1]
+				--GF_SavedVariables.questconversion["WordZZZ"][wtable[2]][gsub(gsub(gsub(wordString,"^an?[%s%p]",""),"[%s%p]an?$",""),"[%s%p]","")] = wtable[1]
+			--end
+		end
 	end
 end
 function CheckWords() -- /script CheckWords()
