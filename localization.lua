@@ -459,7 +459,7 @@ GF_WORD_BYPASS_TRIGGER = { -- Words to not include in the WordTable. lf/lfg/lfm/
 ["pl"] = {
 	["lf"] = true,["lfg"] = true,["lfm"] = true,["queue"] = true,["join"] = true,[""] = true,["a"] = true,["an"] = true,["the"] = true,["xd"] = true,["xdd"] = true,["hspell"] = true,["Z"] = true,
 },
-["pt-pt"] = {
+["pt"] = {
 	["lf"] = true,["lfg"] = true,["lfm"] = true,["queue"] = true,["join"] = true,[""] = true,["a"] = true,["an"] = true,["the"] = true,["xd"] = true,["xdd"] = true,["hspell"] = true,["Z"] = true,
 },
 ["ro"] = {
@@ -1093,83 +1093,6 @@ GF_WORD_FIX_SINGLE_WORD = { -- Single word changes. Mostly typos and simple word
 -- Slang/Curse
 ["shits"] = "shit",["shitty"] = "shit",["shity"] = "shit",["shhitty"] = "shit",
 
--- German
-["mitstreiter"] = "comrade",["mitstreitern"] = "comrade",["raidear"] = "raid",["sind"] = "are",["verstärkung"] = "reinforcement",["weiter"] = "further",["wieder"] = "again",["alle"] = "all",["entspannt"] = "relaxed",["folgende"] = "following",
-["haben"] = "have",["klasse"] = "class",["klassen"] = "class",["meiner"] = "mine",["schlossknacken"] = "lockbox",["minden"] = "all",["laufen"] = "run",["zwei"] = "two",["auf"] = "on",["der"] = "the",["nach"] = "for",["noch"] = "more",
-["junge"] = "new",["und"] = "and",["questen"] = "quest",["deutsche"] = "german",["deutsch"] = "german",["deutschen"] = "german",["gesucht"] = "search",["suche"] = "search",["sucht"] = "search",["suchst"] = "searching",
-["montag"] = "monday",["dienstag"] = "tuesday",["mittwoch"] = "wednesday",["donnerstag"] = "thursday",["freitag"] = "friday",["samstag"] = "saturday",["sonntag"] = "sunday",["sprachige"] = "speaking",
-["sprachigen"] = "speaking",["raiden"] = "raid",["frischen"] = "fresh",["abenteuer"] = "adventure",["neues"] = "new",["neuer"] = "new",["allianz"] = "alliance",["willkommen"] = "welcoming",["entspannte"] = "relaxed",
-["spieler"] = "player",["aktive"] = "active",["gemeinschaft"] = "community",["heiler"] = "healer",
-["kreutfahrer"] = "crusader",["schliebkassette"] = "lockbox",
-
-["searchwird"] = "lf",["ichsearch"] = "lf",
--- Slovenian
-["nekdo"] = "anyone",
-
--- Swedish
-["dricks"] = "tip",["uppskattat"] = "appreciate",
-["norsk"] = "norwegian",["gratis"] = "free",
-
--- Dutch
-["ereen"] = "there",["joineet"] = "join",
-
--- Polish
-["pokskie"] = "polish",["polakow"] = "polish",["polska"] = "polish",["polskiej"] = "polish",["poszukuje"] = "lf",["dla"] = "for",["szuka"] = "lf",["szukam"] = "lf",
-["towarzyskiej"] = "socializing",["emerytow"] = "veteran",["luznej"] = "casual", ["levelingu"] = "leveling",
-["chetnych"] = "willing",["szeregi"] = "ranks",["raidowania"] = "raid",["odkrywajac"] = "discovering",["jego"] = "its",["ciekawostki"] = "curiosities",
-["wladcaognia"] = "firelord",["namniestraszny"] = "wearenotscared",["piwo"] = "beer",["mypijac"] = "wedrink",["wyzwania"] = "challenge",["kolejne"] = "next",
-
--- Italian
-["italiana"] = "italian",["italiano"] = "italian",["cerca"] = "search",["nuova"] = "new",["italiani"] = "italian",["giocatori"] = "player",["creazione"] = "create",["interessato"] = "interested",["interesse"] = "interested",["cerco"] = "need",
-
--- Spanish
-["varios"] = "various",["horarios"] = "schedules",["tiempo"] = "time",["agujas"] = "needles",["del"] = "of",["cambiar"] = "change",["historia"] = "history",["nececito"] = "need",["busco"] = "search",
-["espaola"] = "spanish",["espaol"] = "spanish",["hispana"] = "spanish",["espaoles"] = "spanish",["latina"] = "spanish",["chilean"] = "spanish",["espanola"] = "spanish",["espanol"] = "spanish",
-["alguna"] = "any",["alguan"] = "any",["algun"] = "any",["alguno"] = "any",["nuevos"] = "new",["nuevo"] = "new",["este"] = "this",["leveleando"] = "leveling",["lvleando"] = "leveling",
-["hablas"] = "speak",["habla"] = "speak",["activa"] = "active",
-["acceptamos"] = "accepting",["aceptamos"] = "accepting",["aventura"] = "adventure",["bienvenido"] = "welcome",["bienvenidos"] = "welcome",["buen"] = "good",["castellana"] = "spanish",
-["algumda"] = "any",["conquistar"] = "conquer",["contenido"] = "content",["dimanche"] = "sunday",["domingos"] = "sunday",["esta"] = "this",["hablante"] = "speak",
-["hermandad"] = "brotherhood",["hermandades"] = "brotherhood",["hispano"] = "spanish",["jugadores"] = "player",["necesita"] = "need",["necesitar"] = "need",["para"] = "for",["rollo"] = "vibes",
-["limpiando"] = "clearing",["tambien"] = "else",["también"] = "else",["todas"] = "all",["unete"] = "join",["alguien"] = "anyone",["recrutando"] = "recruiting",["reclutando"] = "recruiting",
-["encantamiento"] = "enchant",["miembros"] = "members",["niveles"] = "level",
-
-
-["buscamos"] = "lf",
-["lftodo"] = "lfall",
-["jugador"] = "player",
-["cualquier"] = "whatever",
-["nivel"] = "level",
-
--- Portuguese
-["alguma"] = "any",["portuguesa"] = "portuguese",["aceptar"] = "accept",["encantar"] = "enchant",["busca"] = "lf",
-
--- French
-["ouvertes"] = "open",["ouvre"] = "open",["plusieurs"] = "several",["semaine"] = "week",["chaque"] = "every",["tous"] = "all",["sont"] = "are",["portes"] = "doors",["sympathiques"] = "friendly",["toutmonde"] = "anyone",["veux"] = "you",["riches"] = "rich",
-["investis"] = "invested",["avecdes"] = "with",["dsirant"] = "desire",["dcouvrir"] = "discover",["francaise"] = "french",["qui"] = "that",["dbutant"] = "beginner",["andbutant"] = "beginner",["chasseur"] = "hunter",["merci"] = "thanks",
-["searchdune"] = "lf",["cherche"] = "search",["salut"] = "salute",["suis"] = "am",["actif"] = "active",["actifs"] = "active",["alors"] = "then",["francais"] = "french",["nous"] = "us",["qui"] = "who",["rejoins"] = "join",["gente"] = "people",
-["experimentes"] = "experience",["toi"] = "you",["quelques"] = "few",["contenu"] = "content",["joueur"] = "player",["joueurs"] = "player",["jusquau"] = "until",["avec"] = "with",["nous"] = "we",["reste"] = "rest",["quelques"] = "few",["depeche"]= "hurry",
-
--- Hungarian
-["tagjait"] = "members",["keresi"] = "lf",["aktv"] = "active",["rdekel"] = "interested",["jelentkezzen"] = "apply",
-
--- Swedish
-["svensk"] = "swedish",["skerfler"] = "lfm",["medlemmar"] = "members",["fokus"] = "focus",["och"] = "and",["mer"] = "more",["lutad"] = "leaning",
-["mndag"] = "monday",["tisdag"] = "tuesday",["onsdag"] = "wednesday",["torsdag"] = "thursday",["fredag"] = "friday",["lrdag"] = "saturday",["sndag"] = "sunday",
-
--- Slavic
-["opzoeknaar"] = "lf",["letar"] = "lf",["vstuplyuv"] = "lf",["raidov"] = "raid",["igrokov"] = "player",
-
--- Guild-related
-["rekrutuje"] = "recruiting",["recrutar"] = "recruiting",["recrute"] = "recruiting",["recrut"] = "recruiting",["rekrutiert"] = "recruiting",["recluta"] = "recruiting",["recruting"] = "recruiting",["recruterait"] = "recruiting",
-["recrutent"] = "recruiting",["recruteaza"] = "recruiting",["recuiting"] = "recruiting",["reqruiting"] = "recruiting",
-["gildia"] = "guild",["gilda"] = "guild",["guilde"] = "guild",["gildiy"] = "guild",["gildiyu"] = "guild",["gildenmitglieder"] = "guild",["gildii"] = "guild",["gildi"] = "guild",["gilduha"] = "guild",["guildy"] = "guild",["guidla"] = "guild",
-["gildiu"] = "guild",["gilden"] = "guild",["gildiya"] = "guild",["gildiyi"] = "guild",["gild"] = "guild",["guldia"] = "guild",["guilda"] = "guild",["guil"] = "guild",["guils"] = "guild",["guld"] = "guild",["guildiji"] = "guild",["guildes"] = "guild",
-["gildosi"] = "guild",["guile"] = "guild",["giuld"] = "guild",["duild"] = "guild",["gilds"] = "guild",["guildia"] = "guild",["gilde"] = "guild",["gildu"] = "guild",["guildi"] = "guild",["guildet"] = "guild",["gildie"] = "guild",
-["progresowania"] = "progression",["progresar"] = "progression",["progreso"] = "progression",["progresshez"] = "progression",["prog"] = "progression",["progressom"] = "progression",["progresando"] = "progressing",["progresowac"] = "progressing",
-["komunity"] = "community",["komunite"] = "community",["komunita"] = "community",["comunidad"] = "community",["comunidade"] = "community",["companheiros"] = "community",["compaeros"] = "community",
-["eventos"] = "event",
-["amigos"] = "friend",["actieve"] = "active",["nederlands"] = "dutch",["nederlandse"] = "dutch",["aktivity"] = "activity",
-
 -- Bank out the word
 ["http"] = "",["https"] = "",
 }
@@ -1310,7 +1233,7 @@ GF_WORD_FIX_BEFORE_QUEST = { -- Word changes processed before quests.
 ["udmage"] = "mage",["udpaladin"] = "paladin",["udpriest"] = "priest",["udrogue"] = "rogue",["udwarlock"] = "warlock",["udwarrior"] = "warrior",["want"] = "need",["wanting"] = "need",["wants"] = "need",
 ["wherethe"] = "need",["whofor"] = "anyonefor",
 
-["searchfor"] = "seek",["searchingfor"] = "seek",["seeks"] = "seek",["seeking"] = "seek",
+["searchfor"] = "seek",["searchingfor"] = "seek",
 
 -- Classes
 ["frostmage"] = "mage",["firemage"] = "mage",["arcanemage"] = "mage",
@@ -1421,64 +1344,6 @@ GF_WORD_FIX_BEFORE_QUEST = { -- Word changes processed before quests.
 
 ["tusedays"] = "tuesday",
 ["signups"] = "signup",
-
--- Foreign Trade Words
-["utc"] = .5,["cet"] = .5,["msk"] = 1,["est"] = 1,["ger"] = 1,["oceanic"] = .5,["aest"] = .5,["naandeu"] = 1,["euandna"] = 1,
-
-["zhdemvseh"] = 2,["proidives"] = 1,["cautammembri"] = 1,["anemariechipa"] = 1,["echipa"] = .5,["ishuG"] = 1,["yparxeikanenaG"] = 1,
-
--- Slovak
-["eqipomnazaciatokzacinajucemu"] = 1,["eqipom"] = .25,["eqipomna"] = .25,["pomozezacinajucemu"] = 1,["zacinajucemu"] = .5,
-
--- German
-["mitraid"] = 1,["zumraid"] = 1,["raidkader"] = 1,["motivierte"] = 1,["raidtage"] = 1,["joinwelt"] = 1,["werbeunterbrechung"] = 1,["yesttutruG"] = 3,["FnetteG"] = 1,["uneG"] = 1,["Fmitplayer"] = 1,
-["mitplayer"] = 1,["bistduzuverlssig"] = 1,["spaamzocken"] = 1,["dannkommzuuns"] = 1,["kommzuuns"] = 1,["wirfreuen"] = 1,["berjedeslevel"] = 1,["classoderrasse"] = 1,["Fdeute"] = 1,
-["frdengermanspeaking"] = 1,["hardcoreouchill"] = .5,["ouverttouslevel"] = .5,["Rpartirdulevel"] = 1.5,["eluneadore"] = .5,["unserercommunity"] = .5,["inunserercommunity"] = .5,
-["zumgemeinsamen"] = 1,["mainraidtage"] = 1,["immerabends"] = 1,["egalobrelaxedleveling"] = 1,["spaigraid"] = 1,["Fmit"] = 1,["compltersonroster"] = 2,["playermotivs"] = 1,["sbados"] = .5,
-["raidzeit"] = 1,["raidzeitmittwoch"] = 1,["ihrereihen"] = .5,["furtherihrereihen"] = .5,["strktfurtherihrereihen"] = .5,["gerneauchfrische"] = 1,
-["einnewadventure"] = .5,["einenfreshstart"] = .5,["Fdu"] = .5,["Fauchdu"] = .5,["raidgruppe"] = .5,["hiereineLG"] = .5,["wirstockenweiterauf"] = .5,["ordentlichegregewachsen"] = .5,
-
--- Hungarian
-["keresek"] = 1,["mindenhungarian"] = .5,["felvetelthirdet"] = 1,["tarsasagbanjatszani"] = 1,["szivesenvrunkbarkit"] = 2,["hangulat"] = .5,["szeretnelvelunkjatszani"] = 2,
-["varunkszeretettel"] = 1,["szeretettelvrminden"] = 1,["keresiaktvhungariantagjait"] = 1,
-
--- Finnish
-["finkilta"] = .5,["finnkilta"] = .5,["finjoukkue"] = .5,["finnjoukkue"] = .5,["maajoukue"] = 2,["maajoukkue"] = 2,["maajoukue"] = 2,["majoukkue"] = 2,["scouttaa"] = 2,["suomalaanen"] = 1,
-["joukkuesuomesta"] = 1,["skouta"] = 1,["skoutauusia"] = 1,["finnational"] = 2.5,["finnnational"] = 2.5,["finlandsnationalgroup"] = 2.5,["finlandnationalgroup"] = 2.5,["josontyls"] = 1,
-["hakeejseni"] = 3,["mitmuutamenoatoistaaseksi"] = 3,["skouttaa"] = 1,["teretulemast"] = 1,["finG"] = .5,["finplayer"] = .5,["newfinplayer"] = .5,["etsiiriveliihinsuusiakykyj"] = 1,
-["etsiiriveliihinsuusia"] = 2,["kykyj"] = 1,["skouttaauusiakykyj"] = 1,["uusiakykyj"] = 1,["pelityyli"] = 1,["sooloolijat"] = 1,["roolipelaajat"] = 1,["kaikkiteretulemast"] = 1,
-["suomibndi"] = 2,["etsiiuusia"] = 1,["etsii"] = 1,["kykyjetsii"] = 1,["uraatarjolla"] = 1,["maajoukkueessa"] = 1,["paikkaauki"] = 1,["skoutaa"] = 1,["uusia"] = .5,["riveihins"] = .5,
-["fysio"] = .5,["keskikentlle"] = .5,["joinmaajoukkue"] = 1.5,["joinmaajoukkuetoday"] = 1,["joinmaajoukkuetnn"] = 2,["suomikilta"] = 2,["suomikiltaa"] = 2,["raidaaako"] = 1.5,
-["questaako"] = 1.5,["pelaajilla"] = 1,["scoutaauusia"] = 1.5,["uusiajawanhoja"] = 1,["teretulemastkiltaan"] = 3,["kaikihoituu"] = 1,["suomipelaajia"] = 2,["kiltaan"] = 1,["haetaankiltaan"] = 2,
-["tulille"] = 1,["firmatarjoaa"] = .5,["tarjoaa"] = .5,["firma"] = .5,["scouttaavuoden"] = 1,["vvvalmistautuujascouttaavuoden"] = 1,["valmistautuu"] = 1,["ihmeellinenmaailma"] = 1,
-
--- Spanish/Portuguese
-["comprometidos"] = 1,["semanalmente"] = 1,["sitequieresunir"] = 2,["anyonedelaG"] = 1,["abresusfiles"] = 1,["yrisas"] = .5,["todotipodeplayer"] = 1,
-["conunaG"] = 1,["nodudesenunirte"] = 1,["enunirte"] = 1,["manos"] = .5,["adventurepicacomienzaaqu"] = 1,["Fbrgroupe"] = 3,["Fmostodo"] = 1,["Fbrgroupe"] = 3,["Fmostodo"] = 1,["Foffi"] = .5,
-["abresuspuerta"] = 1,["pargentequeF"] = 2,["empezando"] = .5,["levear"] = 1,["bienvenido"] = .5,["hablahispana"] = 1,["bancodehermadad"] = 1,["interesados"] = 1,
-
--- Polish
-["zapraszadowspolnej"] = 1,["rodakow"] = .5,["niezaleznieodpoziomu"] = 1,["zaczelismyP"] = 1,["obecnieczyscimy"] = .5,["calykontent"] = 1,["chcedolaczyc"] = 1,
-
--- Slavic
-["raidov"] = 1,["ishet"] = 1,["novacek"] = 1,["raidereket"] = 1,["priednuysia"] = 1,["primet"] = 1,["reydinga"] = 1,["novaya"] = 1,["novayaG"] = 1,["nabirayet"] = 2,["nabiraet"] = 2,
-["nabirayetvsekh"] = 1,["nabiraem"] = 2,["zhelayushchikh"] = 1,["igrokov"] = 1,["zhelayushchikhigrokov"] = 1,["pervaya"] = .5,["edinstvennaya"] = .5,["pervayaiedinstvennaya"] = 1.5,
-["primite"] = .5,["primitevru"] = .5,["osvoenie"] = .5,["naosvoenie"] = 1,["speki"] = .5,["rassmotrim"] = 1,["vseklassy"] = 1,["vseklassyispeki"] = 2,["vsemklassam"] = 1,["unasvreide"] = 1,
-["prijmenovehrace"] = 1,["novehrace"] = .5,["pravidelneraidujemeveskerykontent"] = 1,["raidujemeveskerykontent"] = 1,["ishyrusskuyu"] = 1,["russianmockba"] = 1,["narodavrezerve"] = 1,
-["somcomboG"] = 1,["ishyLG"] = 1,["pomoshobshchenie"] = 1,["vesyolayaigra"] = 1,["prinimaemslubogolvl"] = 1,["prinimaem"] = .5,["ishyrusskuyu"] = 1,["dodajenoveclanove"] = 1,["otevrenaprovsechny"] = 2,
-["ishetplayerdlayraid"] = 1,["ishetplayer"] = 1,["vozmitevG"] = 1,["havorb"] = .5,["lubogolvla"] = 1,["nabor"] = .5,["otkritnabor"] = 2,["vedemnabor"] = 2,["vedetnabor"] = 2,["vedetsanabor"] = 2,
-["prohozhdeniyadanzhey"] = 1,["sovmestnoyprokachki"] = 1,["primemvsehzelaushih"] = 2,["vedemnaborigrokov"] = 3,["novacekciveteran"] = 2,["provodenabirgravziv"] = 2,["pohodova"] = 1,
-
--- Italian
-["seiinterested"] = 1,["sehaiinterested"] = 1,["livelli"] = 1,["divertimentoassicurati"] = 1,
-
--- Romanian
-["romni"] = 1,["jucatoriromni"] = 1,["pentrucontent"] = 1,["socialevenimente"] = 1,["sidistractie"] = 1,["pentruinfosauinvite"] = .5,["evenimente"] = .5,
-["rozwijajacejsieG"] = .5,["namilevelowac"] = .5,["levelowac"] = .5,["doswiadczeniemlorowym"] = .5,["naszegoOC"] = .5,
-
--- Turkish
-["Gmiz"] = 2,["turkGmiz"] = .5,["kurulmustur"] = .5,["gelmekisteyenler"] = 1.5,["gelmek"] = .5,["kuruluyor"] = 1,["katilmakicinlutfen"] = .5,
-
 }
 GF_WORD_FIX_BEFORE_QUEST_SECOND = {
 -- Groups
@@ -1682,6 +1547,7 @@ GF_WORD_SPECIAL_EXCEPTIONS = { -- These are longer words that shouldn't be split
 ["weeks"] = true,
 ["weekly"] = true,
 ["weekend"] = true,["exploring"] = true,
+["warcraft"] = true,["warcrafts"] = true,
 }
 GF_WORD_GOLD = { -- For detecting money("2g", "2 silver")
 ["g"] = "gold",["gs"] = "gold",["gold"] = "gold",["silver"] = "silver",["silvers"] = "silver",["silv"] = "silver",["bh"] = "heal",["s"] = "N",
@@ -2153,13 +2019,13 @@ GF_WORD_LFM = {
 ["lfm"] = 2.5,["lf"] = 2.5,["lft"] = 2.5,["wtj"] = 2.5,["weneedmore"] = 2.5,
 
 -- Roles/Classes
-["lfall"] = 2.5,["lfmembers"] = 2.5,["lfstealth"] = 2,["seekall"] = 2.5,["seekmembers"] = 2.5,["seekstealth"] = 2,
+["lfall"] = 2.5,["lfmembers"] = 2.5,["lfstealth"] = 2,["seekall"] = 2.5,["seekmembers"] = 2.5,["seekstealth"] = 2,["seeksall"] = 2.5,["seeksmembers"] = 2.5,["seeksstealth"] = 2,["seekingall"] = 2.5,["seekingmembers"] = 2.5,["seekingstealth"] = 2,
 
-["needheal"] = 2,["comeheal"] = 2,["joinheal"] = 2,["lastheal"] = 2,["pleaseheal"] = 2,["needoneheal"] = 3,["needtwoheal"] = 3,["needthreeheal"] = 3,["healneeded"] = 2,["seekheal"] = 2,["seekexperienceheal"] = 2,
-["needhealer"] = 2,["comehealer"] = 2,["joinhealer"] = 2,["lasthealer"] = 2,["pleasehealer"] = 2,["needonehealer"] = 3,["needtwohealer"] = 3,["needthreehealer"] = 3,["healerneeded"] = 2,["seekhealer"] = 2,["seekexperiencehealer"] = 2,
-["needdamage"] = 2,["comedamage"] = 2,["joindamage"] = 2,["lastdamage"] = 2,["pleasedamage"] = 2,["needaoe"] = 2,["needonedamage"] = 3,["needtwodamage"] = 3,["needthreedamage"] = 3,["damageneeded"] = 2,["seekdamage"] = 2,["seekexperiencedamage"] = 2,
-["needdps"] = 2,["comedps"] = 2,["joindps"] = 2,["lastdps"] = 2,["pleasedps"] = 2,["needaoe"] = 2,["needonedps"] = 3,["needtwodps"] = 3,["needthreedps"] = 3,["dpsneeded"] = 2,["seekdps"] = 2,["seekexperiencedps"] = 2,
-["needtank"] = 2,["cometank"] = 2,["moretank"] = 2,["jointank"] = 2,["lasttank"] = 2,["pleasetank"] = 2,["needonetank"] = 3,["needtwotank"] = 3,["needthreetank"] = 3,["tankneeded"] = 2,["seektank"] = 2,["seekexperiencetank"] = 2,
+["needheal"] = 2,["comeheal"] = 2,["joinheal"] = 2,["lastheal"] = 2,["pleaseheal"] = 2,["needoneheal"] = 3,["needtwoheal"] = 3,["needthreeheal"] = 3,["healneeded"] = 2,
+["needhealer"] = 2,["comehealer"] = 2,["joinhealer"] = 2,["lasthealer"] = 2,["pleasehealer"] = 2,["needonehealer"] = 3,["needtwohealer"] = 3,["needthreehealer"] = 3,["healerneeded"] = 2,
+["needdamage"] = 2,["comedamage"] = 2,["joindamage"] = 2,["lastdamage"] = 2,["pleasedamage"] = 2,["needaoe"] = 2,["needonedamage"] = 3,["needtwodamage"] = 3,["needthreedamage"] = 3,["damageneeded"] = 2,
+["needdps"] = 2,["comedps"] = 2,["joindps"] = 2,["lastdps"] = 2,["pleasedps"] = 2,["needaoe"] = 2,["needonedps"] = 3,["needtwodps"] = 3,["needthreedps"] = 3,["dpsneeded"] = 2,
+["needtank"] = 2,["cometank"] = 2,["moretank"] = 2,["jointank"] = 2,["lasttank"] = 2,["pleasetank"] = 2,["needonetank"] = 3,["needtwotank"] = 3,["needthreetank"] = 3,["tankneeded"] = 2,
 ["needrange"] = 2,["comerange"] = 2,["morerange"] = 2,
 ["needcaster"] = 2,["comecaster"] = 2,["morecaster"] = 2,
 ["needmelee"] = 2,["comemelee"] = 2,["moremelee"] = 2,
@@ -2183,6 +2049,10 @@ GF_WORD_LFM = {
 ["damagepleasefor"] = 2,["dpspleasefor"] = 2,["healpleasefor"] = 2,["healerpleasefor"] = 2,["tankpleasefor"] = 2,["peoplepleasefor"] = 2,["playerpleasefor"] = 2,
 ["needonefor"] = 2,["needtwofor"] = 2,["needthreefor"] = 2,["needonepeople"] = 2,["needtwopeople"] = 2,["needthreepeople"] = 2,["needoneguy"] = 2,["needtwoguy"] = 2,["needthreeguy"] = 2,["needonemate"] = 2,["needtwomate"] = 2,["needthreemate"] = 2,
 ["groupneedone"] = 2,["groupneedtwo"] = 2,["groupneedthree"] = 2,
+
+["seekheal"] = 2,["seekexperienceheal"] = 2,["seekhealer"] = 2,["seekexperiencehealer"] = 2,["seekdamage"] = 2,["seekexperiencedamage"] = 2,["seekdps"] = 2,["seekexperiencedps"] = 2,["seektank"] = 2,["seekexperiencetank"] = 2,
+["seeksheal"] = 2,["seeksexperienceheal"] = 2,["seekshealer"] = 2,["seeksexperiencehealer"] = 2,["seeksdamage"] = 2,["seeksexperiencedamage"] = 2,["seeksdps"] = 2,["seeksexperiencedps"] = 2,["seekstank"] = 2,["seeksexperiencetank"] = 2,
+["seekingheal"] = 2,["seekingexperienceheal"] = 2,["seekinghealer"] = 2,["seekingexperiencehealer"] = 2,["seekingdamage"] = 2,["seekingexperiencedamage"] = 2,["seekingdps"] = 2,["seekingexperiencedps"] = 2,["seekingtank"] = 2,["seekingexperiencetank"] = 2,
 
 -- Possible use of the word "deeps" for damage
 ["needdeeps"] = 2,["needonedeeps"] = 2,["needtwodeeps"] = 2,["needthreedeeps"] = 2,["needsomedeeps"] = 2,
@@ -2244,7 +2114,7 @@ GF_WORD_LFM = {
 ["helpkill"] = 2,["helpkilling"] = 2,["helpmekill"] = 2,["helpgetthrough"] = 2,["helpthrough"] = 2,["cananyonehelp"] = 2,["caretohelpwith"] = 2,["willingtohelp"] = 2,
 ["helpoutwith"] = 2,["helpwit"] = 2,["helpwith"] = 2,["helpplease"] = 2,["helpdo"] = 2,["helprush"] = 2,
 
-["seekhelp"] = 2,["pleasehelp"] = 2,["whocanhelp"] = 2,["mindhelpwith"] = 2,["mindhelpwith"] = 2,["helpforthisplease"] = 2,
+["seekhelp"] = 2,["seekshelp"] = 2,["seekinghelp"] = 2,["pleasehelp"] = 2,["whocanhelp"] = 2,["mindhelpwith"] = 2,["mindhelpwith"] = 2,["helpforthisplease"] = 2,
 
 ["needtohelp"] = 2,
 ["anydamagecanhelp"] = 2,["anydpscanhelp"] = 2,["anyhealcanhelp"] = 2,["anyhealercanhelp"] = 2,["anytankcanhelp"] = 2,
@@ -2255,12 +2125,12 @@ GF_WORD_LFM = {
 ["pleasecomehelp"] = 2,["comehelpus"] = 2,
 
 -- Quest
-["seekquest"] = 2,["questlookfor"] = 2,["anyoneforquest"] = 2,["anyonehereforquest"] = 2,["anyoneelsequest"] = 2,["anyonequest"] = 2,
+["seekquest"] = 2,["seeksquest"] = 2,["seekingquest"] = 2,["questlookfor"] = 2,["anyoneforquest"] = 2,["anyonehereforquest"] = 2,["anyoneelsequest"] = 2,["anyonequest"] = 2,
 ["comewithmequest"] = 2,["doingquest"] = 2,["moreforquest"] = 3,["needanotherforquest"] = 2,["letsdoquest"] = 2,["needotherforquest"] = 2,
 ["slotforquest"] = 2,["anygamerforquest"] = 2,["anygamerquest"] = 2,["anyoneneedtoquest"] = 2,["anyonewillingtoquest"] = 2,
 ["helpwithquest"] = 2,["sometodoquest"] = 2,["anytodoquest"] = 2,["anyonedoquest"] = 2,["somehelpforquest"] = 2,["anytoquest"] = 2,
 
-["seekhquest"] = 2,["hquestlookfor"] = 2,["anyoneforhquest"] = 2,["anyonehereforhquest"] = 2,["anyoneelsehquest"] = 2,["anyonehquest"] = 2,
+["seekhquest"] = 2,["seekshquest"] = 2,["seekinghquest"] = 2,["hquestlookfor"] = 2,["anyoneforhquest"] = 2,["anyonehereforhquest"] = 2,["anyoneelsehquest"] = 2,["anyonehquest"] = 2,
 ["comewithmehquest"] = 2,["doinghquest"] = 2,["moreforhquest"] = 3,["needanotherforhquest"] = 2,["letsdohquest"] = 2,["needotherforhquest"] = 2,
 ["slotforhquest"] = 2,["anygamerforhquest"] = 2,["anygamerhquest"] = 2,["anyoneneedtohquest"] = 2,["anyonewillingtohquest"] = 2,
 ["helpwithhquest"] = 2,["sometodohquest"] = 2,["anytodohquest"] = 2,["anyonedohquest"] = 2,["somehelpforhquest"] = 2,
@@ -3229,10 +3099,10 @@ GF_WORD_QUEST = {
 ["secondwave"]={40665,10,14,17},["secretadmirer"]={40300,12,141,141},["secretcommunication"]={8318,60,1377,1377},["secretofcircle"]={3447,51,1417,1477},["secretrecipe"]={41001,60,0,3457},["secretsofcolossusashi"]={8857,60,1377,1377},
 ["secretsofcolossusregal"]={8858,60,1377,1377},["secretsofcolossuszora"]={8859,60,1377,1377},["secretsofdarkforging"]={40236,58,139,139},["secretsofdarkirondesecrator"]={40761,60,0,5121},["secretsofqiraji"]={8784,60,3428,876},["securecargo"]={80405,41,15,15},
 ["securingdarnassus"]={40205,11,141,141},["securinggilneasi"]={40926,44,0,5179},["securinggilneasii"]={40927,44,0,5179},["securingkeep"]={39992,40,45,45},["securinglines"]={835,11,14,14},["securingnorthpoint"]={40418,37,15,15},
-["securingroads"]={39991,40,45,45},["securingsupplylines"]={8280,55,1377,1377},["seedoflife"]={7066,51,2100,493},["seeingwhathappens"]={2966,50,1638,215},["seekacceptance"]={40364,11,215,215},["seekblade"]={40286,56,16,16},
-["seekdryads"]={41250,7,0,5225},["seekedge"]={40287,52,16,16},["seekersdemise"]={70033,30,331,17},["seekgrave"]={40555,35,15,15},["seekincendicite"]={466,22,1,5602},["seekjusticeorvengeance"]={80706,60,0,11},
-["seekkorgem"]={1442,22,40009,331},["seeklostanswers"]={55039,35,279,36},["seeklostsatchel"]={5722,16,2437,2437},["seeknewmethods"]={55007,47,14,14},["seekoutsiseven"]={2205,10,40011,1519},["seekredemption"]={489,7,141,141},
-["seekseekers"]={41297,48,4,4},["seekspiritualaid"]={5158,52,361,361},["seekstrahad"]={3001,30,40004,1497},["seektyranis"]={1439,33,405,405},["seekwisdom"]={269,29,10,1519},["seepingcorruption"]={3569,52,1497,1497},
+["securingroads"]={39991,40,45,45},["securingsupplylines"]={8280,55,1377,1377},["seedoflife"]={7066,51,2100,493},["seeingwhathappens"]={2966,50,1638,215},["seekingacceptance"]={40364,11,215,215},["seekblade"]={40286,56,16,16},
+["seekdryads"]={41250,7,0,5225},["seekedge"]={40287,52,16,16},["seekersdemise"]={70033,30,331,17},["seekgrave"]={40555,35,15,15},["seekincendicite"]={466,22,1,5602},["seekingjusticeorvengeance"]={80706,60,0,11},
+["seekingkorgem"]={1442,22,40009,331},["seekinglostanswers"]={55039,35,279,36},["seeklostsatchel"]={5722,16,2437,2437},["seeknewmethods"]={55007,47,14,14},["seekoutsiseven"]={2205,10,40011,1519},["seekredemption"]={489,7,141,141},
+["seekingseekers"]={41297,48,4,4},["seekingspiritualaid"]={5158,52,361,361},["seekingstrahad"]={3001,30,40004,1497},["seektyranis"]={1439,33,405,405},["seekingwisdom"]={269,29,10,1519},["seepingcorruption"]={3569,52,1497,1497},
 ["sellingfish"]={127,21,44,44},["senatorialrevenge"]={40464,45,1584,1584},["senirsobservations"]={420,5,132,5581},["sentinelsrightfulsuspicion"]={41077,54,361,361},["sentinelssuddensuspicion"]={41072,52,361,361},["separationanxiety"]={7849,50,47,47},
 ["serenabloodfeather"]={876,20,17,17},["sergradarkthorn"]={860,10,17,17},["serpentbloom"]={60125,16,718,718},["serpentroot"]={41045,45,0,5179},["serpentwild"]={4865,26,400,400},["setthemablaze"]={3463,52,51,51},
 ["severedhead"]={1239,35,15,15},["sfk"]={60109,24,209,1519},["shadeflayertribalbracelets"]={41019,60,0,616},["shadeofelura"]={1686,10,40005,148},["shadowcurse"]={41868,34,0,5602},["shadoweaver"]={3379,50,40019,51},
@@ -3666,7 +3536,7 @@ GF_TRADE_WORD_EXCLUSION = {
 ["pleasebring"] = 1,["pleasehave"] = 1,["priceplease"] = .5,["priestlf"] = 1,["priority"] = 1,["professionabove"] = .5,["professionpast"] = .5,["progression"] = 1,["proveit"] = 1,
 ["quest"] = 1,["question"] = .5,["raidres"] = 1,["raidroll"] = .5,["range"] = 1,["ratslarge"] = 1,["reallife"] = 1,["realthing"] = .5,["recruiting"] = 1,
 ["remember"] = .5,["repfarm"] = 1,["reserved"] = 1,["ripheroff"] = 1,["riphimoff"] = 1,["ripoff"] = 1,["rippeopleoff"] = 1,["ripplayeroff"] = 1,["ripthemoff"] = 1,
-["ripusoff"] = 1,["roguelf"] = 1,["roster"] = 1,["rules"] = 1,["rumorsabout"] = 1,["runme"] = 1,["saysguy"] = 1,["scam"] = .5,["seektank"] = .3,
+["ripusoff"] = 1,["roguelf"] = 1,["roster"] = 1,["rules"] = 1,["rumorsabout"] = 1,["runme"] = 1,["saysguy"] = 1,["scam"] = .5,["seektank"] = .3,["seekingtank"] = .3,["seekstank"] = .3,
 ["seemstobe"] = 1,["sellthemtovendor"] = 1.5,["sellthosetovendor"] = 1.5,["sendingmessages"] = 1,["shamanlf"] = 1,["shouldi"] = 1,["smalltwink"] = 1,["spam"] = 1.25,["stackwith"] = .5,
 ["startfrom"] = 1,["stupidquestion"] = 1,["tanklf"] = 1,["taurendruid"] = 1,["taurenhunter"] = 1,["taurenmage"] = 1,["taurenpriest"] = 1,["taurenrogue"] = 1,["taurenshaman"] = 1,
 ["taurenwarlock"] = 1,["taurenwarrior"] = 1,["tellmehow"] = 1,["thatstuff"] = 1,["thenwheni"] = 1,["thereareno"] = 1,["they"] = .25,["theycangiveme"] = 1,["throttlesme"] = 1,
@@ -3686,103 +3556,12 @@ GF_TRADE_WORD_EXCLUSION = {
 
 }
 GF_TRADE_COMMON_WORDS = {
-["enchant"] = "E",["lockbox"] = "L",["portal"] = "P",["lf"] = "C",["lfg"] = "C",["lfm"] = "C",["seek"] = "F",["deathroll"] = "D",
+["enchant"] = "E",["lockbox"] = "L",["portal"] = "P",["lf"] = "C",["lfg"] = "C",["lfm"] = "C",["seek"] = "F",["seeks"] = "F",["seeking"] = "F",["deathroll"] = "D",
 ["alahthalas"] = "B",["alterac"] = "B",["aq"] = "B",["arathi"] = "B",["arathihighlands"] = "B",["ashenvale"] = "B",["azshara"] = "B",["badlands"] = "B",["barrens"] = "B",["blackrock"] = "B",["blackrockmountain"] = "B",["blasted"] = "B",["blastedlands"] = "B",["bb"] = "B",["bootybay"] = "B",["brm"] = "B",["cot"] = "B",["crossroads"] = "B",["darkmoon"] = "B",["darkmoonfaire"] = "B",["darnassus"] = "B",["desolace"] = "B",["diremaul"] = "B",["dm"] = "B",["dme"] = "B",["dmw"] = "B",["dmn"] = "B",["dustwallow"] = "B",["ep"] = "B",["epl"] = "B",["everlook"] = "B",["feralas"] = "B",["gadget"] = "B",["gadgetzan"] = "B",["goldshire"] = "B",["hydraxian"] = "B",["hillsbrad"] = "B",["hyjal"] = "B",["if"] = "B",["ironforge"] = "B",["karazhan"] = "B",["moonglade"] = "B",["nordanaar"] = "B",["orgrimmar"] = "B",["ratchet"] = "B",["silithus"] = "B",["sm"] = "B",["stonard"] = "B",["stormwind"] = "B",["stratholme"] = "B",["tanaris"] = "B",["tarrenmill"] = "B",["theramore"] = "B",["thunder"] = "B",["thunderbluff"] = "B",["undercity"] = "B",["ubrs"] = "B",["winterspring"] = "B",["wpl"] = "B",["zoramstrand"] = "B",["able"] = "A",["about"] = "A",["above"] = "A",["afford"] = "A",["ah"] = "A",["all"] = "A",["alley"] = "A",["am"] = "A",["amount"] = "A",["and"] = "A",["appreciate"] = "A",["are"] = "A",["around"] = "A",["ask"] = "A",["at"] = "A",["be"] = "A",["being"] = "A",["better"] = "A",["below"] = "A",["big"] = "A",["bonus"] = "A",["bring"] = "A",["bunch"] = "A",["by"] = "A",["call"] = "A",["can"] = "A",["come"] = "A",["deal"] = "A",["decent"] = "A",["district"] = "A",["do"] = "A",["doing"] = "A",["door"] = "A",["even"] = "A",["every"] = "A",["everything"] = "A",["faster"] = "A",["few"] = "A",["find"] = "A",["for"] = "A",["friend"] = "A",["from"] = "A",["front"] = "A",["get"] = "A",["give"] = "A",["good"] = "A",["great"] = "A",["greatly"] = "A",["guy"] = "A",["hard"] = "A",["has"] = "A",["have"] = "A",["here"] = "A",["hero"] = "A",["high"] = "A",["house"] = "A",["i"] = "A",["im"] = "A",["in"] = "A",["info"] = "A",["information"] = "A",["invite"] = "A",["is"] = "A",["its"] = "A",["just"] = "A",["kind"] = "A",["last"] = "A",["less"] = "A",["link"] = "A",["look"] = "A",["looking"] = "A",["lot"] = "A",["low"] = "A",["lower"] = "A",["major"] = "A",["many"] = "A",["maybe"] = "A",["me"] = "A",["mid"] = "A",["mind"] = "A",["more"] = "A",["most"] = "A",["much"] = "A",["must"] = "A",["my"] = "A",["nice"] = "A",["no"] = "A",["now"] = "A",["of"] = "A",["off"] = "A",["on"] = "A",["only"] = "A",["or"] = "A",["order"] = "A",["out"] = "A",["outside"] = "A",["place"] = "A",["plenty"] = "A",["pop"] = "A",["put"] = "A",["quick"] = "A",["reasonable"] = "A",["so"] = "A",["some"] = "A",["still"] = "A",["stop"] = "A",["stuff"] = "A",["superior"] = "A",["sweet"] = "A",["than"] = "A",["thank"] = "A",["that"] = "A",["their"] = "A",["them"] = "A",["they"] = "A",["there"] = "A",["this"] = "A",["those"] = "A",["time"] = "A",["to"] = "A",["top"] = "A",["tree"] = "A",["under"] = "A",["up"] = "A",["use"] = "A",["way"] = "A",["well"] = "A",["what"] = "A",["where"] = "A",["who"] = "A",["will"] = "A",["willing"] = "A",["with"] = "A",["would"] = "A",["you"] = "A",["your"] = "A",["yourself"] = "A",["alliance"] = "B",["bank"] = "B",["best"] = "B",["bridge"] = "B",["business"] = "B",["commission"] = "B",["contact"] = "B",["couple"] = "B",["delivered"] = "B",["delivery"] = "B",["donation"] = "B",["each"] = "B",["five"] = "B",["fountain"] = "B",["four"] = "B",["guarantee"] = "B",["half"] = "B",["hardcore"] = "B",["help"] = "B",["horde"] = "B",["interested"] = "B",["job"] = "B",["listed"] = "B",["minute"] = "B",["near"] = "B",["one"] = "B",["premium"] = "B",["quality"] = "B",["roof"] = "B",["stair"] = "B",["steps"] = "B",["ten"] = "B",["thankful"] = "B",["third"] = "B",["three"] = "B",["tip"] = "B",["transport"] = "B",["todo"] = "B",["ton"] = "B",["town"] = "B",["two"] = "B",["alchemist"] = "O",["blacksmith"] = "O",["engineer"] = "O",["leatherworker"] = "O",["skinner"] = "O",["smelter"] = "O",["tailor"] = "O",["specialization"] = "B",["artisan"] = "B",["elemental"] = "A",["tribal"] = "A",["dragonscale"] = "A",["cooldown"] = "B",["dance"] = "B",["hide"] = "B",["level"] = "A",["leveling"] = "A",["orange"] = "B",["participant"] = "B",["play"] = "B",["pool"] = "B",["prize"] = "B",["save"] = "B",["set"] = "B",["slot"] = "B",["store"] = "B",["token"] = "B",["win"] = "B",["winner"] = "B",["conjure"] = "B",["mage"] = "B",["stack"] = "B",["warlock"] = "B",["druid"] = "A",["hunter"] = "A",["paladin"] = "A",["priest"] = "A",["shaman"] = "A",["warrior"] = "A",["box"] = "B",["lock"] = "B",["pick"] = "B",["rogue"] = "B",["unlock"] = "B",["add"] = "B",["apply"] = "B",["made"] = "B",["maker"] = "B",["mat"] = "B",["material"] = "B",["auction"] = "B",["disenchant"] = "B",["needed"] = "B",["pay"] = "B",["price"] = "B",["create"] = "C",["make"] = "C",["produce"] = "C",["open"] = "C",["opened"] = "C",["opener"] = "C",["opening"] = "C",["any"] = "C",["anyone"] = "C",["anywhere"] = "C",["boost"] = "C",["discount"] = "C",["everycorner"] = "C",["fast"] = "C",["free"] = "C",["gold"] = "C",["money"] = "C",["need"] = "C",["please"] = "C",["request"] = "C",["sale"] = "C",["search"] = "C",["service"] = "C",["welcome"] = "C",["work"] = "C",["wherever"] = "C",["agility"] = "O",["arcane"] = "O",["armor"] = "O",["block"] = "O",["damage"] = "O",["defense"] = "O",["dodge"] = "O",["fire"] = "O",["fish"] = "O",["frost"] = "O",["glow"] = "O",["haste"] = "O",["heal"] = "O",["health"] = "O",["herb"] = "O",["hit"] = "O",["impact"] = "O",["intellect"] = "O",["mana"] = "O",["mount"] = "O",["nature"] = "O",["resist"] = "O",["riding"] = "O",["shadow"] = "O",["skin"] = "O",["speed"] = "O",["spell"] = "O",["spirit"] = "O",["stamina"] = "O",["stealth"] = "O",["strength"] = "O",["striking"] = "O",["subtlety"] = "O",["allresist"] = "O",["crusader"] = "O",["beastslayer"] = "O",["beastslaying"] = "O",["counterweight"] = "O",["fiery"] = "O",["icychill"] = "O",["icy"] = "O",["minorspeed"] = "O",["mountspeed"] = "O",["movespeed"] = "O",["demonslayer"] = "O",["demonslaying"] = "O",["lifesteal"] = "O",["resistall"] = "O",["ridingskill"] = "O",["ridingspeed"] = "O",["runspeed"] = "O",["shieldspike"] = "O",["spelldamage"] = "O",["spike"] = "O",["spur"] = "O",["vampirism"] = "O",["weaponchain"] = "O",["wintersmight"] = "O",["unholy"] = "O",["head"] = "I",["legs"] = "I",["neck"] = "I",["ring"] = "I",["cloak"] = "I",["back"] = "I",["chest"] = "I",["wrist"] = "I",["gloves"] = "I",["hand"] = "I",["shield"] = "I",["boots"] = "I",["weapon"] = "I",["belt"] = "I",["beltbuckle"] = "I",["gem"] = "I",["gemstone"] = "I",["jewel"] = "I",["handsword"] = "I",["handaxe"] = "I",["handmace"] = "I",["handstaff"] = "I",["handdagger"] = "I",["arcanum"] = "I",["libram"] = "I",["axe"] = "I",["bow"] = "I",["dagger"] = "I",["greater"] = "I",["gun"] = "I",["lesser"] = "I",["mace"] = "I",["mighty"] = "I",["minor"] = "I",["polearm"] = "I",["staff"] = "I",["sword"] = "I",["trinket"] = "I",["wand"] = "I",["blueitem"] = "I",["epicitem"] = "I",["greenitem"] = "I",["bag"] = "I",["elixir"] = "I",["flask"] = "I",["food"] = "I",["formula"] = "I",["pattern"] = "I",["plans"] = "I",["potion"] = "I",["recipe"] = "I",["arcanite"] = "H",["curedruggedhide"] = "H",["hitem"] = "H",["mooncloth"] = "H",["oranges"] = "H",["water"] = "H",["arthas"] = "G",["blackmouth"] = "G",["firefin"] = "G",["khadgar"] = "G",["silversage"] = "G",["steelbloom"] = "G",["stonescale"] = "G",["undeath"] = "G",["arcanecrystal"] = "H",["arthastears"] = "H",["firefinsnapper"] = "H",["flamesac"] = "H",["ghostmushroom"] = "H",["gravemoss"] = "H",["khadgarwhisker"] = "H",["mountainsilversage"] = "H",["oilyblackmouth"] = "H",["stonescaleoil"] = "H",["venomsac"] = "H",["volatilerum"] = "H",["wildsteelbloom"] = "H",["blindweed"] = "H",["briarthorn"] = "H",["bruiseweed"] = "H",["dreamfoil"] = "H",["fadeleaf"] = "H",["firebloom"] = "H",["goldensansam"] = "H",["goldthorn"] = "H",["gromsblood"] = "H",["icecap"] = "H",["kingsblood"] = "H",["liferoot"] = "H",["plaguebloom"] = "H",["stranglekelp"] = "H",["sungrass"] = "H",["swifttthistle"] = "H",["wintersbite"] = "H",["blacklotus"] = "H",["purplelotus"] = "H",["heartofwild"] = "H",["dreamdust"] = "H",["illusiondust"] = "H",["souldust"] = "H",["strangedust"] = "H",["visiondust"] = "H",["essence"] = "G",["shard"] = "G",["astral"] = "N",["brilliant"] = "N",["eternal"] = "N",["glimmering"] = "N",["glowing"] = "N",["large"] = "N",["magic"] = "N",["mystic"] = "N",["nether"] = "N",["radiant"] = "N",["small"] = "N",["earth"] = "N",["bar"] = "I",["cloth"] = "I",["leather"] = "I",["ore"] = "I",["stone"] = "I",["heavy"] = "N",["light"] = "N",["medium"] = "N",["thick"] = "N",["rugged"] = "N",["bronze"] = "N",["copper"] = "N",["iron"] = "N",["mithril"] = "N",["ornate"] = "N",["reinforced"] = "N",["steel"] = "N",["strong"] = "N",["linen"] = "N",["mageweave"] = "N",["silk"] = "N",["thorium"] = "N",["wool"] = "N",["coarse"] = "N",["rough"] = "N",["solid"] = "N",["dense"] = "N",["gear"] = "B",["inventory"] = "B",["item"] = "B",["skill"] = "B",["skilled"] = "B",["ag"] = "N",["hmu"] = "C",["pst"] = "C",["w"] = "C",["wme"] = "C",["ap"] = "B",["ar"] = "B",["fr"] = "B",["hp"] = "B",["mp"] = "B",["nr"] = "B",["sr"] = "B",["stats"] = "B",["mine"] = "B",["threat"] = "B",["bis"] = "B",["hc"] = "B",["pm"] = "B",["u"] = "A",["crack"] = "B",["cracking"] = "B",["comingup"] = "C",["enc"] = "A",["enhancement"] = "A",["easternkingdoms"] = "N",["kalimdor"] = "N",["refined"] = "N",["deeprock"] = "N",["salt"] = "N",["lb"] = "N",
 }
 
 GF_LANGUAGE_FOREIGN_COMMON_WORDS = {
 -- Imported
--- French
---[[
-[""] = {"","fr"},
---]]
--- Norwegian
---[[
-[""] = {"","no"},
---]]
--- Italian
---[[
-[""] = {"","it"},
---]]
---[""] = "",[""] = "",
--- Hungarian
---[[
-[""] = {"","hu"},
---]]
--- German
---[[
-[""] = {"","de"},
---]]
--- Polish
---[[
-[""] = {"","pl"},
---]]
--- Portuguese
---["brasilia"] = {"brazilian","pt-PT"},
---[[
-[""] = {"","pt-PT"},
---]]
--- Romanian
---["romani"] = {"romanian","ro"},
---[[
-[""] = {"","ro"},
---]]
--- Russian
---[[
-[""] = {"","ru"},
---]]
--- Slovenian
---[[
-[""] = {"","sl"},
---]]
--- Spanish
---[[
-[""] = {"","es"},
---]]
--- Swedish
---[[
-[""] = {"","sv"},
---]]
--- Turkish
---[[
-[""] = {"","tr"},
---]]
--- Ukrainian
---["ukrainska"] = {"","uk"},
---[[
-[""] = {"","uk"},
---]]
--- Serbian
---[[
-[""] = {"","sr"},
---]]
--- Slovak
---["slovenska"] = {"slovak","sk"},
---[[
-[""] = {"","sk"},
---]]
--- Finnish
---[[
-[""] = {"","fi"},
---]]
--- Dutch
---[[
-[""] = {"","nl"},
---]]
--- Danish
---[[
-[""] = {"","da"},
---]]
--- Czech
---[[
-[""] = {"","cs"},
---]]
--- Bulgarian
---["bulgarski"] = {"bulgarian","bg"},
---[[
-[""] = {"","bg"},
---]]
-
 }
 GF_LANGUAGE_FOREIGN_COMMON_MULTIWORDS = {
 --[[
@@ -3814,14 +3593,182 @@ GF_LANGUAGE_FOREIGN_COMMON_MULTIWORDS = {
 ["czechsfk"] = {"czech","slovak"},["sfkczech"] = {"czech","slovak"},["czechsk"] = {"czech","slovak"},
 
 ["aprendera"] = {"will","learn"},["siquieres"] = {"you","need"},["sucore"] = {"our","core"},["tienes"] = {"you","have"},["tuadventure"] = {"your","adventure"},
-
--- Foreign Words
-["schliebkassette"] = "lockbox",
-
--- Imported
 --]]
 }
 GF_LANGUAGE_FOREIGN_CONVERSION_WORDS = {
+["en"]={
+
+},
+["de"]={
+-- Hardcoded
+["mitstreiter"] = "comrade",["mitstreitern"] = "comrades",["raidear"] = "raid",["questen"] = "quest",["sprachige"] = "speaking",["sprachigen"] = "speaking",["raiden"] = "raid",["entspannte"] = "relaxed",["kreutfahrer"] = "crusader",
+["mitspieler"] = "teammate",["entspannter"] = "more relaxed",["neulinge"] = "newbies",["hilfsbereite"] = "helpful",["einsteiger"] = "beginners",["konditionen"] = "conditions",["trockenem"] = "dry",["rostigem"] = "rusty",["raidtage"] = "raid days",
+["soziales"] = "social",["dem"] = "the",["raidgilde"] = "raid guild",["seelenlose"] = "soulless",["raidkader"] = "raid team",["raidtag"] = "raid day",["gildenhaus"] = "guild house",["bestmoglich"] = "best possible",["deutschsprachige"] = "german speaking",
+["familienfreundliche"] = "family friendly",["raidet"] = "raid",["hauptraids"] = "main raids",["schamanen"] = "shaman",
+
+--seeks teammate, seeks new teammate, seeks you, seeks member
+-- mo di mi do clock, ger, mo fr cet
+
+-- lock crack = lockbox, close cassette = lockbox
+},
+["es"]={
+-- Hardcoded
+["nececito"] = "need",["espaola"] = "spanish",["espaol"] = "spanish",["hispana"] = "spanish",["espaoles"] = "spanish",["latina"] = "spanish",["alguan"] = "any",["leveleando"] = "leveling",["lvleando"] = "leveling",["acceptamos"] = "accepting",
+["castellana"] = "spanish",["algumda"] = "any",["hablante"] = "speak",["hermandades"] = "brotherhood",["hispano"] = "spanish",["recrutando"] = "recruiting",["reclutando"] = "recruiting",["encantamiento"] = "enchant",["levear"] = "level",
+["experimentes"] = "experience",["farmeo"] = "farming",["sacer"] = "priest",["estandartes"] = "banners",
+
+
+},
+["fr"]={
+-- Hardcoded
+["recrutent"] = "recruits",["sympathiques"] = "friendly",["avecdes"] = "with",["jusquau"] = "until",["coter"] = "value",
+["francophone"] = "french speaking",["conviviale"] = "friendly",["partageant"] = "sharing",["recrutons"] = "we are recruiting",["tisse"] = "weaving",
+["quebecoise"] = "quebec",
+["orientee"] = "oriented",
+["oserez"] = "dare",
+["experimentes"] = "experienced",
+["quil"] = "that",
+
+-- Word fix
+["wewe"] = "we",["youyou"] = "you",
+},
+["pl"]={
+
+},
+["pt"]={
+-- Hardcoded
+["portuguesa"] = "portuguese",["guilda"] = "guild",["sacer"] = "priest",["valorizamos"] = "we value",["que"] = "what",["tugas"] = "portuguese",
+},
+["ru"]={
+
+},
+["it"]={
+-- Hardcoded
+["gilde"] = "guilds",["gildato"] = "guilded",["gildature"] = "guilds",["fullare"] = "full",
+},
+["sv"]={
+
+},
+["no"]={
+
+},
+["da"]={
+
+},
+["fi"]={
+
+},
+["bg"]={
+
+},
+["sr"]={
+
+},
+["tr"]={
+
+},
+["ro"]={
+
+},
+["uk"]={
+
+},
+["nl"]={
+
+},
+["sk"]={
+
+},
+["cs"]={
+
+},
+["sl"]={
+
+},
+["hu"]={
+
+},
+
+--[[
+-- Guild-related
+["rekrutuje"] = "recruiting",["recrut"] = "recruiting",["rekrutiert"] = "recruiting",["recruting"] = "recruiting",["recruterait"] = "recruiting",
+["recruteaza"] = "recruiting",["recuiting"] = "recruiting",["reqruiting"] = "recruiting",
+
+["gildia"] = "guild",["gildiy"] = "guild",["gildiyu"] = "guild",["gildenmitglieder"] = "guild",["gildii"] = "guild",["gildi"] = "guild",["gilduha"] = "guild",["guildy"] = "guild",["guidla"] = "guild",
+["gildiu"] = "guild",["gilden"] = "guild",["gildiya"] = "guild",["gildiyi"] = "guild",["gild"] = "guild",["guldia"] = "guild",["guil"] = "guild",["guils"] = "guild",["guld"] = "guild",["guildiji"] = "guild",
+["gildosi"] = "guild",["guile"] = "guild",["giuld"] = "guild",["duild"] = "guild",["gilds"] = "guild",["guildia"] = "guild",["gildu"] = "guild",["guildi"] = "guild",["guildet"] = "guild",["gildie"] = "guild",
+["progresowania"] = "progression",["progresar"] = "progression",["progreso"] = "progression",["progresshez"] = "progression",["prog"] = "progression",["progressom"] = "progression",["progresando"] = "progressing",["progresowac"] = "progressing",
+["komunity"] = "community",["komunite"] = "community",["komunita"] = "community",["comunidad"] = "community",["comunidade"] = "community",["companheiros"] = "community",["compaeros"] = "community",
+
+["actieve"] = "active",["nederlands"] = "dutch",["nederlandse"] = "dutch",["aktivity"] = "activity",
+
+-- Foreign Trade Words
+["utc"] = .5,["cet"] = .5,["msk"] = 1,["est"] = 1,["ger"] = 1,["oceanic"] = .5,["aest"] = .5,["naandeu"] = 1,["euandna"] = 1,
+["zhdemvseh"] = 2,["proidives"] = 1,["cautammembri"] = 1,["anemariechipa"] = 1,["echipa"] = .5,["yparxeikanenaG"] = 1,
+
+-- Slovak
+["eqipomnazaciatokzacinajucemu"] = 1,["eqipom"] = .25,["eqipomna"] = .25,["pomozezacinajucemu"] = 1,["zacinajucemu"] = .5,
+
+-- Hungarian
+["keresek"] = 1,["mindenhungarian"] = .5,["felvetelthirdet"] = 1,["tarsasagbanjatszani"] = 1,["szivesenvrunkbarkit"] = 2,["hangulat"] = .5,["szeretnelvelunkjatszani"] = 2,
+["varunkszeretettel"] = 1,["szeretettelvrminden"] = 1,["keresiaktvhungariantagjait"] = 1,
+
+-- Finnish
+["finkilta"] = .5,["finnkilta"] = .5,["finjoukkue"] = .5,["finnjoukkue"] = .5,["maajoukue"] = 2,["maajoukkue"] = 2,["maajoukue"] = 2,["majoukkue"] = 2,["scouttaa"] = 2,["suomalaanen"] = 1,
+["joukkuesuomesta"] = 1,["skouta"] = 1,["skoutauusia"] = 1,["finnational"] = 2.5,["finnnational"] = 2.5,["finlandsnationalgroup"] = 2.5,["finlandnationalgroup"] = 2.5,["josontyls"] = 1,
+["hakeejseni"] = 3,["mitmuutamenoatoistaaseksi"] = 3,["skouttaa"] = 1,["teretulemast"] = 1,["finG"] = .5,["finplayer"] = .5,["newfinplayer"] = .5,["etsiiriveliihinsuusiakykyj"] = 1,
+["etsiiriveliihinsuusia"] = 2,["kykyj"] = 1,["skouttaauusiakykyj"] = 1,["uusiakykyj"] = 1,["pelityyli"] = 1,["sooloolijat"] = 1,["roolipelaajat"] = 1,["kaikkiteretulemast"] = 1,
+["suomibndi"] = 2,["etsiiuusia"] = 1,["etsii"] = 1,["kykyjetsii"] = 1,["uraatarjolla"] = 1,["maajoukkueessa"] = 1,["paikkaauki"] = 1,["skoutaa"] = 1,["uusia"] = .5,["riveihins"] = .5,
+["fysio"] = .5,["keskikentlle"] = .5,["joinmaajoukkue"] = 1.5,["joinmaajoukkuetoday"] = 1,["joinmaajoukkuetnn"] = 2,["suomikilta"] = 2,["suomikiltaa"] = 2,["raidaaako"] = 1.5,
+["questaako"] = 1.5,["pelaajilla"] = 1,["scoutaauusia"] = 1.5,["uusiajawanhoja"] = 1,["teretulemastkiltaan"] = 3,["kaikihoituu"] = 1,["suomipelaajia"] = 2,["kiltaan"] = 1,["haetaankiltaan"] = 2,
+["tulille"] = 1,["firmatarjoaa"] = .5,["tarjoaa"] = .5,["firma"] = .5,["scouttaavuoden"] = 1,["vvvalmistautuujascouttaavuoden"] = 1,["valmistautuu"] = 1,["ihmeellinenmaailma"] = 1,
+
+-- Polish
+["zapraszadowspolnej"] = 1,["rodakow"] = .5,["niezaleznieodpoziomu"] = 1,["zaczelismyP"] = 1,["obecnieczyscimy"] = .5,["calykontent"] = 1,["chcedolaczyc"] = 1,
+
+-- Slavic
+["raidov"] = 1,["ishet"] = 1,["novacek"] = 1,["raidereket"] = 1,["priednuysia"] = 1,["primet"] = 1,["reydinga"] = 1,["novaya"] = 1,["novayaG"] = 1,["nabirayet"] = 2,["nabiraet"] = 2,
+["nabirayetvsekh"] = 1,["nabiraem"] = 2,["zhelayushchikh"] = 1,["igrokov"] = 1,["zhelayushchikhigrokov"] = 1,["pervaya"] = .5,["edinstvennaya"] = .5,["pervayaiedinstvennaya"] = 1.5,
+["primite"] = .5,["primitevru"] = .5,["osvoenie"] = .5,["naosvoenie"] = 1,["speki"] = .5,["rassmotrim"] = 1,["vseklassy"] = 1,["vseklassyispeki"] = 2,["vsemklassam"] = 1,["unasvreide"] = 1,
+["prijmenovehrace"] = 1,["novehrace"] = .5,["pravidelneraidujemeveskerykontent"] = 1,["raidujemeveskerykontent"] = 1,["ishyrusskuyu"] = 1,["russianmockba"] = 1,["narodavrezerve"] = 1,
+["somcomboG"] = 1,["ishyLG"] = 1,["pomoshobshchenie"] = 1,["vesyolayaigra"] = 1,["prinimaemslubogolvl"] = 1,["prinimaem"] = .5,["ishyrusskuyu"] = 1,["dodajenoveclanove"] = 1,["otevrenaprovsechny"] = 2,
+["ishetplayerdlayraid"] = 1,["ishetplayer"] = 1,["vozmitevG"] = 1,["havorb"] = .5,["lubogolvla"] = 1,["nabor"] = .5,["otkritnabor"] = 2,["vedemnabor"] = 2,["vedetnabor"] = 2,["vedetsanabor"] = 2,
+["prohozhdeniyadanzhey"] = 1,["sovmestnoyprokachki"] = 1,["primemvsehzelaushih"] = 2,["vedemnaborigrokov"] = 3,["novacekciveteran"] = 2,["provodenabirgravziv"] = 2,["pohodova"] = 1,
+
+
+-- Romanian
+["romni"] = 1,["jucatoriromni"] = 1,["pentrucontent"] = 1,["socialevenimente"] = 1,["sidistractie"] = 1,["pentruinfosauinvite"] = .5,["evenimente"] = .5,
+["rozwijajacejsieG"] = .5,["namilevelowac"] = .5,["levelowac"] = .5,["doswiadczeniemlorowym"] = .5,["naszegoOC"] = .5,
+
+-- Turkish
+["Gmiz"] = 2,["turkGmiz"] = .5,["kurulmustur"] = .5,["gelmekisteyenler"] = 1.5,["gelmek"] = .5,["kuruluyor"] = 1,["katilmakicinlutfen"] = .5,
+
+-- Slovenian
+["nekdo"] = "anyone",
+
+-- Swedish
+["dricks"] = "tip",["uppskattat"] = "appreciate",
+["norsk"] = "norwegian",["gratis"] = "free",
+
+-- Dutch
+["ereen"] = "there",["joineet"] = "join",
+
+-- Polish
+["pokskie"] = "polish",["polakow"] = "polish",["polska"] = "polish",["polskiej"] = "polish",["poszukuje"] = "lf",["dla"] = "for",["szuka"] = "lf",["szukam"] = "lf",
+["towarzyskiej"] = "socializing",["emerytow"] = "veteran",["luznej"] = "casual", ["levelingu"] = "leveling",
+["chetnych"] = "willing",["szeregi"] = "ranks",["raidowania"] = "raid",["odkrywajac"] = "discovering",["jego"] = "its",["ciekawostki"] = "curiosities",
+["wladcaognia"] = "firelord",["namniestraszny"] = "wearenotscared",["piwo"] = "beer",["mypijac"] = "wedrink",["wyzwania"] = "challenge",["kolejne"] = "next",
+
+-- Hungarian
+["tagjait"] = "members",["keresi"] = "lf",["aktv"] = "active",["rdekel"] = "interested",["jelentkezzen"] = "apply",
+
+-- Swedish
+["svensk"] = "swedish",["skerfler"] = "lfm",["medlemmar"] = "members",["fokus"] = "focus",["och"] = "and",["mer"] = "more",["lutad"] = "leaning",
+["mndag"] = "monday",["tisdag"] = "tuesday",["onsdag"] = "wednesday",["torsdag"] = "thursday",["fredag"] = "friday",["lrdag"] = "saturday",["sndag"] = "sunday",
+
+-- Slavic
+["opzoeknaar"] = "lf",["letar"] = "lf",["vstuplyuv"] = "lf",["raidov"] = "raid",["igrokov"] = "player",
+--]]
 }
 GF_GROUP_IDS = {
 ["rfc"] = "RFC",["ragefire"] = "RFC",["chasm"] = "RFC",["ragefirechasm"] = "RFC",["deadmines"] = "DM",["deadmine"] = "DM",["dm"] = "DM",["vc"] = "DM",["vancleef"] = "DM",
@@ -4210,12 +4157,78 @@ GF_GroupHistoryNames = { -- Name of the dungeon. Minimum level to show. Update t
 [30] = { "World Bosses", 58 },
 }
 GF_QUEST_CONVERT = {
+
 }
 GF_QUEST_CONVERT_NEGATIVE_ID = {
 [1] = 40001,[22] = 40002,[24] = 40003,[61] = 40004,[81] = 40005,[82] = 40006,[101] = 40007,[121] = 40008,[141] = 40009,[161] = 40010,[162] = 40011,[181] = 40012,[182] = 40013,[201] = 40014,[221] = 40015,
 [261] = 40016,[262] = 40017,[263] = 40018,[264] = 40019,[284] = 40020,[304] = 40021,[324] = 40022,[344] = 40023,[364] = 40024,[365] = 40025,[366] = 40026,[368] = 40027,[369] = 40028,
 }
 GF_LANGUAGE_CONVERT = {
+["en"]={
+
+},
+["de"]={
+},
+["es"]={
+
+},
+["fr"]={
+
+},
+["pl"]={
+
+},
+["pt"]={
+
+},
+["ru"]={
+
+},
+["it"]={
+
+},
+["sv"]={
+
+},
+["no"]={
+
+},
+["da"]={
+
+},
+["fi"]={
+
+},
+["bg"]={
+
+},
+["sr"]={
+
+},
+["tr"]={
+
+},
+["ro"]={
+
+},
+["uk"]={
+
+},
+["nl"]={
+
+},
+["sk"]={
+
+},
+["cs"]={
+
+},
+["sl"]={
+
+},
+["hu"]={
+
+},
 }
 -- Turtle additions
 GF_HIGH_ELF = "High Elf"
