@@ -238,9 +238,9 @@ function GF_LoadVariables()
 		for i=1, getn(GF_WhisperLogData[GF_RealmName]) do -- Convert older style Whisper Log entries - Could get rid of in final release
 			if type(GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][1]) ~= "table" then
 				for j=1, getn(GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]]) do
-					if string.find(GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j], " %[[TFrom]+%] |cff") then
+					if strfind(GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j], " %[[TFrom]+%] |cff") then
 						GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j] = { GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j], "WHISPER" }
-					elseif string.find(GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j], " [O] |cff",1,1) then
+					elseif strfind(GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j], " [O] |cff",1,1) then
 						GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j] = { GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j], "OFFICER" }
 					else
 						GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j] = { GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j], "GUILD" }
@@ -287,16 +287,9 @@ function GF_LoadVariables()
 	
 	GF_BUTTONS_LIST["FontName"][1][2] = ChatFontNormal:GetFont()
 	if pfUI and pfUI.gui and pfUI.gui.dropdowns and pfUI.gui.dropdowns.fonts then
-		local tempTable = {}
 		for i=1, getn(pfUI.gui.dropdowns.fonts) do
 			for fontPath,fontName in string.gfind(pfUI.gui.dropdowns.fonts[i], "(.*):(.*)") do
-				table.insert(tempTable,{fontName,fontPath})
-			end
-		end
-		if getn(tempTable) > 4 then
-			for i=2, getn(GF_BUTTONS_LIST["FontName"]) do GF_BUTTONS_LIST["FontName"][i] = nil end
-			for i=1, getn(tempTable) do
-				table.insert(GF_BUTTONS_LIST["FontName"],{tempTable[i][1],tempTable[i][2]})
+				if not GF_BUTTONS_LIST["FontName"][strupper(fontName)] then table.insert(GF_BUTTONS_LIST["FontName"],{fontName,fontPath}) end
 			end
 		end
 	end
@@ -469,7 +462,7 @@ function GF_SetStringSize()
 	GF_UIScaleSliderLabel:SetText("")
 end
 function GF_FormatBlockListWords(arg1)
-	arg1 = " "..string.lower(gsub(gsub(gsub(gsub(string.lower(gsub(gsub(gsub(arg1, "|[cC]%x+%p+(%w+)[%w:]+|+[hH]", " %1 >z"), "|[hr]", ""),"([a-z ][a-z])([A-Z])","%1 %2")),".gg/%w+", ""),"[\"#\$\%&\*,\.@\\\^_`~|]"," "),"'",""),"[%d%p%s]","")).." "
+	arg1 = " "..strlower(gsub(gsub(gsub(gsub(strlower(gsub(gsub(gsub(arg1, "|[cC]%x+%p+(%w+)[%w:]+|+[hH]", " %1 >z"), "|[hr]", ""),"([a-z ][a-z])([A-Z])","%1 %2")),".gg/%w+", ""),"[\"#\$\%&\*,\.@\\\^_`~|]"," "),"'",""),"[%d%p%s]","")).." "
 	local wordTable = {}
 	local wordString,lfs,lfe,tempVal,tempString
 	
@@ -520,52 +513,52 @@ function GF_FormatBlockListWords(arg1)
 		tempVal = tempVal + 1
 	end
 	arg1 = table.concat(wordTable)
-	if string.sub(arg1,-1) ~= " " then arg1 = arg1.." " end
+	if strsub(arg1,-1) ~= " " then arg1 = arg1.." " end
 	wordTable = {}
 
 	lfs = 2 -- To detect word/word with no space(eg "lfgscholo" = lfg scholo)
 	while true do
-		lfs,lfe,wordString = string.find(arg1,"(%a%a%a%a+)",lfs)
+		lfs,lfe,wordString = strfind(arg1,"(%a%a%a%a+)",lfs)
 		if wordString then
 			if not GF_WORD_WORD_REPLACE[wordString] and not GF_WORD_SPECIAL_EXCEPTIONS[wordString] then
-				tempVal = string.len(wordString) - 1
+				tempVal = strlen(wordString) - 1
 				if tempVal > 11 then tempVal = 11 end
 				for i=tempVal, 3, -1 do
-					if GF_WORD_WORD_REPLACE[string.sub(wordString,1,i)] then
-						if tempVal-i > 2 and GF_WORD_SPECIAL_EXCEPTIONS[string.sub(wordString,1,i+3)] then
-							arg1 = string.sub(arg1,1,lfs-1)..string.sub(wordString,1,i+3).." "..string.sub(arg1,lfs+i+3)
-						elseif tempVal-i > 1 and GF_WORD_SPECIAL_EXCEPTIONS[string.sub(wordString,1,i+2)] then
-							arg1 = string.sub(arg1,1,lfs-1)..string.sub(wordString,1,i+2).." "..string.sub(arg1,lfs+i+2)
-						elseif tempVal-i > 0 and GF_WORD_SPECIAL_EXCEPTIONS[string.sub(wordString,1,i+1)] then
-							arg1 = string.sub(arg1,1,lfs-1)..string.sub(wordString,1,i+1).." "..string.sub(arg1,lfs+i+1)
+					if GF_WORD_WORD_REPLACE[strsub(wordString,1,i)] then
+						if tempVal-i > 2 and GF_WORD_SPECIAL_EXCEPTIONS[strsub(wordString,1,i+3)] then
+							arg1 = strsub(arg1,1,lfs-1)..strsub(wordString,1,i+3).." "..strsub(arg1,lfs+i+3)
+						elseif tempVal-i > 1 and GF_WORD_SPECIAL_EXCEPTIONS[strsub(wordString,1,i+2)] then
+							arg1 = strsub(arg1,1,lfs-1)..strsub(wordString,1,i+2).." "..strsub(arg1,lfs+i+2)
+						elseif tempVal-i > 0 and GF_WORD_SPECIAL_EXCEPTIONS[strsub(wordString,1,i+1)] then
+							arg1 = strsub(arg1,1,lfs-1)..strsub(wordString,1,i+1).." "..strsub(arg1,lfs+i+1)
 						else
-							arg1 = string.sub(arg1,1,lfs-1)..string.sub(wordString,1,i).." "..string.sub(arg1,lfs+i)
+							arg1 = strsub(arg1,1,lfs-1)..strsub(wordString,1,i).." "..strsub(arg1,lfs+i)
 						end
 						lfs = lfe + 1
 						break
-					elseif GF_WORD_WORD_REPLACE[string.sub(wordString,-i)] then
-						arg1 = string.sub(arg1,1,lfe-i).." "..string.sub(wordString,-i)..string.sub(arg1,lfe+1)
-						lfs = lfs + (i-string.len(string.sub(wordString,-i))) + string.len(wordString) + 1
+					elseif GF_WORD_WORD_REPLACE[strsub(wordString,-i)] then
+						arg1 = strsub(arg1,1,lfe-i).." "..strsub(wordString,-i)..strsub(arg1,lfe+1)
+						lfs = lfs + (i-strlen(strsub(wordString,-i))) + strlen(wordString) + 1
 						break
 					end
 				end
 				if lfs < lfe then
-					if GF_WORD_WORD_REPLACE[string.sub(wordString,1,2)] then
-						arg1 = string.sub(arg1,1,lfs-1)..string.sub(wordString,1,2).." "..string.sub(arg1,lfs+2)
-						lfs = lfs + string.len(wordString) + 1
-					elseif GF_WORD_WORD_REPLACE[string.sub(wordString,-2)] then
-						wordString = string.sub(wordString,1,-3)
+					if GF_WORD_WORD_REPLACE[strsub(wordString,1,2)] then
+						arg1 = strsub(arg1,1,lfs-1)..strsub(wordString,1,2).." "..strsub(arg1,lfs+2)
+						lfs = lfs + strlen(wordString) + 1
+					elseif GF_WORD_WORD_REPLACE[strsub(wordString,-2)] then
+						wordString = strsub(wordString,1,-3)
 						if GF_WORD_FIX_SINGLE_WORD[wordString] then wordString = GF_WORD_FIX_SINGLE_WORD[wordString]
 						elseif GF_WORD_FIX_BEFORE_QUEST[wordString] then wordString = GF_WORD_FIX_BEFORE_QUEST[wordString] end
 						if GF_WORD_QUEST[wordString] then
-							arg1 = string.sub(arg1,1,lfs-1)..wordString.." lf"..string.sub(arg1,lfe+1)
+							arg1 = strsub(arg1,1,lfs-1)..wordString.." lf"..strsub(arg1,lfe+1)
 						else
 							if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end
 							if GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString] or GF_WORD_GROUP_BYPASS[wordString] then
-								arg1 = string.sub(arg1,1,lfs-1)..wordString.." lf"..string.sub(arg1,lfe+1)
+								arg1 = strsub(arg1,1,lfs-1)..wordString.." lf"..strsub(arg1,lfe+1)
 							end
 						end
-						lfs = lfs + string.len(wordString) + 3
+						lfs = lfs + strlen(wordString) + 3
 					else
 						lfs = lfe + 1
 					end
@@ -578,11 +571,11 @@ function GF_FormatBlockListWords(arg1)
 		end
 	end
 	lfs = 2 -- To fix single words
-	while true do lfs,lfe,wordString,tempString = string.find(arg1, "(.-)([%s%p%d]+)",lfs) if not wordString then break elseif GF_WORD_FIX_SINGLE_WORD[wordString] then arg1 = string.sub(arg1,1,lfs-1)..GF_WORD_FIX_SINGLE_WORD[wordString]..tempString..string.sub(arg1,lfe+1) lfs = lfs + string.len(GF_WORD_FIX_SINGLE_WORD[wordString]..tempString)-1 else lfs = lfe+1 end end
+	while true do lfs,lfe,wordString,tempString = strfind(arg1, "(.-)([%s%p%d]+)",lfs) if not wordString then break elseif GF_WORD_FIX_SINGLE_WORD[wordString] then arg1 = strsub(arg1,1,lfs-1)..GF_WORD_FIX_SINGLE_WORD[wordString]..tempString..strsub(arg1,lfe+1) lfs = lfs + strlen(GF_WORD_FIX_SINGLE_WORD[wordString]..tempString)-1 else lfs = lfe+1 end end
 
 	lfs = 2 -- Add all words to the wordTable
 	while true do
-		lfs,lfe,wordString = string.find(arg1, "(.-)[%s%p%d]+",lfs)
+		lfs,lfe,wordString = strfind(arg1, "(.-)[%s%p%d]+",lfs)
 		if wordString then
 			if strbyte(wordString) then
 				if not GF_WORD_BYPASS_TRIGGER["en"][wordString] then
@@ -590,13 +583,13 @@ function GF_FormatBlockListWords(arg1)
 					lfs = lfe+1
 				else
 					if GF_WORD_GROUP_BYPASS[wordString] then
-						_,tempVal,tempString = string.find(arg1,"(%a+)",lfe+1)
+						_,tempVal,tempString = strfind(arg1,"(%a+)",lfe+1)
 						if tempString then
 							if GF_WORD_GROUP_BYPASS[tempString] then
 								table.insert(wordTable, GF_WORD_GROUP_BYPASS[wordString]) table.insert(wordTable, GF_WORD_GROUP_BYPASS[tempString])
 								lfs = tempVal+1
 							elseif GF_WORD_GROUP_BYPASS_SECOND[wordString..tempString] then
-								_,tempVal,tempString = string.find(arg1,"(%a+)",tempVal+1)
+								_,tempVal,tempString = strfind(arg1,"(%a+)",tempVal+1)
 								if GF_WORD_GROUP_BYPASS[tempString] then
 									table.insert(wordTable, GF_WORD_GROUP_BYPASS[wordString]) table.insert(wordTable, GF_WORD_GROUP_BYPASS[tempString])
 									lfs = tempVal+1
@@ -614,7 +607,7 @@ function GF_FormatBlockListWords(arg1)
 							break
 						end
 					else
-						_,tempVal,tempString = string.find(arg1,"(%a+)",lfe+1)
+						_,tempVal,tempString = strfind(arg1,"(%a+)",lfe+1)
 						if GF_WORD_QUEST_BYPASS[tempString] then
 							table.insert(wordTable, wordString) table.insert(wordTable, tempString)
 							lfs = tempVal+1
@@ -727,13 +720,13 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 	SLASH_GroupFinderCOMMAND2 = "/groupfinder"
 	local old_ChatFrame_OnEvent = ChatFrame_OnEvent
 	function ChatFrame_OnEvent(event) -- arg1(message), arg2(sender), arg4("Channel#." "(City/Trade)" "channelName"), arg5, (nameOfPlayerWhoLooted), arg7(zoneChannel#), arg8(channel#), arg9("City/Trade" "channelName")
-		if not arg1 or not GF_TextColors[string.sub(event,10)] or (arg9 and string.lower(arg9) == "lft") then old_ChatFrame_OnEvent(event) return end
+		if not arg1 or not GF_TextColors[strsub(event,10)] or (arg9 and strlower(arg9) == "lft") then old_ChatFrame_OnEvent(event) return end
 		if not arg2 or arg2 == "" then arg2 = "SYSTEM" end
 		if not GF_ProcessedFirstMessage[arg2] then
 			GF_ChatFunctions(event,arg1,arg2,arg8,arg9)
 			if GF_SavedVariables.showformattedchat and GF_PreviousMessage[arg2] and GF_PreviousMessage[arg2][1] then
 				if GF_PreviousMessage[arg2][2] then arg1 = GF_PreviousMessage[arg2][2] end
-				if event == "CHAT_MSG_CHANNEL" then GF_AddChannelMessage(arg1,arg2,arg8,arg9) else GF_AddChatMessage(arg1,arg2,string.sub(event,10)) end
+				if event == "CHAT_MSG_CHANNEL" then GF_AddChannelMessage(arg1,arg2,arg8,arg9) else GF_AddChatMessage(arg1,arg2,strsub(event,10)) end
 				GF_PreviousMessage[arg2] = {}
 			end
 			GF_ProcessedFirstMessage[arg2] = true
@@ -821,12 +814,12 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 	local old_JoinChannelByName = JoinChannelByName	
 	function JoinChannelByName(channel,a2,a3,a4)
 		old_JoinChannelByName(channel,a2,a3,a4)
-		GF_ChatJoinedChannels[string.lower(channel)] = true
+		GF_ChatJoinedChannels[strlower(channel)] = true
 	end
 	local old_LeaveChannelByName = LeaveChannelByName	
 	function LeaveChannelByName(channel)
 		old_LeaveChannelByName(channel)
-		GF_ChatJoinedChannels[string.lower(channel)] = nil
+		GF_ChatJoinedChannels[strlower(channel)] = nil
 	end
 	local old_UIErrorsFrame_OnEvent = UIErrorsFrame_OnEvent	
 	function UIErrorsFrame_OnEvent(event,message,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9)
@@ -835,8 +828,8 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 end
 function GF_HandleItemRefLinks(link,text,button) -- Will have to update when I add feature to turn off click combinations
 	if strsub(link,1,6) == "player" then
-		local name = string.sub(gsub(link, "([^%s]*)%s+([^%s]*)", "%2"),8)
-		if name and string.len(name) > 0 then 
+		local name = strsub(gsub(link, "([^%s]*)%s+([^%s]*)", "%2"),8)
+		if name and strlen(name) > 0 then 
 			if button == "LeftButton" then
 				if GF_SavedVariables.clickcombos and IsControlKeyDown() then
 					for i=1, GetNumRaidMembers() do
@@ -879,9 +872,9 @@ function GF_HandleItemRefLinks(link,text,button) -- Will have to update when I a
 			end
 		end
 	elseif strsub(link, 1, 3) == "url" and GF_MainFrame:IsVisible() then
-		if string.len(link) > 4 and string.sub(link,1,4) == "url:" then
+		if strlen(link) > 4 and strsub(link,1,4) == "url:" then
 			GF_UrlCopyFrame:Show()
-			GF_UrlCopyFrameEditBox:SetText(string.sub(link,5,string.len(link)))
+			GF_UrlCopyFrameEditBox:SetText(strsub(link,5,strlen(link)))
 			GF_UrlCopyFrameEditBox:HighlightText()
 			return true
 		end
@@ -891,7 +884,7 @@ function GF_HandleItemRefLinks(link,text,button) -- Will have to update when I a
 		elseif GF_SavedVariables.questmod and not IsAddOnLoaded("pfQuest") and not IsAddOnLoaded("Questie") then
 			if GF_GetQuestInfo(text,true) then return true
 			else
-				local _,_,questid = string.find(link,"(%d+)")
+				local _,_,questid = strfind(link,"(%d+)")
 				if questid then
 					questid = tonumber(questid)
 					for entryname,wtable in GF_WORD_QUEST do
@@ -923,7 +916,7 @@ function GF_GetQuestInfo(text,printinfo) -- Will have to update once I get new s
 	return {0,0,0}
 end
 function GF_SlashHandler(msg)
-	if string.lower(msg) == "reset" then
+	if strlower(msg) == "reset" then
 		GF_MainFrame:ClearAllPoints()
 		GF_MainFrame:SetPoint("CENTER", UIParent, "CENTER",0,0)
 		GF_GroupsFrame:Show()
@@ -937,10 +930,10 @@ function GF_SlashHandler(msg)
 		GF_SavedVariables.mainframeishidden = nil
 		GF_MainFrame:Show()
 		GF_UpdateMainFrame()
-	elseif string.lower(msg) == "toggle" then
+	elseif strlower(msg) == "toggle" then
 		GF_ToggleMainFrame()
-	elseif string.len(msg) > 5 and string.sub(string.lower(msg),1,4) == "test" then
-		GF_CheckForGroups(string.sub(msg,5),"R","","CHAT_MSG_YELL",true)
+	elseif strlen(msg) > 5 and strsub(strlower(msg),1,4) == "test" then
+		GF_CheckForGroups(strsub(msg,5),"R","","CHAT_MSG_YELL",true)
 	else
 		DEFAULT_CHAT_FRAME:AddMessage("'/gf reset' to reset screen position", 1, 1, 0.5)
 		DEFAULT_CHAT_FRAME:AddMessage("'/gf toggle' to toggle the frame", 1, 1, 0.5)
@@ -1236,8 +1229,8 @@ end
 
 function GF_AddChannelMessage(arg1,arg2,arg8,arg9,nodelay) -- Message Handlers
 	if not GF_PlayingOnTurtle or nodelay or GF_WhoTable[GF_RealmName][arg2] or not GF_SavedVariables.usefriendslist or not GF_SavedVariables.usewhoongroups or not GF_SavedVariables.friendsToRemove[arg2] then
-		arg9 = string.gsub(string.lower(arg9), " - .*", "")
-		arg1 = "["..arg8..". "..string.upper(string.sub(arg9,1,1))..string.sub(arg9,2).."] "..GF_MakeBasicChatString(arg1,arg2)
+		arg9 = string.gsub(strlower(arg9), " - .*", "")
+		arg1 = "["..arg8..". "..strupper(strsub(arg9,1,1))..strsub(arg9,2).."] "..GF_MakeBasicChatString(arg1,arg2)
 		for i=1,NUM_CHAT_WINDOWS do
 			if not GF_ChatChannelsGroups[i] then GF_ChatGetChannelsGroups() end
 			if GF_ChatChannelsGroups[i].channel[arg9] then
@@ -1250,7 +1243,7 @@ function GF_AddChannelMessage(arg1,arg2,arg8,arg9,nodelay) -- Message Handlers
 end
 function GF_AddChatMessage(arg1,arg2,event,nodelay)
 	if not GF_PlayingOnTurtle or nodelay or GF_WhoTable[GF_RealmName][arg2] or not GF_SavedVariables.usefriendslist or not GF_SavedVariables.usewhoongroups or not GF_SavedVariables.friendsToRemove[arg2] then
-		arg1 = (EventIDAlias[event] or "["..string.sub(event,1,1).."] ")..GF_MakeBasicChatString(arg1,arg2)
+		arg1 = (EventIDAlias[event] or "["..strsub(event,1,1).."] ")..GF_MakeBasicChatString(arg1,arg2)
 		for i=1,NUM_CHAT_WINDOWS do
 			if not GF_ChatChannelsGroups[i] then GF_ChatGetChannelsGroups() end
 			if GF_ChatChannelsGroups[i].group[event] or GF_ChatChannelsGroups[i].group[GF_TextBypassChatNameAlias[event]] then
@@ -1262,7 +1255,7 @@ function GF_AddChatMessage(arg1,arg2,event,nodelay)
 	end
 end
 function GF_MakeBasicChatString(arg1,arg2)
-	arg1 = GF_ChatReplaceHquestLevels(GF_ChatReplaceHplayer(arg1))
+	arg1 = GF_ChatReplaceItemLink(GF_ChatReplaceHquestLevels(GF_ChatReplaceHplayer(arg1)))
 	if arg2 == "SYSTEM" or GF_LootFilter[event] then
 		return arg1
 	elseif arg2 == UnitName("player") then
@@ -1278,7 +1271,7 @@ function GF_ChatGetChannelsGroups() -- How do other servers handle Hardcore grou
 		GF_ChatChannelsGroups[i] = { ["channel"] = {},["group"] = { ["HARDCORE"] = true }, }
 		local channellist = { GetChatWindowChannels(i) }
 		for j=1, getn(channellist) do
-			GF_ChatChannelsGroups[i].channel[string.lower(channellist[j])] = true
+			GF_ChatChannelsGroups[i].channel[strlower(channellist[j])] = true
 		end
 		channellist = { GetChatWindowMessages(i) }
 		for j=1, getn(channellist) do
@@ -1290,11 +1283,11 @@ function GF_ChatGetChannelsGroups() -- How do other servers handle Hardcore grou
 	local chanList = { GetChannelList() }
 	for i=1, getn(chanList) do
 		if not tonumber(chanList[i]) then 
-			GF_ChatJoinedChannels[string.lower(chanList[i])] = i/2
+			GF_ChatJoinedChannels[strlower(chanList[i])] = i/2
 		end
 	end
 end
-function GF_ChatCheckFilters(logType,arg1,event)
+function GF_ChatCheckFilters(logType,arg1,arg2,event)
 	if logType == 7 or logType == 8 or logType == 9 then
 		return
 	elseif event == "SAY" then
@@ -1309,10 +1302,10 @@ end
 function GF_ChatReplaceHplayer(arg1)
 	local lfs,lfe,wordString = 1
 	while true do
-		lfs,lfe,wordString = string.find(arg1,"|c%x+|+Hplayer:(%w+)|+h%[.-%]|+h|+r",lfs)
+		lfs,lfe,wordString = strfind(arg1,"|%x+|+Hplayer:(%w+)|+h%[.-%]|+h|+r",lfs)
 		if wordString then
 			if GF_WhoTable[GF_RealmName][wordString] then
-				arg1 = string.sub(arg1,1,lfs).."cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][wordString][2]] or "ffffff").."|Hplayer:"..wordString.."|h["..wordString..", "..GF_WhoTable[GF_RealmName][wordString][1].."]|h|"..string.sub(arg1,lfe)
+				arg1 = strsub(arg1,1,lfs).."cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][wordString][2]] or "ffffff").."|Hplayer:"..wordString.."|h["..wordString..", "..GF_WhoTable[GF_RealmName][wordString][1].."]|h|"..strsub(arg1,lfe)
 			end
 			lfs = lfe + 1
 		else
@@ -1324,10 +1317,10 @@ end
 function GF_ChatReplaceHquestLevels(arg1)
 	local lfs,lfe,questID,questLevel,questName = 1
 	while true do
-		lfs,lfe,questID,questLevel,questName = string.find(arg1,"|c%x+|+Hquest:(%d+):(%d+)|+h%[(.-)%]|+h|+r",lfs)
+		lfs,lfe,questID,questLevel,questName = strfind(arg1,"|%x+|+Hquest:(%d+):(%d+)|+h%[(.-)%]|+h|+r",lfs)
 		if questID then
 			if questLevel == "0" then questLevel = ({GF_GetQuestInfo(questName)})[2] or 0 end
-			arg1 = string.sub(arg1,1,lfs-1)..(GF_GetDifficultyColor(tonumber(questLevel)) or "|cffffffff").."|Hquest:"..questID..":"..questLevel.."|h["..questName.."]|h|"..string.sub(arg1,lfe)
+			arg1 = strsub(arg1,1,lfs-1)..(GF_GetDifficultyColor(tonumber(questLevel)) or "|cffffffff").."|Hquest:"..questID..":"..questLevel.."|h["..questName.."]|h|"..strsub(arg1,lfe)
 			lfs = lfe + 1
 		else
 			break
@@ -1335,8 +1328,23 @@ function GF_ChatReplaceHquestLevels(arg1)
 	end
 	return arg1
 end
+function GF_ChatReplaceItemLink(arg1,checkOnly)
+	local lfs,lfe,name,itemLink,preFix,broken = 1
+	while true do
+		lfs,lfe,preFix,itemLink = strfind(arg1,"(|%x+|H(item:[%d+:]+)|h%[).-%]|h|r",lfs)
+		if itemLink then
+			name = GetItemInfo(itemLink)
+			if checkOnly then if not name then broken = true ShowUIPanel(ItemRefTooltip) if not ItemRefTooltip:IsVisible() then ItemRefTooltip:SetOwner(UIParent, "ANCHOR_PRESERVE") end ItemRefTooltip:SetHyperlink(itemLink) end
+			elseif name then arg1 = strsub(arg1,1,lfs-1)..preFix..name..strsub(arg1,lfe-4) end
+			lfs = lfe + 1
+		else
+			break
+		end
+	end
+	if broken then return else return arg1 end
+end
 function GF_CleanUpMessagesOfBadLinks(arg1) -- Replaces CLINK messages with normal links
-	if string.find(arg1,"CLINK") then
+	if strfind(arg1,"CLINK") then
 		arg1 = gsub(arg1, "{CLINK:item:(%x+):([%d-]-:[%d-]-:[%d-]-:[%d-]-:[%d-]-:[%d-]-:[%d-]-:[%d-]-):([^}]-)}", "|c%1|Hitem:%2|h[%3]|h|r")
 		arg1 = gsub(arg1, "{CLINK:(%x+):([%d-]-:[%d-]-:[%d-]-:[%d-]-):([^}]-)}", "|c%1|Hitem:%2|h[%3]|h|r")
 		arg1 = gsub(arg1, "{CLINK:enchant:(%x+):([%d-]-):([^}]-)}", "|c%1|Henchant:%2|h[%3]|h|r")
@@ -1363,7 +1371,7 @@ function GF_ShowGroupsOnMinimap(arg1,arg2,nodelay)
 				else
 					getglobal("GF_MinimapMessageFrameA"..i):AddMessage("|Hplayer:"..arg2.."|h "..arg2.."|h", 1, 1, 1)
 				end
-				getglobal("GF_MinimapMessageFrameB"..i):AddMessage(string.sub(gsub(arg1, "|c.*|Hquest:[%d]+:[-]?[%d]+|h%[(.*)%]|h|r", "\[%1\]"),1,105), 187/255, 255/255, 187/255)
+				getglobal("GF_MinimapMessageFrameB"..i):AddMessage(strsub(gsub(arg1, "|c.*|Hquest:[%d]+:[-]?[%d]+|h%[(.*)%]|h|r", "\[%1\]"),1,105), 187/255, 255/255, 187/255)
 				GF_MiniMapMessages[i] = GetTime() + 20
 				GF_MiniMapMessages[7][arg2] = { GetTime()+20, i }
 				return
@@ -1376,15 +1384,15 @@ end
 function GF_AddLogMessage(arg1,logcode,add,arg2,arg8,arg9,event,nodelay)
 	if not GF_PlayingOnTurtle or nodelay or GF_WhoTable[GF_RealmName][arg2] or not GF_SavedVariables.usefriendslist or not GF_SavedVariables.usewhoongroups or not GF_SavedVariables.friendsToRemove[arg2] then
 		if add then
-			arg1 = GF_MakeBasicChatString(string.sub(GF_ChatReplaceHplayer(gsub(gsub(gsub(gsub(" "..arg1," (www%d-)%.([_A-Za-z0-9-]+)%.(%S+)%s?", " |cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r")," (%a+)://(%S+)", " |cffccccff|Hurl:%1://%2|h[%1://%2]|h|r")," (%a+)%.(%a+)/(%S+)", " |cffccccff|Hurl:%1.%2/%3|h[%1.%2/%3]|h|r")," ([_A-Za-z0-9-]+)%.([_A-Za-z0-9-]+)%.(%S+)", " |cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r")),2),arg2)
-			if event == "CHANNEL" then arg9 = string.gsub(string.lower(arg9), " - .*", "") arg1 = "["..arg8..". "..string.upper(string.sub(arg9,1,1))..string.sub(arg9,2).."] "..arg1 end
+			arg1 = GF_MakeBasicChatString(strsub(GF_ChatReplaceHplayer(gsub(gsub(gsub(gsub(" "..arg1," (www%d-)%.([_A-Za-z0-9-]+)%.(%S+)%s?", " |cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r")," (%a+)://(%S+)", " |cffccccff|Hurl:%1://%2|h[%1://%2]|h|r")," (%a+)%.(%a+)/(%S+)", " |cffccccff|Hurl:%1.%2/%3|h[%1.%2/%3]|h|r")," ([_A-Za-z0-9-]+)%.([_A-Za-z0-9-]+)%.(%S+)", " |cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r")),2),arg2)
+			if event == "CHANNEL" then arg9 = string.gsub(strlower(arg9), " - .*", "") arg1 = "["..arg8..". "..strupper(strsub(arg9,1,1))..strsub(arg9,2).."] "..arg1 end
 			arg1 = "["..date("%H:%M").."] "..GF_LogMessageCodes[logcode].." "..arg1
 			table.insert(GF_LogHistory[GF_RealmName],1, {arg1,logcode,event})
 			if getn(GF_LogHistory[GF_RealmName]) > 500 then table.remove(GF_LogHistory[GF_RealmName],501) end
 		end
 		if GF_WhisperLogCurrentButtonID == 0 and GF_LogFilters[logcode] and GF_LogFilters[event] then
 			if GF_ConvertMessagesToLinks then
-				local _,_,startString,endString = string.find(arg1, "(.-%].-|Hplayer.-|h|r:? )(.*)")
+				local _,_,startString,endString = strfind(arg1, "(.-%].-|Hplayer.-|h|r:? )(.*)")
 				if startString then
 					endString = gsub(gsub(gsub(gsub(endString, "|[cC]%x+|%w+:%w+:[%w:]+|[h]", ""), "|[cC]%x+%p+%w+:(.-)|h.-|h|r", "%1"), "|[cC]%x+", ""), "|[hHrR]?", "")
 					GF_Log:AddMessage(startString.."|cffccccff|Hurl:"..endString.."|h"..endString.."|h|r", GF_TextColors[event][1], GF_TextColors[event][2], GF_TextColors[event][3])
@@ -1411,7 +1419,7 @@ function GF_DisplayLog()
 	end
 	if GF_ConvertMessagesToLinks then
 		for i=1, getn(tempHistoryTable) do
-			local _,_,startString,endString = string.find(tempHistoryTable[i][1], "(.-%].-|Hplayer.-|h|r:? )(.*)")
+			local _,_,startString,endString = strfind(tempHistoryTable[i][1], "(.-%].-|Hplayer.-|h|r:? )(.*)")
 			if startString then
 				endString = gsub(gsub(gsub(gsub(endString, "|[cC]%x+|%w+:%w+:[%w:]+|[h]", ""), "|[cC]%x+%p+%w+:.-|h(.-)|h|r", "%1"), "|[cC]%x+", ""), "|[hHrR]?", "")
 				GF_Log:AddMessage(startString.."|cffccccff|Hurl:"..endString.."|h"..endString.."|h|r", GF_TextColors[tempHistoryTable[i][3]][1], GF_TextColors[tempHistoryTable[i][3]][2], GF_TextColors[tempHistoryTable[i][3]][3])
@@ -1481,6 +1489,10 @@ function GF_CheckForDelayedMessages()
 				if not GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][4]] or GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][4]][1] >= GF_SavedVariables.blockmessagebelowlevel then
 					GF_ShowGroupsOnMinimap(GF_ChatReplaceHplayer(GF_LogHistory[GF_RealmName]["Delay"][i][3]),GF_LogHistory[GF_RealmName]["Delay"][i][4],true)
 				end
+				table.remove(GF_LogHistory[GF_RealmName]["Delay"],i)
+				i = i - 1
+			elseif GF_LogHistory[GF_RealmName]["Delay"][i][1] == "Item" and GF_LogHistory[GF_RealmName]["Delay"][i][2] < time() then
+				GF_ProcessChatMessages(GF_LogHistory[GF_RealmName]["Delay"][i][3],GF_LogHistory[GF_RealmName]["Delay"][i][4],GF_LogHistory[GF_RealmName]["Delay"][i][5],GF_LogHistory[GF_RealmName]["Delay"][i][6],GF_LogHistory[GF_RealmName]["Delay"][i][7],true)
 				table.remove(GF_LogHistory[GF_RealmName]["Delay"],i)
 				i = i - 1
 			end
@@ -1605,34 +1617,32 @@ function GF_UpdateFriendsList()
 		local name,level,class,_,online = GetFriendInfo(i)
 		if name then
 			if name == UNKNOWN then
-				GF_Friends[name] = nil
 				RemoveFriend(i)
 				GF_BlockingFriendsListUpdates = nil
 			elseif GF_ClassColors[GF_Classes[class]] and level and level ~= 0 then
 				GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], "", time()}
 				if online and not GF_SavedVariables.friendsToRemove[name] then GF_Friends[name] = true end
 			else
-				GF_Friends[name] = nil
 				if GF_SavedVariables.friendsToRemove[name] then GF_FriendUnknown[name] = time() end
 			end
 		end
 		if GF_SavedVariables.friendsToRemove[name] then RemoveFriend(i) GF_BlockingFriendsListUpdates = nil end
 	end
 	for name,_ in GF_SavedVariables.friendsToRemove do
-		if GF_Friends[name] then GF_SavedVariables.friendsToRemove[name] = nil elseif GF_SavedVariables.friendsToRemove[name] + 2 < time() then GF_SavedVariables.friendsToRemove[name] = nil end
+		if not GF_Friends[name] and GF_SavedVariables.friendsToRemove[name] + 30 < time() then GF_SavedVariables.friendsToRemove[name] = nil end
 	end
 end
 function GF_CheckForAnnounce()
 	if GF_AutoAnnounceTimer then
 		GF_AutoAnnounceTimer = GF_AutoAnnounceTimer + 1
-		if not GF_ChatJoinedChannels[string.lower(GF_GroupChannelEditBox:GetText())] then GF_TurnOffAnnounce(GF_AUTO_ANNOUNCE_NOT_IN_CHANNEL) return end
+		if not GF_ChatJoinedChannels[strlower(GF_GroupChannelEditBox:GetText())] then GF_TurnOffAnnounce(GF_AUTO_ANNOUNCE_NOT_IN_CHANNEL) return end
 		if GF_LFGDescriptionEditBox:GetText() == "" then GF_TurnOffAnnounce(GF_NOTHING_TO_ANNOUNCE) return end
 		if GF_AutoAnnounceTimer > GF_SavedVariables.announcetimer then
 			GF_AutoAnnounceTimer = 0
 			if not GF_PerCharVariables.disablehardcore and GF_Hardcore and GF_PerCharVariables.hardcore ~= 3 then
 				SendChatMessage(GF_LFGDescriptionEditBox:GetText(), "HARDCORE", nil, nil)
 			else 
-				SendChatMessage(GF_LFGDescriptionEditBox:GetText(), "CHANNEL", nil, GF_ChatJoinedChannels[string.lower(GF_GroupChannelEditBox:GetText())])
+				SendChatMessage(GF_LFGDescriptionEditBox:GetText(), "CHANNEL", nil, GF_ChatJoinedChannels[strlower(GF_GroupChannelEditBox:GetText())])
 			end
 			DEFAULT_CHAT_FRAME:AddMessage(GF_SENT..GF_LFGDescriptionEditBox:GetText(), 1, 1, 0.5)
 			GF_AnnounceToLFGButton:SetText(GF_ANNOUNCE_STOP_ANNOUNCE.."-"..GF_SavedVariables.announcetimer - GF_AutoAnnounceTimer)
@@ -1649,7 +1659,7 @@ function GF_TurnOffAnnounce(messageText)
 	DEFAULT_CHAT_FRAME:AddMessage(messageText, 1, 1, 0.5)
 end
 function GF_TurnOnAnnounce()
-	if not GF_ChatJoinedChannels[string.lower(GF_GroupChannelEditBox:GetText())] then GF_TurnOffAnnounce(GF_AUTO_ANNOUNCE_NOT_IN_CHANNEL) return end
+	if not GF_ChatJoinedChannels[strlower(GF_GroupChannelEditBox:GetText())] then GF_TurnOffAnnounce(GF_AUTO_ANNOUNCE_NOT_IN_CHANNEL) return end
 	GF_AutoAnnounceTimer = GF_SavedVariables.announcetimer
 	if UnitIsPartyLeader("player") then GF_WasPartyLeaderBefore = true end
 	GF_AnnounceToLFGButton:SetText(GF_ANNOUNCE_STOP_ANNOUNCE.."-"..GF_SavedVariables.announcetimer)
@@ -1714,7 +1724,7 @@ function GF_CheckForBroadCast()
 					if counter > 2 then GF_AddonNeedToBroadcastSomething = true GF_OnStartupQueueURequest = i return end
 					if GF_MessageList[GF_RealmName][i].t + 300 > time() then
 						addonsendstring = addonsendstring..":"..GF_MessageList[GF_RealmName][i].op
-						if string.len(addonsendstring) > 240 then
+						if strlen(addonsendstring) > 240 then
 							if GetGuildInfo("player") then SendAddonMessage("GF", addonsendstring, "GUILD") end
 							if GF_NumPartyMembers > 1 then SendAddonMessage("GF", addonsendstring, "PARTY") end
 							addonsendstring = "U"
@@ -1722,7 +1732,7 @@ function GF_CheckForBroadCast()
 						end
 					end
 				end
-				if counter == 0 or string.len(addonsendstring) > 1 then if GetGuildInfo("player") then SendAddonMessage("GF", addonsendstring, "GUILD") elseif GF_NumPartyMembers > 1 then SendAddonMessage("GF", addonsendstring, "PARTY") end end
+				if counter == 0 or strlen(addonsendstring) > 1 then if GetGuildInfo("player") then SendAddonMessage("GF", addonsendstring, "GUILD") elseif GF_NumPartyMembers > 1 then SendAddonMessage("GF", addonsendstring, "PARTY") end end
 				GF_OnStartupQueueURequest = nil
 			end
 
@@ -1744,27 +1754,27 @@ function GF_CheckForBroadCast()
 			for name,_ in pairs(GF_AddonAllNamesForResponseToLogin) do
 				if name then addonsendstring = addonsendstring..":"..name end
 				GF_AddonAllNamesForResponseToLogin[name] = nil
-				if string.len(addonsendstring) > 240 then
+				if strlen(addonsendstring) > 240 then
 					if sendType == 1 or sendType == 3 then SendAddonMessage("GF", addonsendstring, "GUILD") end if sendType > 1 then SendAddonMessage("GF", addonsendstring, "PARTY") end
 					addonsendstring = "W"
 					counter = counter + 1
 					if counter > 2 then GF_AddonNeedToBroadcastSomething = true return end
 				end
 			end
-			if string.len(addonsendstring) > 1 then if sendType == 1 or sendType == 3 then SendAddonMessage("GF", addonsendstring, "GUILD") end if sendType > 1 then SendAddonMessage("GF", addonsendstring, "PARTY") end end
+			if strlen(addonsendstring) > 1 then if sendType == 1 or sendType == 3 then SendAddonMessage("GF", addonsendstring, "GUILD") end if sendType > 1 then SendAddonMessage("GF", addonsendstring, "PARTY") end end
 			
 			addonsendstring = "R" -- Send Request Name List
 			for name,_ in pairs(GF_AddonNamesToBeSentAsARequest) do
 				if name then addonsendstring = addonsendstring..":"..name end
 				GF_AddonNamesToBeSentAsARequest[name] = nil
-				if string.len(addonsendstring) > 240 then
+				if strlen(addonsendstring) > 240 then
 					if sendType == 1 or sendType == 3 then SendAddonMessage("GF", addonsendstring, "GUILD") end if sendType > 1 then SendAddonMessage("GF", addonsendstring, "PARTY") end
 					addonsendstring = "R"
 					counter = counter + 1
 					if counter > 2 then GF_AddonNeedToBroadcastSomething = true return end
 				end
 			end
-			if string.len(addonsendstring) > 1 then if sendType == 1 or sendType == 3 then SendAddonMessage("GF", addonsendstring, "GUILD") end if sendType > 1 then SendAddonMessage("GF", addonsendstring, "PARTY") end end
+			if strlen(addonsendstring) > 1 then if sendType == 1 or sendType == 3 then SendAddonMessage("GF", addonsendstring, "GUILD") end if sendType > 1 then SendAddonMessage("GF", addonsendstring, "PARTY") end end
 
 			addonsendstring = "" -- Return WhoData for Requested Names
 			for name,whodata in pairs(GF_AddonWhoDataToBeSentBuffer) do
@@ -1772,7 +1782,7 @@ function GF_CheckForBroadCast()
 				if name then
 					if whodata[3] == "" then whodata[3] = "Z" end
 					addonsendstring = addonsendstring..":"..whodata[1]..name..GF_ClassIDs[whodata[2]]..whodata[3]..whodata[4]
-					if string.len(addonsendstring) > 202 then
+					if strlen(addonsendstring) > 202 then
 						if sendType == 1 or sendType == 3 then SendAddonMessage("GF", addonsendstring, "GUILD") end if sendType > 1 then SendAddonMessage("GF", addonsendstring, "PARTY") end
 						addonsendstring = ""
 						counter = counter + 1
@@ -1780,7 +1790,7 @@ function GF_CheckForBroadCast()
 					end
 				end
 			end
-			if string.len(addonsendstring) > 1 then if sendType == 1 or sendType == 3 then SendAddonMessage("GF", addonsendstring, "GUILD") end if sendType > 1 then SendAddonMessage("GF", addonsendstring, "PARTY") end end
+			if strlen(addonsendstring) > 1 then if sendType == 1 or sendType == 3 then SendAddonMessage("GF", addonsendstring, "GUILD") end if sendType > 1 then SendAddonMessage("GF", addonsendstring, "PARTY") end end
 		end
 	end
 end
@@ -1795,8 +1805,8 @@ function GF_ParseIncomingAddonMessages(msg)
 	--print(msg)
 
 -- This system prevents groups and "W" from being sent for multiple "U"'s... The issue is that, if multiple people log on within 1-30 seconds(random), where one needs all groups and the other needs none, it will send none.
-	if string.sub(msg,1,1) == "U" then -- (From OP) Sent on login with a list of names from OP's group list(up to 240 characters).
-		for name in string.gfind(string.sub(msg,3), "(%w+)") do
+	if strsub(msg,1,1) == "U" then -- (From OP) Sent on login with a list of names from OP's group list(up to 240 characters).
+		for name in string.gfind(strsub(msg,3), "(%w+)") do
 			GF_AddonOPSentNamesOnLogin[name] = true
 			GF_AddonAllNamesForResponseToLogin[name] = nil
 		end
@@ -1812,14 +1822,14 @@ function GF_ParseIncomingAddonMessages(msg)
 		GF_AddonMakeAListOfGroupsForSending = true
 		GF_UpdateAndRequestTimer = 0
 		GF_AddonNeedToBroadcastSomething = true
-	elseif string.sub(msg,1,1) == "W" then -- (To Everyone) A list of names available to be requested(up to 240 characters). Add to 'GF_AddonNamesToBeSentAsARequest' if the name is not in 'GF_WhoTable'. Then delete from 'GF_AddonAllNamesForResponseToLogin'.
+	elseif strsub(msg,1,1) == "W" then -- (To Everyone) A list of names available to be requested(up to 240 characters). Add to 'GF_AddonNamesToBeSentAsARequest' if the name is not in 'GF_WhoTable'. Then delete from 'GF_AddonAllNamesForResponseToLogin'.
 		for sentname in string.gfind(msg, ":(%w+)") do -- This works 100% correctly. 'GF_AddonAllNamesForResponseToLogin' is removed either when responding with a "R" message or when receiving either a ":" or full group message.
 			if not GF_WhoTable[GF_RealmName][sentname] then GF_AddonNamesToBeSentAsARequest[sentname] = true end
 			GF_AddonAllNamesForResponseToLogin[sentname] = nil
 		end
 		GF_TimeTillNextBroadcast = (math.random(80))/4
 		GF_AddonNeedToBroadcastSomething = true
-	elseif string.sub(msg,1,1) == "R" then -- (To Everyone) The list of names requested(up to 240 characters). Add to 'GF_AddonWhoDataToBeSentBuffer' if I have 'GF_WhoTable'. Then delete the names I was going to request('GF_AddonNamesToBeSentAsARequest').
+	elseif strsub(msg,1,1) == "R" then -- (To Everyone) The list of names requested(up to 240 characters). Add to 'GF_AddonWhoDataToBeSentBuffer' if I have 'GF_WhoTable'. Then delete the names I was going to request('GF_AddonNamesToBeSentAsARequest').
 		for sentname in string.gfind(msg, ":(%w+)") do -- This works 100% correctly. 'GF_AddonWhoDataToBeSentBuffer' is removed when sending or receiving a ":" message or a full group message.
 			if GF_WhoTable[GF_RealmName][sentname] and (GF_WhoTable[GF_RealmName][sentname][1] == 60 or GF_WhoTable[GF_RealmName][sentname][4] + 86400 > time()) then
 				GF_AddonWhoDataToBeSentBuffer[sentname] = GF_WhoTable[GF_RealmName][sentname]
@@ -1828,7 +1838,7 @@ function GF_ParseIncomingAddonMessages(msg)
 		end
 		GF_TimeTillNextBroadcast = (math.random(80))/4
 		GF_AddonNeedToBroadcastSomething = true
-	elseif string.sub(msg,1,1) == ":" then -- (To Everyone) This is 'GF_WhoTable' data. Add to your 'GF_WhoTable' and delete from 'GF_AddonAllNamesForResponseToLogin', 'GF_AddonNamesToBeSentAsARequest', and 'GF_AddonWhoDataToBeSentBuffer'.
+	elseif strsub(msg,1,1) == ":" then -- (To Everyone) This is 'GF_WhoTable' data. Add to your 'GF_WhoTable' and delete from 'GF_AddonAllNamesForResponseToLogin', 'GF_AddonNamesToBeSentAsARequest', and 'GF_AddonWhoDataToBeSentBuffer'.
 		for sentlevel,sentname,sentclass,sentguild,senttime in string.gfind(msg, ":(%d+)([a-zA-Z]+)(%d)([a-zA-Z%s]+)(%d+)") do -- This works 100% correctly.
 			if sentguild == "Z" then sentguild = "" end
 			if tonumber(senttime) <= time() and GF_ClassIDs[tonumber(sentclass)] and (not GF_WhoTable[GF_RealmName][sentname] or tonumber(senttime) > GF_WhoTable[GF_RealmName][sentname][4]) then
@@ -1838,9 +1848,9 @@ function GF_ParseIncomingAddonMessages(msg)
 			GF_AddonNamesToBeSentAsARequest[sentname] = nil
 			GF_AddonWhoDataToBeSentBuffer[sentname] = nil
 		end
-	elseif string.len(msg) > 2 then -- (To Everyone) Add group information to your 'GF_MessageList' and delete from 'GF_AddonAllNamesForResponseToLogin', 'GF_AddonNamesToBeSentAsARequest', 'GF_AddonWhoDataToBeSentBuffer', 'GF_AddonGroupDataToBeSentBuffer'.
+	elseif strlen(msg) > 2 then -- (To Everyone) Add group information to your 'GF_MessageList' and delete from 'GF_AddonAllNamesForResponseToLogin', 'GF_AddonNamesToBeSentAsARequest', 'GF_AddonWhoDataToBeSentBuffer', 'GF_AddonGroupDataToBeSentBuffer'.
 		for senttime,sentname,message in string.gfind(msg, "(%d+)([a-zA-Z]+):(.+)") do -- This works 100% correctly.
-			GF_GetTypes(gsub(gsub(gsub(gsub(gsub(string.lower(gsub(gsub(gsub(gsub(" "..message.." ", " |+h%[([%w%s%p]+)%]|+h|+r", " %1 "), "|c%x+|+(%w+)[%d:]+|+h", " %1 "), "|+h|+r", " "),"([a-z ][a-z])([A-Z])","%1 %2")),".gg/%w+", ""),"([%p%s])(%w%w+)([%p%s])","%1 %2 %3"),"[%s%.%[](%a)[%s%.](%a)[%s%.]","%1%2"),"%s%s+", " "),"[']", ""))
+			GF_GetTypes(gsub(gsub(gsub(gsub(gsub(strlower(gsub(gsub(gsub(gsub(" "..message.." ", " |+h%[([%w%s%p]+)%]|+h|+r", " %1 "), "|c%x+|+(%w+)[%d:]+|+h", " %1 "), "|+h|+r", " "),"([a-z ][a-z])([A-Z])","%1 %2")),".gg/%w+", ""),"([%p%s])(%w%w+)([%p%s])","%1 %2 %3"),"[%s%.%[](%a)[%s%.](%a)[%s%.]","%1%2"),"%s%s+", " "),"[']", ""))
 			for i=1, getn(GF_MessageList[GF_RealmName]) do
 				if GF_MessageList[GF_RealmName][i].op and GF_MessageList[GF_RealmName][i].op == sentname then
 					table.remove(GF_MessageList[GF_RealmName], i)
@@ -1933,7 +1943,7 @@ function self:PLAYER_LEAVING_WORLD()
 	GF_PerCharVariables.searchtext = GF_GroupsFrameDescriptionEditBox:GetText()
 	GF_PerCharVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText()
 	GF_PerCharVariables.searchlfgwhispertext = GF_GetWhoWhisperEditBox:GetText()
-	if string.len(GF_GroupChannelEditBox:GetText()) > 1 then GF_SavedVariables.groupchannelname = GF_GroupChannelEditBox:GetText() else GF_GroupChannelEditBox:SetText(GF_SavedVariables.groupchannelname) end
+	if strlen(GF_GroupChannelEditBox:GetText()) > 1 then GF_SavedVariables.groupchannelname = GF_GroupChannelEditBox:GetText() else GF_GroupChannelEditBox:SetText(GF_SavedVariables.groupchannelname) end
 end
 function self:PLAYER_LEVEL_UP()
 	GF_FixLFGStrings()
@@ -2057,27 +2067,27 @@ end
 
 function GF_CHAT_MSG_BATTLEGROUND()
 	if not GF_WhoTable[GF_RealmName][arg2] then GF_UpdatePlayersInGroupList() end
-	GF_AddLogMessage(arg1,10,true,arg2,arg8,arg9,string.sub(event,10))
+	GF_AddLogMessage(arg1,10,true,arg2,arg8,arg9,strsub(event,10))
 	GF_PreviousMessage[arg2] = {true}
 end
 function GF_CHAT_MSG_BATTLEGROUND_LEADER()
 	if not GF_WhoTable[GF_RealmName][arg2] then GF_UpdatePlayersInGroupList() end
-	GF_AddLogMessage(arg1,10,true,arg2,arg8,arg9,string.sub(event,10))
+	GF_AddLogMessage(arg1,10,true,arg2,arg8,arg9,strsub(event,10))
 	GF_PreviousMessage[arg2] = {true}
 end
 function GF_CHAT_MSG_CHANNEL(event,arg1,arg2,arg8,arg9)
 	GF_ProcessChatMessages(event,arg1,arg2,arg8,arg9)
 end
 function GF_CHAT_MSG_COMBAT_FACTION_CHANGE()
-	GF_AddLogMessage(arg1,6,true,"SYSTEM",arg8,arg9,string.sub(event,10))
+	GF_AddLogMessage(arg1,6,true,"SYSTEM",arg8,arg9,strsub(event,10))
 	if GF_SavedVariables.showloottexts then GF_PreviousMessage["SYSTEM"] = {true} else GF_PreviousMessage["SYSTEM"] = {} end
 end
 function GF_CHAT_MSG_COMBAT_HONOR_GAIN()
-	GF_AddLogMessage(arg1,6,true,"SYSTEM",arg8,arg9,string.sub(event,10))
+	GF_AddLogMessage(arg1,6,true,"SYSTEM",arg8,arg9,strsub(event,10))
 	if GF_SavedVariables.showloottexts then GF_PreviousMessage["SYSTEM"] = {true} else GF_PreviousMessage["SYSTEM"] = {} end
 end
 function GF_CHAT_MSG_COMBAT_XP_GAIN()
-	GF_AddLogMessage(arg1,6,true,"SYSTEM",arg8,arg9,string.sub(event,10))
+	GF_AddLogMessage(arg1,6,true,"SYSTEM",arg8,arg9,strsub(event,10))
 	if GF_SavedVariables.showloottexts then GF_PreviousMessage["SYSTEM"] = {true} else GF_PreviousMessage["SYSTEM"] = {} end
 end
 function GF_EXECUTE_CHAT_LINE()
@@ -2087,18 +2097,18 @@ function GF_CHAT_MSG_EMOTE()
 	GF_CheckForEmotes(arg1,arg2)
 end
 function GF_CHAT_MSG_GUILD()
-	GF_WhisperReceivedAddToWhisperHistoryList(arg1,arg2,string.sub(event,10))
+	GF_WhisperReceivedAddToWhisperHistoryList(arg1,arg2,strsub(event,10))
 	GF_PreviousMessage[arg2] = {true}
 end
 function GF_CHAT_MSG_HARDCORE()
 	GF_ProcessChatMessages(event,arg1,arg2,arg8,arg9)
 end
 function GF_CHAT_MSG_LOOT()
-	GF_AddLogMessage(arg1,6,true,"SYSTEM",arg8,arg9,string.sub(event,10))
+	GF_AddLogMessage(arg1,6,true,"SYSTEM",arg8,arg9,strsub(event,10))
 	GF_CheckForLoot(arg1)
 end
 function GF_CHAT_MSG_MONEY()
-	GF_AddLogMessage(arg1,6,true,"SYSTEM",arg8,arg9,string.sub(event,10))
+	GF_AddLogMessage(arg1,6,true,"SYSTEM",arg8,arg9,strsub(event,10))
 	if GF_SavedVariables.showloottexts then GF_PreviousMessage["SYSTEM"] = {true} else GF_PreviousMessage["SYSTEM"] = {} end
 end
 function GF_CHAT_MSG_MONSTER_EMOTE()
@@ -2111,46 +2121,46 @@ function GF_CHAT_MSG_MONSTER_YELL()
 	GF_CheckForMonsterEmote(arg1,arg2)
 end
 function GF_CHAT_MSG_OFFICER()
-	GF_WhisperReceivedAddToWhisperHistoryList(arg1,arg2,string.sub(event,10))
+	GF_WhisperReceivedAddToWhisperHistoryList(arg1,arg2,strsub(event,10))
 	GF_PreviousMessage[arg2] = {true}
 end
 function GF_CHAT_MSG_PARTY()
 	if not GF_WhoTable[GF_RealmName][arg2] then GF_UpdatePlayersInGroupList() end
-	GF_AddLogMessage(arg1,10,true,arg2,arg8,arg9,string.sub(event,10))
+	GF_AddLogMessage(arg1,10,true,arg2,arg8,arg9,strsub(event,10))
 	GF_PreviousMessage[arg2] = {true}
 end
 function GF_CHAT_MSG_RAID()
 	if not GF_WhoTable[GF_RealmName][arg2] then GF_UpdatePlayersInGroupList() end
-	GF_AddLogMessage(arg1,10,true,arg2,arg8,arg9,string.sub(event,10))
+	GF_AddLogMessage(arg1,10,true,arg2,arg8,arg9,strsub(event,10))
 	GF_PreviousMessage[arg2] = {true}
 end
 function GF_CHAT_MSG_RAID_LEADER()
 	if not GF_WhoTable[GF_RealmName][arg2] then GF_UpdatePlayersInGroupList() end
-	GF_AddLogMessage(arg1,10,true,arg2,arg8,arg9,string.sub(event,10))
+	GF_AddLogMessage(arg1,10,true,arg2,arg8,arg9,strsub(event,10))
 	GF_PreviousMessage[arg2] = {true}
 end
 function GF_CHAT_MSG_RAID_WARNING()
 	if not GF_WhoTable[GF_RealmName][arg2] then GF_UpdatePlayersInGroupList() end
-	GF_AddLogMessage(arg1,10,true,arg2,arg8,arg9,string.sub(event,10))
+	GF_AddLogMessage(arg1,10,true,arg2,arg8,arg9,strsub(event,10))
 	GF_PreviousMessage[arg2] = {true}
 end
 function GF_CHAT_MSG_SAY()
 	GF_ProcessChatMessages(event,arg1,arg2,arg8,arg9)
 end
 function GF_CHAT_MSG_SYSTEM()
-	if string.find(arg1, MARKED_AFK) then if GF_AutoAnnounceTimer then GF_TurnOffAnnounce(GF_AFK_ANNOUNCE_OFF) end return end
+	if strfind(arg1, MARKED_AFK) then if GF_AutoAnnounceTimer then GF_TurnOffAnnounce(GF_AFK_ANNOUNCE_OFF) end return end
 	GF_CheckForSystem(arg1)
 end
 function GF_CHAT_MSG_TEXT_EMOTE()
 	GF_CheckForEmotes(arg1,arg2)
 end
 function GF_CHAT_MSG_WHISPER()
-	GF_WhisperReceivedAddToWhisperHistoryList(arg1,arg2,string.sub(event,10))
+	GF_WhisperReceivedAddToWhisperHistoryList(arg1,arg2,strsub(event,10))
 	table.insert(DEFAULT_CHAT_FRAME.editBox.lastTell,1,arg2)
 	GF_PreviousMessage[arg2] = {true}
 end
 function GF_CHAT_MSG_WHISPER_INFORM()
-	GF_WhisperReceivedAddToWhisperHistoryList(arg1,arg2,string.sub(event,10))
+	GF_WhisperReceivedAddToWhisperHistoryList(arg1,arg2,strsub(event,10))
 	table.insert(DEFAULT_CHAT_FRAME.editBox.lastTell,1,arg2)
 	GF_PreviousMessage[arg2] = {true}
 end
@@ -2158,16 +2168,21 @@ function GF_CHAT_MSG_YELL()
 	GF_ProcessChatMessages(event,arg1,arg2,arg8,arg9)
 end
 
-function GF_ProcessChatMessages(event,arg1,arg2,arg8,arg9) -- Chat processing functions
-	event = string.sub(event,10)
+function GF_ProcessChatMessages(event,arg1,arg2,arg8,arg9,delayed) -- Chat processing functions
+	if GF_SavedVariables.showformattedchat and not delayed and not GF_ChatReplaceItemLink(arg1,true) then table.insert(GF_LogHistory[GF_RealmName]["Delay"], {"Item",time()+1,event,arg1,arg2,arg8,arg9}) GF_PreviousMessage[arg2] = {} return end
 	arg2 = gsub(arg2,".* ","")
+	event = strsub(event,10)
 	--print(GetTime())
 	local logType = GF_CheckForGroups(gsub(arg1,"[\\\"]", " "),arg2,arg9,event) or 4
 	--print(GetTime())
 	if logType == 5 or logType == 11 or logType < 4 then GF_PlayerMessages[arg2][1][1] = GF_PlayerMessages[arg2][1][1] + 1 end -- To block multiple messages in series
 	GF_AddLogMessage(GF_CleanUpMessagesOfBadLinks(arg1),logType,true,arg2,arg8,arg9,event)
-	if arg2 == UnitName("player") or (GF_SavedVariables.alwaysshowguild and (GF_Guildies[arg2] or GF_Friends[arg2] or GF_PlayersCurrentlyInGroup[arg2])) or GF_ChatCheckFilters(logType,arg1,event) then
-		GF_PreviousMessage[arg2] = {true}
+	if arg2 == UnitName("player") or (GF_SavedVariables.alwaysshowguild and (GF_Guildies[arg2] or GF_Friends[arg2] or GF_PlayersCurrentlyInGroup[arg2])) or GF_ChatCheckFilters(logType,arg1,arg2,event) then
+		if delayed then
+			if event == "CHANNEL" then GF_AddChannelMessage(arg1,arg2,arg8,arg9) else GF_AddChatMessage(arg1,arg2,event) end
+		else
+			GF_PreviousMessage[arg2] = {true}
+		end
 	else
 		GF_PreviousMessage[arg2] = {}
 	end
@@ -2175,7 +2190,7 @@ end
 function GF_CheckForMonsterEmote(arg1,arg2)
 	if GF_SavedVariables.systemfilter then
 		for i=1, getn(GF_MonsterEmoteFilters) do
-			if string.find(arg1, GF_MonsterEmoteFilters[i]) then GF_PreviousMessage[arg2] = {} return end
+			if strfind(arg1, GF_MonsterEmoteFilters[i]) then GF_PreviousMessage[arg2] = {} return end
 		end
 	end
 	GF_PreviousMessage[arg2] = {true}
@@ -2185,7 +2200,7 @@ function GF_CheckForEmotes(arg1,arg2)
 		GF_PreviousMessage[arg2] = {}
 		return
 	elseif GF_SavedVariables.systemfilter then
-		for i=1, getn(GF_EmoteFilters) do if string.find(arg1, GF_EmoteFilters[i]) then GF_PreviousMessage[arg2] = {} return end end
+		for i=1, getn(GF_EmoteFilters) do if strfind(arg1, GF_EmoteFilters[i]) then GF_PreviousMessage[arg2] = {} return end end
 	elseif GF_CheckForSpam(arg1,arg2) then
 		GF_PreviousMessage[arg2] = {}
 		return
@@ -2194,9 +2209,9 @@ function GF_CheckForEmotes(arg1,arg2)
 end
 function GF_CheckForLoot(arg1)
 	if not GF_SavedVariables.showloottexts then
-		if string.find(arg1, "9d9d9d") then GF_PreviousMessage["SYSTEM"] = {} return -- Block grey Items
-		elseif string.find(arg1, "1eff00") then for i=1, getn(GF_LootFilters) do if string.find(arg1, GF_LootFilters[i]) then GF_PreviousMessage["SYSTEM"] = {} return end end -- Block 'selected need/greed/pass' and rolls on green items
-		else for i=1, 2 do  if string.find(arg1, GF_LootFilters[i]) then GF_PreviousMessage["SYSTEM"] = {} return end end end -- Block only 'need/greed' rolls on other items
+		if strfind(arg1, "9d9d9d") then GF_PreviousMessage["SYSTEM"] = {} return -- Block grey Items
+		elseif strfind(arg1, "1eff00") then for i=1, getn(GF_LootFilters) do if strfind(arg1, GF_LootFilters[i]) then GF_PreviousMessage["SYSTEM"] = {} return end end -- Block 'selected need/greed/pass' and rolls on green items
+		else for i=1, 2 do  if strfind(arg1, GF_LootFilters[i]) then GF_PreviousMessage["SYSTEM"] = {} return end end end -- Block only 'need/greed' rolls on other items
 	end
 	GF_PreviousMessage["SYSTEM"] = {true}
 end
@@ -2204,7 +2219,7 @@ function GF_CheckForSystem(arg1)
 	if arg1 == ERR_FRIEND_WRONG_FACTION then
 		GF_PreviousMessage["SYSTEM"] = {}
 		return
-	elseif string.find(arg1, "^%d+") then
+	elseif strfind(arg1, "^%d+") then
 		for i=1, GetNumWhoResults() do
 			local name,guild,level,_,class = GetWhoInfo(i)
 			if GF_Classes[class] then
@@ -2217,8 +2232,8 @@ function GF_CheckForSystem(arg1)
 			GF_TimeTillNextBroadcast = 0
 		end
 		FriendsFrame_Update()
-	elseif GF_SavedVariables.showformattedchat and string.find(arg1,"|+Hplayer: ?(%w+)|+h%[[%w%s!=\,\-\+<>\":'\.]+%]|+h ") then
-		local lfs,lfe,wordString = string.find(arg1,"|+Hplayer: ?(%w+)|+h%[[%w%s!=\,\-\+<>\":'\.]+%]|+h ")
+	elseif GF_SavedVariables.showformattedchat and strfind(arg1,"|+Hplayer: ?(%w+)|+h%[[%w%s!=\,\-\+<>\":'\.]+%]|+h ") then
+		local lfs,lfe,wordString = strfind(arg1,"|+Hplayer: ?(%w+)|+h%[[%w%s!=\,\-\+<>\":'\.]+%]|+h ")
 		if wordString then
 			if not GF_WhoTable[GF_RealmName][wordString] then
 				for i=1, GetNumGuildMembers() do
@@ -2234,23 +2249,23 @@ function GF_CheckForSystem(arg1)
 				end
 			end
 			if GF_WhoTable[GF_RealmName][wordString] then
-				GF_PreviousMessage["SYSTEM"] = {true,string.sub(arg1,1,lfs).."cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][wordString][2]] or "ffffff").."|Hplayer:"..wordString.."|h["..wordString..", "..GF_WhoTable[GF_RealmName][wordString][1].."]|h|r"..string.sub(arg1,lfe)}
+				GF_PreviousMessage["SYSTEM"] = {true,strsub(arg1,1,lfs).."cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][wordString][2]] or "ffffff").."|Hplayer:"..wordString.."|h["..wordString..", "..GF_WhoTable[GF_RealmName][wordString][1].."]|h|r"..strsub(arg1,lfe)}
 				return
 			end
 		end
 	else
 		for i=1, getn(GF_HardcoreMessages) do
-			local lfs,lfe,wordString,tempString,tempVal = string.find(arg1, GF_HardcoreMessages[i])
+			local lfs,lfe,wordString,tempString,tempVal = strfind(arg1, GF_HardcoreMessages[i])
 			if tempString then
 				if GF_WhoTable[GF_RealmName][tempString] then if tempVal then GF_WhoTable[GF_RealmName][tempString][1] = tonumber(tempVal) else GF_WhoTable[GF_RealmName][tempString][1] = 60 end end
 				if not GF_SavedVariables.systemfilter then wordString = arg1 end
-				lfs,lfe = string.find(" "..wordString, " "..tempString.." ")
+				lfs,lfe = strfind(" "..wordString, " "..tempString.." ")
 				if lfs then
-					GF_AddLogMessage(string.sub(string.sub(" "..wordString,1,lfs).."|cff9d9d9d|Hplayer:"..tempString.."|h["..tempString.."]|h|r "..string.sub(wordString,lfe),2),4,true,"SYSTEM",nil,nil,"SYSTEM")
+					GF_AddLogMessage(strsub(strsub(" "..wordString,1,lfs).."|cff9d9d9d|Hplayer:"..tempString.."|h["..tempString.."]|h|r "..strsub(wordString,lfe),2),4,true,"SYSTEM",nil,nil,"SYSTEM")
 					if GF_WhoTable[GF_RealmName][tempString] then
-						GF_PreviousMessage["SYSTEM"] = {true,string.sub(string.sub(" "..wordString,1,lfs).."|cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][tempString][2]] or "9d9d9d").."|Hplayer:"..tempString.."|h["..tempString.."]|h|r "..string.sub(wordString,lfe),2)}
+						GF_PreviousMessage["SYSTEM"] = {true,strsub(strsub(" "..wordString,1,lfs).."|cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][tempString][2]] or "9d9d9d").."|Hplayer:"..tempString.."|h["..tempString.."]|h|r "..strsub(wordString,lfe),2)}
 					else
-						GF_PreviousMessage["SYSTEM"] = {true,string.sub(string.sub(" "..wordString,1,lfs).."|cff9d9d9d|Hplayer:"..tempString.."|h["..tempString.."]|h|r "..string.sub(wordString,lfe),2)}
+						GF_PreviousMessage["SYSTEM"] = {true,strsub(strsub(" "..wordString,1,lfs).."|cff9d9d9d|Hplayer:"..tempString.."|h["..tempString.."]|h|r "..strsub(wordString,lfe),2)}
 					end
 					return
 				end
@@ -2264,10 +2279,10 @@ function GF_CheckForSystem(arg1)
 		end
 		if GF_SavedVariables.systemfilter then
 			for i=1, getn(GF_ServerMessageFilters) do -- Block Server Spam about RMT or WDB folders or Discord servers or whatever
-				if string.find(arg1, GF_ServerMessageFilters[i]) then GF_PreviousMessage["SYSTEM"] = {} return end
+				if strfind(arg1, GF_ServerMessageFilters[i]) then GF_PreviousMessage["SYSTEM"] = {} return end
 			end
 			for i=1, getn(GF_SystemMessageFilters) do -- 5-second timeout on quest and party-related messages
-				local lfs,lfe,wordString = string.find(arg1, GF_SystemMessageFilters[i])
+				local lfs,lfe,wordString = strfind(arg1, GF_SystemMessageFilters[i])
 				if wordString then
 					if not GF_PlayerSystemMessage[wordString] then
 						GF_PlayerSystemMessage[wordString] = { [i] = GetTime() + 5 }
@@ -2294,7 +2309,7 @@ function GF_CheckForGroups(arg1,arg2,arg9,event,showanyway)
 	if GF_BlackList[GF_RealmName][arg2] and not GF_PlayersCurrentlyInGroup[arg2] and not GF_Friends[arg2] and not GF_Guildies[arg2] then return 8 end
 	GF_GetTypes(arg1,showanyway)
 	if foundBlockList then return 7 end
-	if event == "HARDCORE" or string.lower(arg9) == "hardcore" then foundHC = true end
+	if event == "HARDCORE" or strlower(arg9) == "hardcore" then foundHC = true end
 	if foundGuild > 2.9 then if GF_SavedVariables.showformattedchat and GF_SavedVariables.usefriendslist then GF_GetWhoData(arg2) end return GF_CheckForSpam(arg1,arg2) or 11
 	elseif foundTrades > 2.9 then if GF_SavedVariables.showformattedchat and GF_SavedVariables.usefriendslist then GF_GetWhoData(arg2) end return GF_CheckForSpam(arg1,arg2) or 5
 	elseif foundLFM < GF_SavedVariables.FilterLevel and foundLFG < GF_SavedVariables.FilterLevel then
@@ -2318,32 +2333,25 @@ end
 function GF_GetTypes(arg1, showanyway)
 	if showanyway == true then print(arg1) end
 
-languageName = "en"
-foundIgnore,foundGuild,foundGuildExclusion,foundLFM,foundLFMPreSuf,foundLFG,foundLFGPreSuf,foundTrades,foundTradesExclusion = 0,0,0,0,0,0,0,0,0
-foundClass,foundDungeon,foundRaid,foundPvP,foundHC,foundNotHC,foundBlockList = nil,nil,nil,nil,nil,nil,nil
-foundQuest = {} foundDFlags = {} foundPFlags = {} lfmlfgName = {} groupName = {}
+	foundIgnore,foundGuild,foundGuildExclusion,foundLFM,foundLFMPreSuf,foundLFG,foundLFGPreSuf,foundTrades,foundTradesExclusion = 0,0,0,0,0,0,0,0,0
+	foundClass,foundDungeon,foundRaid,foundPvP,foundHC,foundNotHC,foundBlockList = nil,nil,nil,nil,nil,nil,nil
+	foundQuest = {} foundDFlags = {} foundPFlags = {} lfmlfgName = {} groupName = {}
+	languageName = "en"
 
--- The problem is, to do a straight translator, I would have to save everything and only replace what needs to be replaced.
--- This script majorly modifies everything. Such as removing hyperlinks, urls, punctuation characters, and separating certain words.
--- Basically, nothing should really "line up" before and after.
--- I could cut up the sentence into snippets, then process each snippet, then recombine snippets
--- I would need to save all links
-
-	arg1 = " "..gsub(gsub(string.lower(gsub(gsub(gsub(gsub(arg1, "|[cC]%x+%p+(%w+)[%w:]+|+[hH]", " %1 >z"), "|[hr]", ""),".[gG][gG]/.-[%s%p]", ""),"([a-z ][a-z])([A-Z])","%1 %2")),"[\"#\$\%&\*,\.@\\\^_`~|]"," "),"'","").." "
+	arg1 = " "..gsub(gsub(strlower(gsub(gsub(gsub(gsub(arg1, "|[cC]%x+%p+(%w+)[%w:]+|+[hH]", " %1 >z"), "|[hr]", ""),"%.[gG][gG]/%S+", ""),"([a-z ][a-z])([A-Z])","%1 %2")),"[\"#\$\%&\*,\.@\\\^_`~|]"," "),"'","").." "
 	local wordTable,wordTableTrade,wordTableGuild = {},{},{}
 	local wordString,lfs,lfe,tempVal,tempString
-	local languageID = {}
 	
-	if string.find(arg1, "%d+p[%p%s]") then foundLFM = 2 if showanyway == true then print("##p lfm 2") end end -- "10p heal" messages from chinese
+	if strfind(arg1, "%d+p[%p%s]") then foundLFM = 2 if showanyway == true then print("##p lfm 2") end end -- "10p heal" messages from chinese
 	lfs = 1 -- To detect space/lf##m/letter(eg " lf15mbwl" = lfm bwl)
-	while true do lfs,lfe,wordString = string.find(arg1," ([lk]f?%s?%d+m)[%p%s]",lfs) if wordString then arg1 = string.sub(arg1,1,lfs).."lfm "..string.sub(arg1,lfs+string.len(wordString)+1) lfs = lfs + 4 foundLFM = 4 foundGuildExclusion = 2 foundTradesExclusion = 2 if showanyway == true then print("lf##m lfm 4 .. guildex 3... tradesex 3") end else break end end
+	while true do lfs,lfe,wordString = strfind(arg1," ([lk]f?%s?%d+m)[%p%s]",lfs) if wordString then arg1 = strsub(arg1,1,lfs).."lfm "..strsub(arg1,lfs+strlen(wordString)+1) lfs = lfs + 4 foundLFM = 4 foundGuildExclusion = 2 foundTradesExclusion = 2 if showanyway == true then print("lf##m lfm 4 .. guildex 3... tradesex 3") end else break end end
 	lfs = 1 -- To detect space/number+/punctuation/number+/space for groups
-	while true do lfs,lfe,wordString,tempString = string.find(arg1,"[%p%s](%d%d?([=/])%d%d?) ",lfs) if wordString then if tempString == "=" then foundLFM = 2 lfs = lfe else arg1 = string.sub(arg1,1,lfs).."group"..string.sub(arg1,lfe) lfs = lfs + 6 end else break end end
-	lfs,lfe,wordString = string.find(arg1,"%d?%s?\-?([\+±])\-?%s?%d?")
+	while true do lfs,lfe,wordString,tempString = strfind(arg1,"[%p%s](%d%d?([=/])%d%d?) ",lfs) if wordString then if tempString == "=" then foundLFM = 2 lfs = lfe else arg1 = strsub(arg1,1,lfs).."group"..strsub(arg1,lfe) lfs = lfs + 6 end else break end end
+	lfs,lfe,wordString = strfind(arg1,"%d?%s?\-?([\+±])\-?%s?%d?")
 	if lfs then -- To detect "+- or ±"
 		if wordString == "±" then foundTrades = foundTrades + 1 if showanyway == true then print("± trade 1") end
-		elseif string.find(arg1, "[\+\-][\+\-]%s?%d",lfs) then foundTrades = foundTrades + 1 if showanyway == true then print("+-d% trade 1") end
-		elseif string.find(arg1, "%d%s?[\+\-][\+\-]",lfs) then foundTrades = foundTrades + 1 if showanyway == true then print("d%+- trade 1") end end
+		elseif strfind(arg1, "[\+\-][\+\-]%s?%d",lfs) then foundTrades = foundTrades + 1 if showanyway == true then print("+-d% trade 1") end
+		elseif strfind(arg1, "%d%s?[\+\-][\+\-]",lfs) then foundTrades = foundTrades + 1 if showanyway == true then print("d%+- trade 1") end end
 	end
 
 	tempVal = 1
@@ -2393,54 +2401,54 @@ foundQuest = {} foundDFlags = {} foundPFlags = {} lfmlfgName = {} groupName = {}
 		tempVal = tempVal + 1
 	end
 	arg1 = table.concat(wordTable)
-	if string.sub(arg1,-1) ~= " " then arg1 = arg1.." " end
+	if strsub(arg1,-1) ~= " " then arg1 = arg1.." " end
 	wordTable = {}
 
 	lfs = 1 -- To detect "faces"(eg ":d",":p")
-	while true do lfs,lfe,wordString = string.find(arg1, " (%p%a+)[%[%s]",lfs) if wordString then if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = string.sub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..string.sub(arg1,lfe) end lfs = lfs + string.len(wordString) + 1 else break end end
+	while true do lfs,lfe,wordString = strfind(arg1, " (%p%a+)[%[%s]",lfs) if wordString then if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = strsub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..strsub(arg1,lfe) end lfs = lfs + strlen(wordString) + 1 else break end end
 	lfs = 2 -- To detect word/word with no space(eg "lfgscholo" = lfg scholo)
 	while true do
-		lfs,lfe,wordString = string.find(arg1,"(%a%a%a%a+)",lfs)
+		lfs,lfe,wordString = strfind(arg1,"(%a%a%a%a+)",lfs)
 		if wordString then
 			if not GF_WORD_WORD_REPLACE[wordString] and not GF_WORD_SPECIAL_EXCEPTIONS[wordString] then
-				tempVal = string.len(wordString) - 1
+				tempVal = strlen(wordString) - 1
 				if tempVal > 11 then tempVal = 11 end
 				for i=tempVal, 3, -1 do
-					if GF_WORD_WORD_REPLACE[string.sub(wordString,1,i)] then
-						if tempVal-i > 2 and GF_WORD_SPECIAL_EXCEPTIONS[string.sub(wordString,1,i+3)] then
-							arg1 = string.sub(arg1,1,lfs-1)..string.sub(wordString,1,i+3).." "..string.sub(arg1,lfs+i+3)
-						elseif tempVal-i > 1 and GF_WORD_SPECIAL_EXCEPTIONS[string.sub(wordString,1,i+2)] then
-							arg1 = string.sub(arg1,1,lfs-1)..string.sub(wordString,1,i+2).." "..string.sub(arg1,lfs+i+2)
-						elseif tempVal-i > 0 and GF_WORD_SPECIAL_EXCEPTIONS[string.sub(wordString,1,i+1)] then
-							arg1 = string.sub(arg1,1,lfs-1)..string.sub(wordString,1,i+1).." "..string.sub(arg1,lfs+i+1)
+					if GF_WORD_WORD_REPLACE[strsub(wordString,1,i)] then
+						if tempVal-i > 2 and GF_WORD_SPECIAL_EXCEPTIONS[strsub(wordString,1,i+3)] then
+							arg1 = strsub(arg1,1,lfs-1)..strsub(wordString,1,i+3).." "..strsub(arg1,lfs+i+3)
+						elseif tempVal-i > 1 and GF_WORD_SPECIAL_EXCEPTIONS[strsub(wordString,1,i+2)] then
+							arg1 = strsub(arg1,1,lfs-1)..strsub(wordString,1,i+2).." "..strsub(arg1,lfs+i+2)
+						elseif tempVal-i > 0 and GF_WORD_SPECIAL_EXCEPTIONS[strsub(wordString,1,i+1)] then
+							arg1 = strsub(arg1,1,lfs-1)..strsub(wordString,1,i+1).." "..strsub(arg1,lfs+i+1)
 						else
-							arg1 = string.sub(arg1,1,lfs-1)..string.sub(wordString,1,i).." "..string.sub(arg1,lfs+i)
+							arg1 = strsub(arg1,1,lfs-1)..strsub(wordString,1,i).." "..strsub(arg1,lfs+i)
 						end
 						lfs = lfe + 1
 						break
-					elseif GF_WORD_WORD_REPLACE[string.sub(wordString,-i)] then
-						arg1 = string.sub(arg1,1,lfe-i).." "..string.sub(wordString,-i)..string.sub(arg1,lfe+1)
-						lfs = lfs + (i-string.len(string.sub(wordString,-i))) + string.len(wordString) + 1
+					elseif GF_WORD_WORD_REPLACE[strsub(wordString,-i)] then
+						arg1 = strsub(arg1,1,lfe-i).." "..strsub(wordString,-i)..strsub(arg1,lfe+1)
+						lfs = lfs + (i-strlen(strsub(wordString,-i))) + strlen(wordString) + 1
 						break
 					end
 				end
 				if lfs < lfe then
-					if GF_WORD_WORD_REPLACE[string.sub(wordString,1,2)] then
-						arg1 = string.sub(arg1,1,lfs-1)..string.sub(wordString,1,2).." "..string.sub(arg1,lfs+2)
-						lfs = lfs + string.len(wordString) + 1
-					elseif GF_WORD_WORD_REPLACE[string.sub(wordString,-2)] then
-						wordString = string.sub(wordString,1,-3)
+					if GF_WORD_WORD_REPLACE[strsub(wordString,1,2)] then
+						arg1 = strsub(arg1,1,lfs-1)..strsub(wordString,1,2).." "..strsub(arg1,lfs+2)
+						lfs = lfs + strlen(wordString) + 1
+					elseif GF_WORD_WORD_REPLACE[strsub(wordString,-2)] then
+						wordString = strsub(wordString,1,-3)
 						if GF_WORD_FIX_SINGLE_WORD[wordString] then wordString = GF_WORD_FIX_SINGLE_WORD[wordString]
 						elseif GF_WORD_FIX_BEFORE_QUEST[wordString] then wordString = GF_WORD_FIX_BEFORE_QUEST[wordString] end
 						if GF_WORD_QUEST[wordString] then
-							arg1 = string.sub(arg1,1,lfs-1)..wordString.." lf"..string.sub(arg1,lfe+1)
+							arg1 = strsub(arg1,1,lfs-1)..wordString.." lf"..strsub(arg1,lfe+1)
 						else
 							if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end
 							if GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString] or GF_WORD_GROUP_BYPASS[wordString] then
-								arg1 = string.sub(arg1,1,lfs-1)..wordString.." lf"..string.sub(arg1,lfe+1)
+								arg1 = strsub(arg1,1,lfs-1)..wordString.." lf"..strsub(arg1,lfe+1)
 							end
 						end
-						lfs = lfs + string.len(wordString) + 3
+						lfs = lfs + strlen(wordString) + 3
 					else
 						lfs = lfe + 1
 					end
@@ -2453,85 +2461,26 @@ foundQuest = {} foundDFlags = {} foundPFlags = {} lfmlfgName = {} groupName = {}
 		end
 	end
 	lfs = 2 -- To fix single words
-	while true do lfs,lfe,wordString,tempString = string.find(arg1, "(.-)([%s%p%d]+)",lfs) if not wordString then break elseif GF_WORD_FIX_SINGLE_WORD[wordString] then arg1 = string.sub(arg1,1,lfs-1)..GF_WORD_FIX_SINGLE_WORD[wordString]..tempString..string.sub(arg1,lfe+1) lfs = lfs + string.len(GF_WORD_FIX_SINGLE_WORD[wordString]..tempString)-1 elseif GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString] then if not languageID[GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString]] then languageID[GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString]] = 1 else languageID[GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString]] = languageID[GF_LANGUAGE_FOREIGN_COMMON_WORDS[wordString]] + 1 end lfs = lfe+1 else lfs = lfe+1 end end
-
--- Translation stuff
-	lfs = 0
-	for langID,totalLang in languageID do if totalLang > lfs then lfs = totalLang languageName = langID end end
-	if showanyway == true then print(languageName.." "..lfs) end
-
---	local word1,word2,word3,word4,space1,space2,space3,space4
---[[	tempVal = 4
-	lfs = 2 -- To do translation
-	while true do
-		if tempVal == 4 then
-			_,lfe,wordString,word1,space1,word2,space2,word3,space3,word4,space4 = string.find(arg1, "((.-)([%s%p%d]+)(.-)([%s%p%d]+)(.-)([%s%p%d]+)(.-)([%s%p%d]+))",lfs) -- 4 words
-			if not wordString then
-				tempVal = 3
-			else
-				lfs = lfs + string.len(word1..space1)
-			end
-		elseif tempVal == 3 then
-			_,lfe,wordString,word1,space1,word2,space2,word3,space3 = string.find(arg1, "((.-)([%s%p%d]+)(.-)([%s%p%d]+)(.-)([%s%p%d]+))",lfs) -- 3 words
-			if not wordString then
-				tempVal = 2
-			else
-				lfs = lfs + string.len(word1..space1)
-			end
-		elseif tempVal == 2 then
-			_,lfe,wordString,word1,space1,word2,space2 = string.find(arg1, "((.-)([%s%p%d]+)(.-)([%s%p%d]+))",lfs) -- 2 words
-			if not wordString then
-				tempVal = 1
-			else
-				lfs = lfs + string.len(word1..space1)
-			end
-		elseif tempVal == 1 then
-			_,lfe,wordString,word1,space1 = string.find(arg1, "((.-)([%s%p%d]+))",lfs) -- 1 word
-			if not wordString then
-				break
-			else
-				break
-			end
-		end
-	end--]]
---print(GetTime())
---for i=1, 1000 do
---	lfs = 2 -- Add all words to the wordTable
---	while true do
---		lfs,lfe,wordString = string.find(arg1, "(.-)[%s%p%d]+",lfs)
---		if wordString then
---			lfs = lfe+1
---		else
---			break
---		end
---	end
---end
---print(GetTime())
--- It's about 20-50 for 1000 of these, or 0.02 to 0.05 ms
--- Just the string.find routine is 1-20 ms(2-10 typical)
--- But it's only about 2-15 for 1000 of my data entry... and 2-15 for my checking.. so just this is more than my entire entry + fix
--- I feel like there has to be a way to integrate the word replacer into get word
-
--- So like, if I 
+	while true do lfs,lfe,wordString,tempString = strfind(arg1, "(.-)([%s%p%d]+)",lfs) if not wordString then break elseif GF_WORD_FIX_SINGLE_WORD[wordString] then arg1 = strsub(arg1,1,lfs-1)..GF_WORD_FIX_SINGLE_WORD[wordString]..tempString..strsub(arg1,lfe+1) lfs = lfs + strlen(GF_WORD_FIX_SINGLE_WORD[wordString]..tempString)-1 else lfs = lfe+1 end end
 
 	lfs = 1 -- To detect space/letter/number/letter/space combinations(eg " g2g " = gtg)
-	while true do lfs,lfe,wordString = string.find(arg1," (w?%a%s?%d%s?%ab?)[%p%s]",lfs) if wordString then wordString = gsub(wordString," ","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = string.sub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..string.sub(arg1,lfe) end lfs = lfs + string.len(wordString) + 1 else break end end
+	while true do lfs,lfe,wordString = strfind(arg1," (w?%a%s?%d%s?%ab?)[%p%s]",lfs) if wordString then wordString = gsub(wordString," ","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = strsub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..strsub(arg1,lfe) end lfs = lfs + strlen(wordString) + 1 else break end end
 	lfs = 1 -- To detect space/word/number+/space combinations(eg " k10" = lowerkarazhan)
-	while true do lfs,lfe,wordString = string.find(arg1," (%a+%s?[:%-]?%s?%d+)s?[%p%s]",lfs) if wordString then wordString = gsub(wordString,"[%s:%-]","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = string.sub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..string.sub(arg1,lfe) end lfs = lfs + string.len(wordString) + 1 else break end end
+	while true do lfs,lfe,wordString = strfind(arg1," (%a+%s?[:%-]?%s?%d+)s?[%p%s]",lfs) if wordString then wordString = gsub(wordString,"[%s:%-]","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = strsub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..strsub(arg1,lfe) end lfs = lfs + strlen(wordString) + 1 else break end end
 	lfs = 1 -- To detect words with explanation points "!" (eg "hungry!","lost!")... To help identify quests with short names.
-	while true do lfs,lfe,wordString = string.find(arg1, " (%a+%s?!) ",lfs) if wordString then wordString = gsub(wordString," ","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = string.sub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..string.sub(arg1,lfe) end lfs = lfs + string.len(wordString) + 1 else break end end
+	while true do lfs,lfe,wordString = strfind(arg1, " (%a+%s?!) ",lfs) if wordString then wordString = gsub(wordString," ","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = strsub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..strsub(arg1,lfe) end lfs = lfs + strlen(wordString) + 1 else break end end
 	lfs = 1 -- To detect space/number+/word/space combinations(eg " 10th " = tenth, " 5g " = 5gold)
 	while true do
-		lfs,lfe,wordString,tempString = string.find(arg1,"[%p%s](%d+%s?(%a+))[%p%s]",lfs)
+		lfs,lfe,wordString,tempString = strfind(arg1,"[%p%s](%d+%s?(%a+))[%p%s]",lfs)
 		if wordString then
 			wordString = gsub(wordString," ","")
-			if GF_WORD_FIX[tempString] then wordString = string.sub(wordString,1,string.len(tempString)*-1-1)..GF_WORD_FIX[tempString] end
+			if GF_WORD_FIX[tempString] then wordString = strsub(wordString,1,strlen(tempString)*-1-1)..GF_WORD_FIX[tempString] end
 			if GF_WORD_SPECIAL_COMBINATION[wordString] then
-				arg1 = string.sub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..string.sub(arg1,lfe)
-				lfs = lfs + string.len(GF_WORD_SPECIAL_COMBINATION[wordString])
+				arg1 = strsub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..strsub(arg1,lfe)
+				lfs = lfs + strlen(GF_WORD_SPECIAL_COMBINATION[wordString])
 			elseif GF_WORD_GOLD[tempString] then
-				arg1 = string.sub(arg1,1,lfs)..GF_WORD_GOLD[tempString]..string.sub(arg1,lfe)
-				lfs = lfs + string.len(GF_WORD_GOLD[tempString])
+				arg1 = strsub(arg1,1,lfs)..GF_WORD_GOLD[tempString]..strsub(arg1,lfe)
+				lfs = lfs + strlen(GF_WORD_GOLD[tempString])
 				if foundTrades < 2 and tempString ~= "bh" then foundTrades = foundTrades + 2 if showanyway == true then print("#g trade 2") end end
 			else
 				lfs = lfe
@@ -2541,45 +2490,45 @@ foundQuest = {} foundDFlags = {} foundPFlags = {} lfmlfgName = {} groupName = {}
 		end
 	end
 	lfs = 2 -- To detect words between and next to "[] or ()" (eg "(human only)", "[item] for free").
-	while true do lfs,lfe,wordString = string.find(arg1, "[<%(%[](.-)[%)%]>]",lfs)
+	while true do lfs,lfe,wordString = strfind(arg1, "[<%(%[](.-)[%)%]>]",lfs)
 		if wordString then
 			if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_BRACKET[gsub(wordString," ","")] then foundGuild = foundGuild + GF_GUILD_BRACKET[gsub(wordString," ","")] if showanyway == true then print(wordString.." guild "..GF_GUILD_BRACKET[gsub(wordString," ","")]) end end
 			if strbyte(arg1,lfs) == 91 and strbyte(arg1,lfe) == 93 then -- "[]"
-				if foundLFM == 0 then if string.find(arg1, "^%]%s?%d+%s?\+",lfe) then foundLFM = 2 if showanyway == true then print("##+ lfm") end end end -- Group "] 2+"
-				if string.find(arg1, "^%]%s?[0-9\-]+%s?[gs]",lfe) then foundTrades = foundTrades + 1 if showanyway == true then print("##g trade 1") end end -- Trades "]2.5g"
-				if string.find(arg1, "^%]%s?%p?%s?%d+m[%p%s]",lfe) then foundLFM = 2 if showanyway == true then print("##m lfm") end end -- Group "] 2m"
-				if string.find(arg1, "^%]%s?%p?%s?x%s?%d+[%p%s]",lfe) then foundTrades = foundTrades + .5 if showanyway == true then print("x## trade .5") end end -- Trades "] x2"
-				if string.find(arg1, "^%]%s?%d+%s?[\+\-][\+\-][%p%s]",lfe) then foundTrades = foundTrades + 1.5 if showanyway == true then print("+- trade 1") end end -- Trades "[hitem] 36+-"
+				if foundLFM == 0 then if strfind(arg1, "^%]%s?%d+%s?\+",lfe) then foundLFM = 2 if showanyway == true then print("##+ lfm") end end end -- Group "] 2+"
+				if strfind(arg1, "^%]%s?[0-9\-]+%s?[gs]",lfe) then foundTrades = foundTrades + 1 if showanyway == true then print("##g trade 1") end end -- Trades "]2.5g"
+				if strfind(arg1, "^%]%s?%p?%s?%d+m[%p%s]",lfe) then foundLFM = 2 if showanyway == true then print("##m lfm") end end -- Group "] 2m"
+				if strfind(arg1, "^%]%s?%p?%s?x%s?%d+[%p%s]",lfe) then foundTrades = foundTrades + .5 if showanyway == true then print("x## trade .5") end end -- Trades "] x2"
+				if strfind(arg1, "^%]%s?%d+%s?[\+\-][\+\-][%p%s]",lfe) then foundTrades = foundTrades + 1.5 if showanyway == true then print("+- trade 1") end end -- Trades "[hitem] 36+-"
 
-				_,_,tempString = string.find(arg1, "^%]%s?x?%d?%d?x?%p?%s?(%a+)[%p%s]",lfe) if tempString then if GF_WORD_FIX[tempString] then tempString = GF_WORD_FIX[tempString] end if GF_TRADE_PREFIX_SUFFIX[tempString] then foundTrades = foundTrades + GF_TRADE_PREFIX_SUFFIX[tempString] if showanyway == true then print(tempString.." trade ] "..GF_TRADE_PREFIX_SUFFIX[tempString]) end end end
-				_,_,tempString = string.find(arg1, "^%]%s?x?%d?%d?x?%p?%s?(%a+%s%a+)[%p%s]",lfe) if tempString then tempString = gsub(tempString," ","") if GF_WORD_FIX[tempString] then tempString = GF_WORD_FIX[tempString] end if GF_TRADE_PREFIX_SUFFIX[tempString] then foundTrades = foundTrades + GF_TRADE_PREFIX_SUFFIX[tempString] if showanyway == true then print(tempString.." trade ] "..GF_TRADE_PREFIX_SUFFIX[tempString]) end end end
-				_,_,tempString = string.find(arg1, "^%]%s?x?%d?%d?x?%p?%s?(%a+%s%a+%s%a+)[%p%s]",lfe) if tempString then tempString = gsub(tempString," ","") if GF_WORD_FIX[tempString] then tempString = GF_WORD_FIX[tempString] end if GF_TRADE_PREFIX_SUFFIX[tempString] then foundTrades = foundTrades + GF_TRADE_PREFIX_SUFFIX[tempString] if showanyway == true then print(tempString.." trade ] "..GF_TRADE_PREFIX_SUFFIX[tempString]) end end end
+				_,_,tempString = strfind(arg1, "^%]%s?x?%d?%d?x?%p?%s?(%a+)[%p%s]",lfe) if tempString then if GF_WORD_FIX[tempString] then tempString = GF_WORD_FIX[tempString] end if GF_TRADE_PREFIX_SUFFIX[tempString] then foundTrades = foundTrades + GF_TRADE_PREFIX_SUFFIX[tempString] if showanyway == true then print(tempString.." trade ] "..GF_TRADE_PREFIX_SUFFIX[tempString]) end end end
+				_,_,tempString = strfind(arg1, "^%]%s?x?%d?%d?x?%p?%s?(%a+%s%a+)[%p%s]",lfe) if tempString then tempString = gsub(tempString," ","") if GF_WORD_FIX[tempString] then tempString = GF_WORD_FIX[tempString] end if GF_TRADE_PREFIX_SUFFIX[tempString] then foundTrades = foundTrades + GF_TRADE_PREFIX_SUFFIX[tempString] if showanyway == true then print(tempString.." trade ] "..GF_TRADE_PREFIX_SUFFIX[tempString]) end end end
+				_,_,tempString = strfind(arg1, "^%]%s?x?%d?%d?x?%p?%s?(%a+%s%a+%s%a+)[%p%s]",lfe) if tempString then tempString = gsub(tempString," ","") if GF_WORD_FIX[tempString] then tempString = GF_WORD_FIX[tempString] end if GF_TRADE_PREFIX_SUFFIX[tempString] then foundTrades = foundTrades + GF_TRADE_PREFIX_SUFFIX[tempString] if showanyway == true then print(tempString.." trade ] "..GF_TRADE_PREFIX_SUFFIX[tempString]) end end end
 
 				if strbyte(arg1,lfs-1) == 90 then -- From Link
-					tempString = string.sub(arg1,1,lfs)
-					if string.find(tempString, "[%p%s]%d+%s?x%s+hitem Z%[$") then foundTrades = foundTrades + 1 if showanyway == true then print("##x [ trade 1") end end -- Trades " 2x ["
-					if string.find(tempString, "[%p%s]x%s?%d+%s+hitem Z%[$") then foundTrades = foundTrades + 1 if showanyway == true then print("x## [ trade 1") end end -- Trades " x2 ["
+					tempString = strsub(arg1,1,lfs)
+					if strfind(tempString, "[%p%s]%d+%s?x%s+hitem Z%[$") then foundTrades = foundTrades + 1 if showanyway == true then print("##x [ trade 1") end end -- Trades " 2x ["
+					if strfind(tempString, "[%p%s]x%s?%d+%s+hitem Z%[$") then foundTrades = foundTrades + 1 if showanyway == true then print("x## [ trade 1") end end -- Trades " x2 ["
 
-					_,_,tempString = string.find(tempString, "[%p%s](%a+)%s?%s?x?%d?%d?x?%p?%s+hitem Z%[$") -- One word before
+					_,_,tempString = strfind(tempString, "[%p%s](%a+)%s?%s?x?%d?%d?x?%p?%s+hitem Z%[$") -- One word before
 					if GF_WORD_FIX[tempString] then tempString = GF_WORD_FIX[tempString] end
 					if GF_TRADE_PREFIX_SUFFIX[tempString] then
 						foundTrades = foundTrades + GF_TRADE_PREFIX_SUFFIX[tempString]
 						if showanyway == true then print(tempString.." trade <word>[ "..GF_TRADE_PREFIX_SUFFIX[tempString]) end
-						_,_,tempString = string.find(arg1, "^%]%s?x?%d?%d?x?%p?%s?(%a+)[%p%s]",lfe)
+						_,_,tempString = strfind(arg1, "^%]%s?x?%d?%d?x?%p?%s?(%a+)[%p%s]",lfe)
 						if GF_WORD_FIX[tempString] then tempString = GF_WORD_FIX[tempString] end
 						if GF_TRADE_PREFIX_SUFFIX[tempString] then
 							foundTrades = foundTrades + 2.5
 							if showanyway == true then print(tempString.." trade ]<word> 2.5") end
 						end
 					end
-					for words in string.gfind(wordString, "(%a+)") do if GF_WORD_FIX_ITEM_NAME[words] then arg1 = string.sub(arg1,1,lfs)..GF_WORD_FIX_ITEM_NAME[words]..string.sub(arg1,lfe) break end end
+					for words in string.gfind(wordString, "(%a+)") do if GF_WORD_FIX_ITEM_NAME[words] then arg1 = strsub(arg1,1,lfs)..GF_WORD_FIX_ITEM_NAME[words]..strsub(arg1,lfe) break end end
 				end
 			elseif strbyte(arg1,lfs) == 60 and strbyte(arg1,lfe) == 62 then -- "<>"
 				wordTableGuild["BRACKETS"] = gsub(gsub(wordString,"[%d%p]","")," ","")
-				tempString = string.sub(arg1,1,lfs)
-				_,_,wordString = string.find(tempString, " (%a+)%s?<$") if wordString then if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_PREFIX_SUFFIX[wordString] then foundGuild = foundGuild + GF_GUILD_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." guild "..GF_GUILD_PREFIX_SUFFIX[wordString]) end end end
-				_,_,wordString = string.find(arg1, "^>%s?(%a+)[%p%s]",lfe) if wordString then if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_PREFIX_SUFFIX[wordString] then foundGuild = foundGuild + GF_GUILD_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." guild "..GF_GUILD_PREFIX_SUFFIX[wordString]) end end end
-				_,_,wordString = string.find(arg1, "^>%s?(%a+ %a+)[%p%s]",lfe) if wordString then wordString = gsub(wordString," ","") if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_PREFIX_SUFFIX[wordString] then foundGuild = foundGuild + GF_GUILD_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." guild "..GF_GUILD_PREFIX_SUFFIX[wordString]) end end end
+				tempString = strsub(arg1,1,lfs)
+				_,_,wordString = strfind(tempString, " (%a+)%s?<$") if wordString then if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_PREFIX_SUFFIX[wordString] then foundGuild = foundGuild + GF_GUILD_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." guild "..GF_GUILD_PREFIX_SUFFIX[wordString]) end end end
+				_,_,wordString = strfind(arg1, "^>%s?(%a+)[%p%s]",lfe) if wordString then if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_PREFIX_SUFFIX[wordString] then foundGuild = foundGuild + GF_GUILD_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." guild "..GF_GUILD_PREFIX_SUFFIX[wordString]) end end end
+				_,_,wordString = strfind(arg1, "^>%s?(%a+ %a+)[%p%s]",lfe) if wordString then wordString = gsub(wordString," ","") if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_PREFIX_SUFFIX[wordString] then foundGuild = foundGuild + GF_GUILD_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." guild "..GF_GUILD_PREFIX_SUFFIX[wordString]) end end end
 			end
 			lfs = lfs + 1
 		else
@@ -2587,28 +2536,28 @@ foundQuest = {} foundDFlags = {} foundPFlags = {} lfmlfgName = {} groupName = {}
 		end
 	end
 	lfs = 1 -- To detect word/letter/number combinations(eg "BMx2" = bm x2)
-	while true do lfs,lfe,wordString,tempString = string.find(arg1," (%a+)(%a%d+)[%p%s]",lfs) if wordString then if GF_WORD_LETTER_NUMBER_BEFORE_AFTER[tempString] and (GF_GROUP_IDS[wordString] or GF_LFMLFG_PREFIX_GUILD[wordString]) then arg1 = string.sub(arg1,1,lfs)..wordString.." "..GF_WORD_LETTER_NUMBER_BEFORE_AFTER[tempString].." "..string.sub(arg1,lfe) lfs = lfs + string.len(wordString..GF_WORD_LETTER_NUMBER_BEFORE_AFTER[tempString]) + 2 else lfs = lfe end else break end end
+	while true do lfs,lfe,wordString,tempString = strfind(arg1," (%a+)(%a%d+)[%p%s]",lfs) if wordString then if GF_WORD_LETTER_NUMBER_BEFORE_AFTER[tempString] and (GF_GROUP_IDS[wordString] or GF_LFMLFG_PREFIX_GUILD[wordString]) then arg1 = strsub(arg1,1,lfs)..wordString.." "..GF_WORD_LETTER_NUMBER_BEFORE_AFTER[tempString].." "..strsub(arg1,lfe) lfs = lfs + strlen(wordString..GF_WORD_LETTER_NUMBER_BEFORE_AFTER[tempString]) + 2 else lfs = lfe end else break end end
 	lfs = 1 -- To detect word/letter/number combinations(eg "BMx2" = bm x2)
-	while true do lfs,lfe,wordString,tempString = string.find(arg1," (%d+%a)(%a+)[%p%s]",lfs) if wordString then if GF_WORD_LETTER_NUMBER_BEFORE_AFTER[wordString] and GF_GROUP_IDS[tempString] then arg1 = string.sub(arg1,1,lfs)..GF_WORD_LETTER_NUMBER_BEFORE_AFTER[wordString].." "..tempString.." "..string.sub(arg1,lfe) lfs = lfs + string.len(GF_WORD_LETTER_NUMBER_BEFORE_AFTER[wordString]..tempString) + 2 else lfs = lfe end else break end end
+	while true do lfs,lfe,wordString,tempString = strfind(arg1," (%d+%a)(%a+)[%p%s]",lfs) if wordString then if GF_WORD_LETTER_NUMBER_BEFORE_AFTER[wordString] and GF_GROUP_IDS[tempString] then arg1 = strsub(arg1,1,lfs)..GF_WORD_LETTER_NUMBER_BEFORE_AFTER[wordString].." "..tempString.." "..strsub(arg1,lfe) lfs = lfs + strlen(GF_WORD_LETTER_NUMBER_BEFORE_AFTER[wordString]..tempString) + 2 else lfs = lfe end else break end end
 
 -- Quest Search
 	lfs = 2 -- Add all words to the wordTable
 	while true do
-		lfs,lfe,wordString = string.find(arg1, "(.-)[%s%p%d]+",lfs)
+		lfs,lfe,wordString = strfind(arg1, "(.-)[%s%p%d]+",lfs)
 		if wordString then
 			if strbyte(wordString) then
-				if not GF_WORD_BYPASS_TRIGGER[languageName][wordString] then
+				if not GF_WORD_BYPASS_TRIGGER["en"][wordString] then
 					table.insert(wordTable, wordString)
 					lfs = lfe+1
 				else
 					if GF_WORD_GROUP_BYPASS[wordString] then
-						_,tempVal,tempString = string.find(arg1,"(%a+)",lfe+1)
+						_,tempVal,tempString = strfind(arg1,"(%a+)",lfe+1)
 						if tempString then
 							if GF_WORD_GROUP_BYPASS[tempString] then
 								table.insert(wordTable, GF_WORD_GROUP_BYPASS[wordString]) table.insert(wordTable, GF_WORD_GROUP_BYPASS[tempString])
 								lfs = tempVal+1
 							elseif GF_WORD_GROUP_BYPASS_SECOND[wordString..tempString] then
-								_,tempVal,tempString = string.find(arg1,"(%a+)",tempVal+1)
+								_,tempVal,tempString = strfind(arg1,"(%a+)",tempVal+1)
 								if GF_WORD_GROUP_BYPASS[tempString] then
 									table.insert(wordTable, GF_WORD_GROUP_BYPASS[wordString]) table.insert(wordTable, GF_WORD_GROUP_BYPASS[tempString])
 									lfs = tempVal+1
@@ -2626,7 +2575,7 @@ foundQuest = {} foundDFlags = {} foundPFlags = {} lfmlfgName = {} groupName = {}
 							break
 						end
 					else
-						_,tempVal,tempString = string.find(arg1,"(%a+)",lfe+1)
+						_,tempVal,tempString = strfind(arg1,"(%a+)",lfe+1)
 						if GF_WORD_QUEST_BYPASS[tempString] then
 							table.insert(wordTable, wordString) table.insert(wordTable, tempString)
 							lfs = tempVal+1
@@ -2690,9 +2639,6 @@ foundQuest = {} foundDFlags = {} foundPFlags = {} lfmlfgName = {} groupName = {}
 							for k=1, j do if wordTable[lfs] then table.remove(wordTable,lfs) tempVal=tempVal-1 end end
 						end
 					end
-				elseif languageName ~= "en" and GF_LANGUAGE_FOREIGN_CONVERSION_WORDS[languageName][wordString] then
-					wordTable[lfs] = GF_LANGUAGE_FOREIGN_CONVERSION_WORDS[languageName][wordString]
-					for k=1, j do table.remove(wordTable,lfs+1) tempVal=tempVal-1 end
 				end
 			end
 			lfs = lfs + 1
@@ -2701,19 +2647,19 @@ foundQuest = {} foundDFlags = {} foundPFlags = {} lfmlfgName = {} groupName = {}
 	for i=1, tempVal do if wordTable[i] == "x" then table.remove(wordTable,i) i = i - 1 tempVal=tempVal-1 end end
 	if wordTable[1] == "hquest" and tempVal <= 9 then
 		wordString = ""
-		if string.sub(arg1,-2) == "? " then
+		if strsub(arg1,-2) == "? " then
 			if wordTable[2] then
 				for i=2,tempVal do wordString = wordString..wordTable[i] end
 				if GF_WORD_QUEST[wordString] then foundLFG = 2 if showanyway == true then print("quest? lfg 2") end end
 			end
 		end
 		lfs = 1 -- To detect punctuation after "]" (eg "[hitem] + ")... For detecting groups
-		while true do lfs,lfe,wordString = string.find(arg1, "\]%s?(%p)[%p%s]",lfs) if not wordString then break end if wordString == "+" or wordString == "?" then foundLFG = 2 if showanyway == true then print("[quest]+ lfg 2") end end lfs = lfe end
-	elseif string.sub(arg1,-2) == "? " and tempVal < 9 then
+		while true do lfs,lfe,wordString = strfind(arg1, "\]%s?(%p)[%p%s]",lfs) if not wordString then break end if wordString == "+" or wordString == "?" then foundLFG = 2 if showanyway == true then print("[quest]+ lfg 2") end end lfs = lfe end
+	elseif strsub(arg1,-2) == "? " and tempVal < 9 then
 		wordString = ""
 		for i=1,tempVal do wordString = wordString..wordTable[i] end
 		if GF_WORD_QUEST[wordString] then foundLFG = 2 if showanyway == true then print("quest? lfg 2") end end
-	elseif string.sub(arg1,1,2) == " +" and GF_WORD_ROLES[wordTable[1]] then foundLFM = 2 if showanyway == true then print("[quest]+ lfg 2") end end
+	elseif strsub(arg1,1,2) == " +" and GF_WORD_ROLES[wordTable[1]] then foundLFM = 2 if showanyway == true then print("[quest]+ lfg 2") end end
 	for j=0,7 do
 		for i=1, tempVal do
 			if i+j <= tempVal then
@@ -2792,7 +2738,7 @@ foundQuest = {} foundDFlags = {} foundPFlags = {} lfmlfgName = {} groupName = {}
 		if GF_WORD_TRADE_PHRASE[lfe] then foundTrades = 2 if showanyway == true then print("tradephrase trades 3") end end
 		if GF_WORD_GUILD_PHRASE[wordString] then foundGuild = 3 if showanyway == true then print("guildphrase guild 3") end end
 		if GF_GROUP_PHRASE[wordString] and foundLFM == 0 then foundLFM = 2 if showanyway == true then print("lfmphrase lfm 2") end end
-		if string.sub(arg1,-2) == "? " then
+		if strsub(arg1,-2) == "? " then
 			if (GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString] or GF_GROUP_PHRASE_QUESTION[wordString]) then foundLFG = 2 if showanyway == true then print("group? lfg 2") end
 			elseif GF_WORD_TRADE_QUESTION[lfe] then foundTrades = 2 if showanyway == true then print("trades? trades "..GF_WORD_TRADE_QUESTION[lfe]) end
 			elseif GF_WORD_GUILD_QUESTION[wordString] then foundGuild = 3 if showanyway == true then print("guild? guild 3") end
@@ -2901,8 +2847,8 @@ foundQuest = {} foundDFlags = {} foundPFlags = {} lfmlfgName = {} groupName = {}
 		end
 	end
 
-	if getn(lfmlfgName) == 1 and groupName[1] and ((not foundQuest[1] and not foundDungeon and not foundRaid) or GF_LFM_BYPASS[groupName[1]]) then lfs = 0 for i=1,getn(groupName) do if string.find(lfmlfgName[1],groupName[i]) then lfs = lfs + 1 end end if lfs == getn(groupName) then foundLFM = 0 foundLFG = 0 end end
-	if foundGuild < 100 and string.find(arg1, "[<~][a-zA-Z0-9%&%-/ ]+[>~]") then foundGuild = foundGuild + 2 foundTradesExclusion = foundTradesExclusion + 1 if showanyway == true then print("<words> guild 2 .. tradesex 1") end end
+	if getn(lfmlfgName) == 1 and groupName[1] and ((not foundQuest[1] and not foundDungeon and not foundRaid) or GF_LFM_BYPASS[groupName[1]]) then lfs = 0 for i=1,getn(groupName) do if strfind(lfmlfgName[1],groupName[i]) then lfs = lfs + 1 end end if lfs == getn(groupName) then foundLFM = 0 foundLFG = 0 end end
+	if foundGuild < 100 and strfind(arg1, "[<~][a-zA-Z0-9%&%-/ ]+[>~]") then foundGuild = foundGuild + 2 foundTradesExclusion = foundTradesExclusion + 1 if showanyway == true then print("<words> guild 2 .. tradesex 1") end end
 	while foundGuild > 100 do foundGuild = foundGuild - 100 end
 	foundGuild = foundGuild - foundGuildExclusion
 
@@ -2917,7 +2863,7 @@ foundQuest = {} foundDFlags = {} foundPFlags = {} lfmlfgName = {} groupName = {}
 	foundLFG = foundLFG + foundLFGPreSuf
 
 	if showanyway == true then
-		GF_Log:AddMessage("|cffccccff|Hurl:"..string.sub(arg1,2,-2).."|h"..string.sub(arg1,2,-2).."|h|r", 1, 1, 1)
+		GF_Log:AddMessage("|cffccccff|Hurl:"..strsub(arg1,2,-2).."|h"..strsub(arg1,2,-2).."|h|r", 1, 1, 1)
 		for i=1, tempVal do
 			print(wordTable[i].." .. "..wordTableTrade[i].." .. "..wordTableGuild[i])
 		end
@@ -2961,9 +2907,9 @@ function GF_CheckForSpam(arg1,arg2,foundInGroup)
 		if GF_WhoTable[GF_RealmName][arg2] and GF_WhoTable[GF_RealmName][arg2][1] < GF_SavedVariables.blockmessagebelowlevel and GF_WhoTable[GF_RealmName][arg2][4] + 86400 > time() then return 9 end  -- Block lowlevel
 		if GF_SavedVariables.spamfilter then
 			if GF_PlayerMessages[arg2][1][1] > time() then return 7 end -- Returns spam for the duration of the spam filter
-			if (string.len(arg1) > 30 and ((GF_PlayerMessages[arg2][1][1] + 120 > time() and string.find(arg1,string.sub(GF_PlayerMessages[arg2][2][1],math.random(math.ceil(string.len(GF_PlayerMessages[arg2][2][1])/4)),math.random(math.ceil(string.len(GF_PlayerMessages[arg2][2][1])/4))*-1),1,true)) or (GF_PlayerMessages[arg2][1][2] + 120 > time() and string.find(arg1,string.sub(GF_PlayerMessages[arg2][2][2],math.random(math.ceil(string.len(GF_PlayerMessages[arg2][2][2])/4)),math.random(math.ceil(string.len(GF_PlayerMessages[arg2][2][2])/4))*-1),1,true)) or (GF_PlayerMessages[arg2][1][3] + 120 > time() and string.find(arg1,string.sub(GF_PlayerMessages[arg2][2][3],math.random(math.ceil(string.len(GF_PlayerMessages[arg2][2][3])/4)),math.random(math.ceil(string.len(GF_PlayerMessages[arg2][2][3])/4))*-1),1,true))))
+			if (strlen(arg1) > 30 and ((GF_PlayerMessages[arg2][1][1] + 120 > time() and strfind(arg1,strsub(GF_PlayerMessages[arg2][2][1],math.random(math.ceil(strlen(GF_PlayerMessages[arg2][2][1])/4)),math.random(math.ceil(strlen(GF_PlayerMessages[arg2][2][1])/4))*-1),1,true)) or (GF_PlayerMessages[arg2][1][2] + 120 > time() and strfind(arg1,strsub(GF_PlayerMessages[arg2][2][2],math.random(math.ceil(strlen(GF_PlayerMessages[arg2][2][2])/4)),math.random(math.ceil(strlen(GF_PlayerMessages[arg2][2][2])/4))*-1),1,true)) or (GF_PlayerMessages[arg2][1][3] + 120 > time() and strfind(arg1,strsub(GF_PlayerMessages[arg2][2][3],math.random(math.ceil(strlen(GF_PlayerMessages[arg2][2][3])/4)),math.random(math.ceil(strlen(GF_PlayerMessages[arg2][2][3])/4))*-1),1,true))))
 			or (not foundInGroup and (GF_PlayerMessages[arg2][1][1] + 120 > time() and arg1 == GF_PlayerMessages[arg2][2][1]) and (GF_PlayerMessages[arg2][1][2] + 120 > time() and arg1 == GF_PlayerMessages[arg2][2][2])) then		-- Found Spammer
-				if GF_SavedVariables.autoblacklist and not GF_BlackList[GF_RealmName][arg2] and string.len(arg1) > 120 and arg1 == GF_PlayerMessages[arg2][2][1] and arg1 == GF_PlayerMessages[arg2][2][2] and
+				if GF_SavedVariables.autoblacklist and not GF_BlackList[GF_RealmName][arg2] and strlen(arg1) > 120 and arg1 == GF_PlayerMessages[arg2][2][1] and arg1 == GF_PlayerMessages[arg2][2][2] and
 				((GF_SavedVariables.blacklisttrades and foundTrades > 2.9) or (GF_SavedVariables.blacklistguild and foundGuild > 2.9) or (GF_SavedVariables.blacklistchat and foundGuild < 3 and foundTrades < 3) or (GF_SavedVariables.blacklistforeign and languageName ~= "en")) then
 					if GF_WhoTable[GF_RealmName][arg2] and GF_WhoTable[GF_RealmName][arg2][4] + 86400 > time() then -- Data must be less than a day old to autoblacklist or block lowlevel
 						if GF_WhoTable[GF_RealmName][arg2][1] <= GF_SavedVariables.autoblacklistminlevel then																																						-- Blacklist if below level filter
@@ -2984,7 +2930,7 @@ function GF_CheckForSpam(arg1,arg2,foundInGroup)
 			table.remove(GF_PlayerMessages[arg2][1],4)
 			table.insert(GF_PlayerMessages[arg2][2],1,arg1)
 			table.remove(GF_PlayerMessages[arg2][2],4)
-			if string.len(arg1) > 40 and string.find(arg1,string.sub(arg1,1,20),21, true) then return 7 end -- Repeating text in the same message
+			if strlen(arg1) > 40 and strfind(arg1,strsub(arg1,1,20),21, true) then return 7 end -- Repeating text in the same message
 		end
 	end
 end
@@ -3034,9 +2980,9 @@ function GF_GetGroupInformation(arg1,arg2,sentTime,event) -- Searches messages f
 end
 function GF_SearchMessageForTextString(msg,textstring,entry)
 	for w in string.gfind(textstring, "([%w%s]+),") do
-		if string.find(msg, w) then return true end
+		if strfind(msg, w) then return true end
 		for i=1, getn(entry.flags) do
-			if entry.flags[i] == GF_GROUP_IDS[string.lower(gsub(w," ",""))] or entry.flags[i] == string.upper(gsub(w," ", "")) then return true end
+			if entry.flags[i] == GF_GROUP_IDS[strlower(gsub(w," ",""))] or entry.flags[i] == strupper(gsub(w," ", "")) then return true end
 		end
 	end
 	for i=1, getn(entry.flags) do
@@ -3055,7 +3001,7 @@ function GF_JoinWorld() -- Event-related
 	if GF_SavedVariables.joinworld then
 		local chanList = { GetChannelList() }
 		for i=1, getn(chanList) do
-			if string.lower(chanList[i]) == string.lower(GF_SavedVariables.groupchannelname) then return true end
+			if strlower(chanList[i]) == strlower(GF_SavedVariables.groupchannelname) then return true end
 		end
 		JoinChannelByName(GF_SavedVariables.groupchannelname)
 		ChatFrame_AddChannel(ChatFrame1, GF_SavedVariables.groupchannelname)
@@ -3239,7 +3185,7 @@ function GF_IsGuildieOrPartyMemberUsingAddon()
 end
 
 function GF_ApplyFiltersToGroupList() -- GroupsFrame functions
-	if GetMouseFocus() and GetMouseFocus():GetName() and (string.find(GetMouseFocus():GetName(), "GroupWhoButton") or string.find(GetMouseFocus():GetName(), "LFGInviteButton") or string.find(GetMouseFocus():GetName(), "LFMWhisperRequestInviteButton")) then return end
+	if GetMouseFocus() and GetMouseFocus():GetName() and (strfind(GetMouseFocus():GetName(), "GroupWhoButton") or strfind(GetMouseFocus():GetName(), "LFGInviteButton") or strfind(GetMouseFocus():GetName(), "LFMWhisperRequestInviteButton")) then return end
 	GF_FilteredResultsList = {}
 	for i=1, getn(GF_MessageList[GF_RealmName]) do
 		if GF_MessageList[GF_RealmName][i] then
@@ -3322,7 +3268,7 @@ function GF_UpdateResults()
 	end
 end
 function GF_EntryMatchesGroupFilterCriteria(entry)
-	if ((not GF_SearchButtonHasValues() and (not GF_PerCharVariables.autofilter or (entry.dlevel and entry.dlevel >= UnitLevel("player")-GF_PerCharVariables.autofilterlevelvar and entry.dlevel <= UnitLevel("player")+GF_PerCharVariables.autofilterlevelvar))) or ((GF_PerCharVariables.searchtext ~= "" or GF_SearchButtonHasValues()) and GF_SearchMessageForTextString(string.lower(entry.message).." ",string.lower(GF_PerCharVariables.searchtext)..",",entry))) and ((GF_SavedVariables.showlfg and entry.lfg) or (GF_SavedVariables.showlfm and not entry.lfg)) and ((not entry.hc and GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][5]) or (entry.hc and GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][6]))
+	if ((not GF_SearchButtonHasValues() and (not GF_PerCharVariables.autofilter or (entry.dlevel and entry.dlevel >= UnitLevel("player")-GF_PerCharVariables.autofilterlevelvar and entry.dlevel <= UnitLevel("player")+GF_PerCharVariables.autofilterlevelvar))) or ((GF_PerCharVariables.searchtext ~= "" or GF_SearchButtonHasValues()) and GF_SearchMessageForTextString(strlower(entry.message).." ",strlower(GF_PerCharVariables.searchtext)..",",entry))) and ((GF_SavedVariables.showlfg and entry.lfg) or (GF_SavedVariables.showlfm and not entry.lfg)) and ((not entry.hc and GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][5]) or (entry.hc and GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][6]))
 	and ((GF_SavedVariables.showdungeons and entry.type == "D") or (GF_SavedVariables.showraids and entry.type == "R") or (GF_SavedVariables.showquests and entry.type == "Q") or (GF_SavedVariables.showother and entry.type == "N")) then
 		return true
 	end
@@ -3512,7 +3458,7 @@ function GF_LFMWhisperRequestInviteButton(frame,id)
 	if GF_PerCharVariables.lfgtank then specString = specString..GF_TANK.."/" end
 	if GF_PerCharVariables.lfgheal then specString = specString..GF_HEALER.."/" end
 	if GF_PerCharVariables.lfgdps then specString = specString..GF_DPS.."/" end
-	specString = string.sub(specString,1,-2)..gsub(string.sub(specString,-1,-1),"[/ ]","").." "..UnitClass("player").."] "
+	specString = strsub(specString,1,-2)..gsub(strsub(specString,-1,-1),"[/ ]","").." "..UnitClass("player").."] "
 	SendChatMessage(specString..GF_INVITE_PLEASE,"WHISPER",nil,GF_FilteredResultsList[GF_ResultsListOffset+id].op)
 	GF_RequestInviteTime[GF_FilteredResultsList[GF_ResultsListOffset+id].op] = time() + 120
 	getglobal(frame:GetName().."LFMWhisperRequestInviteButton"):Hide()
@@ -3542,7 +3488,7 @@ function GF_WhisperHistoryButtonPressed(id,override,nolog) -- Whisper/Guild Hist
 	end
 end
 function GF_WhisperReceivedAddToWhisperHistoryList(arg1,name,event)
-	arg1 = "|cff"..GF_ClassColors[({UnitClass("player")})[2]].."|Hplayer:"..UnitName("player").."|h".."["..date("%m/%d").."]|h|r ["..date("%H:%M").."] "..EventIDAlias[event]..GF_MakeBasicChatString(string.sub(GF_ChatReplaceHplayer(gsub(gsub(gsub(gsub(" "..arg1.." "," (www%d-)%.([_A-Za-z0-9-]+)%.(%S+)%s?", " |cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r")," (%a+)://(%S+)", " |cffccccff|Hurl:%1://%2|h[%1://%2]|h|r")," (%a+)%.(%a+)/(%S+)", " |cffccccff|Hurl:%1.%2/%3|h[%1.%2/%3]|h|r")," ([_A-Za-z0-9-]+)%.([_A-Za-z0-9-]+)%.(%S+)", " |cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r")),2),arg2)
+	arg1 = "|cff"..GF_ClassColors[({UnitClass("player")})[2]].."|Hplayer:"..UnitName("player").."|h".."["..date("%m/%d").."]|h|r ["..date("%H:%M").."] "..EventIDAlias[event]..GF_MakeBasicChatString(strsub(GF_ChatReplaceHplayer(gsub(gsub(gsub(gsub(" "..arg1.." "," (www%d-)%.([_A-Za-z0-9-]+)%.(%S+)%s?", " |cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r")," (%a+)://(%S+)", " |cffccccff|Hurl:%1://%2|h[%1://%2]|h|r")," (%a+)%.(%a+)/(%S+)", " |cffccccff|Hurl:%1.%2/%3|h[%1.%2/%3]|h|r")," ([_A-Za-z0-9-]+)%.([_A-Za-z0-9-]+)%.(%S+)", " |cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r")),2),arg2)
 	if not GF_WhisperLogData[GF_RealmName][name] then GF_WhisperLogData[GF_RealmName][name] = {} if GF_Friends[name] then GF_WhisperLogData[GF_RealmName][name].priority = true end end
 	if event == "GUILD" or event == "OFFICER" then
 		table.insert(GF_WhisperLogData[GF_RealmName]["Guild"],1,{arg1,event})
@@ -3558,7 +3504,7 @@ function GF_WhisperReceivedAddToWhisperHistoryList(arg1,name,event)
 	if getn(GF_LogHistory[GF_RealmName]) > 500 then table.remove(GF_LogHistory[GF_RealmName],501) end
 	if GF_WhisperLogCurrentButtonID < 2 or name == getglobal("GF_WhisperHistoryButton"..GF_WhisperLogCurrentButtonID):GetText() then
 		if GF_ConvertMessagesToLinks then
-			local _,_,startString,endString = string.find(arg1, "(.-%].-|Hplayer.-|h|r:? )(.*)")
+			local _,_,startString,endString = strfind(arg1, "(.-%].-|Hplayer.-|h|r:? )(.*)")
 			if startString then
 				endString = gsub(gsub(gsub(gsub(endString, "|[cC]%x+|%w+:%w+:[%w:]+|[h]", ""), "|[cC]%x+%p+%w+:(.-)|h.-|h|r", "%1"), "|[cC]%x+", ""), "|[hHrR]?", "")
 				GF_Log:AddMessage(startString.."|cffccccff|Hurl:"..endString.."|h"..endString.."|h|r", GF_TextColors[event][1], GF_TextColors[event][2], GF_TextColors[event][3])
@@ -3618,7 +3564,7 @@ function GF_WhisperHistoryDisplayLog(name)
 	GF_Log:SetMaxLines(128)
 	if GF_ConvertMessagesToLinks then
 		for i=getn(GF_WhisperLogData[GF_RealmName][name]), 1, -1 do
-			local _,_,startString,endString = string.find(GF_WhisperLogData[GF_RealmName][name][i][1], "(.-%].-|Hplayer.-|h|r:? )(.*)")
+			local _,_,startString,endString = strfind(GF_WhisperLogData[GF_RealmName][name][i][1], "(.-%].-|Hplayer.-|h|r:? )(.*)")
 			if startString then
 				endString = gsub(gsub(gsub(gsub(endString, "|[cC]%x+|%w+:%w+:[%w:]+|[h]", ""), "|[cC]%x+%p+%w+:(.-)|h.-|h|r", "%1"), "|[cC]%x+", ""), "|[hHrR]?", "")
 				GF_Log:AddMessage(startString.."|cffccccff|Hurl:"..endString.."|h"..endString.."|h|r", GF_TextColors[GF_WhisperLogData[GF_RealmName][name][i][2]][1], GF_TextColors[GF_WhisperLogData[GF_RealmName][name][i][2]][2], GF_TextColors[GF_WhisperLogData[GF_RealmName][name][i][2]][3])
@@ -3675,9 +3621,9 @@ function GF_EditBlackListItem(name)
 	GF_BlackListItemEditFrameEditBox:SetFocus()
 end
 function GF_BlacklistAddPlayerDialogOKButton_OnCLick()
-	local name = string.upper(string.sub(GF_AddPlayerFrameEditBox:GetText(),1,1))..string.lower(string.sub(GF_AddPlayerFrameEditBox:GetText(),2))
+	local name = strupper(strsub(GF_AddPlayerFrameEditBox:GetText(),1,1))..strlower(strsub(GF_AddPlayerFrameEditBox:GetText(),2))
 	if name ~= "" then
-		if not GF_BlackList[GF_RealmName][name] and not string.find(name, "[%d%p%c%s]") then
+		if not GF_BlackList[GF_RealmName][name] and not strfind(name, "[%d%p%c%s]") then
 			table.insert(GF_BlackList[GF_RealmName],1,{ name, GF_DEFAULT_PLAYER_NOTE })
 			GF_BlackList[GF_RealmName][name] = true
 		else
@@ -3781,7 +3727,7 @@ function GF_GetWhoSendWhisperToAvailablePlayer()
 		DEFAULT_CHAT_FRAME:AddMessage("GF: "..GF_NO_PLAYERS_TO_WHISPER, 1, 1, 0.5)
 	elseif whispermessage == "" then
 		DEFAULT_CHAT_FRAME:AddMessage("GF: "..GF_NO_WHISPER_TEXT, 1, 1, 0.5)
-	elseif string.len(whispermessage) < 5 then
+	elseif strlen(whispermessage) < 5 then
 		DEFAULT_CHAT_FRAME:AddMessage("GF: "..GF_WHISPER_TEXT_TOO_SHORT, 1, 1, 0.5)
 	else
 		SendChatMessage(whispermessage,"WHISPER",nil,GF_GetWhoName)
@@ -3897,7 +3843,7 @@ function GF_FixLFGStrings(groupSizeOnly) -- LFG Group Maker Functions
 	local endOfFilter = 0
 	GF_PerCharVariables.searchlfgtext = gsub(gsub(gsub(GF_PerCharVariables.searchlfgtext, "[Ll]+[Ff]+%d?%d?[Mm]+", "LFM"), "%(HC%)", ""),"%s%s+"," ")
 	for i=1,getn(GF_BUTTONS_LIST.LFGLFM) do
-		_,foundEndOfText = string.find(GF_PerCharVariables.searchlfgtext, GF_BUTTONS_LIST.LFGLFM[i][1])
+		_,foundEndOfText = strfind(GF_PerCharVariables.searchlfgtext, GF_BUTTONS_LIST.LFGLFM[i][1])
 		if foundEndOfText then
 			foundLF = i
 			if foundEndOfText > endOfFilter then endOfFilter = foundEndOfText end
@@ -3905,14 +3851,14 @@ function GF_FixLFGStrings(groupSizeOnly) -- LFG Group Maker Functions
 		end
 	end
 	for i=1,getn(GF_BUTTONS_LIST.LFGRole) do
-		_,foundEndOfText = string.find(GF_PerCharVariables.searchlfgtext, GF_BUTTONS_LIST.LFGRole[i][1])
+		_,foundEndOfText = strfind(GF_PerCharVariables.searchlfgtext, GF_BUTTONS_LIST.LFGRole[i][1])
 		if foundEndOfText then
 			if foundEndOfText > endOfFilter then endOfFilter = foundEndOfText end
 			table.insert(foundRoles,GF_BUTTONS_LIST.LFGRole[i][1])
 		end
 	end
 	for i=1,getn(GF_BUTTONS_LIST.LFGDungeon) do
-		_,foundEndOfText = string.find(GF_PerCharVariables.searchlfgtext, GF_BUTTONS_LIST.LFGDungeon[i][1])
+		_,foundEndOfText = strfind(GF_PerCharVariables.searchlfgtext, GF_BUTTONS_LIST.LFGDungeon[i][1])
 		if foundEndOfText then
 			if foundEndOfText > endOfFilter then endOfFilter = foundEndOfText end
 			if tonumber(maxGroupSize) > GF_BUTTONS_LIST.LFGDungeon[i][5] then maxGroupSize = GF_BUTTONS_LIST.LFGDungeon[i][5] end
@@ -3920,7 +3866,7 @@ function GF_FixLFGStrings(groupSizeOnly) -- LFG Group Maker Functions
 		end
 	end
 	for i=1,getn(GF_BUTTONS_LIST.LFGRaid) do
-		_,foundEndOfText = string.find(GF_PerCharVariables.searchlfgtext, GF_BUTTONS_LIST.LFGRaid[i][1])
+		_,foundEndOfText = strfind(GF_PerCharVariables.searchlfgtext, GF_BUTTONS_LIST.LFGRaid[i][1])
 		if foundEndOfText then
 			if foundEndOfText > endOfFilter then endOfFilter = foundEndOfText end
 			if tonumber(maxGroupSize) > GF_BUTTONS_LIST.LFGRaid[i][5] then maxGroupSize = GF_BUTTONS_LIST.LFGRaid[i][5] end
@@ -3975,7 +3921,7 @@ function GF_FixLFGStrings(groupSizeOnly) -- LFG Group Maker Functions
 			end
 			if not GF_PerCharVariables.disablehardcore and GF_Hardcore and GF_PerCharVariables.hardcore ~= 3 and strlen(newText) > 1 then newText = newText.." (HC)" end
 		end
-		GF_PerCharVariables.searchlfgtext = gsub(gsub(gsub(gsub(gsub(gsub(gsub(newText.." "..string.sub(GF_PerCharVariables.searchlfgtext, endOfFilter+1), "^[/ ]+", ""), "[/ ]+$", ""), "^[/ ]+", ""),"//+", ""), "/%s+"," "),"%s+/", " "),"%s%s+", " ")
+		GF_PerCharVariables.searchlfgtext = gsub(gsub(gsub(gsub(gsub(gsub(gsub(newText.." "..strsub(GF_PerCharVariables.searchlfgtext, endOfFilter+1), "^[/ ]+", ""), "[/ ]+$", ""), "^[/ ]+", ""),"//+", ""), "/%s+"," "),"%s+/", " "),"%s%s+", " ")
 		GF_LFGDescriptionEditBox:SetText(GF_PerCharVariables.searchlfgtext)
 	end
 	if GF_PerCharVariables.searchlfgtext ~= "" then GF_LFGDescriptionClearButton:Show() else GF_LFGDescriptionClearButton:Hide() end
@@ -4012,7 +3958,7 @@ function GF_GetDropDownButtons(fName,maxSize,showAll,MatchLFG) -- Create dropdow
 		button:ClearAllPoints()
 		button:Show()
 		if MatchLFG then
-			if (fName == "SearchList" and GF_PerCharVariables.searchbuttonstext[buttons[i][4]]) or (fName ~= "SearchList" and string.find(GF_PerCharVariables.searchlfgtext, buttons[i][1])) then
+			if (fName == "SearchList" and GF_PerCharVariables.searchbuttonstext[buttons[i][4]]) or (fName ~= "SearchList" and strfind(GF_PerCharVariables.searchlfgtext, buttons[i][1])) then
 				button:SetChecked(true)
 			else
 				button:SetChecked(false)
@@ -4061,11 +4007,11 @@ function GF_LFGHardCoreDropdownShow()
 end
 function GF_LFGLFMDropdownShow()
 	GF_GetDropDownButtons("LFGLFM",6,true)
-	if string.find(" "..string.lower(GF_PerCharVariables.searchlfgtext).." ", " [lL][fF]%d?%d?[mM] ") then
+	if strfind(" "..strlower(GF_PerCharVariables.searchlfgtext).." ", " [lL][fF]%d?%d?[mM] ") then
 		GF_LFGLFM1:SetChecked(true)
 	else
 		for i=2, getn(GF_BUTTONS_LIST["LFGLFM"]) do
-			if string.find(string.lower(GF_PerCharVariables.searchlfgtext), string.lower(GF_BUTTONS_LIST["LFGLFM"][i][1])) then getglobal("GF_LFGLFM"..i):SetChecked(true) break end
+			if strfind(strlower(GF_PerCharVariables.searchlfgtext), strlower(GF_BUTTONS_LIST["LFGLFM"][i][1])) then getglobal("GF_LFGLFM"..i):SetChecked(true) break end
 		end
 	end
 end
@@ -4146,15 +4092,15 @@ function GF_LFGLFMAddRemove(entryName,entryID,add)
 	GF_PerCharVariables.searchlfgtext = gsub(GF_PerCharVariables.searchlfgtext, "^[lL][fF]%d+[mM]", "LFM")
 	if add then
 		for i=1, getn(GF_BUTTONS_LIST["LFGLFM"]) do -- Remove LFM/LFG and Roles then add new LFM/LFG
-			if entryID == 1 and not string.find(GF_PerCharVariables.searchlfgtext, "^LFM") or (entryID > 1 and entryID < 5) then -- If setting to LFM and I'm LFG then remove roles
+			if entryID == 1 and not strfind(GF_PerCharVariables.searchlfgtext, "^LFM") or (entryID > 1 and entryID < 5) then -- If setting to LFM and I'm LFG then remove roles
 				for k=1,3 do
-					local lfs,lfe = string.find(GF_PerCharVariables.searchlfgtext, " need "..GF_BUTTONS_LIST.LFGRole[k][1])
+					local lfs,lfe = strfind(GF_PerCharVariables.searchlfgtext, " need "..GF_BUTTONS_LIST.LFGRole[k][1])
 					if lfs then
-						GF_PerCharVariables.searchlfgtext = string.sub(GF_PerCharVariables.searchlfgtext,1,lfs-1)..string.sub(GF_PerCharVariables.searchlfgtext,lfe+1)
+						GF_PerCharVariables.searchlfgtext = strsub(GF_PerCharVariables.searchlfgtext,1,lfs-1)..strsub(GF_PerCharVariables.searchlfgtext,lfe+1)
 					else
-						lfs,lfe = string.find(GF_PerCharVariables.searchlfgtext, GF_BUTTONS_LIST.LFGRole[k][1])
+						lfs,lfe = strfind(GF_PerCharVariables.searchlfgtext, GF_BUTTONS_LIST.LFGRole[k][1])
 						if lfs then
-							GF_PerCharVariables.searchlfgtext = string.sub(GF_PerCharVariables.searchlfgtext,1,lfs-1)..string.sub(GF_PerCharVariables.searchlfgtext,lfe+1)
+							GF_PerCharVariables.searchlfgtext = strsub(GF_PerCharVariables.searchlfgtext,1,lfs-1)..strsub(GF_PerCharVariables.searchlfgtext,lfe+1)
 						end
 					end
 				end
@@ -4212,12 +4158,12 @@ function print(msg) -- I added this only temporarily so I could work on the addo
 end
 function GetModifiedQuestName(entryname)
 	local wordTable = {}
-	local arg1 = " "..string.lower(gsub(gsub(entryname,"[\"#\$\%&\*,\.@\\\^_`~|]"," "),"'","")).." "
+	local arg1 = " "..strlower(gsub(gsub(entryname,"[\"#\$\%&\*,\.@\\\^_`~|]"," "),"'","")).." "
 	local wordString,lfs,lfe,tempVar
 
-	while true do lfs,lfe,wordString = string.find(arg1," ([lk]f?%s?%d+m)[%p%s]",lfs) if wordString then arg1 = string.sub(arg1,1,lfs).."lfm "..string.sub(arg1,lfs+string.len(wordString)+1) lfs = lfs + 4 else break end end
+	while true do lfs,lfe,wordString = strfind(arg1," ([lk]f?%s?%d+m)[%p%s]",lfs) if wordString then arg1 = strsub(arg1,1,lfs).."lfm "..strsub(arg1,lfs+strlen(wordString)+1) lfs = lfs + 4 else break end end
 	lfs = 1 -- To detect space/number+/punctuation/number+/space for groups
-	while true do lfs,lfe,wordString,tempString = string.find(arg1,"[%p%s](%d+([=/])%d+) ",lfs) if wordString then if tempString == "=" then lfs = lfe else arg1 = string.sub(arg1,1,lfs).."group"..string.sub(arg1,lfe) lfs = lfs + 6 end else break end end
+	while true do lfs,lfe,wordString,tempString = strfind(arg1,"[%p%s](%d+([=/])%d+) ",lfs) if wordString then if tempString == "=" then lfs = lfe else arg1 = strsub(arg1,1,lfs).."group"..strsub(arg1,lfe) lfs = lfs + 6 end else break end end
 
 	tempVal = 1
 	while true do -- Block letter repeats
@@ -4253,57 +4199,57 @@ function GetModifiedQuestName(entryname)
 		tempVal = tempVal + 1
 	end
 	arg1 = table.concat(wordTable)
-	if string.sub(arg1,-1) ~= " " then arg1 = arg1.." " end
+	if strsub(arg1,-1) ~= " " then arg1 = arg1.." " end
 	wordTable = {}
 
 	lfs = 1 -- To detect "faces"(eg ":d",":p")
-	while true do lfs,lfe,wordString = string.find(arg1, " (%p%a+)[%[%s]",lfs) if wordString then if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = string.sub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..string.sub(arg1,lfe) end lfs = lfs + string.len(wordString) + 1 else break end end
+	while true do lfs,lfe,wordString = strfind(arg1, " (%p%a+)[%[%s]",lfs) if wordString then if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = strsub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..strsub(arg1,lfe) end lfs = lfs + strlen(wordString) + 1 else break end end
 	lfs = 2 -- To detect word/word with no space(eg "lfgscholo" = lfg scholo)
 	while true do
-		lfs,lfe,wordString = string.find(arg1,"(%a%a%a%a+)",lfs)
+		lfs,lfe,wordString = strfind(arg1,"(%a%a%a%a+)",lfs)
 		if wordString then
-			tempVal = string.len(wordString) - 1
+			tempVal = strlen(wordString) - 1
 			if tempVal > 11 then tempVal = 11 end
 			for i=tempVal, 3, -1 do
-				if GF_WORD_WORD_REPLACE[string.sub(wordString,1,i)] then 
+				if GF_WORD_WORD_REPLACE[strsub(wordString,1,i)] then 
 					if GF_WORD_SPECIAL_EXCEPTIONS[wordString] then
-						arg1 = string.sub(arg1,1,lfs-1)..wordString.." "..string.sub(arg1,lfe+1)
-						lfs = lfs + string.len(wordString)
+						arg1 = strsub(arg1,1,lfs-1)..wordString.." "..strsub(arg1,lfe+1)
+						lfs = lfs + strlen(wordString)
 					elseif not GF_WORD_WORD_REPLACE[wordString] then
-						arg1 = string.sub(arg1,1,lfs-1)..string.sub(wordString,1,i).." "..string.sub(arg1,lfs+i)
-						lfs = lfs + (i-string.len(string.sub(wordString,1,i))) + string.len(wordString) + 1
+						arg1 = strsub(arg1,1,lfs-1)..strsub(wordString,1,i).." "..strsub(arg1,lfs+i)
+						lfs = lfs + (i-strlen(strsub(wordString,1,i))) + strlen(wordString) + 1
 					end
 					break
-				elseif GF_WORD_WORD_REPLACE[string.sub(wordString,-i)] then
+				elseif GF_WORD_WORD_REPLACE[strsub(wordString,-i)] then
 					if GF_WORD_SPECIAL_EXCEPTIONS[wordString] then
-						arg1 = string.sub(arg1,1,lfs-1).." "..wordString..string.sub(arg1,lfe+1)
-						lfs = lfs + string.len(wordString)
+						arg1 = strsub(arg1,1,lfs-1).." "..wordString..strsub(arg1,lfe+1)
+						lfs = lfs + strlen(wordString)
 					elseif not GF_WORD_WORD_REPLACE[wordString] then
-						arg1 = string.sub(arg1,1,lfe-i).." "..string.sub(wordString,-i)..string.sub(arg1,lfe+1)
-						lfs = lfs + (i-string.len(string.sub(wordString,-i))) + string.len(wordString) + 1
+						arg1 = strsub(arg1,1,lfe-i).." "..strsub(wordString,-i)..strsub(arg1,lfe+1)
+						lfs = lfs + (i-strlen(strsub(wordString,-i))) + strlen(wordString) + 1
 					end
 					break
 				end
 			end
 			if lfs < lfe then
-				if GF_WORD_WORD_REPLACE[string.sub(wordString,1,2)] then
-					arg1 = string.sub(arg1,1,lfs-1)..string.sub(wordString,1,2).." "..string.sub(arg1,lfs+2)
-					lfs = lfs + string.len(wordString) + 1
-				elseif string.sub(wordString,-2) == "lf" then
-					wordString = string.sub(wordString,1,-3)
+				if GF_WORD_WORD_REPLACE[strsub(wordString,1,2)] then
+					arg1 = strsub(arg1,1,lfs-1)..strsub(wordString,1,2).." "..strsub(arg1,lfs+2)
+					lfs = lfs + strlen(wordString) + 1
+				elseif strsub(wordString,-2) == "lf" then
+					wordString = strsub(wordString,1,-3)
 					if GF_WORD_FIX_SINGLE_WORD[wordString] then wordString = GF_WORD_FIX_SINGLE_WORD[wordString]
 					elseif GF_WORD_FIX_BEFORE_QUEST[wordString] then wordString = GF_WORD_FIX_BEFORE_QUEST[wordString] end
 					if GF_WORD_QUEST[wordString] then
-						arg1 = string.sub(arg1,1,lfs-1)..wordString.." lf"..string.sub(arg1,lfe+1)
+						arg1 = strsub(arg1,1,lfs-1)..wordString.." lf"..strsub(arg1,lfe+1)
 					else
 						if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end
 						if GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString] or GF_WORD_GROUP_BYPASS[wordString] then
-							arg1 = string.sub(arg1,1,lfs-1)..wordString.." lf"..string.sub(arg1,lfe+1)
+							arg1 = strsub(arg1,1,lfs-1)..wordString.." lf"..strsub(arg1,lfe+1)
 						end
 					end
-					lfs = lfs + string.len(wordString) + 3
+					lfs = lfs + strlen(wordString) + 3
 				else
-					lfs = lfs + string.len(wordString)
+					lfs = lfs + strlen(wordString)
 				end
 			end
 		else
@@ -4312,25 +4258,25 @@ function GetModifiedQuestName(entryname)
 	end
 
 	lfs = 2 -- To fix single words
-	while true do lfs,lfe,wordString,tempString = string.find(arg1, "(.-)[%s%p%d]+",lfs) if not wordString then break elseif GF_WORD_FIX_SINGLE_WORD[wordString] then arg1 = string.sub(arg1,1,lfs-1)..GF_WORD_FIX_SINGLE_WORD[wordString]..tempString..string.sub(arg1,lfe) lfs = lfs + string.len(GF_WORD_FIX_SINGLE_WORD[wordString]) else lfs = lfe+1 end end
+	while true do lfs,lfe,wordString,tempString = strfind(arg1, "(.-)[%s%p%d]+",lfs) if not wordString then break elseif GF_WORD_FIX_SINGLE_WORD[wordString] then arg1 = strsub(arg1,1,lfs-1)..GF_WORD_FIX_SINGLE_WORD[wordString]..tempString..strsub(arg1,lfe) lfs = lfs + strlen(GF_WORD_FIX_SINGLE_WORD[wordString]) else lfs = lfe+1 end end
 	lfs = 1 -- To detect space/letter/number/letter/space combinations(eg " g2g " = gtg)
-	while true do lfs,lfe,wordString = string.find(arg1," (w?%a%s?%d%s?%ab?)[%p%s]",lfs) if wordString then wordString = gsub(wordString," ","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = string.sub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..string.sub(arg1,lfe) end lfs = lfs + string.len(wordString) + 1 else break end end
+	while true do lfs,lfe,wordString = strfind(arg1," (w?%a%s?%d%s?%ab?)[%p%s]",lfs) if wordString then wordString = gsub(wordString," ","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = strsub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..strsub(arg1,lfe) end lfs = lfs + strlen(wordString) + 1 else break end end
 	lfs = 1 -- To detect space/word/number+/space combinations(eg " k10" = lowerkarazhan)
-	while true do lfs,lfe,wordString = string.find(arg1," (%a+%s?[:%-]?%s?%d+)s?[%p%s]",lfs) if wordString then wordString = gsub(wordString,"[%s:%-]","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = string.sub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..string.sub(arg1,lfe) end lfs = lfs + string.len(wordString) + 1 else break end end
+	while true do lfs,lfe,wordString = strfind(arg1," (%a+%s?[:%-]?%s?%d+)s?[%p%s]",lfs) if wordString then wordString = gsub(wordString,"[%s:%-]","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = strsub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..strsub(arg1,lfe) end lfs = lfs + strlen(wordString) + 1 else break end end
 	lfs = 1 -- To detect words with explanation points "!" (eg "hungry!","lost!")... To help identify quests with short names.
-	while true do lfs,lfe,wordString = string.find(arg1, " (%a+%s?!) ",lfs) if wordString then wordString = gsub(wordString," ","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = string.sub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..string.sub(arg1,lfe) end lfs = lfs + string.len(wordString) + 1 else break end end
+	while true do lfs,lfe,wordString = strfind(arg1, " (%a+%s?!) ",lfs) if wordString then wordString = gsub(wordString," ","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = strsub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..strsub(arg1,lfe) end lfs = lfs + strlen(wordString) + 1 else break end end
 	lfs = 1 -- To detect space/number+/word/space combinations(eg " 10th " = tenth, " 5g " = 5gold)
 	while true do
-		lfs,lfe,wordString,tempString = string.find(arg1,"[%p%s](%d+%s?(%a+))[%p%s]",lfs)
+		lfs,lfe,wordString,tempString = strfind(arg1,"[%p%s](%d+%s?(%a+))[%p%s]",lfs)
 		if wordString then
 			wordString = gsub(wordString," ","")
-			if GF_WORD_FIX[tempString] then wordString = string.sub(wordString,1,string.len(tempString)*-1-1)..GF_WORD_FIX[tempString] end
+			if GF_WORD_FIX[tempString] then wordString = strsub(wordString,1,strlen(tempString)*-1-1)..GF_WORD_FIX[tempString] end
 			if GF_WORD_SPECIAL_COMBINATION[wordString] then
-				arg1 = string.sub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..string.sub(arg1,lfe)
-				lfs = lfs + string.len(GF_WORD_SPECIAL_COMBINATION[wordString])
+				arg1 = strsub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..strsub(arg1,lfe)
+				lfs = lfs + strlen(GF_WORD_SPECIAL_COMBINATION[wordString])
 			elseif GF_WORD_GOLD[tempString] then
-				arg1 = string.sub(arg1,1,lfs)..GF_WORD_GOLD[tempString]..string.sub(arg1,lfe)
-				lfs = lfs + string.len(GF_WORD_GOLD[tempString])
+				arg1 = strsub(arg1,1,lfs)..GF_WORD_GOLD[tempString]..strsub(arg1,lfe)
+				lfs = lfs + strlen(GF_WORD_GOLD[tempString])
 			else
 				lfs = lfe
 			end
@@ -4339,11 +4285,11 @@ function GetModifiedQuestName(entryname)
 		end
 	end
 	lfs = 2 -- To detect words between and next to "[] or ()" (eg "(human only)", "[item] for free").
-	while true do lfs,lfe,wordString = string.find(arg1, "[<%(%[](.-)[%)%]>]",lfs)
+	while true do lfs,lfe,wordString = strfind(arg1, "[<%(%[](.-)[%)%]>]",lfs)
 		if wordString then
 			if strbyte(arg1,lfs) == 91 and strbyte(arg1,lfe) == 93 then -- "[]"
 				if strbyte(arg1,lfs-1) == 90 then -- From Link
-					for words in string.gfind(wordString, "(%a+)") do if GF_WORD_FIX_ITEM_NAME[words] then arg1 = string.sub(arg1,1,lfs)..GF_WORD_FIX_ITEM_NAME[words]..string.sub(arg1,lfe) break end end
+					for words in string.gfind(wordString, "(%a+)") do if GF_WORD_FIX_ITEM_NAME[words] then arg1 = strsub(arg1,1,lfs)..GF_WORD_FIX_ITEM_NAME[words]..strsub(arg1,lfe) break end end
 				end
 			end
 			lfs = lfs + 1
@@ -4355,13 +4301,13 @@ function GetModifiedQuestName(entryname)
 -- Quest Search
 	lfs = 2 -- Add all words to the wordTable
 	while true do
-		lfs,lfe,wordString = string.find(arg1, "(.-)[%s%p%d]+",lfs)
+		lfs,lfe,wordString = strfind(arg1, "(.-)[%s%p%d]+",lfs)
 		if wordString then
 			if not GF_WORD_BYPASS_TRIGGER["en"][wordString] then
 				table.insert(wordTable, wordString)
 				lfs = lfe+1
 			else
-				_,tempVal,tempString = string.find(arg1,"(%a+)",lfe+1)
+				_,tempVal,tempString = strfind(arg1,"(%a+)",lfe+1)
 				if GF_WORD_GROUP_BYPASS[wordString] then
 					if GF_WORD_GROUP_BYPASS[tempString] then
 						table.insert(wordTable, wordString) table.insert(wordTable, GF_WORD_GROUP_BYPASS[tempString])
@@ -4665,279 +4611,4 @@ local questinfo = {}
 -- Ex: Westfall stew... Four objectives(Items). Prioritize items in the same or closest zone... The algorithm would end up with like 4+ "clusters" for each item. Display the highest density(the highest count). Would only show Westfall.
 -- EX: Rhapsody's Kalimdor Kocktail... Three objectives(Items). Prioritize items in the same or closest zone(only one zone per item)... Would need a database for zone coords/continent.
 
-end
-function FindForeignLetters()
-	local lfs,lfe,tempVal
-	local wordTable = {}
-	GF_SavedVariables.questconversion = {}
-	local counter,cnt = 0,0
-	for entryname,wtable in GF_LANGUAGE_CONVERT do
-		tempVal = 1
-		while true do
-			lfs = strbyte(entryname,tempVal)
-			lfe = strbyte(entryname,tempVal+1)
-			if not lfe then break end
-			if lfs > 122 then
-				if not (GF_WORD_ACCENT_ASCII_FIX[lfs] and GF_WORD_ACCENT_ASCII_FIX[lfs][lfe]) then
-					print(tempVal)
-					print(lfs)
-					print(lfe)
-				end
-				tempVal = tempVal + 1
-			end
-			tempVal = tempVal + 1
-		end
-	end
-	for entryname,wtable in GF_QUEST_CONVERT do
-		tempVal = 1
-		while true do
-			lfs = strbyte(entryname,tempVal)
-			lfe = strbyte(entryname,tempVal+1)
-			if not lfe then break end
-			if lfs > 122 then
-				if lfs >= 194 and lfs <= 197 or lfs >= 208 and lfs <= 210 then
-					if not (GF_WORD_ACCENT_ASCII_FIX[lfs] and GF_WORD_ACCENT_ASCII_FIX[lfs][lfe]) then
-						print(entryname)
-						print(tempVal)
-						print(lfs)
-						print(lfe)
-						GF_SavedVariables.questconversion[entryname] = { wtable[1],wtable[2] }
-						counter = counter + 1
-						break
-					end
-					tempVal = tempVal + 1
-				end
-			end
-			tempVal = tempVal + 1
-		end
-		if counter == 1 then return end
-		cnt = cnt + 1
-	end
-	print(cnt)
-end
-function FindForeignLettersDouble()
-	local lfs,lfe,tempVal
-	local wordTable = {}
-	GF_SavedVariables.questconversion = {}
-	for languageID,wtable in GF_LANGUAGE_CONVERT do
-		for entryname,word in wtable do
-			tempVal = 1
-			while true do
-				lfs = strbyte(entryname,tempVal)
-				lfe = strbyte(entryname,tempVal+1)
-				if not lfe then break end
-				if lfs > 122 then
-					if lfs >= 194 and lfs <= 197 or lfs >= 208 and lfs <= 210 then
-						if not (GF_WORD_ACCENT_ASCII_FIX[lfs] and GF_WORD_ACCENT_ASCII_FIX[lfs][lfe]) then
-							GF_SavedVariables.questconversion[entryname] = { word, lfs, lfe, strchar(lfs)..strchar(lfe)}
-						end
-						tempVal = tempVal + 1
-					end
-				end
-				tempVal = tempVal + 1
-			end
-		end
-	end
-end
-function ConvertForeignWords() -- /script ConvertForeignWords()
--- remove if word is too short, remove punctuation, convert letters
-
--- First database = add single words 3 characters or longer with the language family only(word = language)... remove any words that are the same across languages
--- Second database = Broken down by language family... Replace word with word(word = word).. second database should include all words and store them within each language's family
--- Run first datase on single-word after letter correction... Then immediately run translation. If "Translate" then add Arg1 to database and show the database Arg1 instead of normal Arg1(chat/log/groupsframe)
--- The translation should do word replacement backwards(longest(4-word) to shortest(1-word)). Then it removes anything in the GF_WORD_BYPASS_TRIGGER based on the language family. Need to add more phrases.
--- Error correction needs to eliminate all double-letter repeating(including normal letters)
--- Two options, Translate and Show Translated... Translate will translate the message and show T in front of it in groupsframe, logsframe, and normal chat.. Show Translate will show/hide translated group messages.
-
-	local lfs,lfe,tempVal,wordString
-	local wordTable = {}
-	GF_SavedVariables.questconversion = { LanguageZZZ = {}, WordZZZ = {} }
-	local tempTable = {}
-	for entryname,wtable in GF_QUEST_CONVERT do
-		tempVal = 1
-		wordString = gsub(gsub(entryname,"^%p+",""),"'","")
-
-		wordString = wordString.." "
-		while true do
-			lfs = strbyte(wordString,tempVal)
-			lfe = strbyte(wordString,tempVal+1)
-			if not lfe then break end
-
-			if lfs >= 194 and lfs <= 210 and GF_WORD_ACCENT_ASCII_FIX[lfs] and GF_WORD_ACCENT_ASCII_FIX[lfs][lfe] then
-				if lfs == strbyte(wordString,tempVal+2) and lfe == strbyte(wordString,tempVal+3) then
-					table.insert(wordTable,GF_WORD_ACCENT_ASCII_FIX[lfs][lfe]) tempVal=tempVal+1 for j=1,250,2 do if lfs ~= strbyte(wordString,tempVal+j) and lfe ~= strbyte(wordString,tempVal+j+1) or not GF_WORD_ACCENT_ASCII_FIX[strbyte(wordString,tempVal+j)] or not GF_WORD_ACCENT_ASCII_FIX[strbyte(wordString,tempVal+j)][strbyte(wordString,tempVal+j+1)] then tempVal=tempVal+j-1 break end end
-				else
-					table.insert(wordTable,GF_WORD_ACCENT_ASCII_FIX[lfs][lfe])
-					tempVal = tempVal + 1
-				end
-			else
-				table.insert(wordTable,strchar(lfs))
-			end
-			tempVal = tempVal + 1
-		end
-		wordString = table.concat(wordTable)
-		wordTable = {}
-		-- Need to save words without a/an space/%p in first database, and with in second database
-		-- if first database has same words, don't save
-		-- second database should be broken down by language
-		wordString = gsub(gsub(wordString,"^an?[%s%p]",""),"[%s%p]an?$","")
-		if not string.find(wordString,"^an?[%s%p]") and not string.find(wordString,"[%s%p]an?$") and not string.find(wordString,"[%s%p]") and string.len(wordString) > 2 then if tempTable[wordString] then tempTable[wordString][1] = "1" else tempTable[wordString] = wtable end end
-		if not GF_SavedVariables.questconversion["WordZZZ"][wtable[2]] then GF_SavedVariables.questconversion["WordZZZ"][wtable[2]] = {} end
-		if wtable[2] ~= "en" then
-			GF_SavedVariables.questconversion["WordZZZ"][wtable[2]][gsub(wordString,"[%s%p]","")] = wtable[1]
-			GF_SavedVariables.questconversion["WordZZZ"][wtable[2]][gsub(gsub(gsub(wordString,"^an?[%s%p]",""),"[%s%p]an?$",""),"[%s%p]","")] = wtable[1]
-		end
-	end
-	for entryname,wtable in tempTable do
-		if wtable[1] ~= "1" and wtable[2] ~= "en" then GF_SavedVariables.questconversion["LanguageZZZ"][entryname] = wtable[2] end
-	end
-end
-function ConvertForeignWordsDouble() -- /script ConvertForeignWordsDouble()
--- remove if word is too short, remove punctuation, convert letters
-
--- First database = add single words 3 characters or longer with the language family only(word = language)... remove any words that are the same across languages
--- Second database = Broken down by language family... Replace word with word(word = word).. second database should include all words and store them within each language's family
--- Run first datase on single-word after letter correction... Then immediately run translation. If "Translate" then add Arg1 to database and show the database Arg1 instead of normal Arg1(chat/log/groupsframe)
--- The translation should do word replacement backwards(longest(4-word) to shortest(1-word)). Then it removes anything in the GF_WORD_BYPASS_TRIGGER based on the language family. Need to add more phrases.
--- Error correction needs to eliminate all double-letter repeating(including normal letters)
--- Two options, Translate and Show Translated... Translate will translate the message and show T in front of it in groupsframe, logsframe, and normal chat.. Show Translate will show/hide translated group messages.
-
-	local lfs,lfe,tempVal,wordString
-	local wordTable = {}
-	GF_SavedVariables.questconversion = { ["common"] = {} }
-	local tempTable = {}
-	for languageID,wtable in GF_LANGUAGE_FOREIGN_CONVERSION_WORDS do
-		GF_SavedVariables.questconversion[languageID] = {}
-		for entryname,word in wtable do
-			tempVal = 1
-			wordString = gsub(gsub(entryname,"^%p+",""),"'","")
-
-			wordString = wordString.." "
-			while true do
-				lfs = strbyte(wordString,tempVal)
-				lfe = strbyte(wordString,tempVal+1)
-				if not lfe then break end
-
-				if lfs >= 194 and lfs <= 210 and GF_WORD_ACCENT_ASCII_FIX[lfs] and GF_WORD_ACCENT_ASCII_FIX[lfs][lfe] then
-					if lfs == strbyte(wordString,tempVal+2) and lfe == strbyte(wordString,tempVal+3) then
-						table.insert(wordTable,GF_WORD_ACCENT_ASCII_FIX[lfs][lfe]) tempVal=tempVal+1 for j=1,250,2 do if lfs ~= strbyte(wordString,tempVal+j) and lfe ~= strbyte(wordString,tempVal+j+1) or not GF_WORD_ACCENT_ASCII_FIX[strbyte(wordString,tempVal+j)] or not GF_WORD_ACCENT_ASCII_FIX[strbyte(wordString,tempVal+j)][strbyte(wordString,tempVal+j+1)] then tempVal=tempVal+j-1 break end end
-					else
-						table.insert(wordTable,GF_WORD_ACCENT_ASCII_FIX[lfs][lfe])
-						tempVal = tempVal + 1
-					end
-				else
-					table.insert(wordTable,strchar(lfs))
-				end
-				tempVal = tempVal + 1
-			end
-			wordString = table.concat(wordTable)
-			wordTable = {}
-			if not GF_SavedVariables.questconversion[languageID][gsub(wordString,"[%s%p]","")] then
-				GF_SavedVariables.questconversion[languageID][gsub(wordString,"[%s%p]","")] = word
-			else
-				if string.len(gsub(wordString,"[%s%p]","")) < string.len(GF_SavedVariables.questconversion[languageID][gsub(wordString,"[%s%p]","")]) then GF_SavedVariables.questconversion[languageID][gsub(wordString,"[%s%p]","")] = word end
-			end
-
--- Alright, I saved wordString in GF_SavedVariables.questconversion[languageID]... Now I need to trim wordstring of A/AN... Then add to database if no other same words and word is more than 2 characters
-
-			wordString = gsub(gsub(wordString,"^an?[%s%p]",""),"[%s%p]an?$","")
-			if not string.find(wordString,"^an?[%s%p]") and not string.find(wordString,"[%s%p]an?$") and not string.find(wordString,"[%s%p]") and string.len(wordString) > 2 then if tempTable[wordString] then tempTable[wordString] = "1" else tempTable[wordString] = languageID end end
-		end
-	end
-	for entryname,languageID in tempTable do
-		if languageID ~= "1" then GF_SavedVariables.questconversion["common"][entryname] = languageID end
-	end
-end
-function CheckWords() -- /script CheckWords()
-	for entryname,wtable in GF_LANGUAGE_CONVERT do
-		--GF_CheckForGroups(entryname,"R","World","CHAT_MSG_YELL",true)
-		print(entryname)
-		print(GF_CleanUpMessagesOfBadLinks(entryname))
-		GF_AddLogMessage(GF_CleanUpMessagesOfBadLinks(entryname),10,true,"Redshadowz","","","YELL")
-	end
-end
-function ConvertForeignWordsSingle()
-	local lfs,lfe,tempVal,wordString
-	local wordTable = {}
-	GF_SavedVariables.questconversion = {}
-	for entryname,_ in GF_QUEST_CONVERT do
-		tempVal = 1
-		wordString = gsub(gsub(entryname,"^%p+",""),"'","")
-
-		wordString = wordString.." "
-		while true do
-			lfs = strbyte(wordString,tempVal)
-			lfe = strbyte(wordString,tempVal+1)
-			if not lfe then break end
-
-			if lfs >= 194 and lfs <= 210 and GF_WORD_ACCENT_ASCII_FIX[lfs] and GF_WORD_ACCENT_ASCII_FIX[lfs][lfe] then
-				if lfs == strbyte(wordString,tempVal+2) and lfe == strbyte(wordString,tempVal+3) then
-					table.insert(wordTable,GF_WORD_ACCENT_ASCII_FIX[lfs][lfe]) tempVal=tempVal+1 for j=1,250,2 do if lfs ~= strbyte(wordString,tempVal+j) and lfe ~= strbyte(wordString,tempVal+j+1) or not GF_WORD_ACCENT_ASCII_FIX[strbyte(wordString,tempVal+j)] or not GF_WORD_ACCENT_ASCII_FIX[strbyte(wordString,tempVal+j)][strbyte(wordString,tempVal+j+1)] then tempVal=tempVal+j-1 break end end
-				else
-					table.insert(wordTable,GF_WORD_ACCENT_ASCII_FIX[lfs][lfe])
-					tempVal = tempVal + 1
-				end
-			else
-				table.insert(wordTable,strchar(lfs))
-			end
-			tempVal = tempVal + 1
-		end
-		wordString = gsub(table.concat(wordTable),"[%s%p]+","")
-		wordTable = {}
-		GF_SavedVariables.questconversion[wordString] = true
-	end
-end
-function ConvertForeignWordsOther() --/script ConvertForeignWordsOther()
-	local lfs,lfe,tempVal,wordString
-	local wordTable = {}
-	GF_SavedVariables.questconversion = {}
-	for entryname,word in GF_QUEST_CONVERT do
-		tempVal = 1
-		wordString = gsub(gsub(entryname,"^%p+",""),"'","")
-		word = gsub(gsub(word,"^%p+",""),"'","")
-
-		wordString = wordString.." "
-		word = word.." "
-		while true do
-			lfs = strbyte(wordString,tempVal)
-			lfe = strbyte(wordString,tempVal+1)
-			if not lfe then break end
-
-			if lfs >= 194 and lfs <= 210 and GF_WORD_ACCENT_ASCII_FIX[lfs] and GF_WORD_ACCENT_ASCII_FIX[lfs][lfe] then
-				if lfs == strbyte(wordString,tempVal+2) and lfe == strbyte(wordString,tempVal+3) then
-					table.insert(wordTable,GF_WORD_ACCENT_ASCII_FIX[lfs][lfe]) tempVal=tempVal+1 for j=1,250,2 do if lfs ~= strbyte(wordString,tempVal+j) and lfe ~= strbyte(wordString,tempVal+j+1) or not GF_WORD_ACCENT_ASCII_FIX[strbyte(wordString,tempVal+j)] or not GF_WORD_ACCENT_ASCII_FIX[strbyte(wordString,tempVal+j)][strbyte(wordString,tempVal+j+1)] then tempVal=tempVal+j-1 break end end
-				else
-					table.insert(wordTable,GF_WORD_ACCENT_ASCII_FIX[lfs][lfe])
-					tempVal = tempVal + 1
-				end
-			else
-				table.insert(wordTable,strchar(lfs))
-			end
-			tempVal = tempVal + 1
-		end
-		wordString = gsub(table.concat(wordTable),"[%s%p]+","")
-		wordTable = {}
-		tempVal = 1
-		while true do
-			lfs = strbyte(word,tempVal)
-			lfe = strbyte(word,tempVal+1)
-			if not lfe then break end
-
-			if lfs >= 194 and lfs <= 210 and GF_WORD_ACCENT_ASCII_FIX[lfs] and GF_WORD_ACCENT_ASCII_FIX[lfs][lfe] then
-				if lfs == strbyte(word,tempVal+2) and lfe == strbyte(word,tempVal+3) then
-					table.insert(wordTable,GF_WORD_ACCENT_ASCII_FIX[lfs][lfe]) tempVal=tempVal+1 for j=1,250,2 do if lfs ~= strbyte(word,tempVal+j) and lfe ~= strbyte(word,tempVal+j+1) or not GF_WORD_ACCENT_ASCII_FIX[strbyte(word,tempVal+j)] or not GF_WORD_ACCENT_ASCII_FIX[strbyte(word,tempVal+j)][strbyte(word,tempVal+j+1)] then tempVal=tempVal+j-1 break end end
-				else
-					table.insert(wordTable,GF_WORD_ACCENT_ASCII_FIX[lfs][lfe])
-					tempVal = tempVal + 1
-				end
-			else
-				table.insert(wordTable,strchar(lfs))
-			end
-			tempVal = tempVal + 1
-		end
-		word = gsub(gsub(table.concat(wordTable),"%p+","")," $","")
-		wordTable = {}
-		
-		if not string.find(wordString,"%d") and not string.find(word,"%d") then GF_SavedVariables.questconversion[wordString] = word end
-	end
 end
