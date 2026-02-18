@@ -578,7 +578,7 @@ function GF_FormatBlockListWords(arg1)
 		lfs,lfe,wordString = strfind(arg1, "(.-)[%s%p%d]+",lfs)
 		if wordString then
 			if strbyte(wordString) then
-				if not GF_WORD_BYPASS_TRIGGER["en"][wordString] then
+				if not GF_WORD_BYPASS_TRIGGER[wordString] then
 					table.insert(wordTable, wordString)
 					lfs = lfe+1
 				else
@@ -723,6 +723,7 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 		if not arg1 or not GF_TextColors[strsub(event,10)] or (arg9 and strlower(arg9) == "lft") then old_ChatFrame_OnEvent(event) return end
 		if not arg2 or arg2 == "" then arg2 = "SYSTEM" end
 		if not GF_ProcessedFirstMessage[arg2] then
+			--print(GetTime())
 			GF_ChatFunctions(event,arg1,arg2,arg8,arg9)
 			if GF_SavedVariables.showformattedchat and GF_PreviousMessage[arg2] and GF_PreviousMessage[arg2][1] then
 				if GF_PreviousMessage[arg2][2] then arg1 = GF_PreviousMessage[arg2][2] end
@@ -730,6 +731,7 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 				GF_PreviousMessage[arg2] = {}
 			end
 			GF_ProcessedFirstMessage[arg2] = true
+			--print(GetTime())
 		end
 		if GF_PreviousMessage[arg2] and GF_PreviousMessage[arg2][1]	then
 			if GF_PreviousMessage[arg2][2] then arg1 = GF_PreviousMessage[arg2][2] end
@@ -900,9 +902,7 @@ function GF_HandleItemRefLinks(link,text,button) -- Will have to update when I a
 	end
 end
 function GF_GetQuestInfo(text,printinfo) -- Will have to update once I get new system
-	local wordTable = GetModifiedQuestName(gsub(gsub(text,"|c%x+|+(%w+)[%d:]+|+h%[",""),"%]|+h|+r",""))
-	wordString = ""
-	for i=1, getn(wordTable) do if wordTable[i] then wordString = wordString..wordTable[i] end end
+	wordString = table.concat(GetModifiedQuestName(gsub(gsub(text,"|c%x+|+(%w+)[%d:]+|+h%[",""),"%]|+h|+r","")))
 	if GF_WORD_QUEST[wordString] then
 		if printinfo and GF_QUEST_ZONE_ID[GF_WORD_QUEST[wordString][3]] then
 			if GF_QUEST_ZONE_ID[GF_WORD_QUEST[wordString][4]] and GF_WORD_QUEST[wordString][3] ~= GF_WORD_QUEST[wordString][4] then
@@ -1228,7 +1228,7 @@ function GF_LFGGetWhoUpdateOffset()
 end
 
 function GF_AddChannelMessage(arg1,arg2,arg8,arg9,nodelay) -- Message Handlers
-	if not GF_PlayingOnTurtle or nodelay or GF_WhoTable[GF_RealmName][arg2] or not GF_SavedVariables.usefriendslist or not GF_SavedVariables.usewhoongroups or not GF_SavedVariables.friendsToRemove[arg2] then
+	if not GF_SavedVariables.friendsToRemove[arg2] or nodelay or not GF_PlayingOnTurtle or GF_WhoTable[GF_RealmName][arg2] or not GF_SavedVariables.usewhoongroups or not GF_SavedVariables.usefriendslist then
 		arg9 = string.gsub(strlower(arg9), " - .*", "")
 		arg1 = "["..arg8..". "..strupper(strsub(arg9,1,1))..strsub(arg9,2).."] "..GF_MakeBasicChatString(arg1,arg2)
 		for i=1,NUM_CHAT_WINDOWS do
@@ -1242,7 +1242,7 @@ function GF_AddChannelMessage(arg1,arg2,arg8,arg9,nodelay) -- Message Handlers
 	end
 end
 function GF_AddChatMessage(arg1,arg2,event,nodelay)
-	if not GF_PlayingOnTurtle or nodelay or GF_WhoTable[GF_RealmName][arg2] or not GF_SavedVariables.usefriendslist or not GF_SavedVariables.usewhoongroups or not GF_SavedVariables.friendsToRemove[arg2] then
+	if not GF_SavedVariables.friendsToRemove[arg2] or nodelay or not GF_PlayingOnTurtle or GF_WhoTable[GF_RealmName][arg2] or not GF_SavedVariables.usewhoongroups or not GF_SavedVariables.usefriendslist then
 		arg1 = (EventIDAlias[event] or "["..strsub(event,1,1).."] ")..GF_MakeBasicChatString(arg1,arg2)
 		for i=1,NUM_CHAT_WINDOWS do
 			if not GF_ChatChannelsGroups[i] then GF_ChatGetChannelsGroups() end
@@ -1255,15 +1255,14 @@ function GF_AddChatMessage(arg1,arg2,event,nodelay)
 	end
 end
 function GF_MakeBasicChatString(arg1,arg2)
-	arg1 = GF_ChatReplaceItemLink(GF_ChatReplaceHquestLevels(GF_ChatReplaceHplayer(arg1)))
 	if arg2 == "SYSTEM" or GF_LootFilter[event] then
 		return arg1
 	elseif arg2 == UnitName("player") then
-		return "|cff"..(GF_ClassColors[({UnitClass("player")})[2]] or "9d9d9d").."|Hplayer:"..arg2.."|h["..arg2..", "..UnitLevel("player").."]|h|r: "..arg1 
+		return "|cff"..(GF_ClassColors[({UnitClass("player")})[2]] or "9d9d9d").."|Hplayer:"..arg2.."|h["..arg2..", "..UnitLevel("player").."]|h|r: "..arg1
 	elseif GF_WhoTable[GF_RealmName][arg2] then
-		return "|cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][arg2][2]] or "ffffff").."|Hplayer:"..arg2.."|h["..arg2..", "..GF_WhoTable[GF_RealmName][arg2][1].."]|h|r: "..arg1
+		return "|cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][arg2][2]] or "ffffff").."|Hplayer:"..arg2.."|h["..arg2..", "..GF_WhoTable[GF_RealmName][arg2][1].."]|h|r: "..GF_ChatReplaceItemLink(GF_ChatReplaceHquestLevels(GF_ChatReplaceHplayer(arg1)))
 	else
-		return "|cff9d9d9d|Hplayer:"..arg2.."|h["..arg2.."]|h|r: "..arg1
+		return "|cff9d9d9d|Hplayer:"..arg2.."|h["..arg2.."]|h|r: "..GF_ChatReplaceItemLink(GF_ChatReplaceHquestLevels(GF_ChatReplaceHplayer(arg1)))
 	end
 end
 function GF_ChatGetChannelsGroups() -- How do other servers handle Hardcore group toggles? Addon might not work on other servers with Hardcore.. I could simply enable all channels and only turn off if known
@@ -1331,11 +1330,11 @@ end
 function GF_ChatReplaceItemLink(arg1,checkOnly)
 	local lfs,lfe,name,itemLink,preFix,broken = 1
 	while true do
-		lfs,lfe,preFix,itemLink = strfind(arg1,"(|%x+|H(item:[%d+:]+)|h%[).-%]|h|r",lfs)
+		lfs,lfe,preFix,itemLink = strfind(arg1,"|(%x+|H(item:[%d+:]+)|h%[).-%]|h|r",lfs)
 		if itemLink then
 			name = GetItemInfo(itemLink)
 			if checkOnly then if not name then broken = true ShowUIPanel(ItemRefTooltip) if not ItemRefTooltip:IsVisible() then ItemRefTooltip:SetOwner(UIParent, "ANCHOR_PRESERVE") end ItemRefTooltip:SetHyperlink(itemLink) end
-			elseif name then arg1 = strsub(arg1,1,lfs-1)..preFix..name..strsub(arg1,lfe-4) end
+			elseif name then arg1 = strsub(arg1,1,lfs)..preFix..name..strsub(arg1,lfe-4) end
 			lfs = lfe + 1
 		else
 			break
@@ -1354,7 +1353,7 @@ function GF_CleanUpMessagesOfBadLinks(arg1) -- Replaces CLINK messages with norm
 	return arg1
 end
 function GF_ShowGroupsOnMinimap(arg1,arg2,nodelay)
-	if not GF_PlayingOnTurtle or nodelay or GF_WhoTable[GF_RealmName][arg2] or not GF_SavedVariables.usefriendslist or not GF_SavedVariables.usewhoongroups or not GF_SavedVariables.friendsToRemove[arg2] then
+	if not GF_SavedVariables.friendsToRemove[arg2] or nodelay or not GF_PlayingOnTurtle or GF_WhoTable[GF_RealmName][arg2] or not GF_SavedVariables.usewhoongroups or not GF_SavedVariables.usefriendslist then
 		for name,mmtable in GF_MiniMapMessages[7] do if mmtable[1] <= GetTime() then GF_MiniMapMessages[7][name] = nil end end
 		if GF_MiniMapMessages[1] > GetTime() and GF_MiniMapMessages[2] > GetTime() and GF_MiniMapMessages[3] > GetTime() and GF_MiniMapMessages[4] > GetTime() and GF_MiniMapMessages[5] > GetTime() and GF_MiniMapMessages[6] > GetTime() then
 			local lowest = { GetTime()+20, 0 }
@@ -1382,7 +1381,7 @@ function GF_ShowGroupsOnMinimap(arg1,arg2,nodelay)
 	end
 end
 function GF_AddLogMessage(arg1,logcode,add,arg2,arg8,arg9,event,nodelay)
-	if not GF_PlayingOnTurtle or nodelay or GF_WhoTable[GF_RealmName][arg2] or not GF_SavedVariables.usefriendslist or not GF_SavedVariables.usewhoongroups or not GF_SavedVariables.friendsToRemove[arg2] then
+	if not GF_SavedVariables.friendsToRemove[arg2] or nodelay or not GF_PlayingOnTurtle or GF_WhoTable[GF_RealmName][arg2] or not GF_SavedVariables.usewhoongroups or not GF_SavedVariables.usefriendslist then
 		if add then
 			arg1 = GF_MakeBasicChatString(strsub(GF_ChatReplaceHplayer(gsub(gsub(gsub(gsub(" "..arg1," (www%d-)%.([_A-Za-z0-9-]+)%.(%S+)%s?", " |cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r")," (%a+)://(%S+)", " |cffccccff|Hurl:%1://%2|h[%1://%2]|h|r")," (%a+)%.(%a+)/(%S+)", " |cffccccff|Hurl:%1.%2/%3|h[%1.%2/%3]|h|r")," ([_A-Za-z0-9-]+)%.([_A-Za-z0-9-]+)%.(%S+)", " |cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r")),2),arg2)
 			if event == "CHANNEL" then arg9 = string.gsub(strlower(arg9), " - .*", "") arg1 = "["..arg8..". "..strupper(strsub(arg9,1,1))..strsub(arg9,2).."] "..arg1 end
@@ -1518,7 +1517,7 @@ function GF_SendWhoIfNameInQueue()
 					GF_GetWhoButton:SetText(GF_GET_WHO)
 					GF_GetWhoTotalNames:SetText(GF_ClassWhoMatchingResults)
 				end
-			elseif GF_SavedVariables.usewhoongroups and GF_WhoQueue[1] then
+			elseif GF_WhoQueue[1] and GF_SavedVariables.usewhoongroups then
 				if (GF_WhoTable[GF_RealmName][GF_WhoQueue[1]] and GF_WhoTable[GF_RealmName][GF_WhoQueue[1]][4] + 86400 > time()) or GF_AddonNamesToBeSentAsARequest[GF_WhoQueue[1]] then
 					GF_WhoQueue[GF_WhoQueue[1]] = nil
 					table.remove(GF_WhoQueue, 1)
@@ -2546,7 +2545,7 @@ function GF_GetTypes(arg1, showanyway)
 		lfs,lfe,wordString = strfind(arg1, "(.-)[%s%p%d]+",lfs)
 		if wordString then
 			if strbyte(wordString) then
-				if not GF_WORD_BYPASS_TRIGGER["en"][wordString] then
+				if not GF_WORD_BYPASS_TRIGGER[wordString] then
 					table.insert(wordTable, wordString)
 					lfs = lfe+1
 				else
@@ -2779,13 +2778,15 @@ function GF_GetTypes(arg1, showanyway)
 					if GF_WORD_IGNORE_AFTER[wordTable[i+j+1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_AFTER[wordTable[i+j+1]] if showanyway == true then print(wordTable[i+j+1].." ignore "..GF_WORD_IGNORE_AFTER[wordTable[i+j+1]]) end
 					elseif GF_WORD_IGNORE_BEFORE[wordTable[i-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_BEFORE[wordTable[i-1]] if showanyway == true then print(wordTable[i-1].." ignore "..GF_WORD_IGNORE_BEFORE[wordTable[i-1]]) end
 					elseif wordTable[i+j+2] and GF_WORD_IGNORE_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] if showanyway == true then print(wordTable[i+j+1]..wordTable[i+j+2].." ignore "..GF_WORD_IGNORE_AFTER[wordTable[i+j+1]..wordTable[i+j+2]]) end
-					elseif wordTable[i-2] and GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]] if showanyway == true then print(wordTable[i-2]..wordTable[i-1].." ignore "..GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]]) end end
+					elseif wordTable[i-2] and GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]] if showanyway == true then print(wordTable[i-2]..wordTable[i-1].." ignore "..GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]]) end
+					elseif wordTable[i-3] and GF_WORD_IGNORE_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] if showanyway == true then print(wordTable[i-3]..wordTable[i-2]..wordTable[i-1].." ignore "..GF_WORD_IGNORE_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]]) end end
 				elseif GF_WORD_LFG[wordString] then if GF_WORD_LFG[wordString] > foundLFG then foundLFG = GF_WORD_LFG[wordString] table.insert(lfmlfgName, wordString) if showanyway == true then print(wordString.." lfg") end end
 					if not foundQuest[1] then if GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] elseif GF_WORD_LEVEL_ZONE[wordTable[i-1]] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-1]] end end
 					if GF_WORD_IGNORE_AFTER[wordTable[i+j+1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_AFTER[wordTable[i+j+1]] if showanyway == true then print(wordTable[i+j+1].." ignore "..GF_WORD_IGNORE_AFTER[wordTable[i+j+1]]) end
 					elseif GF_WORD_IGNORE_BEFORE[wordTable[i-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_BEFORE[wordTable[i-1]] if showanyway == true then print(wordTable[i-1].." ignore "..GF_WORD_IGNORE_BEFORE[wordTable[i-1]]) end
 					elseif wordTable[i+j+2] and GF_WORD_IGNORE_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] if showanyway == true then print(wordTable[i+j+1]..wordTable[i+j+2].." ignore "..GF_WORD_IGNORE_AFTER[wordTable[i+j+1]..wordTable[i+j+2]]) end
-					elseif wordTable[i-2] and GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]] if showanyway == true then print(wordTable[i-2]..wordTable[i-1].." ignore "..GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]]) end end
+					elseif wordTable[i-2] and GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]] if showanyway == true then print(wordTable[i-2]..wordTable[i-1].." ignore "..GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]]) end
+					elseif wordTable[i-3] and GF_WORD_IGNORE_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] if showanyway == true then print(wordTable[i-3]..wordTable[i-2]..wordTable[i-1].." ignore "..GF_WORD_IGNORE_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]]) end end				
 				end
 				if GF_WORD_CLASSES[wordString] then foundClass = GF_WORD_CLASSES[wordString] table.insert(groupName,wordString)
 				elseif GF_WORD_DUNGEON[wordString] then
@@ -2820,15 +2821,11 @@ function GF_GetTypes(arg1, showanyway)
 						if foundLFG == 0 and foundLFMPreSuf == 0 then foundLFG = 1 end if wordTable[i-1] and GF_LFMLFG_PREFIX_GUILD[wordTable[i-1]] then foundGuildExclusion = foundGuildExclusion + 1 end foundLFGPreSuf = 1 foundTradesExclusion = foundTradesExclusion + 1.5 if showanyway == true then print(wordString.." triggername lfg 1/2 .. tradesex 1.5") end
 					end
 
-					if GF_WORD_IGNORE_AFTER[wordTable[i+j+1]] then
-						foundIgnore = foundIgnore + GF_WORD_IGNORE_AFTER[wordTable[i+j+1]] if showanyway == true then print(wordTable[i+j+1].." ignore "..GF_WORD_IGNORE_AFTER[wordTable[i+j+1]]) end
-					elseif GF_WORD_IGNORE_BEFORE[wordTable[i-1]] then
-						foundIgnore = foundIgnore + GF_WORD_IGNORE_BEFORE[wordTable[i-1]] if showanyway == true then print(wordTable[i-1].." ignore "..GF_WORD_IGNORE_BEFORE[wordTable[i-1]]) end
-					elseif wordTable[i+j+2] and GF_WORD_IGNORE_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] then
-						foundIgnore = foundIgnore + GF_WORD_IGNORE_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] if showanyway == true then print(wordTable[i+j+1]..wordTable[i+j+2].." ignore "..GF_WORD_IGNORE_AFTER[wordTable[i+j+1]..wordTable[i+j+2]]) end
-					elseif wordTable[i-2] and GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]] then
-						foundIgnore = foundIgnore + GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]] if showanyway == true then print(wordTable[i-2]..wordTable[i-1].." ignore "..GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]]) end
-					end
+					if GF_WORD_IGNORE_AFTER[wordTable[i+j+1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_AFTER[wordTable[i+j+1]] if showanyway == true then print(wordTable[i+j+1].." ignore "..GF_WORD_IGNORE_AFTER[wordTable[i+j+1]]) end
+					elseif GF_WORD_IGNORE_BEFORE[wordTable[i-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_BEFORE[wordTable[i-1]] if showanyway == true then print(wordTable[i-1].." ignore "..GF_WORD_IGNORE_BEFORE[wordTable[i-1]]) end
+					elseif wordTable[i+j+2] and GF_WORD_IGNORE_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] if showanyway == true then print(wordTable[i+j+1]..wordTable[i+j+2].." ignore "..GF_WORD_IGNORE_AFTER[wordTable[i+j+1]..wordTable[i+j+2]]) end
+					elseif wordTable[i-2] and GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]] if showanyway == true then print(wordTable[i-2]..wordTable[i-1].." ignore "..GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]]) end
+					elseif wordTable[i-3] and GF_WORD_IGNORE_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] if showanyway == true then print(wordTable[i-3]..wordTable[i-2]..wordTable[i-1].." ignore "..GF_WORD_IGNORE_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]]) end end				
 				end
 			end
 			if i+j <= tempVal then -- Score Trades separately
@@ -4162,15 +4159,27 @@ function GetModifiedQuestName(entryname)
 	local wordString,lfs,lfe,tempVar
 
 	while true do lfs,lfe,wordString = strfind(arg1," ([lk]f?%s?%d+m)[%p%s]",lfs) if wordString then arg1 = strsub(arg1,1,lfs).."lfm "..strsub(arg1,lfs+strlen(wordString)+1) lfs = lfs + 4 else break end end
-	lfs = 1 -- To detect space/number+/punctuation/number+/space for groups
-	while true do lfs,lfe,wordString,tempString = strfind(arg1,"[%p%s](%d+([=/])%d+) ",lfs) if wordString then if tempString == "=" then lfs = lfe else arg1 = strsub(arg1,1,lfs).."group"..strsub(arg1,lfe) lfs = lfs + 6 end else break end end
 
 	tempVal = 1
 	while true do -- Block letter repeats
 		lfs = strbyte(arg1,tempVal)
 		lfe = strbyte(arg1,tempVal+1)
 		if not lfe then break end
-		if lfs == lfe then
+		if lfs >= 194 then
+			if GF_WORD_ACCENT_ASCII_FIX[lfs] and GF_WORD_ACCENT_ASCII_FIX[lfs][lfe] then
+				if lfs == strbyte(arg1,tempVal+2) and lfe == strbyte(arg1,tempVal+3) then
+					table.insert(wordTable,GF_WORD_ACCENT_ASCII_FIX[lfs][lfe]) tempVal=tempVal+1 for j=1,250,2 do if lfs ~= strbyte(arg1,tempVal+j) and lfe ~= strbyte(arg1,tempVal+j+1) or not GF_WORD_ACCENT_ASCII_FIX[strbyte(arg1,tempVal+j)] or not GF_WORD_ACCENT_ASCII_FIX[strbyte(arg1,tempVal+j)][strbyte(arg1,tempVal+j+1)] then tempVal=tempVal+j-1 break end end
+				else
+					table.insert(wordTable,GF_WORD_ACCENT_ASCII_FIX[lfs][lfe])
+					tempVal = tempVal + 1
+				end
+			elseif GF_WORD_ASIAN_LANGUAGES[lfs] then -- Chinese characters are always 227-239 first byte, and then two more bytes that are 128-190ish
+				table.insert(wordTable,strchar(lfs)) table.insert(wordTable,strchar(lfe)) table.insert(wordTable,strchar(strbyte(arg1,tempVal+2)))
+				tempVal=tempVal+2
+			else
+				table.insert(wordTable,strchar(lfs))
+			end
+		elseif lfs == lfe then
 			if lfs >= 97 and lfs <= 122 then
 				if lfs == strbyte(arg1,tempVal+2) then
 					table.insert(wordTable,strchar(lfs)) table.insert(wordTable,strchar(lfe)) tempVal=tempVal+2 for j=1,250 do if lfs ~= strbyte(arg1,tempVal+j) then tempVal=tempVal+j-1 break end end
@@ -4180,10 +4189,9 @@ function GetModifiedQuestName(entryname)
 			else
 				table.insert(wordTable,strchar(lfs)) tempVal=tempVal+1 for j=1,250 do if lfs ~= strbyte(arg1,tempVal+j) then tempVal=tempVal+j-1 break end end
 			end
-		elseif lfe == 32 or lfe == 46 then
-			wordString = strbyte(arg1,tempVal-1)
-			if (wordString == 32 or wordString == 46) and wordString == strbyte(arg1,tempVal+3) then
-				table.insert(wordTable,strchar(lfs)) table.insert(wordTable,strchar(strbyte(arg1,tempVal+2))) tempVal=tempVal+2 for j=3,250,2 do if strbyte(arg1,tempVal+j) ~= 32 and strbyte(arg1,tempVal+j) ~= 46 then tempVal=tempVal+j-3 break else table.insert(wordTable,strchar(strbyte(arg1,tempVal+j-1))) end end
+		elseif lfe == 32 or lfe == 46 then -- Space or Period
+			if (strbyte(arg1,tempVal-1) == 32 or strbyte(arg1,tempVal-1) == 46 or strbyte(arg1,tempVal-1) == 60) and (strbyte(arg1,tempVal+3) == 32 or strbyte(arg1,tempVal+3) == 46 or strbyte(arg1,tempVal+3) == 60) then
+				table.insert(wordTable,strchar(lfs)) table.insert(wordTable,strchar(strbyte(arg1,tempVal+2))) tempVal=tempVal+2 for j=3,250,2 do if strbyte(arg1,tempVal+j) ~= 32 and strbyte(arg1,tempVal+j) ~= 46 and strbyte(arg1,tempVal+j) ~= 62 then tempVal=tempVal+j-3 break else table.insert(wordTable,strchar(strbyte(arg1,tempVal+j-1))) end end
 			else
 				table.insert(wordTable,strchar(lfs))
 			end
@@ -4204,53 +4212,56 @@ function GetModifiedQuestName(entryname)
 
 	lfs = 1 -- To detect "faces"(eg ":d",":p")
 	while true do lfs,lfe,wordString = strfind(arg1, " (%p%a+)[%[%s]",lfs) if wordString then if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = strsub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..strsub(arg1,lfe) end lfs = lfs + strlen(wordString) + 1 else break end end
+
 	lfs = 2 -- To detect word/word with no space(eg "lfgscholo" = lfg scholo)
 	while true do
 		lfs,lfe,wordString = strfind(arg1,"(%a%a%a%a+)",lfs)
 		if wordString then
-			tempVal = strlen(wordString) - 1
-			if tempVal > 11 then tempVal = 11 end
-			for i=tempVal, 3, -1 do
-				if GF_WORD_WORD_REPLACE[strsub(wordString,1,i)] then 
-					if GF_WORD_SPECIAL_EXCEPTIONS[wordString] then
-						arg1 = strsub(arg1,1,lfs-1)..wordString.." "..strsub(arg1,lfe+1)
-						lfs = lfs + strlen(wordString)
-					elseif not GF_WORD_WORD_REPLACE[wordString] then
-						arg1 = strsub(arg1,1,lfs-1)..strsub(wordString,1,i).." "..strsub(arg1,lfs+i)
-						lfs = lfs + (i-strlen(strsub(wordString,1,i))) + strlen(wordString) + 1
-					end
-					break
-				elseif GF_WORD_WORD_REPLACE[strsub(wordString,-i)] then
-					if GF_WORD_SPECIAL_EXCEPTIONS[wordString] then
-						arg1 = strsub(arg1,1,lfs-1).." "..wordString..strsub(arg1,lfe+1)
-						lfs = lfs + strlen(wordString)
-					elseif not GF_WORD_WORD_REPLACE[wordString] then
+			if not GF_WORD_WORD_REPLACE[wordString] and not GF_WORD_SPECIAL_EXCEPTIONS[wordString] then
+				tempVal = strlen(wordString) - 1
+				if tempVal > 11 then tempVal = 11 end
+				for i=tempVal, 3, -1 do
+					if GF_WORD_WORD_REPLACE[strsub(wordString,1,i)] then
+						if tempVal-i > 2 and GF_WORD_SPECIAL_EXCEPTIONS[strsub(wordString,1,i+3)] then
+							arg1 = strsub(arg1,1,lfs-1)..strsub(wordString,1,i+3).." "..strsub(arg1,lfs+i+3)
+						elseif tempVal-i > 1 and GF_WORD_SPECIAL_EXCEPTIONS[strsub(wordString,1,i+2)] then
+							arg1 = strsub(arg1,1,lfs-1)..strsub(wordString,1,i+2).." "..strsub(arg1,lfs+i+2)
+						elseif tempVal-i > 0 and GF_WORD_SPECIAL_EXCEPTIONS[strsub(wordString,1,i+1)] then
+							arg1 = strsub(arg1,1,lfs-1)..strsub(wordString,1,i+1).." "..strsub(arg1,lfs+i+1)
+						else
+							arg1 = strsub(arg1,1,lfs-1)..strsub(wordString,1,i).." "..strsub(arg1,lfs+i)
+						end
+						lfs = lfe + 1
+						break
+					elseif GF_WORD_WORD_REPLACE[strsub(wordString,-i)] then
 						arg1 = strsub(arg1,1,lfe-i).." "..strsub(wordString,-i)..strsub(arg1,lfe+1)
 						lfs = lfs + (i-strlen(strsub(wordString,-i))) + strlen(wordString) + 1
+						break
 					end
-					break
 				end
-			end
-			if lfs < lfe then
-				if GF_WORD_WORD_REPLACE[strsub(wordString,1,2)] then
-					arg1 = strsub(arg1,1,lfs-1)..strsub(wordString,1,2).." "..strsub(arg1,lfs+2)
-					lfs = lfs + strlen(wordString) + 1
-				elseif strsub(wordString,-2) == "lf" then
-					wordString = strsub(wordString,1,-3)
-					if GF_WORD_FIX_SINGLE_WORD[wordString] then wordString = GF_WORD_FIX_SINGLE_WORD[wordString]
-					elseif GF_WORD_FIX_BEFORE_QUEST[wordString] then wordString = GF_WORD_FIX_BEFORE_QUEST[wordString] end
-					if GF_WORD_QUEST[wordString] then
-						arg1 = strsub(arg1,1,lfs-1)..wordString.." lf"..strsub(arg1,lfe+1)
-					else
-						if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end
-						if GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString] or GF_WORD_GROUP_BYPASS[wordString] then
+				if lfs < lfe then
+					if GF_WORD_WORD_REPLACE[strsub(wordString,1,2)] then
+						arg1 = strsub(arg1,1,lfs-1)..strsub(wordString,1,2).." "..strsub(arg1,lfs+2)
+						lfs = lfs + strlen(wordString) + 1
+					elseif GF_WORD_WORD_REPLACE[strsub(wordString,-2)] then
+						wordString = strsub(wordString,1,-3)
+						if GF_WORD_FIX_SINGLE_WORD[wordString] then wordString = GF_WORD_FIX_SINGLE_WORD[wordString]
+						elseif GF_WORD_FIX_BEFORE_QUEST[wordString] then wordString = GF_WORD_FIX_BEFORE_QUEST[wordString] end
+						if GF_WORD_QUEST[wordString] then
 							arg1 = strsub(arg1,1,lfs-1)..wordString.." lf"..strsub(arg1,lfe+1)
+						else
+							if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end
+							if GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString] or GF_WORD_GROUP_BYPASS[wordString] then
+								arg1 = strsub(arg1,1,lfs-1)..wordString.." lf"..strsub(arg1,lfe+1)
+							end
 						end
+						lfs = lfs + strlen(wordString) + 3
+					else
+						lfs = lfe + 1
 					end
-					lfs = lfs + strlen(wordString) + 3
-				else
-					lfs = lfs + strlen(wordString)
 				end
+			else
+				lfs = lfe + 1
 			end
 		else
 			break
@@ -4258,7 +4269,8 @@ function GetModifiedQuestName(entryname)
 	end
 
 	lfs = 2 -- To fix single words
-	while true do lfs,lfe,wordString,tempString = strfind(arg1, "(.-)[%s%p%d]+",lfs) if not wordString then break elseif GF_WORD_FIX_SINGLE_WORD[wordString] then arg1 = strsub(arg1,1,lfs-1)..GF_WORD_FIX_SINGLE_WORD[wordString]..tempString..strsub(arg1,lfe) lfs = lfs + strlen(GF_WORD_FIX_SINGLE_WORD[wordString]) else lfs = lfe+1 end end
+	while true do lfs,lfe,wordString,tempString = strfind(arg1, "(.-)([%s%p%d]+)",lfs) if not wordString then break elseif GF_WORD_FIX_SINGLE_WORD[wordString] then arg1 = strsub(arg1,1,lfs-1)..GF_WORD_FIX_SINGLE_WORD[wordString]..tempString..strsub(arg1,lfe+1) lfs = lfs + strlen(GF_WORD_FIX_SINGLE_WORD[wordString]..tempString)-1 else lfs = lfe+1 end end
+
 	lfs = 1 -- To detect space/letter/number/letter/space combinations(eg " g2g " = gtg)
 	while true do lfs,lfe,wordString = strfind(arg1," (w?%a%s?%d%s?%ab?)[%p%s]",lfs) if wordString then wordString = gsub(wordString," ","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = strsub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..strsub(arg1,lfe) end lfs = lfs + strlen(wordString) + 1 else break end end
 	lfs = 1 -- To detect space/word/number+/space combinations(eg " k10" = lowerkarazhan)
@@ -4298,33 +4310,57 @@ function GetModifiedQuestName(entryname)
 		end
 	end
 
+	lfs = 1 -- To detect word/letter/number combinations(eg "BMx2" = bm x2)
+	while true do lfs,lfe,wordString,tempString = strfind(arg1," (%a+)(%a%d+)[%p%s]",lfs) if wordString then if GF_WORD_LETTER_NUMBER_BEFORE_AFTER[tempString] and (GF_GROUP_IDS[wordString] or GF_LFMLFG_PREFIX_GUILD[wordString]) then arg1 = strsub(arg1,1,lfs)..wordString.." "..GF_WORD_LETTER_NUMBER_BEFORE_AFTER[tempString].." "..strsub(arg1,lfe) lfs = lfs + strlen(wordString..GF_WORD_LETTER_NUMBER_BEFORE_AFTER[tempString]) + 2 else lfs = lfe end else break end end
+	lfs = 1 -- To detect word/letter/number combinations(eg "2xBM" = 2x bm)
+	while true do lfs,lfe,wordString,tempString = strfind(arg1," (%d+%a)(%a+)[%p%s]",lfs) if wordString then if GF_WORD_LETTER_NUMBER_BEFORE_AFTER[wordString] and GF_GROUP_IDS[tempString] then arg1 = strsub(arg1,1,lfs)..GF_WORD_LETTER_NUMBER_BEFORE_AFTER[wordString].." "..tempString.." "..strsub(arg1,lfe) lfs = lfs + strlen(GF_WORD_LETTER_NUMBER_BEFORE_AFTER[wordString]..tempString) + 2 else lfs = lfe end else break end end
+
 -- Quest Search
 	lfs = 2 -- Add all words to the wordTable
 	while true do
 		lfs,lfe,wordString = strfind(arg1, "(.-)[%s%p%d]+",lfs)
 		if wordString then
-			if not GF_WORD_BYPASS_TRIGGER["en"][wordString] then
-				table.insert(wordTable, wordString)
-				lfs = lfe+1
-			else
-				_,tempVal,tempString = strfind(arg1,"(%a+)",lfe+1)
-				if GF_WORD_GROUP_BYPASS[wordString] then
-					if GF_WORD_GROUP_BYPASS[tempString] then
-						table.insert(wordTable, wordString) table.insert(wordTable, GF_WORD_GROUP_BYPASS[tempString])
-						lfs = tempVal+1
-					else
-						if GF_WORD_GROUP_BYPASS[wordTable[getn(wordTable)]] then wordTable[getn(wordTable)] = GF_WORD_GROUP_BYPASS[wordTable[getn(wordTable)]] end
-						table.insert(wordTable, wordString)
-						lfs = lfe+1
-					end
+			if strbyte(wordString) then
+				if not GF_WORD_BYPASS_TRIGGER[wordString] then
+					table.insert(wordTable, wordString)
+					lfs = lfe+1
 				else
-					if GF_WORD_QUEST_BYPASS[tempString] then
-						table.insert(wordTable, wordString) table.insert(wordTable, tempString)
-						lfs = tempVal+1
+					if GF_WORD_GROUP_BYPASS[wordString] then
+						_,tempVal,tempString = strfind(arg1,"(%a+)",lfe+1)
+						if tempString then
+							if GF_WORD_GROUP_BYPASS[tempString] then
+								table.insert(wordTable, GF_WORD_GROUP_BYPASS[wordString]) table.insert(wordTable, GF_WORD_GROUP_BYPASS[tempString])
+								lfs = tempVal+1
+							elseif GF_WORD_GROUP_BYPASS_SECOND[wordString..tempString] then
+								_,tempVal,tempString = strfind(arg1,"(%a+)",tempVal+1)
+								if GF_WORD_GROUP_BYPASS[tempString] then
+									table.insert(wordTable, GF_WORD_GROUP_BYPASS[wordString]) table.insert(wordTable, GF_WORD_GROUP_BYPASS[tempString])
+									lfs = tempVal+1
+								else
+									table.insert(wordTable, wordString)
+									lfs = lfe+1
+								end
+							else
+								if GF_WORD_GROUP_BYPASS[wordTable[getn(wordTable)]] then wordTable[getn(wordTable)] = GF_WORD_GROUP_BYPASS[wordTable[getn(wordTable)]] end
+								table.insert(wordTable, wordString)
+								lfs = lfe+1
+							end
+						else
+							table.insert(wordTable, wordString)
+							break
+						end
 					else
-						lfs = lfe+1
+						_,tempVal,tempString = strfind(arg1,"(%a+)",lfe+1)
+						if GF_WORD_QUEST_BYPASS[tempString] then
+							table.insert(wordTable, wordString) table.insert(wordTable, tempString)
+							lfs = tempVal+1
+						else
+							lfs = lfe+1
+						end
 					end
 				end
+			else
+				lfs = lfe+1
 			end
 		else
 			break
@@ -4334,7 +4370,7 @@ function GetModifiedQuestName(entryname)
 	for j=0,3 do
 		lfs = 1
 		while lfs <= tempVal do
-			if wordTable[lfs+j] then
+			if lfs+j <= tempVal then
 				wordString = wordTable[lfs]
 				for k=1, j do wordString = wordString..wordTable[lfs+k] end
 				if GF_WORD_FIX_BEFORE_QUEST[wordString] then
@@ -4369,7 +4405,8 @@ function GetModifiedQuestName(entryname)
 			end
 			lfs = lfs + 1
 		end
-	end
+	end	
+
 	return wordTable
 end
 function CompileFixedQuestZones(continue) -- /script CompileFixedQuestZones() /script CompileFixedQuestZones(true)

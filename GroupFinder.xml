@@ -4281,7 +4281,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnValueChanged>
 								</Scripts>
 							</Slider>
-							<CheckButton name="GF_FrameShowFormattedChatCheckButton" inherits="GF_CheckButtonTemplate_Label">
+							<CheckButton name="GF_FrameSystemFilterCheckButton" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="TOPLEFT">
 										<Offset>
@@ -4291,14 +4291,14 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										GF_SavedVariables.showformattedchat = this:GetChecked()
+										GF_SavedVariables.systemfilter = this:GetChecked()
 									</OnClick>
 									<OnLoad>
-										getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_ORIGINAL_CHAT)
+										getglobal(this:GetName().."TextLabel"):SetText(GF_SYSTEM_FILTER)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_FrameSystemFilterCheckButton" inherits="GF_CheckButtonTemplate_Label">
+							<CheckButton name="GF_FrameShowFormattedChatCheckButton" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="TOP">
 										<Offset>
@@ -4308,10 +4308,10 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										GF_SavedVariables.systemfilter = this:GetChecked()
+										GF_SavedVariables.showformattedchat = this:GetChecked()
 									</OnClick>
 									<OnLoad>
-										getglobal(this:GetName().."TextLabel"):SetText(GF_SYSTEM_FILTER)
+										getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_ORIGINAL_CHAT)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -4396,7 +4396,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							</Frame>
 							<CheckButton name="GF_FrameSpamFilterCheckButton" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="GF_FrameShowFormattedChatCheckButton" relativePoint="BOTTOMLEFT">
+									<Anchor point="TOPLEFT" relativeTo="GF_FrameSystemFilterCheckButton" relativePoint="BOTTOMLEFT">
 										<Offset>
 											<AbsDimension x="0" y="-8"/>
 										</Offset>
@@ -4417,7 +4417,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							</CheckButton>
 							<CheckButton name="GF_AutomaticBlacklistCheckButton" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="GF_FrameSystemFilterCheckButton" relativePoint="BOTTOMLEFT">
+									<Anchor point="TOPLEFT" relativeTo="GF_FrameShowFormattedChatCheckButton" relativePoint="BOTTOMLEFT">
 										<Offset>
 											<AbsDimension x="0" y="-8"/>
 										</Offset>
