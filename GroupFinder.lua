@@ -90,8 +90,8 @@ local GF_TextColors = { ["SYSTEM"] = {1,1,0},["SAY"] = {1,1,1},["YELL"] = {1,0.2
 ["MONSTER_EMOTE"] = {1,0.502,0.251},["MONSTER_YELL"] = {1,0.251,0.251},["HARDCORE"] = {0.902,0.8,0.502}, ["HAT_LINE"] = {1,1,0}, } --["HARDCORE"] = {0.651,0.6,0.451} }
 local EventIDAlias = { ["SAY"] = "[S] ",["YELL"] = "[Y] ",["GUILD"] = "[G] ",["OFFICER"] = "[O] ",["WHISPER"] = "",["WHISPER_INFORM"] = "[To] ",["PARTY"] = "[P] ",["RAID"] = "[R] ",["RAID_LEADER"] = "[RL] ",["RAID_WARNING"] = "[RW] ",
 ["BATTLEGROUND"] = "[BG] ",["BATTLEGROUND_LEADER"] = "[BL] ",["SYSTEM"] = "",}
-local GF_TextBypassChatNameAlias = { ["OFFICER"] = "GUILD",["RAID"] = "PARTY",["RAID_LEADER"] = "PARTY",["RAID_WARNING"] = "PARTY",["BATTLEGROUND"] = "PARTY",["BATTLEGROUND_LEADER"] = "PARTY",["WHISPER_INFORM"] = "WHISPER", ["HARDCORE"] = "PARTY",}
-local GF_LootFilter = { ["MONEY"] = true,["LOOT"] = true,["COMBAT_FACTION_CHANGE"] = true,["COMBAT_XP_GAIN"] = true,["COMBAT_HONOR_GAIN"] = true }
+local GF_ChatNameAlias = { ["OFFICER"] = "GUILD",["RAID"] = "PARTY",["RAID_LEADER"] = "PARTY",["RAID_WARNING"] = "PARTY",["BATTLEGROUND"] = "PARTY",["BATTLEGROUND_LEADER"] = "PARTY",["WHISPER_INFORM"] = "WHISPER",["HARDCORE"] = "PARTY",}
+local GF_ChatBypass = { ["MONEY"] = true,["LOOT"] = true,["COMBAT_FACTION_CHANGE"] = true,["COMBAT_XP_GAIN"] = true,["COMBAT_HONOR_GAIN"] = true,["EMOTE"] = true,["TEXT_EMOTE"] = true,["MONSTER_SAY"] = true,["MONSTER_EMOTE"] = true,["MONSTER_YELL"] = true,}
 local ThingsToHide = { "GF_MainFrameCloseButton","GF_GroupChatOptionsFrame","GF_ShowSearchButton","GF_SettingsFrameButton","GF_ShowBlacklistButton","GF_LogFrameButton","GF_AnnounceToLFGButton",
 "GF_LogBottomButton","GF_LogDownButton","GF_LogUpButton","GF_LogFilterDropdownButton","GF_LogChannelFilterDropdownButton","GF_ConvertLogMessagesToURL","GF_WhisperLogButton","GF_GroupLogButton",
 "GF_GetWhoFrame","GF_LFGFrame","GF_MessageFrame","GF_LogFilterDropdownMenu","GF_GroupFilterDropdownMenu","GF_ChatFilterDropdownMenu","GF_LFGHardCoreDropdown","GF_FontName","GF_GroupChannelName","GF_BlockList","GF_AutoBlacklistDropdownMenu", }
@@ -725,7 +725,7 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 		if not GF_ProcessedFirstMessage[arg2] then
 			--print(GetTime())
 			GF_ChatFunctions(event,arg1,arg2,arg8,arg9)
-			if GF_SavedVariables.showformattedchat and GF_PreviousMessage[arg2] and GF_PreviousMessage[arg2][1] then
+			if not GF_ChatBypass[strsub(event,10)] and GF_SavedVariables.showformattedchat and GF_PreviousMessage[arg2] and GF_PreviousMessage[arg2][1] then
 				if GF_PreviousMessage[arg2][2] then arg1 = GF_PreviousMessage[arg2][2] end
 				if event == "CHAT_MSG_CHANNEL" then GF_AddChannelMessage(arg1,arg2,arg8,arg9) else GF_AddChatMessage(arg1,arg2,strsub(event,10)) end
 				GF_PreviousMessage[arg2] = {}
@@ -797,30 +797,35 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 	function ChatFrame_AddMessageGroup(chatFrame,group)
 		old_ChatFrame_AddMessageGroup(chatFrame,group)
 		GF_ChatGetChannelsGroups()
+		GF_ChatChannelsGroups[chatFrame:GetID()].group[group] = true
 	end
 	local old_ChatFrame_RemoveMessageGroup = ChatFrame_RemoveMessageGroup	
 	function ChatFrame_RemoveMessageGroup(chatFrame,group)
 		old_ChatFrame_RemoveMessageGroup(chatFrame,group)
 		GF_ChatGetChannelsGroups()
+		GF_ChatChannelsGroups[chatFrame:GetID()].group[group] = nil
 	end
 	local old_ChatFrame_AddChannel = ChatFrame_AddChannel
 	function ChatFrame_AddChannel(chatFrame,channel)
 		old_ChatFrame_AddChannel(chatFrame,channel)
 		GF_ChatGetChannelsGroups()
+		GF_ChatChannelsGroups[chatFrame:GetID()].channel[strlower(channel)] = true
 	end
 	local old_ChatFrame_RemoveChannel = ChatFrame_RemoveChannel	
 	function ChatFrame_RemoveChannel(chatFrame,channel)
 		old_ChatFrame_RemoveChannel(chatFrame,channel)
 		GF_ChatGetChannelsGroups()
+		GF_ChatChannelsGroups[chatFrame:GetID()].channel[strlower(channel)] = nil
 	end
 	local old_JoinChannelByName = JoinChannelByName	
 	function JoinChannelByName(channel,a2,a3,a4)
 		old_JoinChannelByName(channel,a2,a3,a4)
-		GF_ChatJoinedChannels[strlower(channel)] = true
+		GF_ChatGetChannelsGroups()
 	end
 	local old_LeaveChannelByName = LeaveChannelByName	
 	function LeaveChannelByName(channel)
 		old_LeaveChannelByName(channel)
+		GF_ChatGetChannelsGroups()
 		GF_ChatJoinedChannels[strlower(channel)] = nil
 	end
 	local old_UIErrorsFrame_OnEvent = UIErrorsFrame_OnEvent	
@@ -1243,10 +1248,10 @@ function GF_AddChannelMessage(arg1,arg2,arg8,arg9,nodelay) -- Message Handlers
 end
 function GF_AddChatMessage(arg1,arg2,event,nodelay)
 	if not GF_SavedVariables.friendsToRemove[arg2] or nodelay or not GF_PlayingOnTurtle or GF_WhoTable[GF_RealmName][arg2] or not GF_SavedVariables.usewhoongroups or not GF_SavedVariables.usefriendslist then
-		arg1 = (EventIDAlias[event] or "["..strsub(event,1,1).."] ")..GF_MakeBasicChatString(arg1,arg2)
+		arg1 = (EventIDAlias[event] or "["..strsub(event,1,1).."] ")..GF_MakeBasicChatString(arg1,arg2,event)
 		for i=1,NUM_CHAT_WINDOWS do
 			if not GF_ChatChannelsGroups[i] then GF_ChatGetChannelsGroups() end
-			if GF_ChatChannelsGroups[i].group[event] or GF_ChatChannelsGroups[i].group[GF_TextBypassChatNameAlias[event]] then
+			if GF_ChatChannelsGroups[i].group[event] or GF_ChatChannelsGroups[i].group[GF_ChatNameAlias[event]] then
 				getglobal("ChatFrame"..i):AddMessage(arg1, GF_TextColors[event][1], GF_TextColors[event][2], GF_TextColors[event][3])
 			end
 		end
@@ -1254,8 +1259,8 @@ function GF_AddChatMessage(arg1,arg2,event,nodelay)
 		table.insert(GF_LogHistory[GF_RealmName]["Delay"], {"Chat",time()+20,arg1,arg2,event})
 	end
 end
-function GF_MakeBasicChatString(arg1,arg2)
-	if arg2 == "SYSTEM" or GF_LootFilter[event] then
+function GF_MakeBasicChatString(arg1,arg2,event)
+	if arg2 == "SYSTEM" or GF_ChatBypass[event] then
 		return arg1
 	elseif arg2 == UnitName("player") then
 		return "|cff"..(GF_ClassColors[({UnitClass("player")})[2]] or "9d9d9d").."|Hplayer:"..arg2.."|h["..arg2..", "..UnitLevel("player").."]|h|r: "..arg1
@@ -1383,7 +1388,7 @@ end
 function GF_AddLogMessage(arg1,logcode,add,arg2,arg8,arg9,event,nodelay)
 	if not GF_SavedVariables.friendsToRemove[arg2] or nodelay or not GF_PlayingOnTurtle or GF_WhoTable[GF_RealmName][arg2] or not GF_SavedVariables.usewhoongroups or not GF_SavedVariables.usefriendslist then
 		if add then
-			arg1 = GF_MakeBasicChatString(strsub(GF_ChatReplaceHplayer(gsub(gsub(gsub(gsub(" "..arg1," (www%d-)%.([_A-Za-z0-9-]+)%.(%S+)%s?", " |cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r")," (%a+)://(%S+)", " |cffccccff|Hurl:%1://%2|h[%1://%2]|h|r")," (%a+)%.(%a+)/(%S+)", " |cffccccff|Hurl:%1.%2/%3|h[%1.%2/%3]|h|r")," ([_A-Za-z0-9-]+)%.([_A-Za-z0-9-]+)%.(%S+)", " |cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r")),2),arg2)
+			arg1 = GF_MakeBasicChatString(strsub(gsub(gsub(gsub(gsub(" "..arg1," (www%d-)%.([_A-Za-z0-9-]+)%.(%S+)%s?", " |cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r")," (%a+)://(%S+)", " |cffccccff|Hurl:%1://%2|h[%1://%2]|h|r")," (%a+)%.(%a+)/(%S+)", " |cffccccff|Hurl:%1.%2/%3|h[%1.%2/%3]|h|r")," ([_A-Za-z0-9-]+)%.([_A-Za-z0-9-]+)%.(%S+)", " |cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r"),2),arg2,event)
 			if event == "CHANNEL" then arg9 = string.gsub(strlower(arg9), " - .*", "") arg1 = "["..arg8..". "..strupper(strsub(arg9,1,1))..strsub(arg9,2).."] "..arg1 end
 			arg1 = "["..date("%H:%M").."] "..GF_LogMessageCodes[logcode].." "..arg1
 			table.insert(GF_LogHistory[GF_RealmName],1, {arg1,logcode,event})
@@ -1469,24 +1474,28 @@ function GF_CheckForDelayedMessages()
 		if GF_LogHistory[GF_RealmName]["Delay"][i] then
 			if GF_LogHistory[GF_RealmName]["Delay"][i][1] == "Log" and (GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][6]] or GF_LogHistory[GF_RealmName]["Delay"][i][2] < time()) then
 				if GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][6]] and GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][6]][1] < GF_SavedVariables.blockmessagebelowlevel then GF_LogHistory[GF_RealmName]["Delay"][i][4] = 9 end
-				GF_AddLogMessage(GF_ChatReplaceHplayer(GF_LogHistory[GF_RealmName]["Delay"][i][3]),GF_LogHistory[GF_RealmName]["Delay"][i][4],GF_LogHistory[GF_RealmName]["Delay"][i][5],GF_LogHistory[GF_RealmName]["Delay"][i][6],GF_LogHistory[GF_RealmName]["Delay"][i][7],GF_LogHistory[GF_RealmName]["Delay"][i][8],GF_LogHistory[GF_RealmName]["Delay"][i][9],true)
+				GF_AddLogMessage(GF_LogHistory[GF_RealmName]["Delay"][i][3],GF_LogHistory[GF_RealmName]["Delay"][i][4],GF_LogHistory[GF_RealmName]["Delay"][i][5],GF_LogHistory[GF_RealmName]["Delay"][i][6],GF_LogHistory[GF_RealmName]["Delay"][i][7],GF_LogHistory[GF_RealmName]["Delay"][i][8],GF_LogHistory[GF_RealmName]["Delay"][i][9],true)
 				table.remove(GF_LogHistory[GF_RealmName]["Delay"],i)
 				i = i - 1
 			elseif GF_LogHistory[GF_RealmName]["Delay"][i][1] == "Channel" and (GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][4]] or GF_LogHistory[GF_RealmName]["Delay"][i][2] < time()) then
 				if not GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][4]] or GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][4]][1] >= GF_SavedVariables.blockmessagebelowlevel then
-					GF_AddChannelMessage(GF_ChatReplaceHplayer(GF_LogHistory[GF_RealmName]["Delay"][i][3]),GF_LogHistory[GF_RealmName]["Delay"][i][4],GF_LogHistory[GF_RealmName]["Delay"][i][5],GF_LogHistory[GF_RealmName]["Delay"][i][6],true)
+					GF_AddChannelMessage(GF_LogHistory[GF_RealmName]["Delay"][i][3],GF_LogHistory[GF_RealmName]["Delay"][i][4],GF_LogHistory[GF_RealmName]["Delay"][i][5],GF_LogHistory[GF_RealmName]["Delay"][i][6],true)
 				end
 				table.remove(GF_LogHistory[GF_RealmName]["Delay"],i)
 				i = i - 1
 			elseif GF_LogHistory[GF_RealmName]["Delay"][i][1] == "Chat" and (GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][4]] or GF_LogHistory[GF_RealmName]["Delay"][i][2] < time()) then
 				if not GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][4]] or GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][4]][1] >= GF_SavedVariables.blockmessagebelowlevel then
-					GF_AddChatMessage(GF_ChatReplaceHplayer(GF_LogHistory[GF_RealmName]["Delay"][i][3]),GF_LogHistory[GF_RealmName]["Delay"][i][4],GF_LogHistory[GF_RealmName]["Delay"][i][5],true)
+					GF_AddChatMessage(GF_LogHistory[GF_RealmName]["Delay"][i][3],GF_LogHistory[GF_RealmName]["Delay"][i][4],GF_LogHistory[GF_RealmName]["Delay"][i][5],true)
 				end
+				table.remove(GF_LogHistory[GF_RealmName]["Delay"],i)
+				i = i - 1
+			elseif GF_LogHistory[GF_RealmName]["Delay"][i][1] == "Whisper" and (GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][4]] or GF_LogHistory[GF_RealmName]["Delay"][i][2] < time()) then
+				GF_WhisperReceivedAddToWhisperHistoryList(GF_LogHistory[GF_RealmName]["Delay"][i][3],GF_LogHistory[GF_RealmName]["Delay"][i][4],GF_LogHistory[GF_RealmName]["Delay"][i][5],true)
 				table.remove(GF_LogHistory[GF_RealmName]["Delay"],i)
 				i = i - 1
 			elseif GF_LogHistory[GF_RealmName]["Delay"][i][1] == "Minimap" and (GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][4]] or GF_LogHistory[GF_RealmName]["Delay"][i][2] < time()) then
 				if not GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][4]] or GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][4]][1] >= GF_SavedVariables.blockmessagebelowlevel then
-					GF_ShowGroupsOnMinimap(GF_ChatReplaceHplayer(GF_LogHistory[GF_RealmName]["Delay"][i][3]),GF_LogHistory[GF_RealmName]["Delay"][i][4],true)
+					GF_ShowGroupsOnMinimap(GF_LogHistory[GF_RealmName]["Delay"][i][3],GF_LogHistory[GF_RealmName]["Delay"][i][4],true)
 				end
 				table.remove(GF_LogHistory[GF_RealmName]["Delay"],i)
 				i = i - 1
@@ -2154,6 +2163,7 @@ function GF_CHAT_MSG_TEXT_EMOTE()
 	GF_CheckForEmotes(arg1,arg2)
 end
 function GF_CHAT_MSG_WHISPER()
+	if not GF_WhoTable[GF_RealmName][arg2] and GF_PlayingOnTurtle and GF_SavedVariables.usewhoongroups and GF_SavedVariables.usefriendslist then GF_GetWhoData(arg2) end
 	GF_WhisperReceivedAddToWhisperHistoryList(arg1,arg2,strsub(event,10))
 	table.insert(DEFAULT_CHAT_FRAME.editBox.lastTell,1,arg2)
 	GF_PreviousMessage[arg2] = {true}
@@ -3484,33 +3494,37 @@ function GF_WhisperHistoryButtonPressed(id,override,nolog) -- Whisper/Guild Hist
 		if GF_SavedVariables.showwhisperlogs == 1 then GF_WhisperHistoryDisplayLog(getglobal("GF_WhisperHistoryButton"..id):GetText()) elseif GF_SavedVariables.showwhisperlogs == 2 then GF_GroupHistoryDisplayLog(getglobal("GF_WhisperHistoryButton"..id):GetText()) end
 	end
 end
-function GF_WhisperReceivedAddToWhisperHistoryList(arg1,name,event)
-	arg1 = "|cff"..GF_ClassColors[({UnitClass("player")})[2]].."|Hplayer:"..UnitName("player").."|h".."["..date("%m/%d").."]|h|r ["..date("%H:%M").."] "..EventIDAlias[event]..GF_MakeBasicChatString(strsub(GF_ChatReplaceHplayer(gsub(gsub(gsub(gsub(" "..arg1.." "," (www%d-)%.([_A-Za-z0-9-]+)%.(%S+)%s?", " |cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r")," (%a+)://(%S+)", " |cffccccff|Hurl:%1://%2|h[%1://%2]|h|r")," (%a+)%.(%a+)/(%S+)", " |cffccccff|Hurl:%1.%2/%3|h[%1.%2/%3]|h|r")," ([_A-Za-z0-9-]+)%.([_A-Za-z0-9-]+)%.(%S+)", " |cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r")),2),arg2)
-	if not GF_WhisperLogData[GF_RealmName][name] then GF_WhisperLogData[GF_RealmName][name] = {} if GF_Friends[name] then GF_WhisperLogData[GF_RealmName][name].priority = true end end
-	if event == "GUILD" or event == "OFFICER" then
-		table.insert(GF_WhisperLogData[GF_RealmName]["Guild"],1,{arg1,event})
-		if getn(GF_WhisperLogData[GF_RealmName]["Guild"]) > 128 then table.remove(GF_WhisperLogData[GF_RealmName]["Guild"],129) end
-	else
-		table.insert(GF_WhisperLogData[GF_RealmName][name],1,{arg1,"WHISPER"})
-		table.insert(GF_WhisperLogData[GF_RealmName]["Guild"],1,{arg1,"WHISPER"})
-		if getn(GF_WhisperLogData[GF_RealmName][name]) > 128 then table.remove(GF_WhisperLogData[GF_RealmName][name],129) end
-		if getn(GF_WhisperLogData[GF_RealmName]["Guild"]) > 128 then table.remove(GF_WhisperLogData[GF_RealmName]["Guild"],129) end
-		GF_WhisperHistoryUpdateFrame(name)
-	end
-	table.insert(GF_LogHistory[GF_RealmName],1,{arg1,10,event})
-	if getn(GF_LogHistory[GF_RealmName]) > 500 then table.remove(GF_LogHistory[GF_RealmName],501) end
-	if GF_WhisperLogCurrentButtonID < 2 or name == getglobal("GF_WhisperHistoryButton"..GF_WhisperLogCurrentButtonID):GetText() then
-		if GF_ConvertMessagesToLinks then
-			local _,_,startString,endString = strfind(arg1, "(.-%].-|Hplayer.-|h|r:? )(.*)")
-			if startString then
-				endString = gsub(gsub(gsub(gsub(endString, "|[cC]%x+|%w+:%w+:[%w:]+|[h]", ""), "|[cC]%x+%p+%w+:(.-)|h.-|h|r", "%1"), "|[cC]%x+", ""), "|[hHrR]?", "")
-				GF_Log:AddMessage(startString.."|cffccccff|Hurl:"..endString.."|h"..endString.."|h|r", GF_TextColors[event][1], GF_TextColors[event][2], GF_TextColors[event][3])
+function GF_WhisperReceivedAddToWhisperHistoryList(arg1,arg2,event,nodelay)
+	if not GF_SavedVariables.friendsToRemove[arg2] or nodelay or not GF_PlayingOnTurtle or GF_WhoTable[GF_RealmName][arg2] or not GF_SavedVariables.usewhoongroups or not GF_SavedVariables.usefriendslist then
+		arg1 = "|cff"..GF_ClassColors[({UnitClass("player")})[2]].."|Hplayer:"..UnitName("player").."|h".."["..date("%m/%d").."]|h|r ["..date("%H:%M").."] "..EventIDAlias[event]..GF_MakeBasicChatString(strsub(gsub(gsub(gsub(gsub(" "..arg1.." "," (www%d-)%.([_A-Za-z0-9-]+)%.(%S+)%s?", " |cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r")," (%a+)://(%S+)", " |cffccccff|Hurl:%1://%2|h[%1://%2]|h|r")," (%a+)%.(%a+)/(%S+)", " |cffccccff|Hurl:%1.%2/%3|h[%1.%2/%3]|h|r")," ([_A-Za-z0-9-]+)%.([_A-Za-z0-9-]+)%.(%S+)", " |cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r"),2),arg2,event)
+		if not GF_WhisperLogData[GF_RealmName][arg2] then GF_WhisperLogData[GF_RealmName][arg2] = {} if GF_Friends[arg2] then GF_WhisperLogData[GF_RealmName][arg2].priority = true end end
+		if event == "GUILD" or event == "OFFICER" then
+			table.insert(GF_WhisperLogData[GF_RealmName]["Guild"],1,{arg1,event})
+			if getn(GF_WhisperLogData[GF_RealmName]["Guild"]) > 128 then table.remove(GF_WhisperLogData[GF_RealmName]["Guild"],129) end
+		else
+			table.insert(GF_WhisperLogData[GF_RealmName][arg2],1,{arg1,"WHISPER"})
+			table.insert(GF_WhisperLogData[GF_RealmName]["Guild"],1,{arg1,"WHISPER"})
+			if getn(GF_WhisperLogData[GF_RealmName][arg2]) > 128 then table.remove(GF_WhisperLogData[GF_RealmName][arg2],129) end
+			if getn(GF_WhisperLogData[GF_RealmName]["Guild"]) > 128 then table.remove(GF_WhisperLogData[GF_RealmName]["Guild"],129) end
+			GF_WhisperHistoryUpdateFrame(arg2)
+		end
+		table.insert(GF_LogHistory[GF_RealmName],1,{arg1,10,event})
+		if getn(GF_LogHistory[GF_RealmName]) > 500 then table.remove(GF_LogHistory[GF_RealmName],501) end
+		if GF_WhisperLogCurrentButtonID < 2 or arg2 == getglobal("GF_WhisperHistoryButton"..GF_WhisperLogCurrentButtonID):GetText() then
+			if GF_ConvertMessagesToLinks then
+				local _,_,startString,endString = strfind(arg1, "(.-%].-|Hplayer.-|h|r:? )(.*)")
+				if startString then
+					endString = gsub(gsub(gsub(gsub(endString, "|[cC]%x+|%w+:%w+:[%w:]+|[h]", ""), "|[cC]%x+%p+%w+:(.-)|h.-|h|r", "%1"), "|[cC]%x+", ""), "|[hHrR]?", "")
+					GF_Log:AddMessage(startString.."|cffccccff|Hurl:"..endString.."|h"..endString.."|h|r", GF_TextColors[event][1], GF_TextColors[event][2], GF_TextColors[event][3])
+				else
+					GF_Log:AddMessage(arg1, GF_TextColors[event][1], GF_TextColors[event][2], GF_TextColors[event][3])
+				end
 			else
 				GF_Log:AddMessage(arg1, GF_TextColors[event][1], GF_TextColors[event][2], GF_TextColors[event][3])
 			end
-		else
-			GF_Log:AddMessage(arg1, GF_TextColors[event][1], GF_TextColors[event][2], GF_TextColors[event][3])
 		end
+	else
+		table.insert(GF_LogHistory[GF_RealmName]["Delay"], {"Whisper",time()+20,arg1,arg2,event})
 	end
 end
 function GF_GroupFinishedAddToGroupHistoryList(message,name,event)

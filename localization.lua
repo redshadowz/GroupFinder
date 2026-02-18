@@ -704,6 +704,7 @@ GF_WORD_FIX_SECOND = {
 ["globesmountspeed"] = {"gloves","mountspeed"},["globesarcane"] = {"gloves","arcane"},["globesshadow"] = {"gloves","shadow"},["globesfire"] = {"gloves","fire"},["globesnature"] = {"gloves","nature"},["globesheal"] = {"gloves","heal"},
 ["globesspelldamage"] = {"gloves","spelldamage"},["globesthreat"] = {"gloves","threat"},["globesherb"] = {"gloves","herb"},["globesskin"] = {"gloves","skin"},["globesfish"] = {"gloves","fish"},["globesmine"] = {"gloves","mine"},
 ["triballeatherworker"] = {"specialization","leatherworker"},["elementalleatherworker"] = {"specialization","leatherworker"},["dragonscaleleatherworker"] = {"specialization","leatherworker"},["bakstair"] = {"bank","stair"},
+["wshitem"] = {"wts","hitem"},
 
 -- Location
 ["inogr"] = {"in","orgrimmar"},
@@ -1773,7 +1774,7 @@ GF_WORD_IGNORE = { -- Phrases to help prevent group false-positives.
 ["whilefinding"] = 1,["whilehardreserving"] = 1,["whileleveling"] = 1,["whininginthe"] = .5,["whisperingme"] = .5,["whitelevel"] = 1,["whohr"] = 1,["whoismore"] = .5,["wholeminute"] = 1,
 ["whoneeddamage"] = 1,["whosummoned"] = 1,["whouses"] = 1,["whyareall"] = 1,["whyarethere"] = 1,["whyarethese"] = .5,["whycani"] = 1,["whycanti"] = 1,["whydopeople"] = 1,
 ["whyhell"] = 1,["whyicant"] = 1,["whyis"] = .5,["whyiseveryone"] = 1,["whyisit"] = .5,["whynoonedoing"] = 1,["whythereare"] = 1,["whywouldi"] = 1,["wieldme"] = 1,
-["willendwell"] = 1,["willitbeat"] = 1,["winningtheroll"] = 1,["wishaliens"] = 1,["withhand"] = .5,["withbasically"] = 1,["withgear"] = 1,["withhim"] = 1,["withhow"] = .5,
+["willendwell"] = 1,["willitbeat"] = 1,["winningtheroll"] = 1,["wishaliens"] = 1,["withhand"] = .5,["withbasically"] = 1,["withhim"] = 1,["withhow"] = .5,
 ["withquestion"] = 1,["withrandom"] = 1,["withsomething"] = 1,["withthenameof"] = 1,["workoutfor"] = 1,["workshere"] = 1,["worldchat"] = .5,["wouldneed"] = 1,["wouldnotbemad"] = 1,
 ["wouldnotbeask"] = 1,["wouldstop"] = 1,["wouldtankgetquicker"] = 1,["wowyouneed"] = 1,["wtf"] = 1,["xcitingx"] = 1,["yalltobusy"] = .5,["yeahat"] = 1,["yeahidig"] = .5,
 ["yearago"] = 1,["yearsago"] = 1,["yell"] = 1,["yesterday"] = 1,["youareconfusing"] = 1,["youaredamage"] = 1,["youaredps"] = 1,["youareheal"] = 1,["youarehealer"] = 1,["youarejustask"] = 1,["youarejustlooking"] = 1,
@@ -3667,10 +3668,10 @@ GF_TRADE_WORD_EXCLUSION = {
 ["wtbsmalltwink"] = .5,["wtbspam"] = 1.25,["wtbwife"] = .5,["wtsbf"] = .5,["wtsboyfriend"] = .5,["wtsdankmemes"] = .5,["wtsgf"] = .5,["wtsgirlfriend"] = .5,["wtsmyass"] = .5,
 ["wtssmalltwink"] = .5,["wtsspam"] = 1.25,["wtswife"] = .5,["youcanhave"] = .5,["youdonotneed"] = 1,["youdonotunderstand"] = 1,["younotunderstand"] = 1,["youwillhave"] = .5,
 
-["christian"] = .25,["women"] = .25,["wheredoi"] = .5,["doilearn"] = .5,["wheredoilearn"] = 1,
+["christian"] = .25,["women"] = .25,["wheredoi"] = .5,["doilearn"] = .5,["wheredoilearn"] = 1,["firstpull"] = .5,["gearlevel"] = .25,
 ["myownmessage"] = .5,["cantsay"] = .5,["butifi"] = .5,["anyonehaveongoing"] = 1,["anyonehavegroup"] = 1,["doineed"] = 1,["ordoi"] = .5,
 
-["offline"] = 1,["gearcheck"] = .5,
+["offline"] = 1,["gearcheck"] = .5,["mctonight"] = .5,["bwltonight"] = .5,["aqtonight"] = .5,["naxxramastonight"] = .5,["blackwinglairtonight"] = .5,["moltencoretonight"] = .5,["karazhantonight"] = .5,["estonight"] = .5,["emeraldsanctumtonight"] = .5,
 
 }
 GF_TRADE_COMMON_WORDS = {
