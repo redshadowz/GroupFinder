@@ -93,7 +93,7 @@ local EventIDAlias = { ["SAY"] = "[S] ",["YELL"] = "[Y] ",["GUILD"] = "[G] ",["O
 ["BATTLEGROUND"] = "[BG] ",["BATTLEGROUND_LEADER"] = "[BL] ",["SYSTEM"] = "",}
 local GF_ChatNameAlias = { ["OFFICER"] = "GUILD",["RAID"] = "PARTY",["RAID_LEADER"] = "PARTY",["RAID_WARNING"] = "PARTY",["BATTLEGROUND"] = "PARTY",["BATTLEGROUND_LEADER"] = "PARTY",["WHISPER_INFORM"] = "WHISPER",}
 local GF_ChatBypass = { ["MONEY"] = true,["LOOT"] = true,["COMBAT_FACTION_CHANGE"] = true,["COMBAT_XP_GAIN"] = true,["COMBAT_HONOR_GAIN"] = true,["EMOTE"] = true,["TEXT_EMOTE"] = true,["MONSTER_SAY"] = true,["MONSTER_EMOTE"] = true,["MONSTER_YELL"] = true,}
-local ThingsToHide = { "GF_MainFrameCloseButton","GF_GroupChatOptionsFrame","GF_ShowSearchButton","GF_SettingsFrameButton","GF_ShowBlacklistButton","GF_LogFrameButton","GF_AnnounceToLFGButton",
+local ThingsToHide = { "GF_MainFrameCloseButton","GF_GroupChatOptionsFrame","GF_ShowGroupsButton","GF_SettingsFrameButton","GF_ShowBlacklistButton","GF_LogFrameButton","GF_AnnounceToLFGButton",
 "GF_LogBottomButton","GF_LogDownButton","GF_LogUpButton","GF_LogFilterDropdownButton","GF_LogChannelFilterDropdownButton","GF_ConvertLogMessagesToURL","GF_WhisperLogButton","GF_GroupLogButton",
 "GF_GetWhoFrame","GF_LFGFrame","GF_MessageFrame","GF_LogFilterDropdownMenu","GF_GroupFilterDropdownMenu","GF_ChatFilterDropdownMenu","GF_LFGHardCoreDropdown","GF_FontName","GF_GroupChannelName","GF_BlockList","GF_AutoBlacklistDropdownMenu","GF_LogChannelName" }
 local GF_DifficultyColors = { ["RED"] = "ff0000",["ORANGE"] = "ff8040",["YELLOW"] = "ffff00",["GREEN"] = "1eff00",["GREY"] = "808080", }
@@ -379,6 +379,7 @@ function GF_LoadSettings()
 	GF_SetDropdownWidths()
 	GF_SetLFGRoleButtons()
 	GF_AddNamesToGroupHistoryList()
+	GF_UpdateQueueLFTButton()
 end
 function GF_SetStringSize()
 	local fontName,fontSizeMinimap,fontSizeLarge,fontSizeButton
@@ -435,7 +436,7 @@ function GF_SetStringSize()
 	"GF_AutoBlacklistChatCheckButtonTextLabel","GF_AutoBlacklistForeignCheckButtonTextLabel","GF_FontNameDropdownTextLabel","GF_BlockListDropdownTextLabel","GF_SquareMinimapCheckButtonTextLabel","GF_AddPlayerFrameContentLabel",
 	"GF_SettingsFrameChatSettingsTitle","GF_SettingsFrameGroupSettingsTitle","GF_SettingsFrameLFxSettingsTitle","GF_SettingsFrameOtherSettingsTitle","GF_PageLabel",}
 	for i=1, getn(frameNames) do getglobal(frameNames[i]):SetFont(fontName,GF_BaseFontSize) end
-	frameNames = { "GF_GetWhoTotalNames","GF_AnnounceToLFGButton","GF_GetWhoButton","GF_GetWhoSkipButton","GF_GetWhoWhisperButton","GF_GetWhoNameLabel","GF_ShowSearchButton",	"GF_SettingsFrameButton","GF_PlayerNoteFrameOKButton",
+	frameNames = { "GF_GetWhoTotalNames","GF_AnnounceToLFGButton","GF_GetWhoButton","GF_GetWhoSkipButton","GF_GetWhoWhisperButton","GF_GetWhoNameLabel","GF_ShowGroupsButton",	"GF_SettingsFrameButton","GF_PlayerNoteFrameOKButton","GF_QueuetoLFTButton",
 	"GF_PlayerNoteFrameDeleteButton","GF_ShowBlacklistButton","GF_LogFrameButton","GF_LFGFrameToggleButton","GF_GetWhoFrameToggleButton","GF_ConvertLogMessagesToURL","GF_UIScaleSliderUpdateButton","GF_ResetAllSettingsDialogCloseButton",
 	"GF_ResetAllSettingsButton","GF_AddPlayerButton","GF_BlackListFramePageLabel","GF_WhisperLogButton","GF_GroupLogButton","GF_MinimapIconTextLabel","GF_AddPlayerFrameOkButton","GF_AddPlayerFrameCloseButton","GF_ResetAllSettingsDialogOkButton",}
 	for i=1, getn(frameNames) do getglobal(frameNames[i]):SetFont(fontName,fontSizeButton) end
@@ -1934,6 +1935,7 @@ end
 function self:PLAYER_LEVEL_UP()
 	GF_FixLFGStrings()
 	if GF_PerCharVariables.getwhowhisperlevel == 0 then GF_GetWhoLevelDropdownTextLabel:SetText(LEVEL.." "..UnitLevel("player").."±") end
+	GF_UpdateQueueLFTButton()
 end
 function self:RAID_ROSTER_UPDATE()
 	GF_UpdateGroup()
@@ -3157,6 +3159,7 @@ function GF_UpdateGroup()
 				GF_PlayersCurrentlyInGroup[name] = true
 			end
 		end
+		if GF_QueuetoLFTButton:IsVisible() then GF_QueuetoLFTButton:Hide() GF_QueuetoLFTButton:SetText(GF_QUEUE_IN_LFT) end
 	else
 		for i=1,4 do
 			if UnitExists("party"..i) and GF_Classes[({UnitClass("party"..i)})[2]] and UnitLevel("party"..i) and UnitLevel("party"..i) > 0 then
@@ -4165,7 +4168,7 @@ function GF_LFGCommonCleanup(entryName)
 end
 
 function GF_QueueLFT() -- /script GF_QueueLFT()
-local LFTInstances = {}
+	local LFTInstances = {}
 	for i=1, 100 do
 		if getglobal("LFTFrameInstancesListEntry"..i) then
 			table.insert(LFTInstances,getglobal("LFTFrameInstancesListEntry"..i).instance)
@@ -4178,16 +4181,24 @@ local LFTInstances = {}
 	if GF_PerCharVariables.lfgheal then if not LFTFrameRoleHealerCheckButton:GetChecked() then LFTFrameRoleHealerCheckButton:Click() end else if LFTFrameRoleHealerCheckButton:GetChecked() then LFTFrameRoleHealerCheckButton:Click() end end
 	if GF_PerCharVariables.lfgdps then if not LFTFrameRoleDamageCheckButton:GetChecked() then LFTFrameRoleDamageCheckButton:Click() end else if LFTFrameRoleDamageCheckButton:GetChecked() then LFTFrameRoleDamageCheckButton:Click() end end
 
-
-
 	for i=1,getn(LFTInstances) do
 	end
-
 
 -- Need to make a list of the dungeons in my addon
 -- Need to get a list of available LFT dungeons(LFTFrameInstancesListEntry1.instance) to see what matches
 
 	LFTFrameMainButton:Click()
+end
+function GF_UpdateQueueLFTButton(update)
+-- If there are groups in lfgeditbox, show the button
+-- make mouseover button to show what groups it will queue for... must also have roles checked
+	if LFTFrame then
+		if update and not LFTFrame:IsVisible() then LFT_Toggle() LFT_Toggle() end
+		if LFTFrameMainButton:GetButtonState() ~= "DISABLED" then GF_QueuetoLFTButton:SetText(GF_LEAVE_QUEUE) end
+
+	end
+--	if GF_QueuetoLFTButton:IsVisible() then GF_QueuetoLFTButton:Hide() GF_QueuetoLFTButton:SetText(GF_QUEUE_IN_LFT) end
+
 end
 
 function print(msg) -- I added this only temporarily so I could work on the addon without having to turn on other addons(reload faster)

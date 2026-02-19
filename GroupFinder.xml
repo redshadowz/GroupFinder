@@ -1366,26 +1366,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_ChatFilterShowLootCheckButton" inherits="GF_CheckButtonTemplate_Label">
-								<Anchors>
-									<Anchor point="TOP" relativeTo="GF_ChatFilterShowTradesCheckButton" relativePoint="BOTTOM">
-										<Offset>
-											<AbsDimension x="0" y="6"/>
-										</Offset>
-									</Anchor>
-								</Anchors>
-								<Scripts>
-									<OnClick>
-										GF_SavedVariables.showloottexts = this:GetChecked()
-									</OnClick>
-									<OnLoad>
-										getglobal(this:GetName().."TextLabel"):SetText(GF_LOOT)
-									</OnLoad>
-								</Scripts>
-							</CheckButton>
 							<CheckButton name="GF_ChatFilterShowGuildsCheckButton" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
-									<Anchor point="TOP" relativeTo="GF_ChatFilterShowLootCheckButton" relativePoint="BOTTOM">
+									<Anchor point="TOP" relativeTo="GF_ChatFilterShowTradesCheckButton" relativePoint="BOTTOM">
 										<Offset>
 											<AbsDimension x="0" y="6"/>
 										</Offset>
@@ -1397,6 +1380,23 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnClick>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_GUILDS)
+									</OnLoad>
+								</Scripts>
+							</CheckButton>
+							<CheckButton name="GF_ChatFilterShowLootCheckButton" inherits="GF_CheckButtonTemplate_Label">
+								<Anchors>
+									<Anchor point="TOP" relativeTo="GF_ChatFilterShowGuildsCheckButton" relativePoint="BOTTOM">
+										<Offset>
+											<AbsDimension x="0" y="6"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										GF_SavedVariables.showloottexts = this:GetChecked()
+									</OnClick>
+									<OnLoad>
+										getglobal(this:GetName().."TextLabel"):SetText(GF_LOOT)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -1698,11 +1698,11 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnClick>
 				</Scripts>
 			</CheckButton>
-			<Button name="GF_ShowSearchButton" inherits="GF_CharacterFrameTabButtonTemplate" text="GF_FIND_PLAYERS_AND_GROUPS">
+			<Button name="GF_ShowGroupsButton" inherits="GF_CharacterFrameTabButtonTemplate" text="GF_GROUP_LISTINGS">
 				<Anchors>
 					<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
 						<Offset>
-							<AbsDimension x="5" y="-22"/>
+							<AbsDimension x="-1" y="-22"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -1721,7 +1721,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				<Anchors>
 					<Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT">
 						<Offset>
-							<AbsDimension x="3" y="-22"/>
+							<AbsDimension x="4" y="-22"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -1797,6 +1797,22 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnClick>
 				</Scripts>
 			</Button>
+			<Button name="GF_QueuetoLFTButton" inherits="GF_ButtonTemplate" text="GF_QUEUE_IN_LFT" hidden="true">
+				<Size>
+					<AbsDimension x="98" y="22"/>
+				</Size>
+				<Anchors>
+					<Anchor point="RIGHT" relativeTo="GF_AnnounceToLFGButton" relativePoint="LEFT">
+						<Offset>
+							<AbsDimension x="0" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+					</OnClick>
+				</Scripts>
+			</Button>
 			<Frame name="GF_GroupsFrame">
 				<Size>
 					<AbsDimension x="640" y="380"/>
@@ -1850,7 +1866,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									<AbsDimension x="40" y="22"/>
 								</Size>
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="GF_ShowSearchButton" relativePoint="TOPRIGHT">
+									<Anchor point="TOPLEFT" relativeTo="GF_ShowGroupsButton" relativePoint="TOPRIGHT">
 										<Offset>
 											<AbsDimension x="-5" y="3"/>
 										</Offset>

@@ -44,7 +44,7 @@ BINDING_NAME_GF_SHOW_GROUP= "Toggle Group Window"
 
 -- Main window common buttons and texts
 GF_MAIN_HEADER = "Group Finder" -- Main window title
-GF_FIND_PLAYERS_AND_GROUPS = "Find players and groups" -- Label for Groupfinder tab
+GF_GROUP_LISTINGS = "Groups listings" -- Label for Groupfinder tab
 GF_MORE_FEATURES = "More" -- Label for "More" frame(Settings/Log/Blacklist)
 GF_CHAT_FILTERS = "Chat Filters"
 GF_GROUP_FILTERS = "Group Filters"
@@ -116,7 +116,7 @@ GF_FOUND = "Found: " -- Shows number of groups on list
 GF_PAGE = "PAGE" -- Label for pages of groups.
 
 -- Settings tab buttons and texts
-GF_LOG = "   Log   " -- Label for Log tab
+GF_LOG = "  Log  " -- Label for Log tab
 GF_SETTINGS = "Settings" -- Label for Settings tab
 GF_BLACK_LIST = "Blacklist" -- Label for Blacklist tab
 GF_CHAT_SETTINGS = "Chat settings" -- Label for minimap section of Settings tab
@@ -232,6 +232,9 @@ GF_MINUTE = " minute"
 GF_MINUTES = " minutes"
 GF_TIME_AGO = " ago" -- Label for righttext on group list, showing how many minutes ago group was found
 GF_TIME_JUST_NOW = "Just now" -- Text for righttext on group list, "Found ## minutes ago"
+
+GF_QUEUE_IN_LFT = "Queue in LFT"
+GF_LEAVE_QUEUE = "Leave Queue"
 
 --if GetLocale() == "zhCN" then
 --elseif GetLocale() == "zhTW" then
@@ -4143,14 +4146,15 @@ GF_QUEST_CONVERT_NEGATIVE_ID = {
 GF_HIGH_ELF = "High Elf"
 GF_GOBLIN = "Goblin"
 local GF_TurtleSearchList = {
-[9] = { "Dragonmaw Retreat", 26, 33, "DRAG",},
-[8] = { "Crescent Grove", 34, 40, "CG",},
-[7] = { "Stormwrought Ruins", 35, 42, "STORM",},
-[6] = { "Gilneas City", 43, 49, "GC", },
-[5] = { "Hateforge Quarry", 52, 60, "HFQ", },
-[4] = { "Stormwind Vault", 60, 60, "SWV", },
-[3] = { "Black Morass", 60, 60, "COT", },
-[2] = { "Karazhan Crypt", 60, 60, "CRYPT", },
+[10] = { "Dragonmaw Retreat", 26, 33, "DRAG",},
+[9] = { "Crescent Grove", 34, 40, "CG",},
+[8] = { "Stormwrought Ruins", 35, 42, "STORM",},
+[7] = { "Gilneas City", 43, 49, "GC", },
+[6] = { "Hateforge Quarry", 52, 60, "HFQ", },
+[5] = { "Stormwind Vault", 60, 60, "SWV", },
+[4] = { "Black Morass", 60, 60, "COT", },
+[3] = { "Karazhan Crypt", 60, 60, "CRYPT", },
+[2] = { "Karazhan", 60, 60, "KARA", },
 [1] = { "Emerald Sanctum", 60, 60, "ES", },
 }
 local GF_TurtleGroupButtonsListGetWhoLevel = {
