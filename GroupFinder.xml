@@ -3638,6 +3638,68 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLeave>
 								</Scripts>
 							</Frame>
+							<Button name="GF_LogChannelNameDropdown" inherits="GF_ButtonTemplate">
+								<Anchors>
+									<Anchor point="LEFT" relativeTo="GF_LogChannelFilterDropdownButtonTextLabel" relativePoint="RIGHT">
+										<Offset>
+											<AbsDimension x="0" y="0"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										if not GF_LogChannelName:IsShown() then
+											GF_ButtonListFunctions(gsub(this:GetName(),"%d","").."Show")
+										else
+											GF_LogChannelName:Hide()
+										end
+									</OnClick>
+									<OnLeave>
+										if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "LogChannelName") then 
+											GF_LogChannelName:Hide()
+										end
+									</OnLeave>
+								</Scripts>
+								<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up" setAllPoints="true"/>
+								<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Down" setAllPoints="true"/>
+								<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD" setAllPoints="true"/>
+							</Button>
+							<Frame name="GF_LogChannelName" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true">
+								<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border">
+									<BackgroundInsets>
+										<AbsInset left="4" right="4" top="4" bottom="4"/>
+									</BackgroundInsets>
+									<EdgeSize>
+										<AbsValue val="16"/>
+									</EdgeSize>
+									<BorderColor r="0.6" g="0.6" b="0.6"/>
+								</Backdrop>
+								<Layers>
+									<Layer level ="BACKGROUND">
+										<Texture file="Interface\ChatFrame\ChatFrameBackground">
+											<Anchors>
+												<Anchor point="TOPLEFT">
+													<Offset x="4" y="-4"/>
+												</Anchor>
+												<Anchor point="BOTTOMRIGHT">
+													<Offset x="-4" y="4"/>
+												</Anchor>
+											</Anchors>
+											<Gradient orientation="VERTICAL">
+												<MinColor r="0" g="0" b="0" a="0.9"/>
+												<MaxColor r="0.2" g="0.2" b="0.2" a="0.9"/>
+											</Gradient>
+										</Texture>
+									</Layer>
+								</Layers>
+								<Scripts>
+									<OnLeave>
+										if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "LogChannelName") then 
+											GF_LogChannelName:Hide()
+										end
+									</OnLeave>
+								</Scripts>
+							</Frame>
 							<Frame name = "GF_WhisperHistoryButtonLog" hidden="true">
 								<Size>
 									<AbsDimension x="100" y="435"/>
@@ -3897,27 +3959,19 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										this:HighlightText(string.len(this:GetText())+1)
 									</OnEditFocusGained>
 									<OnEditFocusLost>
-										if string.len(GF_GroupChannelEditBox:GetText()) > 1 then GF_SavedVariables.groupchannelname = GF_GroupChannelEditBox:GetText() else GF_GroupChannelEditBox:SetText(GF_SavedVariables.groupchannelname) end
-										if GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][4] then GF_WorldAnnounceMessageTextLabel:SetText(GF_HARDCORE_SEND_TEXT) else GF_WorldAnnounceMessageTextLabel:SetText(GF_WORLD_SEND_TEXT.." "..GF_SavedVariables.groupchannelname.." "..GF_LOG_CHANNEL) end
-										this:HighlightText(string.len(this:GetText())+1)
+										if string.len(GF_GroupChannelEditBox:GetText()) > 1 then GF_GroupChannelNameAddRemove(GF_GroupChannelEditBox:GetText()) else GF_GroupChannelEditBox:SetText(GF_SavedVariables.groupchannelname) end
 									</OnEditFocusLost>
 									<OnTabPressed>
-										if string.len(GF_GroupChannelEditBox:GetText()) > 1 then GF_SavedVariables.groupchannelname = GF_GroupChannelEditBox:GetText() else GF_GroupChannelEditBox:SetText(GF_SavedVariables.groupchannelname) end
-										if GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][4] then GF_WorldAnnounceMessageTextLabel:SetText(GF_HARDCORE_SEND_TEXT) else GF_WorldAnnounceMessageTextLabel:SetText(GF_WORLD_SEND_TEXT.." "..GF_SavedVariables.groupchannelname.." "..GF_LOG_CHANNEL) end
+										if string.len(GF_GroupChannelEditBox:GetText()) > 1 then GF_GroupChannelNameAddRemove(GF_GroupChannelEditBox:GetText()) else GF_GroupChannelEditBox:SetText(GF_SavedVariables.groupchannelname) end
 										this:ClearFocus()
-										this:HighlightText(string.len(this:GetText())+1)
 									</OnTabPressed>
 									<OnEnterPressed>
-										if string.len(GF_GroupChannelEditBox:GetText()) > 1 then GF_SavedVariables.groupchannelname = GF_GroupChannelEditBox:GetText() else GF_GroupChannelEditBox:SetText(GF_SavedVariables.groupchannelname) end
-										if GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][4] then GF_WorldAnnounceMessageTextLabel:SetText(GF_HARDCORE_SEND_TEXT) else GF_WorldAnnounceMessageTextLabel:SetText(GF_WORLD_SEND_TEXT.." "..GF_SavedVariables.groupchannelname.." "..GF_LOG_CHANNEL) end
+										if string.len(GF_GroupChannelEditBox:GetText()) > 1 then GF_GroupChannelNameAddRemove(GF_GroupChannelEditBox:GetText()) else GF_GroupChannelEditBox:SetText(GF_SavedVariables.groupchannelname) end
 										this:ClearFocus()
-										this:HighlightText(string.len(this:GetText())+1)
 									</OnEnterPressed>
 									<OnEscapePressed>
-										if string.len(GF_GroupChannelEditBox:GetText()) > 1 then GF_SavedVariables.groupchannelname = GF_GroupChannelEditBox:GetText() else GF_GroupChannelEditBox:SetText(GF_SavedVariables.groupchannelname) end
-										if GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][4] then GF_WorldAnnounceMessageTextLabel:SetText(GF_HARDCORE_SEND_TEXT) else GF_WorldAnnounceMessageTextLabel:SetText(GF_WORLD_SEND_TEXT.." "..GF_SavedVariables.groupchannelname.." "..GF_LOG_CHANNEL) end
+										GF_GroupChannelEditBox:SetText(GF_SavedVariables.groupchannelname)
 										this:ClearFocus()
-										this:HighlightText(string.len(this:GetText())+1)
 									</OnEscapePressed>
 								</Scripts>
 							</EditBox>
@@ -5381,7 +5435,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				GF_FontName:Hide()
 				GF_BlockList:Hide()
 				GF_AutoBlacklistDropdownMenu:Hide()
-
+				GF_LogChannelName:Hide()
+				
 				GF_SavedVariables.mainframeishidden = true
 				GF_SavedVariables.mainframestatus = 0
 				if pfUI and pfUI.chat and pfUI.chat.urlcopy then pfUI.chat.urlcopy:SetWidth(270) pfUI.chat.urlcopy.text:SetWidth(250) end
