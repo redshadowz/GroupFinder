@@ -3205,6 +3205,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
+										GF_LogChannelFilterDropdownMenu:Hide()
+										GF_LogChannelName:Hide()
 										if not GF_LogFilterDropdownMenu:IsShown() then
 											GF_LogFilterDropdownMenu:Show()
 										else
@@ -3454,6 +3456,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
+										GF_LogFilterDropdownMenu:Hide()
+										GF_LogChannelName:Hide()
 										if not GF_LogChannelFilterDropdownMenu:IsShown() then
 											GF_LogChannelFilterDropdownMenu:Show()
 										else
@@ -3664,6 +3668,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
+										GF_LogFilterDropdownMenu:Hide()
+										GF_LogChannelFilterDropdownMenu:Hide()
 										if not GF_LogChannelName:IsShown() then
 											GF_ButtonListFunctions(gsub(this:GetName(),"%d","").."Show")
 										else
@@ -3835,7 +3841,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Anchors>
 										<Scripts>
 											<OnClick>
-												if getn(GF_WhisperLogData[GF_RealmName]) > GF_WhisperLogOffset + 18 then
+												if getn(GF_WhisperLogData[GF_RealmName]) > GF_WhisperLogOffset + 19 then
 													GF_WhisperLogOffset = GF_WhisperLogOffset + 18
 													GF_WhisperHistoryUpdateFrame()
 												end
@@ -4001,6 +4007,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
+										GF_BlockList:Hide()
 										if not GF_GroupChannelName:IsShown() then
 											GF_ButtonListFunctions(gsub(this:GetName(),"%d","").."Show")
 										else
@@ -4182,6 +4189,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
+										GF_GroupChannelName:Hide()
 										if not GF_BlockList:IsShown() then
 											GF_ButtonListFunctions(gsub(this:GetName(),"%d","").."Show")
 										else
@@ -5444,6 +5452,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				GF_MessageFrame:Hide()
 				GF_LogFilterDropdownMenu:Hide()
 				GF_LogChannelFilterDropdownMenu:Hide()
+				GF_LogChannelName:Hide()
 				GF_GroupFilterDropdownMenu:Hide()
 				GF_ChatFilterDropdownMenu:Hide()
 				GF_LFGHardCoreDropdown:Hide()
@@ -5451,7 +5460,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				GF_FontName:Hide()
 				GF_BlockList:Hide()
 				GF_AutoBlacklistDropdownMenu:Hide()
-				GF_LogChannelName:Hide()
 				
 				GF_SavedVariables.mainframeishidden = true
 				GF_SavedVariables.mainframestatus = 0

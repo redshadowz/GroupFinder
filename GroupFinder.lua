@@ -1,4 +1,4 @@
-﻿local GF_CurrentVersion						= 7020 -- New revisions cause a reset of basic settings
+﻿local GF_CurrentVersion						= 7030 -- New revisions cause a reset of basic settings
 
 GF_SavedVariables 							= {}
 GF_PerCharVariables							= {}
@@ -125,8 +125,7 @@ function GF_LoadVariables()
 	if not GF_WhoTable[GF_RealmName] then GF_WhoTable[GF_RealmName] = {} end
 	if not GF_WhoTable[GF_RealmName]["LOADED"] then GF_WhoTable[GF_RealmName]["LOADED"] = { UnitLevel("player"), ({UnitClass("player")})[2], "", time() - 1 } end
 	if not GF_WhisperLogData then GF_WhisperLogData = {} end
-	if not GF_WhisperLogData[GF_RealmName] then GF_WhisperLogData[GF_RealmName] = {} table.insert(GF_WhisperLogData[GF_RealmName], "Guild") end
-	if not GF_WhisperLogData[GF_RealmName]["Guild"] then GF_WhisperLogData[GF_RealmName]["Guild"] = {""} end
+	if not GF_WhisperLogData[GF_RealmName] then GF_WhisperLogData[GF_RealmName] = {} table.insert(GF_WhisperLogData[GF_RealmName], "Guild") GF_WhisperLogData[GF_RealmName]["Guild"] = {} end
 	if not GF_GroupHistory then GF_GroupHistory = {} end
 	if not GF_GroupHistory[GF_RealmName] then GF_GroupHistory[GF_RealmName] = {} table.insert(GF_GroupHistory[GF_RealmName], "Groups") end
 	if not GF_GroupHistory[GF_RealmName]["Groups"] then GF_GroupHistory[GF_RealmName]["Groups"] = {""} end
@@ -783,14 +782,13 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 	function QuestLogTitleButton_OnClick(button,self)
 		if GF_SavedVariables.questmod and (ChatFrameEditBox:IsVisible() or GF_LFGDescriptionEditBoxHasFocus[1]) and not IsAddOnLoaded("pfQuest") and not IsAddOnLoaded("Questie") and button == "LeftButton" and IsShiftKeyDown() then
 			local qtable = GF_GetQuestInfo(GetQuestLogTitle(this:GetID() + FauxScrollFrame_GetOffset(EQL3_QuestLogListScrollFrame or ShaguQuest_QuestLogListScrollFrame or QuestLogListScrollFrame)),nil)
-			if qtable then
+			if qtable[2] then
 				if GF_LFGDescriptionEditBoxHasFocus[1] then
 					GF_LFGDescriptionEditBox:Insert(GF_GetDifficultyColor(qtable[2]).."|Hquest:"..qtable[1]..":"..qtable[2].."|h["..GetQuestLogTitle(this:GetID() + FauxScrollFrame_GetOffset(EQL3_QuestLogListScrollFrame or ShaguQuest_QuestLogListScrollFrame or QuestLogListScrollFrame)).."]|h|r")
-					return true
 				else
 					ChatFrameEditBox:Insert(GF_GetDifficultyColor(qtable[2]).."|Hquest:"..qtable[1]..":"..qtable[2].."|h["..GetQuestLogTitle(this:GetID() + FauxScrollFrame_GetOffset(EQL3_QuestLogListScrollFrame or ShaguQuest_QuestLogListScrollFrame or QuestLogListScrollFrame)).."]|h|r")
-					return true
 				end
+				return true
 			end
 		end
 		old_QuestLogTitleButton_OnClick(button,self)
@@ -867,15 +865,23 @@ function GF_HandleItemRefLinks(link,text,button) -- Will have to update when I a
 		if IsShiftKeyDown() then
 			if GF_LFGDescriptionEditBoxHasFocus[1] then GF_LFGDescriptionEditBox:Insert(text) return true end
 		elseif GF_SavedVariables.questmod and not IsAddOnLoaded("pfQuest") and not IsAddOnLoaded("Questie") then
-			if GF_GetQuestInfo(text,true) then return true
-			else
+			if not ({GF_GetQuestInfo(text,true)})[1][2] then
 				local _,_,questid = strfind(link,"(%d+)")
 				if questid then
 					questid = tonumber(questid)
 					for entryname,wtable in GF_WORD_QUEST do
-						if wtable[1] == questid then DEFAULT_CHAT_FRAME:AddMessage("GF: "..text..GF_QUEST_IS_LEVEL_TEXT..GF_WORD_QUEST[entryname][2].."("..GF_QUEST_ZONE_ID[GF_WORD_QUEST[entryname][3]].."}", 1, 1, 0.5) return true end
+						if wtable[1] == questid then
+							if entryname == ({GF_GetQuestInfo(text)})[1][1] then
+								DEFAULT_CHAT_FRAME:AddMessage("GF: "..text..GF_QUEST_IS_LEVEL_TEXT..GF_WORD_QUEST[entryname][2].."("..GF_QUEST_ZONE_ID[GF_WORD_QUEST[entryname][3]].."}", 1, 1, 0.5)
+							else
+								DEFAULT_CHAT_FRAME:AddMessage("GF: "..text.."("..entryname..")"..GF_QUEST_IS_LEVEL_TEXT..GF_WORD_QUEST[entryname][2].."("..GF_QUEST_ZONE_ID[GF_WORD_QUEST[entryname][3]].."}", 1, 1, 0.5)
+							end
+							return true
+						end
 					end
 				end
+			else
+				return true
 			end
 		end
 	elseif strsub(link,1,4) == "item" then
@@ -896,7 +902,7 @@ function GF_GetQuestInfo(text,printinfo) -- Will have to update once I get new s
 		end 
 		return GF_WORD_QUEST[wordString]
 	end
-	return {0,0,0}
+	return {wordString}
 end
 function GF_SlashHandler(msg)
 	if strlower(msg) == "reset" then
@@ -1295,7 +1301,7 @@ function GF_ChatReplaceHquestLevels(arg1)
 	while true do
 		lfs,lfe,questID,questLevel,questName = strfind(arg1,"|%x+|+Hquest:(%d+):(%d+)|+h%[(.-)%]|+h|+r",lfs)
 		if questID then
-			if questLevel == "0" then questLevel = ({GF_GetQuestInfo(questName)})[2] or 0 end
+			if questLevel == "0" then questLevel = ({GF_GetQuestInfo(questName)})[1][2] or 0 end
 			arg1 = strsub(arg1,1,lfs-1)..(GF_GetDifficultyColor(tonumber(questLevel)) or "|cffffffff").."|Hquest:"..questID..":"..questLevel.."|h["..questName.."]|h|"..strsub(arg1,lfe)
 			lfs = lfe + 1
 		else
@@ -2533,7 +2539,7 @@ function GF_GetTypes(arg1, showanyway)
 	while true do lfs,lfe,wordString,tempString = strfind(arg1," (%d+%a)(%a+)[%p%s]",lfs) if wordString then if GF_WORD_LETTER_NUMBER_BEFORE_AFTER[wordString] and (GF_GROUP_IDS[wordString] or GF_WORD_ROLES[tempString]) then arg1 = strsub(arg1,1,lfs)..GF_WORD_LETTER_NUMBER_BEFORE_AFTER[wordString].." "..tempString.." "..strsub(arg1,lfe) lfs = lfs + strlen(GF_WORD_LETTER_NUMBER_BEFORE_AFTER[wordString]..tempString) + 2 else lfs = lfe end else break end end
 
 -- Quest Search
-	lfs = 2 -- Add all words to the wordTable
+	lfs = 1 _,lfe,wordString = string.find(arg1, "([%s%p%d]+)",lfs) lfs = lfe+1 -- Add all words to the wordTable
 	while true do
 		lfs,lfe,wordString = strfind(arg1, "(.-)[%s%p%d]+",lfs)
 		if wordString then
@@ -2543,13 +2549,13 @@ function GF_GetTypes(arg1, showanyway)
 					lfs = lfe+1
 				else
 					if GF_WORD_GROUP_BYPASS[wordString] then
-						_,tempVal,tempString = strfind(arg1,"(%a+)",lfe+1)
+						_,tempVal,tempString = strfind(arg1,"(.-)[%s%p%d]+",lfe+1)
 						if tempString then
 							if GF_WORD_GROUP_BYPASS[tempString] then
 								table.insert(wordTable, GF_WORD_GROUP_BYPASS[wordString]) table.insert(wordTable, GF_WORD_GROUP_BYPASS[tempString])
 								lfs = tempVal+1
 							elseif GF_WORD_GROUP_BYPASS_SECOND[wordString..tempString] then
-								_,tempVal,tempString = strfind(arg1,"(%a+)",tempVal+1)
+								_,tempVal,tempString = strfind(arg1,"(.-)[%s%p%d]+",tempVal+1)
 								if GF_WORD_GROUP_BYPASS[tempString] then
 									table.insert(wordTable, GF_WORD_GROUP_BYPASS[wordString]) table.insert(wordTable, GF_WORD_GROUP_BYPASS[tempString])
 									lfs = tempVal+1
@@ -2567,7 +2573,7 @@ function GF_GetTypes(arg1, showanyway)
 							break
 						end
 					else
-						_,tempVal,tempString = strfind(arg1,"(%a+)",lfe+1)
+						_,tempVal,tempString = strfind(arg1,"(.-)[%s%p%d]+",lfe+1)
 						if GF_WORD_QUEST_BYPASS[tempString] then
 							table.insert(wordTable, wordString) table.insert(wordTable, tempString)
 							lfs = tempVal+1
@@ -2722,12 +2728,12 @@ function GF_GetTypes(arg1, showanyway)
 	end
 	for j=1, tempVal do -- Add adjacent trade/guild words
 		if strbyte(wordTableTrade[j]) <= 90 then
-			if j > 1 and strbyte(wordTableTrade[j-1]) >= 97 then for i=1, 250 do if not GF_TRADE_COMMON_WORDS[wordTableTrade[j-i]] then break end wordTableTrade[j-i] = GF_TRADE_COMMON_WORDS[wordTableTrade[j-i]] end end
-			if j < tempVal and strbyte(wordTableTrade[j+1]) >= 97 then for i=1, 250 do if not GF_TRADE_COMMON_WORDS[wordTableTrade[j+i]] then break end wordTableTrade[j+i] = GF_TRADE_COMMON_WORDS[wordTableTrade[j+i]] end end
+			if j > 1 and strbyte(wordTableTrade[j-1]) >= 97 then for i=1, 250 do if not GF_TRADE_COMMON_WORDS[wordTableTrade[j-i]] then break end wordTableTrade[j-i] = GF_TRADE_COMMON_WORDS[wordTableTrade[j-i]] end for i=1, 250 do if not wordTableTrade[j-i-1] or not GF_TRADE_COMMON_WORDS[wordTableTrade[j-i-1]..wordTableTrade[j-i]] then break end wordTableTrade[j-i-1] = GF_TRADE_COMMON_WORDS[wordTableTrade[j-i-1]..wordTableTrade[j-i]] wordTableTrade[j-i] = "N" end end
+			if j < tempVal and strbyte(wordTableTrade[j+1]) >= 97 then for i=1, 250 do if not GF_TRADE_COMMON_WORDS[wordTableTrade[j+i]] then break end wordTableTrade[j+i] = GF_TRADE_COMMON_WORDS[wordTableTrade[j+i]] end for i=1, 250 do if not wordTableTrade[j+i+1] or not GF_TRADE_COMMON_WORDS[wordTableTrade[j+i]..wordTableTrade[j+i+1]] then break end wordTableTrade[j+i] = GF_TRADE_COMMON_WORDS[wordTableTrade[j+i]..wordTableTrade[j+i+1]] wordTableTrade[j+i+1] = "N" end end
 		end
 		if strbyte(wordTableGuild[j]) <= 90 then
-			if j > 1 and strbyte(wordTableGuild[j-1]) >= 97 then for i=1, 250 do if not GF_GUILD_COMMON_WORDS[wordTableGuild[j-i]] then break end wordTableGuild[j-i] = GF_GUILD_COMMON_WORDS[wordTableGuild[j-i]] end end
-			if j < tempVal and strbyte(wordTableGuild[j+1]) >= 97 then for i=1, 250 do if not GF_GUILD_COMMON_WORDS[wordTableGuild[j+i]] then break end wordTableGuild[j+i] = GF_GUILD_COMMON_WORDS[wordTableGuild[j+i]] end end
+			if j > 1 and strbyte(wordTableGuild[j-1]) >= 97 then for i=1, 250 do if not GF_GUILD_COMMON_WORDS[wordTableGuild[j-i]] then break end wordTableGuild[j-i] = GF_GUILD_COMMON_WORDS[wordTableGuild[j-i]] end for i=1, 250 do if not wordTableGuild[j-i-1] or not GF_GUILD_COMMON_WORDS[wordTableGuild[j-i-1]..wordTableGuild[j-i]] then break end wordTableGuild[j-i-1] = GF_GUILD_COMMON_WORDS[wordTableGuild[j-i-1]..wordTableGuild[j-i]] wordTableGuild[j-i] = "N" end end
+			if j < tempVal and strbyte(wordTableGuild[j+1]) >= 97 then for i=1, 250 do if not GF_GUILD_COMMON_WORDS[wordTableGuild[j+i]] then break end wordTableGuild[j+i] = GF_GUILD_COMMON_WORDS[wordTableGuild[j+i]] end for i=1, 250 do if not wordTableGuild[j+i+1] or not GF_GUILD_COMMON_WORDS[wordTableGuild[j+i]..wordTableGuild[j+i+1]] then break end wordTableGuild[j+i] = GF_GUILD_COMMON_WORDS[wordTableGuild[j+i]..wordTableGuild[j+i+1]] wordTableGuild[j+i+1] = "N" end end
 		end
 	end
 	if tempVal <= 6 then -- Check 4/6-word Phrase
@@ -2775,14 +2781,14 @@ function GF_GetTypes(arg1, showanyway)
 				elseif GF_GUILD_WORD_EXCLUSION[wordString] then foundGuildExclusion = foundGuildExclusion + GF_GUILD_WORD_EXCLUSION[wordString] if showanyway == true then print(wordString.." guildex") end end
 				if GF_TRADE_WORD_EXCLUSION[wordString] then foundTradesExclusion = foundTradesExclusion + GF_TRADE_WORD_EXCLUSION[wordString] if showanyway == true then print(wordString.." tradesex") end end
 
-				if GF_WORD_LFM[wordString] then if GF_WORD_LFM[wordString] > foundLFM then foundLFM = GF_WORD_LFM[wordString] table.insert(lfmlfgName, wordString) if showanyway == true then print(wordString.." lfm") end end
+				if GF_WORD_LFM[wordString] then if GF_WORD_LFM[wordString] > foundLFM then foundLFM = GF_WORD_LFM[wordString] table.insert(lfmlfgName, wordString) if showanyway == true then print(wordString.." lfm "..GF_WORD_LFM[wordString]) end end
 					if not foundQuest[1] then if GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] elseif GF_WORD_LEVEL_ZONE[wordTable[i-1]] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-1]] end end
 					if GF_WORD_IGNORE_AFTER[wordTable[i+j+1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_AFTER[wordTable[i+j+1]] if showanyway == true then print(wordTable[i+j+1].." ignore "..GF_WORD_IGNORE_AFTER[wordTable[i+j+1]]) end
 					elseif GF_WORD_IGNORE_BEFORE[wordTable[i-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_BEFORE[wordTable[i-1]] if showanyway == true then print(wordTable[i-1].." ignore "..GF_WORD_IGNORE_BEFORE[wordTable[i-1]]) end
 					elseif wordTable[i+j+2] and GF_WORD_IGNORE_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] if showanyway == true then print(wordTable[i+j+1]..wordTable[i+j+2].." ignore "..GF_WORD_IGNORE_AFTER[wordTable[i+j+1]..wordTable[i+j+2]]) end
 					elseif wordTable[i-2] and GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]] if showanyway == true then print(wordTable[i-2]..wordTable[i-1].." ignore "..GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]]) end
 					elseif wordTable[i-3] and GF_WORD_IGNORE_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] if showanyway == true then print(wordTable[i-3]..wordTable[i-2]..wordTable[i-1].." ignore "..GF_WORD_IGNORE_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]]) end end
-				elseif GF_WORD_LFG[wordString] then if GF_WORD_LFG[wordString] > foundLFG then foundLFG = GF_WORD_LFG[wordString] table.insert(lfmlfgName, wordString) if showanyway == true then print(wordString.." lfg") end end
+				elseif GF_WORD_LFG[wordString] then if GF_WORD_LFG[wordString] > foundLFG then foundLFG = GF_WORD_LFG[wordString] table.insert(lfmlfgName, wordString) if showanyway == true then print(wordString.." lfg "..GF_WORD_LFG[wordString]) end end
 					if not foundQuest[1] then if GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] elseif GF_WORD_LEVEL_ZONE[wordTable[i-1]] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-1]] end end
 					if GF_WORD_IGNORE_AFTER[wordTable[i+j+1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_AFTER[wordTable[i+j+1]] if showanyway == true then print(wordTable[i+j+1].." ignore "..GF_WORD_IGNORE_AFTER[wordTable[i+j+1]]) end
 					elseif GF_WORD_IGNORE_BEFORE[wordTable[i-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_BEFORE[wordTable[i-1]] if showanyway == true then print(wordTable[i-1].." ignore "..GF_WORD_IGNORE_BEFORE[wordTable[i-1]]) end
@@ -3531,7 +3537,6 @@ function GF_WhisperHistoryUpdateFrame(name)
 	local numPriority = 0
 	local nameWasPriority
 	local counter = 2
-	if not GF_WhisperLogData[GF_RealmName][1] then table.insert(GF_WhisperLogData[GF_RealmName], "Guild") end
 	while true do
 		if not name or not GF_WhisperLogData[GF_RealmName][counter] or counter == 96 then break end
 		if GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][counter]].priority then numPriority = numPriority+1 end
@@ -4189,16 +4194,25 @@ function GF_QueueLFT() -- /script GF_QueueLFT()
 
 	LFTFrameMainButton:Click()
 end
-function GF_UpdateQueueLFTButton(update)
+function GF_UpdateQueueLFTButton(update) -- Updates(gets dungeon list) on login and when leveling up... Otherwise, just check if groups match GF_PerCharVariables.searchlfgtext and show/hide the Queue Button... Always show button if in queue
+	if LFTFrame then
+		if update and not LFTFrame:IsVisible() then LFT_Toggle() LFT_Toggle() end -- Get List
+		if LFTFrameMainButton:GetButtonState() == "DISABLED" then GF_QueuetoLFTButton:SetText(GF_LEAVE_QUEUE) else GF_QueuetoLFTButton:SetText(GF_QUEUE_IN_LFT) end -- Resets text... Button is hidden by GF_UpdateGroup() if in raid group, or here if no matches.
+
+		for i=1, 100 do
+			if getglobal("LFTFrameInstancesListEntry"..i) then
+				if getglobal("LFTFrameInstancesListEntry"..i.."CheckButton"):GetChecked() then getglobal("LFTFrameInstancesListEntry"..i.."CheckButton"):Click() end
+			else
+				break
+			end
+		end
+		
+
 -- If there are groups in lfgeditbox, show the button
 -- make mouseover button to show what groups it will queue for... must also have roles checked
-	if LFTFrame then
-		if update and not LFTFrame:IsVisible() then LFT_Toggle() LFT_Toggle() end
-		if LFTFrameMainButton:GetButtonState() ~= "DISABLED" then GF_QueuetoLFTButton:SetText(GF_LEAVE_QUEUE) end
 
-	end
 --	if GF_QueuetoLFTButton:IsVisible() then GF_QueuetoLFTButton:Hide() GF_QueuetoLFTButton:SetText(GF_QUEUE_IN_LFT) end
-
+	end
 end
 
 function print(msg) -- I added this only temporarily so I could work on the addon without having to turn on other addons(reload faster)
