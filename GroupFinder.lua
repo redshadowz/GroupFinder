@@ -378,7 +378,7 @@ function GF_LoadSettings()
 	GF_SetDropdownWidths()
 	GF_SetLFGRoleButtons()
 	GF_AddNamesToGroupHistoryList()
-	GF_UpdateQueueLFTButton()
+	GF_UpdateQueueLFTButton(true)
 end
 function GF_SetStringSize()
 	local fontName,fontSizeMinimap,fontSizeLarge,fontSizeButton
@@ -807,6 +807,11 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 	local old_UIErrorsFrame_OnEvent = UIErrorsFrame_OnEvent	
 	function UIErrorsFrame_OnEvent(event,message,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9)
 		if not GF_SavedVariables.systemfilter or not GF_Error_Messages[message] then old_UIErrorsFrame_OnEvent(event,message,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9) end
+	end
+	local old_LFT_Update = LFT_Update	
+	function LFT_Update()
+		old_LFT_Update()
+		GF_UpdateQueueLFTButton()
 	end
 end
 function GF_HandleItemRefLinks(link,text,button) -- Will have to update when I add feature to turn off click combinations
@@ -1941,7 +1946,7 @@ end
 function self:PLAYER_LEVEL_UP()
 	GF_FixLFGStrings()
 	if GF_PerCharVariables.getwhowhisperlevel == 0 then GF_GetWhoLevelDropdownTextLabel:SetText(LEVEL.." "..UnitLevel("player").."±") end
-	GF_UpdateQueueLFTButton()
+	GF_UpdateQueueLFTButton(true)
 end
 function self:RAID_ROSTER_UPDATE()
 	GF_UpdateGroup()
@@ -2341,8 +2346,8 @@ function GF_GetTypes(arg1, showanyway)
 	local wordString,lfs,lfe,tempVal,tempString
 	
 	if strfind(arg1, "%d+p[%p%s]") then foundLFM = 2 if showanyway == true then print("##p lfm 2") end end -- "10p heal" messages from chinese
-	lfs = 1 -- To detect space/lf##m/letter(eg " lf15mbwl" = lfm bwl)
-	while true do lfs,lfe,wordString = strfind(arg1," ([lk]f?%s?%d+m)[%p%s]",lfs) if wordString then arg1 = strsub(arg1,1,lfs).."lfm "..strsub(arg1,lfs+strlen(wordString)+1) lfs = lfs + 4 foundLFM = 4 foundGuildExclusion = 2 foundTradesExclusion = 2 if showanyway == true then print("lf##m lfm 4 .. guildex 3... tradesex 3") end else break end end
+	lfs = 1 -- To detect space/lf##m/letter(eg "lf15mbwl" = lfm bwl)
+	while true do lfs,lfe,wordString = strfind(arg1,"[%p%s]([lk]f?%s?%d+m)[%p%s]",lfs) if wordString then arg1 = strsub(arg1,1,lfs).."lfm "..strsub(arg1,lfs+strlen(wordString)+1) lfs = lfs + 4 foundLFM = 4 foundGuildExclusion = 2 foundTradesExclusion = 2 if showanyway == true then print("lf##m lfm 4 .. guildex 3... tradesex 3") end else break end end
 	lfs = 1 -- To detect space/number+/punctuation/number+/space for groups
 	while true do lfs,lfe,wordString,tempString = strfind(arg1,"[%p%s](%d%d?([=/])%d%d?) ",lfs) if wordString then if tempString == "=" then foundLFM = 2 lfs = lfe else arg1 = strsub(arg1,1,lfs).."group"..strsub(arg1,lfe) lfs = lfs + 6 end else break end end
 	lfs,lfe,wordString = strfind(arg1,"%d?%s?\-?([\+±])\-?%s?%d?")
@@ -2461,13 +2466,13 @@ function GF_GetTypes(arg1, showanyway)
 	lfs = 2 -- To fix single words
 	while true do lfs,lfe,wordString,tempString = strfind(arg1, "(.-)([%s%p%d]+)",lfs) if not wordString then break elseif GF_WORD_FIX_SINGLE_WORD[wordString] then arg1 = strsub(arg1,1,lfs-1)..GF_WORD_FIX_SINGLE_WORD[wordString]..tempString..strsub(arg1,lfe+1) lfs = lfs + strlen(GF_WORD_FIX_SINGLE_WORD[wordString]..tempString)-1 else lfs = lfe+1 end end
 
-	lfs = 1 -- To detect space/letter/number/letter/space combinations(eg " g2g " = gtg)
-	while true do lfs,lfe,wordString = strfind(arg1," (w?%a%s?%d%s?%ab?)[%p%s]",lfs) if wordString then wordString = gsub(wordString," ","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = strsub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..strsub(arg1,lfe) end lfs = lfs + strlen(wordString) + 1 else break end end
-	lfs = 1 -- To detect space/word/number+/space combinations(eg " k10" = lowerkarazhan)
-	while true do lfs,lfe,wordString = strfind(arg1," (%a+%s?[:%-]?%s?%d+)s?[%p%s]",lfs) if wordString then wordString = gsub(wordString,"[%s:%-]","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = strsub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..strsub(arg1,lfe) end lfs = lfs + strlen(wordString) + 1 else break end end
+	lfs = 1 -- To detect space/letter/number/letter/space combinations(eg "g2g " = gtg)
+	while true do lfs,lfe,wordString = strfind(arg1,"[%p%s](w?%a%s?%d%s?%ab?)[%p%s]",lfs) if wordString then wordString = gsub(wordString," ","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = strsub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..strsub(arg1,lfe) end lfs = lfs + strlen(wordString) + 1 else break end end
+	lfs = 1 -- To detect space/word/number+/space combinations(eg "k10" = lowerkarazhan)
+	while true do lfs,lfe,wordString = strfind(arg1,"[%p%s](%a+%s?[:%-]?%s?%d+)s?[%p%s]",lfs) if wordString then wordString = gsub(wordString,"[%s:%-]","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = strsub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..strsub(arg1,lfe) end lfs = lfs + strlen(wordString) + 1 else break end end
 	lfs = 1 -- To detect words with explanation points "!" (eg "hungry!","lost!")... To help identify quests with short names.
-	while true do lfs,lfe,wordString = strfind(arg1, " (%a+%s?!) ",lfs) if wordString then wordString = gsub(wordString," ","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = strsub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..strsub(arg1,lfe) end lfs = lfs + strlen(wordString) + 1 else break end end
-	lfs = 1 -- To detect space/number+/word/space combinations(eg " 10th " = tenth, " 5g " = 5gold)
+	while true do lfs,lfe,wordString = strfind(arg1, "[%p%s](%a+%s?!) ",lfs) if wordString then wordString = gsub(wordString," ","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = strsub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..strsub(arg1,lfe) end lfs = lfs + strlen(wordString) + 1 else break end end
+	lfs = 1 -- To detect space/number+/word/space combinations(eg "10th" = tenth, "5g" = 5gold)
 	while true do
 		lfs,lfe,wordString,tempString = strfind(arg1,"[%p%s](%d+%s?(%a+))[%p%s]",lfs)
 		if wordString then
@@ -2524,7 +2529,7 @@ function GF_GetTypes(arg1, showanyway)
 			elseif strbyte(arg1,lfs) == 60 and strbyte(arg1,lfe) == 62 then -- "<>"
 				wordTableGuild["BRACKETS"] = gsub(gsub(wordString,"[%d%p]","")," ","")
 				tempString = strsub(arg1,1,lfs)
-				_,_,wordString = strfind(tempString, " (%a+)%s?<$") if wordString then if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_PREFIX_SUFFIX[wordString] then foundGuild = foundGuild + GF_GUILD_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." guild "..GF_GUILD_PREFIX_SUFFIX[wordString]) end end end
+				_,_,wordString = strfind(tempString, "[%p%s](%a+)%s?<$") if wordString then if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_PREFIX_SUFFIX[wordString] then foundGuild = foundGuild + GF_GUILD_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." guild "..GF_GUILD_PREFIX_SUFFIX[wordString]) end end end
 				_,_,wordString = strfind(arg1, "^>%s?(%a+)[%p%s]",lfe) if wordString then if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_PREFIX_SUFFIX[wordString] then foundGuild = foundGuild + GF_GUILD_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." guild "..GF_GUILD_PREFIX_SUFFIX[wordString]) end end end
 				_,_,wordString = strfind(arg1, "^>%s?(%a+ %a+)[%p%s]",lfe) if wordString then wordString = gsub(wordString," ","") if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_PREFIX_SUFFIX[wordString] then foundGuild = foundGuild + GF_GUILD_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." guild "..GF_GUILD_PREFIX_SUFFIX[wordString]) end end end
 			end
@@ -2534,56 +2539,52 @@ function GF_GetTypes(arg1, showanyway)
 		end
 	end
 	lfs = 1 -- To detect word/letter/number combinations(eg "BMx2" = bm x2)
-	while true do lfs,lfe,wordString,tempString = strfind(arg1," (%a+)(%a%d+)[%p%s]",lfs) if wordString then if GF_WORD_LETTER_NUMBER_BEFORE_AFTER[tempString] and (GF_GROUP_IDS[wordString] or GF_LFMLFG_PREFIX_GUILD[wordString]) then arg1 = strsub(arg1,1,lfs)..wordString.." "..GF_WORD_LETTER_NUMBER_BEFORE_AFTER[tempString].." "..strsub(arg1,lfe) lfs = lfs + strlen(wordString..GF_WORD_LETTER_NUMBER_BEFORE_AFTER[tempString]) + 2 else lfs = lfe end else break end end
+	while true do lfs,lfe,wordString,tempString = strfind(arg1,"[%p%s](%a+)(%a%d+)[%p%s]",lfs) if wordString then if GF_WORD_LETTER_NUMBER_BEFORE_AFTER[tempString] and (GF_GROUP_IDS[wordString] or GF_LFMLFG_PREFIX_GUILD[wordString]) then arg1 = strsub(arg1,1,lfs)..wordString.." "..GF_WORD_LETTER_NUMBER_BEFORE_AFTER[tempString].." "..strsub(arg1,lfe) lfs = lfs + strlen(wordString..GF_WORD_LETTER_NUMBER_BEFORE_AFTER[tempString]) + 2 else lfs = lfe end else break end end
 	lfs = 1 -- To detect word/letter/number combinations(eg "2xBM" = bm x2)
-	while true do lfs,lfe,wordString,tempString = strfind(arg1," (%d+%a)(%a+)[%p%s]",lfs) if wordString then if GF_WORD_LETTER_NUMBER_BEFORE_AFTER[wordString] and (GF_GROUP_IDS[wordString] or GF_WORD_ROLES[tempString]) then arg1 = strsub(arg1,1,lfs)..GF_WORD_LETTER_NUMBER_BEFORE_AFTER[wordString].." "..tempString.." "..strsub(arg1,lfe) lfs = lfs + strlen(GF_WORD_LETTER_NUMBER_BEFORE_AFTER[wordString]..tempString) + 2 else lfs = lfe end else break end end
+	while true do lfs,lfe,wordString,tempString = strfind(arg1,"[%p%s](%d+%a)(%a+)[%p%s]",lfs) if wordString then if GF_WORD_LETTER_NUMBER_BEFORE_AFTER[wordString] and (GF_GROUP_IDS[wordString] or GF_WORD_ROLES[tempString]) then arg1 = strsub(arg1,1,lfs)..GF_WORD_LETTER_NUMBER_BEFORE_AFTER[wordString].." "..tempString.." "..strsub(arg1,lfe) lfs = lfs + strlen(GF_WORD_LETTER_NUMBER_BEFORE_AFTER[wordString]..tempString) + 2 else lfs = lfe end else break end end
 
 -- Quest Search
 	lfs = 1 _,lfe,wordString = string.find(arg1, "([%s%p%d]+)",lfs) lfs = lfe+1 -- Add all words to the wordTable
 	while true do
 		lfs,lfe,wordString = strfind(arg1, "(.-)[%s%p%d]+",lfs)
 		if wordString then
-			if strbyte(wordString) then
-				if not GF_WORD_BYPASS_TRIGGER[wordString] then
-					table.insert(wordTable, wordString)
-					lfs = lfe+1
-				else
-					if GF_WORD_GROUP_BYPASS[wordString] then
-						_,tempVal,tempString = strfind(arg1,"(.-)[%s%p%d]+",lfe+1)
-						if tempString then
+			if not GF_WORD_BYPASS_TRIGGER[wordString] then
+				table.insert(wordTable, wordString)
+				lfs = lfe+1
+			else
+				if GF_WORD_GROUP_BYPASS[wordString] then
+					_,tempVal,tempString = strfind(arg1,"(.-)[%s%p%d]+",lfe+1)
+					if tempString then
+						if GF_WORD_GROUP_BYPASS[tempString] then
+							table.insert(wordTable, GF_WORD_GROUP_BYPASS[wordString]) table.insert(wordTable, GF_WORD_GROUP_BYPASS[tempString])
+							lfs = tempVal+1
+						elseif GF_WORD_GROUP_BYPASS_SECOND[wordString..tempString] then
+							_,tempVal,tempString = strfind(arg1,"(.-)[%s%p%d]+",tempVal+1)
 							if GF_WORD_GROUP_BYPASS[tempString] then
 								table.insert(wordTable, GF_WORD_GROUP_BYPASS[wordString]) table.insert(wordTable, GF_WORD_GROUP_BYPASS[tempString])
 								lfs = tempVal+1
-							elseif GF_WORD_GROUP_BYPASS_SECOND[wordString..tempString] then
-								_,tempVal,tempString = strfind(arg1,"(.-)[%s%p%d]+",tempVal+1)
-								if GF_WORD_GROUP_BYPASS[tempString] then
-									table.insert(wordTable, GF_WORD_GROUP_BYPASS[wordString]) table.insert(wordTable, GF_WORD_GROUP_BYPASS[tempString])
-									lfs = tempVal+1
-								else
-									table.insert(wordTable, wordString)
-									lfs = lfe+1
-								end
 							else
-								if GF_WORD_GROUP_BYPASS[wordTable[getn(wordTable)]] then wordTable[getn(wordTable)] = GF_WORD_GROUP_BYPASS[wordTable[getn(wordTable)]] end
 								table.insert(wordTable, wordString)
 								lfs = lfe+1
 							end
 						else
+							if GF_WORD_GROUP_BYPASS[wordTable[getn(wordTable)]] then wordTable[getn(wordTable)] = GF_WORD_GROUP_BYPASS[wordTable[getn(wordTable)]] end
 							table.insert(wordTable, wordString)
-							break
-						end
-					else
-						_,tempVal,tempString = strfind(arg1,"(.-)[%s%p%d]+",lfe+1)
-						if GF_WORD_QUEST_BYPASS[tempString] then
-							table.insert(wordTable, wordString) table.insert(wordTable, tempString)
-							lfs = tempVal+1
-						else
 							lfs = lfe+1
 						end
+					else
+						table.insert(wordTable, wordString)
+						break
+					end
+				else
+					_,tempVal,tempString = strfind(arg1,"(.-)[%s%p%d]+",lfe+1)
+					if GF_WORD_QUEST_BYPASS[tempString] then
+						table.insert(wordTable, wordString) table.insert(wordTable, tempString)
+						lfs = tempVal+1
+					else
+						lfs = lfe+1
 					end
 				end
-			else
-				lfs = lfe+1
 			end
 		else
 			break
@@ -2903,13 +2904,13 @@ function GF_GetTypes(arg1, showanyway)
 	end
 end
 function GF_CheckForSpam(arg1,arg2,foundInGroup)
-	if GF_IncomingMessagePrune + 600 < time() then -- 10 minutes
+	if GF_IncomingMessagePrune < time() then -- 1 minute
 		for name,_ in GF_PlayerMessages do
-				if GF_PlayerMessages[name][1][1] + GF_SavedVariables.grouplistingduration*60 < time() then
+				if GF_PlayerMessages[name][1][1] + 900 < time() then
 					GF_PlayerMessages[name] = nil
 				end
 		end
-		GF_IncomingMessagePrune = time()
+		GF_IncomingMessagePrune = time() + 60
 	end
 	if not GF_PlayerMessages[arg2] then
 		GF_PlayerMessages[arg2] = { [1] = { time(),time(),time() }, [2] = { arg1, "ZZZzzz123654", "ZZZzzz123654" } }
@@ -3173,6 +3174,7 @@ function GF_UpdateGroup()
 				GF_WhoTable[GF_RealmName][UnitName("party"..i)] = { UnitLevel("party"..i), ({UnitClass("party"..i)})[2], GetGuildInfo("party"..i) or "", time() }
 			end
 		end
+		GF_UpdateQueueLFTButton()
 	end
 	if GF_NumPartyMembers == 1 then GF_ApplyFiltersToGroupList() end
 end
@@ -3196,7 +3198,7 @@ function GF_IsGuildieOrPartyMemberUsingAddon()
 end
 
 function GF_ApplyFiltersToGroupList() -- GroupsFrame functions
-	if GetMouseFocus() and GetMouseFocus():GetName() and (strfind(GetMouseFocus():GetName(), "GroupWhoButton") or strfind(GetMouseFocus():GetName(), "LFGInviteButton") or strfind(GetMouseFocus():GetName(), "LFMWhisperRequestInviteButton")) then return end
+	if GetMouseFocus() and GetMouseFocus():GetName() and (strfind(GetMouseFocus():GetName(), "GF_NewItem") or strfind(GetMouseFocus():GetName(), "LFGInviteButton") or strfind(GetMouseFocus():GetName(), "LFMWhisperRequestInviteButton") or strfind(GetMouseFocus():GetName(), "PlayerNoteButton")) then return end
 	GF_FilteredResultsList = {}
 	for i=1, getn(GF_MessageList[GF_RealmName]) do
 		if GF_MessageList[GF_RealmName][i] then
@@ -3262,16 +3264,23 @@ function GF_UpdateResults()
 						getglobal("GF_NewItem"..i.."LFMWhisperRequestInviteButton"):Hide()
 						getglobal("GF_NewItem"..i.."LFGInviteButton"):Hide()
 					end
+					if GF_PlayerNotes[GF_FilteredResultsList[i+GF_ResultsListOffset].op] and GF_PlayerNotes[GF_FilteredResultsList[i+GF_ResultsListOffset].op] ~= "" then
+						getglobal("GF_NewItem"..i.."PlayerNoteButton"):Show()
+					else
+						getglobal("GF_NewItem"..i.."PlayerNoteButton"):Hide()
+					end
 				else
 					getglobal("GF_NewItem"..i.."GroupWhoButton"):Hide()
 					getglobal("GF_NewItem"..i.."LFGInviteButton"):Hide()
 					getglobal("GF_NewItem"..i.."LFMWhisperRequestInviteButton"):Hide()
+					getglobal("GF_NewItem"..i.."PlayerNoteButton"):Hide()
 				end
 			else
 				getglobal("GF_NewItem"..i):Hide()
 				getglobal("GF_NewItem"..i.."GroupWhoButton"):Hide()
 				getglobal("GF_NewItem"..i.."LFGInviteButton"):Hide()
 				getglobal("GF_NewItem"..i.."LFMWhisperRequestInviteButton"):Hide()
+				getglobal("GF_NewItem"..i.."PlayerNoteButton"):Hide()
 			end
 		else
 			getglobal("GF_NewItem"..i):Hide()
@@ -3395,13 +3404,11 @@ function GF_CreateDropDownMenu()
 	UIDropDownMenu_AddButton(info, 1)	
 end
 function GF_ListItemAuxLeft_ShowTooltip(frame,id,showall)
-	if not id then return end
+	if not id or not GF_FilteredResultsList[GF_ResultsListOffset+id] then return end
 	GameTooltip:ClearLines()
 	GameTooltip:SetOwner(this, "ANCHOR_BOTTOMLEFT")
 	GameTooltip:ClearAllPoints()
 	GameTooltip:SetPoint("BOTTOMLEFT", frame:GetName(), "TOPLEFT", 0, 8)
-	
-	if not GF_FilteredResultsList[GF_ResultsListOffset+id] then return end
 	
 	--GameTooltip:AddLine(GF_FilteredResultsList[GF_ResultsListOffset+id].op)
 	GameTooltip:AddLine(GF_FilteredResultsList[GF_ResultsListOffset+id].message, 0.9, 0.9, 1.0, 1, 1)
@@ -3478,6 +3485,17 @@ function GF_EditPlayerNote(name)
 	GF_EditPlayerNoteFrameTitleLabel:SetText(name)
 	GF_EditPlayerNoteFrameEditBox:SetText(GF_PlayerNotes[name] or "")
 	GF_EditPlayerNoteFrame:Show()
+end
+function GF_PlayerNoteButton_ShowTooltip(frame,id)
+	if not id or not GF_FilteredResultsList[GF_ResultsListOffset+id] then return end
+	if GF_PlayerNotes[GF_FilteredResultsList[GF_ResultsListOffset+id].op] and GF_PlayerNotes[GF_FilteredResultsList[GF_ResultsListOffset+id].op] ~= "" then
+		GameTooltip:ClearLines()
+		GameTooltip:SetOwner(this, "ANCHOR_BOTTOMLEFT")
+		GameTooltip:ClearAllPoints()
+		GameTooltip:SetPoint("BOTTOMLEFT", frame:GetName(), "TOPLEFT", 0, 8)
+		GameTooltip:AddLine(GF_PLAYER_NOTE..GF_PlayerNotes[GF_FilteredResultsList[GF_ResultsListOffset+id].op],1,1,0,1,1)
+		GameTooltip:Show()
+	end
 end
 
 function GF_WhisperHistoryButtonPressed(id,override,nolog) -- Whisper/Guild History Functions
@@ -4089,6 +4107,7 @@ function GF_LFGDungeonAddRemove(entryName,entryID,add)
 		GF_LFGCommonCleanup(entryName)
 	end
 	GF_FixLFGStrings()
+	GF_UpdateQueueLFTButton()
 end
 function GF_LFGHardCoreAddRemove(entryName,entryID,add)
 	if GF_Hardcore then
@@ -4172,46 +4191,75 @@ function GF_LFGCommonCleanup(entryName)
 	GF_PerCharVariables.searchlfgtext = gsub(gsub(gsub(gsub(gsub(gsub(gsub(GF_PerCharVariables.searchlfgtext, "^%d+", ""),"for "..entryName,""),"need "..entryName,""),entryName,""),"/ "," "), "%(HC%)", ""),"%s%s+"," ")
 end
 
-function GF_QueueLFT() -- /script GF_QueueLFT()
-	local LFTInstances = {}
-	for i=1, 100 do
-		if getglobal("LFTFrameInstancesListEntry"..i) then
-			table.insert(LFTInstances,getglobal("LFTFrameInstancesListEntry"..i).instance)
-			if getglobal("LFTFrameInstancesListEntry"..i.."CheckButton"):GetChecked() then getglobal("LFTFrameInstancesListEntry"..i.."CheckButton"):Click() end
-		else
-			break
-		end
-	end
-	if GF_PerCharVariables.lfgtank then if not LFTFrameRoleTankCheckButton:GetChecked() then LFTFrameRoleTankCheckButton:Click() end else if LFTFrameRoleTankCheckButton:GetChecked() then LFTFrameRoleTankCheckButton:Click() end end
-	if GF_PerCharVariables.lfgheal then if not LFTFrameRoleHealerCheckButton:GetChecked() then LFTFrameRoleHealerCheckButton:Click() end else if LFTFrameRoleHealerCheckButton:GetChecked() then LFTFrameRoleHealerCheckButton:Click() end end
-	if GF_PerCharVariables.lfgdps then if not LFTFrameRoleDamageCheckButton:GetChecked() then LFTFrameRoleDamageCheckButton:Click() end else if LFTFrameRoleDamageCheckButton:GetChecked() then LFTFrameRoleDamageCheckButton:Click() end end
-
-	for i=1,getn(LFTInstances) do
-	end
-
--- Need to make a list of the dungeons in my addon
--- Need to get a list of available LFT dungeons(LFTFrameInstancesListEntry1.instance) to see what matches
-
-	LFTFrameMainButton:Click()
-end
-function GF_UpdateQueueLFTButton(update) -- Updates(gets dungeon list) on login and when leveling up... Otherwise, just check if groups match GF_PerCharVariables.searchlfgtext and show/hide the Queue Button... Always show button if in queue
-	if LFTFrame then
-		if update and not LFTFrame:IsVisible() then LFT_Toggle() LFT_Toggle() end -- Get List
-		if LFTFrameMainButton:GetButtonState() == "DISABLED" then GF_QueuetoLFTButton:SetText(GF_LEAVE_QUEUE) else GF_QueuetoLFTButton:SetText(GF_QUEUE_IN_LFT) end -- Resets text... Button is hidden by GF_UpdateGroup() if in raid group, or here if no matches.
+function GF_ClickQueueLFT()
+	if LFTFrameMainButtonText:GetText() == LFT_GENERAL_LEAVE_QUEUE_TEXT then
+		LFTFrameMainButton:Click()
+	else
+		if GF_PerCharVariables.lfgtank then if not LFTFrameRoleTankCheckButton:GetChecked() then LFTFrameRoleTankCheckButton:Click() end else if LFTFrameRoleTankCheckButton:GetChecked() then LFTFrameRoleTankCheckButton:Click() end end
+		if GF_PerCharVariables.lfgheal then if not LFTFrameRoleHealerCheckButton:GetChecked() then LFTFrameRoleHealerCheckButton:Click() end else if LFTFrameRoleHealerCheckButton:GetChecked() then LFTFrameRoleHealerCheckButton:Click() end end
+		if GF_PerCharVariables.lfgdps then if not LFTFrameRoleDamageCheckButton:GetChecked() then LFTFrameRoleDamageCheckButton:Click() end else if LFTFrameRoleDamageCheckButton:GetChecked() then LFTFrameRoleDamageCheckButton:Click() end end
 
 		for i=1, 100 do
-			if getglobal("LFTFrameInstancesListEntry"..i) then
-				if getglobal("LFTFrameInstancesListEntry"..i.."CheckButton"):GetChecked() then getglobal("LFTFrameInstancesListEntry"..i.."CheckButton"):Click() end
+			if getglobal("LFTFrameInstancesListEntry"..i) then -- Just need to click the instances in my lfgtext(and unclick any instances not)
+				if string.find(GF_PerCharVariables.searchlfgtext, GF_LFT_Dungeons[getglobal("LFTFrameInstancesListEntry"..i.."Name"):GetText()]) then
+					if not getglobal("LFTFrameInstancesListEntry"..i.."CheckButton"):GetChecked() then getglobal("LFTFrameInstancesListEntry"..i.."CheckButton"):Click() end
+				else
+					if getglobal("LFTFrameInstancesListEntry"..i.."CheckButton"):GetChecked() then getglobal("LFTFrameInstancesListEntry"..i.."CheckButton"):Click() end
+				end
 			else
 				break
 			end
 		end
-		
-
--- If there are groups in lfgeditbox, show the button
--- make mouseover button to show what groups it will queue for... must also have roles checked
-
---	if GF_QueuetoLFTButton:IsVisible() then GF_QueuetoLFTButton:Hide() GF_QueuetoLFTButton:SetText(GF_QUEUE_IN_LFT) end
+		LFTFrameMainButton:Click()
+	end
+end
+function GF_UpdateQueueLFTButton(update) -- Updates(gets dungeon list) on login and when leveling up... Otherwise, just check if groups match GF_PerCharVariables.searchlfgtext and show/hide the Queue Button... Always show button if in queue
+	if LFTFrame then
+		if update and not LFTFrame:IsVisible() then LFT_Toggle() LFT_Toggle() end -- Get List
+		if LFTFrameMainButtonText:GetText() == LFT_GENERAL_LEAVE_QUEUE_TEXT then
+			GF_QueuetoLFTButton:SetText(GF_LEAVE_QUEUE)
+			GF_QueuetoLFTButton:Show()
+			GF_GenTooltips["GF_QueuetoLFTButton"].tooltip1 = GF_QUEUED_FOR
+			wordString = ""
+			for i=1, 100 do
+				if getglobal("LFTFrameInstancesListEntry"..i) then
+					if getglobal("LFTFrameInstancesListEntry"..i.."CheckButton"):GetChecked() then
+						wordString = wordString..getglobal("LFTFrameInstancesListEntry"..i.."Name"):GetText()..", "
+					end
+				else
+					break
+				end
+			end
+			if wordString ~= "" then
+				wordString = strsub(wordString,1,-3)..GF_LFT_AS
+				if LFTFrameRoleTankCheckButton:GetChecked() then wordString = wordString..GF_TANK..", " end
+				if LFTFrameRoleHealerCheckButton:GetChecked() then wordString = wordString..GF_HEALER..", " end
+				if LFTFrameRoleDamageCheckButton:GetChecked() then wordString = wordString..GF_DPS..", " end
+				GF_GenTooltips["GF_QueuetoLFTButton"].tooltip2 = strsub(wordString,1,-3)
+			end
+		else
+			GF_QueuetoLFTButton:SetText(GF_QUEUE_IN_LFT)
+			GF_QueuetoLFTButton:Hide()
+			GF_GenTooltips["GF_QueuetoLFTButton"].tooltip1 = GF_QUEUE_FOR
+			wordString = ""
+			for i=1, 100 do
+				if getglobal("LFTFrameInstancesListEntry"..i) then
+					if string.find(GF_PerCharVariables.searchlfgtext, GF_LFT_Dungeons[getglobal("LFTFrameInstancesListEntry"..i.."Name"):GetText()]) and (GF_PerCharVariables.lfgdps or GF_PerCharVariables.lfgheal or GF_PerCharVariables.lfgtank) then
+						wordString = wordString..getglobal("LFTFrameInstancesListEntry"..i.."Name"):GetText()..", "
+					end
+				else
+					break
+				end
+			end
+			if wordString ~= "" then
+				GF_QueuetoLFTButton:Show()
+				wordString = strsub(wordString,1,-3)..GF_LFT_AS
+				if GF_PerCharVariables.lfgtank then wordString = wordString..GF_TANK..", " end
+				if GF_PerCharVariables.lfgheal then wordString = wordString..GF_HEALER..", " end
+				if GF_PerCharVariables.lfgdps then wordString = wordString..GF_DPS..", " end
+				GF_GenTooltips["GF_QueuetoLFTButton"].tooltip2 = strsub(wordString,1,-3)
+			end
+		end
 	end
 end
 

@@ -614,6 +614,32 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLeave>
 				</Scripts>
 			</Button>
+			<Button name="$parentPlayerNoteButton" inherits="GF_ButtonTemplate">
+				<NormalTexture file="Interface\Buttons\UI-GuildButton-OfficerNote-Up" setAllPoints="true"/>
+				<PushedTexture file="Interface\Buttons\UI-GuildButton-OfficerNote-Disabled" setAllPoints="true"/>
+				<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD" setAllPoints="true"/>
+				<Anchors>
+					<Anchor point="LEFT" relativeTo="$parentNameLabel" relativePoint="RIGHT">
+						<Offset>
+							<AbsDimension x="-23" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Size>
+					<AbsDimension x="16" y="16"/>
+				</Size>
+				<Scripts>
+					<OnClick>
+						GF_EditPlayerNote(GF_FilteredResultsList[GF_ResultsListOffset+this:GetParent():GetID()].op)
+					</OnClick>
+					<OnEnter>
+						GF_PlayerNoteButton_ShowTooltip(this:GetParent(),this:GetParent():GetID())
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide()
+					</OnLeave>
+				</Scripts>
+			</Button>
 		</Frames>
 		<Scripts>
 			<OnMouseDown>
@@ -1810,7 +1836,14 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Anchors>
 				<Scripts>
 					<OnClick>
+						GF_ClickQueueLFT()
 					</OnClick>
+					<OnEnter>
+						GF_ShowTooltip(this)
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide()
+					</OnLeave>
 				</Scripts>
 			</Button>
 			<Frame name="GF_GroupsFrame">
@@ -2602,6 +2635,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											<OnClick>
 												GF_PerCharVariables.lfgtank = this:GetChecked()
 												GF_FixLFGStrings()
+												GF_UpdateQueueLFTButton()
 											</OnClick>
 											<OnLoad>
 												getglobal(this:GetName().."TextLabel"):SetText(GF_TANK)
@@ -2613,6 +2647,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											<OnClick>
 													GF_PerCharVariables.lfgheal = this:GetChecked()
 													GF_FixLFGStrings()
+													GF_UpdateQueueLFTButton()
 											</OnClick>
 											<OnLoad>
 												getglobal(this:GetName().."TextLabel"):SetText(GF_HEALER)
@@ -2622,8 +2657,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									<CheckButton name="GF_LFGMyRoleDPSCheckButton" inherits="GF_CheckButtonTemplate_Label">
 										<Scripts>
 											<OnClick>
-													GF_PerCharVariables.lfgdps = this:GetChecked()
-													GF_FixLFGStrings()
+												GF_PerCharVariables.lfgdps = this:GetChecked()
+												GF_FixLFGStrings()
+												GF_UpdateQueueLFTButton()
 											</OnClick>
 											<OnLoad>
 												getglobal(this:GetName().."TextLabel"):SetText(GF_DPS)
@@ -2710,25 +2746,25 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												if GF_LFGDescriptionEditBoxHasFocus[2] + .005 &lt; GetTime() then GF_LFGDescriptionEditBoxHasFocus = {nil,GetTime()} end
 												GF_PerCharVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText()
 												this:HighlightText(string.len(this:GetText())+1)
-												if GF_PerCharVariables.searchlfgtext ~= "" then GF_LFGDescriptionClearButton:Show() else GF_LFGDescriptionClearButton:Hide() end
+												if GF_PerCharVariables.searchlfgtext ~= "" then GF_LFGDescriptionClearButton:Show() else GF_LFGDescriptionClearButton:Hide() GF_UpdateQueueLFTButton() end
 											</OnEditFocusLost>
 											<OnTabPressed>
 												GF_PerCharVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText()
 												this:ClearFocus()
 												this:HighlightText(string.len(this:GetText())+1)
-												if GF_PerCharVariables.searchlfgtext ~= "" then GF_LFGDescriptionClearButton:Show() else GF_LFGDescriptionClearButton:Hide() end
+												if GF_PerCharVariables.searchlfgtext ~= "" then GF_LFGDescriptionClearButton:Show() else GF_LFGDescriptionClearButton:Hide() GF_UpdateQueueLFTButton() end
 											</OnTabPressed>
 											<OnEnterPressed>
 												GF_PerCharVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText()
 												this:ClearFocus()
 												this:HighlightText(string.len(this:GetText())+1)
-												if GF_PerCharVariables.searchlfgtext ~= "" then GF_LFGDescriptionClearButton:Show() else GF_LFGDescriptionClearButton:Hide() end
+												if GF_PerCharVariables.searchlfgtext ~= "" then GF_LFGDescriptionClearButton:Show() else GF_LFGDescriptionClearButton:Hide() GF_UpdateQueueLFTButton() end
 											</OnEnterPressed>
 											<OnEscapePressed>
 												GF_PerCharVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText()
 												this:ClearFocus()
 												this:HighlightText(string.len(this:GetText())+1)
-												if GF_PerCharVariables.searchlfgtext ~= "" then GF_LFGDescriptionClearButton:Show() else GF_LFGDescriptionClearButton:Hide() end
+												if GF_PerCharVariables.searchlfgtext ~= "" then GF_LFGDescriptionClearButton:Show() else GF_LFGDescriptionClearButton:Hide() GF_UpdateQueueLFTButton() end
 											</OnEscapePressed>
 										</Scripts>
 									</EditBox>
@@ -2747,6 +2783,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												GF_LFGDescriptionEditBox:SetText("")
 												GF_LFGDescriptionClearButton:Hide()
 												if GF_AutoAnnounceTimer then GF_TurnOffAnnounce(GF_AUTO_ANNOUNCE_TURNED_OFF) end
+												GF_UpdateQueueLFTButton()
 											</OnClick>
 										</Scripts>
 									</Button>
