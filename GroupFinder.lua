@@ -128,7 +128,7 @@ function GF_LoadVariables()
 	if not GF_WhisperLogData[GF_RealmName] then GF_WhisperLogData[GF_RealmName] = {} table.insert(GF_WhisperLogData[GF_RealmName], "Guild") GF_WhisperLogData[GF_RealmName]["Guild"] = {} end
 	if not GF_GroupHistory then GF_GroupHistory = {} end
 	if not GF_GroupHistory[GF_RealmName] then GF_GroupHistory[GF_RealmName] = {} table.insert(GF_GroupHistory[GF_RealmName], "Groups") end
-	if not GF_GroupHistory[GF_RealmName]["Groups"] then GF_GroupHistory[GF_RealmName]["Groups"] = {""} end
+	if not GF_GroupHistory[GF_RealmName]["Groups"] then GF_GroupHistory[GF_RealmName]["Groups"] = {} end
 	if not GF_PreviousMessage then GF_PreviousMessage = {} end
 	if not GF_PlayerMessages then GF_PlayerMessages = {} end
 	if not GF_PlayerNotes then GF_PlayerNotes = {} end
@@ -246,6 +246,15 @@ function GF_LoadVariables()
 						GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j] = { GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j], "GUILD" }
 					end
 				end
+			end
+		end
+		for name,data in GF_GroupHistory[GF_RealmName] do -- Convert older style Group History entries - Could get rid of in final release
+			if type(GF_GroupHistory[GF_RealmName][name]) == "table" and GF_GroupHistory[GF_RealmName][name][1] and type(GF_GroupHistory[GF_RealmName][name][1]) == "string" then
+				GF_GroupHistory = {}
+				GF_GroupHistory[GF_RealmName] = {}
+				table.insert(GF_GroupHistory[GF_RealmName], "Groups")
+				GF_GroupHistory[GF_RealmName]["Groups"] = {}
+				GF_AddNamesToGroupHistoryList()
 			end
 		end
 	end
@@ -370,7 +379,7 @@ function GF_LoadSettings()
 	GF_UpdateMinimapIcon()
 	GF_UpdateFriendsList()
 	GF_UpdateGuildiesList()
-	GF_WhisperHistoryUpdateFrame()
+	if GF_SavedVariables.showwhisperlogs == 2 then GF_GroupHistoryUpdateFrame() else GF_WhisperHistoryUpdateFrame() end
 	GF_GetLogFilters()
 	GF_DisplayLog()
 	GF_PruneTheClassWhoTable()
@@ -704,7 +713,7 @@ function GF_FormatBlockListWords(arg1)
 end
 function GF_AddNamesToGroupHistoryList()
 	for i=1, getn(GF_GroupHistoryNames) do
-		if not GF_GroupHistory[GF_RealmName][GF_GroupHistoryNames[i][1]] then table.insert(GF_GroupHistory[GF_RealmName], GF_GroupHistoryNames[i][1]) GF_GroupHistory[GF_RealmName][GF_GroupHistoryNames[i][1]] = {""} end
+		if not GF_GroupHistory[GF_RealmName][GF_GroupHistoryNames[i][1]] then table.insert(GF_GroupHistory[GF_RealmName], GF_GroupHistoryNames[i][1]) GF_GroupHistory[GF_RealmName][GF_GroupHistoryNames[i][1]] = {} end
 	end
 end
 
@@ -3591,6 +3600,42 @@ function GF_WhisperHistoryUpdateFrame(name)
 	if getn(GF_WhisperLogData[GF_RealmName]) > 95 then GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][96]] = nil table.remove(GF_WhisperLogData[GF_RealmName],96) end
 end
 function GF_GroupHistoryUpdateFrame(name)
+	local numPriority = 0
+	local nameWasPriority
+	local counter = 2
+	while true do
+		if not name or not GF_GroupHistory[GF_RealmName][counter] then break end
+		if GF_GroupHistory[GF_RealmName][GF_GroupHistory[GF_RealmName][counter]].priority then numPriority = numPriority+1 end
+		if name == GF_GroupHistory[GF_RealmName][counter] then if GF_GroupHistory[GF_RealmName][GF_GroupHistory[GF_RealmName][counter]].priority then nameWasPriority = true end table.remove(GF_GroupHistory[GF_RealmName],counter) else counter = counter+1 end
+	end
+	if name then
+		if nameWasPriority then
+			table.insert(GF_GroupHistory[GF_RealmName],2,name)
+			GF_WhisperLogOffset = 0
+		else
+			table.insert(GF_GroupHistory[GF_RealmName],2+numPriority,name)
+			GF_WhisperLogOffset = math.floor(numPriority/18) * 18
+		end
+	end
+	for i=2, 19 do
+		if GF_GroupHistory[GF_RealmName][i+GF_WhisperLogOffset] then
+			if GF_GroupHistory[GF_RealmName][GF_GroupHistory[GF_RealmName][i+GF_WhisperLogOffset]].priority then getglobal("GF_WhisperHistoryButtonCheckButton"..i):SetChecked(true) getglobal("GF_WhisperHistoryButton"..i.."TextureGold"):Show() else getglobal("GF_WhisperHistoryButtonCheckButton"..i):SetChecked(false) getglobal("GF_WhisperHistoryButton"..i.."TextureGold"):Hide() end
+			getglobal("GF_WhisperHistoryButton"..i):SetText(GF_GroupHistory[GF_RealmName][i+GF_WhisperLogOffset])
+			getglobal("GF_WhisperHistoryButton"..i):Show()
+		else
+			getglobal("GF_WhisperHistoryButton"..i):SetText("")
+			getglobal("GF_WhisperHistoryButton"..i):Hide()
+		end
+	end
+	for i=2, 19 do
+		if GF_GroupHistory[GF_RealmName][i+GF_WhisperLogOffset] then
+			if GF_GroupHistory[GF_RealmName][i+GF_WhisperLogOffset] == GF_WhisperLogCurrentButtonName then GF_WhisperHistoryButtonPressed(i,true,true) end
+		end
+	end
+	if GF_WhisperLogCurrentButtonID > 1 and getglobal("GF_WhisperHistoryButton"..GF_WhisperLogCurrentButtonID):GetText() ~= GF_WhisperLogCurrentButtonName then
+		getglobal("GF_WhisperHistoryButton"..GF_WhisperLogCurrentButtonID):UnlockHighlight()
+		getglobal("GF_WhisperHistoryButtonCheckButton"..GF_WhisperLogCurrentButtonID):Hide()
+	end
 end
 function GF_WhisperHistoryDisplayLog(name)
 	GF_Log:SetMaxLines(128)
@@ -3611,6 +3656,10 @@ function GF_WhisperHistoryDisplayLog(name)
 	end
 end
 function GF_GroupHistoryDisplayLog(name)
+	GF_Log:SetMaxLines(128)
+	for i=getn(GF_GroupHistory[GF_RealmName][name]), 1, -1 do
+		GF_Log:AddMessage(GF_GroupHistory[GF_RealmName][name][i][1],1,1,1)
+	end
 end
 function GF_WhisperHistoryPriorityListCheckButtonPressed(id,name,priority)
 	if GF_SavedVariables.showwhisperlogs == 1 then

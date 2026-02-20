@@ -3856,7 +3856,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											<OnClick>
 												if GF_WhisperLogOffset > 0 then
 													GF_WhisperLogOffset = GF_WhisperLogOffset - 18
-													GF_WhisperHistoryUpdateFrame()
+													if GF_SavedVariables.showwhisperlogs == 1 then GF_WhisperHistoryUpdateFrame() elseif GF_SavedVariables.showwhisperlogs == 2 then GF_GroupHistoryUpdateFrame() end
 												end
 											</OnClick>
 										</Scripts>
@@ -3878,9 +3878,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Anchors>
 										<Scripts>
 											<OnClick>
-												if getn(GF_WhisperLogData[GF_RealmName]) > GF_WhisperLogOffset + 19 then
+												if GF_SavedVariables.showwhisperlogs == 1 and getn(GF_WhisperLogData[GF_RealmName]) > GF_WhisperLogOffset + 19 then
 													GF_WhisperLogOffset = GF_WhisperLogOffset + 18
 													GF_WhisperHistoryUpdateFrame()
+												elseif GF_SavedVariables.showwhisperlogs == 2 and getn(GF_GroupHistory[GF_RealmName]) > GF_WhisperLogOffset + 19 then
+													GF_WhisperLogOffset = GF_WhisperLogOffset + 18
+													GF_GroupHistoryUpdateFrame()
 												end
 											</OnClick>
 										</Scripts>
