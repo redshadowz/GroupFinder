@@ -1545,6 +1545,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							</OnLoad>
 							<OnEditFocusLost>
 								GF_PerCharVariables.searchtext = GF_GroupsFrameDescriptionEditBox:GetText()
+								GF_ApplyFiltersToGroupList()
 								this:HighlightText(string.len(this:GetText())+1)
 							</OnEditFocusLost>
 							<OnTabPressed>
@@ -3352,7 +3353,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										<Scripts>
 											<OnClick>
 												GF_SavedVariables.logshowchat = this:GetChecked()
-												if GF_SavedVariables.logshowchat then GF_LogFilters[4] = true else GF_LogFilters[4] = nil end
+												if GF_SavedVariables.logshowchat then GF_LogFilters[5] = true else GF_LogFilters[5] = nil end
 												if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 											</OnClick>
 											<OnLoad>
@@ -3371,7 +3372,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										<Scripts>
 											<OnClick>
 												GF_SavedVariables.logshowtrades = this:GetChecked()
-												if GF_SavedVariables.logshowtrades then GF_LogFilters[5] = true else GF_LogFilters[5] = nil end
+												if GF_SavedVariables.logshowtrades then GF_LogFilters[9] = true else GF_LogFilters[9] = nil end
 												if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 											</OnClick>
 											<OnLoad>
@@ -3390,7 +3391,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										<Scripts>
 											<OnClick>
 												GF_SavedVariables.logshowguilds = this:GetChecked()
-												if GF_SavedVariables.logshowguilds then GF_LogFilters[11] = true else GF_LogFilters[11] = nil end
+												if GF_SavedVariables.logshowguilds then GF_LogFilters[8] = true else GF_LogFilters[8] = nil end
 												if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 											</OnClick>
 											<OnLoad>
@@ -3447,7 +3448,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										<Scripts>
 											<OnClick>
 												GF_SavedVariables.logshowblacklist = this:GetChecked()
-												if GF_SavedVariables.logshowblacklist then GF_LogFilters[8] = true else GF_LogFilters[8] = nil end
+												if GF_SavedVariables.logshowblacklist then GF_LogFilters[10] = true else GF_LogFilters[10] = nil end
 												if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 											</OnClick>
 											<OnLoad>
@@ -3466,7 +3467,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										<Scripts>
 											<OnClick>
 												GF_SavedVariables.logshowbelowlevel = this:GetChecked()
-												if GF_SavedVariables.logshowbelowlevel then GF_LogFilters[9] = true else GF_LogFilters[9] = nil end
+												if GF_SavedVariables.logshowbelowlevel then GF_LogFilters[11] = true else GF_LogFilters[11] = nil end
 												if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 											</OnClick>
 											<OnLoad>
@@ -4311,15 +4312,26 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Layers>
 								<Scripts>
 									<OnLoad>
-										getglobal(this:GetName().."High"):SetText("120")
-										getglobal(this:GetName().."Low"):SetText("5")
-										this:SetMinMaxValues(5,120)
-										this:SetValueStep(5)
+										getglobal(this:GetName().."High"):SetText("30 min")
+										getglobal(this:GetName().."Low"):SetText("5 sec")
+										this:SetMinMaxValues(1,25)
+										this:SetValueStep(1)
 										getglobal(this:GetName().."Text"):SetText(GF_SPAM_FILTER_TIMER)
 									</OnLoad>
 									<OnValueChanged>
-										GF_SavedVariables.spamfilterduration = this:GetValue()
-										getglobal(this:GetName().."Label"):SetText(GF_SavedVariables.spamfilterduration..GF_SECONDS)
+										if this:GetValue() > 21 then
+											GF_SavedVariables.spamfilterduration = (this:GetValue()-21)*300 + 600
+											getglobal(this:GetName().."Label"):SetText((GF_SavedVariables.spamfilterduration/60)..GF_MINUTES)
+										elseif this:GetValue() > 12 then
+											GF_SavedVariables.spamfilterduration = (this:GetValue()-11)*60
+											getglobal(this:GetName().."Label"):SetText((GF_SavedVariables.spamfilterduration/60)..GF_MINUTES)
+										elseif this:GetValue() == 12 then
+											GF_SavedVariables.spamfilterduration = 60
+											getglobal(this:GetName().."Label"):SetText((GF_SavedVariables.spamfilterduration/60)..GF_MIN)
+										else
+											GF_SavedVariables.spamfilterduration = this:GetValue()*5
+											getglobal(this:GetName().."Label"):SetText(GF_SavedVariables.spamfilterduration..GF_SECONDS)
+										end
 									</OnValueChanged>
 								</Scripts>
 							</Slider>
