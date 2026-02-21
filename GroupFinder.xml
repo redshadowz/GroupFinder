@@ -1739,7 +1739,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						GF_SettingsFrame:Hide()
 						GF_BlackListFrame:Hide()
 						GF_UpdateBlackListItems()
-						GF_SavedVariables.mainframelogisopen = nil
+						GF_SavedVariables.mainframelogisopen = false
 					</OnClick>
 				</Scripts>
 			</Button>
@@ -3782,7 +3782,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											</OnLoad>
 										</Scripts>
 									</Button>
-									<Button name="GF_WhisperHistoryButton1" inherits="GF_GrayButton_Whisper" id="1" text="GF_LOG_GUILDWHISPERS">
+									<Button name="GF_WhisperHistoryButton1" inherits="GF_GrayButton_Whisper" id="1">
 										<Size>
 											<AbsDimension x="100" y="26"/>
 										</Size>
@@ -3907,7 +3907,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if GF_SavedVariables.showwhisperlogs == 1 then GF_SavedVariables.showwhisperlogs = nil else GF_SavedVariables.showwhisperlogs = 1 GF_WhisperLogOffset = 0 GF_WhisperHistoryUpdateFrame() end
+										if GF_SavedVariables.showwhisperlogs == 1 then GF_SavedVariables.showwhisperlogs = false else GF_SavedVariables.showwhisperlogs = 1 GF_WhisperLogOffset = 0 GF_WhisperHistoryUpdateFrame() end
 										GF_UpdateWhisperFrame()
 									</OnClick>
 								</Scripts>
@@ -3925,7 +3925,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if GF_SavedVariables.showwhisperlogs == 2 then GF_SavedVariables.showwhisperlogs = nil else GF_SavedVariables.showwhisperlogs = 2 GF_WhisperLogOffset = 0 GF_GroupHistoryUpdateFrame() end
+										if GF_SavedVariables.showwhisperlogs == 2 then GF_SavedVariables.showwhisperlogs = false else GF_SavedVariables.showwhisperlogs = 2 GF_WhisperLogOffset = 0 GF_GroupHistoryUpdateFrame() end
 										GF_UpdateWhisperFrame()
 									</OnClick>
 								</Scripts>
@@ -5402,7 +5402,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Anchors>
 						<Scripts>
 							<OnClick>
-								GF_PlayerNotes[GF_EditPlayerNoteFrameTitleLabel:GetText()] = GF_EditPlayerNoteFrameEditBox:GetText()
+								GF_PlayerNotes[GF_RealmName][GF_EditPlayerNoteFrameTitleLabel:GetText()] = GF_EditPlayerNoteFrameEditBox:GetText()
 								GF_UpdateResults()
 								GF_EditPlayerNoteFrame:Hide()
 							</OnClick>
@@ -5421,7 +5421,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Anchors>
 						<Scripts>
 							<OnClick>
-								GF_PlayerNotes[GF_EditPlayerNoteFrameTitleLabel:GetText()] = ""
+								GF_PlayerNotes[GF_RealmName][GF_EditPlayerNoteFrameTitleLabel:GetText()] = ""
 								GF_UpdateResults()
 								GF_EditPlayerNoteFrame:Hide()
 							</OnClick>
@@ -5455,7 +5455,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								GF_EditPlayerNoteFrame:Hide()
 							</OnTabPressed>
 							<OnEnterPressed>
-								GF_PlayerNotes[GF_EditPlayerNoteFrameTitleLabel:GetText()] = GF_EditPlayerNoteFrameEditBox:GetText()
+								GF_PlayerNotes[GF_RealmName][GF_EditPlayerNoteFrameTitleLabel:GetText()] = GF_EditPlayerNoteFrameEditBox:GetText()
 								GF_UpdateResults()
 								GF_EditPlayerNoteFrame:Hide()
 							</OnEnterPressed>

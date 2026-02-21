@@ -235,9 +235,10 @@ GF_TIME_JUST_NOW = "Just now" -- Text for righttext on group list, "Found ## min
 
 GF_QUEUE_IN_LFT = "Queue in LFT"
 GF_LEAVE_QUEUE = "Leave Queue"
-GF_QUEUE_FOR = "Queue for"
-GF_QUEUED_FOR = "Queued for"
+GF_QUEUE_FOR = "Queue for:"
+GF_QUEUED_FOR = "Queued for:"
 GF_LFT_AS = " as "
+GF_LOG_ALLGROUPS = "All Groups"
 
 --if GetLocale() == "zhCN" then
 --elseif GetLocale() == "zhTW" then

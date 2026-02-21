@@ -1,4 +1,4 @@
-﻿local GF_CurrentVersion						= 7030 -- New revisions cause a reset of basic settings
+﻿local GF_CurrentVersion						= 7040 -- New revisions cause a reset of basic settings
 
 GF_SavedVariables 							= {}
 GF_PerCharVariables							= {}
@@ -119,6 +119,7 @@ function GF_LoadVariables()
 	if not GF_MessageList[GF_RealmName] then GF_MessageList[GF_RealmName] = {} end
 	if not GF_BlackList then GF_BlackList = {} end
 	if not GF_BlackList[GF_RealmName] then GF_BlackList[GF_RealmName] = {} end
+	if not GF_LogHistory then GF_LogHistory = {} end
 	if not GF_LogHistory[GF_RealmName] then GF_LogHistory[GF_RealmName] = {} end
 	if not GF_LogHistory[GF_RealmName]["Delay"] then GF_LogHistory[GF_RealmName]["Delay"] = {} end
 	if not GF_WhoTable then GF_WhoTable = {} end
@@ -129,75 +130,75 @@ function GF_LoadVariables()
 	if not GF_GroupHistory then GF_GroupHistory = {} end
 	if not GF_GroupHistory[GF_RealmName] then GF_GroupHistory[GF_RealmName] = {} table.insert(GF_GroupHistory[GF_RealmName], "Groups") end
 	if not GF_GroupHistory[GF_RealmName]["Groups"] then GF_GroupHistory[GF_RealmName]["Groups"] = {} end
-	if not GF_PreviousMessage then GF_PreviousMessage = {} end
 	if not GF_PlayerMessages then GF_PlayerMessages = {} end
 	if not GF_PlayerNotes then GF_PlayerNotes = {} end
+	if not GF_PlayerNotes[GF_RealmName] then GF_PlayerNotes[GF_RealmName] = {} end
 
 	if not GF_SavedVariables then GF_SavedVariables = {} end
 	if not GF_SavedVariables.version or GF_SavedVariables.version < GF_CurrentVersion then
 		GF_SavedVariables.version = GF_CurrentVersion
-		if not GF_SavedVariables.addonsendtimeout then GF_SavedVariables.addonsendtimeout = 0 end
+		if GF_SavedVariables.addonsendtimeout == nil then GF_SavedVariables.addonsendtimeout = 0 end
 
-		if not GF_SavedVariables.showgroupsinchat then GF_SavedVariables.showgroupsinchat = true end
-		if not GF_SavedVariables.showgroupsnewonly then GF_SavedVariables.showgroupsnewonly = false end
-		if not GF_SavedVariables.showgroupsinminimap then GF_SavedVariables.showgroupsinminimap = false end
-		if not GF_SavedVariables.showchattexts then GF_SavedVariables.showchattexts = true end
-		if not GF_SavedVariables.showtradestexts then GF_SavedVariables.showtradestexts = true end
-		if not GF_SavedVariables.showloottexts then GF_SavedVariables.showloottexts = true end
-		if not GF_SavedVariables.showguilds then GF_SavedVariables.showguilds = true end
-		if not GF_SavedVariables.usewhoongroups then GF_SavedVariables.usewhoongroups = false end
+		if GF_SavedVariables.showgroupsinchat == nil then GF_SavedVariables.showgroupsinchat = true end
+		if GF_SavedVariables.showgroupsnewonly == nil then GF_SavedVariables.showgroupsnewonly = false end
+		if GF_SavedVariables.showgroupsinminimap == nil then GF_SavedVariables.showgroupsinminimap = false end
+		if GF_SavedVariables.showchattexts == nil then GF_SavedVariables.showchattexts = true end
+		if GF_SavedVariables.showtradestexts == nil then GF_SavedVariables.showtradestexts = true end
+		if GF_SavedVariables.showloottexts == nil then GF_SavedVariables.showloottexts = true end
+		if GF_SavedVariables.showguilds == nil then GF_SavedVariables.showguilds = true end
+		if GF_SavedVariables.usewhoongroups == nil then GF_SavedVariables.usewhoongroups = false end
 
-		if not GF_SavedVariables.showdungeons then GF_SavedVariables.showdungeons = true end
-		if not GF_SavedVariables.showraids then GF_SavedVariables.showraids = true end
-		if not GF_SavedVariables.showquests then GF_SavedVariables.showquests = true end
-		if not GF_SavedVariables.showother then GF_SavedVariables.showother = true end
-		if not GF_SavedVariables.showlfm then GF_SavedVariables.showlfm = true end
-		if not GF_SavedVariables.showlfg then GF_SavedVariables.showlfg = true end
+		if GF_SavedVariables.showdungeons == nil then GF_SavedVariables.showdungeons = true end
+		if GF_SavedVariables.showraids == nil then GF_SavedVariables.showraids = true end
+		if GF_SavedVariables.showquests == nil then GF_SavedVariables.showquests = true end
+		if GF_SavedVariables.showother == nil then GF_SavedVariables.showother = true end
+		if GF_SavedVariables.showlfm == nil then GF_SavedVariables.showlfm = true end
+		if GF_SavedVariables.showlfg == nil then GF_SavedVariables.showlfg = true end
 
-		if not GF_SavedVariables.announcetimer then GF_SavedVariables.announcetimer = 300 end
+		if GF_SavedVariables.announcetimer == nil then GF_SavedVariables.announcetimer = 300 end
 
-		if not GF_SavedVariables.logshowgroup then GF_SavedVariables.logshowgroup = true end
-		if not GF_SavedVariables.logshowfiltered then GF_SavedVariables.logshowfiltered = true end
-		if not GF_SavedVariables.logshowchat then GF_SavedVariables.logshowchat = true end
-		if not GF_SavedVariables.logshowtrades then GF_SavedVariables.logshowtrades = true end
-		if not GF_SavedVariables.logshowloot then GF_SavedVariables.logshowloot = true end
-		if not GF_SavedVariables.logshowguilds then GF_SavedVariables.logshowguilds = true end
-		if not GF_SavedVariables.logshowspam then GF_SavedVariables.logshowspam = true end
-		if not GF_SavedVariables.logshowblacklist then GF_SavedVariables.logshowblacklist = true end
-		if not GF_SavedVariables.logshowbelowlevel then GF_SavedVariables.logshowbelowlevel = true end
-		if not GF_SavedVariables.showwhisperlogs then GF_SavedVariables.showwhisperlogs = false end
+		if GF_SavedVariables.logshowgroup == nil then GF_SavedVariables.logshowgroup = true end
+		if GF_SavedVariables.logshowfiltered == nil then GF_SavedVariables.logshowfiltered = true end
+		if GF_SavedVariables.logshowchat == nil then GF_SavedVariables.logshowchat = true end
+		if GF_SavedVariables.logshowtrades == nil then GF_SavedVariables.logshowtrades = true end
+		if GF_SavedVariables.logshowloot == nil then GF_SavedVariables.logshowloot = true end
+		if GF_SavedVariables.logshowguilds == nil then GF_SavedVariables.logshowguilds = true end
+		if GF_SavedVariables.logshowspam == nil then GF_SavedVariables.logshowspam = true end
+		if GF_SavedVariables.logshowblacklist == nil then GF_SavedVariables.logshowblacklist = true end
+		if GF_SavedVariables.logshowbelowlevel == nil then GF_SavedVariables.logshowbelowlevel = true end
+		if GF_SavedVariables.showwhisperlogs == nil then GF_SavedVariables.showwhisperlogs = false end
 
-		if not GF_SavedVariables.logchannels then GF_SavedVariables.logchannels = true end
-		if not GF_SavedVariables.logparty then GF_SavedVariables.logparty = true end
-		if not GF_SavedVariables.logguild then GF_SavedVariables.logguild = true end
-		if not GF_SavedVariables.logwhisper then GF_SavedVariables.logwhisper = true end
-		if not GF_SavedVariables.logsay then GF_SavedVariables.logsay = true end
-		if not GF_SavedVariables.logyell then GF_SavedVariables.logyell = true end
-		if not GF_SavedVariables.loghardcore then GF_SavedVariables.loghardcore = true end
+		if GF_SavedVariables.logchannels == nil then GF_SavedVariables.logchannels = true end
+		if GF_SavedVariables.logparty == nil then GF_SavedVariables.logparty = true end
+		if GF_SavedVariables.logguild == nil then GF_SavedVariables.logguild = true end
+		if GF_SavedVariables.logwhisper == nil then GF_SavedVariables.logwhisper = true end
+		if GF_SavedVariables.logsay == nil then GF_SavedVariables.logsay = true end
+		if GF_SavedVariables.logyell == nil then GF_SavedVariables.logyell = true end
+		if GF_SavedVariables.loghardcore == nil then GF_SavedVariables.loghardcore = true end
+		
+		if GF_SavedVariables.joinworld == nil then GF_SavedVariables.joinworld = true end
+		if GF_SavedVariables.spamfilter == nil then GF_SavedVariables.spamfilter = true end
+		if GF_SavedVariables.spamfilterduration == nil then GF_SavedVariables.spamfilterduration = 15 end
+		if GF_SavedVariables.systemfilter == nil then GF_SavedVariables.systemfilter = false end
+		if GF_SavedVariables.autoblacklist == nil then GF_SavedVariables.autoblacklist = true end
+		if GF_SavedVariables.autoblacklistminlevel == nil then GF_SavedVariables.autoblacklistminlevel = 12 end
+		if GF_SavedVariables.showformattedchat == nil then GF_SavedVariables.showformattedchat = false end
+		if GF_SavedVariables.alwaysshowguild == nil then GF_SavedVariables.alwaysshowguild = true end
+		if GF_SavedVariables.blockmessagebelowlevel == nil then GF_SavedVariables.blockmessagebelowlevel = 1 end
 
-		if not GF_SavedVariables.joinworld then GF_SavedVariables.joinworld = true end
-		if not GF_SavedVariables.spamfilter then GF_SavedVariables.spamfilter = true end
-		if not GF_SavedVariables.spamfilterduration then GF_SavedVariables.spamfilterduration = 15 end
-		if not GF_SavedVariables.systemfilter then GF_SavedVariables.systemfilter = false end
-		if not GF_SavedVariables.autoblacklist then GF_SavedVariables.autoblacklist = true end
-		if not GF_SavedVariables.autoblacklistminlevel then GF_SavedVariables.autoblacklistminlevel = 12 end
-		if not GF_SavedVariables.showformattedchat then GF_SavedVariables.showformattedchat = false end
-		if not GF_SavedVariables.alwaysshowguild then GF_SavedVariables.alwaysshowguild = true end
-		if not GF_SavedVariables.blockmessagebelowlevel then GF_SavedVariables.blockmessagebelowlevel = 1 end
+		if GF_SavedVariables.grouplistingduration == nil then GF_SavedVariables.grouplistingduration = 30 end
+		if GF_SavedVariables.showgroupsnewonlytime == nil then GF_SavedVariables.showgroupsnewonlytime = 3 end
+		if GF_SavedVariables.FilterLevel == nil then GF_SavedVariables.FilterLevel = 2 end
+		if GF_SavedVariables.MainFrameUIScale == nil then GF_SavedVariables.MainFrameUIScale = 1 end
+		if GF_SavedVariables.MainFrameTransparency == nil then GF_SavedVariables.MainFrameTransparency = 1 end
+		if GF_SavedVariables.MinimapIconXPos == nil then GF_SavedVariables.MinimapIconXPos = 11 end
+		if GF_SavedVariables.MinimapIconYPos == nil then GF_SavedVariables.MinimapIconYPos = -72 end
+		if GF_SavedVariables.squareminimap == nil then GF_SavedVariables.squareminimap = false end
+		if GF_SavedVariables.MinimapMsgArcOffset == nil then GF_SavedVariables.MinimapMsgArcOffset = 345 end
+		if GF_SavedVariables.MinimapMsgRadiusOffset == nil then GF_SavedVariables.MinimapMsgRadiusOffset = 90 end
 
-		if not GF_SavedVariables.grouplistingduration then GF_SavedVariables.grouplistingduration = 30 end
-		if not GF_SavedVariables.showgroupsnewonlytime then GF_SavedVariables.showgroupsnewonlytime = 3 end
-		if not GF_SavedVariables.FilterLevel then GF_SavedVariables.FilterLevel = 2 end
-		if not GF_SavedVariables.MainFrameUIScale then GF_SavedVariables.MainFrameUIScale = 1 end
-		if not GF_SavedVariables.MainFrameTransparency then GF_SavedVariables.MainFrameTransparency = 1 end
-		if not GF_SavedVariables.MinimapIconXPos then GF_SavedVariables.MinimapIconXPos = 11 end
-		if not GF_SavedVariables.MinimapIconYPos then GF_SavedVariables.MinimapIconYPos = -72 end
-		if not GF_SavedVariables.squareminimap then GF_SavedVariables.squareminimap = false end
-		if not GF_SavedVariables.MinimapMsgArcOffset then GF_SavedVariables.MinimapMsgArcOffset = 345 end
-		if not GF_SavedVariables.MinimapMsgRadiusOffset then GF_SavedVariables.MinimapMsgRadiusOffset = 90 end
-
-		if not GF_SavedVariables.questmod then GF_SavedVariables.questmod = true end
-		if not GF_SavedVariables.purgepfdb then GF_SavedVariables.purgepfdb = false end
+		if GF_SavedVariables.questmod == nil then GF_SavedVariables.questmod = true end
+		if GF_SavedVariables.purgepfdb == nil then GF_SavedVariables.purgepfdb = false end
 
 		if not GF_SavedVariables.MainFrameXPos or not GF_SavedVariables.MainFrameYPos then
 			local _,_,_,xpos, ypos = GF_MainFrame:GetPoint()
@@ -205,27 +206,27 @@ function GF_LoadVariables()
 			GF_SavedVariables.MainFrameYPos = ypos
 		end
 
-		if not GF_SavedVariables.mainframestatus then GF_SavedVariables.mainframestatus = 0 end -- status is 0(normal), 1(left), or 2(right)... save window position and restore
-		if not GF_SavedVariables.mainframeheight then GF_SavedVariables.mainframeheight = false end
-		if not GF_SavedVariables.mainframewidth then GF_SavedVariables.mainframewidth = true end
-		if not GF_SavedVariables.mainframelogisopen then GF_SavedVariables.mainframelogisopen = false end -- whether it was last opened to logs or to group frame, for reloading
-		if not GF_SavedVariables.mainframeishidden then GF_SavedVariables.mainframeishidden = true end -- if not hidden on login, show
+		if GF_SavedVariables.mainframestatus == nil then GF_SavedVariables.mainframestatus = 0 end -- status is 0(normal), 1(left), or 2(right)... save window position and restore
+		if GF_SavedVariables.mainframeheight == nil then GF_SavedVariables.mainframeheight = false end
+		if GF_SavedVariables.mainframewidth == nil then GF_SavedVariables.mainframewidth = true end
+		if GF_SavedVariables.mainframelogisopen == nil then GF_SavedVariables.mainframelogisopen = false end -- whether it was last opened to logs or to group frame, for reloading
+		if GF_SavedVariables.mainframeishidden == nil then GF_SavedVariables.mainframeishidden = true end -- if not hidden on login, show
 
-		if not GF_SavedVariables.logshowwhisperwindow then GF_SavedVariables.logshowwhisperwindow = true end
+		if GF_SavedVariables.logshowwhisperwindow == nil then GF_SavedVariables.logshowwhisperwindow = true end
 
-		if not GF_SavedVariables.groupchannelname then if GF_KNOWN_SERVERS_LIST[GF_RealmName] then GF_SavedVariables.groupchannelname = GF_WORLD_CHANNEL_NAME else GF_SavedVariables.groupchannelname = GF_LFG_CHANNEL_NAME end end
-		if not GF_SavedVariables.blocklist then GF_SavedVariables.blocklist = {} end
+		if GF_SavedVariables.groupchannelname == nil then if GF_KNOWN_SERVERS_LIST[GF_RealmName] then GF_SavedVariables.groupchannelname = GF_WORLD_CHANNEL_NAME else GF_SavedVariables.groupchannelname = GF_LFG_CHANNEL_NAME end end
+		if GF_SavedVariables.blocklist == nil then GF_SavedVariables.blocklist = {} end
 
-		if not GF_SavedVariables.clickcombos then GF_SavedVariables.clickcombos = true end
-		if not GF_SavedVariables.usefriendslist then if GF_KNOWN_SERVERS_LIST[GF_RealmName] then GF_SavedVariables.usefriendslist = true else GF_SavedVariables.usefriendslist = false end end
-		if not GF_SavedVariables.fontname then GF_SavedVariables.fontname = 1 end
-		if not GF_SavedVariables.blacklisttrades then GF_SavedVariables.blacklisttrades = false end
-		if not GF_SavedVariables.blacklistguild then GF_SavedVariables.blacklistguild = false end
-		if not GF_SavedVariables.blacklistchat then GF_SavedVariables.blacklistchat = false end
-		if not GF_SavedVariables.blacklistforeign then GF_SavedVariables.blacklistforeign = true end
-		if not GF_SavedVariables.iconpriority then GF_SavedVariables.iconpriority = false end
-		if not GF_SavedVariables.friendsToRemove then GF_SavedVariables.friendsToRemove = {} end
-
+		if GF_SavedVariables.clickcombos == nil then GF_SavedVariables.clickcombos = true end
+		if GF_SavedVariables.usefriendslist == nil then if GF_KNOWN_SERVERS_LIST[GF_RealmName] then GF_SavedVariables.usefriendslist = true else GF_SavedVariables.usefriendslist = false end end
+		if GF_SavedVariables.fontname == nil then GF_SavedVariables.fontname = 1 end
+		if GF_SavedVariables.blacklisttrades == nil then GF_SavedVariables.blacklisttrades = false end
+		if GF_SavedVariables.blacklistguild == nil then GF_SavedVariables.blacklistguild = false end
+		if GF_SavedVariables.blacklistchat == nil then GF_SavedVariables.blacklistchat = false end
+		if GF_SavedVariables.blacklistforeign == nil then GF_SavedVariables.blacklistforeign = true end
+		if GF_SavedVariables.iconpriority == nil then GF_SavedVariables.iconpriority = false end
+		if GF_SavedVariables.friendsToRemove == nil then GF_SavedVariables.friendsToRemove = {} end
+		
 		if type(GF_SavedVariables.blocklist) ~= "table" then GF_SavedVariables.blocklist = {} end -- Could get rid of in final release
 		for name,_ in GF_PlayerMessages do if type(GF_PlayerMessages[name][1]) ~= "table" then GF_PlayerMessages = {} break end end -- Get rid of older style PlayerMessages - Could get rid of in final release
 		for i=1, getn(GF_LogHistory[GF_RealmName]) do -- Get rid of older style LogHistory entries - Could get rid of in final release
@@ -261,31 +262,31 @@ function GF_LoadVariables()
 	if not GF_PerCharVariables then GF_PerCharVariables = {} end
 	if not GF_PerCharVariables.version or GF_PerCharVariables.version < GF_CurrentVersion then
 		GF_PerCharVariables.version = GF_CurrentVersion
-		if not GF_PerCharVariables.autofilter then GF_PerCharVariables.autofilter = false end
-		if not GF_PerCharVariables.autofilterlevelvar then GF_PerCharVariables.autofilterlevelvar = 5 end
-		if not GF_PerCharVariables.searchtext then GF_PerCharVariables.searchtext = "" end
-		if not GF_PerCharVariables.searchbuttonstext then GF_PerCharVariables.searchbuttonstext = {} end
-		if not GF_PerCharVariables.searchlfgtext then GF_PerCharVariables.searchlfgtext = "" end
-		if not GF_PerCharVariables.searchlfgwhispertext then GF_PerCharVariables.searchlfgwhispertext = "" end
-		if not GF_PerCharVariables.getwhowhisperclass then GF_PerCharVariables.getwhowhisperclass = GF_WARRIOR end
-		if not GF_PerCharVariables.getwhowhisperlevel then GF_PerCharVariables.getwhowhisperlevel = 0 end
-		if not GF_PerCharVariables.lfgauto then GF_PerCharVariables.lfgauto = false end
-		if not GF_PerCharVariables.lfgsize or not tonumber(GF_PerCharVariables.lfgsize) then GF_PerCharVariables.lfgsize = 1 end
-		if not GF_PerCharVariables.hardcore then GF_PerCharVariables.hardcore = 1 end
-		if not GF_PerCharVariables.disablehardcore then GF_PerCharVariables.disablehardcore = false end
+		if GF_PerCharVariables.autofilter == nil then GF_PerCharVariables.autofilter = false end
+		if GF_PerCharVariables.autofilterlevelvar == nil then GF_PerCharVariables.autofilterlevelvar = 5 end
+		if GF_PerCharVariables.searchtext == nil then GF_PerCharVariables.searchtext = "" end
+		if GF_PerCharVariables.searchbuttonstext == nil then GF_PerCharVariables.searchbuttonstext = {} end
+		if GF_PerCharVariables.searchlfgtext == nil then GF_PerCharVariables.searchlfgtext = "" end
+		if GF_PerCharVariables.searchlfgwhispertext == nil then GF_PerCharVariables.searchlfgwhispertext = "" end
+		if GF_PerCharVariables.getwhowhisperclass == nil then GF_PerCharVariables.getwhowhisperclass = GF_WARRIOR end
+		if GF_PerCharVariables.getwhowhisperlevel == nil then GF_PerCharVariables.getwhowhisperlevel = 0 end
+		if GF_PerCharVariables.lfgauto == nil then GF_PerCharVariables.lfgauto = false end
+		if GF_PerCharVariables.lfgsize == nil or not tonumber(GF_PerCharVariables.lfgsize) then GF_PerCharVariables.lfgsize = 1 end
+		if GF_PerCharVariables.hardcore == nil then GF_PerCharVariables.hardcore = 1 end
+		if GF_PerCharVariables.disablehardcore == nil then GF_PerCharVariables.disablehardcore = false end
 
-		if not GF_PerCharVariables.lfglevel then GF_PerCharVariables.lfglevel = false end
-		if not GF_PerCharVariables.lfgdps then GF_PerCharVariables.lfgdps = false end
-		if not GF_PerCharVariables.lfgheal then GF_PerCharVariables.lfgheal = false end
-		if not GF_PerCharVariables.lfgtank then GF_PerCharVariables.lfgtank = false end
+		if GF_PerCharVariables.lfglevel == nil then GF_PerCharVariables.lfglevel = false end
+		if GF_PerCharVariables.lfgdps == nil then GF_PerCharVariables.lfgdps = false end
+		if GF_PerCharVariables.lfgheal == nil then GF_PerCharVariables.lfgheal = false end
+		if GF_PerCharVariables.lfgtank == nil then GF_PerCharVariables.lfgtank = false end
 
-		if not GF_PerCharVariables.playsounds then GF_PerCharVariables.playsounds = false end
-		if not GF_PerCharVariables.lfgshown then GF_PerCharVariables.lfgshown = false end
-		if not GF_PerCharVariables.getwhoshown then GF_PerCharVariables.getwhoshown = false end
-		if not GF_PerCharVariables.blockedchannels then GF_PerCharVariables.blockedchannels = {} end
+		if GF_PerCharVariables.playsounds == nil then GF_PerCharVariables.playsounds = false end
+		if GF_PerCharVariables.lfgshown == nil then GF_PerCharVariables.lfgshown = false end
+		if GF_PerCharVariables.getwhoshown == nil then GF_PerCharVariables.getwhoshown = false end
+		if GF_PerCharVariables.blockedchannels == nil then GF_PerCharVariables.blockedchannels = {} end
 	end
-	if GF_WhoTable[GF_RealmName]["LOADED"][4] + 86400 < time() then -- Prune the WhoTable once per day
-		GF_WhoTable[GF_RealmName]["LOADED"] = { UnitLevel("player"), ({UnitClass("player")})[2], "", time() }
+	if GF_WhoTable[GF_RealmName]["LOADED"][4] < time() then -- Prune the WhoTable once per day
+		GF_WhoTable[GF_RealmName]["LOADED"] = { UnitLevel("player"), ({UnitClass("player")})[2], "", time() + 86400 }
 		GF_PruneTheWhoTable()
 	end
 	GF_LogHistory[GF_RealmName].lastLogin = time()
@@ -395,22 +396,22 @@ function GF_SetStringSize()
 	fontName = GF_BUTTONS_LIST["FontName"][GF_SavedVariables.fontname][2]
 
 	GF_UIScaleSliderLabel:SetText("Join the group channel")
-	for i = 0, 100 do --
+	for i = 0, 100 do
 		GF_UIScaleSliderLabel:SetFont(fontName,20-i)
 		if GF_UIScaleSliderLabel:GetStringWidth() < 126 then GF_BaseFontSize = 20-i break end
 	end
 	GF_UIScaleSliderLabel:SetText("LF1M Shaman AQ15  2SR > MS > OS  Books HR  Can summon")
-	for i = 0, 100 do --
+	for i = 0, 100 do
 		GF_UIScaleSliderLabel:SetFont(fontName,20-i)
 		if GF_UIScaleSliderLabel:GetStringWidth() < 365 then fontSizeLarge = 20-i break end
 	end
 	GF_UIScaleSliderLabel:SetText("Druidsarebis")
-	for i = 0, 100 do -- 
+	for i = 0, 100 do
 		GF_UIScaleSliderLabel:SetFont(fontName,20-i)
 		if GF_UIScaleSliderLabel:GetStringWidth() < 80 then fontSizeButton = 20-i break end
 	end
 	GF_UIScaleSliderLabel:SetText("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 ")
-	for i = 0, 100 do --
+	for i = 0, 100 do
 		GF_UIScaleSliderLabel:SetFont(fontName,20-i)
 		if GF_UIScaleSliderLabel:GetStringWidth() < 332 then fontSizeMinimap = 20-i break end
 	end
@@ -810,7 +811,7 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 	local old_LeaveChannelByName = LeaveChannelByName	
 	function LeaveChannelByName(channel)
 		old_LeaveChannelByName(channel)
-		if strlower(channel) == strlower(GF_SavedVariables.groupchannelname) then GF_SavedVariables.joinworld = nil GF_AutoJoinGroupChannelCheckButton:SetChecked(false) end
+		if strlower(channel) == strlower(GF_SavedVariables.groupchannelname) then GF_SavedVariables.joinworld = false GF_AutoJoinGroupChannelCheckButton:SetChecked(false) end
 		GF_ChatJoinedChannels = {}
 	end
 	local old_UIErrorsFrame_OnEvent = UIErrorsFrame_OnEvent	
@@ -823,7 +824,7 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 		GF_UpdateQueueLFTButton()
 	end
 end
-function GF_HandleItemRefLinks(link,text,button) -- Will have to update when I add feature to turn off click combinations
+function GF_HandleItemRefLinks(link,text,button)
 	if strsub(link,1,6) == "player" then
 		local name = strsub(gsub(link, "([^%s]*)%s+([^%s]*)", "%2"),8)
 		if name and strlen(name) > 0 then 
@@ -904,7 +905,7 @@ function GF_HandleItemRefLinks(link,text,button) -- Will have to update when I a
 		end
 	end
 end
-function GF_GetQuestInfo(text,printinfo) -- Will have to update once I get new system
+function GF_GetQuestInfo(text,printinfo)
 	wordString = table.concat(GetModifiedQuestName(gsub(gsub(text,"|c%x+|+(%w+)[%d:]+|+h%[",""),"%]|+h|+r","")))
 	if GF_WORD_QUEST[wordString] then
 		if printinfo and GF_QUEST_ZONE_ID[GF_WORD_QUEST[wordString][3]] then
@@ -927,10 +928,10 @@ function GF_SlashHandler(msg)
 		GF_BlackListFrame:Hide()
 		GF_SettingsFrame:Hide()
 		GF_SavedVariables.mainframestatus = 0
-		GF_SavedVariables.mainframelogisopen = nil
-		GF_SavedVariables.mainframewidth = nil
-		GF_SavedVariables.mainframeheight = nil
-		GF_SavedVariables.mainframeishidden = nil
+		GF_SavedVariables.mainframelogisopen = false
+		GF_SavedVariables.mainframewidth = false
+		GF_SavedVariables.mainframeheight = false
+		GF_SavedVariables.mainframeishidden = false
 		GF_MainFrame:Show()
 		GF_UpdateMainFrame()
 	elseif strlower(msg) == "toggle" then
@@ -968,7 +969,7 @@ function GF_ToggleMainFrame(tab)
 			GF_LogFrame:Hide()
 			GF_BlackListFrame:Hide()
 			GF_SettingsFrame:Hide()
-			GF_SavedVariables.mainframelogisopen = nil
+			GF_SavedVariables.mainframelogisopen = false
 		elseif tab == 2 or GF_SavedVariables.mainframelogisopen then -- LogsFrame
 			GF_GroupsFrame:Hide()
 			GF_LogFrame:Show()
@@ -982,7 +983,7 @@ function GF_ToggleMainFrame(tab)
 			GF_SavedVariables.MainFrameYPos = ypos
 		end
 		GF_MainFrame:Show()
-		GF_SavedVariables.mainframeishidden = nil
+		GF_SavedVariables.mainframeishidden = false
 		if pfUI and pfUI.chat and pfUI.chat.urlcopy then pfUI.chat.urlcopy:SetWidth(700) pfUI.chat.urlcopy.text:SetWidth(680) end
 	end
 	GF_LFGGetWhoUpdateOffset()
@@ -1151,10 +1152,8 @@ function GF_SetPFUIAddonButtons()
 	if pfUI and pfUI.addonbuttons and pfUI_cache and pfUI_cache["abuttons"] and pfUI_cache["abuttons"]["del"] then
 		if GF_SavedVariables.iconpriority then
 			table.insert(pfUI_cache["abuttons"]["del"],"GF_MinimapIcon")
-			--SlashCmdList["PFABP"]("del GF_MinimapIcon")
 		else
 			for i=1, getn(pfUI_cache["abuttons"]["del"]) do if pfUI_cache["abuttons"]["del"][i] == "GF_MinimapIcon" then pfUI_cache["abuttons"]["del"][i] = nil end end
-			--SlashCmdList["PFABP"]("add GF_MinimapIcon")
 		end
 	end
 end
@@ -1274,7 +1273,7 @@ function GF_MakeBasicChatString(arg1,arg2,event)
 		return "|cff9d9d9d|Hplayer:"..arg2.."|h["..arg2.."]|h|r: "..GF_ChatReplaceItemLink(GF_ChatReplaceHquestLevels(GF_ChatReplaceHplayer(arg1)))
 	end
 end
-function GF_GetJoinedChannels() -- How do other servers handle Hardcore group toggles? Addon might not work on other servers with Hardcore.. I could simply enable all channels and only turn off if known
+function GF_GetJoinedChannels()
 	GF_ChatJoinedChannels = {}
 	local chanList = { GetChannelList() }
 	for i=1, getn(chanList) do
@@ -1435,8 +1434,6 @@ function GF_DisplayLog()
 	end
 end
 function GF_GetLogFilters()
--- Channel shown unless blocked
--- Dropdown shows list, checked by default... Unchecking 	
 	if GF_SavedVariables.logshowgroup then GF_LogFilters[1] = true GF_LogFilters[2] = true else GF_LogFilters[1] = nil GF_LogFilters[2] = nil end
 	if GF_SavedVariables.logshowfiltered then GF_LogFilters[3] = true else GF_LogFilters[3] = nil end
 	if GF_SavedVariables.logshowchat then GF_LogFilters[4] = true else GF_LogFilters[4] = nil end
@@ -3077,7 +3074,7 @@ function GF_SetDropdownWidths() -- Could clean this up with some "For" tables of
 	if (GF_AutoBlacklistForeignCheckButtonTextLabel:GetStringWidth() + 40) > GF_AutoBlacklistDropdownMenu:GetWidth() then GF_AutoBlacklistDropdownMenu:SetWidth((GF_AutoBlacklistForeignCheckButtonTextLabel:GetStringWidth() + 40)) end
 end
 function GF_SetLFGRoleButtons()
-	if GF_TankClasses[({UnitClass("player")})[2]] then -- If tank... If heal then tank + heal + dps. Otherwise tank + dps.
+	if GF_TankClasses[({UnitClass("player")})[2]] then
 		if GF_HealingClasses[({UnitClass("player")})[2]] then
 			GF_LFGMyRoleDPSCheckButton:SetPoint("RIGHT", "GF_LFGMyRoleLevelCheckButton", "LEFT", -1*getglobal(GF_LFGMyRoleDPSCheckButton:GetName().."TextLabel"):GetStringWidth() -2, 0)
 			GF_LFGMyRoleHealCheckButton:SetPoint("RIGHT", "GF_LFGMyRoleDPSCheckButton", "LEFT", -1*getglobal(GF_LFGMyRoleHealCheckButton:GetName().."TextLabel"):GetStringWidth() -2, 0)
@@ -3140,7 +3137,7 @@ function GF_PruneTheWhoTable()
 		end
 	end
 	for realm,_ in GF_LogHistory do
-		if not GF_LogHistory[realm].lastLogin or GF_LogHistory[realm].lastLogin + 2592000 < time() then -- Keep for 30 days
+		if not GF_LogHistory[realm].lastLogin or GF_LogHistory[realm].lastLogin + 2592000 < time() then -- Keep for 30 days after last login per realm
 			GF_LogHistory[realm] = {}
 		end
 	end
@@ -3273,7 +3270,7 @@ function GF_UpdateResults()
 						getglobal("GF_NewItem"..i.."LFMWhisperRequestInviteButton"):Hide()
 						getglobal("GF_NewItem"..i.."LFGInviteButton"):Hide()
 					end
-					if GF_PlayerNotes[GF_FilteredResultsList[i+GF_ResultsListOffset].op] and GF_PlayerNotes[GF_FilteredResultsList[i+GF_ResultsListOffset].op] ~= "" then
+					if GF_PlayerNotes[GF_RealmName][GF_FilteredResultsList[i+GF_ResultsListOffset].op] and GF_PlayerNotes[GF_RealmName][GF_FilteredResultsList[i+GF_ResultsListOffset].op] ~= "" then
 						getglobal("GF_NewItem"..i.."PlayerNoteButton"):Show()
 					else
 						getglobal("GF_NewItem"..i.."PlayerNoteButton"):Hide()
@@ -3419,7 +3416,6 @@ function GF_ListItemAuxLeft_ShowTooltip(frame,id,showall)
 	GameTooltip:ClearAllPoints()
 	GameTooltip:SetPoint("BOTTOMLEFT", frame:GetName(), "TOPLEFT", 0, 8)
 	
-	--GameTooltip:AddLine(GF_FilteredResultsList[GF_ResultsListOffset+id].op)
 	GameTooltip:AddLine(GF_FilteredResultsList[GF_ResultsListOffset+id].message, 0.9, 0.9, 1.0, 1, 1)
 	if showall and GF_PlayerMessages[GF_FilteredResultsList[GF_ResultsListOffset+id].op] then
 		if GF_PlayerMessages[GF_FilteredResultsList[GF_ResultsListOffset+id].op][2][1] and GF_PlayerMessages[GF_FilteredResultsList[GF_ResultsListOffset+id].op][2][1] ~= GF_FilteredResultsList[GF_ResultsListOffset+id].message then
@@ -3432,8 +3428,8 @@ function GF_ListItemAuxLeft_ShowTooltip(frame,id,showall)
 			GameTooltip:AddLine(GF_PlayerMessages[GF_FilteredResultsList[GF_ResultsListOffset+id].op][2][3], 0.9, 0.9, 1.0, 1, 1)
 		end
 	end
-	if GF_PlayerNotes[GF_FilteredResultsList[GF_ResultsListOffset+id].op] and GF_PlayerNotes[GF_FilteredResultsList[GF_ResultsListOffset+id].op] ~= "" then
-		GameTooltip:AddLine(GF_PLAYER_NOTE..GF_PlayerNotes[GF_FilteredResultsList[GF_ResultsListOffset+id].op],1,1,0,1,1)
+	if GF_PlayerNotes[GF_RealmName][GF_FilteredResultsList[GF_ResultsListOffset+id].op] and GF_PlayerNotes[GF_RealmName][GF_FilteredResultsList[GF_ResultsListOffset+id].op] ~= "" then
+		GameTooltip:AddLine(GF_PLAYER_NOTE..GF_PlayerNotes[GF_RealmName][GF_FilteredResultsList[GF_ResultsListOffset+id].op],1,1,0,1,1)
 	end
 	GameTooltip:Show()
 end
@@ -3492,17 +3488,17 @@ function GF_LFMWhisperRequestInviteButton(frame,id)
 end
 function GF_EditPlayerNote(name)
 	GF_EditPlayerNoteFrameTitleLabel:SetText(name)
-	GF_EditPlayerNoteFrameEditBox:SetText(GF_PlayerNotes[name] or "")
+	GF_EditPlayerNoteFrameEditBox:SetText(GF_PlayerNotes[GF_RealmName][name] or "")
 	GF_EditPlayerNoteFrame:Show()
 end
 function GF_PlayerNoteButton_ShowTooltip(frame,id)
 	if not id or not GF_FilteredResultsList[GF_ResultsListOffset+id] then return end
-	if GF_PlayerNotes[GF_FilteredResultsList[GF_ResultsListOffset+id].op] and GF_PlayerNotes[GF_FilteredResultsList[GF_ResultsListOffset+id].op] ~= "" then
+	if GF_PlayerNotes[GF_RealmName][GF_FilteredResultsList[GF_ResultsListOffset+id].op] and GF_PlayerNotes[GF_RealmName][GF_FilteredResultsList[GF_ResultsListOffset+id].op] ~= "" then
 		GameTooltip:ClearLines()
 		GameTooltip:SetOwner(this, "ANCHOR_BOTTOMLEFT")
 		GameTooltip:ClearAllPoints()
 		GameTooltip:SetPoint("BOTTOMLEFT", frame:GetName(), "TOPLEFT", 0, 8)
-		GameTooltip:AddLine(GF_PLAYER_NOTE..GF_PlayerNotes[GF_FilteredResultsList[GF_ResultsListOffset+id].op],1,1,0,1,1)
+		GameTooltip:AddLine(GF_PLAYER_NOTE..GF_PlayerNotes[GF_RealmName][GF_FilteredResultsList[GF_ResultsListOffset+id].op],1,1,0,1,1)
 		GameTooltip:Show()
 	end
 end
@@ -3520,7 +3516,7 @@ function GF_WhisperHistoryButtonPressed(id,override,nolog) -- Whisper/Guild Hist
 	if id == 0 then
 		GF_DisplayLog()
 	elseif id == 1 then
-		if GF_SavedVariables.showwhisperlogs == 1 then GF_WhisperHistoryDisplayLog("Guild") elseif GF_SavedVariables.showwhisperlogs == 2 then GF_GroupHistoryDisplayLog("Group") end
+		if GF_SavedVariables.showwhisperlogs == 1 then GF_WhisperHistoryDisplayLog("Guild") elseif GF_SavedVariables.showwhisperlogs == 2 then GF_GroupHistoryDisplayLog("Groups") end
 	else
 		if GF_SavedVariables.showwhisperlogs == 1 then GF_WhisperHistoryDisplayLog(getglobal("GF_WhisperHistoryButton"..id):GetText()) elseif GF_SavedVariables.showwhisperlogs == 2 then GF_GroupHistoryDisplayLog(getglobal("GF_WhisperHistoryButton"..id):GetText()) end
 	end
@@ -3597,6 +3593,7 @@ function GF_WhisperHistoryUpdateFrame(name)
 		getglobal("GF_WhisperHistoryButton"..GF_WhisperLogCurrentButtonID):UnlockHighlight()
 		getglobal("GF_WhisperHistoryButtonCheckButton"..GF_WhisperLogCurrentButtonID):Hide()
 	end
+	GF_WhisperHistoryButton1:SetText(GF_LOG_GUILDWHISPERS)
 	if getn(GF_WhisperLogData[GF_RealmName]) > 95 then GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][96]] = nil table.remove(GF_WhisperLogData[GF_RealmName],96) end
 end
 function GF_GroupHistoryUpdateFrame(name)
@@ -3636,6 +3633,7 @@ function GF_GroupHistoryUpdateFrame(name)
 		getglobal("GF_WhisperHistoryButton"..GF_WhisperLogCurrentButtonID):UnlockHighlight()
 		getglobal("GF_WhisperHistoryButtonCheckButton"..GF_WhisperLogCurrentButtonID):Hide()
 	end
+	GF_WhisperHistoryButton1:SetText(GF_LOG_ALLGROUPS)
 end
 function GF_WhisperHistoryDisplayLog(name)
 	GF_Log:SetMaxLines(128)
@@ -4052,7 +4050,7 @@ function GF_GetDropDownButtons(fName,maxSize,showAll,MatchLFG) -- Create dropdow
 		if i <= ceil(getn(buttons)/maxSize) then
 			getglobal("GF_"..fName..i):SetPoint("TOPLEFT", getglobal("GF_"..fName):GetName(), "TOPLEFT", 6 + (i-1)*(width+51), -4)
 		else
-			getglobal("GF_"..fName..i):SetPoint("TOP", getglobal("GF_"..fName..i-ceil(getn(buttons)/maxSize)), "BOTTOM", 0, 6) -- 5 needs to be under 1
+			getglobal("GF_"..fName..i):SetPoint("TOP", getglobal("GF_"..fName..i-ceil(getn(buttons)/maxSize)), "BOTTOM", 0, 6)
 		end
 	end
 	for i=getn(buttons)+1,100 do if not getglobal("GF_"..fName..i) then break end getglobal("GF_"..fName..i):Hide() end
