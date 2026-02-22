@@ -1007,7 +1007,7 @@ GF_WORD_FIX_SINGLE_WORD = { -- Single word changes. Mostly typos and simple word
 ["gnomergegan"] = "gnomeregan",["gnomergen"] = "gnomeregan",["gnomergin"] = "gnomeregan",["gnomergon"] = "gnomeregan",["gnomergone"] = "gnomeregan",["gnomerigan"] = "gnomeregan",["gnomerregan"] = "gnomeregan",["gnomerreggan"] = "gnomeregan",
 ["gnomerregin"] = "gnomeregan",["gnomger"] = "gnomeregan",["gnomoeregan"] = "gnomeregan",["gnomragen"] = "gnomeregan",["gnomregan"] = "gnomeregan",["gnomregen"] = "gnomeregan",["gnomrigan"] = "gnomeregan",["gnooner"] = "gnomeregan",
 ["gnormeregan"] = "gnomeregan",["gonomeregan"] = "gnomeregan",["gooneragan"] = "gnomeregan",["gooneregan"] = "gnomeregan",["goonergon"] = "gnomeregan",["goonergone"] = "gnomeregan",["nomeragan"] = "gnomeregan",["nomeragon"] = "gnomeregan",
-["nomeregan"] = "gnomeregan",["vnomeregan"] = "gnomeregan",["gnomerang"] = "gnomeregan",
+["nomeregan"] = "gnomeregan",["vnomeregan"] = "gnomeregan",["gnomerang"] = "gnomeregan",["gnomerega"] = "gnomeregan",
 ["karul"] = "kraul",["kral"] = "kraul",["craul"] = "kraul",["cral"] = "kraul",["rpk"] = "rfk",["rfkk"] = "rfk",["rdk"] = "rfk",
 ["rpd"] = "rfd",["rdf"] = "rfd",["dwown"] = "downs",["dwowns"] = "downs",
 
@@ -1194,7 +1194,7 @@ GF_WORD_FIX_BEFORE_QUEST = { -- Word changes processed before quests.
 ["stormwrouth"] = "stormwrought",["stornwrought"] = "stormwrought",["storumwrought"] = "stormwrought",["storwrought"] = "stormwrought",["stromwrought"] = "stormwrought",["sturmwrought"] = "stormwrought",["stormwroughgt"] = "stormwrought",
 ["shtorm"] = "storm",["andorhall"] = "andorhal",["suneyglade"] = "sunnyglade",["sunneyglade"] = "sunnyglade",
 
-["kalindor"] = "kalimdor",
+["kalindor"] = "kalimdor",["gadgedzan"] = "gadgetzan",
 
 -- Groups
 ["lfgm"] = "lfm",["lmfg"] = "lfm",["lfmm"] = "lfm",["glfm"] = "lfm",["ldm"] = "lfm",["flm"] = "lfm",["lmf"] = "lfm",["ldg"] = "lfm",["lfp"] = "lfm",["lkf"] = "lfg",["flt"] = "lft",["lvm"] = "lfm",

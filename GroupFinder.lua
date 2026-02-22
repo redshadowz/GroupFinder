@@ -225,7 +225,34 @@ function GF_LoadVariables()
 		if GF_SavedVariables.blacklistforeign == nil then GF_SavedVariables.blacklistforeign = true end
 		if GF_SavedVariables.iconpriority == nil then GF_SavedVariables.iconpriority = false end
 		if GF_SavedVariables.friendsToRemove == nil then GF_SavedVariables.friendsToRemove = {} end
-		
+	end
+	if not GF_PerCharVariables then GF_PerCharVariables = {} end
+	if not GF_PerCharVariables.version or GF_PerCharVariables.version < GF_CurrentVersion then
+		GF_PerCharVariables.version = GF_CurrentVersion
+		if GF_PerCharVariables.autofilter == nil then GF_PerCharVariables.autofilter = false end
+		if GF_PerCharVariables.autofilterlevelvar == nil then GF_PerCharVariables.autofilterlevelvar = 5 end
+		if GF_PerCharVariables.searchtext == nil then GF_PerCharVariables.searchtext = "" end
+		if GF_PerCharVariables.searchbuttonstext == nil then GF_PerCharVariables.searchbuttonstext = {} end
+		if GF_PerCharVariables.searchlfgtext == nil then GF_PerCharVariables.searchlfgtext = "" end
+		if GF_PerCharVariables.searchlfgwhispertext == nil then GF_PerCharVariables.searchlfgwhispertext = "" end
+		if GF_PerCharVariables.getwhowhisperclass == nil then GF_PerCharVariables.getwhowhisperclass = GF_WARRIOR end
+		if GF_PerCharVariables.getwhowhisperlevel == nil then GF_PerCharVariables.getwhowhisperlevel = 0 end
+		if GF_PerCharVariables.wholevelrange == nil then GF_PerCharVariables.wholevelrange = 3 end
+		if GF_PerCharVariables.lfgauto == nil then GF_PerCharVariables.lfgauto = false end
+		if GF_PerCharVariables.lfgsize == nil or not tonumber(GF_PerCharVariables.lfgsize) then GF_PerCharVariables.lfgsize = 1 end
+		if GF_PerCharVariables.hardcore == nil then GF_PerCharVariables.hardcore = 1 end
+		if GF_PerCharVariables.disablehardcore == nil then GF_PerCharVariables.disablehardcore = false end
+
+		if GF_PerCharVariables.lfglevel == nil then GF_PerCharVariables.lfglevel = false end
+		if GF_PerCharVariables.lfgdps == nil then GF_PerCharVariables.lfgdps = false end
+		if GF_PerCharVariables.lfgheal == nil then GF_PerCharVariables.lfgheal = false end
+		if GF_PerCharVariables.lfgtank == nil then GF_PerCharVariables.lfgtank = false end
+
+		if GF_PerCharVariables.playsounds == nil then GF_PerCharVariables.playsounds = false end
+		if GF_PerCharVariables.lfgshown == nil then GF_PerCharVariables.lfgshown = false end
+		if GF_PerCharVariables.getwhoshown == nil then GF_PerCharVariables.getwhoshown = false end
+		if GF_PerCharVariables.blockedchannels == nil then GF_PerCharVariables.blockedchannels = {} end
+
 		if type(GF_SavedVariables.blocklist) ~= "table" then GF_SavedVariables.blocklist = {} end -- Could get rid of in final release
 		for name,_ in GF_PlayerMessages do if type(GF_PlayerMessages[name][1]) ~= "table" then GF_PlayerMessages = {} break end end -- Get rid of older style PlayerMessages - Could get rid of in final release
 		for i=1, getn(GF_LogHistory[GF_RealmName]) do -- Get rid of older style LogHistory entries - Could get rid of in final release
@@ -257,33 +284,6 @@ function GF_LoadVariables()
 				GF_AddNamesToGroupHistoryList()
 			end
 		end
-	end
-	if not GF_PerCharVariables then GF_PerCharVariables = {} end
-	if not GF_PerCharVariables.version or GF_PerCharVariables.version < GF_CurrentVersion then
-		GF_PerCharVariables.version = GF_CurrentVersion
-		if GF_PerCharVariables.autofilter == nil then GF_PerCharVariables.autofilter = false end
-		if GF_PerCharVariables.autofilterlevelvar == nil then GF_PerCharVariables.autofilterlevelvar = 5 end
-		if GF_PerCharVariables.searchtext == nil then GF_PerCharVariables.searchtext = "" end
-		if GF_PerCharVariables.searchbuttonstext == nil then GF_PerCharVariables.searchbuttonstext = {} end
-		if GF_PerCharVariables.searchlfgtext == nil then GF_PerCharVariables.searchlfgtext = "" end
-		if GF_PerCharVariables.searchlfgwhispertext == nil then GF_PerCharVariables.searchlfgwhispertext = "" end
-		if GF_PerCharVariables.getwhowhisperclass == nil then GF_PerCharVariables.getwhowhisperclass = GF_WARRIOR end
-		if GF_PerCharVariables.getwhowhisperlevel == nil then GF_PerCharVariables.getwhowhisperlevel = 0 end
-		if GF_PerCharVariables.wholevelrange == nil then GF_PerCharVariables.wholevelrange = 3 end
-		if GF_PerCharVariables.lfgauto == nil then GF_PerCharVariables.lfgauto = false end
-		if GF_PerCharVariables.lfgsize == nil or not tonumber(GF_PerCharVariables.lfgsize) then GF_PerCharVariables.lfgsize = 1 end
-		if GF_PerCharVariables.hardcore == nil then GF_PerCharVariables.hardcore = 1 end
-		if GF_PerCharVariables.disablehardcore == nil then GF_PerCharVariables.disablehardcore = false end
-
-		if GF_PerCharVariables.lfglevel == nil then GF_PerCharVariables.lfglevel = false end
-		if GF_PerCharVariables.lfgdps == nil then GF_PerCharVariables.lfgdps = false end
-		if GF_PerCharVariables.lfgheal == nil then GF_PerCharVariables.lfgheal = false end
-		if GF_PerCharVariables.lfgtank == nil then GF_PerCharVariables.lfgtank = false end
-
-		if GF_PerCharVariables.playsounds == nil then GF_PerCharVariables.playsounds = false end
-		if GF_PerCharVariables.lfgshown == nil then GF_PerCharVariables.lfgshown = false end
-		if GF_PerCharVariables.getwhoshown == nil then GF_PerCharVariables.getwhoshown = false end
-		if GF_PerCharVariables.blockedchannels == nil then GF_PerCharVariables.blockedchannels = {} end
 	end
 	if GF_WhoTable[GF_RealmName]["LOADED"][4] < time() then -- Prune the WhoTable once per day
 		GF_WhoTable[GF_RealmName]["LOADED"] = { UnitLevel("player"), ({UnitClass("player")})[2], "", time() + 86400 }
@@ -2201,9 +2201,12 @@ function GF_ProcessChatMessages(event,arg1,arg2,arg8,arg9,delayed) -- Chat proce
 end
 function GF_CheckForMonsterEmote(arg1,arg2)
 	if GF_SavedVariables.systemfilter then
-		for i=1, getn(GF_MonsterEmoteFilters) do
-			if strfind(arg1, GF_MonsterEmoteFilters[i]) then GF_PreviousMessage[arg2] = {} return end
-		end
+		--for i=1, getn(GF_MonsterEmoteFilters) do
+			--if strfind(arg1, GF_MonsterEmoteFilters[i]) then
+				GF_PreviousMessage[arg2] = {}
+				return
+			--end
+		--end
 	end
 	GF_PreviousMessage[arg2] = {true}
 end
@@ -2814,7 +2817,9 @@ function GF_GetTypes(arg1, showanyway)
 				if GF_TRADE_WORD_EXCLUSION[wordString] then foundTradesExclusion = foundTradesExclusion + GF_TRADE_WORD_EXCLUSION[wordString] if showanyway == true then print(wordString.." tradesex") end end
 
 -- Currently, when it finds "anyone" or "anyonein" it looks to see if a zone is next to it. That way I don't have to create 50 entries for each
--- 
+-- A lot of my LFM/LFG entries are probably unnecessary. I created many of them before I added the before/after routine(among other things). But it's really impossible to know what I can get rid of.
+-- The problem is, if I try to create dynamic names, other things might not work properly, or would require multiple runs through... I'd be better off just making a spreadsheet page with a template to copy/paste
+
 				if GF_WORD_LFM[wordString] and (not GF_LFM_TRIGGER[wordString] or GF_WORD_LEVEL_ZONE[wordTable[i+j+1]]) then
 					if GF_WORD_LFM[wordString] > foundLFM then foundLFM = GF_WORD_LFM[wordString] table.insert(lfmlfgName, wordString) if showanyway == true then print(wordString.." lfm "..GF_WORD_LFM[wordString]) end end
 					if not foundQuest[1] then if GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] elseif GF_WORD_LEVEL_ZONE[wordTable[i-1]] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-1]] end end
