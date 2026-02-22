@@ -2770,12 +2770,18 @@ function GF_GetTypes(arg1, showanyway)
 		if GF_WORD_GUILD_PHRASE[wordString] then foundGuild = 3 if showanyway == true then print("guildphrase guild 3") end end
 		if GF_GROUP_PHRASE[wordString] and foundLFM == 0 then foundLFM = 2 if showanyway == true then print("lfmphrase lfm 2") end end
 		if strsub(arg1,-2) == "? " then
-			if (GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString] or GF_GROUP_PHRASE_QUESTION[wordString]) then foundLFG = 2 if showanyway == true then print("group? lfg 2") end
+			if (GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString]) then foundLFG = 2 if showanyway == true then print("group? lfg 2") end
 			elseif GF_WORD_TRADE_QUESTION[lfe] then foundTrades = 2 if showanyway == true then print("trades? trades ") end
 			elseif GF_WORD_GUILD_QUESTION[wordString] then foundGuild = 3 if showanyway == true then print("guild? guild 3") end
 			elseif tempVal > 2 then
 				if tempVal <= 4 and GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]] then foundTrades = foundTrades + GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]] if showanyway == true then print("first two? trades "..GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]]) end
 				elseif not lfs then	foundTrades = foundTrades + 1.5 if showanyway == true then print("tradeonly? trades 1.5") end end
+			end
+			for i=1,tempVal do
+				if GF_WORD_RAID[wordTable[i]] then
+					if GF_RAID_BEFORE[wordTable[i-1]] and (GF_RAID_BEFORE[wordTable[i-1]][wordTable[i+1]] or (wordTable[i+2] and GF_RAID_BEFORE[wordTable[i-1]][wordTable[i+1]..wordTable[i+2]])) then if foundLFG < 3 then foundLFG = 3 if showanyway == true then print("1 word before/1-2 words after raid ?") end end end
+					if GF_RAID_AFTER[wordTable[i+1]] or (wordTable[i+2] and GF_RAID_AFTER[wordTable[i+1]..wordTable[i+2]]) or (wordTable[i+3] and GF_RAID_AFTER[wordTable[i+1]..wordTable[i+2]..wordTable[i+3]]) then if foundLFG < 3 then foundLFG = 3 if showanyway == true then print("1-3 words after raid ?") end end end
+				end
 			end
 		elseif tempVal > 1 then
 			if tempVal <= 4 and GF_LFM_AFTER[wordTable[tempVal-1]..wordTable[tempVal]] then foundLFM = 2 if showanyway == true then print("word lfmafter lfm 2") end
@@ -2807,6 +2813,8 @@ function GF_GetTypes(arg1, showanyway)
 				elseif GF_GUILD_WORD_EXCLUSION[wordString] then foundGuildExclusion = foundGuildExclusion + GF_GUILD_WORD_EXCLUSION[wordString] if showanyway == true then print(wordString.." guildex") end end
 				if GF_TRADE_WORD_EXCLUSION[wordString] then foundTradesExclusion = foundTradesExclusion + GF_TRADE_WORD_EXCLUSION[wordString] if showanyway == true then print(wordString.." tradesex") end end
 
+-- Currently, when it finds "anyone" or "anyonein" it looks to see if a zone is next to it. That way I don't have to create 50 entries for each
+-- 
 				if GF_WORD_LFM[wordString] and (not GF_LFM_TRIGGER[wordString] or GF_WORD_LEVEL_ZONE[wordTable[i+j+1]]) then
 					if GF_WORD_LFM[wordString] > foundLFM then foundLFM = GF_WORD_LFM[wordString] table.insert(lfmlfgName, wordString) if showanyway == true then print(wordString.." lfm "..GF_WORD_LFM[wordString]) end end
 					if not foundQuest[1] then if GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] elseif GF_WORD_LEVEL_ZONE[wordTable[i-1]] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-1]] end end
@@ -2836,6 +2844,8 @@ function GF_GetTypes(arg1, showanyway)
 					if showanyway == true then print(wordString.." raid") end
 					if not foundRaid or GF_WORD_RAID[wordString] > foundRaid then foundRaid = GF_WORD_RAID[wordString] table.insert(foundDFlags,1,wordString) else table.insert(foundDFlags,wordString) end
 					foundTradesExclusion = foundTradesExclusion + .3 foundGuildExclusion = foundGuildExclusion + .1
+					if GF_RAID_BEFORE[wordTable[i-1]] and (GF_RAID_BEFORE[wordTable[i-1]][wordTable[i+j+1]] or (wordTable[i+j+2] and GF_RAID_BEFORE[wordTable[i-1]][wordTable[i+j+1]..wordTable[i+j+2]])) then foundGuildExclusion = foundGuildExclusion + 1 if foundLFM < 3 then foundLFM = 3 if showanyway == true then print("1 word before/1-2 words after raid") end end end
+					if GF_RAID_AFTER[wordTable[i+j+1]] or (wordTable[i+j+2] and GF_RAID_AFTER[wordTable[i+j+1]..wordTable[i+j+2]]) or (wordTable[i+j+3] and GF_RAID_AFTER[wordTable[i+j+1]..wordTable[i+j+2]..wordTable[i+j+3]]) then foundGuildExclusion = foundGuildExclusion + 1 if foundLFM < 3 then foundLFM = 3 if showanyway == true then print("1-3 words after raid") end end end
 				elseif GF_WORD_PVP[wordString] then
 					if showanyway == true then print(wordString.." pvp") end
 					if not foundPvP or GF_WORD_PVP[wordString] > foundPvP then foundPvP = GF_WORD_PVP[wordString] table.insert(foundPFlags,1,wordString) else table.insert(foundPFlags, wordString) end
