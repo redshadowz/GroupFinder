@@ -305,6 +305,11 @@ function GF_LoadVariables()
 		end
 	end
 	if type(GF_SavedVariables.fontname) ~= "number" or GF_SavedVariables.fontname > getn(GF_BUTTONS_LIST["FontName"]) then GF_SavedVariables.fontname = 1 end
+
+	local lfs,lfe
+	for i=1, getn(GF_SystemMessageFilters) do lfs,lfe = strfind(" "..GF_SystemMessageFilters[i],"%s",1,true) if lfs then GF_SystemMessageFilters[i] = strsub(GF_SystemMessageFilters[i],1,lfs-2).."(%a+)"..strsub(GF_SystemMessageFilters[i],lfe) end end
+	for i=1, getn(GF_ServerMessageFilters) do lfs,lfe = strfind(" "..GF_ServerMessageFilters[i],"%s",1,true) if lfs then GF_ServerMessageFilters[i] = strsub(GF_ServerMessageFilters[i],1,lfs-2).."(%a+)"..strsub(GF_ServerMessageFilters[i],lfe) end end
+	for i=1, getn(GF_LootFilters) do lfs,lfe = strfind(" "..GF_LootFilters[i],"%s|Hitem",1,true) if lfs then GF_LootFilters[i] = strsub(GF_LootFilters[i],1,lfs-2) lfs,lfe = strfind(" "..GF_LootFilters[i],"%s",1,true) if lfs then GF_LootFilters[i] = strsub(GF_LootFilters[i],1,lfs-2).."(%a+)"..strsub(GF_LootFilters[i],lfe) end lfs,lfe = strfind(" "..GF_LootFilters[i],"%d",1,true) if lfs then GF_LootFilters[i] = strsub(GF_LootFilters[i],1,lfs-2).."%d+"..strsub(GF_LootFilters[i],lfe) end end end
 end
 function GF_LoadSettings()
 	if GF_TURTLE_SERVERS_LIST[GF_RealmName] then GF_AddTurtleWoWDungeonsRaids() GF_WhoCooldownTime = 30 GF_PlayingOnTurtle = true end -- See if I'm not Turtle servers.
@@ -476,7 +481,7 @@ function GF_SetStringSize()
 	GF_ChatFilterDropdownButton:SetPoint("TOPRIGHT", GF_MainFrameCloseButton, "BOTTOMRIGHT", -1*getglobal(GF_ChatFilterDropdownButton:GetName().."TextLabel"):GetStringWidth() -15, 6)
 	GF_UIScaleSliderLabel:SetText("")
 end
-function GF_FormatBlockListWords(arg1)
+function GF_FormatBlockListWords(arg1,display)
 	arg1 = " "..strlower(gsub(gsub(gsub(gsub(strlower(gsub(gsub(gsub(arg1, "|[cC]%x+%p+(%w+)[%w:]+|+[hH]", " %1 >z"), "|[hr]", ""),"([a-z ][a-z])([A-Z])","%1 %2")),".gg/%w+", ""),"[\"#\$\%&\*,\.@\\\^_`~|]"," "),"'",""),"[%d%p%s]","")).." "
 	local wordTable = {}
 	local wordString,lfs,lfe,tempVal,tempString
@@ -710,6 +715,7 @@ function GF_FormatBlockListWords(arg1)
 	end
 	wordString = ""
 	for i=1,tempVal do wordString = wordString..wordTable[i] end
+	if display then DEFAULT_CHAT_FRAME:AddMessage(format(GF_ADDING_TO_BLOCK_LIST,wordString), 1, 1, 0.5) end
 	return wordString
 end
 function GF_AddNamesToGroupHistoryList()
@@ -1963,7 +1969,7 @@ end
 function self:WHO_LIST_UPDATE()
 	GF_WhoListUpdated()
 end
-function self:ZONE_CHANGED()
+function self:ZONE_CHANGED() -- TODO: Add Group History stuff.
 -- Turn whisper log into a button, create group log button, move convert messages to links and make smaller... default to whisper log on startup
 -- Use the same buttons but change them to group names(will have to create an array with group names since they can only be 12 characters long)
 -- There are 27 baseline dungeons, plus 8 turtle dungeons(currently)... Then 7 raids + 3 turtle raids... plus world bosses... ~3 pages.. reset to page 1 when flipping between whisper and groups
@@ -2195,7 +2201,7 @@ function GF_ProcessChatMessages(event,arg1,arg2,arg8,arg9,delayed) -- Chat proce
 		GF_PreviousMessage[arg2] = {}
 	end
 end
-function GF_CheckForMonsterEmote(arg1,arg2)
+function GF_CheckForMonsterEmote(arg1,arg2) -- TODO: Add more Monster emotes or just keep blocking all?
 	if GF_SavedVariables.systemfilter then
 		--for i=1, getn(GF_MonsterEmoteFilters) do
 			--if strfind(arg1, GF_MonsterEmoteFilters[i]) then
@@ -2219,10 +2225,10 @@ function GF_CheckForEmotes(arg1,arg2)
 	end
 	GF_PreviousMessage[arg2] = {true}
 end
-function GF_CheckForLoot(arg1)
+function GF_CheckForLoot(arg1) -- TODO: Need to rewrite this for group detection/history. Only add a person to the group if they roll on items or they are within range on mouseover(30 yards?). Don't start group at all unless something is looted.
 	if not GF_SavedVariables.showloottexts then
 		if strfind(arg1, "9d9d9d") then GF_PreviousMessage["SYSTEM"] = {} return -- Block grey Items
-		elseif strfind(arg1, "1eff00") then for i=1, getn(GF_LootFilters) do if strfind(arg1, GF_LootFilters[i]) then GF_PreviousMessage["SYSTEM"] = {} return end end -- Block 'selected need/greed/pass' and rolls on green items
+		elseif strfind(arg1, "1eff00") then for i=1, getn(GF_LootFilters) do if strfind(arg1, GF_LootFilters[i]) then GF_PreviousMessage["SYSTEM"] = {} print("blocked") return end end -- Block 'selected need/greed/pass' and rolls on green items
 		else for i=1, 2 do  if strfind(arg1, GF_LootFilters[i]) then GF_PreviousMessage["SYSTEM"] = {} return end end end -- Block only 'need/greed' rolls on other items
 	end
 	GF_PreviousMessage["SYSTEM"] = {true}
@@ -2340,7 +2346,7 @@ function GF_CheckForGroups(arg1,arg2,event)
 	end
 	return foundInGroup
 end
-function GF_GetTypes(arg1, showanyway)
+function GF_GetTypes(arg1, showanyway) -- TODO: Need to do LFM/Quest sequence(look between LFM start/end  and quest start/end, can make baseline less then add more with more words)... Need to do every other word in wordtable so I can recombine
 	if showanyway == true then print(arg1) end
 
 	foundIgnore,foundGuild,foundGuildExclusion,foundLFM,foundLFMPreSuf,foundLFG,foundLFGPreSuf,foundTrades,foundTradesExclusion = 0,0,0,0,0,0,0,0,0
@@ -2360,8 +2366,8 @@ function GF_GetTypes(arg1, showanyway)
 	lfs,lfe,wordString = strfind(arg1,"%d?%s?\-?([\+±])\-?%s?%d?")
 	if lfs then -- To detect "+- or ±"
 		if wordString == "±" then foundTrades = foundTrades + 1 if showanyway == true then print("± trade 1") end
-		elseif strfind(arg1, "[\+\-][\+\-]%s?%d",lfs) then foundTrades = foundTrades + 1 if showanyway == true then print("+-d% trade 1") end
-		elseif strfind(arg1, "%d%s?[\+\-][\+\-]",lfs) then foundTrades = foundTrades + 1 if showanyway == true then print("d%+- trade 1") end end
+		elseif strfind(arg1, "[\+\-]/?[\+\-]%s?%d",lfs) then foundTrades = foundTrades + 1 if showanyway == true then print("+-d% trade 1") end
+		elseif strfind(arg1, "%d%s?[\+\-]/?[\+\-]",lfs) then foundTrades = foundTrades + 1 if showanyway == true then print("d%+- trade 1") end end
 	end
 
 	tempVal = 1
@@ -2504,7 +2510,7 @@ function GF_GetTypes(arg1, showanyway)
 		if wordString then
 			if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_BRACKET[gsub(wordString," ","")] then foundGuild = foundGuild + GF_GUILD_BRACKET[gsub(wordString," ","")] if showanyway == true then print(wordString.." guild "..GF_GUILD_BRACKET[gsub(wordString," ","")]) end end
 			if strbyte(arg1,lfs) == 91 and strbyte(arg1,lfe) == 93 then -- "[]"
-				if foundLFM == 0 then if strfind(arg1, "^%]%s?%d+%s?\-?\+",lfe) then foundLFM = 2 if showanyway == true then print("##+ lfm") end end end -- Group "] 2+"
+				if foundLFM == 0 then if strfind(arg1, "^%]%s?l?e?v?e?l?%s?%d+%s?\-?/?\+",lfe) then foundLFM = 2 if showanyway == true then print("##+ lfm") end end end -- Group "] 2+"
 				if strfind(arg1, "^%]%s?[0-9\-]+%s?[gs]",lfe) then foundTrades = foundTrades + 1 if showanyway == true then print("##g trade 1") end end -- Trades "]2.5g"
 				if strfind(arg1, "^%]%s?%p?%s?%d+m[%p%s]",lfe) then foundLFM = 2 if showanyway == true then print("##m lfm") end end -- Group "] 2m"
 				if strfind(arg1, "^%]%s?%p?%s?x%s?%d+[%p%s]",lfe) then foundTrades = foundTrades + .5 if showanyway == true then print("x## trade .5") end end -- Trades "] x2"
@@ -2531,12 +2537,12 @@ function GF_GetTypes(arg1, showanyway)
 							if showanyway == true then print(tempString.." trade ]<word> 2.5") end
 						end
 					end
-					for words in string.gfind(wordString, "(%a+)") do if GF_WORD_FIX_ITEM_NAME[words] then arg1 = strsub(arg1,1,lfs)..GF_WORD_FIX_ITEM_NAME[words]..strsub(arg1,lfe) break end end
+					if strlen(wordString) < 45 then for words in string.gfind(wordString, "(%a+)") do if GF_WORD_FIX_ITEM_NAME[words] then arg1 = strsub(arg1,1,lfs)..GF_WORD_FIX_ITEM_NAME[words]..strsub(arg1,lfe) break end end end
 				end
 			elseif strbyte(arg1,lfs) == 60 and strbyte(arg1,lfe) == 62 then -- "<>"
 				tempString = ""
 				for word in string.gfind(wordString,"%a+") do if GF_WORD_FIX[word] then tempString = tempString..GF_WORD_FIX[word] else tempString = tempString..word end end
-				wordTableGuild["BRACKETS"] = tempString
+				if strlen(tempString) < 25 then wordTableGuild["BRACKETS"] = tempString end
 				tempString = strsub(arg1,1,lfs)
 				_,_,wordString = strfind(tempString, "[%p%s](%a+)%s?<$") if wordString then if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_PREFIX_SUFFIX[wordString] then foundGuild = foundGuild + GF_GUILD_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." guild "..GF_GUILD_PREFIX_SUFFIX[wordString]) end end end
 				_,_,wordString = strfind(arg1, "^>%s?(%a+)[%p%s]",lfe) if wordString then if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_PREFIX_SUFFIX[wordString] then foundGuild = foundGuild + GF_GUILD_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." guild "..GF_GUILD_PREFIX_SUFFIX[wordString]) end end end
@@ -2689,6 +2695,12 @@ function GF_GetTypes(arg1, showanyway)
 						else
 							if not foundQuest[1] or GF_WORD_QUEST[wordString][2] > foundQuest[1] or foundQuest[2] < j then foundQuest[1] = GF_WORD_QUEST[wordString][2] foundQuest[2] = j end
 						end
+-- Found quest.. The current script looks to see if the word before or after is a zone.. then it shifts the lfm before/after by that and renames the string to 'Zone'..Quest/Elite/Escort/Etc
+-- I was basically going to add connecting words... so like... If the group string was "can anyone help me I need a druid for deadmines"... I would take deadmines then go back until I don't find a connecting word, and use the last word
+
+-- I could do this post-processing by save the position of quests/dungeons/raids/pvp and any lfm message
+-- So if LFM in position 2 and a quest in position 5, then check 3/4/5... if something in each, add 1 lfm(or X amount for each)
+
 						if showanyway == true then print(wordString.." quest") end
 						foundTradesExclusion = foundTradesExclusion + .3 foundGuildExclusion = foundGuildExclusion + .1
 						if GF_LFM_BYPASS[wordString] then
@@ -2815,7 +2827,7 @@ function GF_GetTypes(arg1, showanyway)
 -- A lot of my LFM/LFG entries are probably unnecessary. I created many of them before I added the before/after routine(among other things). But it's really impossible to know what I can get rid of.
 -- The problem is, if I try to create dynamic names, other things might not work properly, or would require multiple runs through... I'd be better off just making a spreadsheet page with a template to copy/paste
 
-				if GF_WORD_LFM[wordString] and (not GF_LFM_TRIGGER[wordString] or GF_WORD_LEVEL_ZONE[wordTable[i+j+1]]) then
+				if GF_WORD_LFM[wordString] and (not GF_LFM_TRIGGER[wordString] or GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] or GF_GROUP_IDS[wordTable[i+j+1]]) then
 					if GF_WORD_LFM[wordString] > foundLFM then foundLFM = GF_WORD_LFM[wordString] table.insert(lfmlfgName, wordString) if showanyway == true then print(wordString.." lfm "..GF_WORD_LFM[wordString]) end end
 					if not foundQuest[1] then if GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] elseif GF_WORD_LEVEL_ZONE[wordTable[i-1]] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-1]] end end
 					if GF_WORD_IGNORE_AFTER[wordTable[i+j+1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_AFTER[wordTable[i+j+1]] if showanyway == true then print(wordTable[i+j+1].." ignore "..GF_WORD_IGNORE_AFTER[wordTable[i+j+1]]) end end
@@ -4346,8 +4358,10 @@ function GF_UpdateQueueLFTButton(update) -- Updates(gets dungeon list) on login 
 end
 
 function print(msg) -- I added this only temporarily so I could work on the addon without having to turn on other addons(reload faster)
-	if not msg then
+	if msg == nil then
 		DEFAULT_CHAT_FRAME:AddMessage("nil", 1, 1, 0.5)
+	elseif not msg then
+		DEFAULT_CHAT_FRAME:AddMessage("false", 1, 1, 0.5)
 	elseif type(msg) == "table" then
 		DEFAULT_CHAT_FRAME:AddMessage("table", 1, 1, 0.5)
 	else

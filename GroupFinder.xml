@@ -4174,12 +4174,11 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											end
 											table.insert(GF_BUTTONS_LIST["BlockList"],1,{this:GetText()})
 											table.insert(GF_SavedVariables.blocklist,1,this:GetText())
-											GF_WORD_BLOCK_LIST[GF_FormatBlockListWords(this:GetText())] = true
+											GF_WORD_BLOCK_LIST[GF_FormatBlockListWords(this:GetText(),true)] = true
 											this:SetText("")
 											this:HighlightText(string.len(this:GetText())+1)
-										else
-											this:ClearFocus()
 										end
+										this:ClearFocus()
 									</OnEnterPressed>
 									<OnEscapePressed>
 										GF_BlockListEditBox:SetText("")
@@ -4211,7 +4210,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											end
 											table.insert(GF_BUTTONS_LIST["BlockList"],1,{GF_BlockListEditBox:GetText()})
 											table.insert(GF_SavedVariables.blocklist,1,GF_BlockListEditBox:GetText())
-											GF_WORD_BLOCK_LIST[GF_FormatBlockListWords(GF_BlockListEditBox:GetText())] = true
+											GF_WORD_BLOCK_LIST[GF_FormatBlockListWords(GF_BlockListEditBox:GetText(),true)] = true
 											GF_BlockListEditBox:SetText("")
 											GF_BlockListEditBox:HighlightText(string.len(GF_BlockListEditBox:GetText())+1)
 										else
