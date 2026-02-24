@@ -501,18 +501,18 @@ function GF_FormatBlockListWords(arg1)
 				table.insert(wordTable,strchar(lfs))
 			end
 		elseif lfs == lfe then
-			if lfs >= 97 and lfs <= 122 then -- Lowercase [a-z]
+			if lfs >= 97 and lfs <= 122 then
 				if lfs == strbyte(arg1,tempVal+2) then
-					table.insert(wordTable,strchar(lfs)) table.insert(wordTable,strchar(lfe)) tempVal=tempVal+2 for j=1,250 do if lfs ~= strbyte(arg1,tempVal+j) then tempVal=tempVal+j-1 break end end
+					table.insert(wordTable,strchar(lfs)) table.insert(wordTable,strchar(lfe)) if lfs == 105 then table.insert(wordTable,"i") end tempVal=tempVal+2 for j=1,250 do if lfs ~= strbyte(arg1,tempVal+j) then tempVal=tempVal+j-1 break end end
 				else
 					table.insert(wordTable,strchar(lfs)) table.insert(wordTable,strchar(lfe)) tempVal=tempVal+1
 				end
 			else
 				table.insert(wordTable,strchar(lfs)) tempVal=tempVal+1 for j=1,250 do if lfs ~= strbyte(arg1,tempVal+j) then tempVal=tempVal+j-1 break end end
 			end
-		elseif lfe == 32 or lfe == 46 then -- Space or Period
-			if (strbyte(arg1,tempVal-1) == 32 or strbyte(arg1,tempVal-1) == 46 or strbyte(arg1,tempVal-1) == 60) and (strbyte(arg1,tempVal+3) == 32 or strbyte(arg1,tempVal+3) == 46 or strbyte(arg1,tempVal+3) == 60) then
-				table.insert(wordTable,strchar(lfs)) table.insert(wordTable,strchar(strbyte(arg1,tempVal+2))) tempVal=tempVal+2 for j=3,250,2 do if strbyte(arg1,tempVal+j) ~= 32 and strbyte(arg1,tempVal+j) ~= 46 and strbyte(arg1,tempVal+j) ~= 62 then tempVal=tempVal+j-3 break else table.insert(wordTable,strchar(strbyte(arg1,tempVal+j-1))) end end
+		elseif GF_WORD_PUNCTUATION_FIX[lfe] then -- Space or Period
+			if GF_WORD_PUNCTUATION_FIX[strbyte(arg1,tempVal-1)] and GF_WORD_PUNCTUATION_FIX[strbyte(arg1,tempVal+3)] then
+				table.insert(wordTable,strchar(lfs)) table.insert(wordTable,strchar(strbyte(arg1,tempVal+2))) tempVal=tempVal+2 for j=3,250,2 do if not GF_WORD_PUNCTUATION_FIX[strbyte(arg1,tempVal+j)] then tempVal=tempVal+j-3 break else table.insert(wordTable,strchar(strbyte(arg1,tempVal+j-1))) end end
 			else
 				table.insert(wordTable,strchar(lfs))
 			end
@@ -588,51 +588,47 @@ function GF_FormatBlockListWords(arg1)
 	lfs = 2 -- To fix single words
 	while true do lfs,lfe,wordString,tempString = strfind(arg1, "(.-)([%s%p%d]+)",lfs) if not wordString then break elseif GF_WORD_FIX_SINGLE_WORD[wordString] then arg1 = strsub(arg1,1,lfs-1)..GF_WORD_FIX_SINGLE_WORD[wordString]..tempString..strsub(arg1,lfe+1) lfs = lfs + strlen(GF_WORD_FIX_SINGLE_WORD[wordString]..tempString)-1 else lfs = lfe+1 end end
 
-	lfs = 2 -- Add all words to the wordTable
+	lfs = 1 _,lfe,wordString = string.find(arg1, "([%s%p%d]+)",lfs) lfs = lfe+1 -- Add all words to the wordTable
 	while true do
 		lfs,lfe,wordString = strfind(arg1, "(.-)[%s%p%d]+",lfs)
 		if wordString then
-			if strbyte(wordString) then
-				if not GF_WORD_BYPASS_TRIGGER[wordString] then
-					table.insert(wordTable, wordString)
-					lfs = lfe+1
-				else
-					if GF_WORD_GROUP_BYPASS[wordString] then
-						_,tempVal,tempString = strfind(arg1,"(%a+)",lfe+1)
-						if tempString then
+			if not GF_WORD_BYPASS_TRIGGER[wordString] then
+				table.insert(wordTable, wordString)
+				lfs = lfe+1
+			else
+				if GF_WORD_GROUP_BYPASS[wordString] then
+					_,tempVal,tempString = strfind(arg1,"(.-)[%s%p%d]+",lfe+1)
+					if tempString then
+						if GF_WORD_GROUP_BYPASS[tempString] then
+							table.insert(wordTable, GF_WORD_GROUP_BYPASS[wordString]) table.insert(wordTable, GF_WORD_GROUP_BYPASS[tempString])
+							lfs = tempVal+1
+						elseif GF_WORD_GROUP_BYPASS_SECOND[wordString..tempString] then
+							_,tempVal,tempString = strfind(arg1,"(.-)[%s%p%d]+",tempVal+1)
 							if GF_WORD_GROUP_BYPASS[tempString] then
 								table.insert(wordTable, GF_WORD_GROUP_BYPASS[wordString]) table.insert(wordTable, GF_WORD_GROUP_BYPASS[tempString])
 								lfs = tempVal+1
-							elseif GF_WORD_GROUP_BYPASS_SECOND[wordString..tempString] then
-								_,tempVal,tempString = strfind(arg1,"(%a+)",tempVal+1)
-								if GF_WORD_GROUP_BYPASS[tempString] then
-									table.insert(wordTable, GF_WORD_GROUP_BYPASS[wordString]) table.insert(wordTable, GF_WORD_GROUP_BYPASS[tempString])
-									lfs = tempVal+1
-								else
-									table.insert(wordTable, wordString)
-									lfs = lfe+1
-								end
 							else
-								if GF_WORD_GROUP_BYPASS[wordTable[getn(wordTable)]] then wordTable[getn(wordTable)] = GF_WORD_GROUP_BYPASS[wordTable[getn(wordTable)]] end
 								table.insert(wordTable, wordString)
 								lfs = lfe+1
 							end
 						else
+							if GF_WORD_GROUP_BYPASS[wordTable[getn(wordTable)]] then wordTable[getn(wordTable)] = GF_WORD_GROUP_BYPASS[wordTable[getn(wordTable)]] end
 							table.insert(wordTable, wordString)
-							break
-						end
-					else
-						_,tempVal,tempString = strfind(arg1,"(%a+)",lfe+1)
-						if GF_WORD_QUEST_BYPASS[tempString] then
-							table.insert(wordTable, wordString) table.insert(wordTable, tempString)
-							lfs = tempVal+1
-						else
 							lfs = lfe+1
 						end
+					else
+						table.insert(wordTable, wordString)
+						break
+					end
+				else
+					_,tempVal,tempString = strfind(arg1,"(.-)[%s%p%d]+",lfe+1)
+					if GF_WORD_QUEST_BYPASS[tempString] then
+						table.insert(wordTable, wordString) table.insert(wordTable, tempString)
+						lfs = tempVal+1
+					else
+						lfs = lfe+1
 					end
 				end
-			else
-				lfs = lfe+1
 			end
 		else
 			break
@@ -2743,11 +2739,10 @@ function GF_GetTypes(arg1, showanyway)
 						if GF_WORD_FIX_GUILD[wordTableGuild[lfs+1]] then wordTableGuild[lfs+1] = GF_WORD_FIX_GUILD[wordTableGuild[lfs+1]][1] end
 						if lfs > 1 then lfs = lfs - 2 else lfs = lfs - 1 end
 					end
-				elseif wordTableGuild["BRACKETS"] == wordString then
-					for k=0, j do wordTableGuild[lfs+k] = "G" end
 				else
 					if GF_WORD_FIX_TRADE[wordString] then wordTableTrade[lfs] = GF_WORD_FIX_TRADE[wordString][1] for k=1, j do table.remove(wordTableTrade,lfs+k) table.insert(wordTableTrade,lfs+k,GF_WORD_FIX_TRADE[wordString][2]) end end
-					if GF_WORD_FIX_GUILD[wordString] then wordTableGuild[lfs] = GF_WORD_FIX_GUILD[wordString][1] for k=1, j do table.remove(wordTableGuild,lfs+k) table.insert(wordTableGuild,lfs+k,GF_WORD_FIX_GUILD[wordString][2]) end end
+					if wordTableGuild["BRACKETS"] == wordString then for k=0, j do wordTableGuild[lfs+k] = "G" end
+					elseif GF_WORD_FIX_GUILD[wordString] then wordTableGuild[lfs] = GF_WORD_FIX_GUILD[wordString][1] for k=1, j do table.remove(wordTableGuild,lfs+k) table.insert(wordTableGuild,lfs+k,GF_WORD_FIX_GUILD[wordString][2]) end end
 				end
 			end
 			lfs = lfs + 1
@@ -4388,16 +4383,16 @@ function GetModifiedQuestName(entryname)
 		elseif lfs == lfe then
 			if lfs >= 97 and lfs <= 122 then
 				if lfs == strbyte(arg1,tempVal+2) then
-					table.insert(wordTable,strchar(lfs)) table.insert(wordTable,strchar(lfe)) tempVal=tempVal+2 for j=1,250 do if lfs ~= strbyte(arg1,tempVal+j) then tempVal=tempVal+j-1 break end end
+					table.insert(wordTable,strchar(lfs)) table.insert(wordTable,strchar(lfe)) if lfs == 105 then table.insert(wordTable,"i") end tempVal=tempVal+2 for j=1,250 do if lfs ~= strbyte(arg1,tempVal+j) then tempVal=tempVal+j-1 break end end
 				else
 					table.insert(wordTable,strchar(lfs)) table.insert(wordTable,strchar(lfe)) tempVal=tempVal+1
 				end
 			else
 				table.insert(wordTable,strchar(lfs)) tempVal=tempVal+1 for j=1,250 do if lfs ~= strbyte(arg1,tempVal+j) then tempVal=tempVal+j-1 break end end
 			end
-		elseif lfe == 32 or lfe == 46 then -- Space or Period
-			if (strbyte(arg1,tempVal-1) == 32 or strbyte(arg1,tempVal-1) == 46 or strbyte(arg1,tempVal-1) == 60) and (strbyte(arg1,tempVal+3) == 32 or strbyte(arg1,tempVal+3) == 46 or strbyte(arg1,tempVal+3) == 60) then
-				table.insert(wordTable,strchar(lfs)) table.insert(wordTable,strchar(strbyte(arg1,tempVal+2))) tempVal=tempVal+2 for j=3,250,2 do if strbyte(arg1,tempVal+j) ~= 32 and strbyte(arg1,tempVal+j) ~= 46 and strbyte(arg1,tempVal+j) ~= 62 then tempVal=tempVal+j-3 break else table.insert(wordTable,strchar(strbyte(arg1,tempVal+j-1))) end end
+		elseif GF_WORD_PUNCTUATION_FIX[lfe] then -- Space or Period
+			if GF_WORD_PUNCTUATION_FIX[strbyte(arg1,tempVal-1)] and GF_WORD_PUNCTUATION_FIX[strbyte(arg1,tempVal+3)] then
+				table.insert(wordTable,strchar(lfs)) table.insert(wordTable,strchar(strbyte(arg1,tempVal+2))) tempVal=tempVal+2 for j=3,250,2 do if not GF_WORD_PUNCTUATION_FIX[strbyte(arg1,tempVal+j)] then tempVal=tempVal+j-3 break else table.insert(wordTable,strchar(strbyte(arg1,tempVal+j-1))) end end
 			else
 				table.insert(wordTable,strchar(lfs))
 			end
@@ -4522,51 +4517,47 @@ function GetModifiedQuestName(entryname)
 	while true do lfs,lfe,wordString,tempString = strfind(arg1," (%d+%a)(%a+)[%p%s]",lfs) if wordString then if GF_WORD_LETTER_NUMBER_BEFORE_AFTER[wordString] and GF_GROUP_IDS[tempString] then arg1 = strsub(arg1,1,lfs)..GF_WORD_LETTER_NUMBER_BEFORE_AFTER[wordString].." "..tempString.." "..strsub(arg1,lfe) lfs = lfs + strlen(GF_WORD_LETTER_NUMBER_BEFORE_AFTER[wordString]..tempString) + 2 else lfs = lfe end else break end end
 
 -- Quest Search
-	lfs = 2 -- Add all words to the wordTable
+	lfs = 1 _,lfe,wordString = string.find(arg1, "([%s%p%d]+)",lfs) lfs = lfe+1 -- Add all words to the wordTable
 	while true do
 		lfs,lfe,wordString = strfind(arg1, "(.-)[%s%p%d]+",lfs)
 		if wordString then
-			if strbyte(wordString) then
-				if not GF_WORD_BYPASS_TRIGGER[wordString] then
-					table.insert(wordTable, wordString)
-					lfs = lfe+1
-				else
-					if GF_WORD_GROUP_BYPASS[wordString] then
-						_,tempVal,tempString = strfind(arg1,"(%a+)",lfe+1)
-						if tempString then
+			if not GF_WORD_BYPASS_TRIGGER[wordString] then
+				table.insert(wordTable, wordString)
+				lfs = lfe+1
+			else
+				if GF_WORD_GROUP_BYPASS[wordString] then
+					_,tempVal,tempString = strfind(arg1,"(.-)[%s%p%d]+",lfe+1)
+					if tempString then
+						if GF_WORD_GROUP_BYPASS[tempString] then
+							table.insert(wordTable, GF_WORD_GROUP_BYPASS[wordString]) table.insert(wordTable, GF_WORD_GROUP_BYPASS[tempString])
+							lfs = tempVal+1
+						elseif GF_WORD_GROUP_BYPASS_SECOND[wordString..tempString] then
+							_,tempVal,tempString = strfind(arg1,"(.-)[%s%p%d]+",tempVal+1)
 							if GF_WORD_GROUP_BYPASS[tempString] then
 								table.insert(wordTable, GF_WORD_GROUP_BYPASS[wordString]) table.insert(wordTable, GF_WORD_GROUP_BYPASS[tempString])
 								lfs = tempVal+1
-							elseif GF_WORD_GROUP_BYPASS_SECOND[wordString..tempString] then
-								_,tempVal,tempString = strfind(arg1,"(%a+)",tempVal+1)
-								if GF_WORD_GROUP_BYPASS[tempString] then
-									table.insert(wordTable, GF_WORD_GROUP_BYPASS[wordString]) table.insert(wordTable, GF_WORD_GROUP_BYPASS[tempString])
-									lfs = tempVal+1
-								else
-									table.insert(wordTable, wordString)
-									lfs = lfe+1
-								end
 							else
-								if GF_WORD_GROUP_BYPASS[wordTable[getn(wordTable)]] then wordTable[getn(wordTable)] = GF_WORD_GROUP_BYPASS[wordTable[getn(wordTable)]] end
 								table.insert(wordTable, wordString)
 								lfs = lfe+1
 							end
 						else
+							if GF_WORD_GROUP_BYPASS[wordTable[getn(wordTable)]] then wordTable[getn(wordTable)] = GF_WORD_GROUP_BYPASS[wordTable[getn(wordTable)]] end
 							table.insert(wordTable, wordString)
-							break
-						end
-					else
-						_,tempVal,tempString = strfind(arg1,"(%a+)",lfe+1)
-						if GF_WORD_QUEST_BYPASS[tempString] then
-							table.insert(wordTable, wordString) table.insert(wordTable, tempString)
-							lfs = tempVal+1
-						else
 							lfs = lfe+1
 						end
+					else
+						table.insert(wordTable, wordString)
+						break
+					end
+				else
+					_,tempVal,tempString = strfind(arg1,"(.-)[%s%p%d]+",lfe+1)
+					if GF_WORD_QUEST_BYPASS[tempString] then
+						table.insert(wordTable, wordString) table.insert(wordTable, tempString)
+						lfs = tempVal+1
+					else
+						lfs = lfe+1
 					end
 				end
-			else
-				lfs = lfe+1
 			end
 		else
 			break
