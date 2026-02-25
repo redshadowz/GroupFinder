@@ -282,7 +282,6 @@ function GF_LoadVariables()
 				GF_GroupHistory[GF_RealmName] = {}
 				table.insert(GF_GroupHistory[GF_RealmName], "Groups")
 				GF_GroupHistory[GF_RealmName]["Groups"] = {}
-				GF_AddNamesToGroupHistoryList()
 			end
 		end
 	end
@@ -397,7 +396,6 @@ function GF_LoadSettings()
 	GF_SetStringSize()
 	GF_SetDropdownWidths()
 	GF_SetLFGRoleButtons()
-	GF_AddNamesToGroupHistoryList()
 	GF_UpdateQueueLFTButton(true)
 end
 function GF_SetStringSize()
@@ -718,11 +716,6 @@ function GF_FormatBlockListWords(arg1,display)
 	for i=1,tempVal do wordString = wordString..wordTable[i] end
 	if display then DEFAULT_CHAT_FRAME:AddMessage(format(GF_ADDING_TO_BLOCK_LIST,wordString), 1, 1, 0.5) end
 	return wordString
-end
-function GF_AddNamesToGroupHistoryList()
-	for i=1, getn(GF_GroupHistoryNames) do
-		if not GF_GroupHistory[GF_RealmName][GF_GroupHistoryNames[i][1]] then table.insert(GF_GroupHistory[GF_RealmName], GF_GroupHistoryNames[i][1]) GF_GroupHistory[GF_RealmName][GF_GroupHistoryNames[i][1]] = {} end
-	end
 end
 
 function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
@@ -2229,7 +2222,7 @@ end
 function GF_CheckForLoot(arg1) -- TODO: Need to rewrite this for group detection/history. Only add a person to the group if they roll on items or if they are within range on mouseover(30 yards?). Don't start group at all unless something is looted.
 	if not GF_SavedVariables.showloottexts then
 		if strfind(arg1, "9d9d9d") then GF_PreviousMessage["SYSTEM"] = {} return -- Block grey Items
-		elseif strfind(arg1, "1eff00") then for i=1, getn(GF_LootFilters) do if strfind(arg1, GF_LootFilters[i]) then GF_PreviousMessage["SYSTEM"] = {} print("blocked") return end end -- Block 'selected need/greed/pass' and rolls on green items
+		elseif strfind(arg1, "1eff00") then for i=1, getn(GF_LootFilters) do if strfind(arg1, GF_LootFilters[i]) then GF_PreviousMessage["SYSTEM"] = {} return end end -- Block 'selected need/greed/pass' and rolls on green items
 		else for i=1, 2 do  if strfind(arg1, GF_LootFilters[i]) then GF_PreviousMessage["SYSTEM"] = {} return end end end -- Block only 'need/greed' rolls on other items
 	end
 	GF_PreviousMessage["SYSTEM"] = {true}
@@ -2664,7 +2657,7 @@ function GF_GetTypes(arg1, showanyway)
 			lfs = lfs + 1
 		end
 	end
-	for i=1, tempVal do if wordTable[i] == "x" then table.remove(wordTable,i) i = i - 1 tempVal=tempVal-1 end end
+	for i=1, tempVal do if wordTable[i] == "x" or wordTable[i] == "v" then table.remove(wordTable,i) i = i - 1 tempVal=tempVal-1 end end
 	if wordTable[1] == "hquest" and tempVal <= 9 then
 		wordString = ""
 		if strsub(arg1,-2) == "? " then
@@ -3604,6 +3597,9 @@ function GF_WhisperReceivedAddToWhisperHistoryList(arg1,arg2,event,nodelay)
 	end
 end
 function GF_GroupFinishedAddToGroupHistoryList(message,name,event)
+-- I really want to create my own scrolling frame. It would almost certainly have better performance, and be more easily customizable.
+-- The scrolling frame would basically have to be a bunch of buttons... and I would have to arrange the buttons and set their text and width.
+-- The basic idea is to create 40+ buttons for raid members, then buttons for items... arrange raid members by class, then add items.
 end
 function GF_WhisperHistoryUpdateFrame(name)
 	local numPriority = 0
@@ -3702,7 +3698,7 @@ function GF_WhisperHistoryDisplayLog(name)
 		end
 	end
 end
-function GF_GroupHistoryDisplayLog(name) -- TODO: Stop adding dungeons until they've actually been done. Create "other" for any non-dungeon groups. Make sure the framework is complete so I can just start importing groups. Don't use Log Scrolling frame.
+function GF_GroupHistoryDisplayLog(name) -- TODO: Create "other" for any non-dungeon groups. Make sure the framework is complete so I can just start importing groups. Don't use Log Scrolling frame.
 	GF_Log:SetMaxLines(128)
 	for i=getn(GF_GroupHistory[GF_RealmName][name]), 1, -1 do
 		GF_Log:AddMessage(GF_GroupHistory[GF_RealmName][name][i][1],1,1,1)
