@@ -2225,7 +2225,7 @@ function GF_CheckForEmotes(arg1,arg2)
 	end
 	GF_PreviousMessage[arg2] = {true}
 end
-function GF_CheckForLoot(arg1) -- TODO: Need to rewrite this for group detection/history. Only add a person to the group if they roll on items or they are within range on mouseover(30 yards?). Don't start group at all unless something is looted.
+function GF_CheckForLoot(arg1) -- TODO: Need to rewrite this for group detection/history. Only add a person to the group if they roll on items or if they are within range on mouseover(30 yards?). Don't start group at all unless something is looted.
 	if not GF_SavedVariables.showloottexts then
 		if strfind(arg1, "9d9d9d") then GF_PreviousMessage["SYSTEM"] = {} return -- Block grey Items
 		elseif strfind(arg1, "1eff00") then for i=1, getn(GF_LootFilters) do if strfind(arg1, GF_LootFilters[i]) then GF_PreviousMessage["SYSTEM"] = {} print("blocked") return end end -- Block 'selected need/greed/pass' and rolls on green items
@@ -3581,7 +3581,7 @@ function GF_WhisperReceivedAddToWhisperHistoryList(arg1,arg2,event,nodelay)
 			if getn(GF_WhisperLogData[GF_RealmName]["Guild"]) > 128 then table.remove(GF_WhisperLogData[GF_RealmName]["Guild"],129) end
 			GF_WhisperHistoryUpdateFrame(arg2)
 		end
-		table.insert(GF_LogHistory[GF_RealmName],1,{arg1,10,event})
+		table.insert(GF_LogHistory[GF_RealmName],1,{arg1,4,event})
 		if getn(GF_LogHistory[GF_RealmName]) > 500 then table.remove(GF_LogHistory[GF_RealmName],501) end
 		if GF_WhisperLogCurrentButtonID < 2 or arg2 == getglobal("GF_WhisperHistoryButton"..GF_WhisperLogCurrentButtonID):GetText() then
 			if GF_ConvertMessagesToLinks then
@@ -3699,7 +3699,7 @@ function GF_WhisperHistoryDisplayLog(name)
 		end
 	end
 end
-function GF_GroupHistoryDisplayLog(name)
+function GF_GroupHistoryDisplayLog(name) -- TODO: Stop adding dungeons until they've actually been done. Create "other" for any non-dungeon groups. Make sure the framework is complete so I can just start importing groups. Don't use Log Scrolling frame.
 	GF_Log:SetMaxLines(128)
 	for i=getn(GF_GroupHistory[GF_RealmName][name]), 1, -1 do
 		GF_Log:AddMessage(GF_GroupHistory[GF_RealmName][name][i][1],1,1,1)
