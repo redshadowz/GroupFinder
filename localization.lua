@@ -2317,7 +2317,7 @@ GF_WORD_LFM = {
 ["whoisdownto"] = 2,["wholetsdo"] = 2,["werecontinuingfrom"] = 2,["wearecontinuing"] = 2,["whoneedtogo"] = 2,["whoneedgoto"] = 2,
 ["pleasejoindailybg"] = 2,["queuenow"] = 2,["queueup"] = 2,["joinqueue"] = 2,["queuebg"] = 2,["queuedaily"] = 2,
 ["lookinggroupto"] = 2,["lookinggroupfor"] = 2,["askgroupto"] = 2,["askgroupfor"] = 2,
-["needplayerfor"] = 2,["groupdelvinginto"] = 2,["lendahandin"] = 2,
+["needplayerfor"] = 2,["groupdelvinginto"] = 2,["lendhandin"] = 2,
 ["tryingtodo"] = 2,["stillongoing"] = 2,["letsgoguy"] = 2,["letsdoit"] = 2,["letsdodungeon"] = 2,
 
 ["lookingonefor"] = 2,["lookingtwofor"] = 2,["lookingthreefor"] = 2,
@@ -2633,6 +2633,32 @@ GF_LFM_BYPASS = { -- Won't detect LFM/LFM Before/After if these words
 }
 GF_LFM_TRIGGER = {
 ["anyone"] = true,["anyonein"] = true,["needto"] = true,
+}
+GF_LFM_CONNECT_WORDS = { -- Connecting words and their values
+["druid"] = .5,["rogue"] = .5,["priest"] = .5,["mage"] = .5,["warlock"] = .5,["hunter"] = .5,["shaman"] = .5,["paladin"] = .5,["warrior"] = .5,
+["healer"] = .5,["dps"] = .5,["tank"] = .5,["range"] = .5,["caster"] = .5,["melee"] = .5,["aoe"] = .5,
+["members"] = .5,["people"] = .5,["player"] = .5,["guy"] = .5,["mate"] = .5,["buddy"] = .5,
+["onetank"] = .5,["twotank"] = .5,["threetank"] = .5,["onedps"] = .5,["twodps"] = .5,["threedps"] = .5,["onehealer"] = .5,["twohealer"] = .5,["threehealer"] = .5,
+
+["heal"] = 0,["damage"] = 0,["stealth"] = 0,
+["all"] = 0,["one"] = 0,["two"] = 0,["three"] = 0,["onemore"] = 0,["twomore"] = 0,["threemore"] = 0,["oneheal"] = 0,["twoheal"] = 0,["threeheal"] = 0,["onedamage"] = 0,["twodamage"] = 0,["threedamage"] = 0,
+
+["join"] = .5,["come"] = .5,["last"] = .5,["invite"] = .5,["for"] = .5,["help"] = .5,["please"] = .5,
+["lf"] = 0,["lfg"] = 0,["lfm"] = 0,["seeking"] = .5,["seek"] = .5,["search"] = .5,["looking"] = .5,["need"] = .5,["ask"] = .5,
+
+["lets"] = .5,["todo"] = .5,["letsdo"] = .5,["go"] = .5,["willing"] = .5,["will"] = .5,["doing"] = .5,
+
+["and"] = .25,["there"] = .25,["have"] = .25,["by"] = .25,["it"] = .25,["maybe"] = .25,["with"] = .25,["through"] = .25,["just"] = .25,["or"] = .25,
+["we"] = .25,["me"] = .25,["my"] = .25,["us"] = .25,["you"] = .25,
+["in"] = .25,["to"] = .25,["do"] = .25,["getting"] = .25,
+["up"] = .25,["out"] = .25,["open"] = .25,["down"] = .25,["near"] = .25,["like"] = .25,["only"] = .25,
+["care"] = .25,["use"] = .25,["can"] = .25,["else"] = .25,["get"] = .25,["able"] = .25,["free"] = .25,
+["raid"] = .5,["boss"] = .5,["level"] = .5,["fresh"] = .5,["kill"] = .5,["queue"] = .5,["qing"] = .5,["speedrun"] = .5,["run"] = .5,["farm"] = .5,["clear"] = .5,["daily"] = .5,["weekly"] = .5,["signin"] = .5,["signup"] = .5,
+["spot"] = .5,["slot"] = .5,["some"] = .25,["more"] = .25,["room"] = .5,["space"] = .5,
+["form"] = .5,["start"] = .5,["host"] = .5,["create"] = .5,["gather"] = .5,["gathering"] = .5,
+["any"] = .25,["anyone"] = .25,
+["horde"] = .25,["alliance"] = .25,["hc"] = .25,["hardcore"] = .25,
+["make"] = 0,
 }
 GF_QUEST_ONLY_AFTER_LFM = { -- Mostly to detect quests
 ["theattack"] = 31,
