@@ -104,6 +104,8 @@ local groupName = {}
 local foundQuest = {}
 local foundDFlags = {}
 local foundPFlags = {}
+local groupPosition = {}
+local lfmPosition = {}
 
 local self = CreateFrame'Frame'
 self:Hide()
@@ -739,7 +741,7 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 	function ChatFrame_OnEvent(event) -- arg1(message), arg2(sender), arg4("Channel#." "(City/Trade)" "channelName"), arg5, (nameOfPlayerWhoLooted), arg7(zoneChannel#), arg8(channel#), arg9("City/Trade" "channelName")
 		if not arg1 or not GF_TextColors[strsub(event,10)] or (arg9 and strlower(arg9) == "lft") then old_ChatFrame_OnEvent(event) return end
 		if not arg2 or arg2 == "" then arg2 = "SYSTEM" end
-		if not GF_ProcessedFirstMessage[arg2] then
+		if not GF_ProcessedFirstMessage[arg2] or GF_ProcessedFirstMessage[arg2] <= time() then
 			--print(GetTime())
 			GF_ChatFunctions(event,arg1,arg2,arg8,arg9)
 			if not GF_ChatBypass[strsub(event,10)] and GF_SavedVariables.showformattedchat and GF_PreviousMessage[arg2] and GF_PreviousMessage[arg2][1] then
@@ -747,7 +749,7 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 				if event == "CHAT_MSG_CHANNEL" then GF_AddChannelMessage(arg1,arg2,arg8,arg9) else GF_AddChatMessage(arg1,arg2,strsub(event,10)) end
 				GF_PreviousMessage[arg2] = {}
 			end
-			GF_ProcessedFirstMessage[arg2] = true
+			GF_ProcessedFirstMessage[arg2] = time() + .25
 			--print(GetTime())
 		end
 		if GF_PreviousMessage[arg2] and GF_PreviousMessage[arg2][1]	then
@@ -1905,7 +1907,7 @@ function self:CHAT_MSG_ADDON()
 	if arg1 == "GF" and arg4 ~= UnitName("player") then GF_AddonListOfGuildAndPartyMembersWithAddon[arg4] = true GF_ParseIncomingAddonMessages(arg2,arg4) end
 end
 function self:EXECUTE_CHAT_LINE()
-	GF_ProcessedFirstMessage["SYSTEM"] = nil
+	GF_ProcessedFirstMessage["SYSTEM"] = time()
 end
 function self:FRIENDLIST_UPDATE()
 	if GetNumFriends() ~= GF_CurrentNumFriends then GF_UpdateFriendsList() end
@@ -1997,79 +1999,79 @@ function self:ZONE_CHANGED() -- TODO: Add Group History stuff.
 end
 	
 function self:CHAT_MSG_BATTLEGROUND() -- Chat events. These are to make sure messages are only processed once
-	GF_ProcessedFirstMessage[arg2] = nil
+	GF_ProcessedFirstMessage[arg2] = time()
 end
 function self:CHAT_MSG_BATTLEGROUND_LEADER()
-	GF_ProcessedFirstMessage[arg2] = nil
+	GF_ProcessedFirstMessage[arg2] = time()
 end
 function self:CHAT_MSG_CHANNEL()
-	GF_ProcessedFirstMessage[arg2] = nil
+	GF_ProcessedFirstMessage[arg2] = time()
 end
 function self:CHAT_MSG_COMBAT_FACTION_CHANGE()
-	GF_ProcessedFirstMessage["SYSTEM"] = nil
+	GF_ProcessedFirstMessage["SYSTEM"] = time()
 end
 function self:CHAT_MSG_COMBAT_HONOR_GAIN()
-	GF_ProcessedFirstMessage["SYSTEM"] = nil
+	GF_ProcessedFirstMessage["SYSTEM"] = time()
 end
 function self:CHAT_MSG_COMBAT_XP_GAIN()
-	GF_ProcessedFirstMessage["SYSTEM"] = nil
+	GF_ProcessedFirstMessage["SYSTEM"] = time()
 end
 function self:CHAT_MSG_EMOTE()
-	GF_ProcessedFirstMessage[arg2] = nil
+	GF_ProcessedFirstMessage[arg2] = time()
 end
 function self:CHAT_MSG_GUILD()
-	GF_ProcessedFirstMessage[arg2] = nil
+	GF_ProcessedFirstMessage[arg2] = time()
 end
 function self:CHAT_MSG_HARDCORE()
-	GF_ProcessedFirstMessage[arg2] = nil
+	GF_ProcessedFirstMessage[arg2] = time()
 end
 function self:CHAT_MSG_LOOT()
-	GF_ProcessedFirstMessage["SYSTEM"] = nil
+	GF_ProcessedFirstMessage["SYSTEM"] = time()
 end
 function self:CHAT_MSG_MONEY()
-	GF_ProcessedFirstMessage["SYSTEM"] = nil
+	GF_ProcessedFirstMessage["SYSTEM"] = time()
 end
 function self:CHAT_MSG_MONSTER_EMOTE()
-	GF_ProcessedFirstMessage[arg2] = nil
+	GF_ProcessedFirstMessage[arg2] = time()
 end
 function self:CHAT_MSG_MONSTER_SAY()
-	GF_ProcessedFirstMessage[arg2] = nil
+	GF_ProcessedFirstMessage[arg2] = time()
 end
 function self:CHAT_MSG_MONSTER_YELL()
-	GF_ProcessedFirstMessage[arg2] = nil
+	GF_ProcessedFirstMessage[arg2] = time()
 end
 function self:CHAT_MSG_OFFICER()
-	GF_ProcessedFirstMessage[arg2] = nil
+	GF_ProcessedFirstMessage[arg2] = time()
 end
 function self:CHAT_MSG_PARTY()
-	GF_ProcessedFirstMessage[arg2] = nil
+	GF_ProcessedFirstMessage[arg2] = time()
 end
 function self:CHAT_MSG_RAID()
-	GF_ProcessedFirstMessage[arg2] = nil
+	GF_ProcessedFirstMessage[arg2] = time()
 end
 function self:CHAT_MSG_RAID_LEADER()
-	GF_ProcessedFirstMessage[arg2] = nil
+	GF_ProcessedFirstMessage[arg2] = time()
 end
 function self:CHAT_MSG_RAID_WARNING()
-	GF_ProcessedFirstMessage[arg2] = nil
+	GF_ProcessedFirstMessage[arg2] = time()
 end
 function self:CHAT_MSG_SAY()
-	GF_ProcessedFirstMessage[arg2] = nil
+	GF_ProcessedFirstMessage[arg2] = time()
 end
 function self:CHAT_MSG_SYSTEM()
-	GF_ProcessedFirstMessage["SYSTEM"] = nil
+	GF_ProcessedFirstMessage["SYSTEM"] = time()
 end
 function self:CHAT_MSG_TEXT_EMOTE()
-	GF_ProcessedFirstMessage[arg2] = nil
+	GF_ProcessedFirstMessage[arg2] = time()
 end
 function self:CHAT_MSG_WHISPER()
-	GF_ProcessedFirstMessage[arg2] = nil
+	GF_ProcessedFirstMessage[arg2] = time()
 end
 function self:CHAT_MSG_WHISPER_INFORM()
-	GF_ProcessedFirstMessage[arg2] = nil
+	GF_ProcessedFirstMessage[arg2] = time()
 end
 function self:CHAT_MSG_YELL()
-	GF_ProcessedFirstMessage[arg2] = nil
+	GF_ProcessedFirstMessage[arg2] = time()
 end
 
 function GF_ChatFunctions(event,arg1,arg2,arg8,arg9) -- Functions above reset the chat processing below. Don't have to worry about lag and timers this way.
@@ -2351,10 +2353,10 @@ function GF_GetTypes(arg1, showanyway) -- TODO: Need to do LFM/Quest sequence(lo
 
 	foundIgnore,foundGuild,foundGuildExclusion,foundLFM,foundLFMPreSuf,foundLFG,foundLFGPreSuf,foundTrades,foundTradesExclusion = 0,0,0,0,0,0,0,0,0
 	foundClass,foundDungeon,foundRaid,foundPvP,foundHC,foundNotHC,foundBlockList = nil,nil,nil,nil,nil,nil,nil
-	foundQuest = {} foundDFlags = {} foundPFlags = {} lfmlfgName = {} groupName = {}
+	foundQuest = {} foundDFlags = {} foundPFlags = {} lfmlfgName = {} groupName = {} groupPosition = {} lfmPosition = {}
 	languageName = "en"
 
-	arg1 = " "..gsub(gsub(strlower(gsub(gsub(gsub(gsub(arg1, "|[cC]%x+%p+(%w+)[%w:]+|+[hH]", " %1 >z"), "|[hr]", ""),"%.[gG][gG]/%S+", ""),"([a-z ][a-z])([A-Z])","%1 %2")),"[\"#\$\%&\*,\.@\\\^_`~|]"," "),"'","").." "
+	arg1 = " "..gsub(gsub(strlower(gsub(gsub(gsub(gsub(arg1, "|[cC]%x+%p+(%w+)[%w:]+|+[hH]", " %1 >z "), "|[hr]", ""),"%.[gG][gG]/%S+", ""),"([a-z ][a-z])([A-Z])","%1 %2")),"[\"#\$\%&\*,\.@\\\^_`~|]"," "),"'","").." "
 	local wordTable,wordTableTrade,wordTableGuild = {},{},{}
 	local wordString,lfs,lfe,tempVal,tempString
 	
@@ -2688,19 +2690,13 @@ function GF_GetTypes(arg1, showanyway) -- TODO: Need to do LFM/Quest sequence(lo
 					if GF_WORD_QUEST[wordString] then
 						lfs,lfe = 0,0
 						if GF_QUEST_TRIGGER[wordString] then
-							if GF_WORD_LEVEL_ZONE[wordTable[i-1]] then wordString = wordTable[i-1]..wordString lfs = 1 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i-1]] > foundQuest[1] or foundQuest[2] < j then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-1]] foundQuest[2] = j end
-							elseif GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] then wordString = wordString..wordTable[i+j+1] lfe = 1 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] > foundQuest[1] or foundQuest[2] < j then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] foundQuest[2] = j end
-							elseif wordTable[i-2] and (GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]]) then wordString = wordTable[i-2]..wordTable[i-1]..wordString lfs = 2 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]] > foundQuest[1] or foundQuest[2] < j then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]] foundQuest[2] = j end
-							elseif wordTable[i+j+2] and (GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]]) then wordString = wordString..wordTable[i+j+1]..wordTable[i+j+2] lfe = 2 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]] > foundQuest[1] or foundQuest[2] < j then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]] foundQuest[2] = j end end
+							if GF_WORD_LEVEL_ZONE[wordTable[i-1]] then wordString = wordTable[i-1]..wordString lfs = 1 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i-1]] > foundQuest[1] or foundQuest[2] < j then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-1]] foundQuest[2] = j groupPosition[i-1] = true end
+							elseif GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] then wordString = wordString..wordTable[i+j+1] lfe = 1 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] > foundQuest[1] or foundQuest[2] < j then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] foundQuest[2] = j groupPosition[i] = true end
+							elseif wordTable[i-2] and (GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]]) then wordString = wordTable[i-2]..wordTable[i-1]..wordString lfs = 2 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]] > foundQuest[1] or foundQuest[2] < j then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]] foundQuest[2] = j groupPosition[i-1] = true end
+							elseif wordTable[i+j+2] and (GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]]) then wordString = wordString..wordTable[i+j+1]..wordTable[i+j+2] lfe = 2 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]] > foundQuest[1] or foundQuest[2] < j then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]] foundQuest[2] = j groupPosition[i] = true end end
 						else
-							if not foundQuest[1] or GF_WORD_QUEST[wordString][2] > foundQuest[1] or foundQuest[2] < j then foundQuest[1] = GF_WORD_QUEST[wordString][2] foundQuest[2] = j end
+							if not foundQuest[1] or GF_WORD_QUEST[wordString][2] > foundQuest[1] or foundQuest[2] < j then foundQuest[1] = GF_WORD_QUEST[wordString][2] foundQuest[2] = j end groupPosition[i] = true
 						end
--- Found quest.. The current script looks to see if the word before or after is a zone.. then it shifts the lfm before/after by that and renames the string to 'Zone'..Quest/Elite/Escort/Etc
--- I was basically going to add connecting words... so like... If the group string was "can anyone help me I need a druid for deadmines"... I would take deadmines then go back until I don't find a connecting word, and use the last word
-
--- I could do this post-processing by save the position of quests/dungeons/raids/pvp and any lfm message
--- So if LFM in position 2 and a quest in position 5, then check 3/4/5... if something in each, add 1 lfm(or X amount for each)
-
 						if showanyway == true then print(wordString.." quest") end
 						foundTradesExclusion = foundTradesExclusion + .3 foundGuildExclusion = foundGuildExclusion + .1
 						if GF_LFM_BYPASS[wordString] then
@@ -2772,17 +2768,16 @@ function GF_GetTypes(arg1, showanyway) -- TODO: Need to do LFM/Quest sequence(lo
 	end
 	if tempVal <= 6 then -- Check 4/6-word Phrase
 		wordString = ""
-		lfe = ""
+		tempString = ""
 		lfs = nil
 		for i=1,tempVal do wordString = wordString..wordTable[i] end
-		for i=1,tempVal do lfe = lfe..wordTableTrade[i] if strbyte(wordTableTrade[i]) > 90 then lfs = true end end
-		if GF_WORD_TRADE_PHRASE[lfe] then foundTrades = 2 if showanyway == true then print("tradephrase trades 2") end end
+		for i=1,tempVal do tempString = tempString..wordTableTrade[i] if strbyte(wordTableTrade[i]) > 90 then lfs = true end end
+		if GF_WORD_TRADE_PHRASE[tempString] then foundTrades = 2 if showanyway == true then print("tradephrase trades 2") end end
 		if GF_WORD_GUILD_PHRASE[wordString] then foundGuild = 3 if showanyway == true then print("guildphrase guild 3") end end
 		if GF_GROUP_PHRASE[wordString] and foundLFM == 0 then foundLFM = 2 if showanyway == true then print("lfmphrase lfm 2") end end
 		if strsub(arg1,-2) == "? " then
 			if (GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString]) then foundLFG = 2 if showanyway == true then print("group? lfg 2") end
-			elseif GF_WORD_TRADE_QUESTION[lfe] then foundTrades = 2 if showanyway == true then print("trades? trades ") end
-			elseif GF_WORD_GUILD_QUESTION[wordString] then foundGuild = 3 if showanyway == true then print("guild? guild 3") end
+			elseif GF_WORD_TRADE_QUESTION[tempString] then foundTrades = 2 if showanyway == true then print("trades? trades ") end
 			elseif tempVal > 2 then
 				if tempVal <= 4 and GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]] then foundTrades = foundTrades + GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]] if showanyway == true then print("first two? trades "..GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]]) end
 				elseif not lfs then	foundTrades = foundTrades + 1.5 if showanyway == true then print("tradeonly? trades 1.5") end end
@@ -2794,22 +2789,25 @@ function GF_GetTypes(arg1, showanyway) -- TODO: Need to do LFM/Quest sequence(lo
 				end
 			end
 		elseif tempVal > 1 then
-			if tempVal <= 4 and GF_LFM_AFTER[wordTable[tempVal-1]..wordTable[tempVal]] then foundLFM = 2 if showanyway == true then print("word lfmafter lfm 2") end
-			elseif tempVal <= 4 and GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]] then foundTrades = foundTrades + GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]] if showanyway == true then print("first two trades "..GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]]) end
-			elseif not lfs then	foundTrades = foundTrades + 1.25 if showanyway == true then print("tradeonly trades 1.25") end end
-			
+			if tempVal <= 4 then
+				if GF_LFM_AFTER[wordTable[tempVal-1]..wordTable[tempVal]] then foundLFM = 2 if showanyway == true then print("word lfmafter lfm 2") end end
+				if GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]] then foundTrades = foundTrades + GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]] if showanyway == true then print("first two trades "..GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]]) end end
+				if GF_GROUP_FIRST_TWO[wordTable[1]..wordTable[2]] then if GF_GROUP_FIRST_TWO[wordTable[1]..wordTable[2]] > foundLFM then foundLFM = GF_GROUP_FIRST_TWO[wordTable[1]..wordTable[2]] if showanyway == true then print(wordTable[1]..wordTable[2].." lfm "..GF_GROUP_FIRST_TWO[wordTable[1]..wordTable[2]]) end end end
+			end
+			if not lfs then	foundTrades = foundTrades + 1.25 if showanyway == true then print("tradeonly trades 1.25") end end
 			if GF_GUILD_FIRST_TWO[wordTable[1]..wordTable[2]] then foundGuild = 1 if showanyway == true then print("guild_first_two guild 3") end
 			elseif GF_GUILD_LAST_TWO[wordTable[tempVal-1]..wordTable[tempVal]] then foundGuild = 1 if showanyway == true then print("guild_last_two guild 3") end end
-
-			if tempVal <= 4 and GF_GROUP_FIRST_TWO[wordTable[1]..wordTable[2]] then if GF_GROUP_FIRST_TWO[wordTable[1]..wordTable[2]] > foundLFM then foundLFM = GF_GROUP_FIRST_TWO[wordTable[1]..wordTable[2]] if showanyway == true then print(wordTable[1]..wordTable[2].." lfm "..GF_GROUP_FIRST_TWO[wordTable[1]..wordTable[2]]) end end end
 		end
-		lfe = ""
 		lfs = nil
-		for i=1,tempVal do lfe = lfe..wordTableGuild[i] if strbyte(wordTableGuild[i]) > 90 then lfs = true end end
-		if tempVal <= 4 and GF_TRADE_FIRST_LAST[wordTableTrade[1]] and GF_TRADE_FIRST_LAST[wordTableTrade[1]][wordTableTrade[tempVal]] then foundTrades = foundTrades + 3 if showanyway == true then print("firstlast trades 3") end
-		elseif tempVal <= 4 and foundLFM == 0 and GF_GROUP_FIRST_LAST[wordTable[1]] and GF_GROUP_FIRST_LAST[wordTable[1]][wordTable[tempVal]] then foundLFM = 2 if showanyway == true then print("firstlast lfm 2") end
-		elseif tempVal <= 4 and GF_GUILD_FIRST_LAST[wordTableGuild[1]] and GF_GUILD_FIRST_LAST[wordTableGuild[1]][wordTableGuild[tempVal]] then foundGuild = foundGuild + 3 if showanyway == true then print("firstlast guild 3") end
-		elseif not lfs and tempVal > 2 then foundGuild = foundGuild + 1.25 if showanyway == true then print("guildonly guild 1.25") end end
+		tempString = ""
+		for i=1,tempVal do tempString = tempString..wordTableGuild[i] if strbyte(wordTableGuild[i]) > 90 then lfs = true end end
+		if GF_WORD_GUILD_QUESTION[tempString] and strsub(arg1,-2) == "? " then foundGuild = 3 if showanyway == true then print("guild? guild 3") end end
+		if tempVal <= 4 then
+			if GF_TRADE_FIRST_LAST[wordTableTrade[1]] and GF_TRADE_FIRST_LAST[wordTableTrade[1]][wordTableTrade[tempVal]] then foundTrades = foundTrades + 3 if showanyway == true then print("firstlast trades 3") end end
+			if foundLFM == 0 and GF_GROUP_FIRST_LAST[wordTable[1]] and GF_GROUP_FIRST_LAST[wordTable[1]][wordTable[tempVal]] then foundLFM = 2 if showanyway == true then print("firstlast lfm 2") end end
+			if GF_GUILD_FIRST_LAST[wordTableGuild[1]] and GF_GUILD_FIRST_LAST[wordTableGuild[1]][wordTableGuild[tempVal]] then foundGuild = foundGuild + 3 if showanyway == true then print("firstlast guild 3") end end
+		end
+		if not lfs and tempVal > 2 then foundGuild = foundGuild + 1.25 if showanyway == true then print("guildonly guild 1.25") end end
 	end
 	for j=0,3 do -- Score the wordTable
 		for i=1, tempVal do
@@ -2822,13 +2820,8 @@ function GF_GetTypes(arg1, showanyway) -- TODO: Need to do LFM/Quest sequence(lo
 				elseif GF_WORD_NOT_HC[wordString] then foundNotHC = true
 				elseif GF_GUILD_WORD_EXCLUSION[wordString] then foundGuildExclusion = foundGuildExclusion + GF_GUILD_WORD_EXCLUSION[wordString] if showanyway == true then print(wordString.." guildex") end end
 				if GF_TRADE_WORD_EXCLUSION[wordString] then foundTradesExclusion = foundTradesExclusion + GF_TRADE_WORD_EXCLUSION[wordString] if showanyway == true then print(wordString.." tradesex") end end
-
--- Currently, when it finds "anyone" or "anyonein" it looks to see if a zone is next to it. That way I don't have to create 50 entries for each
--- A lot of my LFM/LFG entries are probably unnecessary. I created many of them before I added the before/after routine(among other things). But it's really impossible to know what I can get rid of.
--- The problem is, if I try to create dynamic names, other things might not work properly, or would require multiple runs through... I'd be better off just making a spreadsheet page with a template to copy/paste
-
 				if GF_WORD_LFM[wordString] and (not GF_LFM_TRIGGER[wordString] or GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] or GF_GROUP_IDS[wordTable[i+j+1]]) then
-					if GF_WORD_LFM[wordString] > foundLFM then foundLFM = GF_WORD_LFM[wordString] table.insert(lfmlfgName, wordString) if showanyway == true then print(wordString.." lfm "..GF_WORD_LFM[wordString]) end end
+					if GF_WORD_LFM[wordString] > foundLFM then foundLFM = GF_WORD_LFM[wordString] table.insert(lfmlfgName, wordString) if showanyway == true then print(wordString.." lfm "..GF_WORD_LFM[wordString]) end end lfmPosition[i+j] = true
 					if not foundQuest[1] then if GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] elseif GF_WORD_LEVEL_ZONE[wordTable[i-1]] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-1]] end end
 					if GF_WORD_IGNORE_AFTER[wordTable[i+j+1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_AFTER[wordTable[i+j+1]] if showanyway == true then print(wordTable[i+j+1].." ignore "..GF_WORD_IGNORE_AFTER[wordTable[i+j+1]]) end end
 					if GF_QUEST_ONLY_AFTER_LFM[wordTable[i+j+1]] then if not foundQuest[1] or GF_QUEST_ONLY_AFTER_LFM[wordTable[i+j+1]] > foundQuest[1] then foundQuest[1] = GF_QUEST_ONLY_AFTER_LFM[wordTable[i+j+1]] if showanyway == true then print(wordTable[i+j+1].." only after lfm") end end end
@@ -2839,7 +2832,8 @@ function GF_GetTypes(arg1, showanyway) -- TODO: Need to do LFM/Quest sequence(lo
 					end
 					if wordTable[i-2] and GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]] if showanyway == true then print(wordTable[i-2]..wordTable[i-1].." ignore "..GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]]) end end
 					if wordTable[i-3] and GF_WORD_IGNORE_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] if showanyway == true then print(wordTable[i-3]..wordTable[i-2]..wordTable[i-1].." ignore "..GF_WORD_IGNORE_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]]) end end
-				elseif GF_WORD_LFG[wordString] then if GF_WORD_LFG[wordString] > foundLFG then foundLFG = GF_WORD_LFG[wordString] table.insert(lfmlfgName, wordString) if showanyway == true then print(wordString.." lfg "..GF_WORD_LFG[wordString]) end end
+				elseif GF_WORD_LFG[wordString] then
+					if GF_WORD_LFG[wordString] > foundLFG then foundLFG = GF_WORD_LFG[wordString] table.insert(lfmlfgName, wordString) if showanyway == true then print(wordString.." lfg "..GF_WORD_LFG[wordString]) end end lfmPosition[i+j] = true
 					if not foundQuest[1] then if GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] elseif GF_WORD_LEVEL_ZONE[wordTable[i-1]] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-1]] end end
 					if GF_WORD_IGNORE_AFTER[wordTable[i+j+1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_AFTER[wordTable[i+j+1]] if showanyway == true then print(wordTable[i+j+1].." ignore "..GF_WORD_IGNORE_AFTER[wordTable[i+j+1]]) end end
 					if GF_WORD_IGNORE_BEFORE[wordTable[i-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_BEFORE[wordTable[i-1]] if showanyway == true then print(wordTable[i-1].." ignore "..GF_WORD_IGNORE_BEFORE[wordTable[i-1]]) end end
@@ -2847,29 +2841,23 @@ function GF_GetTypes(arg1, showanyway) -- TODO: Need to do LFM/Quest sequence(lo
 					if wordTable[i-2] and GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]] if showanyway == true then print(wordTable[i-2]..wordTable[i-1].." ignore "..GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]]) end end
 					if wordTable[i-3] and GF_WORD_IGNORE_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] if showanyway == true then print(wordTable[i-3]..wordTable[i-2]..wordTable[i-1].." ignore "..GF_WORD_IGNORE_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]]) end end
 				end
-				if GF_WORD_CLASSES[wordString] then foundClass = GF_WORD_CLASSES[wordString] table.insert(groupName,wordString)
+				if GF_WORD_CLASSES[wordString] then foundClass = GF_WORD_CLASSES[wordString] table.insert(groupName,wordString) groupPosition[i] = true
 				elseif GF_WORD_DUNGEON[wordString] then
 					if showanyway == true then print(wordString.." dungeon") end
-					if not foundRaid and (not foundDungeon or GF_WORD_DUNGEON[wordString] > foundDungeon) then foundDungeon = GF_WORD_DUNGEON[wordString] table.insert(foundDFlags,1,wordString)
+					if not foundRaid and (not foundDungeon or GF_WORD_DUNGEON[wordString] > foundDungeon) then foundDungeon = GF_WORD_DUNGEON[wordString] table.insert(foundDFlags,1,wordString) groupPosition[i] = true
 					else table.insert(foundDFlags,wordString) end foundTradesExclusion = foundTradesExclusion + .3 foundGuildExclusion = foundGuildExclusion + .1
 				elseif GF_WORD_RAID[wordString] then
 					if showanyway == true then print(wordString.." raid") end
-					if not foundRaid or GF_WORD_RAID[wordString] > foundRaid then foundRaid = GF_WORD_RAID[wordString] table.insert(foundDFlags,1,wordString) else table.insert(foundDFlags,wordString) end
+					if not foundRaid or GF_WORD_RAID[wordString] > foundRaid then foundRaid = GF_WORD_RAID[wordString] table.insert(foundDFlags,1,wordString) else table.insert(foundDFlags,wordString) end groupPosition[i] = true
 					foundTradesExclusion = foundTradesExclusion + .3 foundGuildExclusion = foundGuildExclusion + .1
 					if GF_RAID_BEFORE[wordTable[i-1]] and (GF_RAID_BEFORE[wordTable[i-1]][wordTable[i+j+1]] or (wordTable[i+j+2] and GF_RAID_BEFORE[wordTable[i-1]][wordTable[i+j+1]..wordTable[i+j+2]])) then foundGuildExclusion = foundGuildExclusion + 1 if foundLFM < 3 then foundLFM = 3 if showanyway == true then print("1 word before/1-2 words after raid") end end end
 					if GF_RAID_AFTER[wordTable[i+j+1]] or (wordTable[i+j+2] and GF_RAID_AFTER[wordTable[i+j+1]..wordTable[i+j+2]]) or (wordTable[i+j+3] and GF_RAID_AFTER[wordTable[i+j+1]..wordTable[i+j+2]..wordTable[i+j+3]]) then foundGuildExclusion = foundGuildExclusion + 1 if foundLFM < 3 then foundLFM = 3 if showanyway == true then print("1-3 words after raid") end end end
 				elseif GF_WORD_PVP[wordString] then
 					if showanyway == true then print(wordString.." pvp") end
-					if not foundPvP or GF_WORD_PVP[wordString] > foundPvP then foundPvP = GF_WORD_PVP[wordString] table.insert(foundPFlags,1,wordString) else table.insert(foundPFlags, wordString) end
+					if not foundPvP or GF_WORD_PVP[wordString] > foundPvP then foundPvP = GF_WORD_PVP[wordString] table.insert(foundPFlags,1,wordString) else table.insert(foundPFlags, wordString) end groupPosition[i] = true
 					if foundPvP == 0 then for num in string.gfind(arg1, "(%d+)[%s%plevl]?") do if tonumber(num) > foundPvP and tonumber(num) > 8 and tonumber(num) < 61 then foundPvP = tonumber(num) end end end
 					table.insert(groupName,wordString) foundTradesExclusion = foundTradesExclusion + .3 foundGuildExclusion = foundGuildExclusion + .1
 				end
--- Look for generic words before connecting words
--- A lot of my phrases uses connecting words... I think what I was looking for is druid/level/pro/big, and other adjectives
--- Also words like few, several, many, lots, and other describing words
--- Conjunctions like and/or, for, 10x, 
--- dps/tank/heal/etc(need dps + tank)
--- need tank and healer for dragonmaw retreat
 				if not GF_LFM_BYPASS[wordString] and (GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString] or GF_WORD_LEVEL_ZONE[wordString]) then
 					if not GF_WORD_LEVEL_ZONE[wordString] then
 						if GF_LFM_AFTER[wordTable[i+j+1]] or GF_LFM_BEFORE[wordTable[i-1]] or GF_WORD_LFM[wordTable[i+j+1]] or GF_WORD_LFM[wordTable[i-1]]
