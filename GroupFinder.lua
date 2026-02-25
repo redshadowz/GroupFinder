@@ -483,7 +483,7 @@ function GF_SetStringSize()
 	GF_UIScaleSliderLabel:SetText("")
 end
 function GF_FormatBlockListWords(arg1,display)
-	arg1 = " "..strlower(gsub(gsub(gsub(gsub(strlower(gsub(gsub(gsub(arg1, "|[cC]%x+%p+(%w+)[%w:]+|+[hH]", " %1 >z"), "|[hr]", ""),"([a-z ][a-z])([A-Z])","%1 %2")),".gg/%w+", ""),"[\"#\$\%&\*,\.@\\\^_`~|]"," "),"'",""),"[%d%p%s]","")).." "
+	arg1 = " "..gsub(gsub(strlower(gsub(gsub(gsub(arg1, "|[%x%p]+(H%a+).-|h%[%[?%[?(.-)%]?%]?%]|h|r","%1 >z[%2]"),"%.[gG][gG]/%S+", ""),"([a-z ][a-z])([A-Z])","%1 %2")),"[\"#\$\%&\*,\.@\\\^_`~|]"," "),"'","").." "
 	local wordTable = {}
 	local wordString,lfs,lfe,tempVal,tempString
 	
@@ -2355,7 +2355,8 @@ function GF_GetTypes(arg1, showanyway)
 	foundQuest = {} foundDFlags = {} foundPFlags = {} lfmlfgName = {} groupName = {} lfmPosition = {}
 	languageName = "en"
 
-	arg1 = " "..gsub(gsub(strlower(gsub(gsub(gsub(gsub(arg1, "|[cC]%x+%p+(%w+)[%w:]+|+[hH]", " %1 >z "), "|[hr]", ""),"%.[gG][gG]/%S+", ""),"([a-z ][a-z])([A-Z])","%1 %2")),"[\"#\$\%&\*,\.@\\\^_`~|]"," "),"'","").." "
+	arg1 = " "..gsub(gsub(strlower(gsub(gsub(gsub(arg1, "|[%x%p]+(H%a+).-|h%[%[?%[?(.-)%]?%]?%]|h|r","%1 >z[%2]"),"%.[gG][gG]/%S+", ""),"([a-z ][a-z])([A-Z])","%1 %2")),"[\"#\$\%&\*,\.@\\\^_`~|]"," "),"'","").." "
+
 	local wordTable,wordTableTrade,wordTableGuild = {},{},{}
 	local wordString,lfs,lfe,tempVal,tempString
 	
@@ -2525,7 +2526,6 @@ function GF_GetTypes(arg1, showanyway)
 					tempString = strsub(arg1,1,lfs)
 					if strfind(tempString, "[%p%s]%d+%s?x%s+hitem Z%[$") then foundTrades = foundTrades + 1 if showanyway == true then print("##x [ trade 1") end end -- Trades " 2x ["
 					if strfind(tempString, "[%p%s]x%s?%d+%s+hitem Z%[$") then foundTrades = foundTrades + 1 if showanyway == true then print("x## [ trade 1") end end -- Trades " x2 ["
-
 					_,_,tempString = strfind(tempString, "[%p%s](%a+)%s?%s?x?%d?%d?x?%p?%s+hitem Z%[$") -- One word before
 					if GF_WORD_FIX[tempString] then tempString = GF_WORD_FIX[tempString] end
 					if GF_TRADE_PREFIX_SUFFIX[tempString] then
@@ -2535,7 +2535,7 @@ function GF_GetTypes(arg1, showanyway)
 						if GF_WORD_FIX[tempString] then tempString = GF_WORD_FIX[tempString] end
 						if GF_TRADE_PREFIX_SUFFIX[tempString] then
 							foundTrades = foundTrades + 2.5
-							if showanyway == true then print(tempString.." trade ]<word> 2.5") end
+							if showanyway == true then print(tempString.." trade <word>[]<word> 2.5") end
 						end
 					end
 					if strlen(wordString) < 45 then for words in string.gfind(wordString, "(%a+)") do if GF_WORD_FIX_ITEM_NAME[words] then arg1 = strsub(arg1,1,lfs)..GF_WORD_FIX_ITEM_NAME[words]..strsub(arg1,lfe) break end end end
@@ -4510,19 +4510,6 @@ function GetModifiedQuestName(entryname)
 			else
 				lfs = lfe
 			end
-		else
-			break
-		end
-	end
-	lfs = 2 -- To detect words between and next to "[] or ()" (eg "(human only)", "[item] for free").
-	while true do lfs,lfe,wordString = strfind(arg1, "[<%(%[](.-)[%)%]>]",lfs)
-		if wordString then
-			if strbyte(arg1,lfs) == 91 and strbyte(arg1,lfe) == 93 then -- "[]"
-				if strbyte(arg1,lfs-1) == 90 then -- From Link
-					for words in string.gfind(wordString, "(%a+)") do if GF_WORD_FIX_ITEM_NAME[words] then arg1 = strsub(arg1,1,lfs)..GF_WORD_FIX_ITEM_NAME[words]..strsub(arg1,lfe) break end end
-				end
-			end
-			lfs = lfs + 1
 		else
 			break
 		end
