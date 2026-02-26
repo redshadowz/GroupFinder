@@ -2889,32 +2889,36 @@ function GF_GetTypes(arg1, showanyway)
 			end
 		end
 	end
-	lfe = foundLFM -- Connect LFM words
-	for i=1, getn(lfmPosition) do
-		lfs = 0
-		for k=lfmPosition[i]+1, tempVal do
-			if k == groupPosition and groupPosition > lfmPosition[i]+1 then lfs = lfs + 1 break end
-			if wordTable[k] then
-				if GF_LFM_CONNECT_WORDS[wordTable[k]] then -- Also connect prewords and add to foundLFMPreSuf if made it all the way to groupname
-					lfs = lfs + GF_LFM_CONNECT_WORDS[wordTable[k]]
-				else
-					break
+
+	if foundLFM > foundLFG then
+		lfe = foundLFM -- Connect LFM words
+		for i=1, getn(lfmPosition) do
+			lfs = 0
+			for k=lfmPosition[i]+1, tempVal do
+				if k == groupPosition and groupPosition > lfmPosition[i]+1 then if foundLFMPreSuf == 0 then lfs = lfs + 1 end break end
+				if wordTable[k] then
+					if GF_LFM_CONNECT_WORDS[wordTable[k]] then
+						lfs = lfs + GF_LFM_CONNECT_WORDS[wordTable[k]]
+					else
+						break
+					end
 				end
 			end
-		end
-		for k=lfmPosition[i]-1, 1, -1 do
-			if wordTable[k] then
-				if GF_LFM_CONNECT_WORDS[wordTable[k]] then -- Also connect prewords and add to foundLFMPreSuf if made it all the way to groupname
-					lfs = lfs + GF_LFM_CONNECT_WORDS[wordTable[k]]
-				else
-					break
+			for k=lfmPosition[i]-1, 1, -1 do
+				if wordTable[k] then
+					if GF_LFM_CONNECT_WORDS[wordTable[k]] then
+						lfs = lfs + GF_LFM_CONNECT_WORDS[wordTable[k]]
+					else
+						break
+					end
 				end
 			end
+			if lfs + foundLFM > lfe then lfe = foundLFM + lfs end
 		end
-		if lfs + foundLFM > lfe then lfe = foundLFM + lfs end
+		--if showanyway == true then print("<words> guild 2 .. tradesex 1") end
+-- Problem is, 
+		foundLFM = lfe
 	end
-	foundLFM = lfe
-	--if groupPosition and foundLFM > 0 then print(lfe) print(arg1) end
 
 	if getn(lfmlfgName) == 1 and groupName[1] and ((not foundQuest[1] and not foundDungeon and not foundRaid) or GF_LFM_BYPASS[groupName[1]]) then lfs = 0 for i=1,getn(groupName) do if strfind(lfmlfgName[1],groupName[i]) then lfs = lfs + 1 end end if lfs == getn(groupName) then foundLFM = 0 foundLFG = 0 end end
 
