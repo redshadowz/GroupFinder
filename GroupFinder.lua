@@ -98,7 +98,7 @@ local ThingsToHide = { "GF_MainFrameCloseButton","GF_GroupChatOptionsFrame","GF_
 local GF_DifficultyColors = { ["RED"] = "ff0000",["ORANGE"] = "ff8040",["YELLOW"] = "ffff00",["GREEN"] = "1eff00",["GREY"] = "808080", }
 local GF_TankClasses						= {	["DRUID"]=true,["WARRIOR"]=true,["PALADIN"]=true,["SHAMAN"]=true }
 local GF_HealingClasses						= {	["PRIEST"]=true,["DRUID"]=true,["PALADIN"]=true,["SHAMAN"]=true }
-local languageName,foundIgnore,foundGuild,foundGuildExclusion,foundLFM,foundLFMPreSuf,foundLFG,foundLFGPreSuf,foundClass,foundDungeon,foundRaid,foundTrades,foundTradesExclusion,foundPvP,foundHC,foundNotHC,foundBlockList
+local languageName,foundIgnore,foundGuild,foundGuildExclusion,foundLFM,foundLFMPreSuf,foundLFG,foundLFGPreSuf,foundClass,foundDungeon,foundRaid,foundTrades,foundTradesExclusion,foundPvP,foundHC,foundNotHC,foundBlockList,groupPosition
 local lfmlfgName = {}
 local groupName = {}
 local foundQuest = {}
@@ -2071,12 +2071,12 @@ function GF_ChatFunctions(event,arg1,arg2,arg8,arg9) -- Functions above reset th
 end
 
 function GF_CHAT_MSG_BATTLEGROUND()
-	if not GF_WhoTable[GF_RealmName][arg2] then GF_UpdatePlayersInGroupList() end
+	if not GF_WhoTable[GF_RealmName][arg2] then GF_UpdateGroup() end
 	GF_AddLogMessage(arg1,4,true,arg2,arg8,arg9,strsub(event,10))
 	GF_PreviousMessage[arg2] = {true}
 end
 function GF_CHAT_MSG_BATTLEGROUND_LEADER()
-	if not GF_WhoTable[GF_RealmName][arg2] then GF_UpdatePlayersInGroupList() end
+	if not GF_WhoTable[GF_RealmName][arg2] then GF_UpdateGroup() end
 	GF_AddLogMessage(arg1,4,true,arg2,arg8,arg9,strsub(event,10))
 	GF_PreviousMessage[arg2] = {true}
 end
@@ -2130,22 +2130,22 @@ function GF_CHAT_MSG_OFFICER()
 	GF_PreviousMessage[arg2] = {true}
 end
 function GF_CHAT_MSG_PARTY()
-	if not GF_WhoTable[GF_RealmName][arg2] then GF_UpdatePlayersInGroupList() end
+	if not GF_WhoTable[GF_RealmName][arg2] then GF_UpdateGroup() end
 	GF_AddLogMessage(arg1,4,true,arg2,arg8,arg9,strsub(event,10))
 	GF_PreviousMessage[arg2] = {true}
 end
 function GF_CHAT_MSG_RAID()
-	if not GF_WhoTable[GF_RealmName][arg2] then GF_UpdatePlayersInGroupList() end
+	if not GF_WhoTable[GF_RealmName][arg2] then GF_UpdateGroup() end
 	GF_AddLogMessage(arg1,4,true,arg2,arg8,arg9,strsub(event,10))
 	GF_PreviousMessage[arg2] = {true}
 end
 function GF_CHAT_MSG_RAID_LEADER()
-	if not GF_WhoTable[GF_RealmName][arg2] then GF_UpdatePlayersInGroupList() end
+	if not GF_WhoTable[GF_RealmName][arg2] then GF_UpdateGroup() end
 	GF_AddLogMessage(arg1,4,true,arg2,arg8,arg9,strsub(event,10))
 	GF_PreviousMessage[arg2] = {true}
 end
 function GF_CHAT_MSG_RAID_WARNING()
-	if not GF_WhoTable[GF_RealmName][arg2] then GF_UpdatePlayersInGroupList() end
+	if not GF_WhoTable[GF_RealmName][arg2] then GF_UpdateGroup() end
 	GF_AddLogMessage(arg1,4,true,arg2,arg8,arg9,strsub(event,10))
 	GF_PreviousMessage[arg2] = {true}
 end
@@ -2344,7 +2344,7 @@ function GF_GetTypes(arg1, showanyway)
 	if showanyway == true then print(arg1) end
 
 	foundIgnore,foundGuild,foundGuildExclusion,foundLFM,foundLFMPreSuf,foundLFG,foundLFGPreSuf,foundTrades,foundTradesExclusion = 0,0,0,0,0,0,0,0,0
-	foundClass,foundDungeon,foundRaid,foundPvP,foundHC,foundNotHC,foundBlockList = nil,nil,nil,nil,nil,nil,nil
+	foundClass,foundDungeon,foundRaid,foundPvP,foundHC,foundNotHC,foundBlockList,groupPosition = nil,nil,nil,nil,nil,nil,nil,nil
 	foundQuest = {} foundDFlags = {} foundPFlags = {} lfmlfgName = {} groupName = {} lfmPosition = {}
 	languageName = "en"
 
@@ -2682,12 +2682,12 @@ function GF_GetTypes(arg1, showanyway)
 					if GF_WORD_QUEST[wordString] then
 						lfs,lfe = 0,0
 						if GF_QUEST_TRIGGER[wordString] then
-							if GF_WORD_LEVEL_ZONE[wordTable[i-1]] then wordString = wordTable[i-1]..wordString lfs = 1 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i-1]] > foundQuest[1] or foundQuest[2] < j then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-1]] foundQuest[2] = j end
-							elseif GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] then wordString = wordString..wordTable[i+j+1] lfe = 1 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] > foundQuest[1] or foundQuest[2] < j then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] foundQuest[2] = j end
-							elseif wordTable[i-2] and (GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]]) then wordString = wordTable[i-2]..wordTable[i-1]..wordString lfs = 2 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]] > foundQuest[1] or foundQuest[2] < j then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]] foundQuest[2] = j end
-							elseif wordTable[i+j+2] and (GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]]) then wordString = wordString..wordTable[i+j+1]..wordTable[i+j+2] lfe = 2 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]] > foundQuest[1] or foundQuest[2] < j then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]] foundQuest[2] = j end end
+							if GF_WORD_LEVEL_ZONE[wordTable[i-1]] then wordString = wordTable[i-1]..wordString lfs = 1 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i-1]] > foundQuest[1] or foundQuest[2] < j then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-1]] foundQuest[2] = j groupPosition = i-1 end
+							elseif GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] then wordString = wordString..wordTable[i+j+1] lfe = 1 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] > foundQuest[1] or foundQuest[2] < j then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] foundQuest[2] = j groupPosition = i end
+							elseif wordTable[i-2] and (GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]]) then wordString = wordTable[i-2]..wordTable[i-1]..wordString lfs = 2 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]] > foundQuest[1] or foundQuest[2] < j then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]] foundQuest[2] = j groupPosition = i-1 end
+							elseif wordTable[i+j+2] and (GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]]) then wordString = wordString..wordTable[i+j+1]..wordTable[i+j+2] lfe = 2 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]] > foundQuest[1] or foundQuest[2] < j then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]] foundQuest[2] = j groupPosition = i end end
 						else
-							if not foundQuest[1] or GF_WORD_QUEST[wordString][2] > foundQuest[1] or foundQuest[2] < j then foundQuest[1] = GF_WORD_QUEST[wordString][2] foundQuest[2] = j end
+							if not foundQuest[1] or GF_WORD_QUEST[wordString][2] > foundQuest[1] or foundQuest[2] < j then foundQuest[1] = GF_WORD_QUEST[wordString][2] foundQuest[2] = j groupPosition = i end
 						end
 						if showanyway == true then print(wordString.." quest") end
 						foundTradesExclusion = foundTradesExclusion + .3 foundGuildExclusion = foundGuildExclusion + .1
@@ -2836,17 +2836,17 @@ function GF_GetTypes(arg1, showanyway)
 				if GF_WORD_CLASSES[wordString] then foundClass = GF_WORD_CLASSES[wordString] table.insert(groupName,wordString)
 				elseif GF_WORD_DUNGEON[wordString] then
 					if showanyway == true then print(wordString.." dungeon") end
-					if not foundRaid and (not foundDungeon or GF_WORD_DUNGEON[wordString] > foundDungeon) then foundDungeon = GF_WORD_DUNGEON[wordString] table.insert(foundDFlags,1,wordString)
+					if not foundRaid and (not foundDungeon or GF_WORD_DUNGEON[wordString] > foundDungeon) then foundDungeon = GF_WORD_DUNGEON[wordString] table.insert(foundDFlags,1,wordString) groupPosition = i
 					else table.insert(foundDFlags,wordString) end foundTradesExclusion = foundTradesExclusion + .3 foundGuildExclusion = foundGuildExclusion + .1
 				elseif GF_WORD_RAID[wordString] then
 					if showanyway == true then print(wordString.." raid") end
-					if not foundRaid or GF_WORD_RAID[wordString] > foundRaid then foundRaid = GF_WORD_RAID[wordString] table.insert(foundDFlags,1,wordString) else table.insert(foundDFlags,wordString) end
+					if not foundRaid or GF_WORD_RAID[wordString] > foundRaid then foundRaid = GF_WORD_RAID[wordString] table.insert(foundDFlags,1,wordString) else table.insert(foundDFlags,wordString) end groupPosition = i
 					foundTradesExclusion = foundTradesExclusion + .3 foundGuildExclusion = foundGuildExclusion + .1
 					if GF_RAID_BEFORE[wordTable[i-1]] and (GF_RAID_BEFORE[wordTable[i-1]][wordTable[i+j+1]] or (wordTable[i+j+2] and GF_RAID_BEFORE[wordTable[i-1]][wordTable[i+j+1]..wordTable[i+j+2]])) then foundGuildExclusion = foundGuildExclusion + 1 if foundLFM < 3 then foundLFM = 3 if showanyway == true then print("1 word before/1-2 words after raid") end end end
 					if GF_RAID_AFTER[wordTable[i+j+1]] or (wordTable[i+j+2] and GF_RAID_AFTER[wordTable[i+j+1]..wordTable[i+j+2]]) or (wordTable[i+j+3] and GF_RAID_AFTER[wordTable[i+j+1]..wordTable[i+j+2]..wordTable[i+j+3]]) then foundGuildExclusion = foundGuildExclusion + 1 if foundLFM < 3 then foundLFM = 3 if showanyway == true then print("1-3 words after raid") end end end
 				elseif GF_WORD_PVP[wordString] then
 					if showanyway == true then print(wordString.." pvp") end
-					if not foundPvP or GF_WORD_PVP[wordString] > foundPvP then foundPvP = GF_WORD_PVP[wordString] table.insert(foundPFlags,1,wordString) else table.insert(foundPFlags, wordString) end
+					if not foundPvP or GF_WORD_PVP[wordString] > foundPvP then foundPvP = GF_WORD_PVP[wordString] table.insert(foundPFlags,1,wordString) else table.insert(foundPFlags, wordString) end if not groupPosition then groupPosition = i end
 					if foundPvP == 0 then for num in string.gfind(arg1, "(%d+)[%s%plevl]?") do if tonumber(num) > foundPvP and tonumber(num) > 8 and tonumber(num) < 61 then foundPvP = tonumber(num) end end end
 					table.insert(groupName,wordString) foundTradesExclusion = foundTradesExclusion + .3 foundGuildExclusion = foundGuildExclusion + .1
 				end
@@ -2893,8 +2893,18 @@ function GF_GetTypes(arg1, showanyway)
 	for i=1, getn(lfmPosition) do
 		lfs = 0
 		for k=lfmPosition[i]+1, tempVal do
+			if k == groupPosition and groupPosition > lfmPosition[i]+1 then lfs = lfs + 1 break end
 			if wordTable[k] then
-				if GF_LFM_CONNECT_WORDS[wordTable[k]] then
+				if GF_LFM_CONNECT_WORDS[wordTable[k]] then -- Also connect prewords and add to foundLFMPreSuf if made it all the way to groupname
+					lfs = lfs + GF_LFM_CONNECT_WORDS[wordTable[k]]
+				else
+					break
+				end
+			end
+		end
+		for k=lfmPosition[i]-1, 1, -1 do
+			if wordTable[k] then
+				if GF_LFM_CONNECT_WORDS[wordTable[k]] then -- Also connect prewords and add to foundLFMPreSuf if made it all the way to groupname
 					lfs = lfs + GF_LFM_CONNECT_WORDS[wordTable[k]]
 				else
 					break
@@ -2904,6 +2914,7 @@ function GF_GetTypes(arg1, showanyway)
 		if lfs + foundLFM > lfe then lfe = foundLFM + lfs end
 	end
 	foundLFM = lfe
+	--if groupPosition and foundLFM > 0 then print(lfe) print(arg1) end
 
 	if getn(lfmlfgName) == 1 and groupName[1] and ((not foundQuest[1] and not foundDungeon and not foundRaid) or GF_LFM_BYPASS[groupName[1]]) then lfs = 0 for i=1,getn(groupName) do if strfind(lfmlfgName[1],groupName[i]) then lfs = lfs + 1 end end if lfs == getn(groupName) then foundLFM = 0 foundLFG = 0 end end
 
