@@ -2888,7 +2888,7 @@ function GF_GetTypes(arg1, showanyway)
 		for i=1, getn(lfmPosition) do
 			lfs = lfmPosition[i][3]
 			for k=lfmPosition[i][2]+1, tempVal do
-				if k == groupPosition then lfs = lfs + 1 if foundLFMPreSuf > 1 then foundLFMPreSuf = 3 else foundTradesExclusion = foundTradesExclusion + 1.5 end break end
+				if k == groupPosition then lfs = lfs + 1 if foundLFMPreSuf > 1 then foundLFMPreSuf = 3 foundTradesExclusion = foundTradesExclusion + .5 else foundTradesExclusion = foundTradesExclusion + 1.5 end break end
 				if wordTable[k] then
 					if GF_LFM_CONNECT_WORDS[wordTable[k]] then
 						lfs = lfs + GF_LFM_CONNECT_WORDS[wordTable[k]]
