@@ -2529,7 +2529,7 @@ function GF_GetTypes(arg1, showanyway)
 					end
 					tempString = ""
 					if strlen(wordString) < 45 then
-						for word in string.gfind(wordString, "(%a+)") do if GF_WORD_FIX_ITEM_NAME[word] then tempString = word if GF_WORD_FIX_ITEM_NAME[word] ~= "I" then break end end end
+						for word in string.gfind(wordString, "(%a+)") do if GF_WORD_FIX_ITEM_NAME[word] then tempString = word if GF_WORD_FIX_ITEM_NAME[word] == "enchant" then break end end end
 						if tempString ~= "" then arg1 = strsub(arg1,1,lfs)..GF_WORD_FIX_ITEM_NAME[tempString]..strsub(arg1,lfe) end
 					end
 				end
@@ -2918,7 +2918,7 @@ function GF_GetTypes(arg1, showanyway)
 		end
 	end
 
-	if getn(lfmlfgName) == 1 and groupName[1] and ((not foundQuest[1] and not foundDungeon and not foundRaid) or GF_LFM_BYPASS[groupName[1]]) then lfs = 0 for i=1,getn(groupName) do if strfind(lfmlfgName[1],groupName[i]) then lfs = lfs + 1 end end if lfs == getn(groupName) then foundLFM = 0 foundLFG = 0 end end
+	if getn(lfmlfgName) == 1 and groupName[1] and not foundDungeon and not foundRaid and (not foundQuest[1] or GF_LFM_BYPASS[groupName[1]]) then lfs = 0 for i=1,getn(groupName) do if strfind(lfmlfgName[1],groupName[i]) then lfs = lfs + 1 end end if lfs == getn(groupName) then foundLFM = 0 foundLFG = 0 end end
 
 	if foundGuild < 100 and strfind(arg1, "[<~][a-zA-Z0-9%&%-/ ]+[>~]") then foundGuild = foundGuild + 2 foundTradesExclusion = foundTradesExclusion + 1 if showanyway == true then print("<words> guild 2 .. tradesex 1") end end
 	while foundGuild > 100 do foundGuild = foundGuild - 100 end
