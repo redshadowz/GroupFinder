@@ -2919,8 +2919,7 @@ function GF_GetTypes(arg1, showanyway)
 			end
 			if lfs > foundLFM then foundLFM = lfs end
 		end
-		foundLFG = 0
-		foundLFGPreSuf = 0
+		if foundLFM > 1.99 then foundLFG = 0 foundLFGPreSuf = 0 end
 	end
 
 	if getn(lfmlfgName) == 1 and groupName[1] and not foundDungeon and not foundRaid and (not foundQuest[1] or GF_LFM_BYPASS[groupName[1]]) then lfs = 0 for i=1,getn(groupName) do if strfind(lfmlfgName[1],groupName[i]) then lfs = lfs + 1 end end if lfs == getn(groupName) then foundLFM = 0 foundLFG = 0 end end
