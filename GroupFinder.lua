@@ -2347,7 +2347,7 @@ function GF_GetTypes(arg1, showanyway)
 	
 	if strfind(arg1, "%d+p[%p%s]") then foundLFM = 2 if showanyway == true then print("##p lfm 2") end end -- "10p heal" messages from chinese
 	lfs = 1 -- To detect space/lf##m/letter(eg "lf15mbwl" = lfm bwl)
-	while true do lfs,lfe,wordString = strfind(arg1,"[%p%s]([lk]f?%s?%d+m)[%p%s]",lfs) if wordString then arg1 = strsub(arg1,1,lfs).."lfm "..strsub(arg1,lfs+strlen(wordString)+1) lfs = lfs + 4 foundLFM = 4 foundGuildExclusion = 2 foundTradesExclusion = 2 if showanyway == true then print("lf##m lfm 4 .. guildex 3... tradesex 3") end else break end end
+	while true do lfs,lfe,wordString = strfind(arg1,"[%p%s]([lk]f?%s?%d+m)[%p%s]",lfs) if wordString then arg1 = strsub(arg1,1,lfs).."lfm "..strsub(arg1,lfs+strlen(wordString)+1) lfs = lfs + 4 foundLFM = 3 foundGuildExclusion = 2 foundTradesExclusion = 2 if showanyway == true then print("lf##m lfm 3 .. guildex 2... tradesex 2") end else break end end
 	lfs = 1 -- To detect space/number+/punctuation/number+/space for groups
 	while true do lfs,lfe,wordString,tempString = strfind(arg1,"[%p%s](%d%d?([=/v])%d%d?) ",lfs) if wordString then if tempString == "=" then foundLFM = 2 lfs = lfe else arg1 = strsub(arg1,1,lfs).."group"..strsub(arg1,lfe) lfs = lfs + 6 end else break end end
 	lfs,lfe,wordString = strfind(arg1,"%d?%s?\-?([\+±])\-?%s?%d?")
@@ -2408,7 +2408,7 @@ function GF_GetTypes(arg1, showanyway)
 	wordTable = {}
 
 	lfs = 1 -- To detect "faces"(eg ":d",":p")
-	while true do lfs,lfe,wordString = strfind(arg1, " (%p%a+)[%[%s]",lfs) if wordString then if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = strsub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..strsub(arg1,lfe) end lfs = lfs + strlen(wordString) + 1 else break end end
+	while true do lfs,lfe,wordString = strfind(arg1, " (%p%w+)[%[%%%s]",lfs) if wordString then if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = strsub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..strsub(arg1,lfe) end lfs = lfs + strlen(wordString) + 1 else break end end
 	lfs = 2 -- To detect word/word with no space(eg "lfgscholo" = lfg scholo)
 	while true do
 		lfs,lfe,wordString = strfind(arg1,"(%a%a%a%a+)",lfs)
@@ -2807,12 +2807,10 @@ function GF_GetTypes(arg1, showanyway)
 					if GF_WORD_LFM[wordString] > foundLFM then foundLFM = GF_WORD_LFM[wordString] table.insert(lfmlfgName, wordString) if showanyway == true then print(wordString.." lfm "..GF_WORD_LFM[wordString]) end end
 					if GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] or GF_GROUP_IDS[wordTable[i+j+1]] then
 						if not foundQuest[1] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] end
-						if GF_WORD_LFM[wordString] + .5 > foundLFM then foundLFM = GF_WORD_LFM[wordString] + .5 end
-						table.insert(lfmPosition, {i,i+j,GF_WORD_LFM[wordString]})
+						if GF_WORD_LFM[wordString] + .5 > foundLFM then foundLFM = GF_WORD_LFM[wordString] + .5 table.insert(lfmPosition, {i,i+j,GF_WORD_LFM[wordString] + .5}) else table.insert(lfmPosition, {i,i+j,GF_WORD_LFM[wordString]}) end
 					elseif GF_WORD_LEVEL_ZONE[wordTable[i-1]] or GF_GROUP_IDS[wordTable[i-1]] then
 						if not foundQuest[1] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-1]] end
-						if GF_WORD_LFM[wordString] + .5 > foundLFM then foundLFM = GF_WORD_LFM[wordString] + .5 end
-						table.insert(lfmPosition, {i-1,i,GF_WORD_LFM[wordString]})
+						if GF_WORD_LFM[wordString] + .5 > foundLFM then foundLFM = GF_WORD_LFM[wordString] + .5 table.insert(lfmPosition, {i-1,i,GF_WORD_LFM[wordString] + .5}) else table.insert(lfmPosition, {i-1,i,GF_WORD_LFM[wordString]}) end
 					else
 						table.insert(lfmPosition, {i,i+j,GF_WORD_LFM[wordString]})
 					end
@@ -2894,7 +2892,6 @@ function GF_GetTypes(arg1, showanyway)
 	end
 
 	if foundLFM > foundLFG then
-		foundLFG = -10
 		for i=1, getn(lfmPosition) do
 			lfs = lfmPosition[i][3]
 			for k=lfmPosition[i][2]+1, tempVal do
@@ -2922,6 +2919,8 @@ function GF_GetTypes(arg1, showanyway)
 			end
 			if lfs > foundLFM then foundLFM = lfs end
 		end
+		foundLFG = 0
+		foundLFGPreSuf = 0
 	end
 
 	if getn(lfmlfgName) == 1 and groupName[1] and not foundDungeon and not foundRaid and (not foundQuest[1] or GF_LFM_BYPASS[groupName[1]]) then lfs = 0 for i=1,getn(groupName) do if strfind(lfmlfgName[1],groupName[i]) then lfs = lfs + 1 end end if lfs == getn(groupName) then foundLFM = 0 foundLFG = 0 end end
