@@ -86,7 +86,7 @@ local GF_ClassIDs = { "PRIEST", "MAGE", "WARLOCK", "DRUID", "HUNTER", "ROGUE", "
 local GF_TextColors = { ["SYSTEM"] = {1,1,0},["SAY"] = {1,1,1},["YELL"] = {1,0.251,0.251},["CHANNEL"] = {1,0.753,0.753},["GUILD"] = {0.251,1,0.251},["OFFICER"] = {0.251,0.753,0.251},["WHISPER"] = {1,0.502,1},["WHISPER_INFORM"] = {1,0.502,1},
 ["PARTY"] = {0.667,0.667,1},["RAID"] = {1,0.498,0},["RAID_LEADER"] = {1,0.859,0.718},["RAID_WARNING"] = {1,0.859,0.718},["BATTLEGROUND"] = {1,0.498,0},["BATTLEGROUND_LEADER"] = {1,0.859,0.7176},["LOOT"] = {0,0.667,0},["MONEY"] = {1,1,0},
 ["EMOTE"] = {1,0.502,0.251},["TEXT_EMOTE"] = {1,0.502,0.251},["COMBAT_FACTION_CHANGE"] = {0.502,0.502,1},["COMBAT_XP_GAIN"] = {0.4353,0.4353,1},["COMBAT_HONOR_GAIN"] = {0.8784,0.792,0.0392},["MONSTER_SAY"] = {1,1,1},
-["MONSTER_EMOTE"] = {1,0.502,0.251},["MONSTER_YELL"] = {1,0.251,0.251},["HARDCORE"] = {0.902,0.8,0.502}, ["HAT_LINE"] = {1,1,0}, } --["HARDCORE"] = {0.651,0.6,0.451} }
+["MONSTER_EMOTE"] = {1,0.502,0.251},["MONSTER_YELL"] = {1,0.251,0.251},["HARDCORE"] = {0.902,0.8,0.502}, } --["HARDCORE"] = {0.651,0.6,0.451} }
 local EventIDAlias = { ["SAY"] = "[S] ",["YELL"] = "[Y] ",["GUILD"] = "[G] ",["OFFICER"] = "[O] ",["WHISPER"] = "",["WHISPER_INFORM"] = "[To] ",["PARTY"] = "[P] ",["RAID"] = "[R] ",["RAID_LEADER"] = "[RL] ",["RAID_WARNING"] = "[RW] ",
 ["BATTLEGROUND"] = "[BG] ",["BATTLEGROUND_LEADER"] = "[BL] ",["SYSTEM"] = "",}
 local GF_ChatNameAlias = { ["OFFICER"] = "GUILD",["RAID"] = "PARTY",["RAID_LEADER"] = "PARTY",["RAID_WARNING"] = "PARTY",["BATTLEGROUND"] = "PARTY",["BATTLEGROUND_LEADER"] = "PARTY",["WHISPER_INFORM"] = "WHISPER",}
@@ -721,7 +721,7 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 	for _, event in {'PLAYER_ENTERING_WORLD','PLAYER_LEAVING_WORLD','PARTY_MEMBERS_CHANGED','PARTY_LEADER_CHANGED','RAID_ROSTER_UPDATE','PARTY_INVITE_REQUEST','FRIENDLIST_UPDATE','GUILD_ROSTER_UPDATE','WHO_LIST_UPDATE',
 	'UPDATE_MOUSEOVER_UNIT','PLAYER_LEVEL_UP','CHAT_MSG_ADDON','CHAT_MSG_SYSTEM','CHAT_MSG_WHISPER','CHAT_MSG_WHISPER_INFORM','CHAT_MSG_LOOT','CHAT_MSG_MONEY','CHAT_MSG_COMBAT_XP_GAIN','CHAT_MSG_COMBAT_HONOR_GAIN',
 	'CHAT_MSG_HARDCORE','CHAT_MSG_SAY','CHAT_MSG_YELL','CHAT_MSG_GUILD','CHAT_MSG_OFFICER','CHAT_MSG_PARTY','CHAT_MSG_RAID','CHAT_MSG_RAID_LEADER','CHAT_MSG_RAID_WARNING','CHAT_MSG_BATTLEGROUND','CHAT_MSG_BATTLEGROUND_LEADER',
-	'CHAT_MSG_EMOTE','CHAT_MSG_TEXT_EMOTE','CHAT_MSG_MONSTER_SAY','CHAT_MSG_MONSTER_EMOTE','CHAT_MSG_MONSTER_YELL','CHAT_MSG_CHANNEL','CHAT_MSG_COMBAT_FACTION_CHANGE','EXECUTE_CHAT_LINE','ZONE_CHANGED', } do
+	'CHAT_MSG_EMOTE','CHAT_MSG_TEXT_EMOTE','CHAT_MSG_MONSTER_SAY','CHAT_MSG_MONSTER_EMOTE','CHAT_MSG_MONSTER_YELL','CHAT_MSG_CHANNEL','CHAT_MSG_COMBAT_FACTION_CHANGE','ZONE_CHANGED', } do
 		self:RegisterEvent(event)
 	end
 
@@ -1894,9 +1894,6 @@ end
 function self:CHAT_MSG_ADDON()
 	if arg1 == "GF" and arg4 ~= UnitName("player") then GF_AddonListOfGuildAndPartyMembersWithAddon[arg4] = true GF_ParseIncomingAddonMessages(arg2,arg4) end
 end
-function self:EXECUTE_CHAT_LINE()
-	GF_ProcessedFirstMessage["SYSTEM"] = time()
-end
 function self:FRIENDLIST_UPDATE()
 	if GetNumFriends() ~= GF_CurrentNumFriends then GF_UpdateFriendsList() end
 end
@@ -2090,9 +2087,6 @@ end
 function GF_CHAT_MSG_COMBAT_XP_GAIN()
 	GF_AddLogMessage(arg1,6,true,"SYSTEM",arg8,arg9,strsub(event,10))
 	if GF_SavedVariables.showloottexts then GF_PreviousMessage["SYSTEM"] = {true} else GF_PreviousMessage["SYSTEM"] = {} end
-end
-function GF_EXECUTE_CHAT_LINE()
-	if GF_SystemMessageFiltersStrings[arg1] then GF_PreviousMessage["SYSTEM"] = {} else GF_PreviousMessage[arg2] = {true} end
 end
 function GF_CHAT_MSG_EMOTE()
 	GF_CheckForEmotes(arg1,arg2)

@@ -4133,10 +4133,6 @@ GF_SystemMessageFilters = {
 [8]	= ERR_ALREADY_IN_GROUP_S,
 [9]	= ERR_QUEST_PUSH_LOG_FULL_S,
 }
-GF_SystemMessageFiltersStrings = {
-[HELP_TEXT_SIMPLE] = true,
-[STARTUP_TEXT_LINE1] = true,
-}
 GF_ServerMessageFilters = {
 [1]	= "RMT",
 [2]	= "Discord",
