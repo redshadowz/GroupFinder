@@ -4213,9 +4213,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											GF_WORD_BLOCK_LIST[GF_FormatBlockListWords(GF_BlockListEditBox:GetText(),true)] = true
 											GF_BlockListEditBox:SetText("")
 											GF_BlockListEditBox:HighlightText(string.len(GF_BlockListEditBox:GetText())+1)
-										else
-											GF_BlockListEditBox:ClearFocus()
 										end
+										GF_BlockListEditBox:ClearFocus()
 									</OnClick>
 								</Scripts>
 							</Button>

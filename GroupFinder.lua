@@ -2431,11 +2431,11 @@ function GF_GetTypes(arg1, showanyway)
 						else
 							arg1 = strsub(arg1,1,lfs-1)..strsub(wordString,1,i).." "..strsub(arg1,lfs+i)
 						end
-						lfs = lfe + 1
+						lfe = lfs
 						break
 					elseif GF_WORD_WORD_REPLACE[strsub(wordString,-i)] then
 						arg1 = strsub(arg1,1,lfe-i).." "..strsub(wordString,-i)..strsub(arg1,lfe+1)
-						lfs = lfs + (i-strlen(strsub(wordString,-i))) + strlen(wordString) + 1
+						lfe = lfs
 						break
 					end
 				end
@@ -2789,10 +2789,10 @@ function GF_GetTypes(arg1, showanyway)
 		tempString = ""
 		for i=1,tempVal do tempString = tempString..wordTableGuild[i] if strbyte(wordTableGuild[i]) > 90 then lfs = true end end
 		if GF_WORD_GUILD_QUESTION[tempString] and strsub(arg1,-2) == "? " then foundGuild = 3 if showanyway == true then print("guild? guild 3") end end
+		if GF_GUILD_FIRST_LAST[wordTableGuild[1]] and GF_GUILD_FIRST_LAST[wordTableGuild[1]][wordTableGuild[tempVal]] then foundGuild = foundGuild + 3 if showanyway == true then print("firstlast guild 3") end end
 		if tempVal <= 4 then
 			if GF_TRADE_FIRST_LAST[wordTableTrade[1]] and GF_TRADE_FIRST_LAST[wordTableTrade[1]][wordTableTrade[tempVal]] then foundTrades = foundTrades + 3 if showanyway == true then print("firstlast trades 3") end end
 			if foundLFM == 0 and GF_GROUP_FIRST_LAST[wordTable[1]] and GF_GROUP_FIRST_LAST[wordTable[1]][wordTable[tempVal]] then foundLFM = 2 if showanyway == true then print("firstlast lfm 2") end end
-			if GF_GUILD_FIRST_LAST[wordTableGuild[1]] and GF_GUILD_FIRST_LAST[wordTableGuild[1]][wordTableGuild[tempVal]] then foundGuild = foundGuild + 3 if showanyway == true then print("firstlast guild 3") end end
 		end
 		if not lfs and tempVal > 2 then foundGuild = foundGuild + 1.25 if showanyway == true then print("guildonly guild 1.25") end end
 	end
