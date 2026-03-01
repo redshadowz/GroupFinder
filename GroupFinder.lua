@@ -1497,7 +1497,7 @@ function GF_CheckForDelayedMessages()
 				end
 				table.remove(GF_LogHistory[GF_RealmName]["Delay"],i)
 				i = i - 1
-			elseif GF_LogHistory[GF_RealmName]["Delay"][i][1] == "Item" and GF_LogHistory[GF_RealmName]["Delay"][i][2] < time() then
+			elseif GF_LogHistory[GF_RealmName]["Delay"][i][1] == "Item" and (GF_LogHistory[GF_RealmName]["Delay"][i][2] < time() and GF_ChatReplaceItemLink(arg1,true) or GF_LogHistory[GF_RealmName]["Delay"][i][2] + 2 < time()) then
 				GF_ProcessChatMessages(GF_LogHistory[GF_RealmName]["Delay"][i][3],GF_LogHistory[GF_RealmName]["Delay"][i][4],GF_LogHistory[GF_RealmName]["Delay"][i][5],GF_LogHistory[GF_RealmName]["Delay"][i][6],GF_LogHistory[GF_RealmName]["Delay"][i][7],true)
 				table.remove(GF_LogHistory[GF_RealmName]["Delay"],i)
 				i = i - 1
@@ -2699,7 +2699,14 @@ function GF_GetTypes(arg1, showanyway)
 						if GF_WORD_IGNORE_BEFORE[wordTable[i-lfs-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_BEFORE[wordTable[i-lfs-1]] if showanyway == true then print(wordTable[i-lfs-1].." ignore "..GF_WORD_IGNORE_BEFORE[wordTable[i-lfs-1]]) end end
 						if wordTable[i+lfe+j+2] and GF_WORD_IGNORE_AFTER[wordTable[i+lfe+j+1]..wordTable[i+lfe+j+2]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_AFTER[wordTable[i+lfe+j+1]..wordTable[i+lfe+j+2]] if showanyway == true then print(wordTable[i+lfe+j+1]..wordTable[i+lfe+j+2].." ignore "..GF_WORD_IGNORE_AFTER[wordTable[i+lfe+j+1]..wordTable[i+lfe+j+2]]) end end
 						if wordTable[i-lfs-2] and GF_WORD_IGNORE_BEFORE[wordTable[i-lfs-2]..wordTable[i-lfs-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_BEFORE[wordTable[i-lfs-2]..wordTable[i-lfs-1]] if showanyway == true then print(wordTable[i-lfs-2]..wordTable[i-lfs-1].." ignore "..GF_WORD_IGNORE_BEFORE[wordTable[i-lfs-2]..wordTable[i-lfs-1]]) end end
-						if wordTable[i-lfs-3] and GF_WORD_IGNORE_BEFORE[wordTable[i-lfs-3]..wordTable[i-lfs-2]..wordTable[i-lfs-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_BEFORE[wordTable[i-lfs-3]..wordTable[i-lfs-2]..wordTable[i-lfs-1]] if showanyway == true then print(wordTable[i-lfs-3]..wordTable[i-lfs-2]..wordTable[i-lfs-1].." ignore "..GF_WORD_IGNORE_BEFORE[wordTable[i-lfs-3]..wordTable[i-lfs-2]..wordTable[i-lfs-1]]) end end				
+						if wordTable[i-lfs-3] and GF_WORD_IGNORE_BEFORE[wordTable[i-lfs-3]..wordTable[i-lfs-2]..wordTable[i-lfs-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_BEFORE[wordTable[i-lfs-3]..wordTable[i-lfs-2]..wordTable[i-lfs-1]] if showanyway == true then print(wordTable[i-lfs-3]..wordTable[i-lfs-2]..wordTable[i-lfs-1].." ignore "..GF_WORD_IGNORE_BEFORE[wordTable[i-lfs-3]..wordTable[i-lfs-2]..wordTable[i-lfs-1]]) end end
+
+						if GF_WORD_IGNORE[wordTable[i+lfe+j+1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE[wordTable[i+lfe+j+1]] if showanyway == true then print(wordTable[i+lfe+j+1].." ignore "..GF_WORD_IGNORE[wordTable[i+lfe+j+1]]) end end
+						if GF_WORD_IGNORE[wordTable[i-lfs-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE[wordTable[i-lfs-1]] if showanyway == true then print(wordTable[i-lfs-1].." ignore "..GF_WORD_IGNORE[wordTable[i-lfs-1]]) end end
+						if wordTable[i+lfe+j+2] and GF_WORD_IGNORE[wordTable[i+lfe+j+1]..wordTable[i+lfe+j+2]] then foundIgnore = foundIgnore + GF_WORD_IGNORE[wordTable[i+lfe+j+1]..wordTable[i+lfe+j+2]] if showanyway == true then print(wordTable[i+lfe+j+1]..wordTable[i+lfe+j+2].." ignore "..GF_WORD_IGNORE[wordTable[i+lfe+j+1]..wordTable[i+lfe+j+2]]) end end
+						if wordTable[i-lfs-2] and GF_WORD_IGNORE[wordTable[i-lfs-2]..wordTable[i-lfs-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE[wordTable[i-lfs-2]..wordTable[i-lfs-1]] if showanyway == true then print(wordTable[i-lfs-2]..wordTable[i-lfs-1].." ignore "..GF_WORD_IGNORE[wordTable[i-lfs-2]..wordTable[i-lfs-1]]) end end
+						if wordTable[i-lfs-3] and GF_WORD_IGNORE[wordTable[i-lfs-3]..wordTable[i-lfs-2]..wordTable[i-lfs-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE[wordTable[i-lfs-3]..wordTable[i-lfs-2]..wordTable[i-lfs-1]] if showanyway == true then print(wordTable[i-lfs-3]..wordTable[i-lfs-2]..wordTable[i-lfs-1].." ignore "..GF_WORD_IGNORE[wordTable[i-lfs-3]..wordTable[i-lfs-2]..wordTable[i-lfs-1]]) end end
+
 						i = i + lfs
 					end
 				end
@@ -2807,10 +2814,10 @@ function GF_GetTypes(arg1, showanyway)
 					if GF_WORD_LFM[wordString] > foundLFM then foundLFM = GF_WORD_LFM[wordString] table.insert(lfmlfgName, wordString) if showanyway == true then print(wordString.." lfm "..GF_WORD_LFM[wordString]) end end
 					if GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] or GF_GROUP_IDS[wordTable[i+j+1]] then
 						if not foundQuest[1] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] end
-						if GF_WORD_LFM[wordString] + .5 > foundLFM then foundLFM = GF_WORD_LFM[wordString] + .5 table.insert(lfmPosition, {i,i+j,GF_WORD_LFM[wordString] + .5}) else table.insert(lfmPosition, {i,i+j,GF_WORD_LFM[wordString]}) end
+						if GF_WORD_LFM[wordString] + .5 > foundLFM then foundLFM = GF_WORD_LFM[wordString] + .5 table.insert(lfmPosition, {i,i+j+1,GF_WORD_LFM[wordString] + .5}) else table.insert(lfmPosition, {i,i+j+1,GF_WORD_LFM[wordString]}) end
 					elseif GF_WORD_LEVEL_ZONE[wordTable[i-1]] or GF_GROUP_IDS[wordTable[i-1]] then
 						if not foundQuest[1] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-1]] end
-						if GF_WORD_LFM[wordString] + .5 > foundLFM then foundLFM = GF_WORD_LFM[wordString] + .5 table.insert(lfmPosition, {i-1,i,GF_WORD_LFM[wordString] + .5}) else table.insert(lfmPosition, {i-1,i,GF_WORD_LFM[wordString]}) end
+						if GF_WORD_LFM[wordString] + .5 > foundLFM then foundLFM = GF_WORD_LFM[wordString] + .5 table.insert(lfmPosition, {i-1,i+j,GF_WORD_LFM[wordString] + .5}) else table.insert(lfmPosition, {i-1,i+j,GF_WORD_LFM[wordString]}) end
 					else
 						table.insert(lfmPosition, {i,i+j,GF_WORD_LFM[wordString]})
 					end
@@ -2823,6 +2830,11 @@ function GF_GetTypes(arg1, showanyway)
 					end
 					if wordTable[i-2] and GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]] if showanyway == true then print(wordTable[i-2]..wordTable[i-1].." ignore "..GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]]) end end
 					if wordTable[i-3] and GF_WORD_IGNORE_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] if showanyway == true then print(wordTable[i-3]..wordTable[i-2]..wordTable[i-1].." ignore "..GF_WORD_IGNORE_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]]) end end
+					if GF_WORD_IGNORE[wordTable[i+j+1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE[wordTable[i+j+1]] if showanyway == true then print(wordTable[i+j+1].." ignore "..GF_WORD_IGNORE[wordTable[i+j+1]]) end end
+					if GF_WORD_IGNORE[wordTable[i-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE[wordTable[i-1]] if showanyway == true then print(wordTable[i-1].." ignore "..GF_WORD_IGNORE[wordTable[i-1]]) end end
+					if wordTable[i+j+2] and GF_WORD_IGNORE[wordTable[i+j+1]..wordTable[i+j+2]] then foundIgnore = foundIgnore + GF_WORD_IGNORE[wordTable[i+j+1]..wordTable[i+j+2]] if showanyway == true then print(wordTable[i+j+1]..wordTable[i+j+2].." ignore "..GF_WORD_IGNORE[wordTable[i+j+1]..wordTable[i+j+2]]) end end
+					if wordTable[i-2] and GF_WORD_IGNORE[wordTable[i-2]..wordTable[i-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE[wordTable[i-2]..wordTable[i-1]] if showanyway == true then print(wordTable[i-2]..wordTable[i-1].." ignore "..GF_WORD_IGNORE[wordTable[i-2]..wordTable[i-1]]) end end
+					if wordTable[i-3] and GF_WORD_IGNORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] if showanyway == true then print(wordTable[i-3]..wordTable[i-2]..wordTable[i-1].." ignore "..GF_WORD_IGNORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]]) end end
 				elseif GF_WORD_LFG[wordString] then
 					if GF_WORD_LFG[wordString] > foundLFG then foundLFG = GF_WORD_LFG[wordString] table.insert(lfmlfgName, wordString) if showanyway == true then print(wordString.." lfg "..GF_WORD_LFG[wordString]) end end
 					if not foundQuest[1] then if GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] elseif GF_WORD_LEVEL_ZONE[wordTable[i-1]] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-1]] end end
@@ -2835,6 +2847,11 @@ function GF_GetTypes(arg1, showanyway)
 					end
 					if wordTable[i-2] and GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]] if showanyway == true then print(wordTable[i-2]..wordTable[i-1].." ignore "..GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]]) end end
 					if wordTable[i-3] and GF_WORD_IGNORE_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] if showanyway == true then print(wordTable[i-3]..wordTable[i-2]..wordTable[i-1].." ignore "..GF_WORD_IGNORE_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]]) end end
+					if GF_WORD_IGNORE[wordTable[i+j+1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE[wordTable[i+j+1]] if showanyway == true then print(wordTable[i+j+1].." ignore "..GF_WORD_IGNORE[wordTable[i+j+1]]) end end
+					if GF_WORD_IGNORE[wordTable[i-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE[wordTable[i-1]] if showanyway == true then print(wordTable[i-1].." ignore "..GF_WORD_IGNORE[wordTable[i-1]]) end end
+					if wordTable[i+j+2] and GF_WORD_IGNORE[wordTable[i+j+1]..wordTable[i+j+2]] then foundIgnore = foundIgnore + GF_WORD_IGNORE[wordTable[i+j+1]..wordTable[i+j+2]] if showanyway == true then print(wordTable[i+j+1]..wordTable[i+j+2].." ignore "..GF_WORD_IGNORE[wordTable[i+j+1]..wordTable[i+j+2]]) end end
+					if wordTable[i-2] and GF_WORD_IGNORE[wordTable[i-2]..wordTable[i-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE[wordTable[i-2]..wordTable[i-1]] if showanyway == true then print(wordTable[i-2]..wordTable[i-1].." ignore "..GF_WORD_IGNORE[wordTable[i-2]..wordTable[i-1]]) end end
+					if wordTable[i-3] and GF_WORD_IGNORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] if showanyway == true then print(wordTable[i-3]..wordTable[i-2]..wordTable[i-1].." ignore "..GF_WORD_IGNORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]]) end end
 				end
 				if GF_WORD_CLASSES[wordString] then foundClass = GF_WORD_CLASSES[wordString] table.insert(groupName,wordString)
 				elseif GF_WORD_DUNGEON[wordString] then
@@ -2869,6 +2886,11 @@ function GF_GetTypes(arg1, showanyway)
 						if wordTable[i+j+2] and GF_WORD_IGNORE_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] if showanyway == true then print(wordTable[i+j+1]..wordTable[i+j+2].." ignore "..GF_WORD_IGNORE_AFTER[wordTable[i+j+1]..wordTable[i+j+2]]) end end
 						if wordTable[i-2] and GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]] if showanyway == true then print(wordTable[i-2]..wordTable[i-1].." ignore "..GF_WORD_IGNORE_BEFORE[wordTable[i-2]..wordTable[i-1]]) end end
 						if wordTable[i-3] and GF_WORD_IGNORE_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] if showanyway == true then print(wordTable[i-3]..wordTable[i-2]..wordTable[i-1].." ignore "..GF_WORD_IGNORE_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]]) end end
+						if GF_WORD_IGNORE[wordTable[i+j+1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE[wordTable[i+j+1]] if showanyway == true then print(wordTable[i+j+1].." ignore "..GF_WORD_IGNORE[wordTable[i+j+1]]) end end
+						if GF_WORD_IGNORE[wordTable[i-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE[wordTable[i-1]] if showanyway == true then print(wordTable[i-1].." ignore "..GF_WORD_IGNORE[wordTable[i-1]]) end end
+						if wordTable[i+j+2] and GF_WORD_IGNORE[wordTable[i+j+1]..wordTable[i+j+2]] then foundIgnore = foundIgnore + GF_WORD_IGNORE[wordTable[i+j+1]..wordTable[i+j+2]] if showanyway == true then print(wordTable[i+j+1]..wordTable[i+j+2].." ignore "..GF_WORD_IGNORE[wordTable[i+j+1]..wordTable[i+j+2]]) end end
+						if wordTable[i-2] and GF_WORD_IGNORE[wordTable[i-2]..wordTable[i-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE[wordTable[i-2]..wordTable[i-1]] if showanyway == true then print(wordTable[i-2]..wordTable[i-1].." ignore "..GF_WORD_IGNORE[wordTable[i-2]..wordTable[i-1]]) end end
+						if wordTable[i-3] and GF_WORD_IGNORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] if showanyway == true then print(wordTable[i-3]..wordTable[i-2]..wordTable[i-1].." ignore "..GF_WORD_IGNORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]]) end end
 						if wordTable[i-1] == "portal" or wordTable[i+1] == "portal" or wordTable[i-1] == "summon" or wordTable[i+1] == "summon" then foundTrades = foundTrades + 1 if showanyway == true then print("portalzone trade 1") end
 						elseif wordTable[i+2] and wordTable[i+1]..wordTable[i+2] == "havesummon" then foundTradesExclusion = foundTradesExclusion + 1.5 if showanyway == true then print(wordString.." havesummon .. tradesex 1.5") end end
 					else
