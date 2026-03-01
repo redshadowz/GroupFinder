@@ -166,6 +166,45 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</OnClick>
 		</Scripts>
 	</CheckButton>
+	<CheckButton name="GF_DropdownCheckButtonTemplate_Label" inherits="UICheckButtonTemplate" virtual="true">
+		<Size>
+			<AbsDimension x="24" y="24"/>
+		</Size>
+		<Layers>
+			<Layer level="OVERLAY">
+				<FontString inherits="GF_NormalFont" name="$parentTextLabel" justifyH="LEFT">
+					<Anchors>
+						<Anchor point="LEFT">
+							<Offset>
+								<AbsDimension x="24" y="1"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Size>
+			<AbsDimension x="24" y="24"/>
+		</Size>
+		<Scripts>
+			<OnEnter>
+				GF_ShowTooltip()
+			</OnEnter>
+			<OnLeave>
+				GameTooltip:Hide()
+				if not GetMouseFocus() or not GetMouseFocus():GetName() or string.sub(GetMouseFocus():GetName(),1,10) ~= string.sub(this:GetParent():GetName(),1,10) then 
+					this:GetParent():Hide()
+				end
+			</OnLeave>
+			<OnClick>
+				if (this:GetChecked()) then
+					PlaySound("igMainMenuOptionCheckBoxOff")
+				else
+					PlaySound("igMainMenuOptionCheckBoxOn")
+				end
+			</OnClick>
+		</Scripts>
+	</CheckButton>
 	<CheckButton name="GF_LFGDropdownCheckButtonTemplate_Label" inherits="UICheckButtonTemplate" virtual="true">
 		<Size>
 			<AbsDimension x="24" y="24"/>
@@ -192,6 +231,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</OnEnter>
 			<OnLeave>
 				GameTooltip:Hide()
+				if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), this:GetParent():GetName()) then 
+					this:GetParent():Hide()
+				end
 			</OnLeave>
 			<OnClick>
 				GF_ButtonListFunctions(gsub(this:GetName(),"%d","").."AddRemove",getglobal(this:GetName().."TextLabel"):GetText(),GF_ButtonIDAliases[string.sub(gsub(this:GetName(),"%d",""),4)][getglobal(this:GetName().."TextLabel"):GetText()],this:GetChecked())
@@ -1116,7 +1158,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							</Layer>
 						</Layers>
 						<Frames>
-							<CheckButton name="GF_GroupFilterShowDungeonCheckButton" inherits="GF_CheckButtonTemplate_Label">
+							<CheckButton name="GF_GroupFilterShowDungeonCheckButton" inherits="GF_DropdownCheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="TOPLEFT">
 										<Offset>
@@ -1134,7 +1176,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_GroupFilterShowRaidCheckButton" inherits="GF_CheckButtonTemplate_Label">
+							<CheckButton name="GF_GroupFilterShowRaidCheckButton" inherits="GF_DropdownCheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="TOP" relativeTo="GF_GroupFilterShowDungeonCheckButton" relativePoint="BOTTOM">
 										<Offset>
@@ -1152,7 +1194,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_GroupFilterShowQuestCheckButton" inherits="GF_CheckButtonTemplate_Label">
+							<CheckButton name="GF_GroupFilterShowQuestCheckButton" inherits="GF_DropdownCheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="TOP" relativeTo="GF_GroupFilterShowRaidCheckButton" relativePoint="BOTTOM">
 										<Offset>
@@ -1170,7 +1212,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_GroupFilterShowOtherCheckButton" inherits="GF_CheckButtonTemplate_Label">
+							<CheckButton name="GF_GroupFilterShowOtherCheckButton" inherits="GF_DropdownCheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="TOP" relativeTo="GF_GroupFilterShowQuestCheckButton" relativePoint="BOTTOM">
 										<Offset>
@@ -1305,7 +1347,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							</Layer>
 						</Layers>
 						<Frames>
-							<CheckButton name="GF_ChatFilterGroupsInChatCheckButton" inherits="GF_CheckButtonTemplate_Label">
+							<CheckButton name="GF_ChatFilterGroupsInChatCheckButton" inherits="GF_DropdownCheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeTo="GF_ShowGroupsInLabel" relativePoint="BOTTOMLEFT">
 										<Offset>
@@ -1323,7 +1365,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_ChatFilterGroupsNewOnlyCheckButton" inherits="GF_CheckButtonTemplate_Label">
+							<CheckButton name="GF_ChatFilterGroupsNewOnlyCheckButton" inherits="GF_DropdownCheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="TOP" relativeTo="GF_ChatFilterGroupsInChatCheckButton" relativePoint="BOTTOM">
 										<Offset>
@@ -1341,7 +1383,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_ChatFilterGroupsInMinimapCheckButton" inherits="GF_CheckButtonTemplate_Label">
+							<CheckButton name="GF_ChatFilterGroupsInMinimapCheckButton" inherits="GF_DropdownCheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="TOP" relativeTo="GF_ChatFilterGroupsNewOnlyCheckButton" relativePoint="BOTTOM">
 										<Offset>
@@ -1358,7 +1400,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_ChatFilterShowChatCheckButton" inherits="GF_CheckButtonTemplate_Label">
+							<CheckButton name="GF_ChatFilterShowChatCheckButton" inherits="GF_DropdownCheckButtonTemplate_Label">
 								<Anchors>
 										<Anchor point="TOP" relativeto="GF_ShowChatTypesLabel" relativePoint="BOTTOM">
 										<Offset>
@@ -1375,7 +1417,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_ChatFilterShowTradesCheckButton" inherits="GF_CheckButtonTemplate_Label">
+							<CheckButton name="GF_ChatFilterShowTradesCheckButton" inherits="GF_DropdownCheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="TOP" relativeTo="GF_ChatFilterShowChatCheckButton" relativePoint="BOTTOM">
 										<Offset>
@@ -1392,7 +1434,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_ChatFilterShowGuildsCheckButton" inherits="GF_CheckButtonTemplate_Label">
+							<CheckButton name="GF_ChatFilterShowGuildsCheckButton" inherits="GF_DropdownCheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="TOP" relativeTo="GF_ChatFilterShowTradesCheckButton" relativePoint="BOTTOM">
 										<Offset>
@@ -1409,7 +1451,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_ChatFilterShowLootCheckButton" inherits="GF_CheckButtonTemplate_Label">
+							<CheckButton name="GF_ChatFilterShowLootCheckButton" inherits="GF_DropdownCheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="TOP" relativeTo="GF_ChatFilterShowGuildsCheckButton" relativePoint="BOTTOM">
 										<Offset>
@@ -3304,7 +3346,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</Layer>
 								</Layers>
 								<Frames>
-									<CheckButton name="GF_LogFilterShowGroups" inherits="GF_CheckButtonTemplate_Label">
+									<CheckButton name="GF_LogFilterShowGroups" inherits="GF_DropdownCheckButtonTemplate_Label">
 										<Anchors>
 											<Anchor point="TOPLEFT">
 												<Offset>
@@ -3323,7 +3365,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
-									<CheckButton name="GF_LogFilterShowFiltered" inherits="GF_CheckButtonTemplate_Label">
+									<CheckButton name="GF_LogFilterShowFiltered" inherits="GF_DropdownCheckButtonTemplate_Label">
 										<Anchors>
 											<Anchor point="TOP" relativeTo="GF_LogFilterShowGroups" relativePoint="BOTTOM">
 												<Offset>
@@ -3342,7 +3384,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
-									<CheckButton name="GF_LogFilterShowChat" inherits="GF_CheckButtonTemplate_Label">
+									<CheckButton name="GF_LogFilterShowChat" inherits="GF_DropdownCheckButtonTemplate_Label">
 										<Anchors>
 											<Anchor point="TOP" relativeTo="GF_LogFilterShowFiltered" relativePoint="BOTTOM">
 												<Offset>
@@ -3361,7 +3403,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
-									<CheckButton name="GF_LogFilterShowTrades" inherits="GF_CheckButtonTemplate_Label">
+									<CheckButton name="GF_LogFilterShowTrades" inherits="GF_DropdownCheckButtonTemplate_Label">
 										<Anchors>
 											<Anchor point="TOP" relativeTo="GF_LogFilterShowChat" relativePoint="BOTTOM">
 												<Offset>
@@ -3380,7 +3422,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
-									<CheckButton name="GF_LogFilterShowGuild" inherits="GF_CheckButtonTemplate_Label">
+									<CheckButton name="GF_LogFilterShowGuild" inherits="GF_DropdownCheckButtonTemplate_Label">
 										<Anchors>
 											<Anchor point="TOP" relativeTo="GF_LogFilterShowTrades" relativePoint="BOTTOM">
 												<Offset>
@@ -3399,7 +3441,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
-									<CheckButton name="GF_LogFilterShowLoot" inherits="GF_CheckButtonTemplate_Label">
+									<CheckButton name="GF_LogFilterShowLoot" inherits="GF_DropdownCheckButtonTemplate_Label">
 										<Anchors>
 											<Anchor point="TOP" relativeTo="GF_LogFilterShowGuild" relativePoint="BOTTOM">
 												<Offset>
@@ -3418,7 +3460,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
-									<CheckButton name="GF_LogFilterShowSpam" inherits="GF_CheckButtonTemplate_Label">
+									<CheckButton name="GF_LogFilterShowSpam" inherits="GF_DropdownCheckButtonTemplate_Label">
 										<Anchors>
 											<Anchor point="TOP" relativeTo="GF_LogFilterShowLoot" relativePoint="BOTTOM">
 												<Offset>
@@ -3437,7 +3479,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
-									<CheckButton name="GF_LogFilterShowBlacklist" inherits="GF_CheckButtonTemplate_Label">
+									<CheckButton name="GF_LogFilterShowBlacklist" inherits="GF_DropdownCheckButtonTemplate_Label">
 										<Anchors>
 											<Anchor point="TOP" relativeTo="GF_LogFilterShowSpam" relativePoint="BOTTOM">
 												<Offset>
@@ -3456,7 +3498,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
-									<CheckButton name="GF_LogFilterShowBelowLevel" inherits="GF_CheckButtonTemplate_Label">
+									<CheckButton name="GF_LogFilterShowBelowLevel" inherits="GF_DropdownCheckButtonTemplate_Label">
 										<Anchors>
 											<Anchor point="TOP" relativeTo="GF_LogFilterShowBlacklist" relativePoint="BOTTOM">
 												<Offset>
@@ -3554,7 +3596,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</Layer>
 								</Layers>
 								<Frames>
-									<CheckButton name="GF_LogChannelFilterChannels" inherits="GF_CheckButtonTemplate_Label">
+									<CheckButton name="GF_LogChannelFilterChannels" inherits="GF_DropdownCheckButtonTemplate_Label">
 										<Anchors>
 											<Anchor point="TOPLEFT">
 												<Offset>
@@ -3573,7 +3615,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
-									<CheckButton name="GF_LogChannelFilterParty" inherits="GF_CheckButtonTemplate_Label">
+									<CheckButton name="GF_LogChannelFilterParty" inherits="GF_DropdownCheckButtonTemplate_Label">
 										<Anchors>
 											<Anchor point="TOP" relativeTo="GF_LogChannelFilterChannels" relativePoint="BOTTOM">
 												<Offset>
@@ -3592,7 +3634,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
-									<CheckButton name="GF_LogChannelFilterGuild" inherits="GF_CheckButtonTemplate_Label">
+									<CheckButton name="GF_LogChannelFilterGuild" inherits="GF_DropdownCheckButtonTemplate_Label">
 										<Anchors>
 											<Anchor point="TOP" relativeTo="GF_LogChannelFilterParty" relativePoint="BOTTOM">
 												<Offset>
@@ -3611,7 +3653,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
-									<CheckButton name="GF_LogChannelFilterWhisper" inherits="GF_CheckButtonTemplate_Label">
+									<CheckButton name="GF_LogChannelFilterWhisper" inherits="GF_DropdownCheckButtonTemplate_Label">
 										<Anchors>
 											<Anchor point="TOP" relativeTo="GF_LogChannelFilterGuild" relativePoint="BOTTOM">
 												<Offset>
@@ -3630,7 +3672,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
-									<CheckButton name="GF_LogChannelFilterSay" inherits="GF_CheckButtonTemplate_Label">
+									<CheckButton name="GF_LogChannelFilterSay" inherits="GF_DropdownCheckButtonTemplate_Label">
 										<Anchors>
 											<Anchor point="TOP" relativeTo="GF_LogChannelFilterWhisper" relativePoint="BOTTOM">
 												<Offset>
@@ -3649,7 +3691,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
-									<CheckButton name="GF_LogChannelFilterYell" inherits="GF_CheckButtonTemplate_Label">
+									<CheckButton name="GF_LogChannelFilterYell" inherits="GF_DropdownCheckButtonTemplate_Label">
 										<Anchors>
 											<Anchor point="TOP" relativeTo="GF_LogChannelFilterSay" relativePoint="BOTTOM">
 												<Offset>
@@ -3668,7 +3710,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
-									<CheckButton name="GF_LogChannelFilterHardcore" inherits="GF_CheckButtonTemplate_Label">
+									<CheckButton name="GF_LogChannelFilterHardcore" inherits="GF_DropdownCheckButtonTemplate_Label">
 										<Anchors>
 											<Anchor point="TOP" relativeTo="GF_LogChannelFilterYell" relativePoint="BOTTOM">
 												<Offset>
@@ -4626,7 +4668,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</Layer>
 								</Layers>
 								<Frames>
-									<CheckButton name="GF_AutoBlacklistTradesCheckButton" inherits="GF_CheckButtonTemplate_Label">
+									<CheckButton name="GF_AutoBlacklistTradesCheckButton" inherits="GF_DropdownCheckButtonTemplate_Label">
 										<Anchors>
 											<Anchor point="TOPLEFT">
 												<Offset>
@@ -4643,7 +4685,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
-									<CheckButton name="GF_AutoBlacklistGuildCheckButton" inherits="GF_CheckButtonTemplate_Label">
+									<CheckButton name="GF_AutoBlacklistGuildCheckButton" inherits="GF_DropdownCheckButtonTemplate_Label">
 										<Anchors>
 											<Anchor point="TOP" relativeTo="GF_AutoBlacklistTradesCheckButton" relativePoint="BOTTOM">
 												<Offset>
@@ -4660,7 +4702,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
-									<CheckButton name="GF_AutoBlacklistChatCheckButton" inherits="GF_CheckButtonTemplate_Label">
+									<CheckButton name="GF_AutoBlacklistChatCheckButton" inherits="GF_DropdownCheckButtonTemplate_Label">
 										<Anchors>
 											<Anchor point="TOP" relativeTo="GF_AutoBlacklistGuildCheckButton" relativePoint="BOTTOM">
 												<Offset>
@@ -4677,7 +4719,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
-									<CheckButton name="GF_AutoBlacklistForeignCheckButton" inherits="GF_CheckButtonTemplate_Label">
+									<CheckButton name="GF_AutoBlacklistForeignCheckButton" inherits="GF_DropdownCheckButtonTemplate_Label">
 										<Anchors>
 											<Anchor point="TOP" relativeTo="GF_AutoBlacklistChatCheckButton" relativePoint="BOTTOM">
 												<Offset>

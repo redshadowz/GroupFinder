@@ -2780,13 +2780,14 @@ function GF_GetTypes(arg1, showanyway)
 			end
 		elseif tempVal > 1 then
 			if tempVal <= 4 then
-				if GF_LFM_AFTER[wordTable[tempVal-1]..wordTable[tempVal]] then foundLFM = 2 if showanyway == true then print("word lfmafter lfm 2") end end
+				if GF_LFM_AFTER[wordTable[tempVal-1]..wordTable[tempVal]] then foundLFM = 2 table.insert(lfmlfgName, wordTable[tempVal-1]..wordTable[tempVal]) if showanyway == true then print("word lfmafter lfm 2") end end
 				if GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]] then foundTrades = foundTrades + GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]] if showanyway == true then print("first two trades "..GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]]) end end
-				if GF_GROUP_FIRST_TWO[wordTable[1]..wordTable[2]] then if GF_GROUP_FIRST_TWO[wordTable[1]..wordTable[2]] > foundLFM then foundLFM = GF_GROUP_FIRST_TWO[wordTable[1]..wordTable[2]] if showanyway == true then print(wordTable[1]..wordTable[2].." lfm "..GF_GROUP_FIRST_TWO[wordTable[1]..wordTable[2]]) end end end
+				if GF_GROUP_FIRST_TWO_SHORT[wordTable[1]..wordTable[2]] then if GF_GROUP_FIRST_TWO_SHORT[wordTable[1]..wordTable[2]] > foundLFM then foundLFM = GF_GROUP_FIRST_TWO_SHORT[wordTable[1]..wordTable[2]] table.insert(lfmlfgName, wordTable[1]..wordTable[2]) if showanyway == true then print(wordTable[1]..wordTable[2].." lfm "..GF_GROUP_FIRST_TWO_SHORT[wordTable[1]..wordTable[2]]) end end end
 			end
 			if not lfs then	foundTrades = foundTrades + 1.25 if showanyway == true then print("tradeonly trades 1.25") end end
 			if GF_GUILD_FIRST_TWO[wordTable[1]..wordTable[2]] then foundGuild = 1 if showanyway == true then print("guild_first_two guild 3") end
 			elseif GF_GUILD_LAST_TWO[wordTable[tempVal-1]..wordTable[tempVal]] then foundGuild = 1 if showanyway == true then print("guild_last_two guild 3") end end
+			if GF_GROUP_FIRST_TWO[wordTable[1]..wordTable[2]] then if GF_GROUP_FIRST_TWO[wordTable[1]..wordTable[2]] > foundLFM then foundLFM = GF_GROUP_FIRST_TWO[wordTable[1]..wordTable[2]] table.insert(lfmlfgName, wordTable[1]..wordTable[2]) if showanyway == true then print(wordTable[1]..wordTable[2].." lfm "..GF_GROUP_FIRST_TWO[wordTable[1]..wordTable[2]]) end end end
 		end
 		lfs = nil
 		tempString = ""
@@ -3400,6 +3401,7 @@ function GF_ToggleDropDownMenu(frame,id)
 				GameTooltip:Hide()
 				GF_DropDownMenu = CreateFrame("Frame", "GF_DropDownMenu", frame, "UIDropDownMenuTemplate")
 				GF_DropDownMenu.name = GF_FilteredResultsList[GF_ResultsListOffset+id].op
+				GF_DropDownMenu.message = "("..GF_FilteredResultsList[GF_ResultsListOffset+id].dlevel..") "..GF_FilteredResultsList[GF_ResultsListOffset+id].message
 				UIDropDownMenu_Initialize(GF_DropDownMenu, GF_CreateDropDownMenu, "MENU")
 				ToggleDropDownMenu(1, nil, GF_DropDownMenu, "cursor")
 			end
@@ -3474,8 +3476,8 @@ function GF_CreateDropDownMenu()
 	info.notCheckable = true
 	info.hasArrow = false
 	info.disabled = nil
-	info.text = IGNORE
-	info.func = function() AddIgnore(GF_DropDownMenu.name) end
+	info.text = GF_BLACK_LIST
+	info.func = function() table.insert(GF_BlackList[GF_RealmName], 1, { GF_DropDownMenu.name, GF_DropDownMenu.message }) GF_BlackList[GF_RealmName][GF_DropDownMenu.name] = true GF_UpdateBlackListItems() GF_ApplyFiltersToGroupList() end
 	info.value = nil
 	UIDropDownMenu_AddButton(info, 1)	
 
@@ -3884,7 +3886,6 @@ end
 function GF_GetWhoSendWhisperToAvailablePlayer()
 	local whispermessage = GF_GetWhoWhisperEditBox:GetText()
 	if whispermessage == "" then whispermessage = GF_LFGDescriptionEditBox:GetText() end
-
 	if GF_GetWhoName == "" then
 		DEFAULT_CHAT_FRAME:AddMessage("GF: "..GF_NO_PLAYERS_TO_WHISPER, 1, 1, 0.5)
 	elseif whispermessage == "" then
@@ -3892,6 +3893,7 @@ function GF_GetWhoSendWhisperToAvailablePlayer()
 	elseif strlen(whispermessage) < 5 then
 		DEFAULT_CHAT_FRAME:AddMessage("GF: "..GF_WHISPER_TEXT_TOO_SHORT, 1, 1, 0.5)
 	else
+		if GF_Hardcore and not GF_PerCharVariables.disablehardcore and GF_PerCharVariables.hardcore ~= 3 then whispermessage = whispermessage..GF_HARDCORE_WHISPER_SUFFIX end	
 		SendChatMessage(whispermessage,"WHISPER",nil,GF_GetWhoName)
 		if GF_ClassWhoTable[GF_GetWhoName] then GF_ClassWhoTable[GF_GetWhoName][4] = time() + GF_GetWhoResetTimer end
 		GF_ClassWhoMatchingResults = GF_ClassWhoMatchingResults - 1
@@ -4058,7 +4060,7 @@ function GF_FixLFGStrings(groupSizeOnly) -- LFG Group Maker Functions
 					newText = newText.."/"..foundDungeonRaid[i]
 				end
 			end
-			if not GF_PerCharVariables.disablehardcore and GF_Hardcore and GF_PerCharVariables.hardcore ~= 3 and strlen(newText) > 0 then newText = newText.." (HC)" end
+			if not GF_PerCharVariables.disablehardcore and GF_Hardcore and GF_PerCharVariables.hardcore ~= 3 and strlen(newText) > 0 then newText = newText..GF_HARDCORE_WHISPER_SUFFIX end
 			if getn(foundRoles) > 0 then
 				newText = newText.." need "
 				for i=1, getn(foundRoles) do
@@ -4081,7 +4083,7 @@ function GF_FixLFGStrings(groupSizeOnly) -- LFG Group Maker Functions
 			for i=1, getn(foundDungeonRaid) do
 				newText = newText.."/"..foundDungeonRaid[i]
 			end
-			if not GF_PerCharVariables.disablehardcore and GF_Hardcore and GF_PerCharVariables.hardcore ~= 3 and strlen(newText) > 1 then newText = newText.." (HC)" end
+			if not GF_PerCharVariables.disablehardcore and GF_Hardcore and GF_PerCharVariables.hardcore ~= 3 and strlen(newText) > 1 then newText = newText..GF_HARDCORE_WHISPER_SUFFIX end
 		end
 		GF_PerCharVariables.searchlfgtext = gsub(gsub(gsub(gsub(gsub(gsub(gsub(newText.." "..strsub(GF_PerCharVariables.searchlfgtext, endOfFilter+1), "^[/ ]+", ""), "[/ ]+$", ""), "^[/ ]+", ""),"//+", ""), "/%s+"," "),"%s+/", " "),"%s%s+", " ")
 		GF_LFGDescriptionEditBox:SetText(GF_PerCharVariables.searchlfgtext)
