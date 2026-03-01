@@ -1445,6 +1445,7 @@ GF_WORD_FIX_BEFORE_QUEST = { -- Word changes processed before quests.
 GF_WORD_FIX_BEFORE_QUEST_SECOND = {
 -- Groups
 ["lovepotion"] = {"azshara","quest"},["silithusraidgroup"] = {"silithus","repfarm"},["farmtimbermawrep"] = {"timbermaw","repfarm"},["anygr"] = {"any","group"},["giantsws"] = {"frostmaul","winterspring"},["needto"] = {"need","to"},
+["lokmodan"] = {"loch","modan"},
 
 ["healerlfwork"] = {"healer","lfw"},["heallfwork"] = {"heal","lfw"},["tanklfwork"] = {"tank","lfw"},["needps"] = {"need","dps"},["whohave"] = {"anyone","have"},
 ["elitequeue"] = {"elite","quest"},["alahquest"] = {"alahthalas","quest"},["alahelite"] = {"alahthalas","elite"},["alahqueue"] = {"alahthalas","quest"},
@@ -2738,7 +2739,7 @@ GF_WORD_QUEST = {
 ["wplrepfarm"]={0,60,0},["xalthix"]={0,61,0},["xanthar"]={0,60,0},["xanvarak"]={0,60,0},["yowler"]={0,25,0},["zefek"]={0,48,0},
 
 ["nesingwarycamp"]={0,35,0},["nesingwaryelite"]={0,40,0},["dalsonstears"]={0,55,0},["felstonefield"]={0,53,0},["gahrronswithering"]={0,58,0},["writhinghaunt"]={0,55,0},["tidelordsclaw"]={0,34,0},["tidelordmakrani"]={0,34,0},["makrani"]={0,34,0},
-["carvermolsen"]={0,22,0},["lycankill"]={0,60,0},["omen"]={0,60,0},["scythehr"]={0,60,0},
+["carvermolsen"]={0,22,0},["lycankill"]={0,60,0},["omen"]={0,60,0},["scythehr"]={0,60,0},["bearinlochmodan"]={0,20,0},
 
 ["trollfarm"]={0,0,0},
 
