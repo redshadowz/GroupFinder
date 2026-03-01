@@ -808,6 +808,7 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 	local old_JoinChannelByName = JoinChannelByName	
 	function JoinChannelByName(channel,a2,a3,a4)
 		old_JoinChannelByName(channel,a2,a3,a4)
+		GF_PerCharVariables.blockedchannels[strlower(channel)] = nil
 		GF_ChatJoinedChannels = {}
 	end
 	local old_LeaveChannelByName = LeaveChannelByName	
@@ -1392,7 +1393,7 @@ function GF_AddLogMessage(arg1,logcode,add,arg2,arg8,arg9,event,nodelay)
 			end
 			if getn(GF_LogHistory[GF_RealmName]) > 500 then table.remove(GF_LogHistory[GF_RealmName],501) end
 		end
-		if GF_WhisperLogCurrentButtonID == 0 and GF_LogFilters[logcode] and GF_LogFilters[event] then
+		if GF_WhisperLogCurrentButtonID == 0 and GF_LogFilters[logcode] and GF_LogFilters[event] and not GF_PerCharVariables.blockedchannels[arg9] then
 			if GF_ConvertMessagesToLinks then
 				local _,_,startString,endString = strfind(arg1, "(.-%].-|Hplayer.-|h|r:? )(.*)")
 				if startString then
@@ -1409,11 +1410,12 @@ function GF_AddLogMessage(arg1,logcode,add,arg2,arg8,arg9,event,nodelay)
 	end
 end
 function GF_DisplayLog()
+ 	GF_GetJoinedChannels()
 	GF_Log:SetMaxLines(128)
 	local tempHistoryTable = {}
 	local counter = 0
 	for i=1, getn(GF_LogHistory[GF_RealmName]) do
-		if GF_LogFilters[GF_LogHistory[GF_RealmName][i][2]] and GF_LogFilters[GF_LogHistory[GF_RealmName][i][3]] and not GF_PerCharVariables.blockedchannels[GF_LogHistory[GF_RealmName][i][4]] then 
+		if GF_LogFilters[GF_LogHistory[GF_RealmName][i][2]] and GF_LogFilters[GF_LogHistory[GF_RealmName][i][3]] and not GF_PerCharVariables.blockedchannels[GF_LogHistory[GF_RealmName][i][4]] and GF_ChatJoinedChannels[GF_LogHistory[GF_RealmName][i][4]] then 
 			table.insert(tempHistoryTable,1,GF_LogHistory[GF_RealmName][i])
 			counter = counter + 1
 			if counter == 128 then break end
@@ -2546,7 +2548,7 @@ function GF_GetTypes(arg1, showanyway)
 	lfs = 1 -- To detect word/letter/number combinations(eg "BMx2" = bm x2)
 	while true do lfs,lfe,wordString,tempString = strfind(arg1,"[%p%s](%a+)(%a%d+)[%p%s]",lfs) if wordString then if GF_WORD_LETTER_NUMBER_BEFORE_AFTER[tempString] and (GF_GROUP_IDS[wordString] or GF_LFMLFG_PREFIX_GUILD[wordString]) then arg1 = strsub(arg1,1,lfs)..wordString.." "..GF_WORD_LETTER_NUMBER_BEFORE_AFTER[tempString].." "..strsub(arg1,lfe) lfs = lfs + strlen(wordString..GF_WORD_LETTER_NUMBER_BEFORE_AFTER[tempString]) + 2 else lfs = lfe end else break end end
 	lfs = 1 -- To detect word/letter/number combinations(eg "2xBM" = bm x2)
-	while true do lfs,lfe,wordString,tempString = strfind(arg1,"[%p%s](%d+%a)(%a+)[%p%s]",lfs) if wordString then if GF_WORD_LETTER_NUMBER_BEFORE_AFTER[wordString] and (GF_GROUP_IDS[wordString] or GF_WORD_ROLES[tempString]) then arg1 = strsub(arg1,1,lfs)..GF_WORD_LETTER_NUMBER_BEFORE_AFTER[wordString].." "..tempString.." "..strsub(arg1,lfe) lfs = lfs + strlen(GF_WORD_LETTER_NUMBER_BEFORE_AFTER[wordString]..tempString) + 2 else lfs = lfe end else break end end
+	while true do lfs,lfe,wordString,tempString = strfind(arg1,"[%p%s](%d+%a)(%a+)[%p%s]",lfs) if wordString then if GF_WORD_LETTER_NUMBER_BEFORE_AFTER[wordString] and (GF_GROUP_IDS[tempString] or GF_WORD_ROLES[tempString]) then arg1 = strsub(arg1,1,lfs)..GF_WORD_LETTER_NUMBER_BEFORE_AFTER[wordString].." "..tempString.." "..strsub(arg1,lfe) lfs = lfs + strlen(GF_WORD_LETTER_NUMBER_BEFORE_AFTER[wordString]..tempString) + 2 else lfs = lfe end else break end end
 	if showanyway == true then print(arg1) end
 
 -- Quest Search
@@ -2689,10 +2691,10 @@ function GF_GetTypes(arg1, showanyway)
 						else
 							if GF_LFM_AFTER[wordTable[i+lfe+j+1]] or GF_LFM_BEFORE[wordTable[i-lfs-1]] or wordTable[i+lfe+j+2] and GF_LFM_AFTER[wordTable[i+lfe+j+1]..wordTable[i+lfe+j+2]]
 							or wordTable[i-lfs-2] and GF_LFM_BEFORE[wordTable[i-lfs-2]..wordTable[i-lfs-1]] or wordTable[i-lfs-3] and GF_LFM_BEFORE[wordTable[i-lfs-3]..wordTable[i-lfs-2]..wordTable[i-lfs-1]] then
-								if GF_LFMLFG_PREFIX_GUILD[wordTable[i-lfs-1]] then foundGuildExclusion = foundGuildExclusion + 1 end foundLFMPreSuf = 2 foundTradesExclusion = foundTradesExclusion + 1.5 if showanyway == true then print(wordString.." triggername lfm 1/2 .. tradesex 1.5") end
+								if GF_LFMLFG_PREFIX_GUILD[wordTable[i-lfs-1]] then foundGuildExclusion = foundGuildExclusion + 1 end foundLFMPreSuf = 2 foundTradesExclusion = foundTradesExclusion + 1.5 if showanyway == true then print(wordString.." triggername lfm 1/2(Q).. tradesex 1.5") end
 							end
 							if GF_LFG_AFTER[wordTable[i+lfe+j+1]] or GF_LFG_BEFORE[wordTable[i-lfs-1]] or wordTable[i+lfe+j+2] and GF_LFG_AFTER[wordTable[i+lfe+j+1]..wordTable[i+lfe+j+2]] or wordTable[i-lfs-2] and GF_LFG_BEFORE[wordTable[i-lfs-2]..wordTable[i-lfs-1]] then
-								if GF_LFMLFG_PREFIX_GUILD[wordTable[i-lfs-1]] then foundGuildExclusion = foundGuildExclusion + 1 end if foundLFMPreSuf == 0 then foundLFGPreSuf = 2 end foundTradesExclusion = foundTradesExclusion + 1.5 if showanyway == true then print(wordString.." triggername lfg 1/2 .. tradesex 1.5") end
+								if GF_LFMLFG_PREFIX_GUILD[wordTable[i-lfs-1]] then foundGuildExclusion = foundGuildExclusion + 1 end if foundLFMPreSuf == 0 then foundLFGPreSuf = 2 end foundTradesExclusion = foundTradesExclusion + 1.5 if showanyway == true then print(wordString.." triggername lfg 1/2(Q) .. tradesex 1.5") end
 							end
 						end
 						if GF_WORD_IGNORE_AFTER[wordTable[i+lfe+j+1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_AFTER[wordTable[i+lfe+j+1]] if showanyway == true then print(wordTable[i+lfe+j+1].." ignore "..GF_WORD_IGNORE_AFTER[wordTable[i+lfe+j+1]]) end end
@@ -2875,11 +2877,11 @@ function GF_GetTypes(arg1, showanyway)
 					if not GF_WORD_LEVEL_ZONE[wordString] then
 						if GF_LFM_AFTER[wordTable[i+j+1]] or GF_LFM_BEFORE[wordTable[i-1]] or wordTable[i+j+2] and GF_LFM_AFTER[wordTable[i+j+1]..wordTable[i+j+2]]
 						or wordTable[i-2] and GF_LFM_BEFORE[wordTable[i-2]..wordTable[i-1]] or wordTable[i-3] and GF_LFM_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] then
-							if GF_LFMLFG_PREFIX_GUILD[wordTable[i-1]] then foundGuildExclusion = foundGuildExclusion + 1 end foundLFMPreSuf = 2 foundTradesExclusion = foundTradesExclusion + 1.5 if showanyway == true then print(wordString.." triggername lfm 1/2 .. tradesex 1.5") end
+							if GF_LFMLFG_PREFIX_GUILD[wordTable[i-1]] then foundGuildExclusion = foundGuildExclusion + 1 end foundLFMPreSuf = 2 foundTradesExclusion = foundTradesExclusion + 1.5 if showanyway == true then print(wordString.." triggername lfm 1/2(D) .. tradesex 1.5") end
 						end
 
 						if GF_LFG_AFTER[wordTable[i+j+1]] or GF_LFG_BEFORE[wordTable[i-1]] or wordTable[i+j+2] and GF_LFG_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] or wordTable[i-2] and GF_LFG_BEFORE[wordTable[i-2]..wordTable[i-1]] then
-							if GF_LFMLFG_PREFIX_GUILD[wordTable[i-1]] then foundGuildExclusion = foundGuildExclusion + 1 end if foundLFMPreSuf == 0 then foundLFGPreSuf = 2 end foundTradesExclusion = foundTradesExclusion + 1.5 if showanyway == true then print(wordString.." triggername lfg 1/2 .. tradesex 1.5") end
+							if GF_LFMLFG_PREFIX_GUILD[wordTable[i-1]] then foundGuildExclusion = foundGuildExclusion + 1 end if foundLFMPreSuf == 0 then foundLFGPreSuf = 2 end foundTradesExclusion = foundTradesExclusion + 1.5 if showanyway == true then print(wordString.." triggername lfg 1/2(D) .. tradesex 1.5") end
 						end
 
 						if GF_WORD_IGNORE_AFTER[wordTable[i+j+1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_AFTER[wordTable[i+j+1]] if showanyway == true then print(wordTable[i+j+1].." ignore "..GF_WORD_IGNORE_AFTER[wordTable[i+j+1]]) end end
@@ -3043,7 +3045,7 @@ function GF_GetGroupInformation(arg1,arg2,sentTime,event) -- Searches messages f
 	entry.op = arg2
 	entry.message = GF_ChatReplaceHquestLevels(arg1)
 	if foundRaid then entry.type = "R" entry.flags = {} for i=1, getn(foundDFlags) do table.insert(entry.flags, GF_GROUP_IDS[foundDFlags[i]]) end
-	elseif foundDungeon and (not foundQuest[1] or foundQuest[1] == 0 or foundDungeon >= foundQuest[1] - 5) then
+	elseif foundDungeon and (not foundQuest[1] or foundQuest[1] == 0 or (foundDungeon ~= 0 and foundDungeon >= foundQuest[1] - 5)) then
 		entry.type = "D" entry.flags = {} for i=1, getn(foundDFlags) do table.insert(entry.flags, GF_GROUP_IDS[foundDFlags[i]]) end
 	elseif foundQuest[1] then entry.type = "Q" foundDungeon = nil entry.flags = {"QUEST"}
 	else entry.type = "N" if foundPvP then if foundPvP == 0 then foundPvP = 60 end	entry.flags = {} for i=1, getn(foundPFlags) do table.insert(entry.flags, GF_GROUP_IDS[foundPFlags[i]]) end else entry.flags = {""} end end
@@ -4465,8 +4467,7 @@ function GetModifiedQuestName(entryname)
 	wordTable = {}
 
 	lfs = 1 -- To detect "faces"(eg ":d",":p")
-	while true do lfs,lfe,wordString = strfind(arg1, " (%p%a+)[%[%s]",lfs) if wordString then if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = strsub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..strsub(arg1,lfe) end lfs = lfs + strlen(wordString) + 1 else break end end
-
+	while true do lfs,lfe,wordString = strfind(arg1, " (%p%w+)[%[%%%s]",lfs) if wordString then if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = strsub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..strsub(arg1,lfe) end lfs = lfs + strlen(wordString) + 1 else break end end
 	lfs = 2 -- To detect word/word with no space(eg "lfgscholo" = lfg scholo)
 	while true do
 		lfs,lfe,wordString = strfind(arg1,"(%a%a%a%a+)",lfs)
@@ -4485,11 +4486,11 @@ function GetModifiedQuestName(entryname)
 						else
 							arg1 = strsub(arg1,1,lfs-1)..strsub(wordString,1,i).." "..strsub(arg1,lfs+i)
 						end
-						lfs = lfe + 1
+						lfe = lfs
 						break
 					elseif GF_WORD_WORD_REPLACE[strsub(wordString,-i)] then
 						arg1 = strsub(arg1,1,lfe-i).." "..strsub(wordString,-i)..strsub(arg1,lfe+1)
-						lfs = lfs + (i-strlen(strsub(wordString,-i))) + strlen(wordString) + 1
+						lfe = lfs
 						break
 					end
 				end
@@ -4526,11 +4527,11 @@ function GetModifiedQuestName(entryname)
 	while true do lfs,lfe,wordString,tempString = strfind(arg1, "(.-)([%s%p%d]+)",lfs) if not wordString then break elseif GF_WORD_FIX_SINGLE_WORD[wordString] then arg1 = strsub(arg1,1,lfs-1)..GF_WORD_FIX_SINGLE_WORD[wordString]..tempString..strsub(arg1,lfe+1) lfs = lfs + strlen(GF_WORD_FIX_SINGLE_WORD[wordString]..tempString)-1 else lfs = lfe+1 end end
 
 	lfs = 1 -- To detect space/letter/number/letter/space combinations(eg " g2g " = gtg)
-	while true do lfs,lfe,wordString = strfind(arg1," (w?%a%s?%d%s?%ab?)[%p%s]",lfs) if wordString then wordString = gsub(wordString," ","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = strsub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..strsub(arg1,lfe) end lfs = lfs + strlen(wordString) + 1 else break end end
+	while true do lfs,lfe,wordString = strfind(arg1,"[%p%s](w?%a%s?%d%s?%ab?)[%p%s]",lfs) if wordString then wordString = gsub(wordString," ","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = strsub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..strsub(arg1,lfe) end lfs = lfs + strlen(wordString) + 1 else break end end
 	lfs = 1 -- To detect space/word/number+/space combinations(eg " k10" = lowerkarazhan)
-	while true do lfs,lfe,wordString = strfind(arg1," (%a+%s?[:%-]?%s?%d+)s?[%p%s]",lfs) if wordString then wordString = gsub(wordString,"[%s:%-]","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = strsub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..strsub(arg1,lfe) end lfs = lfs + strlen(wordString) + 1 else break end end
+	while true do lfs,lfe,wordString = strfind(arg1,"[%p%s](%a+%s?[:%-]?%s?%d+)s?[%p%s]",lfs) if wordString then wordString = gsub(wordString,"[%s:%-]","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = strsub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..strsub(arg1,lfe) end lfs = lfs + strlen(wordString) + 1 else break end end
 	lfs = 1 -- To detect words with explanation points "!" (eg "hungry!","lost!")... To help identify quests with short names.
-	while true do lfs,lfe,wordString = strfind(arg1, " (%a+%s?!) ",lfs) if wordString then wordString = gsub(wordString," ","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = strsub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..strsub(arg1,lfe) end lfs = lfs + strlen(wordString) + 1 else break end end
+	while true do lfs,lfe,wordString = strfind(arg1, "[%p%s](%a+%s?!) ",lfs) if wordString then wordString = gsub(wordString," ","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = strsub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..strsub(arg1,lfe) end lfs = lfs + strlen(wordString) + 1 else break end end
 	lfs = 1 -- To detect space/number+/word/space combinations(eg " 10th " = tenth, " 5g " = 5gold)
 	while true do
 		lfs,lfe,wordString,tempString = strfind(arg1,"[%p%s](%d+%s?(%a+))[%p%s]",lfs)
@@ -4552,9 +4553,9 @@ function GetModifiedQuestName(entryname)
 	end
 
 	lfs = 1 -- To detect word/letter/number combinations(eg "BMx2" = bm x2)
-	while true do lfs,lfe,wordString,tempString = strfind(arg1," (%a+)(%a%d+)[%p%s]",lfs) if wordString then if GF_WORD_LETTER_NUMBER_BEFORE_AFTER[tempString] and (GF_GROUP_IDS[wordString] or GF_LFMLFG_PREFIX_GUILD[wordString]) then arg1 = strsub(arg1,1,lfs)..wordString.." "..GF_WORD_LETTER_NUMBER_BEFORE_AFTER[tempString].." "..strsub(arg1,lfe) lfs = lfs + strlen(wordString..GF_WORD_LETTER_NUMBER_BEFORE_AFTER[tempString]) + 2 else lfs = lfe end else break end end
+	while true do lfs,lfe,wordString,tempString = strfind(arg1,"[%p%s](%a+)(%a%d+)[%p%s]",lfs) if wordString then if GF_WORD_LETTER_NUMBER_BEFORE_AFTER[tempString] and (GF_GROUP_IDS[wordString] or GF_LFMLFG_PREFIX_GUILD[wordString]) then arg1 = strsub(arg1,1,lfs)..wordString.." "..GF_WORD_LETTER_NUMBER_BEFORE_AFTER[tempString].." "..strsub(arg1,lfe) lfs = lfs + strlen(wordString..GF_WORD_LETTER_NUMBER_BEFORE_AFTER[tempString]) + 2 else lfs = lfe end else break end end
 	lfs = 1 -- To detect word/letter/number combinations(eg "2xBM" = 2x bm)
-	while true do lfs,lfe,wordString,tempString = strfind(arg1," (%d+%a)(%a+)[%p%s]",lfs) if wordString then if GF_WORD_LETTER_NUMBER_BEFORE_AFTER[wordString] and GF_GROUP_IDS[tempString] then arg1 = strsub(arg1,1,lfs)..GF_WORD_LETTER_NUMBER_BEFORE_AFTER[wordString].." "..tempString.." "..strsub(arg1,lfe) lfs = lfs + strlen(GF_WORD_LETTER_NUMBER_BEFORE_AFTER[wordString]..tempString) + 2 else lfs = lfe end else break end end
+	while true do lfs,lfe,wordString,tempString = strfind(arg1,"[%p%s](%d+%a)(%a+)[%p%s]",lfs) if wordString then if GF_WORD_LETTER_NUMBER_BEFORE_AFTER[wordString] and (GF_GROUP_IDS[tempString] or GF_WORD_ROLES[tempString]) then arg1 = strsub(arg1,1,lfs)..GF_WORD_LETTER_NUMBER_BEFORE_AFTER[wordString].." "..tempString.." "..strsub(arg1,lfe) lfs = lfs + strlen(GF_WORD_LETTER_NUMBER_BEFORE_AFTER[wordString]..tempString) + 2 else lfs = lfe end else break end end
 
 -- Quest Search
 	lfs = 1 _,lfe,wordString = string.find(arg1, "([%s%p%d]+)",lfs) lfs = lfe+1 -- Add all words to the wordTable
