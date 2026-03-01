@@ -1048,8 +1048,10 @@ GF_WORD_FIX_SINGLE_WORD = { -- Single word changes. Mostly typos and simple word
 ["gdmr"] = "dmr",
 ["hollowe"] = "hollow",["holow"] = "hollow",["halow"] = "hallow",["hollw"] = "hollow",["holw"] = "hollow",
 ["otarius"] = "ostarius",["larranikus"] = "larannikus",["larrannikus"] = "larannikus",["laranikkus"] = "larannikus",["laranikus"] = "larannikus",["leranikus"] = "larannikus",["concanius"] = "concavius",
-["jewlery"] = "jewelcrafter",["jewelery"] = "jewelcrafter",["jewler"] = "jewelcrafter",["jewlerer"] = "jewelcrafter",["jewly"] = "jewelcrafter",["jcer"] = "jewelcrafter",["jcers"] = "jewelcrafter",["jvc"] = "jewelcrafter",["jewelcrafer"] = "jewelcrafter",
-["jewelier"] = "jewelcrafter",["jeweller"] = "jewelcrafter",["jc"] = "jewelcrafter",["jw"] = "jewelcrafter",["jwc"] = "jewelcrafter",["jcs"] = "jewelcrafter",["jf"] = "jewelcrafter",["jewe"] = "jewelcrafter",["jewelcraftin"] = "jewelcrafter",
+["jewlery"] = "jewelcrafter",["jewler"] = "jewelcrafter",["jewlerer"] = "jewelcrafter",["jewly"] = "jewelcrafter",["jcer"] = "jewelcrafter",["jcers"] = "jewelcrafter",["jvc"] = "jewelcrafter",
+["jewelier"] = "jewelcrafter",["jeweller"] = "jewelcrafter",["jc"] = "jewelcrafter",["jw"] = "jewelcrafter",["jwc"] = "jewelcrafter",["jcs"] = "jewelcrafter",["jf"] = "jewelcrafter",
+["jewe"] = "jewelcrafter",["jewelcraftin"] = "jewelcrafter",["jewelcra"] = "jewelcrafter",
+
 ["jwl"] = "gem",["jwel"] = "gem",["jewl"] = "gem",["jawel"] = "gem",["juwe"] = "gem",["juwel"] = "gem",["gemmer"] = "gem",["gemo"] = "gem",
 ["casle"] = "castle",["castl"] = "castle",["cstle"] = "castle",["ruinss"] = "ruins",
 ["cripts"] = "crypt",["cript"] = "crypt",["cryps"] = "crypt",["crips"] = "crypt",["crysts"] = "crypt",["cryts"] = "crypt",["cryptes"] = "crypt",["criptes"] = "crypt",["criptt"] = "crypt",["crpts"] = "crypt",
@@ -1357,6 +1359,8 @@ GF_WORD_FIX_BEFORE_QUEST = { -- Word changes processed before quests.
 ["jewelcratfer"] = "jewelcrafter",["juwelcraft"] = "jewelcrafter",["juwelcrafter"] = "jewelcrafter",["juwelcrafting"] = "jewelcrafter",["jewelcraftr"] = "jewelcrafter",["jewlecrafter"] = "jewelcrafter",
 ["jewlecrafting"] = "jewelcrafter",["jewelc"] = "jewelcrafter",["jewelcraft"] = "jewelcrafter",["jcrafting"] = "jewelcrafter",["jcrafter"] = "jewelcrafter",["jcraft"] = "jewelcrafter",["jewcrafter"] = "jewelcrafter",
 ["jewlcrafters"] = "jewelcrafter",["jwelcrafter"] = "jewelcrafter",["jewlescrafter"] = "jewelcrafter",["gemcutter"] = "jewelcrafter",["gemcutters"] = "jewelcrafter",["jewelworker"] = "jewelcrafter",["jewelcradter"] = "jewelcrafter",
+["jewelcrafer"] = "jewelcrafter",["jewelery"] = "jewelcrafter",["jewelcraftor"] = "jewelcrafter",["joolcrafter"] = "jewelcrafter",["jowelcrafter"] = "jewelcrafter",["jewelcrafte"] = "jewelcrafter",["juelcrafter"] = "jewelcrafter",
+["jewelcraftter"] = "jewelcrafter",["jewecrafter"] = "jewelcrafter",["jewelcrafteer"] = "jewelcrafter",["jewlcrafting"] = "jewelcrafter",
 
 -- Quest "x" Combines
 ["keytokarazhanx"] = "keytokarazhanx",["toweroflapidisx"] = "toweroflapidisx",["oldchurchofwestfallx"] = "oldchurchofwestfallx",
@@ -2245,7 +2249,7 @@ GF_GUILD_FIRST_LAST = { -- Words in the wordTableGuild
 ["invite"] = { ["G"] = true, },
 ["G"] = { ["invite"] = true, },
 ["need"] = { ["G"] = true, },
-["F"] = { ["G"] = true, ["R"] = true, },
+["F"] = { ["G"] = true, ["R"] = true, ["belerian"] = true, },
 ["looking"] = { ["G"] = true, },
 }
 GF_GUILD_FIRST_TWO = { -- Regular words in the wordTable
@@ -2464,6 +2468,7 @@ GF_LFM_BEFORE = { -- Up to three words before
 
 ["druidfor"] = true,["hunterfor"] = true,["magefor"] = true,["paladinfor"] = true,["priestfor"] = true,["roguefor"] = true,["shamanfor"] = true,["warlockfor"] = true,["warriorfor"] = true,
 ["anytauren"] = true,["anyundead"] = true,["anyhuman"] = true,["anydwarf"] = true,["anygnome"] = true,["anynightelf"] = true,["anyorc"] = true,["anytroll"] = true,["anyhighelf"] = true,["anygoblin"] = true,
+["lf"] = true,["lfm"] = true,
 }
 GF_LFM_AFTER = { -- Up to two words after
 ["andgo"] = true,
@@ -2553,6 +2558,7 @@ GF_LFG_AFTER = { -- Up to two words after
 ["any"] = true,["ant"] = true,-- Misspelling of Any
 ["need"] = true,
 ["invite"] = true,
+["lfg"] = true,
 }
 GF_LFM_BYPASS = { -- Won't detect LFM/LFM Before/After if these words
 ["elite"] = true,

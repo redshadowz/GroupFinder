@@ -5455,7 +5455,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Anchors>
 						<Scripts>
 							<OnClick>
-								GF_PlayerNotes[GF_RealmName][GF_EditPlayerNoteFrameTitleLabel:GetText()] = GF_EditPlayerNoteFrameEditBox:GetText()
+								if GF_EditPlayerNoteFrameEditBox:GetText() ~= "" then GF_PlayerNotes[GF_RealmName][GF_EditPlayerNoteFrameTitleLabel:GetText()] = GF_EditPlayerNoteFrameEditBox:GetText() else GF_PlayerNotes[GF_RealmName][GF_EditPlayerNoteFrameTitleLabel:GetText()] = nil end
 								GF_UpdateResults()
 								GF_EditPlayerNoteFrame:Hide()
 							</OnClick>
@@ -5474,7 +5474,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Anchors>
 						<Scripts>
 							<OnClick>
-								GF_PlayerNotes[GF_RealmName][GF_EditPlayerNoteFrameTitleLabel:GetText()] = ""
+								GF_PlayerNotes[GF_RealmName][GF_EditPlayerNoteFrameTitleLabel:GetText()] = nil
 								GF_UpdateResults()
 								GF_EditPlayerNoteFrame:Hide()
 							</OnClick>
@@ -5508,7 +5508,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								GF_EditPlayerNoteFrame:Hide()
 							</OnTabPressed>
 							<OnEnterPressed>
-								GF_PlayerNotes[GF_RealmName][GF_EditPlayerNoteFrameTitleLabel:GetText()] = GF_EditPlayerNoteFrameEditBox:GetText()
+								if GF_EditPlayerNoteFrameEditBox:GetText() ~= "" then GF_PlayerNotes[GF_RealmName][GF_EditPlayerNoteFrameTitleLabel:GetText()] = GF_EditPlayerNoteFrameEditBox:GetText() else GF_PlayerNotes[GF_RealmName][GF_EditPlayerNoteFrameTitleLabel:GetText()] = nil end
 								GF_UpdateResults()
 								GF_EditPlayerNoteFrame:Hide()
 							</OnEnterPressed>

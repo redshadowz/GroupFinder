@@ -2817,12 +2817,12 @@ function GF_GetTypes(arg1, showanyway)
 					if GF_WORD_LFM[wordString] > foundLFM then foundLFM = GF_WORD_LFM[wordString] table.insert(lfmlfgName, wordString) if showanyway == true then print(wordString.." lfm "..GF_WORD_LFM[wordString]) end end
 					if GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] or GF_GROUP_IDS[wordTable[i+j+1]] then
 						if not foundQuest[1] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] end
-						if GF_WORD_LFM[wordString] + .5 > foundLFM then foundLFM = GF_WORD_LFM[wordString] + .5 table.insert(lfmPosition, {i,i+j+1,GF_WORD_LFM[wordString] + .5}) else table.insert(lfmPosition, {i,i+j+1,GF_WORD_LFM[wordString]}) end
+						if GF_WORD_LFM[wordString] + .5 > foundLFM then foundLFM = GF_WORD_LFM[wordString] + .5 table.insert(lfmPosition, {i,i+j+1,GF_WORD_LFM[wordString] + .5,1}) else table.insert(lfmPosition, {i,i+j+1,GF_WORD_LFM[wordString],1}) end
 					elseif GF_WORD_LEVEL_ZONE[wordTable[i-1]] or GF_GROUP_IDS[wordTable[i-1]] then
 						if not foundQuest[1] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-1]] end
-						if GF_WORD_LFM[wordString] + .5 > foundLFM then foundLFM = GF_WORD_LFM[wordString] + .5 table.insert(lfmPosition, {i-1,i+j,GF_WORD_LFM[wordString] + .5}) else table.insert(lfmPosition, {i-1,i+j,GF_WORD_LFM[wordString]}) end
+						if GF_WORD_LFM[wordString] + .5 > foundLFM then foundLFM = GF_WORD_LFM[wordString] + .5 table.insert(lfmPosition, {i-1,i+j,GF_WORD_LFM[wordString] + .5,1}) else table.insert(lfmPosition, {i-1,i+j,GF_WORD_LFM[wordString],1}) end
 					else
-						table.insert(lfmPosition, {i,i+j,GF_WORD_LFM[wordString]})
+						table.insert(lfmPosition, {i,i+j,GF_WORD_LFM[wordString],1})
 					end
 					if GF_WORD_IGNORE_AFTER[wordTable[i+j+1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_AFTER[wordTable[i+j+1]] if showanyway == true then print(wordTable[i+j+1].." ignore "..GF_WORD_IGNORE_AFTER[wordTable[i+j+1]]) end end
 					if GF_QUEST_ONLY_AFTER_LFM[wordTable[i+j+1]] then if not foundQuest[1] or GF_QUEST_ONLY_AFTER_LFM[wordTable[i+j+1]] > foundQuest[1] then foundQuest[1] = GF_QUEST_ONLY_AFTER_LFM[wordTable[i+j+1]] if showanyway == true then print(wordTable[i+j+1].." only after lfm") end end end
@@ -2839,7 +2839,7 @@ function GF_GetTypes(arg1, showanyway)
 					if wordTable[i-2] and GF_WORD_IGNORE[wordTable[i-2]..wordTable[i-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE[wordTable[i-2]..wordTable[i-1]] if showanyway == true then print(wordTable[i-2]..wordTable[i-1].." ignore "..GF_WORD_IGNORE[wordTable[i-2]..wordTable[i-1]]) end end
 					if wordTable[i-3] and GF_WORD_IGNORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] if showanyway == true then print(wordTable[i-3]..wordTable[i-2]..wordTable[i-1].." ignore "..GF_WORD_IGNORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]]) end end
 				elseif GF_WORD_LFG[wordString] then
-					if GF_WORD_LFG[wordString] > foundLFG then foundLFG = GF_WORD_LFG[wordString] table.insert(lfmlfgName, wordString) if showanyway == true then print(wordString.." lfg "..GF_WORD_LFG[wordString]) end end
+					if GF_WORD_LFG[wordString] > foundLFG then foundLFG = GF_WORD_LFG[wordString] table.insert(lfmlfgName, wordString) if showanyway == true then print(wordString.." lfg "..GF_WORD_LFG[wordString]) end end table.insert(lfmPosition, {i,i+j,GF_WORD_LFG[wordString]})
 					if not foundQuest[1] then if GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] elseif GF_WORD_LEVEL_ZONE[wordTable[i-1]] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-1]] end end
 					if GF_WORD_IGNORE_AFTER[wordTable[i+j+1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_AFTER[wordTable[i+j+1]] if showanyway == true then print(wordTable[i+j+1].." ignore "..GF_WORD_IGNORE_AFTER[wordTable[i+j+1]]) end end
 					if GF_QUEST_ONLY_AFTER_LFG[wordTable[i+j+1]] then if not foundQuest[1] or GF_QUEST_ONLY_AFTER_LFG[wordTable[i+j+1]] > foundQuest[1] then foundQuest[1] = GF_QUEST_ONLY_AFTER_LFG[wordTable[i+j+1]] if showanyway == true then print(wordTable[i+j+1].." only after lfm") end end end
@@ -2863,7 +2863,7 @@ function GF_GetTypes(arg1, showanyway)
 					else table.insert(foundDFlags,wordString) end foundTradesExclusion = foundTradesExclusion + .3 foundGuildExclusion = foundGuildExclusion + .1
 				elseif GF_WORD_RAID[wordString] then
 					if showanyway == true then print(wordString.." raid") end
-					if not foundRaid or GF_WORD_RAID[wordString] > foundRaid then foundRaid = GF_WORD_RAID[wordString] table.insert(foundDFlags,1,wordString) else table.insert(foundDFlags,wordString) end groupPosition = i
+					if not foundRaid or GF_WORD_RAID[wordString] > foundRaid then foundRaid = GF_WORD_RAID[wordString] table.insert(foundDFlags,1,wordString) groupPosition = i else table.insert(foundDFlags,wordString) end
 					foundTradesExclusion = foundTradesExclusion + .3 foundGuildExclusion = foundGuildExclusion + .1
 					if GF_RAID_BEFORE[wordTable[i-1]] and (GF_RAID_BEFORE[wordTable[i-1]][wordTable[i+j+1]] or (wordTable[i+j+2] and GF_RAID_BEFORE[wordTable[i-1]][wordTable[i+j+1]..wordTable[i+j+2]])) then foundGuildExclusion = foundGuildExclusion + 1 if foundLFM < 3 then foundLFM = 3 if showanyway == true then print("1 word before/1-2 words after raid") end end end
 					if GF_RAID_AFTER[wordTable[i+j+1]] or (wordTable[i+j+2] and GF_RAID_AFTER[wordTable[i+j+1]..wordTable[i+j+2]]) or (wordTable[i+j+3] and GF_RAID_AFTER[wordTable[i+j+1]..wordTable[i+j+2]..wordTable[i+j+3]]) then foundGuildExclusion = foundGuildExclusion + 1 if foundLFM < 3 then foundLFM = 3 if showanyway == true then print("1-3 words after raid") end end end
@@ -2915,37 +2915,34 @@ function GF_GetTypes(arg1, showanyway)
 			end
 		end
 	end
-
-	if foundLFM > foundLFG then
-		for i=1, getn(lfmPosition) do
-			lfs = lfmPosition[i][3]
-			for k=lfmPosition[i][2]+1, tempVal do
-				if k == groupPosition then lfs = lfs + 1 if foundLFMPreSuf > 1 then foundLFMPreSuf = 3 foundTradesExclusion = foundTradesExclusion + .5 else foundTradesExclusion = foundTradesExclusion + 1.5 end break end
-				if wordTable[k] then
-					if GF_LFM_CONNECT_WORDS[wordTable[k]] then
-						lfs = lfs + GF_LFM_CONNECT_WORDS[wordTable[k]]
-						if showanyway == true then print(lfmPosition[i][3].." "..wordTable[k].." "..GF_LFM_CONNECT_WORDS[wordTable[k]]) end
-						if GF_LFM_CONNECT_WORDS[wordTable[k]] < 0 then break end
-					else
-						break
-					end
+	for i=1, getn(lfmPosition) do
+		lfs = lfmPosition[i][3]
+		for k=lfmPosition[i][2]+1, tempVal do
+			if k == groupPosition then lfs = lfs + 1 if lfmPosition[i][4] then if foundLFMPreSuf > 1 then foundLFMPreSuf = 3 foundTradesExclusion = foundTradesExclusion + .5 else foundTradesExclusion = foundTradesExclusion + 1.5 end else if foundLFGPreSuf > 1 then foundLFGPreSuf = 3 foundTradesExclusion = foundTradesExclusion + .5 else foundTradesExclusion = foundTradesExclusion + 1.5 end end break end
+			if wordTable[k] then
+				if GF_LFM_CONNECT_WORDS[wordTable[k]] then
+					lfs = lfs + GF_LFM_CONNECT_WORDS[wordTable[k]]
+					if showanyway == true then print(lfmPosition[i][3].." "..wordTable[k].." "..GF_LFM_CONNECT_WORDS[wordTable[k]]) end
+					if GF_LFM_CONNECT_WORDS[wordTable[k]] < 0 then break end
+				else
+					break
 				end
 			end
-			for k=lfmPosition[i][1]-1, 1, -1 do
-				if wordTable[k] then
-					if GF_LFM_CONNECT_WORDS[wordTable[k]] then
-						lfs = lfs + GF_LFM_CONNECT_WORDS[wordTable[k]]
-						if showanyway == true then print(lfmPosition[i][3].." "..wordTable[k].." "..GF_LFM_CONNECT_WORDS[wordTable[k]]) end
-						if GF_LFM_CONNECT_WORDS[wordTable[k]] < 0 then break end
-					else
-						break
-					end
-				end
-			end
-			if lfs > foundLFM then foundLFM = lfs end
 		end
-		if foundLFM > 1.99 then foundLFG = 0 foundLFGPreSuf = 0 end
+		for k=lfmPosition[i][1]-1, 1, -1 do
+			if wordTable[k] then
+				if GF_LFM_CONNECT_WORDS[wordTable[k]] then
+					lfs = lfs + GF_LFM_CONNECT_WORDS[wordTable[k]]
+					if showanyway == true then print(lfmPosition[i][3].." "..wordTable[k].." "..GF_LFM_CONNECT_WORDS[wordTable[k]]) end
+					if GF_LFM_CONNECT_WORDS[wordTable[k]] < 0 then break end
+				else
+					break
+				end
+			end
+		end
+		if lfmPosition[i][4] then if lfs > foundLFM then foundLFM = lfs end else if lfs > foundLFG then foundLFG = lfs end end
 	end
+	if foundLFM > foundLFG then foundLFG = 0 foundLFGPreSuf = 0 end
 
 	if getn(lfmlfgName) == 1 and groupName[1] and not foundDungeon and not foundRaid and (not foundQuest[1] or GF_LFM_BYPASS[groupName[1]]) then lfs = 0 for i=1,getn(groupName) do if strfind(lfmlfgName[1],groupName[i]) then lfs = lfs + 1 end end if lfs == getn(groupName) then foundLFM = 0 foundLFG = 0 end end
 
@@ -3353,7 +3350,7 @@ function GF_UpdateResults()
 						getglobal("GF_NewItem"..i.."LFMWhisperRequestInviteButton"):Hide()
 						getglobal("GF_NewItem"..i.."LFGInviteButton"):Hide()
 					end
-					if GF_PlayerNotes[GF_RealmName][GF_FilteredResultsList[i+GF_ResultsListOffset].op] and GF_PlayerNotes[GF_RealmName][GF_FilteredResultsList[i+GF_ResultsListOffset].op] ~= "" then
+					if GF_PlayerNotes[GF_RealmName][GF_FilteredResultsList[i+GF_ResultsListOffset].op] then
 						getglobal("GF_NewItem"..i.."PlayerNoteButton"):Show()
 					else
 						getglobal("GF_NewItem"..i.."PlayerNoteButton"):Hide()
@@ -3512,7 +3509,7 @@ function GF_ListItemAuxLeft_ShowTooltip(frame,id,showall)
 			GameTooltip:AddLine(GF_PlayerMessages[GF_FilteredResultsList[GF_ResultsListOffset+id].op][2][3], 0.9, 0.9, 1.0, 1, 1)
 		end
 	end
-	if GF_PlayerNotes[GF_RealmName][GF_FilteredResultsList[GF_ResultsListOffset+id].op] and GF_PlayerNotes[GF_RealmName][GF_FilteredResultsList[GF_ResultsListOffset+id].op] ~= "" then
+	if GF_PlayerNotes[GF_RealmName][GF_FilteredResultsList[GF_ResultsListOffset+id].op] then
 		GameTooltip:AddLine(GF_PLAYER_NOTE..GF_PlayerNotes[GF_RealmName][GF_FilteredResultsList[GF_ResultsListOffset+id].op],1,1,0,1,1)
 	end
 	GameTooltip:Show()
@@ -3577,7 +3574,7 @@ function GF_EditPlayerNote(name)
 end
 function GF_PlayerNoteButton_ShowTooltip(frame,id)
 	if not id or not GF_FilteredResultsList[GF_ResultsListOffset+id] then return end
-	if GF_PlayerNotes[GF_RealmName][GF_FilteredResultsList[GF_ResultsListOffset+id].op] and GF_PlayerNotes[GF_RealmName][GF_FilteredResultsList[GF_ResultsListOffset+id].op] ~= "" then
+	if GF_PlayerNotes[GF_RealmName][GF_FilteredResultsList[GF_ResultsListOffset+id].op] then
 		GameTooltip:ClearLines()
 		GameTooltip:SetOwner(this, "ANCHOR_BOTTOMLEFT")
 		GameTooltip:ClearAllPoints()
