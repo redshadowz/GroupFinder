@@ -1048,7 +1048,7 @@ GF_WORD_FIX_SINGLE_WORD = { -- Single word changes. Mostly typos and simple word
 ["gdmr"] = "dmr",
 ["hollowe"] = "hollow",["holow"] = "hollow",["halow"] = "hallow",["hollw"] = "hollow",["holw"] = "hollow",
 ["otarius"] = "ostarius",["larranikus"] = "larannikus",["larrannikus"] = "larannikus",["laranikkus"] = "larannikus",["laranikus"] = "larannikus",["leranikus"] = "larannikus",["concanius"] = "concavius",
-["jewlery"] = "jewelcrafter",["jewelery"] = "jewelcrafter",["jewler"] = "jewelcrafter",["jewlerer"] = "jewelcrafter",["jewly"] = "jewelcrafter",["jcer"] = "jewelcrafter",["jcers"] = "jewelcrafter",["jvc"] = "jewelcrafter",
+["jewlery"] = "jewelcrafter",["jewelery"] = "jewelcrafter",["jewler"] = "jewelcrafter",["jewlerer"] = "jewelcrafter",["jewly"] = "jewelcrafter",["jcer"] = "jewelcrafter",["jcers"] = "jewelcrafter",["jvc"] = "jewelcrafter",["jewelcrafer"] = "jewelcrafter",
 ["jewelier"] = "jewelcrafter",["jeweller"] = "jewelcrafter",["jc"] = "jewelcrafter",["jw"] = "jewelcrafter",["jwc"] = "jewelcrafter",["jcs"] = "jewelcrafter",["jf"] = "jewelcrafter",["jewe"] = "jewelcrafter",["jewelcraftin"] = "jewelcrafter",
 ["jwl"] = "gem",["jwel"] = "gem",["jewl"] = "gem",["jawel"] = "gem",["juwe"] = "gem",["juwel"] = "gem",["gemmer"] = "gem",["gemo"] = "gem",
 ["casle"] = "castle",["castl"] = "castle",["cstle"] = "castle",["ruinss"] = "ruins",
