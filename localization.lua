@@ -2428,7 +2428,7 @@ GF_LFM_BEFORE = { -- Up to three words before
 ["form"] = true,["formnew"] = true,
 ["fresh"] = true,
 ["go"] = true,["gofor"] = true,["going"] = true,["goingto"] = true,["goingfor"] = true,
-["group"] = true,["groupto"] = true,["groupfor"] = true,["groupforlevel"] = true,
+["group"] = true,["groupto"] = true,["groupfor"] = true,["groupforlevel"] = true,["groupin"] = true,
 ["gtg"] = true,
 ["heal"] = true,["heallast"] = true,["healfor"] = true,["healon"] = true,["healto"] = true,["healmy"] = true,
 ["healer"] = true,["healerlast"] = true,["healerfor"] = true,["healeron"] = true,["healerto"] = true,
