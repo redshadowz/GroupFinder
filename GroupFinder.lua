@@ -97,7 +97,7 @@ local ThingsToHide = { "GF_MainFrameCloseButton","GF_GroupChatOptionsFrame","GF_
 local GF_DifficultyColors = { ["RED"] = "ff0000",["ORANGE"] = "ff8040",["YELLOW"] = "ffff00",["GREEN"] = "1eff00",["GREY"] = "808080", }
 local GF_TankClasses						= {	["DRUID"]=true,["WARRIOR"]=true,["PALADIN"]=true,["SHAMAN"]=true }
 local GF_HealingClasses						= {	["PRIEST"]=true,["DRUID"]=true,["PALADIN"]=true,["SHAMAN"]=true }
-local languageName,foundIgnore,foundGuild,foundGuildExclusion,foundLFM,foundLFMPreSuf,foundLFG,foundLFGPreSuf,foundClass,foundDungeon,foundRaid,foundTrades,foundTradesExclusion,foundPvP,foundHC,foundNotHC,foundBlockList,groupPosition
+local languageName,foundIgnore,foundGuild,foundGuildExclusion,foundLFM,foundLFG,foundClass,foundDungeon,foundRaid,foundTrades,foundTradesExclusion,foundPvP,foundHC,foundNotHC,foundBlockList,groupPosition
 local lfmlfgName = {}
 local groupName = {}
 local foundQuest = {}
@@ -2339,7 +2339,7 @@ end
 function GF_GetTypes(arg1, showanyway)
 	if showanyway == true then print(arg1) end
 
-	foundIgnore,foundGuild,foundGuildExclusion,foundLFM,foundLFMPreSuf,foundLFG,foundLFGPreSuf,foundTrades,foundTradesExclusion = 0,0,0,0,0,0,0,0,0
+	foundIgnore,foundGuild,foundGuildExclusion,foundLFM,foundLFG,foundTrades,foundTradesExclusion = 0,0,0,0,0,0,0,0,0
 	foundClass,foundDungeon,foundRaid,foundPvP,foundHC,foundNotHC,foundBlockList,groupPosition = nil,nil,nil,nil,nil,nil,nil,nil
 	foundQuest = {} foundDFlags = {} foundPFlags = {} lfmlfgName = {} groupName = {} lfmPosition = {}
 	languageName = "en"
@@ -2691,13 +2691,19 @@ function GF_GetTypes(arg1, showanyway)
 						if GF_LFM_BYPASS[wordString] then
 							if wordString ~= "group" then table.insert(groupName,wordString) end
 						else
-							if GF_LFM_AFTER[wordTable[i+lfe+j+1]] or GF_LFM_BEFORE[wordTable[i-lfs-1]] or wordTable[i+lfe+j+2] and GF_LFM_AFTER[wordTable[i+lfe+j+1]..wordTable[i+lfe+j+2]]
-							or wordTable[i-lfs-2] and GF_LFM_BEFORE[wordTable[i-lfs-2]..wordTable[i-lfs-1]] or wordTable[i-lfs-3] and GF_LFM_BEFORE[wordTable[i-lfs-3]..wordTable[i-lfs-2]..wordTable[i-lfs-1]] then
-								if GF_LFMLFG_PREFIX_GUILD[wordTable[i-lfs-1]] then foundGuildExclusion = foundGuildExclusion + 1 end foundLFMPreSuf = 2 foundTradesExclusion = foundTradesExclusion + 1.5 if showanyway == true then print(wordString.." triggername lfm 1/2(Q).. tradesex 1.5") end
-							end
-							if GF_LFG_AFTER[wordTable[i+lfe+j+1]] or GF_LFG_BEFORE[wordTable[i-lfs-1]] or wordTable[i+lfe+j+2] and GF_LFG_AFTER[wordTable[i+lfe+j+1]..wordTable[i+lfe+j+2]] or wordTable[i-lfs-2] and GF_LFG_BEFORE[wordTable[i-lfs-2]..wordTable[i-lfs-1]] then
-								if GF_LFMLFG_PREFIX_GUILD[wordTable[i-lfs-1]] then foundGuildExclusion = foundGuildExclusion + 1 end if foundLFMPreSuf == 0 then foundLFGPreSuf = 2 end foundTradesExclusion = foundTradesExclusion + 1.5 if showanyway == true then print(wordString.." triggername lfg 1/2(Q) .. tradesex 1.5") end
-							end
+							if GF_LFM_AFTER[wordTable[i+lfe+j+1]] then table.insert(lfmPosition, {i+lfe+j+1,i+lfe+j+1,GF_LFM_AFTER[wordTable[i+lfe+j+1]],1}) foundTradesExclusion = foundTradesExclusion + 1 if GF_LFMLFG_PREFIX_GUILD[wordTable[i+lfe+j+1]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(wordString.." triggername lfm 1/2(Q).. tradesex 1.5") end end
+							if GF_LFM_BEFORE[wordTable[i-lfs-1]] then table.insert(lfmPosition, {i-1,i-1,GF_LFM_BEFORE[wordTable[i-lfs-1]],1}) foundTradesExclusion = foundTradesExclusion + 1 if GF_LFMLFG_PREFIX_GUILD[wordTable[i-lfs-1]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(wordString.." triggername lfm 1/2(Q).. tradesex 1.5") end end
+							if wordTable[i+lfe+j+2] and GF_LFM_AFTER[wordTable[i+lfe+j+1]..wordTable[i+lfe+j+2]] then table.insert(lfmPosition, {i+lfe+j+1,i+lfe+j+2,GF_LFM_AFTER[wordTable[i+lfe+j+1]..wordTable[i+lfe+j+2]],1}) foundTradesExclusion = foundTradesExclusion + 1 if GF_LFMLFG_PREFIX_GUILD[wordTable[i+lfe+j+1]..wordTable[i+lfe+j+2]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(wordString.." triggername lfm 1/2(Q).. tradesex 1.5") end end
+							if wordTable[i-lfs-2] and GF_LFM_BEFORE[wordTable[i-lfs-2]..wordTable[i-lfs-1]] then table.insert(lfmPosition, {i-2,i-1,GF_LFM_BEFORE[wordTable[i-lfs-2]..wordTable[i-lfs-1]],1}) foundTradesExclusion = foundTradesExclusion + 1 if GF_LFMLFG_PREFIX_GUILD[wordTable[i-lfs-2]..wordTable[i-lfs-1]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(wordString.." triggername lfm 1/2(Q).. tradesex 1.5") end end
+							if wordTable[i-lfs-3] and GF_LFM_BEFORE[wordTable[i-lfs-3]..wordTable[i-lfs-2]..wordTable[i-lfs-1]] then table.insert(lfmPosition, {i-3,i-1,GF_LFM_BEFORE[wordTable[i-lfs-3]..wordTable[i-lfs-2]..wordTable[i-lfs-1]],1}) foundTradesExclusion = foundTradesExclusion + 1 if GF_LFMLFG_PREFIX_GUILD[wordTable[i-lfs-3]..wordTable[i-lfs-2]..wordTable[i-lfs-1]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(wordString.." triggername lfm 1/2(Q).. tradesex 1.5") end end
+
+							if GF_LFM_BEFORE_AFTER[wordTable[i-lfs-1]] and GF_LFM_BEFORE_AFTER[wordTable[i+lfe+j+1]] then table.insert(lfmPosition, {i-1,i+lfe+j+1,2,1}) if showanyway == true then print(wordString.." triggername lfm 1/2(Q).. before/after") end end
+
+							if GF_LFG_AFTER[wordTable[i+lfe+j+1]] then table.insert(lfmPosition, {i+lfe+j+1,i+lfe+j+1,GF_LFG_AFTER[wordTable[i+lfe+j+1]]}) foundTradesExclusion = foundTradesExclusion + 1 if GF_LFMLFG_PREFIX_GUILD[wordTable[i+lfe+j+1]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(wordString.." triggername lfm 1/2(Q).. tradesex 1.5") end end
+							if GF_LFG_BEFORE[wordTable[i-lfs-1]] then table.insert(lfmPosition, {i-1,i-1,GF_LFG_BEFORE[wordTable[i-lfs-1]]}) foundTradesExclusion = foundTradesExclusion + 1 if GF_LFMLFG_PREFIX_GUILD[wordTable[i-lfs-1]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(wordString.." triggername lfm 1/2(Q).. tradesex 1.5") end end
+							if wordTable[i+lfe+j+2] and GF_LFG_AFTER[wordTable[i+lfe+j+1]..wordTable[i+lfe+j+2]] then table.insert(lfmPosition, {i+lfe+j+1,i+lfe+j+2,GF_LFG_AFTER[wordTable[i+lfe+j+1]..wordTable[i+lfe+j+2]]}) foundTradesExclusion = foundTradesExclusion + 1 if GF_LFMLFG_PREFIX_GUILD[wordTable[i+lfe+j+1]..wordTable[i+lfe+j+2]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(wordString.." triggername lfm 1/2(Q).. tradesex 1.5") end end
+							if wordTable[i-lfs-2] and GF_LFG_BEFORE[wordTable[i-lfs-2]..wordTable[i-lfs-1]] then table.insert(lfmPosition, {i-2,i-1,GF_LFG_BEFORE[wordTable[i-lfs-2]..wordTable[i-lfs-1]]}) foundTradesExclusion = foundTradesExclusion + 1 if GF_LFMLFG_PREFIX_GUILD[wordTable[i-lfs-2]..wordTable[i-lfs-1]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(wordString.." triggername lfm 1/2(Q).. tradesex 1.5") end end
+							if wordTable[i-lfs-3] and GF_LFG_BEFORE[wordTable[i-lfs-3]..wordTable[i-lfs-2]..wordTable[i-lfs-1]] then table.insert(lfmPosition, {i-3,i-1,GF_LFG_BEFORE[wordTable[i-lfs-3]..wordTable[i-lfs-2]..wordTable[i-lfs-1]]}) foundTradesExclusion = foundTradesExclusion + 1 if GF_LFMLFG_PREFIX_GUILD[wordTable[i-lfs-3]..wordTable[i-lfs-2]..wordTable[i-lfs-1]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(wordString.." triggername lfm 1/2(Q).. tradesex 1.5") end end
 						end
 						if GF_WORD_IGNORE_AFTER[wordTable[i+lfe+j+1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_AFTER[wordTable[i+lfe+j+1]] if showanyway == true then print(wordTable[i+lfe+j+1].." ignore "..GF_WORD_IGNORE_AFTER[wordTable[i+lfe+j+1]]) end end
 						if GF_WORD_IGNORE_BEFORE[wordTable[i-lfs-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_BEFORE[wordTable[i-lfs-1]] if showanyway == true then print(wordTable[i-lfs-1].." ignore "..GF_WORD_IGNORE_BEFORE[wordTable[i-lfs-1]]) end end
@@ -2877,14 +2883,19 @@ function GF_GetTypes(arg1, showanyway)
 				end
 				if not GF_LFM_BYPASS[wordString] and (GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString] or GF_WORD_LEVEL_ZONE[wordString]) then
 					if not GF_WORD_LEVEL_ZONE[wordString] then
-						if GF_LFM_AFTER[wordTable[i+j+1]] or GF_LFM_BEFORE[wordTable[i-1]] or wordTable[i+j+2] and GF_LFM_AFTER[wordTable[i+j+1]..wordTable[i+j+2]]
-						or wordTable[i-2] and GF_LFM_BEFORE[wordTable[i-2]..wordTable[i-1]] or wordTable[i-3] and GF_LFM_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] then
-							if GF_LFMLFG_PREFIX_GUILD[wordTable[i-1]] then foundGuildExclusion = foundGuildExclusion + 1 end foundLFMPreSuf = 2 foundTradesExclusion = foundTradesExclusion + 1.5 if showanyway == true then print(wordString.." triggername lfm 1/2(D) .. tradesex 1.5") end
-						end
+						if GF_LFM_AFTER[wordTable[i+j+1]] then table.insert(lfmPosition, {i+j+1,i+j+1,GF_LFM_AFTER[wordTable[i+j+1]],1}) foundTradesExclusion = foundTradesExclusion + 1 if GF_LFMLFG_PREFIX_GUILD[wordTable[i+j+1]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(wordString.." triggername lfm 1/2(D).. tradesex 1.5") end end
+						if GF_LFM_BEFORE[wordTable[i-1]] then table.insert(lfmPosition, {i-1,i-1,GF_LFM_BEFORE[wordTable[i-1]],1}) foundTradesExclusion = foundTradesExclusion + 1 if GF_LFMLFG_PREFIX_GUILD[wordTable[i-1]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(wordString.." triggername lfm 1/2(D).. tradesex 1.5") end end
+						if wordTable[i+j+2] and GF_LFM_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] then table.insert(lfmPosition, {i+j+1,i+j+2,GF_LFM_AFTER[wordTable[i+j+1]..wordTable[i+j+2]],1}) foundTradesExclusion = foundTradesExclusion + 1 if GF_LFMLFG_PREFIX_GUILD[wordTable[i+j+1]..wordTable[i+j+2]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(wordString.." triggername lfm 1/2(D).. tradesex 1.5") end end
+						if wordTable[i-2] and GF_LFM_BEFORE[wordTable[i-2]..wordTable[i-1]] then table.insert(lfmPosition, {i-2,i-1,GF_LFM_BEFORE[wordTable[i-2]..wordTable[i-1]],1}) foundTradesExclusion = foundTradesExclusion + 1 if GF_LFMLFG_PREFIX_GUILD[wordTable[i-2]..wordTable[i-1]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(wordString.." triggername lfm 1/2(D).. tradesex 1.5") end end
+						if wordTable[i-3] and GF_LFM_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] then table.insert(lfmPosition, {i-3,i-1,GF_LFM_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]],1}) foundTradesExclusion = foundTradesExclusion + 1 if GF_LFMLFG_PREFIX_GUILD[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(wordString.." triggername lfm 1/2(D).. tradesex 1.5") end end
 
-						if GF_LFG_AFTER[wordTable[i+j+1]] or GF_LFG_BEFORE[wordTable[i-1]] or wordTable[i+j+2] and GF_LFG_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] or wordTable[i-2] and GF_LFG_BEFORE[wordTable[i-2]..wordTable[i-1]] then
-							if GF_LFMLFG_PREFIX_GUILD[wordTable[i-1]] then foundGuildExclusion = foundGuildExclusion + 1 end if foundLFMPreSuf == 0 then foundLFGPreSuf = 2 end foundTradesExclusion = foundTradesExclusion + 1.5 if showanyway == true then print(wordString.." triggername lfg 1/2(D) .. tradesex 1.5") end
-						end
+						if GF_LFM_BEFORE_AFTER[wordTable[i-1]] and GF_LFM_BEFORE_AFTER[wordTable[i+j+1]] then table.insert(lfmPosition, {i-1,i+j+1,2,1}) if showanyway == true then print(wordString.." triggername lfm 1/2(D).. before/after") end end
+
+						if GF_LFG_AFTER[wordTable[i+j+1]] then table.insert(lfmPosition, {i+j+1,i+j+1,GF_LFG_AFTER[wordTable[i+j+1]]}) foundTradesExclusion = foundTradesExclusion + 1 if GF_LFMLFG_PREFIX_GUILD[wordTable[i+j+1]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(wordString.." triggername lfm 1/2(D).. tradesex 1.5") end end
+						if GF_LFG_BEFORE[wordTable[i-1]] then table.insert(lfmPosition, {i-1,i-1,GF_LFG_BEFORE[wordTable[i-1]]}) foundTradesExclusion = foundTradesExclusion + 1 if GF_LFMLFG_PREFIX_GUILD[wordTable[i-1]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(wordString.." triggername lfm 1/2(D).. tradesex 1.5") end end
+						if wordTable[i+j+2] and GF_LFG_AFTER[wordTable[i+j+1]..wordTable[i+j+2]] then table.insert(lfmPosition, {i+j+1,i+j+2,GF_LFG_AFTER[wordTable[i+j+1]..wordTable[i+j+2]]}) foundTradesExclusion = foundTradesExclusion + 1 if GF_LFMLFG_PREFIX_GUILD[wordTable[i+j+1]..wordTable[i+j+2]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(wordString.." triggername lfm 1/2(D).. tradesex 1.5") end end
+						if wordTable[i-2] and GF_LFG_BEFORE[wordTable[i-2]..wordTable[i-1]] then table.insert(lfmPosition, {i-2,i-1,GF_LFG_BEFORE[wordTable[i-2]..wordTable[i-1]]}) foundTradesExclusion = foundTradesExclusion + 1 if GF_LFMLFG_PREFIX_GUILD[wordTable[i-2]..wordTable[i-1]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(wordString.." triggername lfm 1/2(D).. tradesex 1.5") end end
+						if wordTable[i-3] and GF_LFG_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] then table.insert(lfmPosition, {i-3,i-1,GF_LFG_BEFORE[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]]}) foundTradesExclusion = foundTradesExclusion + 1 if GF_LFMLFG_PREFIX_GUILD[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(wordString.." triggername lfm 1/2(D).. tradesex 1.5") end end
 
 						if GF_WORD_IGNORE_AFTER[wordTable[i+j+1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_AFTER[wordTable[i+j+1]] if showanyway == true then print(wordTable[i+j+1].." ignore "..GF_WORD_IGNORE_AFTER[wordTable[i+j+1]]) end end
 						if GF_WORD_IGNORE_BEFORE[wordTable[i-1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_BEFORE[wordTable[i-1]] if showanyway == true then print(wordTable[i-1].." ignore "..GF_WORD_IGNORE_BEFORE[wordTable[i-1]]) end end
@@ -2920,7 +2931,7 @@ function GF_GetTypes(arg1, showanyway)
 	for i=1, getn(lfmPosition) do
 		lfs = lfmPosition[i][3]
 		for k=lfmPosition[i][2]+1, tempVal do
-			if k == groupPosition then lfs = lfs + 1 if lfmPosition[i][4] then if foundLFMPreSuf > 1 then foundLFMPreSuf = 3 foundTradesExclusion = foundTradesExclusion + .5 else foundTradesExclusion = foundTradesExclusion + 1.5 end else if foundLFGPreSuf > 1 then foundLFGPreSuf = 3 foundTradesExclusion = foundTradesExclusion + .5 else foundTradesExclusion = foundTradesExclusion + 1.5 end end break end
+			if k == groupPosition then lfs = lfs + 1 foundTradesExclusion = foundTradesExclusion + .5 if showanyway == true then print(lfmPosition[i][3].." reached group 1") end break end
 			if wordTable[k] then
 				if GF_LFM_CONNECT_WORDS[wordTable[k]] then
 					lfs = lfs + GF_LFM_CONNECT_WORDS[wordTable[k]]
@@ -2932,6 +2943,7 @@ function GF_GetTypes(arg1, showanyway)
 			end
 		end
 		for k=lfmPosition[i][1]-1, 1, -1 do
+			if k == groupPosition then lfs = lfs + 1 foundTradesExclusion = foundTradesExclusion + .5 if showanyway == true then print(lfmPosition[i][3].." reached group 1") end break end
 			if wordTable[k] then
 				if GF_LFM_CONNECT_WORDS[wordTable[k]] then
 					lfs = lfs + GF_LFM_CONNECT_WORDS[wordTable[k]]
@@ -2954,8 +2966,6 @@ function GF_GetTypes(arg1, showanyway)
 
 	foundTrades = foundTrades - foundTradesExclusion
 
-	if foundLFM < foundLFMPreSuf then foundLFM = foundLFMPreSuf end
-	if foundLFG < foundLFGPreSuf then foundLFG = foundLFGPreSuf end
 	if foundIgnore > 0 then
 		foundLFM = foundLFM - foundIgnore
 		foundLFG = foundLFG - foundIgnore
@@ -2970,7 +2980,6 @@ function GF_GetTypes(arg1, showanyway)
 		print(foundGuildExclusion.." guildex")
 		print(foundTrades.." trades")
 		print(foundTradesExclusion.." tradesex")
-		print(foundLFMPreSuf.." lfm PreSuf .... "..foundLFGPreSuf.." lfg PreSuf")
 		print(foundLFM.." lfm .... "..foundLFG.." lfg .... ignore "..foundIgnore)
 		if foundQuest[1] then print(foundQuest[1].." quest") end
 		if foundDungeon then print(foundDungeon.." dungeon") end
