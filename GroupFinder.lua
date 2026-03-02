@@ -2348,12 +2348,13 @@ function GF_GetTypes(arg1, showanyway)
 	lfs = 1 -- To detect space/lf##m/letter(eg "lf15mbwl" = lfm bwl)
 	while true do lfs,lfe,wordString = strfind(arg1,"[%p%s]([lk]f?%s?%d+m)[%p%s]",lfs) if wordString then arg1 = strsub(arg1,1,lfs).."lfm "..strsub(arg1,lfs+strlen(wordString)+1) lfs = lfs + 4 foundLFM = 3 foundGuildExclusion = 2 foundTradesExclusion = 2 if showanyway == true then print("lf##m lfm 3 .. guildex 2... tradesex 2") end else break end end
 	lfs = 1 -- To detect space/number+/punctuation/number+/space for groups
-	while true do lfs,lfe,wordString,tempString = strfind(arg1,"[%p%s](%d%d?([=/v])%d%d?) ",lfs) if wordString then if tempString == "=" then foundLFM = 2 lfs = lfe else arg1 = strsub(arg1,1,lfs).."group"..strsub(arg1,lfe) lfs = lfs + 6 end else break end end
-	lfs,lfe,wordString = strfind(arg1,"%d?%s?\-?([\+±])\-?%s?%d?")
-	if lfs then -- To detect "+- or ±"
-		if wordString == "±" then foundTrades = foundTrades + 1 if showanyway == true then print("± trade 1") end
+	while true do lfs,lfe,wordString = strfind(arg1,"[%p%s]%d%d?([=/v])%d%d? ",lfs) if wordString then if wordString == "=" then foundLFM = 2 lfs = lfe else arg1 = strsub(arg1,1,lfs).."group"..strsub(arg1,lfe) lfs = lfs + 6 end else break end end
+	lfs,lfe,wordString,tempString = strfind(arg1,"[%p%s](%d?%d?%s?\-?([-\+±]))\-?%s?%d?%d?[%p%s]")
+	if wordString then -- To detect "+- or ±"
+		if tempString == "±" then foundTrades = foundTrades + 1 if showanyway == true then print("± trade 1") end
 		elseif strfind(arg1, "[\+\-]/?[\+\-]%s?%d",lfs) then foundTrades = foundTrades + 1 if showanyway == true then print("+-d% trade 1") end
 		elseif strfind(arg1, "%d%s?[\+\-]/?[\+\-]",lfs) then foundTrades = foundTrades + 1 if showanyway == true then print("d%+- trade 1") end end
+		if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = strsub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..strsub(arg1,lfs+strlen(wordString)) end
 	end
 
 	tempVal = 1
@@ -2816,7 +2817,7 @@ function GF_GetTypes(arg1, showanyway)
 				elseif GF_WORD_NOT_HC[wordString] then foundNotHC = true
 				elseif GF_GUILD_WORD_EXCLUSION[wordString] then foundGuildExclusion = foundGuildExclusion + GF_GUILD_WORD_EXCLUSION[wordString] if showanyway == true then print(wordString.." guildex") end end
 				if GF_TRADE_WORD_EXCLUSION[wordString] then foundTradesExclusion = foundTradesExclusion + GF_TRADE_WORD_EXCLUSION[wordString] if showanyway == true then print(wordString.." tradesex") end end
-				if GF_WORD_LFM[wordString] and (not GF_LFM_TRIGGER[wordString] or GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] or GF_GROUP_IDS[wordTable[i+j+1]] or GF_GROUP_IDS[wordTable[i-1]]) then
+				if GF_WORD_LFM[wordString] and (not GF_LFM_TRIGGER[wordString] or GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] or GF_GROUP_IDS[wordTable[i+j+1]] or GF_GROUP_IDS[wordTable[i-1]] or GF_WORD_LEVEL_ZONE[wordTable[i-1]]) then
 					if GF_WORD_LFM[wordString] > foundLFM then foundLFM = GF_WORD_LFM[wordString] table.insert(lfmlfgName, wordString) if showanyway == true then print(wordString.." lfm "..GF_WORD_LFM[wordString]) end end
 					if GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] or GF_GROUP_IDS[wordTable[i+j+1]] then
 						if not foundQuest[1] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] end
