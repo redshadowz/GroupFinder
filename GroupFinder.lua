@@ -92,7 +92,7 @@ local EventIDAlias = { ["SAY"] = "[S] ",["YELL"] = "[Y] ",["GUILD"] = "[G] ",["O
 local GF_ChatNameAlias = { ["OFFICER"] = "GUILD",["RAID"] = "PARTY",["RAID_LEADER"] = "PARTY",["RAID_WARNING"] = "PARTY",["BATTLEGROUND"] = "PARTY",["BATTLEGROUND_LEADER"] = "PARTY",["WHISPER_INFORM"] = "WHISPER",}
 local GF_ChatBypass = { ["MONEY"] = true,["LOOT"] = true,["COMBAT_FACTION_CHANGE"] = true,["COMBAT_XP_GAIN"] = true,["COMBAT_HONOR_GAIN"] = true,["EMOTE"] = true,["TEXT_EMOTE"] = true,["MONSTER_SAY"] = true,["MONSTER_EMOTE"] = true,["MONSTER_YELL"] = true,}
 local ThingsToHide = { "GF_MainFrameCloseButton","GF_GroupChatOptionsFrame","GF_ShowGroupsButton","GF_SettingsFrameButton","GF_ShowBlacklistButton","GF_LogFrameButton","GF_AnnounceToLFGButton",
-"GF_LogBottomButton","GF_LogDownButton","GF_LogUpButton","GF_LogFilterDropdownButton","GF_LogChannelFilterDropdownButton","GF_ConvertLogMessagesToURL","GF_WhisperLogButton","GF_GroupLogButton",
+"GF_LogBottomButton","GF_LogDownButton","GF_LogUpButton","GF_LogFilterDropdownButton","GF_LogChannelFilterDropdownButton","GF_LogChannelNameDropdown","GF_ConvertLogMessagesToURL","GF_WhisperLogButton","GF_GroupLogButton",
 "GF_GetWhoFrame","GF_LFGFrame","GF_MessageFrame","GF_LogFilterDropdownMenu","GF_GroupFilterDropdownMenu","GF_ChatFilterDropdownMenu","GF_LFGHardCoreDropdown","GF_FontName","GF_GroupChannelName","GF_BlockList","GF_AutoBlacklistDropdownMenu","GF_LogChannelName" }
 local GF_DifficultyColors = { ["RED"] = "ff0000",["ORANGE"] = "ff8040",["YELLOW"] = "ffff00",["GREEN"] = "1eff00",["GREY"] = "808080", }
 local GF_TankClasses						= {	["DRUID"]=true,["WARRIOR"]=true,["PALADIN"]=true,["SHAMAN"]=true }
@@ -409,10 +409,10 @@ function GF_SetStringSize()
 		GF_UIScaleSliderLabel:SetFont(fontName,20-i)
 		if GF_UIScaleSliderLabel:GetStringWidth() < 126 then GF_BaseFontSize = 20-i break end
 	end
-	GF_UIScaleSliderLabel:SetText("LF1M Shaman AQ15  2SR > MS > OS  Books HR  Can summon")
+	GF_UIScaleSliderLabel:SetText("MC hosted by <Weird Vibes> is starting in a couple of minutes! Run")
 	for i = 0, 100 do
 		GF_UIScaleSliderLabel:SetFont(fontName,20-i)
-		if GF_UIScaleSliderLabel:GetStringWidth() < 365 then fontSizeLarge = 20-i break end
+		if GF_UIScaleSliderLabel:GetStringWidth() < 407 then fontSizeLarge = 20-i break end
 	end
 	GF_UIScaleSliderLabel:SetText("Druidsarebis")
 	for i = 0, 100 do
@@ -1099,7 +1099,7 @@ function GF_UpdateMainFrame()
 			if word == "GF_MainFrame" then UISpecialFrames[id] = nil end
 		end
 	else
-		for i=1, 15 do
+		for i=1, 16 do
 			getglobal(ThingsToHide[i]):Show()
 		end
 		if GF_PlayingOnTurtle then GF_LFGHardCoreDropdown:Show() end
@@ -1660,7 +1660,7 @@ end
 function GF_TurnOffAnnounce(messageText)
 	GF_AutoAnnounceTimer = nil
 	GF_AnnounceToLFGButton:SetText(GF_ANNOUNCE_ANNOUNCE_GROUP)
-	DEFAULT_CHAT_FRAME:AddMessage(messageText, 1, 1, 0.5)
+	DEFAULT_CHAT_FRAME:AddMessage("GF: "..messageText, 1, 1, 0.5)
 end
 function GF_TurnOnAnnounce()
 	if not GF_ChatJoinedChannels[strlower(GF_GroupChannelEditBox:GetText())] then GF_GetJoinedChannels() if not GF_ChatJoinedChannels[strlower(GF_GroupChannelEditBox:GetText())] then GF_TurnOffAnnounce(GF_AUTO_ANNOUNCE_NOT_IN_CHANNEL) return end end
@@ -3394,7 +3394,7 @@ function GF_GetLevelString(level,flags)
 	elseif flags[1] ~= "" then if level > 60 then return "[60]|r |cffffffff["..flags[1].."]|r " else return "["..level.."]|r |cffffffff["..flags[1].."]|r " end
 	else return "["..level.."]|r " end
 end
-function GF_ToggleDropDownMenu(frame,id)
+function GF_ToggleDropDownMenu(frame,id,delete)
 	if not GF_HandleItemRefLinks("player:"..GF_FilteredResultsList[GF_ResultsListOffset+id].op,GF_FilteredResultsList[GF_ResultsListOffset+id].message,arg1) then
 		if arg1 == "RightButton" then
 			HideDropDownMenu(1)
@@ -3410,6 +3410,17 @@ function GF_ToggleDropDownMenu(frame,id)
 			CloseDropDownMenus(1)
 			GF_ListItemAuxLeft_ShowTooltip(getglobal("GF_NewItem"..id),id,true)
 		end
+	end
+end
+function GF_ToggleWhisperDropDownMenu(frame,id)
+	if not GF_HandleItemRefLinks("player:"..frame:GetText(),"",arg1) then
+		HideDropDownMenu(1)
+		GameTooltip:Hide()
+		GF_DropDownMenu = CreateFrame("Frame", "GF_DropDownMenu", frame, "UIDropDownMenuTemplate")
+		GF_DropDownMenu.name = frame:GetText()
+		GF_DropDownMenu.id = id+GF_WhisperLogOffset
+		UIDropDownMenu_Initialize(GF_DropDownMenu, GF_CreateDropDownMenu, "MENU")
+		ToggleDropDownMenu(1, nil, GF_DropDownMenu, "cursor")
 	end
 end
 function GF_CreateDropDownMenu()
@@ -3472,6 +3483,17 @@ function GF_CreateDropDownMenu()
 	info.value = nil
 	UIDropDownMenu_AddButton(info, 1)	
 
+if GF_DropDownMenu.id then
+	info = {}
+	info.isTitle = nil
+	info.notCheckable = true
+	info.hasArrow = false
+	info.disabled = nil
+	info.text = DELETE
+	info.func = function() GF_WhisperLogData[GF_RealmName][GF_DropDownMenu.name] = nil table.remove(GF_WhisperLogData[GF_RealmName],GF_DropDownMenu.id) GF_WhisperHistoryUpdateFrame() end
+	info.value = nil
+	UIDropDownMenu_AddButton(info, 1)
+else
 	info = {}
 	info.isTitle = nil
 	info.notCheckable = true
@@ -3480,7 +3502,8 @@ function GF_CreateDropDownMenu()
 	info.text = GF_BLACK_LIST
 	info.func = function() table.insert(GF_BlackList[GF_RealmName], 1, { GF_DropDownMenu.name, GF_DropDownMenu.message }) GF_BlackList[GF_RealmName][GF_DropDownMenu.name] = true GF_UpdateBlackListItems() GF_ApplyFiltersToGroupList() end
 	info.value = nil
-	UIDropDownMenu_AddButton(info, 1)	
+	UIDropDownMenu_AddButton(info, 1)
+end
 
 	info = {}
 	info.isTitle = nil
@@ -3587,6 +3610,7 @@ function GF_PlayerNoteButton_ShowTooltip(frame,id)
 end
 
 function GF_WhisperHistoryButtonPressed(id,override,nolog) -- Whisper/Guild History Functions
+	CloseDropDownMenus(1)
 	if not override and getglobal("GF_WhisperHistoryButton"..id):GetText() == GF_WhisperLogCurrentButtonName then return end
 	getglobal("GF_WhisperHistoryButton"..GF_WhisperLogCurrentButtonID):UnlockHighlight()
 	getglobal("GF_WhisperHistoryButton"..id):LockHighlight()
@@ -4161,6 +4185,9 @@ function GF_FontNameDropdownShow()
 	GF_GetDropDownButtons("FontName",6,true)
 end
 function GF_GroupChannelNameDropdownShow()
+	GF_BUTTONS_LIST["GroupChannelName"] = {{GF_WORLD_CHANNEL_NAME},{GF_LFG_CHANNEL_NAME},{TRADE},{GENERAL},[strlower(GF_WORLD_CHANNEL_NAME)] = true,[strlower(GF_LFG_CHANNEL_NAME)] = true,[strlower(TRADE)] = true,[strlower(GENERAL)] = true,}
+	local chanList = { GetChannelList() }
+	for i=1, getn(chanList) do if not tonumber(chanList[i]) and not GF_BUTTONS_LIST["GroupChannelName"][strlower(chanList[i])] then table.insert(GF_BUTTONS_LIST["GroupChannelName"],{chanList[i]}) end end
 	GF_GetDropDownButtons("GroupChannelName",6,true)
 end
 function GF_LFGDungeonDropdownShow()

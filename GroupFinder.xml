@@ -38,6 +38,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			<OnClick>
 				GF_WhisperHistoryButtonPressed(this:GetID())
 			</OnClick>
+			<OnMouseDown>
+				if arg1 == "RightButton" and this:GetID() > 1 then GF_ToggleWhisperDropDownMenu(this,this:GetID()) end
+			</OnMouseDown>
 		</Scripts>
 	</Button>
 	<CheckButton name="GF_SmallCheckButton_Whisper" inherits="UICheckButtonTemplate" hidden="true" virtual="true">
@@ -541,7 +544,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</Anchors>
 					<Color r="1.0" g="1.0" b="1.0"/>
 				</FontString>
-				<FontString inherits="GF_NormalFont" name="$parentMoreLeftLabel" justifyH="RIGHT">
+				<FontString inherits="GF_NormalFont" name="$parentMoreLeftLabel" justifyH="RIGHT" wordwrap="true">
 					<Size>
 						<AbsDimension x="0" y="16"/>
 					</Size>
@@ -1860,7 +1863,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							if GF_LFGDescriptionEditBox:GetText() ~= "" then
 								GF_TurnOnAnnounce()
 							else
-								DEFAULT_CHAT_FRAME:AddMessage(GF_NOTHING_TO_ANNOUNCE2, 1, 1, 0.5)
+								DEFAULT_CHAT_FRAME:AddMessage("GF: "..GF_NOTHING_TO_ANNOUNCE2, 1, 1, 0.5)
 							end
 						end
 					</OnClick>
