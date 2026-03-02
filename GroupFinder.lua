@@ -1415,7 +1415,7 @@ function GF_DisplayLog()
 	local tempHistoryTable = {}
 	local counter = 0
 	for i=1, getn(GF_LogHistory[GF_RealmName]) do
-		if GF_LogFilters[GF_LogHistory[GF_RealmName][i][2]] and GF_LogFilters[GF_LogHistory[GF_RealmName][i][3]] and not GF_PerCharVariables.blockedchannels[GF_LogHistory[GF_RealmName][i][4]] and GF_ChatJoinedChannels[GF_LogHistory[GF_RealmName][i][4]] then 
+		if GF_LogFilters[GF_LogHistory[GF_RealmName][i][2]] and GF_LogFilters[GF_LogHistory[GF_RealmName][i][3]] and not GF_PerCharVariables.blockedchannels[GF_LogHistory[GF_RealmName][i][4]] and (GF_LogHistory[GF_RealmName][i][3] ~= "CHANNEL" or GF_ChatJoinedChannels[GF_LogHistory[GF_RealmName][i][4]]) then 
 			table.insert(tempHistoryTable,1,GF_LogHistory[GF_RealmName][i])
 			counter = counter + 1
 			if counter == 128 then break end
@@ -1961,13 +1961,15 @@ function self:WHO_LIST_UPDATE()
 	GF_WhoListUpdated()
 end
 function self:ZONE_CHANGED() -- TODO: Add Group History stuff.
+-- I really don't need to do anything here except set the zone or zones... I don't think a group spanning multiple zones would work. Honestly, I don't even think I need this. I really only need loot.
+
 -- Turn whisper log into a button, create group log button, move convert messages to links and make smaller... default to whisper log on startup
 -- Use the same buttons but change them to group names(will have to create an array with group names since they can only be 12 characters long)
 -- There are 27 baseline dungeons, plus 8 turtle dungeons(currently)... Then 7 raids + 3 turtle raids... plus world bosses... ~3 pages.. reset to page 1 when flipping between whisper and groups
 -- Date/time, your name/level, date/level of the people in the group, items that dropped and winner names.
 
 -- Data structure needs to be easily sortable, and also minimal, so that I can store a lot of groups.
--- GF_GroupHistory = [1] = { [1] = "InstanceID", [2] = time(), [3] = { ["playername1"] = { [1] = level, [2] = ClassID}, }, [4] = { ["itemid"] = "playername", } } ... [playername1] = { [1] = #ofpreviousgroups, [2] = time() }... Include duration?
+-- GF_GroupHistory = [1] = { [1] = "InstanceID", [2] = time(), [3] = { ["playername1"] = { [1] = level, [2] = ClassID}, [5] = TotalEntries, }, [4] = { ["itemid"] = "playername", } } ... [playername1] = { [1] = #ofpreviousgroups, [2] = time() }... Include duration?
 -- Create groups when a green item or higher drops. Only include names that roll. Finish group when leaving group. If group exists, update group when PARTY_MEMBERS_CHANGED or RAID_ROSTER_UPDATE
 -- Add "times seen" to playernote... Which clicking playernames, show list of items won, and search for groups of only that player... Remove playername if haven't seen them in more than X days... Keep only X # of groups
 
