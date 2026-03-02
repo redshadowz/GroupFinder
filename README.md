@@ -25,5 +25,5 @@ Note: The addon will not message the same person more than once every 15 minutes
 [Enable Spam Filtering] - The Spam Filter will block repeating messages.  
 [Enable Auto Blacklist] - Automatically blacklists players who 'spam' if they are below the level threshold.  
 [Font] - Switch between fonts(also imports pfUI fonts).  
-[Use Friendslist for /who] - Attempts to get Class/Level information through the friendslist. If you use this in conjunction with 'Auto /Who' and 'Show Formatted Chat'. All messages will show level/class(this is currently disabled on non-turtle servers until I test it).  
+[Use Friendslist for /who] - Attempts to get Class/Level information through the friendslist. If you use this in conjunction with 'Auto /Who' and 'Show Formatted Chat', all messages will show level/class(this is currently disabled on non-turtle servers until I test it).  
 <img width="799" height="603" alt="Image" src="https://github.com/user-attachments/assets/5a5f6b82-f743-48a4-8805-4f145fb52e3c" />
