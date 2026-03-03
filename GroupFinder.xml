@@ -846,7 +846,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Texture>
 			</Layer>
 			<Layer level="OVERLAY">
-				<FontString name="$parentTextLabel" outline="NORMAL" nonspacewrap="false">
+				<FontString name="$parentTextLabel" inherits="GF_NormalFont" outline="NORMAL" nonspacewrap="false">
 					<Size>
 						<AbsDimension x="32" y="32"/>
 					</Size>
