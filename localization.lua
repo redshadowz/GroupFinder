@@ -1101,7 +1101,7 @@ GF_WORD_FIX_BEFORE_QUEST = { -- Word changes processed before quests.
 ["needotquest"] = "needtoquest",["needotfarm"] = "needtofarm",["needotkill"] = "needtokill",["needotrun"] = "needtorun",["needotgroup"] = "needtogroup",["giveaway"] = "free",
 ["needotjoin"] = "needtojoin",["needotqueue"] = "needtoqueue",["needotfind"] = "needtofind",["needotgo"] = "needtogo",["needotraid"] = "needtoraid",["needotcome"] = "needtocome",["needotcome"] = "needtocome",
 ["needothelp"] = "needtohelp",["needtoelp"] = "needtohelp",["needotelp"] = "needtohelp",["needlevelothelp"] = "needtohelp",["needleveltoelp"] = "needtohelp",["needlevelotelp"] = "needtohelp",
-["lfmore"] = "lfm",["lookinfor"] = "lf",["lookingfor"] = "lf",["lookingformore"] = "lfm",["wherethe"] = "need",["poppedjoin"] = "join",["allianceside"] = "alliance",["hordeside"] = "horde",
+["lfmore"] = "lfm",["lookinfor"] = "lf",["lookingfor"] = "lf",["lookingformore"] = "lfm",["wherethe"] = "need",["poppedjoin"] = "join",["allianceside"] = "alliance",["hordeside"] = "horde",["lfgroup"] = "lfg",["lookingforgroup"] = "lfg",
 
 -- Roles
 ["healz"] = "heal",["healere"] = "healer",["healre"] = "healer",["xheal"] = "heal",["mheal"] = "heal",["healler"] = "healer",["healy"] = "heal",["healie"] = "heal",["healing"] = "heal",["heals"] = "heal",
@@ -2090,7 +2090,7 @@ GF_WORD_IGNORE = { -- Phrases to help prevent group false-positives.
 }
 GF_WORD_IGNORE_BEFORE = { -- Up to three words before LFM/LFG phrase or before target of prefix(e.g. "'do not tank' <karazhan>")
 ["bisfor"] = 1,["cleanseplease"] = 1,["cleanse"] = 1,["donottank"] = 1,["donotneed"] = 1,["simplethingslike"] = 1,["theyare"] = .5,["donot"] = 1,["wedonot"] = 1,["difficultto"] = .5,["difficulttomake"] = .5,["refuseto"] = .5,["no"] = .25,["from"] = .25,
-["planfrom"] = .5,["schematicfrom"] = .5,["formulafrom"] = .5,["patternfrom"] = .5,["bagfrom"] = .5,["waterfrom"] = .5,["potionfrom"] = .5,["elixirfrom"] = .5,["flaskfrom"] = .5,["ifitsraid"] = .5,["isntin"] = .5,
+["planfrom"] = .5,["schematicfrom"] = .5,["formulafrom"] = .5,["patternfrom"] = .5,["bagfrom"] = .5,["waterfrom"] = .5,["potionfrom"] = .5,["elixirfrom"] = .5,["flaskfrom"] = .5,["ifitsraid"] = .5,["isntin"] = .5,["sucks"] = .5,
 
 -- Negative
 ["ishost"] = -.5,["isstart"] = -.5,["isstarting"] = -.5,["isform"] = -.5,["isdoing"] = -.5,["isplanning"] = -.5,["hordeplayerto"] = -.5,["allianceplayerto"] = -.5,["allianceplayerfor"] = -.5,["allianceplayerfor"] = -.5,["dungeonand"] = -.5,["dungeonor"] = -.5,
