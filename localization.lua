@@ -828,7 +828,7 @@ GF_WORD_FIX_SINGLE_WORD = { -- Single word changes. Mostly typos and simple word
 -- Misc Misspelling
 ["aat"] = "at",["accep"] = "accept",["acitve"] = "active",["acn"] = "can",["activ"] = "active",["agane"] = "again",["agen"] = "again",["aif"] = "if",["alla"] = "all",["tiome"] = "time",["taxy"] = "taxi",["usefull"] = "useful",
 ["allys"] = "alliance",["ambiance"] = "ambience",["ambient"] = "ambience",["anat"] = "at",["anif"] = "if",["anny"] = "any",["anu"] = "any",["anyb"] = "anyone",["anyy"] = "any",["apparell"] = "apparel",["greve"] = "grave",
-["appreciated"] = "appreciate",["appreciatedd"] = "appreciate",["apreciated"] = "appreciate",["arround"] = "around",["arund"] = "around",["assambling"] = "assembling",["bankk"] = "bank",["beaut"] = "beauty",
+["appreciated"] = "appreciate",["appreciatedd"] = "appreciate",["apreciated"] = "appreciate",["arround"] = "around",["arund"] = "around",["assambling"] = "assembling",["bankk"] = "bank",["beaut"] = "beauty",["nfo"] = "info",
 ["bois"] = "boys",["bullys"] = "bully",["casul"] = "casual",["causual"] = "casual",["chann"] = "channel",["channl"] = "channel",["chriztian"] = "christian",["clr"] = "clear",["coem"] = "come",["theese"] = "these",
 ["comission"] = "commission",["coupl"] = "couple",["descriminate"] = "discriminate",["descrimination"] = "discrimination",["discriminatng"] = "discriminating",["dkk"] = "dk",["doin"] = "doing",["doung"] = "doing",["dowse"] = "douse",
 ["dowsers"] = "douse",["dowses"] = "douse",["droppin"] = "dropping",["evn"] = "even",["extreamly"] = "extremely",["farmm"] = "farm",["faund"] = "found",["femb"] = "femboy",["femboi"] = "femboy",["omgg"] = "omg",["ommgg"] = "omg",["ommg"] = "omg",
@@ -920,7 +920,7 @@ GF_WORD_FIX_SINGLE_WORD = { -- Single word changes. Mostly typos and simple word
 ["paterns"] = "pattern",["patern"] = "pattern",["professiosn"] = "profession",["boes"] = "boe",["sercharges"] = "surcharge",["rollaz"] = "roller",["rollerz"] = "roller",
 
 -- Locations
-["sw"] = "stormwind",["stw"] = "stormwind",["stormwin"] = "stormwind",["stormwnd"] = "stormwind",["strmwind"] = "stormwind",["sturmwind"] = "stormwind",["stnwd"] = "stormwind",["stormwid"] = "stormwind",
+["sw"] = "stormwind",["stw"] = "stormwind",["stormwin"] = "stormwind",["stormwnd"] = "stormwind",["strmwind"] = "stormwind",["sturmwind"] = "stormwind",["stnwd"] = "stormwind",["stormwid"] = "stormwind",["sotorwind"] = "stormwind",
 ["uc"] = "undercity",["undercitry"] = "undercity",["undercirty"] = "undercity",["tb"] = "thunderbluff",["irongforge"] = "ironforge",["iornforge"] = "ironforge",
 ["darnasus"] = "darnassus",["dranasess"] = "darnassus",["darnasess"] = "darnassus",["darna"] = "darnassus",["darnasuss"] = "darnassus",["darnas"] = "darnassus",["dranasus"] = "darnassus",["darnassas"] = "darnassus",
 ["darnassius"] = "darnassus",["darnessus"] = "darnassus",["darnasis"] = "darnassus",["darnassos"] = "darnassus",["darnusass"] = "darnassus",["darnssus"] = "darnassus",
@@ -1990,7 +1990,8 @@ GF_WORD_IGNORE = { -- Phrases to help prevent group false-positives.
 
 ["penandpaper"] = .5,["signupinperson"] = .5,["pfui"] = .5,["heyisit"] = .5,["isitdifficult"] = .5,["atalltime"] = .5,["talentadvice"] = .5,["anothermonthof"] = .5,["havemyass"] = .5,["myasshand"] = .5,["handtome"] = .5,
 ["togivemehead"] = .5,["givemehead"] = .5,["givemesomehead"] = .5,["turtledevs"] = .5,["juststeal"] = .5,["youcanmake"] = .25,["toturnitin"] = .5,["isntinlfgmenu"] = .5,["inlfgmenu"] = .5,["isntinlftmenu"] = .5,["inlftmenu"] = .5,
-["sendgold"] = .5,["tosendgold"] = .5,["sendlittlegold"] = 1,["sendsomegold"] = 1,["idonotknow"] = .5,["wherecani"] = .5,["whereicancomplete"] = .5,
+["sendgold"] = .5,["tosendgold"] = .5,["sendlittlegold"] = 1,["sendsomegold"] = 1,["idonotknow"] = .5,["wherecani"] = .5,["whereicancomplete"] = .5,["ormakefriend"] = 1,
+
 --[[
 [""] = .5,
 [""] = 1,
@@ -2077,6 +2078,7 @@ GF_WORD_IGNORE = { -- Phrases to help prevent group false-positives.
 
 -- Roles
 ["shouldicaster"] = 1,["shouldidamage"] = 1,["shouldidps"] = 1,["shouldiheal"] = 1,["shouldihealer"] = 1,["shouldimelee"] = 1,["shouldirange"] = 1,["shouldistealth"] = 1,["shoulditank"] = 1,
+["rollhealer"] = 1,["rolltank"] = 1,
 
 -- Professions
 ["alchemistis"] = .5,["blacksmithis"] = .5,["enchantis"] = .5,["engineeris"] = .5,["herbis"] = .5,["leatherworkeris"] = .5,["mineris"] = .5,["tailoris"] = .5,
@@ -2462,6 +2464,7 @@ GF_LFM_BEFORE = { -- Up to three words before
 ["queueto"] = 1,["queuefor"] = 1,["queuetolevel"] = 1,["queueforlevel"] = 1,["queueten"] = 1,["queuetwenty"] = 1,["queuethirty"] = 1,["queueforty"] = 1,["queuefifty"] = 1,["queuesixty"] = 1,
 ["qingto"] = 1,["qingfor"] = 1,["qingtolevel"] = 1,["qingforlevel"] = 1,
 ["readyfor"] = 1,["readytogo"] = 1,
+["recruitinghealer"] = 1,["recruitingtank"] = 1,
 ["signfor"] = 1,
 ["someraidfor"] = 1,["somehcraidfor"] = 1,["somehardcoreraidfor"] = 1,
 ["startinminute"] = 1,["startinhour"] = 1,["startnew"] = 1,["startinginminute"] = 1,["startinginhour"] = 1,["startingnew"] = 1,
@@ -2517,6 +2520,7 @@ GF_LFM_AFTER = { -- Up to two words after
 ["quickrun"] = 1,
 ["raidid"] = 1,
 ["realquick"] = 1,
+["recruitinghealer"] = 1,["recruitingtank"] = 1,
 ["speedrun"] = 1,["speedrungoing"] = 1,
 ["startinminute"] = 1,["startinhour"] = 1,["startinginminute"] = 1,["startinginhour"] = 1,
 ["dungeontank"] = 1,
@@ -2627,7 +2631,7 @@ GF_QUEST_ONLY_AFTER_LFG = { -- Mostly to detect quests
 ["brightdreamshard"] = 31,
 }
 GF_GROUP_WORD_BYPASS = { -- Won't detect these quest names at all(skips quest detection)
-["leatherworker"] = true,["cloth"] = true,["aquaticform"] = true,["arcanite"] = true,["armorscraps"] = true,["atlast"] = true,["chapter"] = true,["corruption"] = true,["whynotboth"] = true,
+["leatherworker"] = true,["runecloth"] = true,["aquaticform"] = true,["arcanite"] = true,["armorscraps"] = true,["atlast"] = true,["chapter"] = true,["corruption"] = true,["whynotboth"] = true,
 ["familytree"] = true,["beginnings"] = true,["cluck"] = true,["reassignment"] = true,["redemption"] = true,["returninghome"] = true,["southshore"] = true,["starfall"] = true,["maraudon"] = true,
 ["teldrassil"] = true,["tohinterlands"] = true,["triage"] = true,["trinket"] = true,["welcome"] = true,["ungorosoil"] = true,["youtogood"] = true,["younglovers"] = true,
 ["programmer"] = true,["emptyhanded"] = true,["forher"] = true,["itbroke"] = true,["kaboom"] = true,["oneofus"] = true,["proof"] = true,["staffmeeting"] = true,["darkmoonfaire"] = true,
@@ -3544,6 +3548,7 @@ GF_TRADE_PREFIX_SUFFIX = { -- One word before and two words after '[item]'
 ["nine"] = 1,
 ["ten"] = 1,
 ["pst"] = 1,
+["worthanything"] = 1,
 }
 GF_WORD_TRADE_QUESTION = {
 ["noE"] = true,

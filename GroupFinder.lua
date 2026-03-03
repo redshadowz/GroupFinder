@@ -1585,6 +1585,7 @@ function GF_SendWhoIfNameInQueue()
 				end
 				SetWhoToUI(1)
 				SendWho("n-"..GF_WhoQueue[1])
+				GF_FriendUnknown[GF_WhoQueue[1]] = time()
 				GF_WhoQueue[GF_WhoQueue[1]] = nil
 				table.remove(GF_WhoQueue, 1)
 				GF_BlockNextWho = true
@@ -1728,7 +1729,15 @@ function GF_UpdateGroupsFrame()
 		GF_UpdateAndRequestTimer = 30
 		for i=1, getn(GF_MessageList[GF_RealmName]) do
 			if GF_SavedVariables.usewhoongroups and not GF_WhoTable[GF_RealmName][GF_MessageList[GF_RealmName][i].op] and not GF_WhoQueue[GF_MessageList[GF_RealmName][i].op] then
-				if GF_SavedVariables.usefriendslist then if not GF_SavedVariables.friendsToRemove[GF_MessageList[GF_RealmName][i].op] and (not GF_FriendUnknown[GF_MessageList[GF_RealmName][i].op] or GF_FriendUnknown[GF_MessageList[GF_RealmName][i].op] + 900 < time()) then GF_AddNameToWhoQueue(GF_MessageList[GF_RealmName][i].op,3,true) end else GF_AddNameToWhoQueue(GF_MessageList[GF_RealmName][i].op,true) end
+				if not GF_FriendUnknown[GF_MessageList[GF_RealmName][i].op] or GF_FriendUnknown[GF_MessageList[GF_RealmName][i].op] + 900 < time() then
+					if GF_SavedVariables.usefriendslist then
+						if not GF_SavedVariables.friendsToRemove[GF_MessageList[GF_RealmName][i].op] then
+							GF_AddNameToWhoQueue(GF_MessageList[GF_RealmName][i].op,3,true)
+						end
+					else
+						GF_AddNameToWhoQueue(GF_MessageList[GF_RealmName][i].op,true)
+					end
+				end
 			end
 			if GF_AddonMakeAListOfGroupsForSending and not GF_AddonOPSentNamesOnLogin[GF_MessageList[GF_RealmName][i].op] and GF_MessageList[GF_RealmName][i].t + 300 > time() then
 				GF_AddonGroupDataToBeSentBuffer[GF_MessageList[GF_RealmName][i].op] = GF_MessageList[GF_RealmName][i]
