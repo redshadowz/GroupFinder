@@ -1688,6 +1688,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</Anchor>
 				</Anchors>
 				<Scripts>
+					<OnEnter>
+						GF_ShowTooltip()
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide()
+					</OnLeave>
 					<OnClick>
 						if GF_SavedVariables.mainframestatus == 1 then
 							GF_SavedVariables.mainframestatus = 0
@@ -1720,6 +1726,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</Anchor>
 				</Anchors>
 				<Scripts>
+					<OnEnter>
+						GF_ShowTooltip()
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide()
+					</OnLeave>
 					<OnClick>
 						if GF_SavedVariables.mainframestatus == 2 then
 							GF_SavedVariables.mainframestatus = 0
@@ -1750,8 +1762,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Anchors>
 				<Scripts>
 					<OnClick>
-							GF_SavedVariables.mainframeheight = this:GetChecked()
-							GF_ToggleMainFrame(3)
+						GF_SavedVariables.mainframeheight = this:GetChecked()
+						GF_ToggleMainFrame(3)
 					</OnClick>
 				</Scripts>
 			</CheckButton>
@@ -1765,12 +1777,42 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Anchors>
 				<Scripts>
 					<OnClick>
-							GF_SavedVariables.mainframewidth = this:GetChecked()
-							GF_ToggleMainFrame(3)
+						GF_SavedVariables.mainframewidth = this:GetChecked()
+						GF_ToggleMainFrame(3)
 					</OnClick>
 				</Scripts>
 			</CheckButton>
+			<Button name="GF_HideMainFrameToggleBoth" hidden="true">
+				<Size>
+					<AbsDimension x="26" y="26"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOP" relativeTo="GF_HideMainFrameWidth" relativePoint="BOTTOM">
+						<Offset>
+							<AbsDimension x="0" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnEnter>
+						GF_ShowTooltip()
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide()
+					</OnLeave>
+					<OnClick>
+						if GF_MainFrameShowBoth then GF_MainFrameShowBoth = nil GF_ToggleMainFrame(5) else GF_MainFrameShowBoth = true GF_ToggleMainFrame(4) end
+					</OnClick>
+				</Scripts>
+				<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollEnd-Up"/>
+				<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollEnd-Down"/>
+				<DisabledTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollEnd-Disabled"/>
+				<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD"/>
+			</Button>
 			<Button name="GF_ShowGroupsButton" inherits="GF_CharacterFrameTabButtonTemplate" text="GF_GROUP_LISTINGS">
+				<Size>
+					<AbsDimension x="90" y="30"/>
+				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
 						<Offset>
@@ -1790,6 +1832,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Scripts>
 			</Button>
 			<Button name="GF_SettingsFrameButton" inherits="GF_CharacterFrameTabButtonTemplate" text="GF_SETTINGS">
+				<Size>
+					<AbsDimension x="90" y="30"/>
+				</Size>
 				<Anchors>
 					<Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT">
 						<Offset>
@@ -1808,6 +1853,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Scripts>
 			</Button>
 			<Button name="GF_ShowBlacklistButton" inherits="GF_CharacterFrameTabButtonTemplate" text="GF_BLACK_LIST">
+				<Size>
+					<AbsDimension x="90" y="30"/>
+				</Size>
 				<Anchors>
 					<Anchor point="RIGHT" relativeTo="GF_SettingsFrameButton" relativePoint="LEFT">
 						<Offset>
@@ -1826,6 +1874,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Scripts>
 			</Button>
 			<Button name="GF_LogFrameButton" inherits="GF_CharacterFrameTabButtonTemplate" text="GF_LOG">
+				<Size>
+					<AbsDimension x="90" y="30"/>
+				</Size>
 				<Anchors>
 					<Anchor point="RIGHT" relativeTo="GF_ShowBlacklistButton" relativePoint="LEFT">
 						<Offset>
@@ -1958,7 +2009,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										GF_UpdateMainFrameHeight()
 										GF_UpdateMainFrameWidth()
 										GF_UpdateMainFrame()
-										GF_UpdateWhisperFrame()
 										GF_UpdateResults()
 									</OnClick>
 								</Scripts>
@@ -1981,7 +2031,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										GF_UpdateMainFrameHeight()
 										GF_UpdateMainFrameWidth()
 										GF_UpdateMainFrame()
-										GF_UpdateWhisperFrame()
 										GF_UpdateResults()
 									</OnClick>
 								</Scripts>
@@ -2930,13 +2979,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Frames>
 					</Frame>
 				</Frames>
-				<Scripts>
-					<OnLoad>	
-						for i = 2, 22 do
-							getglobal("GF_NewItem"..i):SetPoint("TOP", "GF_NewItem"..(i-1), "BOTTOM", 0, 0)
-						end
-					</OnLoad>
-				</Scripts>
 			</Frame>
 			<Frame name="GF_BlackListFrame" hidden="true">
 				<Size>
@@ -3954,7 +3996,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Scripts>
 									<OnClick>
 										if GF_SavedVariables.showwhisperlogs == 1 then GF_SavedVariables.showwhisperlogs = false else GF_SavedVariables.showwhisperlogs = 1 GF_WhisperLogOffset = 0 GF_WhisperHistoryUpdateFrame() end
-										GF_UpdateWhisperFrame()
+										GF_UpdateMainFrameWidth()
 									</OnClick>
 								</Scripts>
 							</Button>
@@ -3972,7 +4014,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Scripts>
 									<OnClick>
 										if GF_SavedVariables.showwhisperlogs == 2 then GF_SavedVariables.showwhisperlogs = false else GF_SavedVariables.showwhisperlogs = 2 GF_WhisperLogOffset = 0 GF_GroupHistoryUpdateFrame() end
-										GF_UpdateWhisperFrame()
+										GF_UpdateMainFrameWidth()
 									</OnClick>
 								</Scripts>
 							</Button>

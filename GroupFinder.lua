@@ -12,6 +12,7 @@ local GF_BlockNextWho						= nil
 GF_WhoQueue									= {}
 GF_WhoTable									= {}
 GF_ClassWhoTable							= {}
+GF_MainFrameShowBoth						= nil
 local GF_LFGLFMData							= {}
 local GF_ClassWhoQueue						= {} -- Who queue of /who searches. Searches
 local GF_ClassWhoMatchingResults			= 0
@@ -92,8 +93,10 @@ local EventIDAlias = { ["SAY"] = "[S] ",["YELL"] = "[Y] ",["GUILD"] = "[G] ",["O
 ["BATTLEGROUND"] = "[BG] ",["BATTLEGROUND_LEADER"] = "[BL] ",["SYSTEM"] = "",}
 local GF_ChatNameAlias = { ["OFFICER"] = "GUILD",["RAID"] = "PARTY",["RAID_LEADER"] = "PARTY",["RAID_WARNING"] = "PARTY",["BATTLEGROUND"] = "PARTY",["BATTLEGROUND_LEADER"] = "PARTY",["WHISPER_INFORM"] = "WHISPER",}
 local GF_ChatBypass = { ["MONEY"] = true,["LOOT"] = true,["COMBAT_FACTION_CHANGE"] = true,["COMBAT_XP_GAIN"] = true,["COMBAT_HONOR_GAIN"] = true,["EMOTE"] = true,["TEXT_EMOTE"] = true,["MONSTER_SAY"] = true,["MONSTER_EMOTE"] = true,["MONSTER_YELL"] = true,}
-local ThingsToHide = { "GF_MainFrameCloseButton","GF_GroupChatOptionsFrame","GF_ShowGroupsButton","GF_SettingsFrameButton","GF_ShowBlacklistButton","GF_LogFrameButton","GF_AnnounceToLFGButton",
-"GF_LogBottomButton","GF_LogDownButton","GF_LogUpButton","GF_LogFilterDropdownButton","GF_LogChannelFilterDropdownButton","GF_LogChannelNameDropdown","GF_ConvertLogMessagesToURL","GF_WhisperLogButton","GF_GroupLogButton",
+local ThingsToHide = { "GF_LogBottomButton","GF_LogDownButton","GF_LogUpButton","GF_LogFilterDropdownButton","GF_LogChannelFilterDropdownButton","GF_LogChannelNameDropdown","GF_ConvertLogMessagesToURL","GF_WhisperLogButton","GF_GroupLogButton",-- 9 Log-related
+"GF_MainFrameCloseButton","GF_GroupChatOptionsFrame", -- 2 both
+"GF_LFGFrameToggleButton","GF_GetWhoFrameToggleButton","GF_AnnounceToLFGButton","GF_QueuetoLFTButton", -- 4 Group-related
+"GF_SettingsFrameButton","GF_ShowBlacklistButton","GF_ShowGroupsButton","GF_LogFrameButton",
 "GF_GetWhoFrame","GF_LFGFrame","GF_MessageFrame","GF_LogFilterDropdownMenu","GF_GroupFilterDropdownMenu","GF_ChatFilterDropdownMenu","GF_LFGHardCoreDropdown","GF_FontName","GF_GroupChannelName","GF_BlockList","GF_AutoBlacklistDropdownMenu","GF_LogChannelName" }
 local GF_DifficultyColors = { ["RED"] = "ff0000",["ORANGE"] = "ff8040",["YELLOW"] = "ffff00",["GREEN"] = "1eff00",["GREY"] = "808080", }
 local GF_TankClasses						= {	["DRUID"]=true,["WARRIOR"]=true,["PALADIN"]=true,["SHAMAN"]=true }
@@ -393,7 +396,7 @@ function GF_LoadSettings()
 	GF_MainFrame:SetAlpha(GF_FrameTransparencySlider:GetValue())
 	GF_MainFrame:SetScale(GF_UIScaleSlider:GetValue())
 	if GF_SavedVariables.MainFrameXPos then GF_MainFrame:SetPoint("TOPLEFT",UIParent,"TOPLEFT", GF_SavedVariables.MainFrameXPos, GF_SavedVariables.MainFrameYPos) end
-	if GF_SavedVariables.mainframestatus ~= 0 and not GF_SavedVariables.mainframeishidden then if GF_SavedVariables.mainframelogisopen then GF_ToggleMainFrame(2) else GF_ToggleMainFrame(1) end end
+	if GF_SavedVariables.mainframestatus ~= 0 and not GF_SavedVariables.mainframeishidden then if GF_SavedVariables.mainframelogisopen then GF_ToggleMainFrame(2) else GF_ToggleMainFrame(1) end else if GF_SavedVariables.mainframelogisopen then GF_GroupsFrame:Hide() GF_LogFrame:Show() else GF_GroupsFrame:Show() GF_LogFrame:Hide() end end
 	if GF_SavedVariables.purgepfdb and GF_SavedVariables.showformattedchat then pfUI_playerDB = {} end
 	if GF_SavedVariables.iconpriority then if pfMinimap then GF_RelevelMinimapIcons(pfMinimap) else GF_RelevelMinimapIcons(Minimap) end end
 	GF_UpdateMinimapIcon()
@@ -995,45 +998,49 @@ function GF_ShowTooltip()
 	end
 end
 function GF_ToggleMainFrame(tab)
+	if not tab and GF_MainFrameShowBoth then tab = 3 GF_MainFrameShowBoth = nil end
+	if GF_SavedVariables.mainframestatus == 0 then if GF_SavedVariables.mainframelogisopen then GF_GroupsFrame:Hide() else GF_LogFrame:Hide() end GF_MainFrameShowBoth = nil end
 	PlaySound("igCharacterInfoTab")
-	if GF_MainFrame:IsVisible() and tab ~= 3 and (not tab or (tab == 2 and GF_SavedVariables.mainframelogisopen) or (tab == 1 and not GF_SavedVariables.mainframelogisopen)) then
-		if GF_SavedVariables.mainframestatus == 0 then 
-			local _,_,_,xpos, ypos = GF_MainFrame:GetPoint()
-			GF_SavedVariables.MainFrameXPos = xpos
-			GF_SavedVariables.MainFrameYPos = ypos
-		end
-		GF_MainFrame:Hide() 
+	if GF_MainFrame:IsVisible() and tab ~= 3 and tab ~= 4 and (not tab or (tab == 2 and GF_SavedVariables.mainframelogisopen) or (tab == 1 and not GF_SavedVariables.mainframelogisopen)) then
+		local _,_,_,xpos, ypos = GF_MainFrame:GetPoint() GF_SavedVariables.MainFrameXPos = xpos GF_SavedVariables.MainFrameYPos = ypos
+		GF_MainFrame:Hide()
+		GF_MainFrameShowBoth = nil
 	else
 		if tab == 1 then -- GroupsFrame
 			GF_GroupsFrame:Show()
-			GF_LogFrame:Hide()
+			if not GF_MainFrameShowBoth then GF_LogFrame:Hide() else GF_LogFrame:Show() end
 			GF_BlackListFrame:Hide()
 			GF_SettingsFrame:Hide()
 			GF_SavedVariables.mainframelogisopen = false
 		elseif tab == 2 then -- LogsFrame
-			GF_GroupsFrame:Hide()
+			if not GF_MainFrameShowBoth then GF_GroupsFrame:Hide() else GF_GroupsFrame:Show() end
 			GF_LogFrame:Show()
 			GF_BlackListFrame:Hide()
 			GF_SettingsFrame:Hide()
 			GF_SavedVariables.mainframelogisopen = true
 		elseif tab == 3 then
 			if GF_SavedVariables.mainframelogisopen then
-				GF_GroupsFrame:Hide()
+				if not GF_MainFrameShowBoth then GF_GroupsFrame:Hide() else GF_GroupsFrame:Show() end
 				GF_LogFrame:Show()
 				GF_BlackListFrame:Hide()
 				GF_SettingsFrame:Hide()
 			else
 				GF_GroupsFrame:Show()
-				GF_LogFrame:Hide()
+				if not GF_MainFrameShowBoth then GF_LogFrame:Hide() else GF_LogFrame:Show() end
 				GF_BlackListFrame:Hide()
 				GF_SettingsFrame:Hide()
 			end
+		elseif tab == 4 then
+			GF_GroupsFrame:Show()
+			GF_LogFrame:Show()
+			GF_BlackListFrame:Hide()
+			GF_SettingsFrame:Hide()
+		elseif tab == 5 then
+			if GF_SavedVariables.mainframelogisopen then GF_GroupsFrame:Hide() GF_LogFrame:Show() else GF_GroupsFrame:Show() GF_LogFrame:Hide() end
+			GF_BlackListFrame:Hide()
+			GF_SettingsFrame:Hide()
 		end
-		if tab ~= 3 and GF_SavedVariables.mainframestatus == 0 and not GF_SavedVariables.mainframeishidden then
-			local _,_,_,xpos, ypos = GF_MainFrame:GetPoint()
-			GF_SavedVariables.MainFrameXPos = xpos
-			GF_SavedVariables.MainFrameYPos = ypos
-		end
+		local _,_,_,xpos, ypos = GF_MainFrame:GetPoint() GF_SavedVariables.MainFrameXPos = xpos GF_SavedVariables.MainFrameYPos = ypos
 		GF_MainFrame:Show()
 		GF_SavedVariables.mainframeishidden = false
 		if pfUI and pfUI.chat and pfUI.chat.urlcopy then pfUI.chat.urlcopy:SetWidth(700) pfUI.chat.urlcopy.text:SetWidth(680) end
@@ -1043,100 +1050,133 @@ function GF_ToggleMainFrame(tab)
 	GF_UpdateMainFrameWidth()
 	GF_UpdateMainFramePosition()
 	GF_UpdateMainFrame()
-	GF_UpdateWhisperFrame()
 	GF_UpdateResults()
-end
-function GF_UpdateWhisperFrame()
-	if GF_SavedVariables.mainframestatus == 0 then
-		if GF_SavedVariables.showwhisperlogs then
-			GF_LogFrameInternalFrame:SetWidth(568)
-			GF_WhisperHistoryButtonLog:Show()
-		else
-			GF_LogFrameInternalFrame:SetWidth(669)
-			GF_WhisperHistoryButtonLog:Hide()
-		end
-	else
-		GF_WhisperHistoryButtonLog:Hide()
-	end
-	if GF_SavedVariables.showwhisperlogs == 1 then GF_WhisperLogButton:LockHighlight() GF_GroupLogButton:UnlockHighlight() elseif GF_SavedVariables.showwhisperlogs == 2 then GF_GroupLogButton:LockHighlight() GF_WhisperLogButton:UnlockHighlight() else GF_GroupLogButton:UnlockHighlight() GF_WhisperLogButton:UnlockHighlight() end
 end
 function GF_UpdateMainFrameHeight()
 	if GF_SavedVariables.mainframestatus ~= 0 then
-		if GF_SavedVariables.mainframeheight then
-			GF_ResultsListOffset = 12 * math.ceil(GF_ResultsListOffset/GF_ResultsListOffsetSize)
-			GF_ResultsListOffsetSize = 12
-			GF_LogFrameInternalFrame:SetHeight(250)
+		if GF_SavedVariables.mainframelogisopen then
+			if GF_SavedVariables.mainframeheight then
+				GF_LogFrameInternalFrame:SetHeight(250)
+			else
+				GF_LogFrameInternalFrame:SetHeight(400)
+			end
 		else
-			GF_ResultsListOffset = 20 * math.ceil(GF_ResultsListOffset/GF_ResultsListOffsetSize)
-			GF_ResultsListOffsetSize = 20
-			GF_LogFrameInternalFrame:SetHeight(400)
+			if GF_SavedVariables.mainframeheight then
+				GF_ResultsListOffset = 12 * math.ceil(GF_ResultsListOffset/GF_ResultsListOffsetSize)
+				GF_ResultsListOffsetSize = 12
+			else
+				GF_ResultsListOffset = 20 * math.ceil(GF_ResultsListOffset/GF_ResultsListOffsetSize)
+				GF_ResultsListOffsetSize = 20
+			end
+			GF_LogFrameInternalFrame:SetHeight(440)
 		end
 	else
 		GF_LogFrameInternalFrame:SetHeight(440)
 	end
 end
 function GF_UpdateMainFrameWidth()
-	if GF_SavedVariables.mainframestatus ~= 0 then
-		if GF_SavedVariables.mainframewidth then
-			if GF_SavedVariables.mainframestatus == 2 then
-				for i=1, GF_ResultsBaseListOffsetSize do if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",330,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",330,0) end getglobal("GF_NewItem"..i):SetWidth(320) getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("TOPLEFT",5,0) getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("BOTTOMRIGHT",getglobal("GF_NewItem"..i),"TOPRIGHT",-5,-16) end
-				GF_LogFrameInternalFrame:SetPoint("TOPLEFT",350,-32)
-			else
-				for i=1, GF_ResultsBaseListOffsetSize do if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",0,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",0,0) end getglobal("GF_NewItem"..i):SetWidth(320) getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("TOPLEFT",5,0) getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("BOTTOMRIGHT",getglobal("GF_NewItem"..i),"TOPRIGHT",-5,-16) end
-				GF_LogFrameInternalFrame:SetPoint("TOPLEFT",29,-32)
-			end
-			GF_LogFrameInternalFrame:SetWidth(350)
+	if GF_SavedVariables.mainframestatus ~= 0 and GF_SavedVariables.mainframewidth then
+		if not GF_SavedVariables.mainframelogisopen then
+			for i=1, GF_ResultsBaseListOffsetSize do getglobal("GF_NewItem"..i):SetWidth(320) end
+			if GF_SavedVariables.showwhisperlogs then GF_LogFrameInternalFrame:SetWidth(568) GF_WhisperHistoryButtonLog:Show() else GF_LogFrameInternalFrame:SetWidth(669) GF_WhisperHistoryButtonLog:Hide() end
 		else
-			for i=1, GF_ResultsBaseListOffsetSize do if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",0,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",0,0) end getglobal("GF_NewItem"..i):SetWidth(635) getglobal("GF_NewItem"..i.."NameLabel"):ClearAllPoints() getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("TOPLEFT",5,0) getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("BOTTOMRIGHT",getglobal("GF_NewItem"..i),"TOPRIGHT",-5,-16) end
-			GF_LogFrameInternalFrame:SetPoint("TOPLEFT",29,-64)
-			GF_LogFrameInternalFrame:SetWidth(669)
+			for i=1, GF_ResultsBaseListOffsetSize do getglobal("GF_NewItem"..i):SetWidth(635) end
+			GF_LogFrameInternalFrame:SetWidth(350) GF_WhisperHistoryButtonLog:Hide()
 		end
 	else
-		for i=1, GF_ResultsBaseListOffsetSize do if i == 1 then getglobal("GF_NewItem"..i):SetPoint("TOPLEFT",0,0) else getglobal("GF_NewItem"..i):SetPoint("LEFT",0,0) end getglobal("GF_NewItem"..i):SetWidth(635) getglobal("GF_NewItem"..i.."NameLabel"):ClearAllPoints() getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("TOPLEFT",5,0) getglobal("GF_NewItem"..i.."NameLabel"):SetPoint("BOTTOMRIGHT",getglobal("GF_NewItem"..i),"TOPRIGHT",-80,-16) end
-		GF_LogFrameInternalFrame:SetPoint("TOPLEFT",29,-64)
-		GF_LogFrameInternalFrame:SetWidth(669)
+		for i=1, GF_ResultsBaseListOffsetSize do getglobal("GF_NewItem"..i):SetWidth(635) end
+		if GF_SavedVariables.showwhisperlogs and (GF_SavedVariables.mainframestatus == 0 or not GF_SavedVariables.mainframelogisopen) then
+			GF_LogFrameInternalFrame:SetWidth(568)
+			GF_WhisperHistoryButtonLog:Show()
+		else 
+			GF_LogFrameInternalFrame:SetWidth(669)
+			GF_WhisperHistoryButtonLog:Hide()
+		end
 	end
 end
 function GF_UpdateMainFramePosition()
-	GF_MainFrame:ClearAllPoints()
+	GF_NewItem1:ClearAllPoints()
+	GF_HideMainFrameLeft:ClearAllPoints()
+	GF_LogFrameInternalFrame:ClearAllPoints()
 	if GF_SavedVariables.mainframestatus == 0 then
-		GF_MainFrame:SetPoint("TOPLEFT",UIParent,"TOPLEFT", GF_SavedVariables.MainFrameXPos, GF_SavedVariables.MainFrameYPos)
-		GF_HideMainFrameLeft:ClearAllPoints()
-		GF_HideMainFrameLeft:SetPoint("TOPLEFT", 6, -64)
+		GF_NewItem1:SetPoint("TOPLEFT",GF_GroupsFrame,"TOPLEFT", 0, 0)
+		GF_LogFrameInternalFrame:SetPoint("TOPLEFT",GF_LogFrame,"TOPLEFT", 29, -64)
+		GF_HideMainFrameLeft:SetPoint("TOPLEFT",GF_MainFrame,"TOPLEFT", 6, -64)
 	elseif GF_SavedVariables.mainframestatus == 1 then
-		GF_MainFrame:SetPoint("TOPLEFT",UIParent,"TOPLEFT", -10, GF_SavedVariables.MainFrameYPos)
-		GF_HideMainFrameLeft:ClearAllPoints()
-		GF_HideMainFrameLeft:SetPoint("TOPLEFT", 6, -64)
+		if GF_SavedVariables.mainframelogisopen then GF_LogFrameInternalFrame:SetPoint("TOPLEFT",UIParent,"TOPLEFT", 16, GF_SavedVariables.MainFrameYPos - 55) GF_NewItem1:SetPoint("TOPLEFT",GF_GroupsFrame,"TOPLEFT", 0, 0)
+		else GF_NewItem1:SetPoint("TOPLEFT",UIParent,"TOPLEFT", 50, GF_SavedVariables.MainFrameYPos - 65) GF_LogFrameInternalFrame:SetPoint("TOPLEFT",GF_LogFrame,"TOPLEFT", 29, -64) end
+		GF_HideMainFrameLeft:SetPoint("TOPLEFT",UIParent,"TOPLEFT", 0, GF_SavedVariables.MainFrameYPos - 64)
 	elseif GF_SavedVariables.mainframestatus == 2 then
-		GF_MainFrame:SetPoint("TOPRIGHT",UIParent,"TOPRIGHT", -5, GF_SavedVariables.MainFrameYPos)
-		GF_HideMainFrameLeft:ClearAllPoints()
-		GF_HideMainFrameLeft:SetPoint("TOPRIGHT", 5, -64)
+		if GF_SavedVariables.mainframelogisopen then GF_LogFrameInternalFrame:SetPoint("TOPRIGHT",UIParent,"TOPRIGHT", -5, GF_SavedVariables.MainFrameYPos - 55)  GF_NewItem1:SetPoint("TOPLEFT",GF_GroupsFrame,"TOPLEFT", 0, 0)
+		else GF_NewItem1:SetPoint("TOPRIGHT",UIParent,"TOPRIGHT", 70, GF_SavedVariables.MainFrameYPos - 65) GF_LogFrameInternalFrame:SetPoint("TOPLEFT",GF_LogFrame,"TOPLEFT", 29, -64) end
+		GF_HideMainFrameLeft:SetPoint("TOPRIGHT",UIParent,"TOPRIGHT", 5, GF_SavedVariables.MainFrameYPos - 64)
+	end
+	for i = 2, 22 do
+		getglobal("GF_NewItem"..i):SetPoint("TOP", "GF_NewItem"..(i-1), "BOTTOM", 0, 0)
 	end
 end
 function GF_UpdateMainFrame()
 	if GF_SavedVariables.mainframestatus ~= 0 then
-		for i=1, getn(ThingsToHide) do
-			getglobal(ThingsToHide[i]):Hide()
+		if not GF_MainFrameShowBoth then
+			for i=1, getn(ThingsToHide) do
+				getglobal(ThingsToHide[i]):Hide()
+			end
+			GF_MainFrame:SetAlpha(0)
+			GF_MainFrame:SetFrameStrata("BACKGROUND")
+			GF_MainFrame:EnableMouse(false)
+			GF_MainFrame:IsMovable(false)
+		else
+			if not GF_SavedVariables.mainframelogisopen then
+				for i=1, 11 do
+					getglobal(ThingsToHide[i]):Show()
+				end
+				for i=12, 15 do
+					getglobal(ThingsToHide[i]):Hide()
+				end
+			else
+				for i=1, 9 do
+					getglobal(ThingsToHide[i]):Hide()
+				end
+				for i=10, 15 do
+					getglobal(ThingsToHide[i]):Show()
+				end
+			end
+			if GF_PlayingOnTurtle then GF_LFGHardCoreDropdown:Show() end
+			GF_MainFrame:SetAlpha(GF_SavedVariables.MainFrameTransparency)
+			GF_MainFrame:SetFrameStrata("MEDIUM")
+			GF_MainFrame:EnableMouse(true)
+			GF_MainFrame:IsMovable(true)
 		end
-		GF_MainFrame:SetAlpha(0)
-		GF_MainFrame:SetFrameStrata("BACKGROUND")
-		GF_MainFrame:EnableMouse(false)
-		GF_MainFrame:IsMovable(false)
 
 		GF_HideMainFrameLeft:SetAlpha(1)
 		GF_HideMainFrameRight:SetAlpha(1)
 
 		GF_HideMainFrameHeight:Show()
 		GF_HideMainFrameWidth:Show()
+		GF_HideMainFrameToggleBoth:Show()
 		GF_HideMainFrameHeight:SetAlpha(1)
 		GF_HideMainFrameWidth:SetAlpha(1)
+		GF_HideMainFrameToggleBoth:SetAlpha(1)
 
-		if GF_LogFrame:IsShown() then
+		if GF_SavedVariables.mainframelogisopen then
 			GF_LogFrame:SetAlpha(GF_SavedVariables.MainFrameTransparency)
 			GF_LogFrameInternalFrameTitle:SetText("")
 			GF_LogFrameInternalFrame:SetBackdropBorderColor(.4,.4,.4,0)
 			GF_LogFrameInternalFrame:SetBackdropColor(.14,.14,.14,0)
+			if GF_MainFrameShowBoth then
+				GF_GroupsFrame:EnableMouse(true)
+				GF_GroupsFrame_Results:EnableMouse(true)
+				for i=1, GF_ResultsBaseListOffsetSize do
+					getglobal("GF_NewItem"..i):EnableMouse(true)
+				end
+			end
 		else
+			if GF_MainFrameShowBoth then
+				GF_LogFrameInternalFrameTitle:SetText(GF_LOG_AND_MONITOR)
+				GF_LogFrameInternalFrame:SetBackdropBorderColor(.4,.4,.4,1)
+				GF_LogFrameInternalFrame:SetBackdropColor(.14,.14,.14,1)
+			end
+
 			GF_GroupsFrame:EnableMouse(false)
 			GF_GroupsFrame_Results:EnableMouse(false)
 			for i=1, GF_ResultsBaseListOffsetSize do
@@ -1144,11 +1184,10 @@ function GF_UpdateMainFrame()
 				getglobal("GF_NewItem"..i):EnableMouse(false)
 			end
 		end
-		for id, word in UISpecialFrames do
-			if word == "GF_MainFrame" then UISpecialFrames[id] = nil end
-		end
+		for id, word in UISpecialFrames do if word == "GF_MainFrame" then UISpecialFrames[id] = nil end end
+		if GF_MainFrameShowBoth then tinsert(UISpecialFrames,GF_MainFrame:GetName()) end
 	else
-		for i=1, 16 do
+		for i=1, 19 do
 			getglobal(ThingsToHide[i]):Show()
 		end
 		if GF_PlayingOnTurtle then GF_LFGHardCoreDropdown:Show() end
@@ -1159,6 +1198,7 @@ function GF_UpdateMainFrame()
 
 		GF_HideMainFrameHeight:Hide()
 		GF_HideMainFrameWidth:Hide()
+		GF_HideMainFrameToggleBoth:Hide()
 
 		GF_LogFrameInternalFrameTitle:SetText(GF_LOG_AND_MONITOR)
 		GF_LogFrameInternalFrame:SetBackdropBorderColor(.4,.4,.4,1)
@@ -1171,6 +1211,8 @@ function GF_UpdateMainFrame()
 		end
 		tinsert(UISpecialFrames,GF_MainFrame:GetName())
 	end
+	if GF_SavedVariables.showwhisperlogs == 1 then GF_WhisperLogButton:LockHighlight() GF_GroupLogButton:UnlockHighlight() elseif GF_SavedVariables.showwhisperlogs == 2 then GF_GroupLogButton:LockHighlight() GF_WhisperLogButton:UnlockHighlight() else GF_GroupLogButton:UnlockHighlight() GF_WhisperLogButton:UnlockHighlight() end
+	GF_UpdateQueueLFTButton()
 end
 function GF_UpdateMinimapIcon()
 	local relativepos
@@ -1225,11 +1267,10 @@ function GF_MoveMinimapIcon()
 	end
 end
 function GF_LFGGetWhoUpdateOffset()
-	GF_MessageFrame:Show()
+	if GF_SavedVariables.mainframelogisopen or not GF_MainFrameShowBoth then GF_MessageFrame:Show() else GF_MessageFrame:Hide() end -- If logframe then always show
 	if GF_PerCharVariables.lfgshown and GF_PerCharVariables.getwhoshown then
-		GF_GetWhoFrame:Show()
+		if GF_SavedVariables.mainframelogisopen or not GF_MainFrameShowBoth then GF_GetWhoFrame:Show() GF_LFGFrame:Show() else GF_GetWhoFrame:Hide() GF_LFGFrame:Hide() end
 		GF_GetWhoFrameToggleButton:LockHighlight()
-		GF_LFGFrame:Show()
 		GF_LFGFrameToggleButton:LockHighlight()
 
 		GF_GetWhoFrame:SetPoint("BOTTOMLEFT",GF_MainFrame,"BOTTOMLEFT", 10, -15)
@@ -1243,7 +1284,7 @@ function GF_LFGGetWhoUpdateOffset()
 	elseif GF_PerCharVariables.lfgshown then
 		GF_GetWhoFrame:Hide()
 		GF_GetWhoFrameToggleButton:UnlockHighlight()
-		GF_LFGFrame:Show()
+		if GF_SavedVariables.mainframelogisopen or not GF_MainFrameShowBoth then GF_LFGFrame:Show() else GF_LFGFrame:Hide() end
 		GF_LFGFrameToggleButton:LockHighlight()
 
 		GF_LFGFrame:SetPoint("BOTTOMLEFT",GF_MainFrame,"BOTTOMLEFT", 10, -10)
@@ -1254,7 +1295,7 @@ function GF_LFGGetWhoUpdateOffset()
 		GF_ResultsListOffset = 20 * math.ceil(GF_ResultsListOffset/GF_ResultsListOffsetSize)
 		GF_ResultsListOffsetSize = 20
 	elseif GF_PerCharVariables.getwhoshown then
-		GF_GetWhoFrame:Show()
+		if GF_SavedVariables.mainframelogisopen or not GF_MainFrameShowBoth then GF_GetWhoFrame:Show() else GF_GetWhoFrame:Hide() end
 		GF_GetWhoFrameToggleButton:LockHighlight()
 		GF_LFGFrame:Hide()
 		GF_LFGFrameToggleButton:UnlockHighlight()
@@ -2416,7 +2457,7 @@ function GF_GetTypes(arg1, showanyway)
 	
 	if strfind(arg1, "%d+p[%p%s]") then foundLFM = 2 if showanyway == true then print("##p lfm 2") end end -- "10p heal" messages from chinese
 	lfs = 1 -- To detect space/lf##m/letter(eg "lf15mbwl" = lfm bwl)
-	while true do lfs,lfe,wordString = strfind(arg1,"[%p%s]([lk]f?%s?%d+m)[%p%s]",lfs) if wordString then arg1 = strsub(arg1,1,lfs).."lfm "..strsub(arg1,lfs+strlen(wordString)+1) lfs = lfs + 4 foundLFM = 3 foundGuildExclusion = 2 foundTradesExclusion = 2 if showanyway == true then print("lf##m lfm 3 .. guildex 2... tradesex 2") end else break end end
+	while true do lfs,lfe,wordString = strfind(arg1,"[%p%s]([lk]f?%s?%d+m)[%p%s]",lfs) if wordString then arg1 = strsub(arg1,1,lfs).."lfm "..strsub(arg1,lfs+strlen(wordString)+1) lfs = lfs + 4 foundLFM = 3 foundGuildExclusion = 1 foundTradesExclusion = 1 if showanyway == true then print("lf##m lfm 3 .. guildex 1... tradesex 1") end else break end end
 	lfs = 1 -- To detect space/number+/punctuation/number+/space for groups
 	while true do lfs,lfe,wordString = strfind(arg1,"[%p%s]%d%d?([=/v])%d%d? ",lfs) if wordString then if wordString == "=" then foundLFM = 2 lfs = lfe else arg1 = strsub(arg1,1,lfs).."group"..strsub(arg1,lfe) lfs = lfs + 6 end else break end end
 	lfs,lfe,wordString,tempString = strfind(arg1,"[%p%s](%d?%d?%s?\-?([-\+±]))\-?%s?%d?%d?[%p%s]")
@@ -2815,7 +2856,17 @@ function GF_GetTypes(arg1, showanyway)
 						if lfs > 1 then lfs = lfs - 2 else lfs = lfs - 1 end
 					end
 				else
-					if GF_WORD_FIX_TRADE[wordString] then wordTableTrade[lfs] = GF_WORD_FIX_TRADE[wordString][1] for k=1, j do table.remove(wordTableTrade,lfs+k) table.insert(wordTableTrade,lfs+k,GF_WORD_FIX_TRADE[wordString][2]) end end
+					if GF_WORD_FIX_TRADE[wordString] then
+						if GF_TRADE_TRIGGER[wordString] then
+							if GF_WORD_LEVEL_ZONE[wordTable[lfs-1]] or GF_GROUP_IDS[wordTable[lfs-1]] then
+								wordTableTrade[lfs] = GF_TRADE_COMMON_WORDS[wordString]
+								for k=1, j do table.remove(wordTableTrade,lfs+k) table.insert(wordTableTrade,"N") end
+							end
+						else
+							wordTableTrade[lfs] = GF_WORD_FIX_TRADE[wordString][1]
+							for k=1, j do table.remove(wordTableTrade,lfs+k) table.insert(wordTableTrade,lfs+k,GF_WORD_FIX_TRADE[wordString][2]) end
+						end
+					end
 					if wordTableGuild["BRACKETS"] == wordString then for k=0, j do wordTableGuild[lfs+k] = "G" end
 					elseif GF_WORD_FIX_GUILD[wordString] then wordTableGuild[lfs] = GF_WORD_FIX_GUILD[wordString][1] for k=1, j do table.remove(wordTableGuild,lfs+k) table.insert(wordTableGuild,lfs+k,GF_WORD_FIX_GUILD[wordString][2]) end end
 				end
@@ -3021,6 +3072,7 @@ function GF_GetTypes(arg1, showanyway)
 				end
 			end
 		end
+		if groupPosition[2] == lfmPosition[i][2] and not GF_LFM_BYPASS[wordTable[lfmPosition[i][2]]] and not GF_WORD_LEVEL_ZONE[wordTable[lfmPosition[i][2]]] and not (wordTable[lfmPosition[i][2]-1] and (GF_LFM_BYPASS[wordTable[lfmPosition[i][2]-1]..wordTable[lfmPosition[i][2]]] or GF_WORD_LEVEL_ZONE[wordTable[lfmPosition[i][2]-1]..wordTable[lfmPosition[i][2]]])) then lfs = lfs + 1 foundTradesExclusion = foundTradesExclusion + .5 if showanyway == true then print(lfmPosition[i][3].." reached group 1") end break end
 		if lfmPosition[i][4] then if lfs > foundLFM then foundLFM = lfs end else if lfs > foundLFG then foundLFG = lfs end end
 	end
 	if foundLFM > foundLFG then foundLFG = 0 foundLFGPreSuf = 0 end
@@ -3412,7 +3464,7 @@ function GF_UpdateResults()
 				getglobal("GF_NewItem"..i.."NameLabel"):SetText(GF_GetDifficultyColor(GF_FilteredResultsList[i+GF_ResultsListOffset].dlevel)..GF_GetLevelString(GF_FilteredResultsList[i+GF_ResultsListOffset].dlevel,GF_FilteredResultsList[i+GF_ResultsListOffset].flags)..GF_FilteredResultsList[i+GF_ResultsListOffset].op..": "..GF_FilteredResultsList[i+GF_ResultsListOffset].message)
 				getglobal("GF_NewItem"..i.."MoreLabel"):SetText("")
 			end
-			if (not GF_SavedVariables.mainframeheight or GF_SavedVariables.mainframestatus == 0) or i < 14 then
+			if (not GF_SavedVariables.mainframeheight or GF_SavedVariables.mainframestatus == 0) or i <= GF_ResultsListOffsetSize then
 				getglobal("GF_NewItem"..i):Show()
 				if GF_SavedVariables.mainframestatus == 0 and GF_FilteredResultsList[i+GF_ResultsListOffset].op ~= UnitName("player") then
 					if not GF_SavedVariables.usewhoongroups and not GF_UrgentWhoRequest[GF_FilteredResultsList[i+GF_ResultsListOffset].op] and not GF_SavedVariables.friendsToRemove[GF_FilteredResultsList[i+GF_ResultsListOffset].op] and
@@ -4452,6 +4504,7 @@ function GF_ClickQueueLFT()
 end
 function GF_UpdateQueueLFTButton(update) -- Updates(gets dungeon list) on login and when leveling up... Otherwise, just check if groups match GF_PerCharVariables.searchlfgtext and show/hide the Queue Button... Always show button if in queue
 	if LFTFrame then
+		if GF_MainFrameShowBoth and not GF_SavedVariables.mainframelogisopen then GF_QueuetoLFTButton:Hide() return end
 		if update and not LFTFrame:IsVisible() then LFT_Toggle() LFT_Toggle() end -- Get List
 		if LFTFrameMainButtonText:GetText() == LFT_GENERAL_LEAVE_QUEUE_TEXT then
 			GF_QueuetoLFTButton:SetText(GF_LEAVE_QUEUE)
@@ -4507,6 +4560,8 @@ function print(msg) -- I added this only temporarily so I could work on the addo
 		DEFAULT_CHAT_FRAME:AddMessage("false", 1, 1, 0.5)
 	elseif type(msg) == "table" then
 		DEFAULT_CHAT_FRAME:AddMessage("table", 1, 1, 0.5)
+	elseif type(msg) == "boolean" then
+		DEFAULT_CHAT_FRAME:AddMessage("true", 1, 1, 0.5)
 	else
 		DEFAULT_CHAT_FRAME:AddMessage(msg, 1, 1, 0.5)
 	end
