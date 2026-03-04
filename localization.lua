@@ -491,7 +491,7 @@ GF_WORD_FIX = { -- Word changes processed after quests. Not simple typos.
 ["living"] = "live",["loved"] = "love",["loves"] = "love",["marshall"] = "marshal",["mounting"] = "mount",["mounts"] = "mount",["noting"] = "nothing",["options"] = "option",["orgrimmars"] = "orgrimmar",["plays"] = "play",
 ["princes"] = "princess",["princesses"] = "princess",["prio"] = "priority",["questions"] = "question",["randoms"] = "random",["requesting"] = "request",["rewards"] = "reward",["ringed"] = "ring",["ringer"] = "ring",
 ["rings"] = "ring",["ripped"] = "rip",["ripping"] = "rip",["rips"] = "rip",["rollers"] = "roller",["rosters"] = "roster",["safes"] = "safe",["scammed"] = "scam",["scamming"] = "scam",["scams"] = "scam",["speaker"] = "speak",
-["speakers"] = "speak",["speaking"] = "speak",["speaks"] = "speak",["specs"] = "spec",["spires"] = "spire",["spots"] = "spot",["spurs"] = "spur",["stairs"] = "stair",["stealthy"] = "stealth",["stocks"] = "stock",
+["speakers"] = "speak",["speaking"] = "speak",["speaks"] = "speak",["specs"] = "spec",["spires"] = "spire",["spots"] = "spot",["spurs"] = "spur",["stairs"] = "stair",["stealthy"] = "stealth",["stocks"] = "stock",["wipes"] = "wipe",
 ["stones"] = "stone",["strats"] = "strat",["suggestions"] = "suggestion",["surcharges"] = "surcharge",["times"] = "time",["tokens"] = "token",["trainers"] = "trainer",["trinkets"] = "trinket",["turns"] = "turn",["addons"] = "addon",
 ["twinks"] = "twink",["undercitys"] = "undercity",["weeks"] = "week",["welcomed"] = "welcome",["wings"] = "wing",["yelling"] = "yell",["yours"] = "your",["tubes"] = "tube",["dwarves"] = "dwarf",["satyrs"] = "satyr",
 ["pivipi"] = "pvp",["frees"] = "free",["fre"] = "free",["incl"] = "include",["ned"] = "need",["beginners"] = "beginner",["gathering"] = "gather",["highstakes"] = "highstake",["caves"] = "cave",["mt"] = "tank",["ot"] = "tank",
@@ -1916,7 +1916,7 @@ GF_WORD_IGNORE = { -- Phrases to help prevent group false-positives.
 ["removeme"] = .5,["removemy"] = .5,["repairs"] = .5,["rerollfactionchange"] = .5,["reservedin"] = .5,["resetdungeon"] = .5,["resetquickly"] = .5,["resetspot"] = .5,["respec"] = .5,
 ["restoringbalm"] = .5,["resurrectiondruid"] = .5,["retailhas"] = .5,["retailpvp"] = .5,["retard"] = .5,["rexxarat"] = .5,["ridofit"] = .5,["ripheroff"] = .5,["riphimoff"] = .5,
 ["ripoff"] = .5,["rippeopleoff"] = .5,["ripplayeroff"] = .5,["ripthemoff"] = .5,["ripusoff"] = .5,["riskydoing"] = .5,["ruin"] = .5,["rungo"] = .5,["runsaid"] = .5,
-["runtime"] = .5,["saidnowipes"] = .5,["sameoddsas"] = .5,["scam"] = .5,["seeyouagain"] = .5,["semihardcore"] = .5,["sendingmessages"] = .5,["sentyou"] = .5,["seriouslyreserving"] = .5,
+["runtime"] = .5,["saidnowipe"] = .5,["sameoddsas"] = .5,["scam"] = .5,["seeyouagain"] = .5,["semihardcore"] = .5,["sendingmessages"] = .5,["sentyou"] = .5,["seriouslyreserving"] = .5,
 ["server"] = .5,["serverispathetic"] = .5,["serverofall"] = .5,["setquest"] = .5,["shamantankwill"] = .5,["sheisscared"] = .5,["shesbeauty"] = .5,["shilldungeon"] = .5,["shirt"] = .5,
 ["shitload"] = .5,["shitloads"] = .5,["shitdad"] = .5,["shitfather"] = .5,["shitmom"] = .5,["shitmother"] = .5,["shouldigo"] = .5,["shoulditry"] = .5,["shouldnotbe"] = .5,["shitdads"] = .5,["shitfathers"] = .5,["shitmoms"] = .5,["shitmothers"] = .5,
 ["sicko"] = .5,["simplycannot"] = .5,["simplycant"] = .5,["sincewedid"] = .5,["singleandlonely"] = .5,["slightglow"] = .5,["slowerpace"] = .5,["smfh"] = .5,["soarealliance"] = .5,
@@ -2010,7 +2010,7 @@ GF_WORD_IGNORE = { -- Phrases to help prevent group false-positives.
 ["penandpaper"] = .5,["signupinperson"] = .5,["pfui"] = .5,["heyisit"] = .5,["isitdifficult"] = .5,["atalltime"] = .5,["talentadvice"] = .5,["anothermonthof"] = .5,["havemyass"] = .5,["myasshand"] = .5,["handtome"] = .5,
 ["togivemehead"] = .5,["givemehead"] = .5,["givemesomehead"] = .5,["turtledevs"] = .5,["juststeal"] = .5,["youcanmake"] = .25,["toturnitin"] = .5,["isntinlfgmenu"] = .5,["inlfgmenu"] = .5,["isntinlftmenu"] = .5,["inlftmenu"] = .5,
 ["sendgold"] = .5,["tosendgold"] = .5,["sendlittlegold"] = 1,["sendsomegold"] = 1,["idonotknow"] = .5,["wherecani"] = .5,["whereicancomplete"] = .5,["ormakefriend"] = 1,
-["greenitemcalled"] = .5,["blueitemcalled"] = .5,["epicitemcalled"] = .5,["legendaryitemcalled"] = .5,
+["greenitemcalled"] = .5,["blueitemcalled"] = .5,["epicitemcalled"] = .5,["legendaryitemcalled"] = .5,["wholeraidwipe"] = .5,["keeptrashtalking"] = .5,["trashtalkingthere"] = .5,["stopspoiling"] = .5,
 
 --[[
 [""] = .5,
@@ -2113,6 +2113,7 @@ GF_WORD_IGNORE = { -- Phrases to help prevent group false-positives.
 GF_WORD_IGNORE_BEFORE = { -- Up to three words before LFM/LFG phrase or before target of prefix(e.g. "'do not tank' <karazhan>")
 ["bisfor"] = 1,["cleanseplease"] = 1,["cleanse"] = 1,["donottank"] = 1,["donotneed"] = 1,["simplethingslike"] = 1,["theyare"] = .5,["donot"] = 1,["wedonot"] = 1,["difficultto"] = .5,["difficulttomake"] = .5,["refuseto"] = .5,["no"] = .25,["from"] = .25,
 ["planfrom"] = .5,["schematicfrom"] = .5,["formulafrom"] = .5,["patternfrom"] = .5,["bagfrom"] = .5,["waterfrom"] = .5,["potionfrom"] = .5,["elixirfrom"] = .5,["flaskfrom"] = .5,["ifitsraid"] = .5,["isntin"] = .5,["sucks"] = .5,["whobeenin"] = .5,
+["wipe"] = .5,
 
 -- Negative
 ["ishost"] = -.5,["isstart"] = -.5,["isstarting"] = -.5,["isform"] = -.5,["isdoing"] = -.5,["isplanning"] = -.5,["hordeplayerto"] = -.5,["allianceplayerto"] = -.5,["allianceplayerfor"] = -.5,["allianceplayerfor"] = -.5,["dungeonand"] = -.5,["dungeonor"] = -.5,

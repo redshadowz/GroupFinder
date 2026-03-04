@@ -1093,6 +1093,7 @@ function GF_UpdateMainFrameWidth()
 			GF_WhisperHistoryButtonLog:Hide()
 		end
 	end
+	if GF_SavedVariables.showwhisperlogs == 1 then GF_WhisperLogButton:LockHighlight() GF_GroupLogButton:UnlockHighlight() elseif GF_SavedVariables.showwhisperlogs == 2 then GF_GroupLogButton:LockHighlight() GF_WhisperLogButton:UnlockHighlight() else GF_GroupLogButton:UnlockHighlight() GF_WhisperLogButton:UnlockHighlight() end
 end
 function GF_UpdateMainFramePosition()
 	GF_NewItem1:ClearAllPoints()
@@ -1211,7 +1212,6 @@ function GF_UpdateMainFrame()
 		end
 		tinsert(UISpecialFrames,GF_MainFrame:GetName())
 	end
-	if GF_SavedVariables.showwhisperlogs == 1 then GF_WhisperLogButton:LockHighlight() GF_GroupLogButton:UnlockHighlight() elseif GF_SavedVariables.showwhisperlogs == 2 then GF_GroupLogButton:LockHighlight() GF_WhisperLogButton:UnlockHighlight() else GF_GroupLogButton:UnlockHighlight() GF_WhisperLogButton:UnlockHighlight() end
 	GF_UpdateQueueLFTButton()
 end
 function GF_UpdateMinimapIcon()
@@ -3464,7 +3464,7 @@ function GF_UpdateResults()
 				getglobal("GF_NewItem"..i.."NameLabel"):SetText(GF_GetDifficultyColor(GF_FilteredResultsList[i+GF_ResultsListOffset].dlevel)..GF_GetLevelString(GF_FilteredResultsList[i+GF_ResultsListOffset].dlevel,GF_FilteredResultsList[i+GF_ResultsListOffset].flags)..GF_FilteredResultsList[i+GF_ResultsListOffset].op..": "..GF_FilteredResultsList[i+GF_ResultsListOffset].message)
 				getglobal("GF_NewItem"..i.."MoreLabel"):SetText("")
 			end
-			if (not GF_SavedVariables.mainframeheight or GF_SavedVariables.mainframestatus == 0) or i <= GF_ResultsListOffsetSize then
+			if i <= GF_ResultsListOffsetSize then
 				getglobal("GF_NewItem"..i):Show()
 				if GF_SavedVariables.mainframestatus == 0 and GF_FilteredResultsList[i+GF_ResultsListOffset].op ~= UnitName("player") then
 					if not GF_SavedVariables.usewhoongroups and not GF_UrgentWhoRequest[GF_FilteredResultsList[i+GF_ResultsListOffset].op] and not GF_SavedVariables.friendsToRemove[GF_FilteredResultsList[i+GF_ResultsListOffset].op] and
@@ -3834,7 +3834,7 @@ function GF_WhisperHistoryUpdateFrame(name)
 	GF_WhisperHistoryButton1:SetText(GF_LOG_GUILDWHISPERS)
 	if getn(GF_WhisperLogData[GF_RealmName]) > 95 then GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][96]] = nil table.remove(GF_WhisperLogData[GF_RealmName],96) end
 end
-function GF_GroupHistoryUpdateFrame(name)
+function GF_GroupHistoryUpdateFrame(name,swap)
 	local numPriority = 0
 	local nameWasPriority
 	local counter = 2
@@ -3872,6 +3872,7 @@ function GF_GroupHistoryUpdateFrame(name)
 		getglobal("GF_WhisperHistoryButtonCheckButton"..GF_WhisperLogCurrentButtonID):Hide()
 	end
 	GF_WhisperHistoryButton1:SetText(GF_LOG_ALLGROUPS)
+-- If n
 end
 function GF_WhisperHistoryDisplayLog(name)
 	GF_Log:SetMaxLines(128)
