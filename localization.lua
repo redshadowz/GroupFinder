@@ -1062,7 +1062,7 @@ GF_WORD_FIX_SINGLE_WORD = { -- Single word changes. Mostly typos and simple word
 ["gurrub"] = "gurub",["zgs"] = "zg",["zeegee"] = "zg",["aqs"] = "aq",["mcs"] = "mc",["karas"] = "karazhan",
 ["onyixia"] = "onyxia",["onxy"] = "onyxia",["onyx"] = "onyxia",["onixia"] = "onyxia",["oniwya"] = "onyxia",["onixya"] = "onyxia",["onyqia"] = "onyxia",["onyxxia"] = "onyxia",["onyxuia"] = "onyxia",
 ["onyixa"] = "onyxia",["onxia"] = "onyxia",["ony"] = "onyxia",["ohy"] = "onyxia",["onny"] = "onyxia",["onyy"] = "onyxia",["oony"] = "onyxia",["onx"] = "onyxia",["onxyia"] = "onyxia",["onys"] = "onyxia",["onyzia"] = "onyxia",
-["onyza"] = "onyxia",["onycia"] = "onyxia",["oni"] = "onyxia",["onux"] = "onyxia",["onynxia"] = "onyxia",["oxyxia"] = "onyxia",["oxyy"] = "onyxia",["onxyai"] = "onyxia",
+["onyza"] = "onyxia",["onycia"] = "onyxia",["oni"] = "onyxia",["onux"] = "onyxia",["onynxia"] = "onyxia",["oxyxia"] = "onyxia",["oxyy"] = "onyxia",["onxyai"] = "onyxia",["onyony"] = "onyxia",
 ["azurg"] = "azuregos",["azurgo"] = "azuregos",["azurego"] = "azuregos",["azurgos"] = "azuregos",["azuregs"] = "azuregos",["kazzk"] = "kazzak",["kazz"] = "kazzak",["kazak"] = "kazzak",
 ["ysonder"] = "ysondre",["ysondr"] = "ysondre",["ysndre"] = "ysondre",["ysnder"] = "ysondre",["lethn"] = "lethon",["tarar"] = "taerar",["emeris"] = "emeriss",["emerss"] = "emeriss",
 ["raggi"] = "ragnaros",["ragnoros"] = "ragnaros",
@@ -1712,7 +1712,7 @@ GF_WORD_WORD_REPLACE = { -- Words that get fixed if accidentally combined("fishi
 ["smcath"] = true,["smcathedral"] = true,["smfull"] = true,["smgraveyard"] = true,["smgy"] = true,["smlib"] = true,["smlibrary"] = true,["stormwind"] = true,["stormwrought"] = true,
 ["strath"] = true,["stratholme"] = true,["sunken"] = true,["sunnyglade"] = true,["swc"] = true,["swd"] = true,["swr"] = true,["swv"] = true,["swvault"] = true,
 ["taerar"] = true,["temple"] = true,["thunderbluff"] = true,["ubrs"] = true,["udstrat"] = true,["uldaman"] = true,["undead"] = true,["undercity"] = true,["valley"] = true,
-["warsong"] = true,["warsonggulch"] = true,["weeklies"] = true,["weekly"] = true,["worldboss"] = true,["wpvp"] = true,["wsg"] = true,["ysondre"] = true,["zg"] = true,["zulfarrak"] = true,["zulgurub"] = true,
+["warsong"] = true,["warsonggulch"] = true,["weeklies"] = true,["weekly"] = true,["worldboss"] = true,["wpvp"] = true,["wsg"] = true,["ysondre"] = true,["zg"] = true,["zulfarrak"] = true,["zulgurub"] = true,["onyony"] = true,
 }
 GF_WORD_SPECIAL_EXCEPTIONS = { -- These are longer words that shouldn't be split from GF_WORD_WORD_REPLACE
 ["anyones"] = true,["coupled"] = true,["coupler"] = true,["couplers"] = true,["couples"] = true,["gets"] = true,["forget"] = true,["haven"] = true,["havens"] = true,["havent"] = true,["haves"] = true,
@@ -1779,7 +1779,7 @@ GF_WORD_FIX_ITEM_NAME = { -- Converts "[Crimson Pantaloons]" into "[legs]" for d
 ["shroud"] = "cloak",["cloak"] = "cloak",["drape"] = "cloak",["cape"] = "cloak",
 ["robe"] = "chest",["breastplate"] = "chest",["tunic"] = "chest",["vest"] = "chest",["hauberk"] = "chest",["vestments"] = "chest",["garb"] = "chest",["chestguard"] = "chest",["chestpiece"] = "chest",["bulwark"] = "chest",
 ["robes"] = "chest",["armor"] = "chest",["chestplate"] = "chest",["jerkin"] = "chest",["harness"] = "chest",
-["bracers"] = "wrist",["wristguards"] = "wrist",["wristbands"] = "wrist",["bracelets"] = "wrist",["cuffs"] = "wrist",["armguards"] = "wrist",
+["bracers"] = "wrist",["wristguards"] = "wrist",["wristbands"] = "wrist",["bracelets"] = "wrist",["cuffs"] = "wrist",["armguards"] = "wrist",["bindings"] = "wrist",
 ["gloves"] = "gloves",["gauntlets"] = "gloves",["handwraps"] = "gloves",["handguards"] = "gloves",["hands"] = "gloves",
 ["belt"] = "belt",["sash"] = "belt",["girdle"] = "belt",["cord"] = "belt",["cinch"] = "belt",["waistband"] = "belt",
 ["leggings"] = "legs",["pants"] = "legs",["pantaloons"] = "legs",["legguards"] = "legs",["britches"] = "legs",["trousers"] = "legs",["legwraps"] = "legs",["legplates"] = "legs",["sarong"] = "legs",["kilt"] = "legs",["loincloth"] = "legs",

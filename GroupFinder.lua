@@ -335,7 +335,6 @@ function GF_LoadVariables()
 
 	GF_CurrentZone = GetRealZoneText()
 	if not GF_PerCharVariables.CurrentGroup then GF_PerCharVariables.CurrentGroup = {} end
-
 	if GF_SavedVariables.systemfilter then HELP_TEXT_SIMPLE = nil else HELP_TEXT_SIMPLE = GF_HELP_TEXT_SIMPLE end
 end
 function GF_LoadSettings()
@@ -424,6 +423,7 @@ function GF_LoadSettings()
 	GF_SetDropdownWidths()
 	GF_SetLFGRoleButtons()
 	GF_UpdateQueueLFTButton(true)
+	GF_UpdateGroup()
 end
 function GF_SetStringSize()
 	local fontName,fontSizeMinimap,fontSizeLarge,fontSizeButton
@@ -1406,7 +1406,7 @@ function GF_ChatReplaceHplayer(arg1)
 	lfs = 1
 	while true do
 		lfs,lfe,wordString = strfind(arg1,"|%x+|+Hplayer:(%w+)|+h%[.-%]|+h|+r",lfs)
-		if wordString then
+		if lfe then
 			if GF_WhoTable[GF_RealmName][wordString] then
 				arg1 = strsub(arg1,1,lfs).."cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][wordString][2]] or "ffffff").."|Hplayer:"..wordString.."|h["..wordString..", "..GF_WhoTable[GF_RealmName][wordString][1].."]|h|"..strsub(arg1,lfe)
 			end
@@ -1422,7 +1422,7 @@ function GF_ChatReplaceHquestLevels(arg1)
 	lfs = 1
 	while true do
 		lfs,lfe,questID,questLevel,questName = strfind(arg1,"|%x+|+Hquest:(%d+):(%d+)|+h%[(.-)%]|+h|+r",lfs)
-		if lfs then
+		if lfe then
 			if questLevel == "0" then questLevel = ({GF_GetQuestInfo(questName)})[1][2] or 0 end
 			arg1 = strsub(arg1,1,lfs-1)..(GF_GetDifficultyColor(tonumber(questLevel)) or "|cffffffff").."|Hquest:"..questID..":"..questLevel.."|h["..questName.."]|h|"..strsub(arg1,lfe)
 			lfs = lfe + 1
@@ -1437,7 +1437,7 @@ function GF_ChatReplaceItemLink(arg1,checkOnly)
 	lfs = 1
 	while true do
 		lfs,lfe,preFix,itemLink = strfind(arg1,"|(%x+|H(item:[%d+:]+)|h%[).-%]|h|r",lfs)
-		if itemLink then
+		if lfe then
 			itemName = GetItemInfo(itemLink)
 			if checkOnly then if not itemName then broken = true ShowUIPanel(ItemRefTooltip) if not ItemRefTooltip:IsVisible() then ItemRefTooltip:SetOwner(UIParent, "ANCHOR_PRESERVE") end ItemRefTooltip:SetHyperlink(itemLink) end
 			elseif itemName then arg1 = strsub(arg1,1,lfs)..preFix..itemName..strsub(arg1,lfe-4) end
@@ -2035,7 +2035,6 @@ function self:PARTY_LEADER_CHANGED()
 end
 function self:PLAYER_ENTERING_WORLD() -- When logging in in a group, PLAYER_ENTERING_WORLD > PARTY_MEMBERS_CHANGED > PARTY_MEMBERS_CHANGED again > ZONE_CHANGED_NEW_AREA... When party member goes offline, PARTY_MEMBERS_CHANGED... online, PARTY_MEMBERS_CHANGED
 -- When switching to raid, PARTY_MEMBERS_CHANGED > RAID_ROSTER_UPDATE... when raid member goes offline PARTY_MEMBERS_CHANGED > RAID_ROSTER_UPDATE... online PARTY_MEMBERS_CHANGED > RAID_ROSTER_UPDATE... reloading UI does nothing
-	GF_NumPartyMembers = GF_GetNumGroupMembers()
 	GF_LoadVariables()
 	GF_LoadSettings()
 	GF_UpdateBlackListItems()
@@ -3465,6 +3464,7 @@ function GF_UpdateGroup()
 			end
 			GF_UpdateQueueLFTButton()
 		end
+
 		if GF_NumPartyMembers == 1 then GF_ApplyFiltersToGroupList() GF_GroupFinishedAddToGroupHistoryList()
 		elseif not GF_PerCharVariables.CurrentGroup[GF_CurrentZone] then GF_PerCharVariables.CurrentGroup[GF_CurrentZone] = {time(),{},{}} table.insert(GF_PerCharVariables.CurrentGroup,GF_CurrentZone) end
 	end
@@ -3884,12 +3884,15 @@ function GF_GroupFinishedAddToGroupHistoryList()
 			for _,_ in GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][3] do lfs = lfs + 1 end
 			if lfs > 0 then
 				table.insert(GF_GroupHistory[GF_RealmName]["Groups"], {GF_PerCharVariables.CurrentGroup[i],time(),GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][2],GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][3],lfs})
-				if not GF_GroupHistory[GF_RealmName][strsub(GF_PerCharVariables.CurrentGroup[i],1,12)] then GF_GroupHistory[GF_RealmName][strsub(GF_PerCharVariables.CurrentGroup[i],1,12)] = {} end
+				if not GF_GroupHistory[GF_RealmName][strsub(GF_PerCharVariables.CurrentGroup[i],1,12)] then GF_GroupHistory[GF_RealmName][strsub(GF_PerCharVariables.CurrentGroup[i],1,12)] = {} table.insert(GF_GroupHistory[GF_RealmName],1,strsub(GF_PerCharVariables.CurrentGroup[i],2,12))  end
 				table.insert(GF_GroupHistory[GF_RealmName][strsub(GF_PerCharVariables.CurrentGroup[i],1,12)], {GF_PerCharVariables.CurrentGroup[i],time(),GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][2],GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][3],lfs})
 			end
+-- Need at least two people in the group
 -- Group should finish 2 minutes after leaving the group.
+-- Maximum 20 groups for main, 10 for secondary
 		end
 	end
+	GF_GroupHistoryUpdateFrame()
 	GF_PerCharVariables.CurrentGroup = {}
 end
 function GF_WhisperHistoryUpdateFrame(name)
@@ -4002,7 +4005,7 @@ end
 function GF_GroupHistoryDisplayLog(name) -- TODO: Create "other" for any non-dungeon groups. Make sure the framework is complete so I can just start importing groups. Don't use Log Scrolling frame.
 	GF_Log:SetMaxLines(128)
 	for i=getn(GF_GroupHistory[GF_RealmName][name]), 1, -1 do
-		wordString = GF_GroupHistory[GF_RealmName][name][i][2].." "..GF_GroupHistory[GF_RealmName][name][i][1].." - "
+		wordString = date("[%m/%d] [%H:%M]",GF_GroupHistory[GF_RealmName][name][i][2]).." "..GF_GroupHistory[GF_RealmName][name][i][1].." - "
 		for name,data in GF_GroupHistory[GF_RealmName][name][i][3] do
 			wordString = wordString.."|cff"..(GF_ClassColors[data[2]] or "9d9d9d").."|Hplayer:"..name.."|h["..name..", "..data[1].."]|h|r"
 		end
