@@ -95,9 +95,9 @@ local GF_ChatNameAlias = { ["OFFICER"] = "GUILD",["RAID"] = "PARTY",["RAID_LEADE
 local GF_ChatBypass = { ["MONEY"] = true,["LOOT"] = true,["COMBAT_FACTION_CHANGE"] = true,["COMBAT_XP_GAIN"] = true,["COMBAT_HONOR_GAIN"] = true,["EMOTE"] = true,["TEXT_EMOTE"] = true,["MONSTER_SAY"] = true,["MONSTER_EMOTE"] = true,["MONSTER_YELL"] = true,}
 local ThingsToHide = { "GF_LogBottomButton","GF_LogDownButton","GF_LogUpButton","GF_LogFilterDropdownButton","GF_LogChannelFilterDropdownButton","GF_LogChannelNameDropdown","GF_ConvertLogMessagesToURL","GF_WhisperLogButton","GF_GroupLogButton",-- 9 Log-related
 "GF_MainFrameCloseButton","GF_GroupChatOptionsFrame", -- 2 both
-"GF_LFGFrameToggleButton","GF_GetWhoFrameToggleButton","GF_AnnounceToLFGButton","GF_QueuetoLFTButton", -- 4 Group-related
+"GF_LFGFrameToggleButton","GF_GetWhoFrameToggleButton","GF_AnnounceToLFGButton", -- 3 Group-related
 "GF_SettingsFrameButton","GF_ShowBlacklistButton","GF_ShowGroupsButton","GF_LogFrameButton",
-"GF_GetWhoFrame","GF_LFGFrame","GF_MessageFrame","GF_LogFilterDropdownMenu","GF_GroupFilterDropdownMenu","GF_ChatFilterDropdownMenu","GF_LFGHardCoreDropdown","GF_FontName","GF_GroupChannelName","GF_BlockList","GF_AutoBlacklistDropdownMenu","GF_LogChannelName" }
+"GF_QueuetoLFTButton","GF_GetWhoFrame","GF_LFGFrame","GF_MessageFrame","GF_LogFilterDropdownMenu","GF_GroupFilterDropdownMenu","GF_ChatFilterDropdownMenu","GF_LFGHardCoreDropdown","GF_FontName","GF_GroupChannelName","GF_BlockList","GF_AutoBlacklistDropdownMenu","GF_LogChannelName" }
 local GF_DifficultyColors = { ["RED"] = "ff0000",["ORANGE"] = "ff8040",["YELLOW"] = "ffff00",["GREEN"] = "1eff00",["GREY"] = "808080", }
 local GF_TankClasses						= {	["DRUID"]=true,["WARRIOR"]=true,["PALADIN"]=true,["SHAMAN"]=true }
 local GF_HealingClasses						= {	["PRIEST"]=true,["DRUID"]=true,["PALADIN"]=true,["SHAMAN"]=true }
@@ -219,7 +219,7 @@ function GF_LoadVariables()
 		if GF_SavedVariables.blocklist == nil then GF_SavedVariables.blocklist = {} end
 
 		if GF_SavedVariables.clickcombos == nil then GF_SavedVariables.clickcombos = true end
-		if GF_SavedVariables.usefriendslist == nil then if GF_KNOWN_SERVERS_LIST[GF_RealmName] then GF_SavedVariables.usefriendslist = true else GF_SavedVariables.usefriendslist = false end end
+		if GF_SavedVariables.usefriendslist == nil then GF_SavedVariables.usefriendslist = true end
 		if GF_SavedVariables.fontname == nil then GF_SavedVariables.fontname = 1 end
 		if GF_SavedVariables.blacklisttrades == nil then GF_SavedVariables.blacklisttrades = false end
 		if GF_SavedVariables.blacklistguild == nil then GF_SavedVariables.blacklistguild = false end
@@ -1144,14 +1144,14 @@ function GF_UpdateMainFrame()
 				for i=1, 11 do
 					getglobal(ThingsToHide[i]):Show()
 				end
-				for i=12, 15 do
+				for i=12, 14 do
 					getglobal(ThingsToHide[i]):Hide()
 				end
 			else
 				for i=1, 9 do
 					getglobal(ThingsToHide[i]):Hide()
 				end
-				for i=10, 15 do
+				for i=10, 14 do
 					getglobal(ThingsToHide[i]):Show()
 				end
 			end
@@ -1201,7 +1201,7 @@ function GF_UpdateMainFrame()
 		for id, word in UISpecialFrames do if word == "GF_MainFrame" then UISpecialFrames[id] = nil end end
 		if GF_MainFrameShowBoth then tinsert(UISpecialFrames,GF_MainFrame:GetName()) end
 	else
-		for i=1, 19 do
+		for i=1, 18 do
 			getglobal(ThingsToHide[i]):Show()
 		end
 		if GF_PlayingOnTurtle then GF_LFGHardCoreDropdown:Show() end
@@ -1336,7 +1336,7 @@ function GF_LFGGetWhoUpdateOffset()
 end
 
 function GF_AddChannelMessage(arg1,arg2,arg8,arg9,nodelay) -- Message Handlers
-	if not GF_SavedVariables.friendsToRemove[arg2] or nodelay or not GF_PlayingOnTurtle or GF_WhoTable[GF_RealmName][arg2] or not GF_SavedVariables.usewhoongroups or not GF_SavedVariables.usefriendslist then
+	if not GF_SavedVariables.friendsToRemove[arg2] or nodelay or GF_WhoTable[GF_RealmName][arg2] or not GF_SavedVariables.usewhoongroups or not GF_SavedVariables.usefriendslist then
 		arg9 = string.gsub(arg9, " - .*", "")
 		arg1 = "["..arg8..". "..strupper(strsub(arg9,1,1))..strsub(arg9,2).."] "..GF_MakeBasicChatString(arg1,arg2)
 		for i=1,NUM_CHAT_WINDOWS do
@@ -1350,7 +1350,7 @@ function GF_AddChannelMessage(arg1,arg2,arg8,arg9,nodelay) -- Message Handlers
 	end
 end
 function GF_AddChatMessage(arg1,arg2,event,nodelay)
-	if not GF_SavedVariables.friendsToRemove[arg2] or nodelay or not GF_PlayingOnTurtle or GF_WhoTable[GF_RealmName][arg2] or not GF_SavedVariables.usewhoongroups or not GF_SavedVariables.usefriendslist then
+	if not GF_SavedVariables.friendsToRemove[arg2] or nodelay or GF_WhoTable[GF_RealmName][arg2] or not GF_SavedVariables.usewhoongroups or not GF_SavedVariables.usefriendslist then
 		arg1 = (EventIDAlias[event] or "["..strsub(event,1,1).."] ")..GF_MakeBasicChatString(arg1,arg2,event)
 		if event == "HARDCORE" and TW_HARDCORE_CHAT1 then
 			for i=1,NUM_CHAT_WINDOWS do
@@ -1457,7 +1457,7 @@ function GF_CleanUpMessagesOfBadLinks(arg1) -- Replaces CLINK messages with norm
 	return arg1
 end
 function GF_ShowGroupsOnMinimap(arg1,arg2,nodelay)
-	if not GF_SavedVariables.friendsToRemove[arg2] or nodelay or not GF_PlayingOnTurtle or GF_WhoTable[GF_RealmName][arg2] or not GF_SavedVariables.usewhoongroups or not GF_SavedVariables.usefriendslist then
+	if not GF_SavedVariables.friendsToRemove[arg2] or nodelay or GF_WhoTable[GF_RealmName][arg2] or not GF_SavedVariables.usewhoongroups or not GF_SavedVariables.usefriendslist then
 		for name,mmtable in GF_MiniMapMessages[7] do if mmtable[1] <= GetTime() then GF_MiniMapMessages[7][name] = nil end end
 		if GF_MiniMapMessages[1] > GetTime() and GF_MiniMapMessages[2] > GetTime() and GF_MiniMapMessages[3] > GetTime() and GF_MiniMapMessages[4] > GetTime() and GF_MiniMapMessages[5] > GetTime() and GF_MiniMapMessages[6] > GetTime() then
 			local lowest = { GetTime()+20, 0 }
@@ -1485,7 +1485,7 @@ function GF_ShowGroupsOnMinimap(arg1,arg2,nodelay)
 	end
 end
 function GF_AddLogMessage(arg1,logcode,add,arg2,arg8,arg9,event,nodelay)
-	if not GF_SavedVariables.friendsToRemove[arg2] or nodelay or not GF_PlayingOnTurtle or GF_WhoTable[GF_RealmName][arg2] or not GF_SavedVariables.usewhoongroups or not GF_SavedVariables.usefriendslist then
+	if not GF_SavedVariables.friendsToRemove[arg2] or nodelay or GF_WhoTable[GF_RealmName][arg2] or not GF_SavedVariables.usewhoongroups or not GF_SavedVariables.usefriendslist then
 		if add then
 			arg1 = GF_MakeBasicChatString(strsub(gsub(gsub(gsub(gsub(" "..arg1," (www%d-)%.([_A-Za-z0-9-]+)%.(%S+)%s?", " |cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r")," (%a+)://(%S+)", " |cffccccff|Hurl:%1://%2|h[%1://%2]|h|r")," (%a+)%.(%a+)/(%S+)", " |cffccccff|Hurl:%1.%2/%3|h[%1.%2/%3]|h|r")," ([_A-Za-z0-9-]+)%.([_A-Za-z0-9-]+)%.(%S+)", " |cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r"),2),arg2,event)
 			if event == "CHANNEL" then
@@ -2415,7 +2415,7 @@ function GF_CheckForSystem(arg1)
 			end
 		end
 		for name in string.gfind(arg1, "(%w+)") do
-			if GF_SavedVariables.friendsToRemove[name] then
+			if GF_SavedVariables.friendsToRemove[name] and GF_SavedVariables.friendsToRemove[name] + 1 < time() then
 				GF_PreviousMessage["SYSTEM"] = {}
 				return
 			end
@@ -2949,7 +2949,7 @@ function GF_GetTypes(arg1, showanyway)
 			if GF_TRADE_FIRST_LAST[wordTableTrade[1]] and GF_TRADE_FIRST_LAST[wordTableTrade[1]][wordTableTrade[tempVal]] then foundTrades = foundTrades + 3 if showanyway == true then print("firstlast trades 3") end end
 			if foundLFM == 0 and GF_GROUP_FIRST_LAST[wordTable[1]] and GF_GROUP_FIRST_LAST[wordTable[1]][wordTable[tempVal]] then foundLFM = 2 if showanyway == true then print("firstlast lfm 2") end end
 		end
-		if not lfs and tempVal > 2 then foundGuild = foundGuild + 1.25 if showanyway == true then print("guildonly guild 1.25") end end
+		if not lfs and tempVal > 2 then foundGuild = foundGuild + 1 if showanyway == true then print("guildonly guild 1") end end
 	end
 	for j=0,3 do -- Score the wordTable
 		for i=1, tempVal do
@@ -3810,7 +3810,7 @@ function GF_WhisperHistoryButtonPressed(id,override,nolog) -- Whisper/Guild Hist
 	end
 end
 function GF_WhisperReceivedAddToWhisperHistoryList(arg1,arg2,event,nodelay)
-	if not GF_SavedVariables.friendsToRemove[arg2] or nodelay or not GF_PlayingOnTurtle or GF_WhoTable[GF_RealmName][arg2] or not GF_SavedVariables.usewhoongroups or not GF_SavedVariables.usefriendslist then
+	if not GF_SavedVariables.friendsToRemove[arg2] or nodelay or GF_WhoTable[GF_RealmName][arg2] or not GF_SavedVariables.usewhoongroups or not GF_SavedVariables.usefriendslist then
 		arg1 = "|cff"..GF_ClassColors[({UnitClass("player")})[2]].."|Hplayer:"..UnitName("player").."|h".."["..date("%m/%d").."]|h|r ["..date("%H:%M").."] "..EventIDAlias[event]..GF_MakeBasicChatString(strsub(gsub(gsub(gsub(gsub(" "..arg1.." "," (www%d-)%.([_A-Za-z0-9-]+)%.(%S+)%s?", " |cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r")," (%a+)://(%S+)", " |cffccccff|Hurl:%1://%2|h[%1://%2]|h|r")," (%a+)%.(%a+)/(%S+)", " |cffccccff|Hurl:%1.%2/%3|h[%1.%2/%3]|h|r")," ([_A-Za-z0-9-]+)%.([_A-Za-z0-9-]+)%.(%S+)", " |cffccccff|Hurl:%1.%2.%3|h[%1.%2.%3]|h|r"),2),arg2,event)
 		if not GF_WhisperLogData[GF_RealmName][arg2] then GF_WhisperLogData[GF_RealmName][arg2] = {} if GF_Friends[arg2] then GF_WhisperLogData[GF_RealmName][arg2].priority = true end end
 		if event == "GUILD" or event == "OFFICER" then

@@ -2306,6 +2306,8 @@ GF_GUILD_WORD_EXCLUSION = {
 ["today"] = .5,["tonight"] = .5,["host"] = .5,["legendary"] = .5,["mat"] = .5,["binding"] = .5,["boe"] = .5,["hr"] = .5,["mount"] = .5,["recipe"] = .5,
 ["racist"] = .5,["nonwhites"] = 1,["nonwhite"] = 1,["advertise"] = 1,["nonwhites"] = 1,["nonwhite"] = 1,["hatewhites"] = 1,["whitepeople"] = 1,["whitepeople"] = 1,["isntbanned"] = 1,["admins"] = 1,["againstthem"] = 1,
 ["ngl"] = .5,["yousoundlike"] = 1,["autobooted"] = 1,["getauto"] = .5,["getsauto"] = .5,["gettingauto"] = .5,["separatechannel"] = .5,["completelyseparate"] = .5,["howdoyouset"] = .5,["setupyour"] = .5,["talkaboutsex"] = .5,["haveworldchat"] = .5,
+
+["serverraidor"] = .5,["orguildraid"] = .5,
 --[""] = .5,
 ["despitebeing"] = 1,["cansummon"] = 2,["guildrun"] = 1,["hostedby"] = 2,["nohr"] = 1,["freshrun"] = 2,["gearcheck"] = 1,["postyourgear"] = 1,["blizzardstore"] = 1,["seasonpass"] = 1,
 ["guildmerges"] = 5,["deadserver"] = 5,["serverdeath"] = 5,["worldminority"] = 5,["worldsminority"] = 5,["antimajority"] = 5,["getbanned"] = 5,["getsbanned"] = 5,["gettingbanned"] = 5,
