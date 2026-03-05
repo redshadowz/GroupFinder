@@ -3897,7 +3897,7 @@ function GF_GroupFinishedAddToGroupHistoryList()
 		end
 	end
 	GF_GroupHistoryUpdateFrame()
-	--GF_PerCharVariables.CurrentGroup = {}
+	GF_PerCharVariables.CurrentGroup = {}
 end
 function GF_WhisperHistoryUpdateFrame(name)
 	local numPriority = 0
