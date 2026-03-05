@@ -2672,9 +2672,9 @@ function GF_GetTypes(arg1, showanyway)
 				for word in string.gfind(wordString,"%a+") do if GF_WORD_FIX[word] then tempString = tempString..GF_WORD_FIX[word] else tempString = tempString..word end end
 				if strlen(tempString) < 25 then wordTableGuild["BRACKETS"] = tempString end
 				tempString = strsub(arg1,1,lfs)
-				_,_,wordString = strfind(tempString, "[%p%s](%a+)%s?<$") if wordString then if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_PREFIX_SUFFIX[wordString] then foundGuild = foundGuild + GF_GUILD_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." guild "..GF_GUILD_PREFIX_SUFFIX[wordString]) end end end
-				_,_,wordString = strfind(arg1, "^>%s?(%a+)[%p%s]",lfe) if wordString then if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_PREFIX_SUFFIX[wordString] then foundGuild = foundGuild + GF_GUILD_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." guild "..GF_GUILD_PREFIX_SUFFIX[wordString]) end end end
-				_,_,wordString = strfind(arg1, "^>%s?(%a+ %a+)[%p%s]",lfe) if wordString then wordString = gsub(wordString," ","") if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_PREFIX_SUFFIX[wordString] then foundGuild = foundGuild + GF_GUILD_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." guild "..GF_GUILD_PREFIX_SUFFIX[wordString]) end end end
+				_,_,wordString = strfind(tempString, "[%p%s](%a+)%s?<$") if wordString then if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_BRACKET_PREFIX_SUFFIX[wordString] then foundGuild = foundGuild + GF_GUILD_BRACKET_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." guild "..GF_GUILD_BRACKET_PREFIX_SUFFIX[wordString]) end end end
+				_,_,wordString = strfind(arg1, "^>%s?(%a+)[%p%s]",lfe) if wordString then if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_BRACKET_PREFIX_SUFFIX[wordString] then foundGuild = foundGuild + GF_GUILD_BRACKET_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." guild "..GF_GUILD_BRACKET_PREFIX_SUFFIX[wordString]) end end end
+				_,_,wordString = strfind(arg1, "^>%s?(%a+ %a+)[%p%s]",lfe) if wordString then wordString = gsub(wordString," ","") if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_BRACKET_PREFIX_SUFFIX[wordString] then foundGuild = foundGuild + GF_GUILD_BRACKET_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." guild "..GF_GUILD_BRACKET_PREFIX_SUFFIX[wordString]) end end end
 			end
 			lfs = lfs + 1
 		else
@@ -2791,7 +2791,6 @@ function GF_GetTypes(arg1, showanyway)
 	for i=1, tempVal do if wordTable[i] == "x" then table.remove(wordTable,i) i = i - 1 tempVal=tempVal-1 end end
 
 	if tempVal <= 9 and wordTable[2] then
--- hquest?, quest?, hquest [all], quest [all]
 		wordString = "" for i=2,tempVal-1 do wordString = wordString..wordTable[i] end
 		if strsub(arg1,-2) == "? " then
 			if wordTable[1] == "hquest" and GF_WORD_QUEST[wordString..wordTable[tempVal]] or GF_WORD_QUEST[wordTable[1]..wordString..wordTable[tempVal]] then foundLFG = 2 if showanyway == true then print("quest? lfg 2") end end
@@ -2914,12 +2913,12 @@ function GF_GetTypes(arg1, showanyway)
 		for i=1,tempVal do wordString = wordString..wordTable[i] end
 		for i=1,tempVal do tempString = tempString..wordTableTrade[i] if strbyte(wordTableTrade[i]) > 90 then lfs = true end end
 		if GF_WORD_TRADE_PHRASE[tempString] then foundTrades = 2 if showanyway == true then print("tradephrase trades 2") end end
-		if GF_WORD_GUILD_PHRASE[wordString] then foundGuild = 3 if showanyway == true then print("guildphrase guild 3") end end
+		if GF_GUILD_PHRASE[wordString] then foundGuild = 3 if showanyway == true then print("guildphrase guild 3") end end
 		if GF_GROUP_PHRASE[wordString] and foundLFM == 0 then foundLFM = 2 if showanyway == true then print("lfmphrase lfm 2") end end
 		if strsub(arg1,-2) == "? " then
 			if (GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString]) then foundLFG = 2 if showanyway == true then print("group? lfg 2") end
 			elseif GF_WORD_TRADE_QUESTION[tempString] then foundTrades = 2 if showanyway == true then print("trades? trades ") end
-			elseif tempVal > 2 then
+			elseif tempVal > 1 then
 				if tempVal <= 4 and GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]] then foundTrades = foundTrades + GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]] if showanyway == true then print("first two? trades "..GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]]) end
 				elseif not lfs then	foundTrades = foundTrades + 1.5 if showanyway == true then print("tradeonly? trades 1.5") end end
 			end
@@ -3065,6 +3064,20 @@ function GF_GetTypes(arg1, showanyway)
 				if GF_WORD_GUILD[wordString] then
 					if j ~= 0 or strbyte(wordString) ~= 71 then foundGuild = foundGuild + GF_WORD_GUILD[wordString] if showanyway == true then print(wordString.." guild "..GF_WORD_GUILD[wordString]) end
 					elseif foundGuild < 100 then foundGuild = foundGuild + GF_WORD_GUILD[wordString] if showanyway == true then print(wordString.." guild "..GF_WORD_GUILD[wordString]) end end
+
+					if wordString == "G" then
+						if GF_GUILD_PREFIX_SUFFIX[wordTable[i+j+1]] then foundGuildExclusion = foundGuildExclusion + GF_GUILD_PREFIX_SUFFIX[wordTable[i+j+1]] if showanyway == true then print(wordTable[i+j+1].." guildprefix "..GF_GUILD_PREFIX_SUFFIX[wordTable[i+j+1]]) end end
+						if GF_GUILD_PREFIX_SUFFIX[wordTable[i-1]] then foundGuildExclusion = foundGuildExclusion + GF_GUILD_PREFIX_SUFFIX[wordTable[i-1]] if showanyway == true then print(wordTable[i-1].." guildprefix "..GF_GUILD_PREFIX_SUFFIX[wordTable[i-1]]) end end
+						if wordTable[i+j+2] and GF_GUILD_PREFIX_SUFFIX[wordTable[i+j+1]..wordTable[i+j+2]] then foundGuildExclusion = foundGuildExclusion + GF_GUILD_PREFIX_SUFFIX[wordTable[i+j+1]..wordTable[i+j+2]] if showanyway == true then print(wordTable[i+j+1]..wordTable[i+j+2].." guildprefix "..GF_GUILD_PREFIX_SUFFIX[wordTable[i+j+1]..wordTable[i+j+2]]) end end
+						if wordTable[i-2] and GF_GUILD_PREFIX_SUFFIX[wordTable[i-2]..wordTable[i-1]] then foundGuildExclusion = foundGuildExclusion + GF_GUILD_PREFIX_SUFFIX[wordTable[i-2]..wordTable[i-1]] if showanyway == true then print(wordTable[i-2]..wordTable[i-1].." guildprefix "..GF_GUILD_PREFIX_SUFFIX[wordTable[i-2]..wordTable[i-1]]) end end
+						if wordTable[i-3] and GF_GUILD_PREFIX_SUFFIX[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] then foundGuildExclusion = foundGuildExclusion + GF_GUILD_PREFIX_SUFFIX[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] if showanyway == true then print(wordTable[i-3]..wordTable[i-2]..wordTable[i-1].." guildprefix "..GF_GUILD_PREFIX_SUFFIX[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]]) end end
+
+						if GF_GUILD_WORD_EXCLUSION[wordTable[i+j+1]] then foundGuildExclusion = foundGuildExclusion + GF_GUILD_WORD_EXCLUSION[wordTable[i+j+1]] if showanyway == true then print(wordTable[i+j+1].." guildprefix "..GF_GUILD_WORD_EXCLUSION[wordTable[i+j+1]]) end end
+						if GF_GUILD_WORD_EXCLUSION[wordTable[i-1]] then foundGuildExclusion = foundGuildExclusion + GF_GUILD_WORD_EXCLUSION[wordTable[i-1]] if showanyway == true then print(wordTable[i-1].." guildprefix "..GF_GUILD_WORD_EXCLUSION[wordTable[i-1]]) end end
+						if wordTable[i+j+2] and GF_GUILD_WORD_EXCLUSION[wordTable[i+j+1]..wordTable[i+j+2]] then foundGuildExclusion = foundGuildExclusion + GF_GUILD_WORD_EXCLUSION[wordTable[i+j+1]..wordTable[i+j+2]] if showanyway == true then print(wordTable[i+j+1]..wordTable[i+j+2].." guildprefix "..GF_GUILD_WORD_EXCLUSION[wordTable[i+j+1]..wordTable[i+j+2]]) end end
+						if wordTable[i-2] and GF_GUILD_WORD_EXCLUSION[wordTable[i-2]..wordTable[i-1]] then foundGuildExclusion = foundGuildExclusion + GF_GUILD_WORD_EXCLUSION[wordTable[i-2]..wordTable[i-1]] if showanyway == true then print(wordTable[i-2]..wordTable[i-1].." guildprefix "..GF_GUILD_WORD_EXCLUSION[wordTable[i-2]..wordTable[i-1]]) end end
+						if wordTable[i-3] and GF_GUILD_WORD_EXCLUSION[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] then foundGuildExclusion = foundGuildExclusion + GF_GUILD_WORD_EXCLUSION[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]] if showanyway == true then print(wordTable[i-3]..wordTable[i-2]..wordTable[i-1].." guildprefix "..GF_GUILD_WORD_EXCLUSION[wordTable[i-3]..wordTable[i-2]..wordTable[i-1]]) end end
+					end
 				end
 			end
 		end

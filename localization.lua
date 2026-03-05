@@ -847,7 +847,7 @@ GF_WORD_FIX_SINGLE_WORD = { -- Single word changes. Mostly typos and simple word
 ["aat"] = "at",["accep"] = "accept",["acitve"] = "active",["acn"] = "can",["activ"] = "active",["agane"] = "again",["agen"] = "again",["aif"] = "if",["alla"] = "all",["tiome"] = "time",["taxy"] = "taxi",["usefull"] = "useful",
 ["allys"] = "alliance",["ambiance"] = "ambience",["ambient"] = "ambience",["anat"] = "at",["anif"] = "if",["anny"] = "any",["anu"] = "any",["anyb"] = "anyone",["anywone"] = "anyone",["anyy"] = "any",["apparell"] = "apparel",["greve"] = "grave",
 ["appreciated"] = "appreciate",["appreciatedd"] = "appreciate",["apreciated"] = "appreciate",["arround"] = "around",["arund"] = "around",["assambling"] = "assembling",["bankk"] = "bank",["beaut"] = "beauty",["nfo"] = "info",
-["bois"] = "boys",["bullys"] = "bully",["casul"] = "casual",["causual"] = "casual",["chann"] = "channel",["channl"] = "channel",["chriztian"] = "christian",["clr"] = "clear",["coem"] = "come",["theese"] = "these",
+["bullys"] = "bully",["casul"] = "casual",["causual"] = "casual",["chann"] = "channel",["channl"] = "channel",["chriztian"] = "christian",["clr"] = "clear",["coem"] = "come",["theese"] = "these",["boiz"] = "boys",["bois"] = "boys",
 ["comission"] = "commission",["coupl"] = "couple",["descriminate"] = "discriminate",["descrimination"] = "discrimination",["discriminatng"] = "discriminating",["dkk"] = "dk",["doin"] = "doing",["doung"] = "doing",["dowse"] = "douse",
 ["dowsers"] = "douse",["dowses"] = "douse",["droppin"] = "dropping",["evn"] = "even",["extreamly"] = "extremely",["farmm"] = "farm",["faund"] = "found",["femb"] = "femboy",["femboi"] = "femboy",["omgg"] = "omg",["ommgg"] = "omg",["ommg"] = "omg",
 ["fkin"] = "fuck",["fking"] = "fuck",["fopr"] = "for",["fore"] = "for",["forr"] = "for",["friendlly"] = "friendly",["fro"] = "for",["fucking"] = "fuck",["fucks"] = "fuck",["valueable"] = "valuable",["vlack"] = "black",
@@ -972,7 +972,8 @@ GF_WORD_FIX_SINGLE_WORD = { -- Single word changes. Mostly typos and simple word
 ["mele"] = "melee",["stealthie"] = "stealth",
 
 -- Classes
-["drood"] = "druid",["dudu"] = "druid",["droods"] = "druid",["driud"] = "druid",["boomkin"] = "druid",["boomie"] = "druid",["boomies"] = "druid",["durid"] = "druid",["hutner"] = "hunter",["preist"] = "priest",
+["drood"] = "druid",["dudu"] = "druid",["droods"] = "druid",["driud"] = "druid",["boomkin"] = "druid",["boomie"] = "druid",["boomies"] = "druid",["durid"] = "druid",["drodd"] = "druid",
+["hutner"] = "hunter",["preist"] = "priest",
 ["paly"] = "paladin",["pala"] = "paladin",["palas"] = "paladin",["pally"] = "paladin",["pallie"] = "paladin",["pallies"] = "paladin",["prot"] = "protection",
 ["rog"] = "rogue",["rogs"] = "rogue",["roges"] = "rogue",["rouge"] = "rogue",["rouges"] = "rogue",["roge"] = "rogue",["roguer"] = "rogue",["rouger"] = "rogue",["roguers"] = "rogue",["roue"] = "rogue",["rogeu"] = "rogue",["roggy"] = "rogue",
 ["roguering"] = "rogue",["rougue"] = "rogue",["roag"] = "rogue",["rougeish"] = "rogue",["rouged"] = "rogue",["rogued"] = "rogue",["rouging"] = "rogue",["roug"] = "rogue",["rouguey"] = "rogue",["roguee"] = "rogue",["rooge"] = "rogue",["ro"] = "rogue",
@@ -1217,6 +1218,7 @@ GF_WORD_FIX_BEFORE_QUEST = { -- Word changes processed before quests.
 
 ["deathroller"] = "deathroll",["deathrollers"] = "deathroll",["deathrolling"] = "deathroll",["deathrolls"] = "deathroll",["deathrollerz"] = "deathroll",["deathrollz"] = "deathroll",["dthroller"] = "deathroll",["dthrollers"] = "deathroll",
 ["dthrollerz"] = "deathroll",["deathrollaz"] = "deathroll",
+["hydraxianlords"] = "hydraxian",
 
 -- Locations
 ["arathihighlinds"] = "arathihighlands",["hghlands"] = "highlands",["highlinds"] = "highlands",["higlands"] = "highlands",["arathihighland"] = "arathihighlands",
@@ -1283,7 +1285,7 @@ GF_WORD_FIX_BEFORE_QUEST = { -- Word changes processed before quests.
 ["udmage"] = "mage",["udpaladin"] = "paladin",["udpriest"] = "priest",["udrogue"] = "rogue",["udwarlock"] = "warlock",["udwarrior"] = "warrior",
 
 -- Quests
-["elsaquest"] = "eliza",["angerfod"] = "angerforge",["jinthalor"] = "jinthaalor",["jinthaatol"] = "jinthaalor",["jinthaator"] = "jinthaalor",["jinhacity"] = "jinthaalor",["jintaalor"] = "jinthaalor",
+["elsaquest"] = "eliza",["angerfod"] = "angerforge",["jinthalor"] = "jinthaalor",["jinthaatol"] = "jinthaalor",["jinthaator"] = "jinthaalor",["jinhacity"] = "jinthaalor",["jintaalor"] = "jinthaalor",["jithaalor"] = "jinthaalor",
 ["stormgarde"] = "stromgarde",["stormgard"] = "stromgarde",["stormguard"] = "stromgarde",["stromguard"] = "stromgarde",["lastbravo"] = "lastbarov",["tharilzub"] = "tharilzun",
 ["frostmauls"] = "frostmaul",["restofskull"] = "testofskull",["olsnooty"] = "olsooty",["murceye"] = "murkeye",["bagthera"] = "bhagthera",["bajkteera"] = "bhagthera",["baghtira"] = "bhagthera",
 
@@ -1353,7 +1355,7 @@ GF_WORD_FIX_BEFORE_QUEST = { -- Word changes processed before quests.
 ["blackockspire"] = "blackrockspire",["blackcockspire"] = "blackrockspire",["vaalthak"] = "valthalak",["drakisath"] = "drakkisath",["drakki"] = "drakkisath",["lbrd"] = "lbrs",["ubrd"] = "ubrs",
 ["diremail"] = "diremaul",["diermail"] = "diremaul",["diermaul"] = "diremaul",["diremual"] = "diremaul",["diremau"] = "diremaul",["dmnt"] = "dmt",["eastdm"] = "dme",["northdm"] = "dmn",["dmlibrary"] = "dmn",["westdm"] = "dmw",["eastdire"] = "dme",
 ["northdire"] = "dmn",["westdire"] = "dmw",["dmemaul"] = "dme",["dmnmaul"] = "dmn",["dmwmaul"] = "dmw",["diretribute"] = "dmt",["direeast"] = "dme",["direnorth"] = "dmn",["direwest"] = "dmw",
-["eastdb"] = "dme",["northdb"] = "dmn",["westdb"] = "dmw",["dbtribute"] = "dmt",["dbeast"] = "dme",["dbnorth"] = "dmn",["dbwest"] = "dmw",
+["eastdb"] = "dme",["northdb"] = "dmn",["westdb"] = "dmw",["dbtribute"] = "dmt",["dbeast"] = "dme",["dbnorth"] = "dmn",["direm"] = "dm",
 ["drmn"] = "dmn",["drmt"] = "dmt",["drmw"] = "dmw",["drme"] = "dme",["drmnorth"] = "dmn",["drmtribute"] = "dmt",["drmwest"] = "dmw",["drmeast"] = "dme",
 ["stralive"] = "livestrat",["stradlive"] = "livestrat",["lstrat"] = "livestrat",
 ["udstat"] = "udstrat",["straud"] = "udstrat",["udcity"] = "udstrat",["udside"] = "udstrat",["strengthud"] = "udstrat",["statud"] = "udstrat",["stratud"] = "udstrat",["stratun"] = "udstrat",["stratundead"] = "udstrat",["stratdk"] = "udstrat",
@@ -2250,7 +2252,7 @@ GF_WORD_GUILD = {
 -- Turkish
 ["Gmiz"] = 2,["turkGmiz"] = .5,["kurulmustur"] = .5,["gelmekisteyenler"] = 1.5,["gelmek"] = .5,["kuruluyor"] = 1,["katilmakicinlutfen"] = .5,
 }
-GF_WORD_GUILD_PHRASE = { -- Regular words in the wordTable
+GF_GUILD_PHRASE = { -- Regular words in the wordTable
 }
 GF_GUILD_BRACKET = { -- Regular words inside of brackets
 ["rp"] = 1,
@@ -2269,7 +2271,7 @@ GF_GUILD_BRACKET = { -- Regular words inside of brackets
 ["taurenonly"] = 1,
 ["goblinonly"] = 1,
 }
-GF_GUILD_PREFIX_SUFFIX = { -- Regular words before/after brackets
+GF_GUILD_BRACKET_PREFIX_SUFFIX = { -- Regular words before/after brackets
 ["join"] = 1,
 ["rp"] = .5,
 ["pve"] = .5,
@@ -2302,6 +2304,9 @@ GF_GUILD_LAST_TWO = { -- Regular words in the wordTable
 GF_WORD_GUILD_QUESTION = { -- Words in the wordTableGuild
 ["OG"] = true,
 }
+GF_GUILD_PREFIX_SUFFIX = { -- Three words before, Two words after "G"(guild)
+["serverraidor"] = .5,
+}
 GF_GUILD_WORD_EXCLUSION = {
 ["today"] = .5,["tonight"] = .5,["host"] = .5,["legendary"] = .5,["mat"] = .5,["binding"] = .5,["boe"] = .5,["hr"] = .5,["mount"] = .5,["recipe"] = .5,
 ["racist"] = .5,["nonwhites"] = 1,["nonwhite"] = 1,["advertise"] = 1,["nonwhites"] = 1,["nonwhite"] = 1,["hatewhites"] = 1,["whitepeople"] = 1,["whitepeople"] = 1,["isntbanned"] = 1,["admins"] = 1,["againstthem"] = 1,
@@ -2312,7 +2317,7 @@ GF_GUILD_WORD_EXCLUSION = {
 ["despitebeing"] = 1,["cansummon"] = 2,["guildrun"] = 1,["hostedby"] = 2,["nohr"] = 1,["freshrun"] = 2,["gearcheck"] = 1,["postyourgear"] = 1,["blizzardstore"] = 1,["seasonpass"] = 1,
 ["guildmerges"] = 5,["deadserver"] = 5,["serverdeath"] = 5,["worldminority"] = 5,["worldsminority"] = 5,["antimajority"] = 5,["getbanned"] = 5,["getsbanned"] = 5,["gettingbanned"] = 5,
 }
-GF_LFMLFG_PREFIX_GUILD = {
+GF_LFMLFG_PREFIX_GUILD = { -- Before/After groupnames(LF Kara). Subtracts 1 from guild
 ["lfm"] = true,
 ["lfg"] = true,
 ["lf"] = true,
@@ -2589,7 +2594,7 @@ GF_LFG_AFTER = { -- Up to two words after
 }
 GF_LFM_BEFORE_AFTER = { -- One word before and after
 ["alliance"] = true,["also"] = true,["ant"] = true,["any"] = true,["anyone"] = true,["ask"] = true,["available"] = true,["begin"] = true,["boost"] = true,
-["boss"] = true,["carry"] = true,["clear"] = true,["come"] = true,["coming"] = true,["continuing"] = true,["create"] = true,["dailies"] = true,["daily"] = true,
+["boss"] = true,["boys"] = true,["carry"] = true,["clear"] = true,["come"] = true,["coming"] = true,["continuing"] = true,["create"] = true,["dailies"] = true,["daily"] = true,
 ["damage"] = true,["do"] = true,["doing"] = true,["down"] = true,["dps"] = true,["duo"] = true,["else"] = true,["farm"] = true,["fifty"] = true,
 ["finishing"] = true,["for"] = true,["form"] = true,["forty"] = true,["free"] = true,["fresh"] = true,["gather"] = true,["gathering"] = true,["get"] = true,
 ["getting"] = true,["go"] = true,["going"] = true,["group"] = true,["gtg"] = true,["happen"] = true,["have"] = true,["heal"] = true,["healer"] = true,
