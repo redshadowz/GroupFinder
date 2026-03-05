@@ -2381,9 +2381,11 @@ function GF_CheckForLoot(arg1) -- TODO: Need to rewrite this for group detection
 		if not GF_SavedVariables.showloottexts then for i=1, 2 do if strfind(arg1, GF_LootFilters[i]) then GF_PreviousMessage["SYSTEM"] = {} return end end end -- Block only 'need/greed' rolls on other items
 		for i=8,10 do _,_,wordString = strfind(arg1, GF_LootFilters[i]) if wordString then tempVal = 2 break end end
 	end
-	if tempVal == 1 then GF_PerCharVariables.CurrentGroup[GF_CurrentZone].v = true
-	elseif tempVal == 2 then GF_PerCharVariables.CurrentGroup[GF_CurrentZone].v = true _,_,tempString = strfind(arg1,"|%x+|H(item:[%d+:]+)") if tempString then GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][tempString] = wordString end end
-	GF_PreviousMessage["SYSTEM"] = {true}
+	if GF_NumPartyMembers > 1 then
+		if tempVal == 1 then GF_PerCharVariables.CurrentGroup[GF_CurrentZone].v = true
+		elseif tempVal == 2 then GF_PerCharVariables.CurrentGroup[GF_CurrentZone].v = true _,_,tempString = strfind(arg1,"|%x+|H(item:[%d+:]+)") if tempString then GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][tempString] = wordString end end
+		GF_PreviousMessage["SYSTEM"] = {true}
+	end
 end
 function GF_CheckForSystem(arg1)
 	if arg1 == ERR_FRIEND_WRONG_FACTION then
