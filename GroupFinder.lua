@@ -2415,7 +2415,7 @@ function GF_CheckForSystem(arg1)
 			end
 		end
 		for name in string.gfind(arg1, "(%w+)") do
-			if GF_SavedVariables.friendsToRemove[name] and GF_SavedVariables.friendsToRemove[name] + 30 < time() then
+			if GF_SavedVariables.friendsToRemove[name] and GF_SavedVariables.friendsToRemove[name] + 30 > time() then
 				GF_PreviousMessage["SYSTEM"] = {}
 				return
 			end
