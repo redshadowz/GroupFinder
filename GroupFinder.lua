@@ -1,4 +1,4 @@
-﻿local GF_CurrentVersion						= 7040 -- New revisions cause a reset of basic settings
+﻿local GF_CurrentVersion						= 7050 -- New revisions cause a reset of basic settings
 
 GF_SavedVariables 							= {}
 GF_PerCharVariables							= {}
@@ -285,6 +285,9 @@ function GF_LoadVariables()
 				table.insert(GF_GroupHistory[GF_RealmName], "Groups")
 				GF_GroupHistory[GF_RealmName]["Groups"] = {}
 			end
+		end
+		for i=1, getn(GF_GroupHistory[GF_RealmName]) do
+			if not GF_GroupHistory[GF_RealmName][GF_GroupHistory[GF_RealmName][i]] then GF_GroupHistory = {} end
 		end
 	end
 	if GF_WhoTable[GF_RealmName]["LOADED"][4] < time() then -- Prune the WhoTable once per day
