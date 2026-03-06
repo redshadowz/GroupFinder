@@ -278,16 +278,21 @@ function GF_LoadVariables()
 				end
 			end
 		end
-		for name,data in GF_GroupHistory[GF_RealmName] do -- Convert older style Group History entries - Could get rid of in final release
-			if type(GF_GroupHistory[GF_RealmName][name]) == "table" and GF_GroupHistory[GF_RealmName][name][1] and type(GF_GroupHistory[GF_RealmName][name][1]) == "string" then
-				GF_GroupHistory = {}
-				GF_GroupHistory[GF_RealmName] = {}
-				table.insert(GF_GroupHistory[GF_RealmName], "Groups")
-				GF_GroupHistory[GF_RealmName]["Groups"] = {}
-			end
+	end
+	for name,data in GF_GroupHistory[GF_RealmName] do -- Convert older style Group History entries - Could get rid of in final release
+		if type(GF_GroupHistory[GF_RealmName][name]) == "table" and GF_GroupHistory[GF_RealmName][name][1] and type(GF_GroupHistory[GF_RealmName][name][1]) == "string" then
+			GF_GroupHistory = {}
+			GF_GroupHistory[GF_RealmName] = {}
+			table.insert(GF_GroupHistory[GF_RealmName], "Groups")
+			GF_GroupHistory[GF_RealmName]["Groups"] = {}
 		end
-		for i=1, getn(GF_GroupHistory[GF_RealmName]) do
-			if not GF_GroupHistory[GF_RealmName][GF_GroupHistory[GF_RealmName][i]] then GF_GroupHistory = {} end
+	end
+	for i=1, getn(GF_GroupHistory[GF_RealmName]) do
+		if not GF_GroupHistory[GF_RealmName][GF_GroupHistory[GF_RealmName][i]] then
+			GF_GroupHistory = {}
+			GF_GroupHistory[GF_RealmName] = {}
+			table.insert(GF_GroupHistory[GF_RealmName], "Groups")
+			GF_GroupHistory[GF_RealmName]["Groups"] = {}
 		end
 	end
 	if GF_WhoTable[GF_RealmName]["LOADED"][4] < time() then -- Prune the WhoTable once per day
