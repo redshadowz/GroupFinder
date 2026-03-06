@@ -2493,7 +2493,7 @@ function GF_FilterMessageType(arg1,arg2,arg9,event,showanyway)
 		if GF_SavedVariables.showformattedchat and GF_SavedVariables.usefriendslist then GF_GetWhoData(arg2) end
 		return GF_CheckForSpam(arg1,arg2) or 5
 	end
-	return GF_CheckForSpam(arg1,arg2,foundInGroup) or GF_CheckForGroups(arg1,arg2,event)
+	return GF_CheckForGroups(arg1,arg2,event)
 end
 function GF_CheckForGroups(arg1,arg2,event)
 	local entry,foundInGroup = GF_GetGroupInformation(arg1,arg2,nil,event)
@@ -2507,7 +2507,7 @@ function GF_CheckForGroups(arg1,arg2,event)
 			PlaySoundFile( "Sound\\Interface\\PickUp\\PutDownRing.wav" )
 		end
 	end
-	return foundInGroup
+	return GF_CheckForSpam(arg1,arg2,foundInGroup) or foundInGroup
 end
 function GF_GetTypes(arg1, showanyway)
 	if showanyway == true then print(arg1) end
@@ -2742,12 +2742,12 @@ function GF_GetTypes(arg1, showanyway)
 					if tempString then
 						if GF_WORD_GROUP_BYPASS[tempString] then
 							table.insert(wordTable, GF_WORD_GROUP_BYPASS[wordString]) table.insert(wordTable, GF_WORD_GROUP_BYPASS[tempString])
-							lfs = tempVal+1
+							lfs = lfe+1
 						elseif GF_WORD_GROUP_BYPASS_SECOND[wordString..tempString] then
 							_,tempVal,tempString = strfind(arg1,"(.-)[%s%p%d]+",tempVal+1)
 							if GF_WORD_GROUP_BYPASS[tempString] then
 								table.insert(wordTable, GF_WORD_GROUP_BYPASS[wordString]) table.insert(wordTable, GF_WORD_GROUP_BYPASS[tempString])
-								lfs = tempVal+1
+								lfs = lfe+1
 							else
 								table.insert(wordTable, wordString)
 								lfs = lfe+1
@@ -2765,7 +2765,7 @@ function GF_GetTypes(arg1, showanyway)
 					_,tempVal,tempString = strfind(arg1,"(.-)[%s%p%d]+",lfe+1)
 					if GF_WORD_QUEST_BYPASS[tempString] then
 						table.insert(wordTable, wordString) table.insert(wordTable, tempString)
-						lfs = tempVal+1
+						lfs = lfe+1
 					else
 						lfs = lfe+1
 					end
