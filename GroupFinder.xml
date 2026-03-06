@@ -583,7 +583,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						GF_ResultItem_Hover_Off(this:GetParent())
 					</OnLeave>
 					<OnMouseDown>
-						GF_ToggleDropDownMenu(this,this:GetParent():GetID())
+						GF_ToggleGroupsDropDownMenu(this,this:GetParent():GetID())
 					</OnMouseDown>
 				</Scripts>
 			</Frame>
@@ -688,7 +688,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 		</Frames>
 		<Scripts>
 			<OnMouseDown>
-				GF_ToggleDropDownMenu(this,this:GetID())
+				GF_ToggleGroupsDropDownMenu(this,this:GetID())
 			</OnMouseDown>
 			<OnEnter>
 				GF_ResultItem_Hover_On(this,this:GetID())
@@ -1033,7 +1033,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						<Scripts>
 							<OnClick>
 								GF_PerCharVariables.autofilter = this:GetChecked()
-								GF_ApplyFiltersToGroupList()
+								GF_ApplyFiltersToGroupList(true)
 							</OnClick>
 							<OnLoad>
 								getglobal(this:GetName().."TextLabel"):SetText(GF_AUTO_FILTER)
@@ -1068,7 +1068,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						<Scripts>
 							<OnClick>
 								GF_SavedVariables.showlfm = this:GetChecked()
-								GF_ApplyFiltersToGroupList()
+								GF_ApplyFiltersToGroupList(true)
 							</OnClick>
 							<OnLoad>
 								getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_LFM)
@@ -1086,7 +1086,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						<Scripts>
 							<OnClick>
 								GF_SavedVariables.showlfg = this:GetChecked()
-								GF_ApplyFiltersToGroupList()
+								GF_ApplyFiltersToGroupList(true)
 							</OnClick>
 							<OnLoad>
 								getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_LFG)
@@ -1172,7 +1172,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Scripts>
 									<OnClick>
 										GF_SavedVariables.showdungeons = this:GetChecked()
-										GF_ApplyFiltersToGroupList()
+										GF_ApplyFiltersToGroupList(true)
 									</OnClick>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_DUNGEONS)
@@ -1190,7 +1190,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Scripts>
 									<OnClick>
 										GF_SavedVariables.showraids = this:GetChecked()
-										GF_ApplyFiltersToGroupList()
+										GF_ApplyFiltersToGroupList(true)
 									</OnClick>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_RAIDS)
@@ -1208,7 +1208,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Scripts>
 									<OnClick>
 										GF_SavedVariables.showquests = this:GetChecked()
-										GF_ApplyFiltersToGroupList()
+										GF_ApplyFiltersToGroupList(true)
 									</OnClick>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_QUESTS)
@@ -1226,7 +1226,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Scripts>
 									<OnClick>
 										GF_SavedVariables.showother = this:GetChecked()
-										GF_ApplyFiltersToGroupList()
+										GF_ApplyFiltersToGroupList(true)
 									</OnClick>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_OTHER)
@@ -1590,25 +1590,25 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							</OnLoad>
 							<OnEditFocusLost>
 								GF_PerCharVariables.searchtext = GF_GroupsFrameDescriptionEditBox:GetText()
-								GF_ApplyFiltersToGroupList()
+								GF_ApplyFiltersToGroupList(true)
 								this:HighlightText(string.len(this:GetText())+1)
 							</OnEditFocusLost>
 							<OnTabPressed>
 								this:ClearFocus()
 								GF_PerCharVariables.searchtext = GF_GroupsFrameDescriptionEditBox:GetText()
-								GF_ApplyFiltersToGroupList()
+								GF_ApplyFiltersToGroupList(true)
 								this:HighlightText(string.len(this:GetText())+1)
 							</OnTabPressed>
 							<OnEnterPressed>
 								this:ClearFocus()
 								GF_PerCharVariables.searchtext = GF_GroupsFrameDescriptionEditBox:GetText()
-								GF_ApplyFiltersToGroupList()
+								GF_ApplyFiltersToGroupList(true)
 								this:HighlightText(string.len(this:GetText())+1)
 							</OnEnterPressed>
 							<OnEscapePressed>
 								this:ClearFocus()
 								GF_PerCharVariables.searchtext = GF_GroupsFrameDescriptionEditBox:GetText()
-								GF_ApplyFiltersToGroupList()
+								GF_ApplyFiltersToGroupList(true)
 								this:HighlightText(string.len(this:GetText())+1)
 							</OnEscapePressed>
 						</Scripts>
@@ -1629,7 +1629,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								GF_GroupsFrameDescriptionEditBox:SetText("")
 								GF_SearchListDropdown:UnlockHighlight()
 								GF_SearchListClearButton:Hide()
-								GF_ApplyFiltersToGroupList()
+								GF_ApplyFiltersToGroupList(true)
 							</OnClick>
 							<OnLeave>
 								if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "SearchList") then 
@@ -3304,8 +3304,14 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Frames>
 								<Scripts>
 									<OnHyperlinkClick>
-										ChatFrame_OnHyperlinkShow(arg1, arg2, arg3)
+										GF_TogglePlayerDropDownMenu(arg1,arg2,arg3)
 									</OnHyperlinkClick>
+									<OnHyperlinkEnter>
+										GF_OnHyperlinkShowTooltip(this,arg1)
+									</OnHyperlinkEnter>
+									<OnHyperlinkLeave>
+										GF_OnHyperlinkShowTooltip(this,arg1)
+									</OnHyperlinkLeave>
 									<OnMouseWheel>
 										if arg1 == 1 then
 											this:ScrollUp()
