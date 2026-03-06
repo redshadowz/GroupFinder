@@ -1,7 +1,7 @@
 # GroupFinder
 Group finder Addon for Vanilla Wow 1.12.1 based on the CallToArms addon(with Turtle WoW support).  
 
-Update 3/1/2026... I implemented several new methods of message processing/detection. I also fixed a number of bugs and design oversights. Now I can go back to working on the Group History.  
+Update 3/6/2026... Sorry if I broke the addon. I was trying to add the GroupLog while also doing other fixes and I kept uploading versions with bugs. I hope I got everything fixed now.  
 
 This isn't simply a group finder searching chat channels for groups. This is a massive chat filtering tool that prevents chat spam and allows you to see only what you want to see. Also comes with unlimited Blacklist/Ignore, Chat Logs, Whisper Logs, and a Group Maker tool.  
 
