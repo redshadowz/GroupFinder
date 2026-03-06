@@ -102,7 +102,7 @@ local ThingsToHide = { "GF_LogBottomButton","GF_LogDownButton","GF_LogUpButton",
 local GF_DifficultyColors = { ["RED"] = "ff0000",["ORANGE"] = "ff8040",["YELLOW"] = "ffff00",["GREEN"] = "1eff00",["GREY"] = "808080", }
 local GF_TankClasses						= {	["DRUID"]=true,["WARRIOR"]=true,["PALADIN"]=true,["SHAMAN"]=true }
 local GF_HealingClasses						= {	["PRIEST"]=true,["DRUID"]=true,["PALADIN"]=true,["SHAMAN"]=true }
-local languageName,foundIgnore,foundGuild,foundGuildExclusion,foundLFM,foundLFG,foundClass,foundDungeon,foundRaid,foundTrades,foundTradesExclusion,foundPvP,foundHC,foundNotHC,foundBlockList
+local languageName,foundIgnore,foundGuild,foundGuildExclusion,foundLFM,foundLFG,foundClass,foundDungeon,foundRaid,foundTrades,foundTradesExclusion,foundPvP,foundHC,foundNotHC,foundBlockList,fixedType
 local lfmlfgName,groupName,foundQuest,foundDFlags,foundPFlags,lfmPosition,groupPosition = {},{},{},{},{},{},{}
 GF_HELP_TEXT_SIMPLE = HELP_TEXT_SIMPLE
 local GF_COMBATHITOTHEROTHER,GF_COMBATHITSCHOOLOTHEROTHER,GF_SPELLLOGOTHEROTHER,GF_SPELLLOGSCHOOLOTHEROTHER,GF_HEALEDOTHERSELF,GF_HEALEDOTHEROTHER
@@ -765,7 +765,9 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 		if not arg2 or arg2 == "" then arg2 = "SYSTEM" end
 		if not GF_ProcessedFirstMessage[arg2] or GF_ProcessedFirstMessage[arg2] <= time() then
 			--print(GetTime())
+			fixedType = 0
 			GF_ChatFunctions(event,arg1,arg2,arg8,arg9)
+			if fixedType ~= 0 then GF_PreviousMessage[arg2][2] = strsub(arg1,3) end
 			if not GF_ChatBypass[strsub(event,10)] and GF_SavedVariables.showformattedchat and GF_PreviousMessage[arg2] and GF_PreviousMessage[arg2][1] then
 				if GF_PreviousMessage[arg2][2] then arg1 = GF_PreviousMessage[arg2][2] end
 				if event == "CHAT_MSG_CHANNEL" then GF_AddChannelMessage(arg1,arg2,arg8,arg9) else GF_AddChatMessage(arg1,arg2,strsub(event,10)) end
@@ -1979,7 +1981,7 @@ function GF_ParseIncomingAddonMessages(msg)
 		for senttime,sentname,message in string.gfind(msg, "(%d+)([a-zA-Z]+):(.+)") do -- This works 100% correctly.
 			GF_GetTypes(gsub(gsub(gsub(gsub(gsub(strlower(gsub(gsub(gsub(gsub(" "..message.." ", " |+h%[([%w%s%p]+)%]|+h|+r", " %1 "), "|c%x+|+(%w+)[%d:]+|+h", " %1 "), "|+h|+r", " "),"([a-z ][a-z])([A-Z])","%1 %2")),".gg/%w+", ""),"([%p%s])(%w%w+)([%p%s])","%1 %2 %3"),"[%s%.%[](%a)[%s%.](%a)[%s%.]","%1%2"),"%s%s+", " "),"[']", ""))
 			for i=1, getn(GF_MessageList[GF_RealmName]) do
-				if GF_MessageList[GF_RealmName][i].op and GF_MessageList[GF_RealmName][i].op == sentname then
+				if GF_MessageList[GF_RealmName][i] and GF_MessageList[GF_RealmName][i].op and GF_MessageList[GF_RealmName][i].op == sentname then
 					table.remove(GF_MessageList[GF_RealmName], i)
 					break
 				end
@@ -2337,6 +2339,7 @@ function GF_ProcessChatMessages(event,arg1,arg2,arg8,arg9,delayed) -- Chat proce
 	--print(GetTime())
 	local logType = GF_FilterMessageType(gsub(arg1,"[\\\"]", " "),arg2,arg9,event) or 5 -- 1=group,2=newgroup,3=filteredgroup,4=me,5=chat,6=loot,7=spam,8=guild,9=trade,10=blacklist,11=level
 	--print(GetTime())
+	if fixedType ~= 0 then logType = fixedType arg1 = ">"..strsub(arg1,3) end
 	if logType > 7 and GF_PlayerMessages[arg2] then GF_PlayerMessages[arg2][1][1] = GF_PlayerMessages[arg2][1][1] + 1 end -- To block multiple messages in series(Guild,Trade,Blacklist,Level)
 	GF_AddLogMessage(arg1,logType,true,arg2,arg8,arg9,event)
 	if arg2 == UnitName("player") or (GF_SavedVariables.alwaysshowguild and (GF_Guildies[arg2] or GF_Friends[arg2] or GF_PlayersCurrentlyInGroup[arg2])) or GF_ChatCheckFilters(logType,arg1,arg2,event) then
@@ -2505,16 +2508,17 @@ end
 function GF_GetTypes(arg1, showanyway)
 	if showanyway == true then print(arg1) end
 
-	foundIgnore,foundGuild,foundGuildExclusion,foundLFM,foundLFG,foundTrades,foundTradesExclusion = 0,0,0,0,0,0,0,0,0
+	local lfs,lfe,wordString,tempString,tempVal
+	local wordTable,wordTableTrade,wordTableGuild = {},{},{}
+	foundIgnore,foundGuild,foundGuildExclusion,foundLFM,foundLFG,foundTrades,foundTradesExclusion = 0,0,0,0,0,0,0
 	foundClass,foundDungeon,foundRaid,foundPvP,foundHC,foundNotHC,foundBlockList = nil,nil,nil,nil,nil,nil,nil,nil
 	lfmlfgName,groupName,foundQuest,foundDFlags,foundPFlags,lfmPosition,groupPosition = {},{},{},{},{},{},{}
 	languageName = "en"
 
+	if strlen(arg1) > 2 then wordString = string.sub(arg1,1,2) if wordString == "C " then fixedType = 5 arg1 = strsub(arg1,3) elseif wordString == "T " then fixedType = 9 arg1 = strsub(arg1,3) elseif wordString == "G " then fixedType = 8 arg1 = strsub(arg1,3) end end
+	
 	arg1 = " "..gsub(gsub(strlower(gsub(gsub(gsub(arg1, "|[%x%p]+(H%a+).-|h%[%[?%[?(.-)%]?%]?%]|h|r"," %1 >zqz[%2]"),"%.[gG][gG]/%S+", ""),"([a-z ][a-z])([A-Z])","%1 %2")),"[\"#\$\%&\*,\.@\\\^_`~|]"," "),"'","").." "
 
-	local lfs,lfe,wordString,tempString,tempVal
-	local wordTable,wordTableTrade,wordTableGuild = {},{},{}
-	
 	if strfind(arg1, "%d+p[%p%s]") then foundLFM = 2 if showanyway == true then print("##p lfm 2") end end -- "10p heal" messages from chinese
 	lfs = 1 -- To detect space/lf##m/letter(eg "lf15mbwl" = lfm bwl)
 	while true do lfs,lfe,wordString = strfind(arg1,"[%p%s]([lk]f?%s?%d+m)[%p%s]",lfs) if wordString then arg1 = strsub(arg1,1,lfs).."lfm "..strsub(arg1,lfs+strlen(wordString)+1) lfs = lfs + 4 foundLFM = 3 foundGuildExclusion = 1 foundTradesExclusion = 1 if showanyway == true then print("lf##m lfm 3 .. guildex 1... tradesex 1") end else break end end
@@ -3883,13 +3887,13 @@ end
 function GF_GroupFinishedAddToGroupHistoryList()
 	for i=1, getn(GF_PerCharVariables.CurrentGroup) do
 		if GF_PerCharVariables.CurrentGroup[i] ~= "" and GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][1] + 300 < time() and GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]].v then
-			local lfs = 0
-			for name,_ in GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][2] do lfs = lfs + 1 if not GF_GroupHistory[GF_RealmName][name] then GF_GroupHistory[GF_RealmName][name] = 1 else GF_GroupHistory[GF_RealmName][name] = GF_GroupHistory[GF_RealmName][name] + 1 end end
-			for _,_ in GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][3] do lfs = lfs + 1 end
-			if lfs > 0 then
-				table.insert(GF_GroupHistory[GF_RealmName]["Groups"], {GF_PerCharVariables.CurrentGroup[i],time(),GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][2],GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][3],lfs})
-				if not GF_GroupHistory[GF_RealmName][strsub(GF_PerCharVariables.CurrentGroup[i],1,12)] then GF_GroupHistory[GF_RealmName][strsub(GF_PerCharVariables.CurrentGroup[i],1,12)] = {} table.insert(GF_GroupHistory[GF_RealmName],1,strsub(GF_PerCharVariables.CurrentGroup[i],2,12))  end
-				table.insert(GF_GroupHistory[GF_RealmName][strsub(GF_PerCharVariables.CurrentGroup[i],1,12)], {GF_PerCharVariables.CurrentGroup[i],time(),GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][2],GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][3],lfs})
+			local numNames,numItems = 0,0
+			for name,_ in GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][2] do numNames = numNames + 1 if not GF_GroupHistory[GF_RealmName][name] then GF_GroupHistory[GF_RealmName][name] = 1 else GF_GroupHistory[GF_RealmName][name] = GF_GroupHistory[GF_RealmName][name] + 1 end end
+			for _,_ in GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][3] do numItems = numItems + 1 end
+			if numNames > 1 and numItems > 0 then
+				table.insert(GF_GroupHistory[GF_RealmName]["Groups"], {GF_PerCharVariables.CurrentGroup[i],time(),GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][2],GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][3],numNames+numItems})
+				if not GF_GroupHistory[GF_RealmName][strsub(GF_PerCharVariables.CurrentGroup[i],1,12)] then GF_GroupHistory[GF_RealmName][strsub(GF_PerCharVariables.CurrentGroup[i],1,12)] = {} table.insert(GF_GroupHistory[GF_RealmName],1,strsub(GF_PerCharVariables.CurrentGroup[i],2,12)) end
+				table.insert(GF_GroupHistory[GF_RealmName][strsub(GF_PerCharVariables.CurrentGroup[i],1,12)], {GF_PerCharVariables.CurrentGroup[i],time(),GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][2],GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][3],numNames+numItems})
 			end
 -- Need at least two people in the group
 -- Group should finish 2 minutes after leaving the group.
