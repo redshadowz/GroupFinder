@@ -296,6 +296,11 @@ function GF_LoadVariables()
 			table.insert(GF_GroupHistory[GF_RealmName], "Groups")
 			GF_GroupHistory[GF_RealmName]["Groups"] = {}
 		end
+		for j=1,getn(GF_GroupHistory[GF_RealmName][GF_GroupHistory[GF_RealmName][i]]) do
+			for item,data in GF_GroupHistory[GF_RealmName][GF_GroupHistory[GF_RealmName][i]][j][4] do -- GF_GroupHistory = {}
+				if type(data) ~= "table" then GF_GroupHistory[GF_RealmName][GF_GroupHistory[GF_RealmName][i]][j][4][item] = {data} end
+			end
+		end
 	end
 	if GF_WhoTable[GF_RealmName]["LOADED"][4] < time() then -- Prune the WhoTable once per day
 		GF_WhoTable[GF_RealmName]["LOADED"] = { UnitLevel("player"), ({UnitClass("player")})[2], "", time() + 86400 }
@@ -347,7 +352,16 @@ function GF_LoadVariables()
 	_,_,wordString = strfind(PERIODICAURADAMAGEOTHEROTHER,"(%%d.*)") if wordString then lfs,lfe = strfind(wordString,"%%s.-%%s") if lfs then GF_PERIODICAURADAMAGEOTHEROTHER = "(%d+).-"..strsub(wordString,lfs+2,lfe-2).."(%a+)" end end
 
 	GF_CurrentZone = GetRealZoneText()
-	if not GF_PerCharVariables.CurrentGroup then GF_PerCharVariables.CurrentGroup = {} end
+	if not GF_PerCharVariables.CurrentGroup then
+		GF_PerCharVariables.CurrentGroup = {}
+	else
+		for i=1,getn(GF_PerCharVariables.CurrentGroup) do
+			for item,data in GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][3] do
+				if type(data) ~= "table" then GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][3][item] = {data} end
+			end
+		end
+
+	end
 	if GF_SavedVariables.systemfilter then HELP_TEXT_SIMPLE = nil else HELP_TEXT_SIMPLE = GF_HELP_TEXT_SIMPLE end
 end
 function GF_LoadSettings()
@@ -494,7 +508,7 @@ function GF_SetStringSize()
 	"GF_SettingsFrameChatSettingsTitle","GF_SettingsFrameGroupSettingsTitle","GF_SettingsFrameLFxSettingsTitle","GF_SettingsFrameOtherSettingsTitle","GF_PageLabel",}
 	for i=1, getn(frameNames) do getglobal(frameNames[i]):SetFont(fontName,GF_BaseFontSize) end
 	frameNames = { "GF_GetWhoTotalNames","GF_AnnounceToLFGButton","GF_GetWhoButton","GF_GetWhoSkipButton","GF_GetWhoWhisperButton","GF_GetWhoNameLabel","GF_ShowGroupsButton",	"GF_SettingsFrameButton","GF_PlayerNoteFrameOKButton","GF_QueuetoLFTButton",
-	"GF_PlayerNoteFrameDeleteButton","GF_ShowBlacklistButton","GF_LogFrameButton","GF_LFGFrameToggleButton","GF_GetWhoFrameToggleButton","GF_ConvertLogMessagesToURL","GF_UIScaleSliderUpdateButton","GF_ResetAllSettingsDialogCloseButton",
+	"GF_PlayerNoteFrameDeleteButton","GF_ShowBlacklistButton","GF_LogFrameButton","GF_LFGFrameToggleButton","GF_GetWhoFrameToggleButton","GF_ConvertLogMessagesToURL","GF_UIScaleSliderUpdateButton","GF_ResetAllSettingsDialogCloseButton","GF_ShowGroupLogEntryFrameCloseButton",
 	"GF_ResetAllSettingsButton","GF_AddPlayerButton","GF_BlackListFramePageLabel","GF_WhisperLogButton","GF_GroupLogButton","GF_MinimapIconTextLabel","GF_AddPlayerFrameOkButton","GF_AddPlayerFrameCloseButton","GF_ResetAllSettingsDialogOkButton",}
 	for i=1, getn(frameNames) do getglobal(frameNames[i]):SetFont(fontName,fontSizeButton) end
 	frameNames = {"GF_LFGMyRole","GF_WorldAnnounceMessageTextLabel","GF_ShowGroupsInLabel","GF_ShowChatTypesLabel","GF_LogFrameInternalFrameTitle","GF_ShowMainFrameLabel",
@@ -519,6 +533,9 @@ function GF_SetStringSize()
 	GF_LFGMyRoleLevelCheckButton:SetPoint("RIGHT", -1*getglobal(GF_LFGMyRoleLevelCheckButton:GetName().."TextLabel"):GetStringWidth() -2, -3)
 	GF_ChatFilterDropdownButton:SetPoint("TOPRIGHT", GF_MainFrameCloseButton, "BOTTOMRIGHT", -1*getglobal(GF_ChatFilterDropdownButton:GetName().."TextLabel"):GetStringWidth() -15, 6)
 	GF_UIScaleSliderLabel:SetText("")
+	
+	for i=1,60 do if not getglobal("GF_GroupHistoryLogPlayer"..i) then break end getglobal("GF_GroupHistoryLogPlayer"..i):SetFont(GF_BUTTONS_LIST["FontName"][GF_SavedVariables.fontname][2],GF_BaseFontSize) getglobal("GF_GroupHistoryLogPlayer"..i.."TextLabel"):SetFont(GF_BUTTONS_LIST["FontName"][GF_SavedVariables.fontname][2],GF_BaseFontSize)end
+	for i=1,60 do if not getglobal("GF_GroupHistoryLogItem"..i) then break end getglobal("GF_GroupHistoryLogItem"..i):SetFont(GF_BUTTONS_LIST["FontName"][GF_SavedVariables.fontname][2],GF_BaseFontSize) getglobal("GF_GroupHistoryLogItem"..i.."TextLabel"):SetFont(GF_BUTTONS_LIST["FontName"][GF_SavedVariables.fontname][2],GF_BaseFontSize) end
 end
 function GF_FormatBlockListWords(arg1,display)
 	arg1 = " "..gsub(gsub(strlower(gsub(gsub(gsub(arg1, "|[%x%p]+(H%a+).-|h%[%[?%[?(.-)%]?%]?%]|h|r"," %1 >z[%2]"),"%.[gG][gG]/%S+", ""),"([a-z ][a-z])([A-Z])","%1 %2")),"[\"#\$\%&\*,\.@\\\^_`~|]"," "),"'","").." "
@@ -980,6 +997,9 @@ function GF_HandleItemRefLinks(link,text,button)
 		if IsShiftKeyDown() then
 			if GF_LFGDescriptionEditBoxHasFocus[1] then GF_LFGDescriptionEditBox:Insert(text) return true end
 		end
+	elseif strsub(link,1,4) == "gfgh" then
+		local _,_,name,entry = string.find(strsub(link,6),"(.*):(%d+)")
+		if name then GF_GroupHistoryDisplayEntryLog(name,tonumber(entry)) return true end
 	end
 end
 function GF_GetQuestInfo(text,printinfo) -- TODO: Add full quest name with questid so I can do questname replace without having to search through every quest
@@ -2400,7 +2420,7 @@ function GF_CheckForLoot(arg1)
 	end
 	if GF_NumPartyMembers > 1 then
 		if tempVal == 1 then GF_PerCharVariables.CurrentGroup[GF_CurrentZone].v = true
-		elseif tempVal == 2 then GF_PerCharVariables.CurrentGroup[GF_CurrentZone].v = true _,_,tempString = strfind(arg1,"|%x+|H(item:[%d+:]+)") if tempString then GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][tempString] = wordString end end
+		elseif tempVal == 2 then GF_PerCharVariables.CurrentGroup[GF_CurrentZone].v = true _,_,tempString = strfind(arg1,"|%x+|H(item:[%d+:]+)") if tempString then if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][tempString] then GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][tempString] = {wordString} else table.insert(GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][tempString],wordString) end end end
 	end
 	GF_PreviousMessage["SYSTEM"] = {true}
 end
@@ -2501,7 +2521,7 @@ function GF_FilterMessageType(arg1,arg2,arg9,event,showanyway)
 		if GF_SavedVariables.showformattedchat and GF_SavedVariables.usefriendslist then GF_GetWhoData(arg2) end
 		return GF_CheckForSpam(arg1,arg2) or 5
 	end
-	return GF_CheckForGroups(arg1,arg2,event)
+	return GF_CheckForGroups(arg1,arg2,event) or 5
 end
 function GF_CheckForGroups(arg1,arg2,event)
 	local entry,foundInGroup = GF_GetGroupInformation(arg1,arg2,nil,event)
@@ -2838,7 +2858,6 @@ function GF_GetTypes(arg1, showanyway)
 		end
 	end
 	for i=1, tempVal do if wordTable[i] == "x" then table.remove(wordTable,i) i = i - 1 tempVal=tempVal-1 end end
-
 	if tempVal <= 9 and wordTable[2] then
 		wordString = "" for i=2,tempVal-1 do wordString = wordString..wordTable[i] end
 		if strsub(arg1,-2) == "? " then
@@ -2875,6 +2894,7 @@ function GF_GetTypes(arg1, showanyway)
 			end
 		end
 	end
+
 -- Normal Search
 	for i=1, tempVal do wordTableTrade[i] = wordTable[i] wordTableGuild[i] = wordTable[i] end
 	for j=0,3 do -- Fix Words
@@ -3103,7 +3123,7 @@ function GF_GetTypes(arg1, showanyway)
 	for i=1, getn(lfmPosition) do
 		lfs = lfmPosition[i][3]
 		for k=lfmPosition[i][2]+1, tempVal do
-			for j=1, getn(groupPosition) do if lfe == 0 and k == groupPosition[j][1] then lfs = lfs + 1 foundTradesExclusion = foundTradesExclusion + .5 if showanyway == true then print(lfmPosition[i][3].." reached group 1") end lfe = 1 break end end
+			for j=1, getn(groupPosition) do if lfe == 0 and k == groupPosition[j][1] then lfs = lfs + 1 foundTradesExclusion = foundTradesExclusion + .5 if showanyway == true then print(lfmPosition[i][3].." reached group 1") end lfe = 1 if GF_LFM_CONNECT_WORDS_AFTER[wordTable[k+1]] then lfs = lfs + GF_LFM_CONNECT_WORDS_AFTER[wordTable[k+1]] if showanyway == true then print(lfmPosition[i][3].." "..wordTable[k+1].." "..GF_LFM_CONNECT_WORDS_AFTER[wordTable[k+1]]) end end break end end
 			if wordTable[k] then
 				if GF_LFM_CONNECT_WORDS_BEFORE[wordTable[k]] and (not groupName[wordTable[k]] or getn(groupPosition) > 0) then
 					lfs = lfs + GF_LFM_CONNECT_WORDS_BEFORE[wordTable[k]]
@@ -3115,7 +3135,7 @@ function GF_GetTypes(arg1, showanyway)
 			end
 		end
 		for k=lfmPosition[i][1]-1, 1, -1 do
-			for j=1, getn(groupPosition) do if lfe == 0 and k == groupPosition[j][2] then lfs = lfs + 1 foundTradesExclusion = foundTradesExclusion + .5 if showanyway == true then print(lfmPosition[i][3].." reached group 1") end lfe = 1 break end end
+			for j=1, getn(groupPosition) do if lfe == 0 and k == groupPosition[j][2] then lfs = lfs + 1 foundTradesExclusion = foundTradesExclusion + .5 if showanyway == true then print(lfmPosition[i][3].." reached group 1") end lfe = 1 if GF_LFM_CONNECT_WORDS_BEFORE[wordTable[k-1]] then lfs = lfs + GF_LFM_CONNECT_WORDS_BEFORE[wordTable[k-1]] if showanyway == true then print(lfmPosition[i][3].." "..wordTable[k-1].." "..GF_LFM_CONNECT_WORDS_BEFORE[wordTable[k-1]]) end end break end end
 			if wordTable[k] then
 				if GF_LFM_CONNECT_WORDS_AFTER[wordTable[k]] and (not groupName[wordTable[k]] or getn(groupPosition) > 0) then
 					lfs = lfs + GF_LFM_CONNECT_WORDS_AFTER[wordTable[k]]
@@ -3640,20 +3660,40 @@ function GF_ToggleWhisperDropDownMenu(frame,id)
 		ToggleDropDownMenu(1, nil, GF_DropDownMenu, "cursor")
 	end
 end
-function GF_TogglePlayerDropDownMenu(arg1,arg2,arg3) --player:Name, playerlink, LeftButton/RightButton
-	if GF_HandleItemRefLinks(arg1,arg2,arg3) then return end
-	if arg3 == "RightButton" and strsub(arg1,1,6) == "player" then
+function GF_TogglePlayerDropDownMenu(link,text,button) --player:Name, playerlink, LeftButton/RightButton
+	if GF_HandleItemRefLinks(link,text,button) then return end
+	if button == "RightButton" and strsub(link,1,6) == "player" then
 		HideDropDownMenu(1)
 		GameTooltip:Hide()
 		GF_DropDownMenu = CreateFrame("Frame", "GF_DropDownMenu", frame, "UIDropDownMenuTemplate")
-		GF_DropDownMenu.name = strsub(arg1,8)
+		GF_DropDownMenu.name = strsub(link,8)
 		GF_DropDownMenu.message = GF_PlayerMessages[GF_DropDownMenu.name] and GF_PlayerMessages[GF_DropDownMenu.name][2][1] or GF_DEFAULT_PLAYER_NOTE
 		UIDropDownMenu_Initialize(GF_DropDownMenu, GF_CreateDropDownMenu, "MENU")
 		ToggleDropDownMenu(1, nil, GF_DropDownMenu, "cursor")
 	else
-		ChatFrame_OnHyperlinkShow(arg1,arg2,arg3)
+		ChatFrame_OnHyperlinkShow(link,text,button)
 	end
 end
+function GF_ToggleGroupHistoryPlayerDropDownMenu(frame,text,button)
+	local _,_,link = string.find(text,"|%x+|H(player:%a+)|h%[.-%]|h|r")
+	if not link or GF_HandleItemRefLinks(link,text,button) then return end
+	if button == "RightButton" then
+		HideDropDownMenu(1)
+		GameTooltip:Hide()
+		GF_DropDownMenu = CreateFrame("Frame", "GF_DropDownMenu", frame, "UIDropDownMenuTemplate")
+		GF_DropDownMenu.name = strsub(link,8)
+		GF_DropDownMenu.message = GF_DEFAULT_PLAYER_NOTE
+		UIDropDownMenu_Initialize(GF_DropDownMenu, GF_CreateDropDownMenu, "MENU")
+		ToggleDropDownMenu(1, nil, GF_DropDownMenu, "cursor")
+	else
+		CloseDropDownMenus(1)
+	end
+end
+function GF_ToggleGroupHistoryItemClick(text,button)
+	local _,_,link = string.find(text,"|%x+|H(item:.-)|h%[.-%]|h|r")
+	if link then SetItemRef(link,text,button) end
+end
+
 function GF_CreateDropDownMenu()
 -- isTitle,text,notCheckable,hasArrow,disabled,func,value,owner,icon,checked,tooltipTitle,tooltipText, --tCoordLeft,tCoordRight,tCoordTop,tCoordBottom,justifyH,r,g,b,notClickable,textR,textG,textB,hasOpacity,opacity,opacityFunc,cancelFunc,swatchFunc,keepShownOnClick,hasColorSwatch
 -- whisper, invite, target, ignore, cancel
@@ -4048,7 +4088,8 @@ function GF_GroupHistoryDisplayLog(name) -- TODO: Add a feature to search by pla
 	GF_ConvertLogMessagesToURL:Hide()
 	GF_Log:SetMaxLines(128)
 	for i=getn(GF_GroupHistory[GF_RealmName][name]), 1, -1 do
-		local wordString = date("[%m/%d] [%H:%M]",GF_GroupHistory[GF_RealmName][name][i][2]).." "..GF_GroupHistory[GF_RealmName][name][i][1].." - "
+		local wordString = date("[%m/%d] [%H:%M]",GF_GroupHistory[GF_RealmName][name][i][2]).." "..GF_GroupHistory[GF_RealmName][name][i][1]
+		wordString = "|cffccccff|Hgfgh:"..name..":"..i.."|h"..wordString.."|h|r - "
 		local tempTable = {}
 		for pname,data in GF_GroupHistory[GF_RealmName][name][i][3] do
 			table.insert(tempTable, {pname,data})
@@ -4110,6 +4151,91 @@ function GF_WhisperHistoryPriorityListCheckButtonPressed(id,name,priority)
 		GF_GroupHistory[GF_RealmName][GF_GroupHistory[GF_RealmName][id+GF_WhisperLogOffset]].priority = priority
 		GF_GroupHistoryUpdateFrame(name)
 	end
+end
+function GF_GroupHistoryDisplayEntryLog(name,entry)
+	local maxsize = 40
+	local playerTable = {} -- Players
+	for pname,data in GF_GroupHistory[GF_RealmName][name][entry][3] do
+		table.insert(playerTable, {pname,data})
+	end
+	table.sort(playerTable, function(a,b) return a[2][3]>b[2][3] end)
+	local playerSize = getn(playerTable)
+	if playerSize > maxsize then playerSize = maxsize end
+	for i=1, playerSize do
+		local button = getglobal("GF_GroupHistoryLogPlayer"..i)
+		if not button then
+			button = CreateFrame("Button", "GF_GroupHistoryLogPlayer"..i, GF_ShowGroupLogEntryFrame, "GF_GroupHistoryPlayerButtonTemplate")
+			button:SetID(i)
+			button:SetFont(GF_BUTTONS_LIST["FontName"][GF_SavedVariables.fontname][2],GF_BaseFontSize)
+			getglobal(button:GetName().."TextLabel"):SetFont(GF_BUTTONS_LIST["FontName"][GF_SavedVariables.fontname][2],GF_BaseFontSize)
+		end
+		button:SetText("|cff"..(GF_ClassColors[playerTable[i][2][2]] or "9d9d9d").."|Hplayer:"..playerTable[i][1].."|h["..playerTable[i][1]..", "..playerTable[i][2][1].."]|h|r")
+		getglobal(button:GetName().."TextLabel"):SetText("("..playerTable[i][2][3]..")")
+		button:ClearAllPoints()
+		button:SetWidth(button:GetFontString():GetStringWidth())
+		button:Show()
+	end
+	for i=1, playerSize do
+		if i <= ceil(playerSize/maxsize) then
+			getglobal("GF_GroupHistoryLogPlayer"..i):SetPoint("TOPLEFT", GF_ShowGroupLogEntryFrame, "TOPLEFT", 6, -4)
+		else
+			getglobal("GF_GroupHistoryLogPlayer"..i):SetPoint("TOPLEFT", getglobal("GF_GroupHistoryLogPlayer"..i-ceil(playerSize/maxsize)), "BOTTOMLEFT", 0, 6)
+		end
+	end
+	for i=playerSize+1,40 do if not getglobal("GF_GroupHistoryLogPlayer"..i) then break end getglobal("GF_GroupHistoryLogPlayer"..i):Hide() end
+
+	local itemTable = {} -- Items
+	for item,names in GF_GroupHistory[GF_RealmName][name][entry][4] do
+		table.insert(itemTable, {item,names})
+	end
+	table.sort(itemTable, function(a,b) return a[1]<b[1] end)
+	local itemSize = getn(itemTable)
+	if itemSize/2 > maxsize then
+		itemSize = maxsize*2
+	else
+		if itemSize > playerSize then maxsize = ceil(itemSize/2) end
+	end
+	for i=1, itemSize do
+		local button = getglobal("GF_GroupHistoryLogItem"..i)
+		if not button then
+			button = CreateFrame("Button", "GF_GroupHistoryLogItem"..i, GF_ShowGroupLogEntryFrame, "GF_GroupHistoryItemButtonTemplate")
+			button:SetID(i)
+			button:SetFont(GF_BUTTONS_LIST["FontName"][GF_SavedVariables.fontname][2],GF_BaseFontSize)
+			getglobal(button:GetName().."TextLabel"):SetFont(GF_BUTTONS_LIST["FontName"][GF_SavedVariables.fontname][2],GF_BaseFontSize)
+		end
+		local iName,_,iQuality = GetItemInfo(itemTable[i][1])
+		if iName then
+			local _,_,_,color = GetItemQualityColor(iQuality)
+			button:SetText(color.. "|H"..itemTable[i][1].."|h["..iName.."]|h|r")
+		else
+			button:SetText("|cffffffff|H"..itemTable[i][1].."|h[unknown]|h|r")
+		end
+		--local wordString = ""
+		--for j=1, getn(itemTable[i][2]) do
+			--wordString = wordString..itemTable[i][2][j]
+		--end
+		--getglobal(button:GetName().."TextLabel"):SetText("("..wordString..")")
+		getglobal(button:GetName().."TextLabel"):SetText("("..itemTable[i][2][1]..")")
+		button:ClearAllPoints()
+		button:SetWidth(button:GetFontString():GetStringWidth())
+		button:Show()
+	end
+	for i=1, itemSize do
+		if i <= ceil(itemSize/maxsize) then
+			getglobal("GF_GroupHistoryLogItem"..i):SetPoint("TOPRIGHT", GF_ShowGroupLogEntryFrame, "TOPRIGHT", -6 - (i-1)*(200+51), -4)
+		else
+			getglobal("GF_GroupHistoryLogItem"..i):SetPoint("TOPRIGHT", getglobal("GF_GroupHistoryLogItem"..i-ceil(itemSize/maxsize)), "BOTTOMRIGHT", 0, 6)
+		end
+	end
+	for i=itemSize+1,80 do if not getglobal("GF_GroupHistoryLogItem"..i) then break end getglobal("GF_GroupHistoryLogItem"..i):Hide() end
+	local prows = playerSize/ceil(playerSize/maxsize)
+	local irows = itemSize/ceil(itemSize/maxsize)
+	if prows >= irows then
+		GF_ShowGroupLogEntryFrame:SetHeight(40 + prows*14)
+	else
+		GF_ShowGroupLogEntryFrame:SetHeight(40 + irows*14)
+	end
+	GF_ShowGroupLogEntryFrame:Show()
 end
 
 function GF_UpdateBlackListItems() -- Blacklist functions

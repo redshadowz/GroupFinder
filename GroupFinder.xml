@@ -784,6 +784,52 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</Anchors>
 		</HighlightTexture>
 	</Button>
+	<Button name="GF_GroupHistoryPlayerButtonTemplate" enableMouse="true" toplevel="true" justifyH="LEFT" virtual="true">
+		<Size>
+			<AbsDimension y="20"/>
+		</Size>
+		<Layers>
+			<Layer level="OVERLAY">
+				<FontString inherits="GF_NormalFont" name="$parentTextLabel">
+					<Anchors>
+						<Anchor point="LEFT" relativePoint="RIGHT">
+							<Offset>
+								<AbsDimension x="5" y="0"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Scripts>
+			<OnMouseDown>
+				GF_ToggleGroupHistoryPlayerDropDownMenu(this,this:GetText(),arg1)
+			</OnMouseDown>
+		</Scripts>
+	</Button>
+	<Button name="GF_GroupHistoryItemButtonTemplate" enableMouse="true" toplevel="true" justifyH="LEFT" virtual="true">
+		<Size>
+			<AbsDimension y="20"/>
+		</Size>
+		<Layers>
+			<Layer level="OVERLAY">
+				<FontString inherits="GF_NormalFont" name="$parentTextLabel">
+					<Anchors>
+						<Anchor point="RIGHT" relativePoint="LEFT">
+							<Offset>
+								<AbsDimension x="-5" y="0"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Scripts>
+			<OnMouseDown>
+				GF_ToggleGroupHistoryItemClick(this:GetText(),arg1)
+			</OnMouseDown>
+		</Scripts>
+	</Button>
 	<MessageFrame name="GF_MinimapMessageFrameTemplateA" frameStrata="BACKGROUND" toplevel="true" displayDuration="20.0" maxLines="1" virtual="true">
 		<Size>
 			<AbsDimension x="256" y="16"/>
@@ -5569,6 +5615,80 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Scripts>
 					</EditBox>
 				</Frames>
+			</Frame>
+			<Frame name="GF_ShowGroupLogEntryFrame" inherits="GF_OptionFrameBoxTemplate" toplevel="true" enableMouse="true" hidden="true">
+				<Size>
+					<AbsDimension x="698" y="500"/>
+				</Size>
+				<Anchors>
+					<Anchor point="CENTER">
+						<Offset>
+							<AbsDimension x="2" y="-20"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border">
+					<BackgroundInsets>
+						<AbsInset left="4" right="4" top="4" bottom="4"/>
+					</BackgroundInsets>
+					<EdgeSize>
+						<AbsValue val="16"/>
+					</EdgeSize>
+					<BorderColor r="0.6" g="0.6" b="0.6"/>
+				</Backdrop>
+				<Layers>
+					<Layer level ="BACKGROUND">
+						<Texture file="Interface\ChatFrame\ChatFrameBackground">
+							<Anchors>
+								<Anchor point="TOPLEFT">
+									<Offset x="4" y="-4"/>
+								</Anchor>
+								<Anchor point="BOTTOMRIGHT">
+									<Offset x="-4" y="4"/>
+								</Anchor>
+							</Anchors>
+							<Gradient orientation="VERTICAL">
+								<MinColor r="0" g="0" b="0" a="0.9"/>
+								<MaxColor r="0.2" g="0.2" b="0.2" a="0.9"/>
+							</Gradient>
+						</Texture>
+					</Layer>
+					<Layer level="ARTWORK">
+						<FontString name="$parentTitleLabel" justifyH="LEFT" inherits="GF_NormalFont" nonspacewrap="false">
+							<Anchors>
+								<Anchor point="TOPLEFT">
+									<Offset>
+										<AbsDimension x="15" y="-8"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>										
+					</Layer>
+				</Layers>
+				<Frames>
+					<Button name="GF_ShowGroupLogEntryFrameCloseButton" inherits="GF_ButtonTemplate" text="CLOSE">
+						<Size>
+							<AbsDimension x="50" y="25"/>
+						</Size>
+						<Anchors>
+							<Anchor point="BOTTOMRIGHT">
+								<Offset>
+									<AbsDimension x="-20" y="7"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								GF_ShowGroupLogEntryFrame:Hide()
+							</OnClick>
+						</Scripts>
+					</Button>
+				</Frames>
+				<Scripts>
+					<OnLoad>
+						tinsert(UISpecialFrames,this:GetName())
+					</OnLoad>
+				</Scripts>
 			</Frame>
 		</Frames>
 		<Scripts>
