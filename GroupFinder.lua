@@ -2868,7 +2868,7 @@ function GF_GetTypes(arg1, showanyway)
 						end
 						if showanyway == true then print(wordString.." quest") end
 						foundTradesExclusion = foundTradesExclusion + .3 foundGuildExclusion = foundGuildExclusion + .1
-						if wordString ~= "group" then table.insert(groupName,wordString) end
+						if wordString ~= "group" then table.insert(groupName,wordString) groupName[wordString] = true end
 						i = i + lfs
 					end
 				end
@@ -3003,7 +3003,7 @@ function GF_GetTypes(arg1, showanyway)
 					if not foundQuest[1] then if GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] elseif GF_WORD_LEVEL_ZONE[wordTable[i-1]] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-1]] end end
 					if GF_QUEST_ONLY_AFTER_LFG[wordTable[i+j+1]] then if not foundQuest[1] or GF_QUEST_ONLY_AFTER_LFG[wordTable[i+j+1]] > foundQuest[1] then foundQuest[1] = GF_QUEST_ONLY_AFTER_LFG[wordTable[i+j+1]] if showanyway == true then print(wordTable[i+j+1].." only after lfm") end end end
 				end
-				if GF_WORD_CLASSES[wordString] then foundClass = GF_WORD_CLASSES[wordString] table.insert(groupName,wordString)
+				if GF_WORD_CLASSES[wordString] then foundClass = GF_WORD_CLASSES[wordString] table.insert(groupName,wordString) groupName[wordString] = true
 				elseif GF_WORD_DUNGEON[wordString] then
 					if showanyway == true then print(wordString.." dungeon") end
 					if not foundRaid and (not foundDungeon or GF_WORD_DUNGEON[wordString] > foundDungeon) then foundDungeon = GF_WORD_DUNGEON[wordString] table.insert(foundDFlags,1,wordString) else table.insert(foundDFlags,wordString) end table.insert(groupPosition,{i,i+j,wordString})
@@ -3050,6 +3050,8 @@ function GF_GetTypes(arg1, showanyway)
 			end
 		end
 	end
+
+-- Don't include roles if groupName
 
 	for i=1, getn(groupPosition) do
 		if GF_WORD_IGNORE[wordTable[groupPosition[i][2]+1]] then foundIgnore = foundIgnore + GF_WORD_IGNORE[wordTable[groupPosition[i][2]+1]] if showanyway == true then print(wordTable[groupPosition[i][2]+1].." ignore "..GF_WORD_IGNORE[wordTable[groupPosition[i][2]+1]]) end end
@@ -3103,7 +3105,7 @@ function GF_GetTypes(arg1, showanyway)
 		for k=lfmPosition[i][2]+1, tempVal do
 			for j=1, getn(groupPosition) do if lfe == 0 and k == groupPosition[j][1] then lfs = lfs + 1 foundTradesExclusion = foundTradesExclusion + .5 if showanyway == true then print(lfmPosition[i][3].." reached group 1") end lfe = 1 break end end
 			if wordTable[k] then
-				if GF_LFM_CONNECT_WORDS_BEFORE[wordTable[k]] then
+				if GF_LFM_CONNECT_WORDS_BEFORE[wordTable[k]] and (not groupName[wordTable[k]] or getn(groupPosition) > 0) then
 					lfs = lfs + GF_LFM_CONNECT_WORDS_BEFORE[wordTable[k]]
 					if showanyway == true then print(lfmPosition[i][3].." "..wordTable[k].." "..GF_LFM_CONNECT_WORDS_BEFORE[wordTable[k]]) end
 					if GF_LFM_CONNECT_WORDS_BEFORE[wordTable[k]] < 0 then break end
@@ -3115,7 +3117,7 @@ function GF_GetTypes(arg1, showanyway)
 		for k=lfmPosition[i][1]-1, 1, -1 do
 			for j=1, getn(groupPosition) do if lfe == 0 and k == groupPosition[j][2] then lfs = lfs + 1 foundTradesExclusion = foundTradesExclusion + .5 if showanyway == true then print(lfmPosition[i][3].." reached group 1") end lfe = 1 break end end
 			if wordTable[k] then
-				if GF_LFM_CONNECT_WORDS_AFTER[wordTable[k]] then
+				if GF_LFM_CONNECT_WORDS_AFTER[wordTable[k]] and (not groupName[wordTable[k]] or getn(groupPosition) > 0) then
 					lfs = lfs + GF_LFM_CONNECT_WORDS_AFTER[wordTable[k]]
 					if showanyway == true then print(lfmPosition[i][3].." "..wordTable[k].." "..GF_LFM_CONNECT_WORDS_AFTER[wordTable[k]]) end
 					if GF_LFM_CONNECT_WORDS_AFTER[wordTable[k]] < 0 then break end
