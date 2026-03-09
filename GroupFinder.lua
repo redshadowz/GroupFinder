@@ -2108,25 +2108,25 @@ end
 
 function self:CHAT_MSG_COMBAT_PARTY_HITS() -- Melee hits
 	if GF_NumPartyMembers > 1 then
-		local _,_,wordString,tempString = string.find(arg1,GF_COMBATHITOTHEROTHER) if not wordString then _,_,wordString = string.find(arg1,GF_COMBATHITSCHOOLOTHEROTHER) if not wordString or not GF_PlayersCurrentlyInGroup[wordString] then return end end
+		local _,_,wordString,tempString = string.find(arg1,GF_COMBATHITOTHEROTHER) if not wordString then _,_,wordString = string.find(arg1,GF_COMBATHITSCHOOLOTHEROTHER) end if not wordString or not GF_PlayersCurrentlyInGroup[wordString] then return end
 		if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][2][wordString] then GF_PerCharVariables.CurrentGroup[GF_CurrentZone][2][wordString] = { GF_WhoTable[GF_RealmName][wordString][1],GF_WhoTable[GF_RealmName][wordString][2],0 } else GF_PerCharVariables.CurrentGroup[GF_CurrentZone][2][wordString][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][2][wordString][3] + tonumber(tempString) end
 	end
 end
 function self:CHAT_MSG_COMBAT_HOSTILEPLAYER_HITS() -- Melee hits
 	if GF_NumPartyMembers > 1 then
-		local _,_,wordString,tempString = string.find(arg1,GF_COMBATHITOTHEROTHER) if not wordString then _,_,wordString = string.find(arg1,GF_COMBATHITSCHOOLOTHEROTHER) if not wordString or not GF_PlayersCurrentlyInGroup[wordString] then return end end
+		local _,_,wordString,tempString = string.find(arg1,GF_COMBATHITOTHEROTHER) if not wordString then _,_,wordString = string.find(arg1,GF_COMBATHITSCHOOLOTHEROTHER) end if not wordString or not GF_PlayersCurrentlyInGroup[wordString] then return end
 		if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][2][wordString] then GF_PerCharVariables.CurrentGroup[GF_CurrentZone][2][wordString] = { GF_WhoTable[GF_RealmName][wordString][1],GF_WhoTable[GF_RealmName][wordString][2],0 } else GF_PerCharVariables.CurrentGroup[GF_CurrentZone][2][wordString][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][2][wordString][3] + tonumber(tempString) end
 	end
 end
 function self:CHAT_MSG_SPELL_PARTY_DAMAGE() -- Spell hits
 	if GF_NumPartyMembers > 1 then
-		local _,_,wordString,tempString = string.find(arg1,GF_SPELLLOGOTHEROTHER) if not wordString then _,_,wordString = string.find(arg1,GF_SPELLLOGSCHOOLOTHEROTHER) if not wordString or not GF_PlayersCurrentlyInGroup[wordString] then return end end
+		local _,_,wordString,tempString = string.find(arg1,GF_SPELLLOGOTHEROTHER) if not wordString then _,_,wordString = string.find(arg1,GF_SPELLLOGSCHOOLOTHEROTHER) end if not wordString or not GF_PlayersCurrentlyInGroup[wordString] then return end
 		if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][2][wordString] then GF_PerCharVariables.CurrentGroup[GF_CurrentZone][2][wordString] = { GF_WhoTable[GF_RealmName][wordString][1],GF_WhoTable[GF_RealmName][wordString][2],0 } else GF_PerCharVariables.CurrentGroup[GF_CurrentZone][2][wordString][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][2][wordString][3] + tonumber(tempString) end
 	end
 end
 function self:CHAT_MSG_SPELL_HOSTILEPLAYER_DAMAGE() -- Spell hits
 	if GF_NumPartyMembers > 1 then
-		local _,_,wordString,tempString = string.find(arg1,GF_SPELLLOGOTHEROTHER) if not wordString then _,_,wordString = string.find(arg1,GF_SPELLLOGSCHOOLOTHEROTHER) if not wordString or not GF_PlayersCurrentlyInGroup[wordString] then return end end
+		local _,_,wordString,tempString = string.find(arg1,GF_SPELLLOGOTHEROTHER) if not wordString then _,_,wordString = string.find(arg1,GF_SPELLLOGSCHOOLOTHEROTHER) end if not wordString or not GF_PlayersCurrentlyInGroup[wordString] then return end
 		if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][2][wordString] then GF_PerCharVariables.CurrentGroup[GF_CurrentZone][2][wordString] = { GF_WhoTable[GF_RealmName][wordString][1],GF_WhoTable[GF_RealmName][wordString][2],0 } else GF_PerCharVariables.CurrentGroup[GF_CurrentZone][2][wordString][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][2][wordString][3] + tonumber(tempString) end
 	end
 end
@@ -2138,25 +2138,25 @@ function self:CHAT_MSG_SPELL_PERIODIC_CREATURE_DAMAGE() -- Spell periodic damage
 end
 function self:CHAT_MSG_SPELL_PARTY_BUFF() -- Healing spells... Needs to check for overheal?
 	if GF_NumPartyMembers > 1 then
-		local _,_,wordString,tempString = string.find(arg1,GF_HEALEDOTHEROTHER) if not wordString then _,_,wordString = string.find(arg1,GF_HEALEDOTHERSELF) if not wordString or not GF_PlayersCurrentlyInGroup[wordString] then return end end
+		local _,_,wordString,tempString = string.find(arg1,GF_HEALEDOTHEROTHER) if not wordString then _,_,wordString = string.find(arg1,GF_HEALEDOTHERSELF) end if not wordString or not GF_PlayersCurrentlyInGroup[wordString] then return end
 		if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][2][wordString] then GF_PerCharVariables.CurrentGroup[GF_CurrentZone][2][wordString] = { GF_WhoTable[GF_RealmName][wordString][1],GF_WhoTable[GF_RealmName][wordString][2],0 } else GF_PerCharVariables.CurrentGroup[GF_CurrentZone][2][wordString][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][2][wordString][3] + tonumber(tempString) end
 	end
 end
 function self:CHAT_MSG_SPELL_HOSTILEPLAYER_BUFF() -- Healing spells... Needs to check for overheal?
 	if GF_NumPartyMembers > 1 then
-		local _,_,wordString,tempString = string.find(arg1,GF_HEALEDOTHEROTHER) if not wordString then _,_,wordString = string.find(arg1,GF_HEALEDOTHERSELF) if not wordString or not GF_PlayersCurrentlyInGroup[wordString] then return end end
+		local _,_,wordString,tempString = string.find(arg1,GF_HEALEDOTHEROTHER) if not wordString then _,_,wordString = string.find(arg1,GF_HEALEDOTHERSELF) end if not wordString or not GF_PlayersCurrentlyInGroup[wordString] then return end
 		if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][2][wordString] then GF_PerCharVariables.CurrentGroup[GF_CurrentZone][2][wordString] = { GF_WhoTable[GF_RealmName][wordString][1],GF_WhoTable[GF_RealmName][wordString][2],0 } else GF_PerCharVariables.CurrentGroup[GF_CurrentZone][2][wordString][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][2][wordString][3] + tonumber(tempString) end
 	end
 end
 function self:CHAT_MSG_SPELL_PERIODIC_PARTY_BUFFS() -- Healing spells... Needs to check for overheal?
 	if GF_NumPartyMembers > 1 then
-		local _,_,tempString,wordString = string.find(arg1,GF_PERIODICAURAHEALOTHEROTHER) if not wordString then _,_,wordString = string.find(arg1,GF_PERIODICAURAHEALOTHERSELF) if not wordString or not GF_PlayersCurrentlyInGroup[wordString] then return end end
+		local _,_,tempString,wordString = string.find(arg1,GF_PERIODICAURAHEALOTHEROTHER) if not wordString then _,_,wordString = string.find(arg1,GF_PERIODICAURAHEALOTHERSELF) end if not wordString or not GF_PlayersCurrentlyInGroup[wordString] then return end
 		if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][2][wordString] then GF_PerCharVariables.CurrentGroup[GF_CurrentZone][2][wordString] = { GF_WhoTable[GF_RealmName][wordString][1],GF_WhoTable[GF_RealmName][wordString][2],0 } else GF_PerCharVariables.CurrentGroup[GF_CurrentZone][2][wordString][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][2][wordString][3] + tonumber(tempString) end
 	end
 end
 function self:CHAT_MSG_SPELL_PERIODIC_HOSTILEPLAYER_BUFFS() -- Healing spells... Needs to check for overheal?
 	if GF_NumPartyMembers > 1 then
-		local _,_,tempString,wordString = string.find(arg1,GF_PERIODICAURAHEALOTHEROTHER) if not wordString then _,_,wordString = string.find(arg1,GF_PERIODICAURAHEALOTHERSELF) if not wordString or not GF_PlayersCurrentlyInGroup[wordString] then return end end
+		local _,_,tempString,wordString = string.find(arg1,GF_PERIODICAURAHEALOTHEROTHER) if not wordString then _,_,wordString = string.find(arg1,GF_PERIODICAURAHEALOTHERSELF) end if not wordString or not GF_PlayersCurrentlyInGroup[wordString] then return end
 		if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][2][wordString] then GF_PerCharVariables.CurrentGroup[GF_CurrentZone][2][wordString] = { GF_WhoTable[GF_RealmName][wordString][1],GF_WhoTable[GF_RealmName][wordString][2],0 } else GF_PerCharVariables.CurrentGroup[GF_CurrentZone][2][wordString][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][2][wordString][3] + tonumber(tempString) end
 	end
 end
