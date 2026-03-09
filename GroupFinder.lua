@@ -2401,7 +2401,7 @@ function GF_CheckForLoot(arg1)
 	if GF_NumPartyMembers > 1 then
 		if tempVal == 1 then GF_PerCharVariables.CurrentGroup[GF_CurrentZone].v = true
 		elseif tempVal == 2 then GF_PerCharVariables.CurrentGroup[GF_CurrentZone].v = true _,_,tempString = strfind(arg1,"|%x+|H(item:[%d+:]+)") if tempString then GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][tempString] = wordString end end
-	else
+	end
 	GF_PreviousMessage["SYSTEM"] = {true}
 end
 function GF_CheckForSystem(arg1)
