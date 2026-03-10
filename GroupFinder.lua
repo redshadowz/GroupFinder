@@ -295,6 +295,7 @@ function GF_LoadVariables()
 			GF_GroupHistory[GF_RealmName] = {}
 			table.insert(GF_GroupHistory[GF_RealmName], "Groups")
 			GF_GroupHistory[GF_RealmName]["Groups"] = {}
+			break
 		end
 		for j=1,getn(GF_GroupHistory[GF_RealmName][GF_GroupHistory[GF_RealmName][i]]) do
 			for item,data in GF_GroupHistory[GF_RealmName][GF_GroupHistory[GF_RealmName][i]][j][4] do -- GF_GroupHistory = {}
@@ -1615,7 +1616,7 @@ function GF_OnUpdate() -- OnUpdate, SendWho, WhoListUpdated, Announce, Broadcast
 		for name,_ in OnUpdateFunctions do
 			OnUpdateFunctions[name]()
 		end
-		if GroupHistoryFinishTimer and GroupHistoryFinishTimer < time() then GF_GroupFinishedAddToGroupHistoryList() GroupHistoryFinishTimer = nil end
+		--if GroupHistoryFinishTimer and GroupHistoryFinishTimer < time() then GF_GroupFinishedAddToGroupHistoryList() GroupHistoryFinishTimer = nil end
 	end
 end
 function GF_CheckForDelayedMessages()
