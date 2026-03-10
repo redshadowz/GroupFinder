@@ -784,9 +784,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</Anchors>
 		</HighlightTexture>
 	</Button>
-	<Button name="GF_GroupHistoryPlayerButtonTemplate" enableMouse="true" toplevel="true" justifyH="LEFT" virtual="true">
+	<Button name="GF_GroupHistoryPlayerButtonTemplate" enableMouse="true" toplevel="true" virtual="true">
 		<Size>
-			<AbsDimension y="20"/>
+			<AbsDimension x="100" y="20"/>
 		</Size>
 		<Layers>
 			<Layer level="OVERLAY">
@@ -805,11 +805,17 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			<OnMouseDown>
 				GF_ToggleGroupHistoryPlayerDropDownMenu(this,this:GetText(),arg1)
 			</OnMouseDown>
+			<OnEnter>
+				GF_OnHyperlinkShowTooltip(this,gsub(this:GetText(),"|%x+|H(player:.-)|h%[.-%]|h|r","%1"))
+			</OnEnter>
+			<OnLeave>
+				GameTooltip:Hide()
+			</OnLeave>
 		</Scripts>
 	</Button>
-	<Button name="GF_GroupHistoryItemButtonTemplate" enableMouse="true" toplevel="true" justifyH="LEFT" virtual="true">
+	<Button name="GF_GroupHistoryItemButtonTemplate" enableMouse="true" toplevel="true" virtual="true">
 		<Size>
-			<AbsDimension y="20"/>
+			<AbsDimension x="100" y="20"/>
 		</Size>
 		<Layers>
 			<Layer level="OVERLAY">
@@ -3356,7 +3362,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										GF_OnHyperlinkShowTooltip(this,arg1)
 									</OnHyperlinkEnter>
 									<OnHyperlinkLeave>
-										GF_OnHyperlinkShowTooltip(this,arg1)
+										GameTooltip:Hide()
 									</OnHyperlinkLeave>
 									<OnMouseWheel>
 										if arg1 == 1 then

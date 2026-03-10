@@ -2862,9 +2862,9 @@ function GF_GetTypes(arg1, showanyway)
 		wordString = "" for i=2,tempVal-1 do wordString = wordString..wordTable[i] end
 		if strsub(arg1,-2) == "? " then
 			if wordTable[1] == "hquest" and GF_WORD_QUEST[wordString..wordTable[tempVal]] or GF_WORD_QUEST[wordTable[1]..wordString..wordTable[tempVal]] then foundLFG = 2 if showanyway == true then print("quest? lfg 2") end
-			elseif wordTable[1] == "no" and ((GF_GROUP_IDS[wordString] and wordTable[tempVal] == "group") or GF_GROUP_IDS[wordString..wordTable[tempVal]]) then foundLFG = 2.25 if showanyway == true then print("quest? lfg 2") end end
+			elseif GF_GROUP_NO_QUESTION[wordTable[1]] and ((GF_GROUP_IDS[wordString] and GF_GROUP_NO_QUESTION[wordTable[1]][wordTable[tempVal]]) or GF_GROUP_IDS[wordString..wordTable[tempVal]]) then foundLFG = 2.25 if showanyway == true then print("quest? lfg 2") end end
 		elseif wordTable[1] == "hquest" then
-			if GF_WORD_QUEST[wordString] and (wordTable[tempVal] == "all" or wordTable[tempVal] == "hc") then foundLFM = 2 if showanyway == true then print("quest all lfm 2") end
+			if GF_WORD_QUEST[wordString] and GF_GROUP_HQUEST_LAST[wordTable[tempVal]] then foundLFM = 2 if showanyway == true then print("quest all lfm 2") end
 			else lfs = 1 while true do lfs,lfe,wordString = strfind(arg1, "\]%s?(%p)[%p%s]",lfs) if not wordString then break end if wordString == "+" or wordString == "?" then foundLFG = 2 if showanyway == true then print("[quest]+ lfg 2") end end lfs = lfe end end
 		end
 	elseif strsub(arg1,1,2) == " +" and GF_WORD_ROLES[wordTable[1]] then foundLFM = 2 if showanyway == true then print("+healer lfg 2") end end
@@ -2966,7 +2966,7 @@ function GF_GetTypes(arg1, showanyway)
 				elseif not lfs then	foundTrades = foundTrades + 1.5 if showanyway == true then print("tradeonly? trades 1.5") end end
 			end
 			wordString = ""
-			for i=1,tempVal-1 do wordString = wordString..wordTable[i] end if (GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString]) and wordTable[tempVal] == "group" then foundLFG = 2 if showanyway == true then print("group? lfg 2") end end
+			for i=1,tempVal-1 do wordString = wordString..wordTable[i] end if (GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString]) and wordTable[tempVal] == GF_GROUP_LOCALIZED then foundLFG = 2 if showanyway == true then print("group? lfg 2") end end
 			for i=1,tempVal do
 				if GF_WORD_RAID[wordTable[i]] then
 					if GF_RAID_BEFORE[wordTable[i-1]] and (GF_RAID_BEFORE[wordTable[i-1]][wordTable[i+1]] or (wordTable[i+2] and GF_RAID_BEFORE[wordTable[i-1]][wordTable[i+1]..wordTable[i+2]])) then if foundLFG < 3 then foundLFG = 3 if showanyway == true then print("1 word before/1-2 words after raid ?") end end end
@@ -3040,7 +3040,7 @@ function GF_GetTypes(arg1, showanyway)
 					if foundPvP == 0 then for num in string.gfind(arg1, "(%d+)[%splevl%-'s]+") do if tonumber(num) > foundPvP and tonumber(num) > 8 and tonumber(num) < 61 then foundPvP = tonumber(num) end end end
 					foundTradesExclusion = foundTradesExclusion + .3 foundGuildExclusion = foundGuildExclusion + .1
 				end
-				if GF_WORD_LEVEL_ZONE[wordString] and (wordTable[i-1] == "portal" or wordTable[i+1] == "portal") then foundTrades = foundTrades + 1 if showanyway == true then print("portalzone trade 1") end end
+				if GF_WORD_LEVEL_ZONE[wordString] and (wordTable[i-1] == GF_PORTAL_LOCALIZED or wordTable[i+1] == GF_PORTAL_LOCALIZED) then foundTrades = foundTrades + 1 if showanyway == true then print("portalzone trade 1") end end
 -- Score Trades separately
 				wordString = wordTableTrade[i]
 				for k=1, j do wordString = wordString..wordTableTrade[i+k] end
@@ -3115,8 +3115,8 @@ function GF_GetTypes(arg1, showanyway)
 
 			if GF_LFM_TRIGGER_BEFORE[wordTable[groupPosition[i][1]-1]] and GF_LFM_TRIGGER_AFTER[wordTable[groupPosition[i][2]+1]] then table.insert(lfmPosition, {groupPosition[i][1]-1,groupPosition[i][2]+1,2,true,true}) if showanyway == true then print(groupPosition[i][3].." triggername lfm 1/2(D).. before/after") end end
 
-			if wordTable[i-1] == "portal" or wordTable[i+1] == "portal" or wordTable[i-1] == "summon" or wordTable[i+1] == "summon" then foundTrades = foundTrades + 1 if showanyway == true then print("portalzone trade 1") end
-			elseif wordTable[i+2] and wordTable[i+1]..wordTable[i+2] == "havesummon" then foundTradesExclusion = foundTradesExclusion + 1.5 if showanyway == true then print(wordString.." havesummon .. tradesex 1.5") end end
+			if GF_TRADE_PORTAL_SUMMON[wordTable[i-1]] or GF_TRADE_PORTAL_SUMMON[wordTable[i+1]] then foundTrades = foundTrades + 1 if showanyway == true then print("portalzone trade 1") end
+			elseif wordTable[i+2] and GF_TRADE_GROUP_SUMMON[wordTable[i+1]..wordTable[i+2]] then foundTradesExclusion = foundTradesExclusion + 1.5 if showanyway == true then print(wordString.." havesummon .. tradesex 1.5") end end
 		end
 	end
 	lfe = 0
@@ -3690,8 +3690,8 @@ function GF_ToggleGroupHistoryPlayerDropDownMenu(frame,text,button)
 	end
 end
 function GF_ToggleGroupHistoryItemClick(text,button)
-	local _,_,link = string.find(text,"|%x+|H(item:.-)|h%[.-%]|h|r")
-	if link then SetItemRef(link,text,button) end
+	--local _,_,link = string.find(text,"|%x+|H(item:.-)|h%[.-%]|h|r")
+	--if link then SetItemRef(link,text,button) end
 end
 
 function GF_CreateDropDownMenu()
@@ -4153,19 +4153,18 @@ function GF_WhisperHistoryPriorityListCheckButtonPressed(id,name,priority)
 	end
 end
 function GF_GroupHistoryDisplayEntryLog(name,entry)
-	local maxsize = 40
+	local maxsize,maxpsize = 40,40
 	local playerTable = {} -- Players
 	for pname,data in GF_GroupHistory[GF_RealmName][name][entry][3] do
 		table.insert(playerTable, {pname,data})
 	end
 	table.sort(playerTable, function(a,b) return a[2][3]>b[2][3] end)
 	local playerSize = getn(playerTable)
-	if playerSize > maxsize then playerSize = maxsize end
+	if playerSize > maxpsize then playerSize = maxpsize end
 	for i=1, playerSize do
 		local button = getglobal("GF_GroupHistoryLogPlayer"..i)
 		if not button then
 			button = CreateFrame("Button", "GF_GroupHistoryLogPlayer"..i, GF_ShowGroupLogEntryFrame, "GF_GroupHistoryPlayerButtonTemplate")
-			button:SetID(i)
 			button:SetFont(GF_BUTTONS_LIST["FontName"][GF_SavedVariables.fontname][2],GF_BaseFontSize)
 			getglobal(button:GetName().."TextLabel"):SetFont(GF_BUTTONS_LIST["FontName"][GF_SavedVariables.fontname][2],GF_BaseFontSize)
 		end
@@ -4176,10 +4175,10 @@ function GF_GroupHistoryDisplayEntryLog(name,entry)
 		button:Show()
 	end
 	for i=1, playerSize do
-		if i <= ceil(playerSize/maxsize) then
+		if i <= ceil(playerSize/maxpsize) then
 			getglobal("GF_GroupHistoryLogPlayer"..i):SetPoint("TOPLEFT", GF_ShowGroupLogEntryFrame, "TOPLEFT", 6, -4)
 		else
-			getglobal("GF_GroupHistoryLogPlayer"..i):SetPoint("TOPLEFT", getglobal("GF_GroupHistoryLogPlayer"..i-ceil(playerSize/maxsize)), "BOTTOMLEFT", 0, 6)
+			getglobal("GF_GroupHistoryLogPlayer"..i):SetPoint("TOPLEFT", getglobal("GF_GroupHistoryLogPlayer"..i-ceil(playerSize/maxpsize)), "BOTTOMLEFT", 0, 6)
 		end
 	end
 	for i=playerSize+1,40 do if not getglobal("GF_GroupHistoryLogPlayer"..i) then break end getglobal("GF_GroupHistoryLogPlayer"..i):Hide() end
@@ -4190,16 +4189,11 @@ function GF_GroupHistoryDisplayEntryLog(name,entry)
 	end
 	table.sort(itemTable, function(a,b) return a[1]<b[1] end)
 	local itemSize = getn(itemTable)
-	if itemSize/2 > maxsize then
-		itemSize = maxsize*2
-	else
-		if itemSize > playerSize then maxsize = ceil(itemSize/2) end
-	end
+	if itemSize/2 > maxsize then itemSize = maxsize*2 end
 	for i=1, itemSize do
 		local button = getglobal("GF_GroupHistoryLogItem"..i)
 		if not button then
 			button = CreateFrame("Button", "GF_GroupHistoryLogItem"..i, GF_ShowGroupLogEntryFrame, "GF_GroupHistoryItemButtonTemplate")
-			button:SetID(i)
 			button:SetFont(GF_BUTTONS_LIST["FontName"][GF_SavedVariables.fontname][2],GF_BaseFontSize)
 			getglobal(button:GetName().."TextLabel"):SetFont(GF_BUTTONS_LIST["FontName"][GF_SavedVariables.fontname][2],GF_BaseFontSize)
 		end
@@ -4210,16 +4204,36 @@ function GF_GroupHistoryDisplayEntryLog(name,entry)
 		else
 			button:SetText("|cffffffff|H"..itemTable[i][1].."|h[unknown]|h|r")
 		end
-		--local wordString = ""
-		--for j=1, getn(itemTable[i][2]) do
-			--wordString = wordString..itemTable[i][2][j]
-		--end
-		--getglobal(button:GetName().."TextLabel"):SetText("("..wordString..")")
 		getglobal(button:GetName().."TextLabel"):SetText("("..itemTable[i][2][1]..")")
 		button:ClearAllPoints()
 		button:SetWidth(button:GetFontString():GetStringWidth())
 		button:Show()
 	end
+	for i=1, itemSize do 
+		if itemSize == 80 then break end
+		for j=2, getn(itemTable[i][2]) do
+			if itemSize == 80 then break end
+			itemSize=itemSize+1
+			local button = getglobal("GF_GroupHistoryLogItem"..itemSize)
+			if not button then
+				button = CreateFrame("Button", "GF_GroupHistoryLogItem"..itemSize, GF_ShowGroupLogEntryFrame, "GF_GroupHistoryItemButtonTemplate")
+				button:SetFont(GF_BUTTONS_LIST["FontName"][GF_SavedVariables.fontname][2],GF_BaseFontSize)
+				getglobal(button:GetName().."TextLabel"):SetFont(GF_BUTTONS_LIST["FontName"][GF_SavedVariables.fontname][2],GF_BaseFontSize)
+			end
+			local iName,_,iQuality = GetItemInfo(itemTable[i][1])
+			if iName then
+				local _,_,_,color = GetItemQualityColor(iQuality)
+				button:SetText(color.. "|H"..itemTable[i][1].."|h["..iName.."]|h|r")
+			else
+				button:SetText("|cffffffff|H"..itemTable[i][1].."|h[unknown]|h|r")
+			end
+			getglobal(button:GetName().."TextLabel"):SetText("("..itemTable[i][2][j]..")")
+			button:ClearAllPoints()
+			button:SetWidth(button:GetFontString():GetStringWidth())
+			button:Show()
+		end
+	end
+	if itemSize > playerSize then maxsize = ceil(itemSize/2) end
 	for i=1, itemSize do
 		if i <= ceil(itemSize/maxsize) then
 			getglobal("GF_GroupHistoryLogItem"..i):SetPoint("TOPRIGHT", GF_ShowGroupLogEntryFrame, "TOPRIGHT", -6 - (i-1)*(200+51), -4)
@@ -4228,9 +4242,9 @@ function GF_GroupHistoryDisplayEntryLog(name,entry)
 		end
 	end
 	for i=itemSize+1,80 do if not getglobal("GF_GroupHistoryLogItem"..i) then break end getglobal("GF_GroupHistoryLogItem"..i):Hide() end
-	local prows = playerSize/ceil(playerSize/maxsize)
+	local prows = playerSize/ceil(playerSize/maxpsize)
 	local irows = itemSize/ceil(itemSize/maxsize)
-	if prows >= irows then
+	if prows >= irows or prows > maxsize then
 		GF_ShowGroupLogEntryFrame:SetHeight(40 + prows*14)
 	else
 		GF_ShowGroupLogEntryFrame:SetHeight(40 + irows*14)
