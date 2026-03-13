@@ -786,7 +786,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 	</Button>
 	<Button name="GF_GroupHistoryPlayerButtonTemplate" enableMouse="true" toplevel="true" virtual="true">
 		<Size>
-			<AbsDimension x="100" y="20"/>
+			<AbsDimension x="100" y="14"/>
 		</Size>
 		<Layers>
 			<Layer level="OVERLAY">
@@ -794,7 +794,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					<Anchors>
 						<Anchor point="LEFT" relativePoint="RIGHT">
 							<Offset>
-								<AbsDimension x="5" y="0"/>
+								<AbsDimension x="0" y="0"/>
 							</Offset>
 						</Anchor>
 					</Anchors>
@@ -806,7 +806,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				GF_ToggleGroupHistoryPlayerDropDownMenu(this,this:GetText(),arg1)
 			</OnMouseDown>
 			<OnEnter>
-				GF_OnHyperlinkShowTooltip(this,gsub(this:GetText(),"|%x+|H(player:.-)|h%[.-%]|h|r","%1"))
+				GF_OnHyperlinkShowTooltip(gsub(this:GetText(),"|%x+|H(player:.-)|h%[.-%]|h|r","%1"))
 			</OnEnter>
 			<OnLeave>
 				GameTooltip:Hide()
@@ -815,7 +815,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 	</Button>
 	<Button name="GF_GroupHistoryItemButtonTemplate" enableMouse="true" toplevel="true" virtual="true">
 		<Size>
-			<AbsDimension x="100" y="20"/>
+			<AbsDimension x="100" y="14"/>
 		</Size>
 		<Layers>
 			<Layer level="OVERLAY">
@@ -823,7 +823,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					<Anchors>
 						<Anchor point="RIGHT" relativePoint="LEFT">
 							<Offset>
-								<AbsDimension x="-5" y="0"/>
+								<AbsDimension x="0" y="0"/>
 							</Offset>
 						</Anchor>
 					</Anchors>
@@ -834,6 +834,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			<OnMouseDown>
 				GF_ToggleGroupHistoryItemClick(this:GetText(),arg1)
 			</OnMouseDown>
+			<OnEnter>
+				GF_OnHyperlinkShowTooltip(gsub(this:GetText(),"|%x+|H(item:.-)|h%[.-%]|h|r","%1"))
+			</OnEnter>
+			<OnLeave>
+				GameTooltip:Hide()
+			</OnLeave>
 		</Scripts>
 	</Button>
 	<MessageFrame name="GF_MinimapMessageFrameTemplateA" frameStrata="BACKGROUND" toplevel="true" displayDuration="20.0" maxLines="1" virtual="true">
@@ -3359,7 +3365,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										GF_TogglePlayerDropDownMenu(arg1,arg2,arg3)
 									</OnHyperlinkClick>
 									<OnHyperlinkEnter>
-										GF_OnHyperlinkShowTooltip(this,arg1)
+										GF_OnHyperlinkShowTooltip(arg1)
 									</OnHyperlinkEnter>
 									<OnHyperlinkLeave>
 										GameTooltip:Hide()
@@ -5672,6 +5678,94 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</Layer>
 				</Layers>
 				<Frames>
+					<Button name="GF_GroupHistoryLogPlayer1" inherits="GF_GroupHistoryPlayerButtonTemplate"><Anchors><Anchor point="TOPLEFT"><Offset x="6" y="-4"/></Anchor></Anchors></Button>
+					<Button name="GF_GroupHistoryLogPlayer2" inherits="GF_GroupHistoryPlayerButtonTemplate"><Anchors><Anchor point="TOPLEFT" relativeTo="GF_GroupHistoryLogPlayer1" relativePoint="BOTTOMLEFT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogPlayer3" inherits="GF_GroupHistoryPlayerButtonTemplate"><Anchors><Anchor point="TOPLEFT" relativeTo="GF_GroupHistoryLogPlayer2" relativePoint="BOTTOMLEFT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogPlayer4" inherits="GF_GroupHistoryPlayerButtonTemplate"><Anchors><Anchor point="TOPLEFT" relativeTo="GF_GroupHistoryLogPlayer3" relativePoint="BOTTOMLEFT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogPlayer5" inherits="GF_GroupHistoryPlayerButtonTemplate"><Anchors><Anchor point="TOPLEFT" relativeTo="GF_GroupHistoryLogPlayer4" relativePoint="BOTTOMLEFT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogPlayer6" inherits="GF_GroupHistoryPlayerButtonTemplate"><Anchors><Anchor point="TOPLEFT" relativeTo="GF_GroupHistoryLogPlayer5" relativePoint="BOTTOMLEFT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogPlayer7" inherits="GF_GroupHistoryPlayerButtonTemplate"><Anchors><Anchor point="TOPLEFT" relativeTo="GF_GroupHistoryLogPlayer6" relativePoint="BOTTOMLEFT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogPlayer8" inherits="GF_GroupHistoryPlayerButtonTemplate"><Anchors><Anchor point="TOPLEFT" relativeTo="GF_GroupHistoryLogPlayer7" relativePoint="BOTTOMLEFT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogPlayer9" inherits="GF_GroupHistoryPlayerButtonTemplate"><Anchors><Anchor point="TOPLEFT" relativeTo="GF_GroupHistoryLogPlayer8" relativePoint="BOTTOMLEFT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogPlayer10" inherits="GF_GroupHistoryPlayerButtonTemplate"><Anchors><Anchor point="TOPLEFT" relativeTo="GF_GroupHistoryLogPlayer9" relativePoint="BOTTOMLEFT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogPlayer11" inherits="GF_GroupHistoryPlayerButtonTemplate"><Anchors><Anchor point="TOPLEFT" relativeTo="GF_GroupHistoryLogPlayer10" relativePoint="BOTTOMLEFT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogPlayer12" inherits="GF_GroupHistoryPlayerButtonTemplate"><Anchors><Anchor point="TOPLEFT" relativeTo="GF_GroupHistoryLogPlayer11" relativePoint="BOTTOMLEFT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogPlayer13" inherits="GF_GroupHistoryPlayerButtonTemplate"><Anchors><Anchor point="TOPLEFT" relativeTo="GF_GroupHistoryLogPlayer12" relativePoint="BOTTOMLEFT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogPlayer14" inherits="GF_GroupHistoryPlayerButtonTemplate"><Anchors><Anchor point="TOPLEFT" relativeTo="GF_GroupHistoryLogPlayer13" relativePoint="BOTTOMLEFT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogPlayer15" inherits="GF_GroupHistoryPlayerButtonTemplate"><Anchors><Anchor point="TOPLEFT" relativeTo="GF_GroupHistoryLogPlayer14" relativePoint="BOTTOMLEFT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogPlayer16" inherits="GF_GroupHistoryPlayerButtonTemplate"><Anchors><Anchor point="TOPLEFT" relativeTo="GF_GroupHistoryLogPlayer15" relativePoint="BOTTOMLEFT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogPlayer17" inherits="GF_GroupHistoryPlayerButtonTemplate"><Anchors><Anchor point="TOPLEFT" relativeTo="GF_GroupHistoryLogPlayer16" relativePoint="BOTTOMLEFT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogPlayer18" inherits="GF_GroupHistoryPlayerButtonTemplate"><Anchors><Anchor point="TOPLEFT" relativeTo="GF_GroupHistoryLogPlayer17" relativePoint="BOTTOMLEFT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogPlayer19" inherits="GF_GroupHistoryPlayerButtonTemplate"><Anchors><Anchor point="TOPLEFT" relativeTo="GF_GroupHistoryLogPlayer18" relativePoint="BOTTOMLEFT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogPlayer20" inherits="GF_GroupHistoryPlayerButtonTemplate"><Anchors><Anchor point="TOPLEFT" relativeTo="GF_GroupHistoryLogPlayer19" relativePoint="BOTTOMLEFT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogPlayer21" inherits="GF_GroupHistoryPlayerButtonTemplate"><Anchors><Anchor point="TOPLEFT" relativeTo="GF_GroupHistoryLogPlayer20" relativePoint="BOTTOMLEFT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogPlayer22" inherits="GF_GroupHistoryPlayerButtonTemplate"><Anchors><Anchor point="TOPLEFT" relativeTo="GF_GroupHistoryLogPlayer21" relativePoint="BOTTOMLEFT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogPlayer23" inherits="GF_GroupHistoryPlayerButtonTemplate"><Anchors><Anchor point="TOPLEFT" relativeTo="GF_GroupHistoryLogPlayer22" relativePoint="BOTTOMLEFT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogPlayer24" inherits="GF_GroupHistoryPlayerButtonTemplate"><Anchors><Anchor point="TOPLEFT" relativeTo="GF_GroupHistoryLogPlayer23" relativePoint="BOTTOMLEFT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogPlayer25" inherits="GF_GroupHistoryPlayerButtonTemplate"><Anchors><Anchor point="TOPLEFT" relativeTo="GF_GroupHistoryLogPlayer24" relativePoint="BOTTOMLEFT"/></Anchors></Button>
+
+					<Button name="GF_GroupHistoryLogItem1" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOPRIGHT" relativePoint="TOPRIGHT"><Offset x="-6" y="-4"/></Anchor></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem3" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOPRIGHT" relativeTo="GF_GroupHistoryLogItem1" relativePoint="BOTTOMRIGHT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem5" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOPRIGHT" relativeTo="GF_GroupHistoryLogItem3" relativePoint="BOTTOMRIGHT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem7" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOPRIGHT" relativeTo="GF_GroupHistoryLogItem5" relativePoint="BOTTOMRIGHT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem9" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOPRIGHT" relativeTo="GF_GroupHistoryLogItem7" relativePoint="BOTTOMRIGHT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem11" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOPRIGHT" relativeTo="GF_GroupHistoryLogItem9" relativePoint="BOTTOMRIGHT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem13" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOPRIGHT" relativeTo="GF_GroupHistoryLogItem11" relativePoint="BOTTOMRIGHT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem15" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOPRIGHT" relativeTo="GF_GroupHistoryLogItem13" relativePoint="BOTTOMRIGHT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem17" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOPRIGHT" relativeTo="GF_GroupHistoryLogItem15" relativePoint="BOTTOMRIGHT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem19" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOPRIGHT" relativeTo="GF_GroupHistoryLogItem17" relativePoint="BOTTOMRIGHT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem21" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOPRIGHT" relativeTo="GF_GroupHistoryLogItem19" relativePoint="BOTTOMRIGHT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem23" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOPRIGHT" relativeTo="GF_GroupHistoryLogItem21" relativePoint="BOTTOMRIGHT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem25" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOPRIGHT" relativeTo="GF_GroupHistoryLogItem23" relativePoint="BOTTOMRIGHT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem27" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOPRIGHT" relativeTo="GF_GroupHistoryLogItem25" relativePoint="BOTTOMRIGHT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem29" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOPRIGHT" relativeTo="GF_GroupHistoryLogItem27" relativePoint="BOTTOMRIGHT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem31" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOPRIGHT" relativeTo="GF_GroupHistoryLogItem29" relativePoint="BOTTOMRIGHT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem33" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOPRIGHT" relativeTo="GF_GroupHistoryLogItem31" relativePoint="BOTTOMRIGHT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem35" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOPRIGHT" relativeTo="GF_GroupHistoryLogItem33" relativePoint="BOTTOMRIGHT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem37" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOPRIGHT" relativeTo="GF_GroupHistoryLogItem35" relativePoint="BOTTOMRIGHT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem39" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOPRIGHT" relativeTo="GF_GroupHistoryLogItem37" relativePoint="BOTTOMRIGHT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem41" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOPRIGHT" relativeTo="GF_GroupHistoryLogItem39" relativePoint="BOTTOMRIGHT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem43" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOPRIGHT" relativeTo="GF_GroupHistoryLogItem41" relativePoint="BOTTOMRIGHT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem45" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOPRIGHT" relativeTo="GF_GroupHistoryLogItem43" relativePoint="BOTTOMRIGHT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem47" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOPRIGHT" relativeTo="GF_GroupHistoryLogItem45" relativePoint="BOTTOMRIGHT"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem49" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOPRIGHT" relativeTo="GF_GroupHistoryLogItem47" relativePoint="BOTTOMRIGHT"/></Anchors></Button>
+
+					<Button name="GF_GroupHistoryLogItem2" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOP"><Offset x="0" y="-4"/></Anchor></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem4" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOP" relativeTo="GF_GroupHistoryLogItem2" relativePoint="BOTTOM"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem6" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOP" relativeTo="GF_GroupHistoryLogItem4" relativePoint="BOTTOM"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem8" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOP" relativeTo="GF_GroupHistoryLogItem6" relativePoint="BOTTOM"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem10" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOP" relativeTo="GF_GroupHistoryLogItem8" relativePoint="BOTTOM"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem12" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOP" relativeTo="GF_GroupHistoryLogItem10" relativePoint="BOTTOM"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem14" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOP" relativeTo="GF_GroupHistoryLogItem12" relativePoint="BOTTOM"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem16" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOP" relativeTo="GF_GroupHistoryLogItem14" relativePoint="BOTTOM"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem18" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOP" relativeTo="GF_GroupHistoryLogItem16" relativePoint="BOTTOM"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem20" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOP" relativeTo="GF_GroupHistoryLogItem18" relativePoint="BOTTOM"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem22" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOP" relativeTo="GF_GroupHistoryLogItem20" relativePoint="BOTTOM"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem24" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOP" relativeTo="GF_GroupHistoryLogItem22" relativePoint="BOTTOM"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem26" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOP" relativeTo="GF_GroupHistoryLogItem24" relativePoint="BOTTOM"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem28" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOP" relativeTo="GF_GroupHistoryLogItem26" relativePoint="BOTTOM"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem30" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOP" relativeTo="GF_GroupHistoryLogItem28" relativePoint="BOTTOM"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem32" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOP" relativeTo="GF_GroupHistoryLogItem30" relativePoint="BOTTOM"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem34" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOP" relativeTo="GF_GroupHistoryLogItem32" relativePoint="BOTTOM"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem36" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOP" relativeTo="GF_GroupHistoryLogItem34" relativePoint="BOTTOM"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem38" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOP" relativeTo="GF_GroupHistoryLogItem36" relativePoint="BOTTOM"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem40" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOP" relativeTo="GF_GroupHistoryLogItem38" relativePoint="BOTTOM"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem42" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOP" relativeTo="GF_GroupHistoryLogItem40" relativePoint="BOTTOM"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem44" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOP" relativeTo="GF_GroupHistoryLogItem42" relativePoint="BOTTOM"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem46" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOP" relativeTo="GF_GroupHistoryLogItem44" relativePoint="BOTTOM"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem48" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOP" relativeTo="GF_GroupHistoryLogItem46" relativePoint="BOTTOM"/></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem50" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOP" relativeTo="GF_GroupHistoryLogItem48" relativePoint="BOTTOM"/></Anchors></Button>
+
+					<ScrollFrame name="GF_GroupHistoryLogScrollFrame" inherits="FauxScrollFrameTemplate">
+						<Size><AbsDimension x="688" y="406"/></Size>
+						<Anchors><Anchor point="TOPLEFT"></Anchor></Anchors>
+						<Scripts>
+							<OnVerticalScroll>
+								FauxScrollFrame_OnVerticalScroll(25, GF_GroupHistoryLogScrollbarUpdate)
+							</OnVerticalScroll>
+						</Scripts>
+					</ScrollFrame>
+
 					<Button name="GF_ShowGroupLogEntryFrameCloseButton" inherits="GF_ButtonTemplate" text="CLOSE">
 						<Size>
 							<AbsDimension x="50" y="25"/>
@@ -5694,6 +5788,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					<OnLoad>
 						tinsert(UISpecialFrames,this:GetName())
 					</OnLoad>
+					<OnShow>
+						GF_GroupHistoryLogScrollbarUpdate()
+					</OnShow>
 				</Scripts>
 			</Frame>
 		</Frames>
