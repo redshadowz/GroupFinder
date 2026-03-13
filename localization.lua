@@ -707,7 +707,7 @@ GF_WORD_FIX = { -- Word changes processed after quests. Not simple typos.
 -- Turtle
 ["stormwindcrypt"] = "karazhancrypt",["crypts"] = "crypt",
 ["vaults"] = "vault",
-["stormwindcastle"] = "stormwroughtcastle",["stormwinddescent"] = "stormwroughtdescent",["stormwinddecent"] = "stormwroughtdescent",
+["stormwinddescent"] = "stormwroughtdescent",["stormwinddecent"] = "stormwroughtdescent",
 ["stormruins"] = "stormwroughtruins",["stormdescent"] = "stormwroughtdescent",
 ["bms"] = "bm",
 
@@ -2969,7 +2969,7 @@ GF_WORD_QUEST = {
 
 ["nesingwarycamp"]={0,35,0},["nesingwaryelite"]={0,40,0},["dalsonstears"]={0,55,0},["felstonefield"]={0,53,0},["gahrronswithering"]={0,58,0},["writhinghaunt"]={0,55,0},["tidelordsclaw"]={0,34,0},["tidelordmakrani"]={0,34,0},["makrani"]={0,34,0},
 ["carvermolsen"]={0,22,0},["lycankill"]={0,60,0},["omen"]={0,60,0},["scythehr"]={0,60,0},["trollfarm"]={0,0,0},["vagas"]={0,11,0},["mokk"]={0,45,0},["fenrisisle"]={0,24,0},["dreamvi"]={0,60,0},["malletrun"]={0,50,0},
-["simonetemptress"]={0,60,0},["simoneseductress"]={0,60,0},["simoneinconspicuous"]={0,60,0},["bloodscalptusk"]={0,34,0},
+["simonetemptress"]={0,60,0},["simoneseductress"]={0,60,0},["simoneinconspicuous"]={0,60,0},["bloodscalptusk"]={0,34,0},["stormwindcastle"]={0,0,0},
 
 ["bearinlochmodan"]={0,20,0},["dwarvesinwetlands"]={0,31,0},["drakeswampofsorrows"]={0,60,0},
 
