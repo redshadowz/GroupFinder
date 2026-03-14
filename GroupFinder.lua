@@ -3059,16 +3059,18 @@ function GF_GetTypes(arg1, showanyway)
 		end
 	end
 	for i=1, tempVal do if wordTable[i] == "x" then table.remove(wordTable,i) i = i - 1 tempVal=tempVal-1 end end
-	if tempVal <= 9 and wordTable[2] then
-		wordString = "" for i=2,tempVal-1 do wordString = wordString..wordTable[i] end
-		if strsub(arg1,-2) == "? " then
-			if wordTable[1] == "hquest" and GF_WORD_QUEST[wordString..wordTable[tempVal]] or GF_WORD_QUEST[wordTable[1]..wordString..wordTable[tempVal]] then foundLFG = 2 if showanyway == true then print("quest? lfg 2") end
-			elseif GF_GROUP_NO_QUESTION[wordTable[1]] and ((GF_GROUP_IDS[wordString] and GF_GROUP_NO_QUESTION[wordTable[1]][wordTable[tempVal]]) or GF_GROUP_IDS[wordString..wordTable[tempVal]]) then foundLFG = 2.25 if showanyway == true then print("quest? lfg 2") end end
-		elseif wordTable[1] == "hquest" then
-			if GF_WORD_QUEST[wordString] and GF_GROUP_HQUEST_LAST[wordTable[tempVal]] then foundLFM = 2 if showanyway == true then print("quest all lfm 2") end
-			else lfs = 1 while true do lfs,lfe,wordString = strfind(arg1, "\]%s?(%p)[%p%s]",lfs) if not wordString then break end if wordString == "+" or wordString == "?" then foundLFG = 2 if showanyway == true then print("[quest]+ lfg 2") end end lfs = lfe end end
-		end
-	elseif strsub(arg1,1,2) == " +" and GF_WORD_ROLES[wordTable[1]] then foundLFM = 2 if showanyway == true then print("+healer lfg 2") end end
+	if tempVal <= 9 then
+		if wordTable[2] then
+			wordString = "" for i=2,tempVal-1 do wordString = wordString..wordTable[i] end
+			if strsub(arg1,-2) == "? " then
+				if wordTable[1] == "hquest" and GF_WORD_QUEST[wordString..wordTable[tempVal]] or GF_WORD_QUEST[wordTable[1]..wordString..wordTable[tempVal]] then foundLFG = 2 if showanyway == true then print("quest? lfg 2") end
+				elseif GF_GROUP_NO_QUESTION[wordTable[1]] and ((GF_GROUP_IDS[wordString] and GF_GROUP_NO_QUESTION[wordTable[1]][wordTable[tempVal]]) or GF_GROUP_IDS[wordString..wordTable[tempVal]]) then foundLFG = 2.25 if showanyway == true then print("quest? lfg 2") end end
+			elseif wordTable[1] == "hquest" then
+				if GF_WORD_QUEST[wordString] and GF_GROUP_HQUEST_LAST[wordTable[tempVal]] then foundLFM = 2 if showanyway == true then print("quest all lfm 2") end
+				else lfs = 1 while true do lfs,lfe,wordString = strfind(arg1, "\]%s?(%p)[%p%s]",lfs) if not wordString then break end if wordString == "+" or wordString == "?" then foundLFG = 2 if showanyway == true then print("[quest]+ lfg 2") end end lfs = lfe end end
+			end
+		elseif strsub(arg1,1,2) == " +" and GF_WORD_ROLES[wordTable[1]] then foundLFG = 2 if showanyway == true then print("+roles lfg 2") end end
+	end
 	for j=0,7 do
 		for i=1, tempVal do
 			if i+j <= tempVal then
