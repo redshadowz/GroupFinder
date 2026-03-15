@@ -2341,7 +2341,7 @@ function GF_Process_Other_PERIODIC()
 					end
 				else
 					if GF_PlayersCurrentlyInGroup[wordString] then
-						if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][2][wordString] then
+						if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString] then
 							GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString] = { GF_WhoTable[GF_RealmName][wordString][1],GF_WhoTable[GF_RealmName][wordString][2],tonumber(tempString) }
 						else
 							GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] + tonumber(tempString)
