@@ -2152,7 +2152,7 @@ function self:ZONE_CHANGED_NEW_AREA()
 	GF_GroupHistoryZoneUpdate()
 end
 
-function self:CHAT_MSG_COMBAT_SELF_HITS() -- Melee Hits
+function self:CHAT_MSG_COMBAT_SELF_HITS() -- Melee Hits... TODO: Add pet damage... Why was my damage so much higher than in my dps meters? Ohh, it would be my heals as well. Need to split healing and damage?
 --COMBATHITSELFOTHER,COMBATHITCRITSELFOTHER,COMBATHITSCHOOLSELFOTHER,COMBATHITCRITSCHOOLSELFOTHER
 --"You hit %s for %d.", "You crit %s for %d.", "You hit %s for %d %s damage.", "You crit %s for %d %s damage."
 	if GF_NumPartyMembers > 1 then
@@ -3874,6 +3874,7 @@ function GF_ToggleWhisperDropDownMenu(frame,id)
 		GF_DropDownMenu = CreateFrame("Frame", "GF_DropDownMenu", frame, "UIDropDownMenuTemplate")
 		GF_DropDownMenu.name = frame:GetText()
 		GF_DropDownMenu.id = id+GF_WhisperLogOffset
+		if GF_SavedVariables.showwhisperlogs == 2 then GF_DropDownMenu.block = true end
 		UIDropDownMenu_Initialize(GF_DropDownMenu, GF_CreateDropDownMenu, "MENU")
 		ToggleDropDownMenu(1, nil, GF_DropDownMenu, "cursor")
 	end
@@ -3920,7 +3921,7 @@ function GF_CreateDropDownMenu()
 	info.notCheckable = true
 	UIDropDownMenu_AddButton(info, 1)
 
-	if GF_SavedVariables.showwhisperlogs ~= 2 then
+	if not GF_DropDownMenu.block then
 		info = {}
 		info.isTitle = nil
 		info.notCheckable = true
@@ -4430,8 +4431,8 @@ function GF_GroupHistoryDisplayEntryLog(offset)
 	end
 	for i=itemSize+1,maxsize*2 do getglobal("GF_GroupHistoryLogItem"..i):Hide() end
 	local prows = playerSize/ceil(playerSize/maxpsize)
-	local irows = itemSize/ceil(itemSize/maxsize)
-	if prows >= irows or prows > maxsize then
+	local irows = ceil(itemSize/2)
+	if prows >= irows then
 		GF_ShowGroupLogEntryFrame:SetHeight(40 + prows*14)
 	else
 		GF_ShowGroupLogEntryFrame:SetHeight(40 + irows*14)
@@ -5020,7 +5021,7 @@ function GF_LFGCommonCleanup(entryName)
 	GF_PerCharVariables.searchlfgtext = gsub(gsub(gsub(gsub(gsub(gsub(gsub(GF_PerCharVariables.searchlfgtext, "^%d+", ""),"for "..entryName,""),"need "..entryName,""),entryName,""),"/ "," "), "%(HC%)", ""),"%s%s+"," ")
 end
 
-function GF_ClickQueueLFT()
+function GF_ClickQueueLFT() -- TODO: Need to click "Find More" when group leader and looking for more.
 	if LFTFrameMainButtonText:GetText() == LFT_GENERAL_LEAVE_QUEUE_TEXT then
 		LFTFrameMainButton:Click()
 	else
