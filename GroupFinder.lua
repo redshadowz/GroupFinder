@@ -4,7 +4,7 @@ GF_SavedVariables 							= {}
 GF_PerCharVariables							= {}
 GF_RealmName								= GetRealmName()
 GF_PlayingOnTurtle							= nil
-local OnUpdateFunctions						= {}
+GF_OnUpdateFunctions						= {}
 local GF_Hardcore							= nil
 local GF_WhoCooldownTime					= 10
 local GF_NextAvailableWhoTime				= 0
@@ -1595,7 +1595,7 @@ function GF_DisplayLog()
 	end
 end
 function GF_DisplayLogFirst()
-	OnUpdateFunctions["Log"] = nil
+	GF_OnUpdateFunctions["Log"] = nil
 	GF_DisplayLog()
 end
 function GF_GetLogFilters()
@@ -1621,8 +1621,8 @@ end
 function GF_OnUpdate() -- OnUpdate, SendWho, WhoListUpdated, Announce, Broadcast, Update MessageList
 	if GF_UpdateTicker < GetTime() then -- Triggers once per second
 		GF_UpdateTicker = GetTime() + 1
-		for name,_ in OnUpdateFunctions do
-			OnUpdateFunctions[name]()
+		for name,_ in GF_OnUpdateFunctions do
+			GF_OnUpdateFunctions[name]()
 		end
 		if GroupHistoryFinishTimer and GroupHistoryFinishTimer < time() then GF_GroupFinishedAddToGroupHistoryList() GroupHistoryFinishTimer = nil end
 	end
@@ -1711,7 +1711,7 @@ function GF_WhoListUpdated()
 			GF_AddonNamesFromWhoSinceLoggedOn[name] = time()
 		end
 		if GF_UrgentWhoRequest[name] then GF_UrgentWhoRequest[name] = nil if GF_UpdateAndRequestTimer > 4 then GF_UpdateAndRequestTimer = 5 end end
-		if GF_IsGuildieOrPartyMemberUsingAddon() then OnUpdateFunctions["Broadcast"] = GF_CheckForBroadCast end
+		if GF_IsGuildieOrPartyMemberUsingAddon() then GF_OnUpdateFunctions["Broadcast"] = GF_CheckForBroadCast end
 		GF_TimeTillNextBroadcast = 0
 		if GF_ClassWhoRequest and not GF_ClassWhoTable[name] and not GF_PlayersCurrentlyInGroup[name] and level >= GF_GetWhoParams[1]-GF_PerCharVariables.wholevelrange and level <= GF_GetWhoParams[1]+GF_PerCharVariables.wholevelrange
 		and class == GF_GetWhoParams[2] and (not GF_GetWhoParams[3] or (GF_GetWhoParams[3] and not GF_LFG_GROUP_ZONES[zone])) then
@@ -1810,9 +1810,9 @@ function GF_CheckForAnnounce()
 		if GF_AutoAnnounceTimer > GF_SavedVariables.announcetimer then
 			GF_AutoAnnounceTimer = 0
 			if not GF_PerCharVariables.disablehardcore and GF_Hardcore and GF_PerCharVariables.hardcore ~= 3 then
-				SendChatMessage(GF_LFGDescriptionEditBox:GetText(), "HARDCORE", nil, nil)
+				--SendChatMessage(GF_LFGDescriptionEditBox:GetText(), "HARDCORE", nil, nil)
 			else
-				SendChatMessage(GF_LFGDescriptionEditBox:GetText(), "CHANNEL", nil, GF_ChatJoinedChannels[strlower(GF_GroupChannelEditBox:GetText())])
+				--SendChatMessage(GF_LFGDescriptionEditBox:GetText(), "CHANNEL", nil, GF_ChatJoinedChannels[strlower(GF_GroupChannelEditBox:GetText())])
 			end
 			DEFAULT_CHAT_FRAME:AddMessage(GF_SENT..GF_LFGDescriptionEditBox:GetText(),1,1,0.5)
 			GF_AnnounceToLFGButton:SetText(GF_ANNOUNCE_STOP_ANNOUNCE.."-"..GF_SavedVariables.announcetimer - GF_AutoAnnounceTimer)
@@ -1827,6 +1827,7 @@ function GF_TurnOffAnnounce(messageText)
 	GF_AutoAnnounceTimer = nil
 	GF_AnnounceToLFGButton:SetText(GF_ANNOUNCE_ANNOUNCE_GROUP)
 	DEFAULT_CHAT_FRAME:AddMessage("GF: "..messageText,1,1,0.5)
+	GF_OnUpdateFunctions["Announce"] = nil
 end
 function GF_TurnOnAnnounce()
 	if not GF_ChatJoinedChannels[strlower(GF_GroupChannelEditBox:GetText())] then GF_GetJoinedChannels() if not GF_ChatJoinedChannels[strlower(GF_GroupChannelEditBox:GetText())] then GF_TurnOffAnnounce(GF_AUTO_ANNOUNCE_NOT_IN_CHANNEL) return end end
@@ -1834,6 +1835,7 @@ function GF_TurnOnAnnounce()
 	if UnitIsPartyLeader("player") then GF_WasPartyLeaderBefore = true end
 	GF_AnnounceToLFGButton:SetText(GF_ANNOUNCE_STOP_ANNOUNCE.."-"..GF_SavedVariables.announcetimer)
 	DEFAULT_CHAT_FRAME:AddMessage("GF: "..GF_AUTO_ANNOUNCE_TURNED_ON,1,1,0.5)
+	GF_OnUpdateFunctions["Announce"] = GF_CheckForAnnounce
 end
 function GF_UpdateGroupsFrame()
 	GF_UpdateAndRequestTimer = GF_UpdateAndRequestTimer - 1
@@ -1851,7 +1853,7 @@ function GF_UpdateGroupsFrame()
 			end
 			if GF_AddonMakeAListOfGroupsForSending and not GF_AddonOPSentNamesOnLogin[GF_MessageList[GF_RealmName][i].op] and GF_MessageList[GF_RealmName][i].t + 300 > time() then
 				GF_AddonGroupDataToBeSentBuffer[GF_MessageList[GF_RealmName][i].op] = GF_MessageList[GF_RealmName][i]
-				OnUpdateFunctions["Broadcast"] = GF_CheckForBroadCast
+				GF_OnUpdateFunctions["Broadcast"] = GF_CheckForBroadCast
 			end
 		end
 		GF_AddonMakeAListOfGroupsForSending = nil
@@ -1882,18 +1884,18 @@ function GF_RequestAdditionalWhoDataUpdates() -- Data-Sharing algorithm.... Ever
 				GF_AddonNamesToBeSentAsARequest[GF_WhoQueue[i]] = true
 			end
 			GF_TimeTillNextBroadcast = 0
-			OnUpdateFunctions["Broadcast"] = GF_CheckForBroadCast
+			GF_OnUpdateFunctions["Broadcast"] = GF_CheckForBroadCast
 		end
 	end
-	if not GF_IsGuildieOrPartyMemberUsingAddon() then OnUpdateFunctions["WhoData"] = nil end
+	if not GF_IsGuildieOrPartyMemberUsingAddon() then GF_OnUpdateFunctions["WhoData"] = nil end
 end
 function GF_CheckForBroadCast()
-	OnUpdateFunctions["Broadcast"] = nil
+	GF_OnUpdateFunctions["Broadcast"] = nil
 	local counter = 0
 	local addonsendstring = "U" -- Send List of Groups on Login
 	if GF_OnStartupQueueURequest then
 		for i=GF_OnStartupQueueURequest, getn(GF_MessageList[GF_RealmName]) do
-			if counter > 2 then OnUpdateFunctions["Broadcast"] = GF_CheckForBroadCast GF_OnStartupQueueURequest = i return end
+			if counter > 2 then GF_OnUpdateFunctions["Broadcast"] = GF_CheckForBroadCast GF_OnStartupQueueURequest = i return end
 			if GF_MessageList[GF_RealmName][i].t + 300 > time() then
 				addonsendstring = addonsendstring..":"..GF_MessageList[GF_RealmName][i].op
 				if strlen(addonsendstring) > 240 then
@@ -1918,7 +1920,7 @@ function GF_CheckForBroadCast()
 			if sendType > 1 then SendAddonMessage("GF", entry.t..entry.op..":"..entry.message, "PARTY") end
 			if GF_WhoTable[GF_RealmName][entry.op] then GF_AddonAllNamesForResponseToLogin[entry.op] = true end
 			counter = counter + 1
-			if counter > 2 then OnUpdateFunctions["Broadcast"] = GF_CheckForBroadCast return end
+			if counter > 2 then GF_OnUpdateFunctions["Broadcast"] = GF_CheckForBroadCast return end
 		end
 	end
 
@@ -1930,7 +1932,7 @@ function GF_CheckForBroadCast()
 			if sendType == 1 or sendType == 3 then SendAddonMessage("GF", addonsendstring, "GUILD") end if sendType > 1 then SendAddonMessage("GF", addonsendstring, "PARTY") end
 			addonsendstring = "W"
 			counter = counter + 1
-			if counter > 2 then OnUpdateFunctions["Broadcast"] = GF_CheckForBroadCast return end
+			if counter > 2 then GF_OnUpdateFunctions["Broadcast"] = GF_CheckForBroadCast return end
 		end
 	end
 	if strlen(addonsendstring) > 1 then if sendType == 1 or sendType == 3 then SendAddonMessage("GF", addonsendstring, "GUILD") end if sendType > 1 then SendAddonMessage("GF", addonsendstring, "PARTY") end end
@@ -1943,7 +1945,7 @@ function GF_CheckForBroadCast()
 			if sendType == 1 or sendType == 3 then SendAddonMessage("GF", addonsendstring, "GUILD") end if sendType > 1 then SendAddonMessage("GF", addonsendstring, "PARTY") end
 			addonsendstring = "R"
 			counter = counter + 1
-			if counter > 2 then OnUpdateFunctions["Broadcast"] = GF_CheckForBroadCast return end
+			if counter > 2 then GF_OnUpdateFunctions["Broadcast"] = GF_CheckForBroadCast return end
 		end
 	end
 	if strlen(addonsendstring) > 1 then if sendType == 1 or sendType == 3 then SendAddonMessage("GF", addonsendstring, "GUILD") end if sendType > 1 then SendAddonMessage("GF", addonsendstring, "PARTY") end end
@@ -1958,7 +1960,7 @@ function GF_CheckForBroadCast()
 				if sendType == 1 or sendType == 3 then SendAddonMessage("GF", addonsendstring, "GUILD") end if sendType > 1 then SendAddonMessage("GF", addonsendstring, "PARTY") end
 				addonsendstring = ""
 				counter = counter + 1
-				if counter > 2 then OnUpdateFunctions["Broadcast"] = GF_CheckForBroadCast return end
+				if counter > 2 then GF_OnUpdateFunctions["Broadcast"] = GF_CheckForBroadCast return end
 			end
 		end
 	end
@@ -1991,14 +1993,14 @@ function GF_ParseIncomingAddonMessages(msg)
 		GF_RequestWhoDataPeriodicallyTimer = 300
 		GF_AddonMakeAListOfGroupsForSending = true
 		GF_UpdateAndRequestTimer = 0
-		OnUpdateFunctions["Broadcast"] = GF_CheckForBroadCast
+		GF_OnUpdateFunctions["Broadcast"] = GF_CheckForBroadCast
 	elseif strsub(msg,1,1) == "W" then -- (To Everyone) A list of names available to be requested(up to 240 characters). Add to 'GF_AddonNamesToBeSentAsARequest' if the name is not in 'GF_WhoTable'. Then delete from 'GF_AddonAllNamesForResponseToLogin'.
 		for sentname in string.gfind(msg, ":(%w+)") do -- This works 100% correctly. 'GF_AddonAllNamesForResponseToLogin' is removed either when responding with a "R" message or when receiving either a ":" or full group message.
 			if not GF_WhoTable[GF_RealmName][sentname] then GF_AddonNamesToBeSentAsARequest[sentname] = true end
 			GF_AddonAllNamesForResponseToLogin[sentname] = nil
 		end
 		GF_TimeTillNextBroadcast = (math.random(80))/4
-		OnUpdateFunctions["Broadcast"] = GF_CheckForBroadCast
+		GF_OnUpdateFunctions["Broadcast"] = GF_CheckForBroadCast
 	elseif strsub(msg,1,1) == "R" then -- (To Everyone) The list of names requested(up to 240 characters). Add to 'GF_AddonWhoDataToBeSentBuffer' if I have 'GF_WhoTable'. Then delete the names I was going to request('GF_AddonNamesToBeSentAsARequest').
 		for sentname in string.gfind(msg, ":(%w+)") do -- This works 100% correctly. 'GF_AddonWhoDataToBeSentBuffer' is removed when sending or receiving a ":" message or a full group message.
 			if GF_WhoTable[GF_RealmName][sentname] and (GF_WhoTable[GF_RealmName][sentname][1] == 60 or GF_WhoTable[GF_RealmName][sentname][4] + 86400 > time()) then
@@ -2007,7 +2009,7 @@ function GF_ParseIncomingAddonMessages(msg)
 			GF_AddonNamesToBeSentAsARequest[sentname] = nil
 		end
 		GF_TimeTillNextBroadcast = (math.random(80))/4
-		OnUpdateFunctions["Broadcast"] = GF_CheckForBroadCast
+		GF_OnUpdateFunctions["Broadcast"] = GF_CheckForBroadCast
 	elseif strsub(msg,1,1) == ":" then -- (To Everyone) This is 'GF_WhoTable' data. Add to your 'GF_WhoTable' and delete from 'GF_AddonAllNamesForResponseToLogin', 'GF_AddonNamesToBeSentAsARequest', and 'GF_AddonWhoDataToBeSentBuffer'.
 		for sentlevel,sentname,sentclass,sentguild,senttime in string.gfind(msg, ":(%d+)([a-zA-Z]+)(%d)([a-zA-Z%s]+)(%d+)") do -- This works 100% correctly.
 			if sentguild == "Z" then sentguild = "" end
@@ -2043,9 +2045,10 @@ function GF_ParseIncomingAddonMessages(msg)
 end
 
 function self:ADDON_LOADED() -- Event handlers called directly
-	self:Show()
-	GF_OnLoad()				
-	if arg1 == "pfQuest" then
+	if arg1 == "GroupFinder" then
+		self:Show()
+		GF_OnLoad()
+	elseif arg1 == "pfQuest" then
 		local alt_QuestLogTitleButton_OnClick = QuestLogTitleButton_OnClick
 		function QuestLogTitleButton_OnClick(button, self)
 			if GF_LFGDescriptionEditBoxHasFocus[1] and button == "LeftButton" and IsShiftKeyDown() then
@@ -2059,10 +2062,9 @@ function self:ADDON_LOADED() -- Event handlers called directly
 			alt_QuestLogTitleButton_OnClick(button, self)
 		end
 	end
-	self:UnregisterEvent("ADDON_LOADED")
 end
 function self:CHAT_MSG_ADDON()
-	if arg1 == "GF" and arg4 ~= UnitName("player") then GF_AddonListOfGuildAndPartyMembersWithAddon[arg4] = true GF_ParseIncomingAddonMessages(arg2,arg4) OnUpdateFunctions["WhoData"] = GF_RequestAdditionalWhoDataUpdates end
+	if arg1 == "GF" and arg4 ~= UnitName("player") then GF_AddonListOfGuildAndPartyMembersWithAddon[arg4] = true GF_ParseIncomingAddonMessages(arg2,arg4) GF_OnUpdateFunctions["WhoData"] = GF_RequestAdditionalWhoDataUpdates end
 end
 function self:FRIENDLIST_UPDATE()
 	if GetNumFriends() ~= GF_CurrentNumFriends then GF_UpdateFriendsList() end
@@ -2091,8 +2093,8 @@ function self:PLAYER_ENTERING_WORLD() -- When logging in in a group, PLAYER_ENTE
 		self:RegisterEvent(event)
 	end
 	self:SetScript('OnUpdate', function() GF_OnUpdate() end)
-	OnUpdateFunctions = {["Broadcast"] = GF_CheckForBroadCast,["Groups"] = GF_UpdateGroupsFrame,["WhoData"] = GF_RequestAdditionalWhoDataUpdates,["Announce"] = GF_CheckForAnnounce,
-	["Who"] = GF_SendWhoIfNameInQueue,["Friendslist"] = GF_UpdateWhoDataViaFriendsList,["Delayed"] = GF_CheckForDelayedMessages, ["Log"] = GF_DisplayLogFirst }
+	GF_OnUpdateFunctions = {["Broadcast"] = GF_CheckForBroadCast,["Groups"] = GF_UpdateGroupsFrame,["Who"] = GF_SendWhoIfNameInQueue,["Delayed"] = GF_CheckForDelayedMessages,["Log"] = GF_DisplayLogFirst }
+	if GF_SavedVariables.usefriendslist and GF_SavedVariables.usewhoongroups then GF_OnUpdateFunctions["Friendslist"] = GF_UpdateWhoDataViaFriendsList end
 	GF_LoadVariables()
 	GF_LoadSettings()
 	GF_UpdateBlackListItems()
@@ -2100,7 +2102,6 @@ function self:PLAYER_ENTERING_WORLD() -- When logging in in a group, PLAYER_ENTE
 	if not GF_SavedVariables.addonsendtimeout or GF_SavedVariables.addonsendtimeout + 900 < time() then
 		GF_SavedVariables.addonsendtimeout = time()
 		GF_OnStartupQueueURequest = 1
-		OnUpdateFunctions["Broadcast"] = GF_CheckForBroadCast
 	else
 		if GetGuildInfo("player") then SendAddonMessage("GF", "Z", "GUILD") end
 		if GF_NumPartyMembers > 1 then SendAddonMessage("GF", "Z", "PARTY") end
@@ -2111,6 +2112,7 @@ function self:PLAYER_ENTERING_WORLD() -- When logging in in a group, PLAYER_ENTE
 	SaveBindings(1)
 	GF_JoinWorld()
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+	self:UnregisterEvent("ADDON_LOADED")
 end
 function self:PLAYER_LEAVING_WORLD()
 	if GF_SavedVariables.mainframestatus == 0 then
@@ -2642,7 +2644,7 @@ function GF_CheckForSystem(arg1)
 				GF_AddonNamesFromWhoSinceLoggedOn[name] = time()
 			end
 			if GF_UrgentWhoRequest[name] then GF_UrgentWhoRequest[name] = nil GF_UpdateAndRequestTimer = .5 end
-			if GF_IsGuildieOrPartyMemberUsingAddon() then OnUpdateFunctions["Broadcast"] = GF_CheckForBroadCast end
+			if GF_IsGuildieOrPartyMemberUsingAddon() then GF_OnUpdateFunctions["Broadcast"] = GF_CheckForBroadCast end
 			GF_TimeTillNextBroadcast = 0
 		end
 		GF_NextAvailableWhoTime = time() + GF_WhoCooldownTime
@@ -4185,10 +4187,10 @@ function GF_GroupFinishedAddToGroupHistoryList()
 			for name,_ in GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][3] do numNames = numNames + 1 if not GF_GroupHistory[GF_RealmName]["PLAYERS"][name] then GF_GroupHistory[GF_RealmName]["PLAYERS"][name] = 1 else GF_GroupHistory[GF_RealmName]["PLAYERS"][name] = GF_GroupHistory[GF_RealmName]["PLAYERS"][name] + 1 end end
 			for _,_ in GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][4] do numItems = numItems + 1 end
 			if numNames > 1 and numItems > 0 then
-				table.insert(GF_GroupHistory[GF_RealmName]["Groups"],1,{GF_PerCharVariables.CurrentGroup[i][1],time(),GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][3],GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][4]})
+				table.insert(GF_GroupHistory[GF_RealmName]["Groups"],1,{GF_PerCharVariables.CurrentGroup[i],time(),GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][3],GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][4]})
 				if getn(GF_GroupHistory[GF_RealmName]["Groups"]) > 20 then table.remove(GF_LogHistory[GF_RealmName],21) end
 				if not GF_GroupHistory[GF_RealmName][strsub(GF_PerCharVariables.CurrentGroup[i],1,12)] then GF_GroupHistory[GF_RealmName][strsub(GF_PerCharVariables.CurrentGroup[i],1,12)] = {} end
-				table.insert(GF_GroupHistory[GF_RealmName][strsub(GF_PerCharVariables.CurrentGroup[i],1,12)],1,{GF_PerCharVariables.CurrentGroup[i][1],time(),GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][3],GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][4]})
+				table.insert(GF_GroupHistory[GF_RealmName][strsub(GF_PerCharVariables.CurrentGroup[i],1,12)],1,{GF_PerCharVariables.CurrentGroup[i],time(),GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][3],GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][4]})
 				if getn(GF_GroupHistory[GF_RealmName][strsub(GF_PerCharVariables.CurrentGroup[i],1,12)]) > 20 then table.remove(GF_LogHistory[GF_RealmName],21) end
 				if GF_SavedVariables.showwhisperlogs == 2 then GF_GroupHistoryUpdateFrame(strsub(GF_PerCharVariables.CurrentGroup[i],1,12)) else GF_GroupHistoryUpdateFrame(strsub(GF_PerCharVariables.CurrentGroup[i],1,12),true) end
 			end

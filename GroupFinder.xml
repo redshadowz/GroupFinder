@@ -1553,7 +1553,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								if not GF_SavedVariables.usewhoongroups then
 									GF_WhoQueue = {}
 									for name,data in GF_SavedVariables.friendsToRemove do if data > time() then GF_SavedVariables.friendsToRemove[name] = nil end end
-								end
+									GF_OnUpdateFunctions["Friendslist"] = nil
+								elseif GF_SavedVariables.usefriendslist then GF_OnUpdateFunctions["Friendslist"] = GF_UpdateWhoDataViaFriendsList
+								else GF_OnUpdateFunctions["Friendslist"] = nil end
 							</OnClick>
 							<OnLoad>
 								getglobal(this:GetName().."TextLabel"):SetText(GF_USE_WHO_ON_GROUPS)
@@ -5308,6 +5310,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Scripts>
 									<OnClick>
 										GF_SavedVariables.usefriendslist = this:GetChecked()
+										if GF_SavedVariables.usefriendslist and GF_SavedVariables.usewhoongroups then GF_OnUpdateFunctions["Friendslist"] = GF_UpdateWhoDataViaFriendsList else GF_OnUpdateFunctions["Friendslist"] = nil end
 									</OnClick>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_USE_FRIENDS_LIST_WHO)
