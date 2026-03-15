@@ -454,7 +454,7 @@ function GF_LoadSettings()
 	GF_UpdateFriendsList()
 	GF_UpdateGuildiesList()
 	if not ProcessedFirstMessage then GF_UpdateTicker = GetTime() + 10 end
-	if GF_SavedVariables.showwhisperlogs == 2 then GF_GroupHistoryUpdateFrame() else GF_WhisperHistoryUpdateFrame() end
+	if GF_SavedVariables.showwhisperlogs == 2 then GF_GroupHistoryUpdateFrame() elseif GF_SavedVariables.showwhisperlogs == 1 then GF_WhisperHistoryUpdateFrame() end
 	GF_GetLogFilters()
 	GF_PruneTheClassWhoTable()
 	GF_SetStringSize()
@@ -2216,10 +2216,10 @@ end
 function self:CHAT_MSG_SPELL_PARTY_DAMAGE()
 	GF_Process_Other_SPELL()
 end
-function self:CHAT_MSG_SPELL_FRIENDLYPLAYER_DAMAGE() -- Spell hits... SPELLLOGSCHOOLOTHEROTHER, SPELLLOGCRITSCHOOLOTHEROTHER, SPELLLOGOTHEROTHER, SPELLLOGCRITOTHEROTHER
+function self:CHAT_MSG_SPELL_FRIENDLYPLAYER_DAMAGE()
 	GF_Process_Other_SPELL()
 end
-function self:CHAT_MSG_SPELL_HOSTILEPLAYER_DAMAGE() -- Spell hits... SPELLLOGSCHOOLOTHEROTHER, SPELLLOGCRITSCHOOLOTHEROTHER, SPELLLOGOTHEROTHER, SPELLLOGCRITOTHEROTHER
+function self:CHAT_MSG_SPELL_HOSTILEPLAYER_DAMAGE()
 	GF_Process_Other_SPELL()
 end
 function GF_Process_Other_SPELL()
@@ -2242,7 +2242,7 @@ function GF_Process_Other_SPELL()
 	end
 end
 
-function self:CHAT_MSG_SPELL_SELF_BUFF() -- Healing spells
+function self:CHAT_MSG_SPELL_SELF_BUFF() -- Healing spells... TODO: Check for overhealing
 --HEALEDSELFOTHER,HEALEDCRITSELFOTHER,HEALEDSELFSELF,HEALEDCRITSELFSELF
 --"Your %s heals %s for %d.","Your %s critically heals %s for %d.","Your %s heals you for %d.","Your %s critically heals you for %d."
 	if GF_NumPartyMembers > 1 then
@@ -2288,7 +2288,7 @@ function GF_Process_Other_BUFF()
 	end
 end
 
-function self:CHAT_MSG_SPELL_PERIODIC_SELF_BUFFS() -- Healing spells
+function self:CHAT_MSG_SPELL_PERIODIC_SELF_BUFFS() -- Periodic Healing spells... TODO: Check for overhealing
 --PERIODICAURAHEALOTHERSELF,PERIODICAURAHEALSELFSELF
 --"You gain %d health from %s's %s.","You gain %d health from %s."
 	if GF_NumPartyMembers > 1 then
@@ -2609,19 +2609,23 @@ function GF_CheckForEmotes(arg1,arg2)
 	end
 	GF_PreviousMessage[arg2] = {true}
 end
-function GF_CheckForLoot(arg1)
-	local tempVal,wordString,tempString = 0
-	if strfind(arg1, "9d9d9d") then if not GF_SavedVariables.showloottexts then GF_PreviousMessage["SYSTEM"] = {} return end -- Block grey Items
-	elseif strfind(arg1, "1eff00") then -- Block 'selected need/greed/pass' and rolls on green items
-		if not GF_SavedVariables.showloottexts then for i=1, 7 do if strfind(arg1, GF_LootFilters[i]) then GF_PreviousMessage["SYSTEM"] = {} return end end end
-		for i=8,10 do _,_,wordString = strfind(arg1, GF_LootFilters[i]) if wordString then tempVal = 1 break end end
-	elseif not strfind(arg1, "ffffff") then
-		if not GF_SavedVariables.showloottexts then for i=1, 2 do if strfind(arg1, GF_LootFilters[i]) then GF_PreviousMessage["SYSTEM"] = {} return end end end -- Block only 'need/greed' rolls on other items
-		for i=8,10 do _,_,wordString = strfind(arg1, GF_LootFilters[i]) if wordString then tempVal = 2 break end end
-	end
-	if GF_NumPartyMembers > 1 then
-		if tempVal == 1 then GF_PerCharVariables.CurrentGroup[GF_CurrentZone].v = true
-		elseif tempVal == 2 then GF_PerCharVariables.CurrentGroup[GF_CurrentZone].v = true _,_,tempString = strfind(arg1,"|%x+|H(item:[%d+:]+)") if tempString then if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][tempString] then GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][tempString] = {wordString} else table.insert(GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][tempString],wordString) end end end
+function GF_CheckForLoot(arg1) -- TODO: If an item is "WON" and then looted later, it will show the item twice?
+	local tempVal,wordString = 0
+	local _,_,itemid = strfind(arg1,"|%x+|H(item:[%d+:]+)")
+	if itemid then
+		local _,_,iQuality = GetItemInfo(itemid)
+		if iQuality == 0 then if not GF_SavedVariables.showloottexts then GF_PreviousMessage["SYSTEM"] = {} return end -- Block grey Items
+		elseif iQuality == 2 then
+			if not GF_SavedVariables.showloottexts then for i=1, 7 do if strfind(arg1, GF_LootFilters[i]) then GF_PreviousMessage["SYSTEM"] = {} return end end end -- Block 'selected need/greed/pass' and rolls on green items
+			tempVal = 1
+		elseif iQuality > 2 then
+			if not GF_SavedVariables.showloottexts then for i=1, 2 do if strfind(arg1, GF_LootFilters[i]) then GF_PreviousMessage["SYSTEM"] = {} return end end end -- Block only 'need/greed' rolls on other items
+			for i=8,10 do _,_,wordString = strfind(arg1, GF_LootFilters[i]) if wordString then tempVal = 2 break end end
+		end
+		if GF_NumPartyMembers > 1 then
+			if tempVal == 1 then GF_PerCharVariables.CurrentGroup[GF_CurrentZone].v = true
+			elseif tempVal == 2 then GF_PerCharVariables.CurrentGroup[GF_CurrentZone].v = true if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][4][itemid] then GF_PerCharVariables.CurrentGroup[GF_CurrentZone][4][itemid] = {wordString} else table.insert(GF_PerCharVariables.CurrentGroup[GF_CurrentZone][4][itemid],wordString) end end
+		end
 	end
 	GF_PreviousMessage["SYSTEM"] = {true}
 end
@@ -3868,7 +3872,6 @@ function GF_ToggleWhisperDropDownMenu(frame,id)
 		GF_DropDownMenu = CreateFrame("Frame", "GF_DropDownMenu", frame, "UIDropDownMenuTemplate")
 		GF_DropDownMenu.name = frame:GetText()
 		GF_DropDownMenu.id = id+GF_WhisperLogOffset
-		if GF_SavedVariables.showwhisperlogs == 2 then GF_DropDownMenu.block = true end
 		UIDropDownMenu_Initialize(GF_DropDownMenu, GF_CreateDropDownMenu, "MENU")
 		ToggleDropDownMenu(1, nil, GF_DropDownMenu, "cursor")
 	end
@@ -3915,7 +3918,7 @@ function GF_CreateDropDownMenu()
 	info.notCheckable = true
 	UIDropDownMenu_AddButton(info, 1)
 
-	if not GF_DropDownMenu.block then
+	if GF_SavedVariables.showwhisperlogs ~= 2 then
 		info = {}
 		info.isTitle = nil
 		info.notCheckable = true
@@ -3980,7 +3983,7 @@ function GF_CreateDropDownMenu()
 				GF_WhisperLogData[GF_RealmName][GF_DropDownMenu.name] = nil
 				table.remove(GF_WhisperLogData[GF_RealmName],GF_DropDownMenu.id)
 				GF_WhisperHistoryUpdateFrame()
-			else
+			elseif GF_SavedVariables.showwhisperlogs == 2 then
 				GF_GroupHistory[GF_RealmName][GF_DropDownMenu.name] = nil
 				table.remove(GF_GroupHistory[GF_RealmName],GF_DropDownMenu.id)
 				GF_GroupHistoryUpdateFrame()
@@ -4158,7 +4161,7 @@ function GF_WhisperReceivedAddToWhisperHistoryList(arg1,arg2,event,nodelay)
 		end
 		table.insert(GF_LogHistory[GF_RealmName],1,{arg1,4,event})
 		if getn(GF_LogHistory[GF_RealmName]) > 500 then table.remove(GF_LogHistory[GF_RealmName],501) end
-		if GF_WhisperLogCurrentButtonID < 2 or arg2 == getglobal("GF_WhisperHistoryButton"..GF_WhisperLogCurrentButtonID):GetText() then
+		if GF_SavedVariables.showwhisperlogs == 1 and (GF_WhisperLogCurrentButtonID < 2 or arg2 == getglobal("GF_WhisperHistoryButton"..GF_WhisperLogCurrentButtonID):GetText()) then
 			if GF_ConvertMessagesToLinks then
 				local _,_,startString,endString = strfind(arg1, "(.-%].-|Hplayer.-|h|r:? )(.*)")
 				if startString then
@@ -4187,7 +4190,7 @@ function GF_GroupFinishedAddToGroupHistoryList()
 				if not GF_GroupHistory[GF_RealmName][strsub(GF_PerCharVariables.CurrentGroup[i],1,12)] then GF_GroupHistory[GF_RealmName][strsub(GF_PerCharVariables.CurrentGroup[i],1,12)] = {} end
 				table.insert(GF_GroupHistory[GF_RealmName][strsub(GF_PerCharVariables.CurrentGroup[i],1,12)],1,{GF_PerCharVariables.CurrentGroup[i][1],time(),GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][3],GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][4]})
 				if getn(GF_GroupHistory[GF_RealmName][strsub(GF_PerCharVariables.CurrentGroup[i],1,12)]) > 20 then table.remove(GF_LogHistory[GF_RealmName],21) end
-				if GF_SavedVariables.showwhisperlogs == 2 then GF_GroupHistoryUpdateFrame(strsub(GF_PerCharVariables.CurrentGroup[i],1,12)) else  GF_GroupHistoryUpdateFrame(strsub(GF_PerCharVariables.CurrentGroup[i],1,12),true) end
+				if GF_SavedVariables.showwhisperlogs == 2 then GF_GroupHistoryUpdateFrame(strsub(GF_PerCharVariables.CurrentGroup[i],1,12)) else GF_GroupHistoryUpdateFrame(strsub(GF_PerCharVariables.CurrentGroup[i],1,12),true) end
 			end
 		end
 	end
