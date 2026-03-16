@@ -784,7 +784,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</Anchors>
 		</HighlightTexture>
 	</Button>
-	<Button name="GF_GroupHistoryPlayerButtonTemplate" enableMouse="true" toplevel="true" virtual="true">
+	<Button name="GF_GroupHistoryPlayerButtonTemplate" enableMouse="true" toplevel="true" hidden="true" virtual="true">
 		<Size>
 			<AbsDimension x="100" y="14"/>
 		</Size>
@@ -813,7 +813,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</OnLeave>
 		</Scripts>
 	</Button>
-	<Button name="GF_GroupHistoryItemButtonTemplate" enableMouse="true" toplevel="true" virtual="true">
+	<Button name="GF_GroupHistoryItemButtonTemplate" enableMouse="true" toplevel="true" hidden="true" virtual="true">
 		<Size>
 			<AbsDimension x="100" y="14"/>
 		</Size>

@@ -419,7 +419,6 @@ function GF_LoadSettings()
 		GF_SavedVariables.alwaysshowguild, GF_SavedVariables.questmod, GF_SavedVariables.purgepfdb, GF_SavedVariables.logchannels, GF_SavedVariables.logparty, GF_SavedVariables.logguild, GF_SavedVariables.logwhisper, GF_SavedVariables.logsay,
 		GF_SavedVariables.logyell, GF_SavedVariables.loghardcore, GF_PerCharVariables.lfglevel, GF_PerCharVariables.lfgdps, GF_PerCharVariables.lfgheal, GF_PerCharVariables.lfgtank,GF_SavedVariables.clickcombos,GF_PerCharVariables.disablehardcore,
 		GF_SavedVariables.usefriendslist,GF_SavedVariables.blacklisttrades,GF_SavedVariables.blacklistguild,GF_SavedVariables.blacklistchat,GF_SavedVariables.blacklistforeign,GF_SavedVariables.iconpriority, }
-
 	VarNames = { "GF_ChatFilterGroupsInChatCheckButton","GF_ChatFilterGroupsInMinimapCheckButton","GF_ChatFilterGroupsNewOnlyCheckButton","GF_ChatFilterShowChatCheckButton","GF_ChatFilterShowTradesCheckButton","GF_ChatFilterShowLootCheckButton",
 		"GF_ChatFilterShowGuildsCheckButton","GF_AutoFilterCheckButton","GF_GroupFilterShowDungeonCheckButton","GF_GroupFilterShowRaidCheckButton","GF_GroupFilterShowQuestCheckButton","GF_GroupFilterShowOtherCheckButton","GF_GroupsFrameShowLFMCheckButton",
 		"GF_GroupsFrameShowLFGCheckButton","GF_LogFilterShowGroups","GF_LogFilterShowFiltered","GF_LogFilterShowChat","GF_LogFilterShowTrades","GF_LogFilterShowGuild","GF_LogFilterShowLoot","GF_LogFilterShowSpam","GF_LogFilterShowBlacklist",
@@ -891,9 +890,9 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 	end
 	local old_LFTFrame_OnEvent = LFTFrame_OnEvent
 	function LFTFrame_OnEvent()
+		old_LFTFrame_OnEvent()
 		if event == "CHAT_MSG_ADDON" then
 			if arg1 == LFT_ADDON_PREFIX and strfind(arg2, "S2C_ROLECHECK_START") then
-				old_LFTFrame_OnEvent()
 				if GF_PerCharVariables.lfgtank or GF_PerCharVariables.lfgheal or GF_PerCharVariables.lfgdps then
 					if GF_PerCharVariables.lfgtank then if not LFTRoleCheckFrameRoleTankCheckButton:GetChecked() then LFTRoleCheckFrameRoleTankCheckButton:Click() end else if LFTRoleCheckFrameRoleTankCheckButton:GetChecked() then LFTRoleCheckFrameRoleTankCheckButton:Click() end end
 					if GF_PerCharVariables.lfgheal then if not LFTRoleCheckFrameRoleHealerCheckButton:GetChecked() then LFTRoleCheckFrameRoleHealerCheckButton:Click() end else if LFTRoleCheckFrameRoleHealerCheckButton:GetChecked() then LFTRoleCheckFrameRoleHealerCheckButton:Click() end end
@@ -901,8 +900,6 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 					LFTRoleCheckFrameConfirmButton:Click()
 					DEFAULT_CHAT_FRAME:AddMessage("GF: "..GF_AUTO_QUEUE_IN_LFT,1,1,0.5)
 				end
-			else
-				old_LFTFrame_OnEvent()
 			end
 		end
 	end
@@ -1466,7 +1463,7 @@ function GF_ChatReplaceHplayer(arg1)
 	end
 	return arg1
 end
-function GF_ChatReplaceHquestLevels(arg1)
+function GF_ChatReplaceHquestLevels(arg1) -- TODO: Replace Quest Names once I add them to database
 	local lfs,lfe,questID,questLevel,questName
 	lfs = 1
 	while true do
@@ -2611,7 +2608,7 @@ function GF_CheckForEmotes(arg1,arg2)
 	end
 	GF_PreviousMessage[arg2] = {true}
 end
-function GF_CheckForLoot(arg1) -- TODO: If an item is "WON" and then looted later, it will show the item twice?
+function GF_CheckForLoot(arg1) -- TODO: If an item is "WON" and then looted later, it will show the item twice? Add Green items but only show blue or better in scrolling chatframe. Put Green items at the end of the list(epics at top).
 	local tempVal,wordString = 0
 	local _,_,itemid = strfind(arg1,"|%x+|H(item:[%d+:]+)")
 	if itemid then
@@ -2760,9 +2757,9 @@ function GF_GetTypes(arg1, showanyway)
 
 	if strfind(arg1, "%d+p[%p%s]") then foundLFM = 2 if showanyway == true then print("##p lfm 2") end end -- "10p heal" messages from chinese
 	lfs = 1 -- To detect space/lf##m/letter(eg "lf15mbwl" = lfm bwl)
-	while true do lfs,lfe,wordString = strfind(arg1,"[%p%s]([lk]f?%s?%d+m)[%p%s]",lfs) if wordString then arg1 = strsub(arg1,1,lfs).."lfm "..strsub(arg1,lfs+strlen(wordString)+1) lfs = lfs + 4 foundLFM = 3 foundGuildExclusion = 1 foundTradesExclusion = 1 if showanyway == true then print("lf##m lfm 3 .. guildex 1... tradesex 1") end else break end end
+	while true do lfs,lfe,wordString = strfind(arg1,"[%p%s]([lk]f?%s?%d+m)[%p%s]",lfs) if wordString then arg1 = strsub(arg1,1,lfs)..GF_LFM_LOCALIZED.." "..strsub(arg1,lfs+strlen(wordString)+1) lfs = lfs + 4 foundLFM = 3 foundGuildExclusion = 1 foundTradesExclusion = 1 if showanyway == true then print("lf##m lfm 3 .. guildex 1... tradesex 1") end else break end end
 	lfs = 1 -- To detect space/number+/punctuation/number+/space for groups
-	while true do lfs,lfe,wordString = strfind(arg1,"[%p%s]%d%d?([=/v])%d%d?[%p%s]",lfs) if wordString then if wordString == "=" then foundLFM = 2 lfs = lfe else arg1 = strsub(arg1,1,lfs).."group"..strsub(arg1,lfe) lfs = lfs + 6 end else break end end
+	while true do lfs,lfe,wordString = strfind(arg1,"[%p%s]%d%d?([=/v])%d%d?[%p%s]",lfs) if wordString then if wordString == "=" then foundLFM = 2 lfs = lfe else arg1 = strsub(arg1,1,lfs)..GF_GROUP_GOING_LOCALIZED..strsub(arg1,lfe) lfs = lfs + 6 end else break end end
 	lfs,lfe,wordString,tempString = strfind(arg1,"[%p%s](%d?%d?%s?\-?([-\+±]))\-?%s?%d?%d?[%p%s]")
 	if wordString then -- To detect "+- or ±"
 		if tempString == "±" then foundTrades = foundTrades + 1 if showanyway == true then print("± trade 1") end
@@ -4374,7 +4371,7 @@ function GF_WhisperHistoryPriorityListCheckButtonPressed(id,name,priority)
 		GF_GroupHistoryUpdateFrame(name)
 	end
 end
-function GF_GroupHistoryDisplayEntryLog(offset)
+function GF_GroupHistoryDisplayEntryLog(offset) -- TODO: Display items together. Sort by rarity... Display both healing and damage... Add pet damage.
 	if not GroupHistoryLogTable then return end
 	local maxsize,maxpsize = 25,25
 	local playerTable = {} -- Players
@@ -4692,7 +4689,7 @@ function GF_CreateGetWhoNameLink(name)
 	return "|cff"..(GF_ClassColors[GF_ClassWhoTable[name][2]] or "ffffff").."|Hplayer:"..name.."|h["..name..", "..GF_ClassWhoTable[name][1].."]|h|r"
 end
 
-function GF_FixLFGStrings(groupSizeOnly) -- LFG Group Maker Functions
+function GF_FixLFGStrings(groupSizeOnly) -- LFG Group Maker Functions... TODO: Change to update by dungeon alias name instead of fixed values
 	local maxGroupSize = GF_BUTTONS_LIST.LFGSize[GF_PerCharVariables.lfgsize][4]
 	local foundLF = 0
 	local foundDungeonRaid = {}
