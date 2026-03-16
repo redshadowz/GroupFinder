@@ -1619,7 +1619,7 @@ function GF_OnUpdate() -- OnUpdate, SendWho, WhoListUpdated, Announce, Broadcast
 	if GF_UpdateTicker < GetTime() then -- Triggers once per second
 		GF_UpdateTicker = GetTime() + 1
 		for name,_ in GF_OnUpdateFunctions do
-			GF_OnUpdateFunctions[name]()
+			if GF_OnUpdateFunctions[name] then GF_OnUpdateFunctions[name]() end
 		end
 		if GroupHistoryFinishTimer and GroupHistoryFinishTimer < time() then GF_GroupFinishedAddToGroupHistoryList() GroupHistoryFinishTimer = nil end
 	end
@@ -3083,13 +3083,13 @@ function GF_GetTypes(arg1, showanyway)
 					if GF_WORD_QUEST[wordString] then
 						lfs,lfe = 0,0
 						if GF_QUEST_TRIGGER[wordString] then
-							if GF_WORD_LEVEL_ZONE[wordTable[i-1]] then wordString = wordTable[i-1]..wordString lfs = 1 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i-1]] > foundQuest[1] or foundQuest[2] < j then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-1]] foundQuest[2] = j end table.insert(groupPosition,{i-1,i+j,wordString})
-							elseif GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] then wordString = wordString..wordTable[i+j+1] lfe = 1 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] > foundQuest[1] or foundQuest[2] < j then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] foundQuest[2] = j end table.insert(groupPosition,{i,i+j+1,wordString})
-							elseif wordTable[i-2] and (GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]]) then wordString = wordTable[i-2]..wordTable[i-1]..wordString lfs = 2 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]] > foundQuest[1] or foundQuest[2] < j then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]] foundQuest[2] = j end table.insert(groupPosition,{i-2,i+j,wordString})
-							elseif wordTable[i+j+2] and (GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]]) then wordString = wordString..wordTable[i+j+1]..wordTable[i+j+2] lfe = 2 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]] > foundQuest[1] or foundQuest[2] < j then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]] foundQuest[2] = j end table.insert(groupPosition,{i,i+j+2,wordString})
-							else if not foundQuest[1] or GF_WORD_QUEST[wordString][2] > foundQuest[1] or foundQuest[2] < j then foundQuest[1] = GF_WORD_QUEST[wordString][2] foundQuest[2] = j end table.insert(groupPosition,{i,i+j,wordString}) end
+							if GF_WORD_LEVEL_ZONE[wordTable[i-1]] then wordString = wordTable[i-1]..wordString lfs = 1 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i-1]] > foundQuest[1] or (foundQuest[2] < j and GF_WORD_LEVEL_ZONE[wordTable[i-1]] > foundQuest[1]+5) then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-1]] foundQuest[2] = j end table.insert(groupPosition,{i-1,i+j,wordString})
+							elseif GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] then wordString = wordString..wordTable[i+j+1] lfe = 1 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] > foundQuest[1] or (foundQuest[2] < j and GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] > foundQuest[1]+5) then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] foundQuest[2] = j end table.insert(groupPosition,{i,i+j+1,wordString})
+							elseif wordTable[i-2] and (GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]]) then wordString = wordTable[i-2]..wordTable[i-1]..wordString lfs = 2 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]] > foundQuest[1] or (foundQuest[2] < j and GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]] > foundQuest[1]+5) then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]] foundQuest[2] = j end table.insert(groupPosition,{i-2,i+j,wordString})
+							elseif wordTable[i+j+2] and (GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]]) then wordString = wordString..wordTable[i+j+1]..wordTable[i+j+2] lfe = 2 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]] > foundQuest[1] or (foundQuest[2] < j and GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]] > foundQuest[1]+5) then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]] foundQuest[2] = j end table.insert(groupPosition,{i,i+j+2,wordString})
+							else if not foundQuest[1] or GF_WORD_QUEST[wordString][2] > foundQuest[1] or (foundQuest[2] < j and GF_WORD_QUEST[wordString][2] > foundQuest[1]+5) then foundQuest[1] = GF_WORD_QUEST[wordString][2] foundQuest[2] = j end table.insert(groupPosition,{i,i+j,wordString}) end
 						else
-							if not foundQuest[1] or GF_WORD_QUEST[wordString][2] > foundQuest[1] or foundQuest[2] < j then foundQuest[1] = GF_WORD_QUEST[wordString][2] foundQuest[2] = j end table.insert(groupPosition,{i,i+j,wordString})
+							if not foundQuest[1] or GF_WORD_QUEST[wordString][2] > foundQuest[1] or (foundQuest[2] < j and GF_WORD_QUEST[wordString][2] > foundQuest[1]+5) then foundQuest[1] = GF_WORD_QUEST[wordString][2] foundQuest[2] = j end table.insert(groupPosition,{i,i+j,wordString})
 						end
 						if showanyway == true then print(wordString.." quest") end
 						foundTradesExclusion = foundTradesExclusion + .3 foundGuildExclusion = foundGuildExclusion + .1
@@ -3477,7 +3477,7 @@ function GF_GetGroupInformation(arg1,arg2,sentTime,event) -- Searches messages f
 	if foundRaid then entry.type = "R" entry.flags = {} for i=1, getn(foundDFlags) do table.insert(entry.flags, GF_GROUP_IDS[foundDFlags[i]]) end
 	elseif foundDungeon and (not foundQuest[1] or foundQuest[1] == 0 or (foundDungeon ~= 0 and foundDungeon >= foundQuest[1] - 5)) then
 		entry.type = "D" entry.flags = {} for i=1, getn(foundDFlags) do table.insert(entry.flags, GF_GROUP_IDS[foundDFlags[i]]) end
-	elseif foundQuest[1] then entry.type = "Q" foundDungeon = nil entry.flags = {"QUEST"}
+	elseif foundQuest[1] and (foundQuest[1] > 0 or (not foundPvP or foundPvP == 0)) then entry.type = "Q" foundDungeon = nil entry.flags = {"QUEST"}
 	else entry.type = "N" if foundPvP then if foundPvP == 0 then foundPvP = 60 end	entry.flags = {} for i=1, getn(foundPFlags) do table.insert(entry.flags, GF_GROUP_IDS[foundPFlags[i]]) end else entry.flags = {""} end end
 	if not entry.flags[1] then return end
 	entry.dlevel = math.floor(foundRaid or foundDungeon or foundQuest[1] or foundPvP or foundClass or 0)
