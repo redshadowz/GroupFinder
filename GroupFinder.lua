@@ -459,7 +459,8 @@ function GF_LoadSettings()
 	GF_SetStringSize()
 	GF_SetDropdownWidths()
 	GF_SetLFGRoleButtons()
-	GF_UpdateQueueLFTButton(true)
+	GF_UpdateQueueLFTButton()
+	GF_UpdateGroup()
 end
 function GF_SetStringSize()
 	local fontName,fontSizeMinimap,fontSizeLarge,fontSizeButton
@@ -883,27 +884,7 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 	function UIErrorsFrame_OnEvent(event,message,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9)
 		if not GF_SavedVariables.systemfilter or not GF_Error_Messages[message] then old_UIErrorsFrame_OnEvent(event,message,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9) end
 	end
-	local old_LFT_Update = LFT_Update	
-	function LFT_Update()
-		old_LFT_Update()
-		--GF_UpdateQueueLFTButton(true)
-	end
-	local old_LFTFrame_OnEvent = LFTFrame_OnEvent
-	function LFTFrame_OnEvent()
-		old_LFTFrame_OnEvent()
-		if event == "CHAT_MSG_ADDON" then
-			if arg1 == LFT_ADDON_PREFIX and strfind(arg2, "S2C_ROLECHECK_START") then
-				if GF_PerCharVariables.lfgtank or GF_PerCharVariables.lfgheal or GF_PerCharVariables.lfgdps then
-					if GF_PerCharVariables.lfgtank then if not LFTRoleCheckFrameRoleTankCheckButton:GetChecked() then LFTRoleCheckFrameRoleTankCheckButton:Click() end else if LFTRoleCheckFrameRoleTankCheckButton:GetChecked() then LFTRoleCheckFrameRoleTankCheckButton:Click() end end
-					if GF_PerCharVariables.lfgheal then if not LFTRoleCheckFrameRoleHealerCheckButton:GetChecked() then LFTRoleCheckFrameRoleHealerCheckButton:Click() end else if LFTRoleCheckFrameRoleHealerCheckButton:GetChecked() then LFTRoleCheckFrameRoleHealerCheckButton:Click() end end
-					if GF_PerCharVariables.lfgdps then if not LFTRoleCheckFrameRoleDamageCheckButton:GetChecked() then LFTRoleCheckFrameRoleDamageCheckButton:Click() end else if LFTRoleCheckFrameRoleDamageCheckButton:GetChecked() then LFTRoleCheckFrameRoleDamageCheckButton:Click() end end
-					LFTRoleCheckFrameConfirmButton:Click()
-					DEFAULT_CHAT_FRAME:AddMessage("GF: "..GF_AUTO_QUEUE_IN_LFT,1,1,0.5)
-				end
-			end
-		end
-	end
-	if LFT_DUNGEON_BFD then
+	if LFTFrame then
 		GF_LFT_Dungeons = {
 			[LFT_DUNGEON_BFD] = "Blackfathom Deeps",[LFT_DUNGEON_BRD] = "Blackrock Depths",[LFT_DUNGEON_BRDARENA] = "BRD Arena",[LFT_DUNGEON_BRDEMP] = "BRD Emperor",[LFT_DUNGEON_COTBM] = "Black Morass",[LFT_DUNGEON_DM] = "Deadmines",
 			[LFT_DUNGEON_DME] = "Dire Maul East",[LFT_DUNGEON_DMN] = "Dire Maul North",[LFT_DUNGEON_DMR] = "Dragonmaw Retreat",[LFT_DUNGEON_DMT] = "Dire Maul Tribute",[LFT_DUNGEON_DMW] = "Dire Maul West",[LFT_DUNGEON_GILNEAS] = "Gilneas City",
@@ -914,6 +895,21 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 			[LFT_DUNGEON_TCG] = "Crescent Grove",[LFT_DUNGEON_ULDA] = "Uldaman",[LFT_DUNGEON_WC] = "Wailing Caverns",
 			[LFT_DUNGEON_ZF] = "Zul'Farrak",
 		}
+		local old_LFTFrame_OnEvent = LFTFrame_OnEvent
+		function LFTFrame_OnEvent()
+			old_LFTFrame_OnEvent()
+			if event == "CHAT_MSG_ADDON" then
+				if arg1 == LFT_ADDON_PREFIX and strfind(arg2, "S2C_ROLECHECK_START") then
+					if GF_PerCharVariables.lfgtank or GF_PerCharVariables.lfgheal or GF_PerCharVariables.lfgdps then
+						if GF_PerCharVariables.lfgtank then if not LFTRoleCheckFrameRoleTankCheckButton:GetChecked() then LFTRoleCheckFrameRoleTankCheckButton:Click() end else if LFTRoleCheckFrameRoleTankCheckButton:GetChecked() then LFTRoleCheckFrameRoleTankCheckButton:Click() end end
+						if GF_PerCharVariables.lfgheal then if not LFTRoleCheckFrameRoleHealerCheckButton:GetChecked() then LFTRoleCheckFrameRoleHealerCheckButton:Click() end else if LFTRoleCheckFrameRoleHealerCheckButton:GetChecked() then LFTRoleCheckFrameRoleHealerCheckButton:Click() end end
+						if GF_PerCharVariables.lfgdps then if not LFTRoleCheckFrameRoleDamageCheckButton:GetChecked() then LFTRoleCheckFrameRoleDamageCheckButton:Click() end else if LFTRoleCheckFrameRoleDamageCheckButton:GetChecked() then LFTRoleCheckFrameRoleDamageCheckButton:Click() end end
+						LFTRoleCheckFrameConfirmButton:Click()
+						DEFAULT_CHAT_FRAME:AddMessage("GF: "..GF_AUTO_QUEUE_IN_LFT,1,1,0.5)
+					end
+				end
+			end
+		end
 	end
 end
 
@@ -2125,7 +2121,7 @@ end
 function self:PLAYER_LEVEL_UP()
 	GF_FixLFGStrings()
 	if GF_PerCharVariables.getwhowhisperlevel == 0 then GF_GetWhoLevelDropdownTextLabel:SetText(LEVEL.." "..UnitLevel("player").."±") end
-	GF_UpdateQueueLFTButton(true)
+	GF_UpdateQueueLFTButton()
 end
 function self:RAID_ROSTER_UPDATE()
 	GF_UpdateGroup()
@@ -3691,7 +3687,7 @@ function GF_UpdateGroup() -- Get Group/Friends/Guildies information(turns off ig
 	else
 		GF_NumPartyMembers = 1
 		for i=1,4 do
-			if UnitExists("party"..i) and UnitName("party"..i) ~= UNKNOWN and GF_Classes[({UnitClass("party"..i)})[2]] and UnitLevel("party"..i) and UnitLevel("party"..i) > 0 then
+			if UnitExists("party"..i) and UnitName("party"..i) ~= UNKNOWN and GF_Classes[({UnitClass("party"..i)})[2]] then
 				GF_PlayersCurrentlyInGroup[UnitName("party"..i)] = true
 				GF_WhoTable[GF_RealmName][UnitName("party"..i)] = { UnitLevel("party"..i), ({UnitClass("party"..i)})[2], GetGuildInfo("party"..i) or "", time() }
 				GF_NumPartyMembers = GF_NumPartyMembers + 1
@@ -3703,13 +3699,16 @@ end
 function GF_UpdateOther()
 	if GF_AutoAnnounceTimer and GF_NumPartyMembers >= GF_BUTTONS_LIST.LFGSize[GF_PerCharVariables.lfgsize][4] then GF_TurnOffAnnounce(GF_NO_MORE_PLAYERS_NEEDED) end
 	if GF_PerCharVariables.lfgauto then GF_FixLFGStrings(true) end
-	if GetNumRaidMembers() > 1 then
-		if GF_QueuetoLFTButton:IsVisible() then GF_QueuetoLFTButton:Hide() GF_QueuetoLFTButton:SetText(GF_QUEUE_IN_LFT) end
-	else
-		GF_UpdateQueueLFTButton(true)
-	end
 	if GF_NumPartyMembers == 1 then GF_UpdateAndRequestTimer = 0 GroupHistoryFinishTimer = time() + 120 else GroupHistoryFinishTimer = nil end
 	if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone] then GF_PerCharVariables.CurrentGroup[GF_CurrentZone] = {GF_CurrentZone,time(),{},{}} table.insert(GF_PerCharVariables.CurrentGroup,GF_CurrentZone) end
+	if LFTFrame then
+		LFT_Update()
+		if GetNumRaidMembers() > 1 then
+			if GF_QueuetoLFTButton:IsVisible() then GF_QueuetoLFTButton:Hide() GF_QueuetoLFTButton:SetText(GF_QUEUE_IN_LFT) end
+		else
+			GF_UpdateQueueLFTButton()
+		end
+	end
 end
 function GF_UpdateLeader()
 	if GF_WasPartyLeaderBefore and not UnitIsPartyLeader("player") and GF_NumPartyMembers > 1 then
@@ -5040,17 +5039,16 @@ function GF_ClickQueueLFT() -- TODO: Need to click "Find More" when group leader
 		LFTFrameMainButton:Click()
 	end
 end
-function GF_UpdateQueueLFTButton(update) -- Updates(gets dungeon list) on login and when leveling up... Otherwise, just check if groups match GF_PerCharVariables.searchlfgtext and show/hide the Queue Button... Always show button if in queue
+function GF_UpdateQueueLFTButton() -- Updates(gets dungeon list) on login and when leveling up... Otherwise, just check if groups match GF_PerCharVariables.searchlfgtext and show/hide the Queue Button... Always show button if in queue
 	if LFTFrame then
 		if GF_MainFrameShowBoth and not GF_SavedVariables.mainframelogisopen then GF_QueuetoLFTButton:Hide() return end
-		if update and not LFTFrame:IsVisible() then LFT_Toggle() LFT_Toggle() end -- Get List
 		if LFTFrameMainButtonText:GetText() == LFT_GENERAL_LEAVE_QUEUE_TEXT then
 			GF_QueuetoLFTButton:SetText(GF_LEAVE_QUEUE)
 			GF_QueuetoLFTButton:Show()
 			GF_GenTooltips["GF_QueuetoLFTButton"].tooltip1 = GF_QUEUED_FOR
 			local wordString = ""
 			for i=1, 100 do
-				if getglobal("LFTFrameInstancesListEntry"..i) then
+				if getglobal("LFTFrameInstancesListEntry"..i) and getglobal("LFTFrameInstancesListEntry"..i):IsShown() then
 					if getglobal("LFTFrameInstancesListEntry"..i.."CheckButton"):GetChecked() then
 						wordString = wordString..getglobal("LFTFrameInstancesListEntry"..i.."Name"):GetText()..", "
 					end
