@@ -886,7 +886,7 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 	local old_LFT_Update = LFT_Update	
 	function LFT_Update()
 		old_LFT_Update()
-		GF_UpdateQueueLFTButton(true)
+		--GF_UpdateQueueLFTButton(true)
 	end
 	local old_LFTFrame_OnEvent = LFTFrame_OnEvent
 	function LFTFrame_OnEvent()
