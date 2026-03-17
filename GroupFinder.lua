@@ -898,8 +898,8 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 		local old_LFTFrame_OnEvent = LFTFrame_OnEvent
 		function LFTFrame_OnEvent()
 			old_LFTFrame_OnEvent()
-			if event == "CHAT_MSG_ADDON" then
-				if arg1 == LFT_ADDON_PREFIX and strfind(arg2, "S2C_ROLECHECK_START") then
+			if event == "CHAT_MSG_ADDON" and arg1 == LFT_ADDON_PREFIX then
+				if strfind(arg2, "S2C_ROLECHECK_START") then
 					if GF_PerCharVariables.lfgtank or GF_PerCharVariables.lfgheal or GF_PerCharVariables.lfgdps then
 						if GF_PerCharVariables.lfgtank then if not LFTRoleCheckFrameRoleTankCheckButton:GetChecked() then LFTRoleCheckFrameRoleTankCheckButton:Click() end else if LFTRoleCheckFrameRoleTankCheckButton:GetChecked() then LFTRoleCheckFrameRoleTankCheckButton:Click() end end
 						if GF_PerCharVariables.lfgheal then if not LFTRoleCheckFrameRoleHealerCheckButton:GetChecked() then LFTRoleCheckFrameRoleHealerCheckButton:Click() end else if LFTRoleCheckFrameRoleHealerCheckButton:GetChecked() then LFTRoleCheckFrameRoleHealerCheckButton:Click() end end
@@ -907,6 +907,8 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 						LFTRoleCheckFrameConfirmButton:Click()
 						DEFAULT_CHAT_FRAME:AddMessage("GF: "..GF_AUTO_QUEUE_IN_LFT,1,1,0.5)
 					end
+				elseif strfind(arg2, "S2C_QUEUE_JOINED") or strfind(arg2, "S2C_QUEUE_LEFT") then
+					GF_UpdateQueueLFTButton()
 				end
 			end
 		end
@@ -2753,7 +2755,7 @@ function GF_GetTypes(arg1, showanyway)
 
 	if strfind(arg1, "%d+p[%p%s]") then foundLFM = 2 if showanyway == true then print("##p lfm 2") end end -- "10p heal" messages from chinese
 	lfs = 1 -- To detect space/lf##m/letter(eg "lf15mbwl" = lfm bwl)
-	while true do lfs,lfe,wordString = strfind(arg1,"[%p%s]([lk]f?%s?%d+m)[%p%s]",lfs) if wordString then arg1 = strsub(arg1,1,lfs)..GF_LFM_LOCALIZED.." "..strsub(arg1,lfs+strlen(wordString)+1) lfs = lfs + 4 foundLFM = 3 foundGuildExclusion = 1 foundTradesExclusion = 1 if showanyway == true then print("lf##m lfm 3 .. guildex 1... tradesex 1") end else break end end
+	while true do lfs,lfe,wordString = strfind(arg1,"[%p%s]([lk][fv]?%s?%d+m)[%p%s]",lfs) if wordString then arg1 = strsub(arg1,1,lfs)..GF_LFM_LOCALIZED.." "..strsub(arg1,lfs+strlen(wordString)+1) lfs = lfs + 4 foundLFM = 3 foundGuildExclusion = 1 foundTradesExclusion = 1 if showanyway == true then print("lf##m lfm 3 .. guildex 1... tradesex 1") end else break end end
 	lfs = 1 -- To detect space/number+/punctuation/number+/space for groups
 	while true do lfs,lfe,wordString = strfind(arg1,"[%p%s]%d%d?([=/v])%d%d?[%p%s]",lfs) if wordString then if wordString == "=" then foundLFM = 2 lfs = lfe else arg1 = strsub(arg1,1,lfs)..GF_GROUP_GOING_LOCALIZED..strsub(arg1,lfe) lfs = lfs + 6 end else break end end
 	lfs,lfe,wordString,tempString = strfind(arg1,"[%p%s](%d?%d?%s?\-?([-\+±]))\-?%s?%d?%d?[%p%s]")
@@ -3084,6 +3086,7 @@ function GF_GetTypes(arg1, showanyway)
 							elseif wordTable[i-2] and (GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]]) then wordString = wordTable[i-2]..wordTable[i-1]..wordString lfs = 2 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]] > foundQuest[1] or (foundQuest[2] < j and GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]] > foundQuest[1]+5) then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]] foundQuest[2] = j end table.insert(groupPosition,{i-2,i+j,wordString})
 							elseif wordTable[i+j+2] and (GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]]) then wordString = wordString..wordTable[i+j+1]..wordTable[i+j+2] lfe = 2 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]] > foundQuest[1] or (foundQuest[2] < j and GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]] > foundQuest[1]+5) then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]] foundQuest[2] = j end table.insert(groupPosition,{i,i+j+2,wordString})
 							else if not foundQuest[1] or GF_WORD_QUEST[wordString][2] > foundQuest[1] or (foundQuest[2] < j and GF_WORD_QUEST[wordString][2] > foundQuest[1]+5) then foundQuest[1] = GF_WORD_QUEST[wordString][2] foundQuest[2] = j end table.insert(groupPosition,{i,i+j,wordString}) end
+							if foundQuest[1] > 0 and strfind(wordString,GF_ELITE_LOCALIZED) then foundQuest[1] = foundQuest[1] + 3 end
 						else
 							if not foundQuest[1] or GF_WORD_QUEST[wordString][2] > foundQuest[1] or (foundQuest[2] < j and GF_WORD_QUEST[wordString][2] > foundQuest[1]+5) then foundQuest[1] = GF_WORD_QUEST[wordString][2] foundQuest[2] = j end table.insert(groupPosition,{i,i+j,wordString})
 						end
@@ -4020,7 +4023,7 @@ function GF_OnHyperlinkShowTooltip(link)
 			GameTooltip:SetOwner(this, "ANCHOR_CURSOR")
 			GameTooltip:AddLine(link,1,1,1,1)
 			if GF_PlayerNotes[GF_RealmName][link] then GameTooltip:AddLine(GF_PLAYER_NOTE..GF_PlayerNotes[GF_RealmName][link],1,1,0,1) end
-			if GF_GroupHistory[GF_RealmName]["PLAYERS"][link] then GameTooltip:AddLine(GF_GROUP_NOTE..GF_GroupHistory[GF_RealmName]["PLAYERS"][link],1,1,0,1) end
+			if GF_GroupHistory[GF_RealmName]["PLAYERS"][link] then GameTooltip:AddLine(GF_GROUP_NOTE..GF_GroupHistory[GF_RealmName]["PLAYERS"][link],0,1,0,1) end
 			GameTooltip:Show()
 		end
 	elseif strsub(link,1,4) == "item" then
@@ -4051,7 +4054,7 @@ function GF_ListItemAuxLeft_ShowTooltip(frame,id,showall)
 		GameTooltip:AddLine(GF_PLAYER_NOTE..GF_PlayerNotes[GF_RealmName][GF_FilteredResultsList[GF_ResultsListOffset+id].op],1,1,0,1)
 	end
 	if GF_GroupHistory[GF_RealmName]["PLAYERS"][GF_FilteredResultsList[GF_ResultsListOffset+id].op] then
-		GameTooltip:AddLine(GF_GROUP_NOTE..GF_GroupHistory[GF_RealmName]["PLAYERS"][GF_FilteredResultsList[GF_ResultsListOffset+id].op],1,1,0,1)
+		GameTooltip:AddLine(GF_GROUP_NOTE..GF_GroupHistory[GF_RealmName]["PLAYERS"][GF_FilteredResultsList[GF_ResultsListOffset+id].op],0,1,0,1)
 	end
 	GameTooltip:Show()
 end
@@ -4305,8 +4308,7 @@ function GF_GroupHistoryDisplayLog(name) -- TODO: Add a feature to search by pla
 	GF_ConvertLogMessagesToURL:Hide()
 	GF_Log:SetMaxLines(128)
 	for i=getn(GF_GroupHistory[GF_RealmName][name]), 1, -1 do
-		local wordString = date("[%m/%d] [%H:%M]",GF_GroupHistory[GF_RealmName][name][i][2]).." "..GF_GroupHistory[GF_RealmName][name][i][1]
-		wordString = "|cffccccff|Hgfgh:"..name..":"..i.."|h"..wordString.."|h|r - "
+		local wordString = "|cffccccff|Hgfgh:"..name..":"..i.."|h"..date("[%m/%d] [%H:%M]",GF_GroupHistory[GF_RealmName][name][i][2]).." ["..GF_GroupHistory[GF_RealmName][name][i][1].."]|h|r - "
 		local tempTable = {}
 		for pname,data in GF_GroupHistory[GF_RealmName][name][i][3] do
 			table.insert(tempTable, {pname,data})
@@ -4329,8 +4331,7 @@ function GF_GroupHistoryDisplayLog(name) -- TODO: Add a feature to search by pla
 	if GF_WhisperLogCurrentButtonID == 1 then
 		for i=1, getn(GF_PerCharVariables.CurrentGroup) do
 			if GF_PerCharVariables.CurrentGroup[i] ~= "" then
-				local wordString = date("[%m/%d] [%H:%M]",GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][2]).." {"..GF_PerCharVariables.CurrentGroup[i].."}"
-				wordString = "|cffccccff|Hgfcg:"..GF_PerCharVariables.CurrentGroup[i].."|h"..wordString.."|h|r - "
+				local wordString = "|cffccccff|Hgfcg:"..GF_PerCharVariables.CurrentGroup[i].."|h"..date("[%m/%d] [%H:%M]",GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][2]).." {"..GF_PerCharVariables.CurrentGroup[i].."}".."|h|r - "
 				local tempTable = {}
 				for names,data in GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][3] do
 					table.insert(tempTable, {names,data})
