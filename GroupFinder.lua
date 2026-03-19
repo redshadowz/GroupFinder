@@ -460,7 +460,6 @@ function GF_LoadSettings()
 	GF_SetDropdownWidths()
 	GF_SetLFGRoleButtons()
 	GF_UpdateQueueLFTButton()
-	GF_UpdateGroup()
 end
 function GF_SetStringSize()
 	local fontName,fontSizeMinimap,fontSizeLarge,fontSizeButton
@@ -1804,6 +1803,7 @@ function GF_CheckForAnnounce()
 		if GF_LFGDescriptionEditBox:GetText() == "" then GF_TurnOffAnnounce(GF_NOTHING_TO_ANNOUNCE) return end
 		if GF_AutoAnnounceTimer > GF_SavedVariables.announcetimer then
 			GF_AutoAnnounceTimer = 0
+			GF_GetJoinedChannels()
 			if not GF_PerCharVariables.disablehardcore and GF_Hardcore and GF_PerCharVariables.hardcore ~= 3 then
 				SendChatMessage(GF_LFGDescriptionEditBox:GetText(), "HARDCORE", nil, nil)
 			else
@@ -1827,7 +1827,7 @@ end
 function GF_TurnOnAnnounce()
 	if not GF_ChatJoinedChannels[strlower(GF_GroupChannelEditBox:GetText())] then GF_GetJoinedChannels() if not GF_ChatJoinedChannels[strlower(GF_GroupChannelEditBox:GetText())] then GF_TurnOffAnnounce(GF_AUTO_ANNOUNCE_NOT_IN_CHANNEL) return end end
 	GF_AutoAnnounceTimer = GF_SavedVariables.announcetimer
-	if UnitIsPartyLeader("player") then GF_WasPartyLeaderBefore = true end
+	if UnitIsPartyLeader("player") or GF_NumPartyMembers == 1 then GF_WasPartyLeaderBefore = true end
 	GF_AnnounceToLFGButton:SetText(GF_ANNOUNCE_STOP_ANNOUNCE.."-"..GF_SavedVariables.announcetimer)
 	DEFAULT_CHAT_FRAME:AddMessage("GF: "..GF_AUTO_ANNOUNCE_TURNED_ON,1,1,0.5)
 	GF_OnUpdateFunctions["Announce"] = GF_CheckForAnnounce
@@ -2071,10 +2071,12 @@ function self:PARTY_INVITE_REQUEST()
 	if GF_RequestInviteTime[arg1] and GF_RequestInviteTime[arg1] > time() then AcceptGroupInvite() end
 end
 function self:PARTY_MEMBERS_CHANGED()
-	GF_UpdateGroup()
+	GF_OnUpdateFunctions["UpdateGroup"] = GF_UpdateGroup
+	GF_UpdateTicker = GF_UpdateTicker + .1
 end
 function self:PARTY_LEADER_CHANGED()
-	GF_UpdateLeader()
+	GF_OnUpdateFunctions["UpdateGroup"] = GF_UpdateGroup
+	GF_UpdateTicker = GF_UpdateTicker + .1
 end
 function self:PLAYER_ENTERING_WORLD() -- When logging in in a group, PLAYER_ENTERING_WORLD > PARTY_MEMBERS_CHANGED > PARTY_MEMBERS_CHANGED again > ZONE_CHANGED_NEW_AREA... When party member goes offline, PARTY_MEMBERS_CHANGED... online, PARTY_MEMBERS_CHANGED
 -- When switching to raid, PARTY_MEMBERS_CHANGED > RAID_ROSTER_UPDATE... when raid member goes offline PARTY_MEMBERS_CHANGED > RAID_ROSTER_UPDATE... online PARTY_MEMBERS_CHANGED > RAID_ROSTER_UPDATE... reloading UI does nothing
@@ -2088,7 +2090,7 @@ function self:PLAYER_ENTERING_WORLD() -- When logging in in a group, PLAYER_ENTE
 		self:RegisterEvent(event)
 	end
 	self:SetScript('OnUpdate', function() GF_OnUpdate() end)
-	GF_OnUpdateFunctions = {["Broadcast"] = GF_CheckForBroadCast,["Groups"] = GF_UpdateGroupsFrame,["Who"] = GF_SendWhoIfNameInQueue,["Delayed"] = GF_CheckForDelayedMessages,["Log"] = GF_DisplayLogFirst }
+	GF_OnUpdateFunctions = {["Broadcast"] = GF_CheckForBroadCast,["Groups"] = GF_UpdateGroupsFrame,["Who"] = GF_SendWhoIfNameInQueue,["Delayed"] = GF_CheckForDelayedMessages,["Log"] = GF_DisplayLogFirst,["UpdateGroup"] = GF_UpdateGroup }
 	if GF_SavedVariables.usefriendslist and GF_SavedVariables.usewhoongroups then GF_OnUpdateFunctions["Friendslist"] = GF_UpdateWhoDataViaFriendsList end
 	GF_LoadVariables()
 	GF_LoadSettings()
@@ -2126,10 +2128,11 @@ function self:PLAYER_LEVEL_UP()
 	GF_UpdateQueueLFTButton()
 end
 function self:RAID_ROSTER_UPDATE()
-	GF_UpdateGroup()
+	GF_OnUpdateFunctions["UpdateGroup"] = GF_UpdateGroup
+	GF_UpdateTicker = GF_UpdateTicker + .1
 end
 function self:UNIT_NAME_UPDATE()
-	if string.sub(arg1,1,2) ~= "0x" then GF_UpdateGroup() end
+	if string.sub(arg1,1,2) ~= "0x" then GF_OnUpdateFunctions["UpdateGroup"] = GF_UpdateGroup GF_UpdateTicker = GF_UpdateTicker + .1 end
 end
 function self:UPDATE_MOUSEOVER_UNIT()
 	if UnitIsPlayer("mouseover") and UnitIsFriend("player","mouseover") then GF_WhoTable[GF_RealmName][UnitName("mouseover")] = { UnitLevel("mouseover"), ({UnitClass("mouseover")})[2], GetGuildInfo("mouseover") or "", time() } end
@@ -2460,12 +2463,12 @@ function GF_ChatFunctions(event,arg1,arg2,arg8,arg9) -- Functions above reset th
 end
 
 function GF_CHAT_MSG_BATTLEGROUND()
-	if not GF_WhoTable[GF_RealmName][arg2] then GF_UpdateGroup() end
+	if not GF_WhoTable[GF_RealmName][arg2] or GF_WhoTable[GF_RealmName][arg2][1] == 0 then GF_UpdateGroup() end
 	GF_AddLogMessage(arg1,4,true,arg2,arg8,arg9,strsub(event,10))
 	GF_PreviousMessage[arg2] = {true}
 end
 function GF_CHAT_MSG_BATTLEGROUND_LEADER()
-	if not GF_WhoTable[GF_RealmName][arg2] then GF_UpdateGroup() end
+	if not GF_WhoTable[GF_RealmName][arg2] or GF_WhoTable[GF_RealmName][arg2][1] == 0 then GF_UpdateGroup() end
 	GF_AddLogMessage(arg1,4,true,arg2,arg8,arg9,strsub(event,10))
 	GF_PreviousMessage[arg2] = {true}
 end
@@ -2516,22 +2519,22 @@ function GF_CHAT_MSG_OFFICER()
 	GF_PreviousMessage[arg2] = {true}
 end
 function GF_CHAT_MSG_PARTY()
-	if not GF_WhoTable[GF_RealmName][arg2] then GF_UpdateGroup() end
+	if not GF_WhoTable[GF_RealmName][arg2] or GF_WhoTable[GF_RealmName][arg2][1] == 0 then GF_UpdateGroup() end
 	GF_AddLogMessage(arg1,4,true,arg2,arg8,arg9,strsub(event,10))
 	GF_PreviousMessage[arg2] = {true}
 end
 function GF_CHAT_MSG_RAID()
-	if not GF_WhoTable[GF_RealmName][arg2] then GF_UpdateGroup() end
+	if not GF_WhoTable[GF_RealmName][arg2] or GF_WhoTable[GF_RealmName][arg2][1] == 0 then GF_UpdateGroup() end
 	GF_AddLogMessage(arg1,4,true,arg2,arg8,arg9,strsub(event,10))
 	GF_PreviousMessage[arg2] = {true}
 end
 function GF_CHAT_MSG_RAID_LEADER()
-	if not GF_WhoTable[GF_RealmName][arg2] then GF_UpdateGroup() end
+	if not GF_WhoTable[GF_RealmName][arg2] or GF_WhoTable[GF_RealmName][arg2][1] == 0 then GF_UpdateGroup() end
 	GF_AddLogMessage(arg1,4,true,arg2,arg8,arg9,strsub(event,10))
 	GF_PreviousMessage[arg2] = {true}
 end
 function GF_CHAT_MSG_RAID_WARNING()
-	if not GF_WhoTable[GF_RealmName][arg2] then GF_UpdateGroup() end
+	if not GF_WhoTable[GF_RealmName][arg2] or GF_WhoTable[GF_RealmName][arg2][1] == 0 then GF_UpdateGroup() end
 	GF_AddLogMessage(arg1,4,true,arg2,arg8,arg9,strsub(event,10))
 	GF_PreviousMessage[arg2] = {true}
 end
@@ -3086,12 +3089,11 @@ function GF_GetTypes(arg1, showanyway)
 					if GF_WORD_QUEST[wordString] then
 						lfs,lfe = 0,0
 						if GF_QUEST_TRIGGER[wordString] then
-							if GF_WORD_LEVEL_ZONE[wordTable[i-1]] then wordString = wordTable[i-1]..wordString lfs = 1 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i-1]] > foundQuest[1] or (foundQuest[2] < j and GF_WORD_LEVEL_ZONE[wordTable[i-1]] > foundQuest[1]+5) then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-1]] foundQuest[2] = j end table.insert(groupPosition,{i-1,i+j,wordString})
-							elseif GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] then wordString = wordString..wordTable[i+j+1] lfe = 1 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] > foundQuest[1] or (foundQuest[2] < j and GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] > foundQuest[1]+5) then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] foundQuest[2] = j end table.insert(groupPosition,{i,i+j+1,wordString})
-							elseif wordTable[i-2] and (GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]]) then wordString = wordTable[i-2]..wordTable[i-1]..wordString lfs = 2 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]] > foundQuest[1] or (foundQuest[2] < j and GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]] > foundQuest[1]+5) then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]] foundQuest[2] = j end table.insert(groupPosition,{i-2,i+j,wordString})
-							elseif wordTable[i+j+2] and (GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]]) then wordString = wordString..wordTable[i+j+1]..wordTable[i+j+2] lfe = 2 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]] > foundQuest[1] or (foundQuest[2] < j and GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]] > foundQuest[1]+5) then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]] foundQuest[2] = j end table.insert(groupPosition,{i,i+j+2,wordString})
+							if GF_WORD_LEVEL_ZONE[wordTable[i-1]] then wordString = wordTable[i-1]..wordString lfs = 1 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i-1]] > foundQuest[1] or (foundQuest[2] < j and GF_WORD_LEVEL_ZONE[wordTable[i-1]] > foundQuest[1]+5) then if strfind(wordString,GF_ELITE_LOCALIZED) then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-1]] + 3 foundQuest[2] = j else foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-1]] + 3 foundQuest[2] = j end end table.insert(groupPosition,{i-1,i+j,wordString})
+							elseif GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] then wordString = wordString..wordTable[i+j+1] lfe = 1 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] > foundQuest[1] or (foundQuest[2] < j and GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] > foundQuest[1]+5) then if strfind(wordString,GF_ELITE_LOCALIZED) then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] + 3 foundQuest[2] = j else foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] + 3 foundQuest[2] = j end end table.insert(groupPosition,{i,i+j+1,wordString})
+							elseif wordTable[i-2] and (GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]]) then wordString = wordTable[i-2]..wordTable[i-1]..wordString lfs = 2 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]] > foundQuest[1] or (foundQuest[2] < j and GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]] > foundQuest[1]+5) then if strfind(wordString,GF_ELITE_LOCALIZED) then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]] + 3 foundQuest[2] = j else foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]] + 3 foundQuest[2] = j end end table.insert(groupPosition,{i-2,i+j,wordString})
+							elseif wordTable[i+j+2] and (GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]]) then wordString = wordString..wordTable[i+j+1]..wordTable[i+j+2] lfe = 2 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]] > foundQuest[1] or (foundQuest[2] < j and GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]] > foundQuest[1]+5) then if strfind(wordString,GF_ELITE_LOCALIZED) then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]] + 3 foundQuest[2] = j else foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]] + 3 foundQuest[2] = j end end table.insert(groupPosition,{i,i+j+2,wordString})
 							else if not foundQuest[1] or GF_WORD_QUEST[wordString][2] > foundQuest[1] or (foundQuest[2] < j and GF_WORD_QUEST[wordString][2] > foundQuest[1]+5) then foundQuest[1] = GF_WORD_QUEST[wordString][2] foundQuest[2] = j end table.insert(groupPosition,{i,i+j,wordString}) end
-							if foundQuest[1] > 0 and strfind(wordString,GF_ELITE_LOCALIZED) then foundQuest[1] = foundQuest[1] + 3 end
 						else
 							if not foundQuest[1] or GF_WORD_QUEST[wordString][2] > foundQuest[1] or (foundQuest[2] < j and GF_WORD_QUEST[wordString][2] > foundQuest[1]+5) then foundQuest[1] = GF_WORD_QUEST[wordString][2] foundQuest[2] = j end table.insert(groupPosition,{i,i+j,wordString})
 						end
@@ -3220,22 +3222,29 @@ function GF_GetTypes(arg1, showanyway)
 					if GF_WORD_LFM[wordString] > foundLFM then foundLFM = GF_WORD_LFM[wordString] table.insert(lfmlfgName, wordString) if showanyway == true then print(wordString.." lfm "..GF_WORD_LFM[wordString]) end end
 					if GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] then
 						if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] > foundQuest[1] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] end
-						if GF_WORD_LFM[wordString] + .5 > foundLFM then foundLFM = GF_WORD_LFM[wordString] + .5 table.insert(lfmPosition, {i,i+j+1,GF_WORD_LFM[wordString] + .5,1}) else table.insert(lfmPosition, {i,i+j+1,GF_WORD_LFM[wordString],true}) end
+						if GF_WORD_LFM[wordString] + .5 > foundLFM then foundLFM = GF_WORD_LFM[wordString] + .5 table.insert(lfmPosition, {i,i+j+1,GF_WORD_LFM[wordString] + .5,true}) else table.insert(lfmPosition, {i,i+j+1,GF_WORD_LFM[wordString],true}) end
 					elseif GF_GROUP_IDS[wordTable[i+j+1]] then
-						if GF_WORD_LFM[wordString] + .5 > foundLFM then foundLFM = GF_WORD_LFM[wordString] + .5 table.insert(lfmPosition, {i,i+j+1,GF_WORD_LFM[wordString] + .5,1}) else table.insert(lfmPosition, {i,i+j+1,GF_WORD_LFM[wordString],true}) end
+						if GF_WORD_LFM[wordString] + .5 > foundLFM then foundLFM = GF_WORD_LFM[wordString] + .5 table.insert(lfmPosition, {i,i+j+1,GF_WORD_LFM[wordString] + .5,true}) else table.insert(lfmPosition, {i,i+j+1,GF_WORD_LFM[wordString],true}) end
 					elseif GF_WORD_LEVEL_ZONE[wordTable[i-1]] then
 						if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i-1]] > foundQuest[1] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-1]] end
-						if GF_WORD_LFM[wordString] + .5 > foundLFM then foundLFM = GF_WORD_LFM[wordString] + .5 table.insert(lfmPosition, {i-1,i+j,GF_WORD_LFM[wordString] + .5,1}) else table.insert(lfmPosition, {i-1,i+j,GF_WORD_LFM[wordString],true}) end
+						if GF_WORD_LFM[wordString] + .5 > foundLFM then foundLFM = GF_WORD_LFM[wordString] + .5 table.insert(lfmPosition, {i-1,i+j,GF_WORD_LFM[wordString] + .5,true}) else table.insert(lfmPosition, {i-1,i+j,GF_WORD_LFM[wordString],true}) end
 					elseif GF_GROUP_IDS[wordTable[i-1]] then
-						if GF_WORD_LFM[wordString] + .5 > foundLFM then foundLFM = GF_WORD_LFM[wordString] + .5 table.insert(lfmPosition, {i-1,i+j,GF_WORD_LFM[wordString] + .5,1}) else table.insert(lfmPosition, {i-1,i+j,GF_WORD_LFM[wordString],true}) end
+						if GF_WORD_LFM[wordString] + .5 > foundLFM then foundLFM = GF_WORD_LFM[wordString] + .5 table.insert(lfmPosition, {i-1,i+j,GF_WORD_LFM[wordString] + .5,true}) else table.insert(lfmPosition, {i-1,i+j,GF_WORD_LFM[wordString],true}) end
 					else
 						table.insert(lfmPosition, {i,i+j,GF_WORD_LFM[wordString],true})
 					end
 					if GF_QUEST_ONLY_AFTER_LFM[wordTable[i+j+1]] then if not foundQuest[1] or GF_QUEST_ONLY_AFTER_LFM[wordTable[i+j+1]] > foundQuest[1] then foundQuest[1] = GF_QUEST_ONLY_AFTER_LFM[wordTable[i+j+1]] if showanyway == true then print(wordTable[i+j+1].." only after lfm") end end end
 				elseif GF_WORD_LFG[wordString] then
-					if GF_WORD_LFG[wordString] > foundLFG then foundLFG = GF_WORD_LFG[wordString] table.insert(lfmlfgName, wordString) if showanyway == true then print(wordString.." lfg "..GF_WORD_LFG[wordString]) end end table.insert(lfmPosition, {i,i+j,GF_WORD_LFG[wordString]})
-					if not foundQuest[1] then if GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] elseif GF_WORD_LEVEL_ZONE[wordTable[i-1]] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-1]] end end
+					if GF_WORD_LFG[wordString] > foundLFG then foundLFG = GF_WORD_LFG[wordString] table.insert(lfmlfgName, wordString) if showanyway == true then print(wordString.." lfg "..GF_WORD_LFG[wordString]) end end
 					if GF_QUEST_ONLY_AFTER_LFG[wordTable[i+j+1]] then if not foundQuest[1] or GF_QUEST_ONLY_AFTER_LFG[wordTable[i+j+1]] > foundQuest[1] then foundQuest[1] = GF_QUEST_ONLY_AFTER_LFG[wordTable[i+j+1]] if showanyway == true then print(wordTable[i+j+1].." only after lfm") end end end
+					if GF_GROUP_IDS[wordTable[i+j+1]] then
+						if GF_WORD_LFG[wordString] + .5 > foundLFG then foundLFG = GF_WORD_LFG[wordString] + .5 table.insert(lfmPosition, {i,i+j+1,GF_WORD_LFG[wordString] + .5}) else table.insert(lfmPosition, {i,i+j+1,GF_WORD_LFG[wordString]}) end
+					elseif GF_GROUP_IDS[wordTable[i-1]] then
+						if GF_WORD_LFG[wordString] + .5 > foundLFG then foundLFG = GF_WORD_LFG[wordString] + .5 table.insert(lfmPosition, {i-1,i+j,GF_WORD_LFG[wordString] + .5}) else table.insert(lfmPosition, {i-1,i+j,GF_WORD_LFG[wordString]}) end
+					else
+						table.insert(lfmPosition, {i,i+j,GF_WORD_LFG[wordString]})
+					end
+					if not foundQuest[1] then if GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] elseif GF_WORD_LEVEL_ZONE[wordTable[i-1]] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-1]] end end
 				end
 				if GF_WORD_CLASSES[wordString] then foundClass = GF_WORD_CLASSES[wordString] table.insert(groupName,wordString) groupName[wordString] = true
 				elseif GF_WORD_DUNGEON[wordString] then
@@ -3358,9 +3367,9 @@ function GF_GetTypes(arg1, showanyway)
 				end
 			end
 		end
-		for j=1, getn(groupPosition) do -- If groupposition is within the lfmposition, don't count it if GF_LFM_BYPASS or GF_WORD_LEVEL_ZONE
-			if groupPosition[j][2] == lfmPosition[i][2] and not GF_LFM_BYPASS[wordTable[lfmPosition[i][2]]] and not GF_WORD_LEVEL_ZONE[wordTable[lfmPosition[i][2]]]
-			and not (lfmPosition[i][2] > 1 and (GF_LFM_BYPASS[wordTable[lfmPosition[i][2]-1]..wordTable[lfmPosition[i][2]]] or GF_WORD_LEVEL_ZONE[wordTable[lfmPosition[i][2]-1]..wordTable[lfmPosition[i][2]]])) then
+		for j=1, getn(groupPosition) do -- If groupposition is within the lfmposition, don't count it if GF_LFM_BYPASS or GF_WORD_LEVEL_ZONE or GF_GROUP_IDS
+			if groupPosition[j][2] == lfmPosition[i][2] and not GF_LFM_BYPASS[wordTable[lfmPosition[i][2]]] and not GF_WORD_LEVEL_ZONE[wordTable[lfmPosition[i][2]]] and not GF_GROUP_IDS[wordTable[lfmPosition[i][2]]]
+			and not (lfmPosition[i][2] > 1 and (GF_LFM_BYPASS[wordTable[lfmPosition[i][2]-1]..wordTable[lfmPosition[i][2]]] or GF_WORD_LEVEL_ZONE[wordTable[lfmPosition[i][2]-1]..wordTable[lfmPosition[i][2]]] or GF_GROUP_IDS[wordTable[lfmPosition[i][2]-1]..wordTable[lfmPosition[i][2]]])) then
 				lfs = lfs + 1 if lfe == 0 then foundTradesExclusion = foundTradesExclusion + .5 lfe = 1 end
 				if showanyway == true then print(lfmPosition[i][3].." reached group 1") end
 				break
@@ -3385,7 +3394,7 @@ function GF_GetTypes(arg1, showanyway)
 		end
 		if lfmPosition[i][4] then if lfs > foundLFM then foundLFM = lfs end else if lfs > foundLFG then foundLFG = lfs end end
 	end
-	if foundLFM > foundLFG then foundLFG = 0 foundLFGPreSuf = 0 end
+	if foundLFM > foundLFG then foundLFG = 0 end
 
 	if getn(lfmlfgName) == 1 and groupName[1] and not foundDungeon and not foundRaid and (not foundQuest[1] or GF_LFM_BYPASS[groupName[1]]) then lfs = 0 for i=1,getn(groupName) do if strfind(lfmlfgName[1],groupName[i]) then lfs = lfs + 1 end end if lfs == getn(groupName) then foundLFM = 0 foundLFG = 0 end end
 
@@ -3690,7 +3699,7 @@ function GF_UpdateGroup() -- Get Group/Friends/Guildies information(turns off ig
 		GF_NumPartyMembers = 0
 		for i=1,40 do
 			local name,_,_,level,class = GetRaidRosterInfo(i)
-			if name and name ~= UNKNOWN and class and GF_Classes[class] and level and level > 0 then
+			if name and name ~= UNKNOWN and class and GF_Classes[class] then
 				GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], GetGuildInfo("raid"..i) or "", time() }
 				GF_PlayersCurrentlyInGroup[name] = true
 				GF_NumPartyMembers = GF_NumPartyMembers + 1
@@ -3706,7 +3715,15 @@ function GF_UpdateGroup() -- Get Group/Friends/Guildies information(turns off ig
 			end
 		end
 	end
+	if GF_WasPartyLeaderBefore and not UnitIsPartyLeader("player") and GF_NumPartyMembers > 1 then
+		GF_TurnOffAnnounce(GF_JOINED_GROUP_ANNOUNCE_OFF)
+		GF_WasPartyLeaderBefore = nil
+		GF_ApplyFiltersToGroupList(true)
+	elseif GF_AutoAnnounceTimer and GF_NumPartyMembers == 1 then
+		GF_WasPartyLeaderBefore = true
+	end
 	if lastParty ~= GF_NumPartyMembers then GF_UpdateOther() end
+	GF_OnUpdateFunctions["UpdateGroup"] = nil
 end
 function GF_UpdateOther()
 	if GF_AutoAnnounceTimer and GF_NumPartyMembers >= GF_BUTTONS_LIST.LFGSize[GF_PerCharVariables.lfgsize][4] then GF_TurnOffAnnounce(GF_NO_MORE_PLAYERS_NEEDED) end
@@ -3720,13 +3737,6 @@ function GF_UpdateOther()
 		else
 			GF_UpdateQueueLFTButton()
 		end
-	end
-end
-function GF_UpdateLeader()
-	if GF_WasPartyLeaderBefore and not UnitIsPartyLeader("player") and GF_NumPartyMembers > 1 then
-		GF_TurnOffAnnounce(GF_JOINED_GROUP_ANNOUNCE_OFF)
-		GF_WasPartyLeaderBefore = nil
-		GF_ApplyFiltersToGroupList(true)
 	end
 end
 function GF_UpdateGuildiesList()
@@ -4742,9 +4752,9 @@ function GF_FixLFGStrings(groupSizeOnly) -- LFG Group Maker Functions... TODO: C
 		if foundLF == 1 then
 			GF_PerCharVariables.searchlfgtext = gsub(GF_PerCharVariables.searchlfgtext, "LFM", "")
 			if GF_PerCharVariables.lfgauto then
-				GF_LFGDescriptionEditBox:SetText("LF"..(maxGroupSize-GF_NumPartyMembers).."M"..GF_PerCharVariables.searchlfgtext)
+				GF_PerCharVariables.searchlfgtext = "LF"..(maxGroupSize-GF_NumPartyMembers).."M"..GF_PerCharVariables.searchlfgtext
 			else
-				GF_LFGDescriptionEditBox:SetText("LFM"..GF_PerCharVariables.searchlfgtext)
+				GF_PerCharVariables.searchlfgtext = "LFM"..GF_PerCharVariables.searchlfgtext
 			end
 		end
 	else
@@ -4786,9 +4796,9 @@ function GF_FixLFGStrings(groupSizeOnly) -- LFG Group Maker Functions... TODO: C
 			if not GF_PerCharVariables.disablehardcore and GF_Hardcore and GF_PerCharVariables.hardcore ~= 3 and strlen(newText) > 1 then newText = newText..GF_HARDCORE_WHISPER_SUFFIX end
 		end
 		GF_PerCharVariables.searchlfgtext = gsub(gsub(gsub(gsub(gsub(gsub(gsub(newText.." "..strsub(GF_PerCharVariables.searchlfgtext, endOfFilter+1), "^[/ ]+", ""), "[/ ]+$", ""), "^[/ ]+", ""),"//+", ""), "/%s+"," "),"%s+/", " "),"%s%s+", " ")
-		GF_LFGDescriptionEditBox:SetText(GF_PerCharVariables.searchlfgtext)
 	end
 	if GF_PerCharVariables.searchlfgtext ~= "" then GF_LFGDescriptionClearButton:Show() else GF_LFGDescriptionClearButton:Hide() end
+	GF_LFGDescriptionEditBox:SetText(GF_PerCharVariables.searchlfgtext)
 end
 function GF_SearchButtonHasValues()
 	for word,_ in GF_PerCharVariables.searchbuttonstext do
