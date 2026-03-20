@@ -884,16 +884,64 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 		if not GF_SavedVariables.systemfilter or not GF_Error_Messages[message] then old_UIErrorsFrame_OnEvent(event,message,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9) end
 	end
 	if LFTFrame then
-		GF_LFT_Dungeons = {
-			[LFT_DUNGEON_BFD] = "Blackfathom Deeps",[LFT_DUNGEON_BRD] = "Blackrock Depths",[LFT_DUNGEON_BRDARENA] = "BRD Arena",[LFT_DUNGEON_BRDEMP] = "BRD Emperor",[LFT_DUNGEON_COTBM] = "Black Morass",[LFT_DUNGEON_DM] = "Deadmines",
-			[LFT_DUNGEON_DME] = "Dire Maul East",[LFT_DUNGEON_DMN] = "Dire Maul North",[LFT_DUNGEON_DMR] = "Dragonmaw Retreat",[LFT_DUNGEON_DMT] = "Dire Maul Tribute",[LFT_DUNGEON_DMW] = "Dire Maul West",[LFT_DUNGEON_GILNEAS] = "Gilneas City",
-			[LFT_DUNGEON_GNOMER] = "Gnomeregan",[LFT_DUNGEON_HFC] = "Hateforge Quarry",[LFT_DUNGEON_KC] = "Karazhan Crypt",[LFT_DUNGEON_LBRS] = "Lower Blackrock Spire",[LFT_DUNGEON_MARAORANGE] = "Maraudon",[LFT_DUNGEON_MARAPRINCESS] = "Maraudon Princess",
-			[LFT_DUNGEON_MARAPURPLE] = "Maraudon",[LFT_DUNGEON_RFC] = "Ragefire Chasm",[LFT_DUNGEON_RFD] = "Razorfen Downs",[LFT_DUNGEON_RFK] = "Razorfen Kraul",[LFT_DUNGEON_SCHOLO] = "Scholomance",[LFT_DUNGEON_SFK] = "Shadowfang Keep",
-			[LFT_DUNGEON_SMARM] = "SM Armory",[LFT_DUNGEON_SMCATH] = "SM Cathedral",[LFT_DUNGEON_SMLIB] = "SM Library",[LFT_DUNGEON_SM_GY] = "SM Graveyard",[LFT_DUNGEON_ST] = "Sunken Temple",[LFT_DUNGEON_STOCKS] = "Stockades",
-			[LFT_DUNGEON_STRATLIVE] = "Stratholme Live",[LFT_DUNGEON_STRATUD] = "UD Stratholme",[LFT_DUNGEON_SWC] = "Stormwrought Castle",[LFT_DUNGEON_SWD] = "Stormwrought Descent",[LFT_DUNGEON_SWV] = "Stormwind Vault",
-			[LFT_DUNGEON_TCG] = "Crescent Grove",[LFT_DUNGEON_ULDA] = "Uldaman",[LFT_DUNGEON_WC] = "Wailing Caverns",
-			[LFT_DUNGEON_ZF] = "Zul'Farrak",
-		}
+		GF_LFT_Dungeons = {}
+
+		-- add each dungeon like this in case LFT vars are not updated yet
+		local function GF_AddDungeon(constName, label)
+			local key = getglobal(constName)
+			if key then
+				GF_LFT_Dungeons[key] = label
+			else
+				DEFAULT_CHAT_FRAME:AddMessage("GF missing constant: "..constName, 1, 0.2, 0.2)
+			end
+		end
+
+		GF_AddDungeon("LFT_DUNGEON_BFD", "Blackfathom Deeps")
+		GF_AddDungeon("LFT_DUNGEON_BRD", "Blackrock Depths")
+		GF_AddDungeon("LFT_DUNGEON_BRDARENA", "BRD Arena")
+		GF_AddDungeon("LFT_DUNGEON_BRDEMP", "BRD Emperor")
+		GF_AddDungeon("LFT_DUNGEON_COTBM", "Black Morass")
+		GF_AddDungeon("LFT_DUNGEON_DM", "Deadmines")
+
+		GF_AddDungeon("LFT_DUNGEON_DME", "Dire Maul East")
+		GF_AddDungeon("LFT_DUNGEON_DMN", "Dire Maul North")
+		GF_AddDungeon("LFT_DUNGEON_DMR", "Dragonmaw Retreat")
+		GF_AddDungeon("LFT_DUNGEON_DMT", "Dire Maul Tribute")
+		GF_AddDungeon("LFT_DUNGEON_DMW", "Dire Maul West")
+		GF_AddDungeon("LFT_DUNGEON_GILNEAS", "Gilneas City")
+
+		GF_AddDungeon("LFT_DUNGEON_GNOMER", "Gnomeregan")
+		GF_AddDungeon("LFT_DUNGEON_HFC", "Hateforge Quarry")
+		GF_AddDungeon("LFT_DUNGEON_KC", "Karazhan Crypt")
+		GF_AddDungeon("LFT_DUNGEON_LBRS", "Lower Blackrock Spire")
+		GF_AddDungeon("LFT_DUNGEON_MARAORANGE", "Maraudon")
+		GF_AddDungeon("LFT_DUNGEON_MARAPRINCESS", "Maraudon Princess")
+
+		GF_AddDungeon("LFT_DUNGEON_MARAPURPLE", "Maraudon")
+		GF_AddDungeon("LFT_DUNGEON_RFC", "Ragefire Chasm")
+		GF_AddDungeon("LFT_DUNGEON_RFD", "Razorfen Downs")
+		GF_AddDungeon("LFT_DUNGEON_RFK", "Razorfen Kraul")
+		GF_AddDungeon("LFT_DUNGEON_SCHOLO", "Scholomance")
+		GF_AddDungeon("LFT_DUNGEON_SFK", "Shadowfang Keep")
+
+		GF_AddDungeon("LFT_DUNGEON_SMARM", "SM Armory")
+		GF_AddDungeon("LFT_DUNGEON_SMCATH", "SM Cathedral")
+		GF_AddDungeon("LFT_DUNGEON_SMLIB", "SM Library")
+		GF_AddDungeon("LFT_DUNGEON_SM_GY", "SM Graveyard")
+		GF_AddDungeon("LFT_DUNGEON_ST", "Sunken Temple")
+		GF_AddDungeon("LFT_DUNGEON_STOCKS", "Stockades")
+
+		GF_AddDungeon("LFT_DUNGEON_STRATLIVE", "Stratholme Live")
+		GF_AddDungeon("LFT_DUNGEON_STRATUD", "UD Stratholme")
+		GF_AddDungeon("LFT_DUNGEON_SWC", "Stormwrought Castle")
+		GF_AddDungeon("LFT_DUNGEON_SWD", "Stormwrought Descent")
+		GF_AddDungeon("LFT_DUNGEON_SWV", "Stormwind Vault")
+
+		GF_AddDungeon("LFT_DUNGEON_TCG", "Crescent Grove")
+		GF_AddDungeon("LFT_DUNGEON_ULDA", "Uldaman")
+		GF_AddDungeon("LFT_DUNGEON_WC", "Wailing Caverns")
+		GF_AddDungeon("LFT_DUNGEON_ZF", "Zul'Farrak")
+
 		local old_LFTFrame_OnEvent = LFTFrame_OnEvent
 		function LFTFrame_OnEvent()
 			old_LFTFrame_OnEvent()
