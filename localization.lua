@@ -490,7 +490,7 @@ GF_WORD_FIX = { -- Word changes processed after quests. Not simple typos.
 -- Basic words
 ["haves"] = "have",["keeps"] = "keep",["knows"] = "know",["alot"] = "lot",["lots"] = "lot",["looked"] = "look",["looker"] = "look",["lookers"] = "look",["looks"] = "look",["sets"] = "set",["lasts"] = "last",["racists"] = "racist",["checks"] = "check",
 ["adventures"] = "adventure",["adventurers"] = "adventurer",["clears"] = "clear",["enthusiasts"] = "enthusiast",["friends"] = "friend",["gamers"] = "gamer",["helping"] = "help",["tales"] = "tale",["rn"] = "now",["characters"] = "character",
-["signing"] = "sign",["brackets"] = "bracket",["coins"] = "coin",["skillups"] = "skillup",["skills"] = "skill",
+["signing"] = "sign",["brackets"] = "bracket",["coins"] = "coin",["skillups"] = "skillup",["skills"] = "skill",["costs"] = "cost",
 
 -- Misc
 ["aclan"] = "guild",["arms"] = "arm",["bindings"] = "binding",["buffs"] = "buff",["bullies"] = "bully",["carrying"] = "carry",["cavern"] = "caverns",["cavers"] = "caverns",["chains"] = "chain",["champions"] = "champion",["noone"] = "noone",
@@ -659,15 +659,9 @@ GF_WORD_FIX = { -- Word changes processed after quests. Not simple typos.
 ["moltencore"] = "moltencore",["blackwinglair"] = "blackwinglair",["emeraldsanctum"] = "emeraldsanctum",["lowerkarazhan"] = "lowerkarazhan",["upperkarazhan"] = "upperkarazhan",["karazhanhalls"] = "karazhanhalls",
 ["arathibasin"] = "arathibasin",["alteracvalley"] = "alteracvalley",["arathibasinbasin"] = "arathibasin",["alteracvalleyvalley"] = "alteracvalley",["giftofarthas"] = "giftofarthas",["poisonresist"] = "poisonresist",
 ["powerofscourge"] = "powerofscourge",["fortitudeofscourge"] = "fortitudeofscourge",["mightofscourge"] = "mightofscourge",["resilienceofscourge"] = "resilienceofscourge",["nightelf"] = "nightelf",["highelf"] = "highelf",
-["sigilofvampirism"] = "sigilofvampirism",["sigilofpenetration"] = "sigilofpenetration",["sigilofquickness"] = "sigilofquickness",["sigilofresilience"] = "sigilofresilience",["cavernsoftime"] = "cavernsoftime",
+["sigilofvampirism"] = "sigilofvampirism",["sigilofpenetration"] = "sigilofpenetration",["sigilofquickness"] = "sigilofquickness",["sigilofresilience"] = "sigilofresilience",
 ["pvphead"] = "pvphead",["pvpshoulder"] = "pvpshoulder",["pvpchest"] = "pvpchest",["pvpwrist"] = "pvpwrist",["pvpgloves"] = "pvpgloves",["pvphand"] = "pvphand",["pvplegs"] = "pvplegs",
 ["pvpbelt"] = "pvpbelt",["pvpring"] = "pvpring",["pvpboots"] = "pvpboots",["pvpneck"] = "pvpneck",["pvpback"] = "pvpback",["pvpcloak"] = "pvpcloak",["pvpweapon"] = "pvpweapon",["darkironore"] = "darkironore",["darkironbar"] = "darkironbar",
-
--- Dungeon combine to prevent flagging other dungeons
-["dmeast"] = "dme",["dmnorth"] = "dmn",["dmtrib"] = "dmt",["dmtribute"] = "dmt",["dmwest"] = "dmw",
-["smgy"] = "smgy",["smarm"] = "smarm",["smcath"] = "smcath",
-["diremauleast"] = "dme",["diremaulnorth"] = "dmn",["diremaultrib"] = "dmt",["diremaultribute"] = "dmt",["diremaulwest"] = "dmw",
-["stormwindvault"] = "swv",["stormvault"] = "swv",["swvault"] = "swv",
 
 -- Locations
 ["anyoneinsv"] = "anyoneinstv",["anyoneinhl"] = "anyonehinterlands",["anyoneinthehl"] = "anyonehinterlands",["anyonethehl"] = "anyonehinterlands",
@@ -685,27 +679,22 @@ GF_WORD_FIX = { -- Word changes processed after quests. Not simple typos.
 ["scarletgrave"] = "smgy",["scarletsmgy"] = "smgy",["monasterygy"] = "smgy",["monasterygrav"] = "smgy",["smlibrary"] = "smlib",["smliberal"] = "smlib",
 ["scarletarm"] = "smarm",["scarletarms"] = "smarm",["scarletarmory"] = "smarm",["scarletsmarm"] = "smarm",["monasteryarm"] = "smarm",["monasteryarms"] = "smarm",["monasteryarmory"] = "smarm",
 ["monaarm"] = "smarm",["monaarms"] = "smarm",["monaarmory"] = "smarm",["smarms"] = "smarm",["smarmory"] = "smarm",
-["scarletcat"] = "smcath",["scarletcathedral"] = "smcath",["monasterycat"] = "smcath",["monasterycathedral"] = "smcath",["monacat"] = "smcath",["monacathedral"] = "smcath",["fullscarletrun"] = "smfull",
+["scarletcat"] = "smcath",["monasterycat"] = "smcath",["monasterycath"] = "smcath",["monasterycathedral"] = "smcath",["monacat"] = "smcath",["monacathedral"] = "smcath",["smcathedral"] = "smcath",["scarletcathedral"] = "smcath",["scarletcath"] = "smcath",
+["fullscarletrun"] = "smfull",["smfullrun"] = "smfull",["fullsm"] = "smfull",["allsm"] = "smfull",["fullrunsm"] = "smfull",["fullsmrun"] = "smfull",
 ["shendralar"] = "dmw",
 ["prisonbreak"] = "jailbreak",
-["liveside"] = "livestrat",["stratlife"] = "livestrat",["stratscarlet"] = "livestrat",["stratholmelive"] = "livestrat",["scarletlive"] = "livestrat",["stratholmebastion"] = "livestrat",
-["stratbastion"] = "livestrat",["startbastion"] = "livestrat",["stratholmealive"] = "livestrat",["stratalive"] = "livestrat",["startlive"] = "livestrat",["livestart"] = "livestrat",
+["liveside"] = "livestrat",["stratlife"] = "livestrat",["stratscarlet"] = "livestrat",["scarletlive"] = "livestrat",["stratholmebastion"] = "livestrat",
+["stratbastion"] = "livestrat",["startbastion"] = "livestrat",["stratalive"] = "livestrat",["startlive"] = "livestrat",["livestart"] = "livestrat",
 ["statlive"] = "livestrat",["livestat"] = "livestrat",["livestratside"] = "livestrat",["stratlive"] = "livestrat",["scarletstrat"] = "livestrat",
-["undeadstart"] = "udstrat",["undeadstrat"] = "udstrat",["stratholmedead"] = "udstrat",["stratholmeundead"] = "udstrat",["undeadcity"] = "udstrat",
+["undeadstart"] = "udstrat",["undeadstrat"] = "udstrat",["undeadcity"] = "udstrat",
 
-["monasteryarmo"] = "smarm",
-["smcat"] = "smcath",["smcathedral"] = "smcath",["scarletcath"] = "smcath",["monasterycath"] = "smcath",
-["smfullrun"] = "smfull",["fullsm"] = "smfull",["allsm"] = "smfull",["fullrunsm"] = "smfull",["fullsmrun"] = "smfull",
-
+["monasteryarmo"] = "smarm",["smcat"] = "smcath",
 ["tostrat"] = "stratholme",["stratrun"] = "stratholme",["stratman"] = "stratholme",["farmstrat"] = "stratholme",["stratmalor"] = "stratholme",["stratfarm"] = "stratholme",
-
 ["lowerspire"] = "lowerblackrock",["blackrocklower"] = "lbrs",["lbrsspire"] = "lbrs",
 ["upperspire"] = "upperblackrock",["blackrockupper"] = "ubrs",["ubrsspire"] = "ubrs",
 ["valthalaks"] = "valthalak",["drakkisaths"] = "drakkisath",["blackrockdungeon"] = "blackrockspire",
-
 ["forgnome"] = "gnomer",["fortemple"] = "st",["forgy"] = "smgy",["forgraveyard"] = "smgy",["forrc"] = "rfc",["fortribute"] = "dmt",["forstart"] = "stratholme",["forstrat"] = "stratholme",["forarm"] = "smarm",["forarms"] = "smarm",["forschool"] = "scholomance",
-
-["repfarmstrat"] = "stratrepfarm",["udrep"] = "stratrep",["udrepfarm"] = "stratrepfarm",["repfarmud"] = "stratrepfarm",["bmrep"] = "bm",
+["udrep"] = "stratrep",["udrepfarm"] = "stratrepfarm",["repfarmud"] = "stratrepfarm",["repfarmstrat"] = "stratrepfarm",
 
 ["mcfarm"] = "mc",["bwlfarm"] = "bwl",["karafarm"] = "karazhan",["esfarm"] = "es",
 ["moltencorefarm"] = "mc",["blackwinglairfarm"] = "bwl",["aqfarm"] = "aq",["naxxramasfarm"] = "naxxramas",["karazhanfarm"] = "karazhan",["emeraldsanctumfarm"] = "emeraldsanctum",
@@ -713,15 +702,65 @@ GF_WORD_FIX = { -- Word changes processed after quests. Not simple typos.
 ["fullmc"] = "mc",["fullmoltencore"] = "moltencore",["fullblackwinglair"] = "blackwinglair",["fullaq"] = "aq",["fullnaxxramas"] = "naxxramas",["fullzg"] = "zg",["fullkarazhan"] = "karazhan",
 ["mctrash"] = "mc",["moltencoretrash"] = "moltencore",["blackwinglairtrash"] = "blackwinglair",["aqtrash"] = "aq",["naxxramastrash"] = "naxxramas",["zgtrash"] = "zg",["karazhantrash"] = "karazhan",
 
+-- Dungeon Combines
+["razorfenkraul"] = "razorfenkraul",
+["razorfendowns"] = "razorfendowns",
+["gilneascity"] = "gilneascity",
+["shadowfangkeep"] = "shadowfangkeep",
+["blackfathomdeeps"] = "blackfathomdeeps",
+["gnomeregan"] = "gnomeregan",
+["stormwrought"] = "stormwrought",
+["zulfarrak"] = "zulfarrak",
+["atalhakkar"] = "atalhakkar",["sunkentemple"] = "st",
+["smgy"] = "smgy",["smlib"] = "smlib",["smarm"] = "smarm",["smcath"] = "smcath",
+["udstrat"] = "udstrat",["livestrat"] = "livestrat",["upperblackrock"] = "upperblackrock",["lowerblackrock"] = "lowerblackrock",
+["stratrep"] = "stratrep",["repfarmstrat"] = "repfarmstrat",["stratrepfarm"] = "stratrepfarm",
+
+-- Turtle Combines
+["frostmanehollow"] = "frostmanehollow",
+["dragonmawretreat"] = "dragonmawretreat",
+["crescentgrove"] = "crescentgrove",
+["stormwroughtcastle"] = "stormwroughtcastle",["stormwroughtruins"] = "stormwroughtruins",["stormwroughtdescent"] = "stormwroughtdescent",
+["hateforge"] = "hateforge",["hateforgequarry"] = "hateforgequarry",
+["stormwindvault"] = "stormwindvault",["swv"] = "swv",
+["cavernsoftime"] = "cavernsoftime",["blackmorass"] = "blackmorass",
+["karazhancrypt"] = "karazhancrypt",
+
+-- Dungeon Renames
+["dme"] = "dme",["dmn"] = "dmn",["dmt"] = "dmt",["dmw"] = "dmw",
+["eastdire"] = "dme",["northdire"] = "dmn",["tribdire"] = "dme",["tributedire"] = "dme",["westdire"] = "dmw",["dmemaul"] = "dme",["dmtmaul"] = "dmt",["dmnmaul"] = "dmn",["dmwmaul"] = "dmw",
+["direeast"] = "dme",["direnorth"] = "dmn",["diretrib"] = "dmt",["diretribute"] = "dmt",["direwest"] = "dmw",
+["diren"] = "dmn",["direw"] = "dmw",["diret"] = "dmt",
+["eastdm"] = "dme",["northdm"] = "dmn",["tribdm"] = "dmt",["tributedm"] = "dmt",["westdm"] = "dmw",["dmeast"] = "dme",["dmnorth"] = "dmn",["dmtrib"] = "dmt",["dmtribute"] = "dmt",["dmwest"] = "dmw",
+["dbeast"] = "dme",["dbnorth"] = "dmn",["dbtrib"] = "dmt",["dbtribute"] = "dmt",["dbwest"] = "dmw",["eastdb"] = "dme",["northdb"] = "dmn",["tribdb"] = "dmt",["tributedb"] = "dmt",["westdb"] = "dmw",
+["drmeast"] = "dme",["drmnorth"] = "dmn",["drmtrib"] = "dmt",["drmtribute"] = "dmt",["drmwest"] = "dmw",
+["drmn"] = "dmn",["drmt"] = "dmt",["drmw"] = "dmw",["drme"] = "dme",["mauleast"] = "dme",["maulwest"] = "dmw",["maulnorth"] = "dmn",["maultribute"] = "dmt",
+["diremauleast"] = "dme",["diremaulnorth"] = "dmn",["diremaultrib"] = "dmt",["diremaultribute"] = "dmt",["diremaulwest"] = "dmw",
+["dmlibrary"] = "dmn",
+
+["deadstratholme"] = "udstrat",["undeadstratholme"] = "udstrat",["stratholmeundead"] = "udstrat",["stratholmedead"] = "udstrat",
+["stratholmelive"] = "livestrat",["stratholmealive"] = "livestrat",["livestratholme"] = "livestrat",["alivestratholme"] = "livestrat",
+["smquestrun"] = "smquestrun",
+
+["maraudonorange"] = "maraudonorange",["maraudonpurple"] = "maraudonpurple",["maraudonprincess"] = "maraudonprincess",["princessrun"] = "princessrun",
+["maraorange"] = "maraudonorange",["marapurple"] = "maraudonpurple",["maraprincess"] = "maraudonprincess",
+["orangeside"] = "orangeside",["purpleside"] = "purpleside",["maraorangeside"] = "maraudonorange",["marapurpleside"] = "maraudonpurple",["maraudonorangeside"] = "maraudonorange",["maraudonpurpleside"] = "maraudonpurple",
+["maraprincessrun"] = "maraudonprincess",["maraudonprincessrun"] = "maraudonprincess",
+["orangemara"] = "maraudonorange",["purplemara"] = "maraudonpurple",["orangemaraudon"] = "maraudonorange",["purplemaraudon"] = "maraudonpurple",
+["orangesidemara"] = "maraudonorange",["purplesidemara"] = "maraudonpurple",["orangesidemaraudon"] = "maraudonorange",["purplesidemaraudon"] = "maraudonpurple",
+
+["blackrockdepths"] = "brd",
+["brdarena"] = "brdarena",["arenabrd"] = "brdarena",["brdemperor"] = "brdemperor",["emperorbrd"] = "brdemperor",
+
 -- Turtle
 ["stormwindcrypt"] = "karazhancrypt",["crypts"] = "crypt",
 ["vaults"] = "vault",
 ["stormwinddescent"] = "stormwroughtdescent",["stormwinddecent"] = "stormwroughtdescent",["stormwroughtdescend"] = "stormwroughtdescent",
 ["stormruins"] = "stormwroughtruins",["stormdescent"] = "stormwroughtdescent",
-["bms"] = "bm",["bmn"] = "bm",
+["bms"] = "bm",["bmn"] = "bm",["bmrep"] = "bm",
 
 -- Professions
-["jeweler"] = "jewelcrafter",["jewelers"] = "jewelcrafter",["jewelcrafted"] = "jewelcrafter",["jewelcrafting"] = "jewelcrafter",["jewelry"] = "jewelcrafter",["gemcrafter"] = "jewelcrafter",["jewel"] = "gem",
+["jeweler"] = "jewelcrafter",["jewelers"] = "jewelcrafter",["jewelcrafted"] = "jewelcrafter",["jewelcrafting"] = "jewelcrafter",["jewelry"] = "jewelcrafter",["gemcrafter"] = "jewelcrafter",
 ["arcanologist"] = "specialization",["gemologist"] = "specialization",["gemologists"] = "specialization",["gemology"] = "specialization",["gemonology"] = "specialization",["gemonologist"] = "specialization",["gemelogy"] = "specialization",
 }
 GF_WORD_FIX_SECOND = {
@@ -759,7 +798,7 @@ GF_WORD_FIX_SECOND = {
 ["globesmountspeed"] = {"gloves","mountspeed"},["globesarcane"] = {"gloves","arcane"},["globesshadow"] = {"gloves","shadow"},["globesfire"] = {"gloves","fire"},["globesnature"] = {"gloves","nature"},["globesheal"] = {"gloves","heal"},
 ["globesspelldamage"] = {"gloves","spelldamage"},["globesthreat"] = {"gloves","threat"},["globesherb"] = {"gloves","herb"},["globesskin"] = {"gloves","skin"},["globesfish"] = {"gloves","fish"},["globesmine"] = {"gloves","mine"},["wshitem"] = {"wts","hitem"},
 ["curehid"] = {"cured","hide"},["curehide"] = {"cured","hide"},["ruggedhid"] = {"rugged","hide"},["anytl"] = {"any","tailor"},["craterhitem"] = {"crafter","hitem"},["craterforhitem"] = {"crafter","hitem"},
-["orangespl"] = {"oranges","please"},
+["orangespl"] = {"oranges","please"},["jewhitem"] = {"jewelcrafter","hitem"},["jewforhitem"] = {"jewelcrafter","hitem"},
 
 ["portaldar"] = {"portal","darnassus"},["wsportal"] = {"winterspring","portal"},["portalot"] = {"portal","to"},
 ["summondar"] = {"summon","darnassus"},["wssummon"] = {"winterspring","summon"},["summonot"] = {"summon","to"},
@@ -882,7 +921,7 @@ GF_WORD_FIX_TRADE = { -- Trade trigger words/phrases.
 }
 GF_WORD_FIX_GUILD = { -- Guild trigger words/phrases.
 ["guild"] = {"G","N"},["lf"] = {"F","N"},["lfg"] = {"F","N"},["lfm"] = {"F","N"},["seek"] = {"F","N"},["recruiting"] = {"R","N"},["recruitment"] = {"R","N"},["progress"] = {"P","N"},["progression"] = {"P","N"},["progressing"] = {"P","N"},
-["cometogether"] = {"C","A"},["guildforyou"] = {"G","C"},["invitemetoguild"] = {"G","D"},["invitemeintoguild"] = {"G","D"},["invitetoguild"] = {"G","D"},["inviteforguild"] = {"G","D"},["isthereguild"] = {"G","B"},["guildwith"] = {"G","B"},["acceptingapplications"] = {"A","C"},["considerjoining"] = {"A","C"},["coregroup"] = {"C","B"},["coreraid"] = {"C","O"},["coreraider"] = {"C","B"},["coreraiders"] = {"C","B"},["coreroster"] = {"C","C"},["currentlylooking"] = {"B","B"},["enlisttoday"] = {"C","B"},["exceptionalgamer"] = {"C","C"},["exploringtogether"] = {"D","C"},["firstroster"] = {"A","C"},["freshjourney"] = {"O","D"},["friendandguildies"] = {"D","C"},["getguildinvite"] = {"G","C"},["joinourcause"] = {"C","B"},["joinourranks"] = {"C","C"},["jointoday"] = {"C","B"},["joinus"] = {"C","O"},["livelyrp"] = {"C","O"},["lootsystem"] = {"B","D"},["newmembers"] = {"O","D"},["ourcore"] = {"A","C"},["peopletoexpand"] = {"B","B"},["playerwelcome"] = {"O","B"},["pvefocused"] = {"O","O"},["pvefriendly"] = {"O","O"},["pvpfocused"] = {"O","O"},["pvpfriendly"] = {"O","O"},["raidcore"] = {"O","C"},["raiddays"] = {"O","B"},["raidinfuture"] = {"O","B"},["raidnights"] = {"O","B"},["raidroster"] = {"O","C"},["raidschedule"] = {"O","C"},["secondroster"] = {"A","C"},["seriousapplications"] = {"A","C"},["seriousmembers"] = {"O","D"},["sharedjourney"] = {"B","D"},["sharedtale"] = {"B","C"},["sharedtales"] = {"B","C"},["sharestories"] = {"B","C"},["storiesshared"] = {"B","C"},["storyteller"] = {"B","C"},["storytellers"] = {"B","C"},["supercasual"] = {"O","O"},["wearefocusedon"] = {"D","N"},["weinviteyou"] = {"A","C"},["werefocusedon"] = {"D","N"},["whynotjoin"] = {"A","C"},["youbelongwith"] = {"D","N"},["sisterhoodspanish"] = {"D","C"},["brotherhoodspanish"] = {"D","C"},["brothersandsisters"] = {"C","B"},["venturebackinto"] = {"C","B"},["whisperifinterested"] = {"C","B"},["wforinfo"] = {"C","B"},["whisperforinfo"] = {"C","B"},["moltencoresoon"] = {"C","A"},["blackwinglairsoon"] = {"C","A"},["aqsoon"] = {"C","A"},["naxxramassoon"] = {"C","A"},["iswelcomingall"] = {"C","A"},["welcomingallgoodpeople"] = {"D","A"},["everyoneiswelcome"] = {"D","A"},["secondraidon"] = {"C","A"},["weraidmonday"] = {"C","A"},["weraidtuesday"] = {"C","A"},["weraidwednesday"] = {"C","A"},["weraidthursday"] = {"C","A"},["weraidfriday"] = {"C","A"},["weraidsaturday"] = {"C","A"},["weraidsunday"] = {"C","A"},["ifmomentsmatter"] = {"C","A"},["ifexperiencesmatter"] = {"C","A"},["invitingallalliance"] = {"D","A"},["invitingallhorde"] = {"D","A"},["healerlfguild"] = {"D","G"},["heallfguild"] = {"D","G"},["tanklfguild"] = {"D","G"},["laughtershared"] = {"C","A"},["sharelaughter"] = {"C","A"},["eachstorytold"] = {"C","A"},["everystorytold"] = {"C","A"},["standtalltogether"] = {"C","A"},["thenpullchair"] = {"C","A"},["thenpullupchair"] = {"C","A"},["sharedhearthspace"] = {"C","A"},["recruitingagain"] = {"R","S"},["recruitingforagain"] = {"R","S"},["signmyguildcharter"] = {"G","C"},["signguildcharter"] = {"G","C"},["tiredofrandomgroup"] = {"A","A"},["givingusfreeadvertising"] = {"C","A"},
+["cometogether"] = {"C","A"},["guildforyou"] = {"G","C"},["invitemetoguild"] = {"G","D"},["invitemeintoguild"] = {"G","D"},["invitetoguild"] = {"G","D"},["inviteforguild"] = {"G","D"},["isthereguild"] = {"G","B"},["guildwith"] = {"G","B"},["acceptingapplications"] = {"A","C"},["considerjoining"] = {"A","C"},["coregroup"] = {"C","B"},["coreraid"] = {"C","O"},["coreraider"] = {"C","B"},["coreraiders"] = {"C","B"},["coreroster"] = {"C","C"},["currentlylooking"] = {"B","B"},["enlisttoday"] = {"C","B"},["exceptionalgamer"] = {"C","C"},["exploringtogether"] = {"D","C"},["firstroster"] = {"A","C"},["freshjourney"] = {"O","D"},["friendandguildies"] = {"D","C"},["getguildinvite"] = {"G","C"},["joinourcause"] = {"C","B"},["joinourranks"] = {"C","C"},["jointoday"] = {"C","B"},["joinus"] = {"C","O"},["livelyrp"] = {"C","O"},["lootsystem"] = {"B","D"},["newmembers"] = {"O","D"},["ourcore"] = {"A","C"},["peopletoexpand"] = {"B","B"},["playerwelcome"] = {"O","B"},["pvefocused"] = {"O","O"},["pvefriendly"] = {"O","O"},["pvpfocused"] = {"O","O"},["pvpfriendly"] = {"O","O"},["raidcore"] = {"O","C"},["raiddays"] = {"O","B"},["raidinfuture"] = {"O","B"},["raidnights"] = {"O","B"},["raidroster"] = {"O","C"},["raidschedule"] = {"O","C"},["secondroster"] = {"A","C"},["seriousapplications"] = {"A","C"},["seriousmembers"] = {"O","D"},["sharedjourney"] = {"B","D"},["sharedtale"] = {"B","C"},["sharedtales"] = {"B","C"},["sharestories"] = {"B","C"},["storiesshared"] = {"B","C"},["storyteller"] = {"B","C"},["storytellers"] = {"B","C"},["supercasual"] = {"O","O"},["wearefocusedon"] = {"D","N"},["weinviteyou"] = {"A","C"},["werefocusedon"] = {"D","N"},["whynotjoin"] = {"A","C"},["youbelongwith"] = {"D","N"},["sisterhoodspanish"] = {"D","C"},["brotherhoodspanish"] = {"D","C"},["brothersandsisters"] = {"C","B"},["venturebackinto"] = {"C","B"},["whisperifinterested"] = {"C","B"},["wforinfo"] = {"C","B"},["whisperforinfo"] = {"C","B"},["moltencoresoon"] = {"C","A"},["blackwinglairsoon"] = {"C","A"},["aqsoon"] = {"C","A"},["naxxramassoon"] = {"C","A"},["iswelcomingall"] = {"C","A"},["welcomingallgoodpeople"] = {"D","A"},["everyoneiswelcome"] = {"D","A"},["secondraidon"] = {"C","A"},["weraidmonday"] = {"C","A"},["weraidtuesday"] = {"C","A"},["weraidwednesday"] = {"C","A"},["weraidthursday"] = {"C","A"},["weraidfriday"] = {"C","A"},["weraidsaturday"] = {"C","A"},["weraidsunday"] = {"C","A"},["ifmomentsmatter"] = {"C","A"},["ifexperiencesmatter"] = {"C","A"},["invitingallalliance"] = {"D","A"},["invitingallhorde"] = {"D","A"},["healerlfguild"] = {"D","G"},["heallfguild"] = {"D","G"},["tanklfguild"] = {"D","G"},["laughtershared"] = {"C","A"},["sharelaughter"] = {"C","A"},["eachstorytold"] = {"C","A"},["everystorytold"] = {"C","A"},["standtalltogether"] = {"C","A"},["thenpullchair"] = {"C","A"},["thenpullupchair"] = {"C","A"},["sharedhearthspace"] = {"C","A"},["recruitingagain"] = {"R","S"},["recruitingforagain"] = {"R","S"},["signmyguildcharter"] = {"G","C"},["signguildcharter"] = {"G","C"},["tiredofrandomgroup"] = {"A","A"},["givingusfreeadvertising"] = {"C","A"},["learnwayof"] = {"C","A"},
 }
 GF_WORD_FIX_SINGLE_WORD = { -- Single word changes. Mostly typos and simple words. Processed before quests.
 -- Misc Misspelling
@@ -909,10 +948,10 @@ GF_WORD_FIX_SINGLE_WORD = { -- Single word changes. Mostly typos and simple word
 ["tongiht"] = "tonight",["too"] = "to",["trols"] = "troll",["trools"] = "troll",["trough"] = "through",["tryingh"] = "trying",["tst"] = "test",["u"] = "you",["undea"] = "undead",["unded"] = "undead",["fruid"] = "fruit",["litl"] = "little",
 ["undrer"] = "under",["uper"] = "upper",["uselss"] = "useless",["uzp"] = "up",["waht"] = "what",["wat"] = "what",["weith"] = "with",["welcme"] = "welcome",["welcommed"] = "welcome",["foritude"] = "fortitude",["scurge"] = "scourge",["scorge"] = "scourge",
 ["whho"] = "who",["whisp"] = "whisper",["whos"] = "who",["wordl"] = "world",["guys"] = "guy",["strag"] = "strat",["strst"] = "strat",["strt"] = "start",["togeather"] = "together",["runng"] = "running",
-["insterested "] = "interested",["intrested"] = "interested",["interetsed"] = "interested",["antying"] = "anything",["killin"] = "killing",
+["insterested "] = "interested",["intrested"] = "interested",["interetsed"] = "interested",["antying"] = "anything",["killin"] = "killing",["playeers"] = "player",
 
 -- Group
-["ldaf"] = "lf",["lfe"] = "lf",["lff"] = "lf",["iso"] = "seeking",["seraching"] = "searching",
+["ldaf"] = "lf",["lfe"] = "lf",["lff"] = "lf",["iso"] = "seeking",["seraching"] = "searching",["seeks"] = "seek",
 ["escourts"] = "escort",["escourt"] = "escort",
 ["grp"] = "group",["groupe"] = "group",["grps"] = "group",["grup"] = "group",["groupg"] = "group",
 ["quets"] = "quest",["qujests"] = "quest",["qst"] = "quest",["reput"] = "rep",["repu"] = "rep",
@@ -930,7 +969,7 @@ GF_WORD_FIX_SINGLE_WORD = { -- Single word changes. Mostly typos and simple word
 -- Plural
 ["groups"] = "group",["tasks"] = "task",["tests"] = "test",["skulls"] = "skull",["reputation"] = "rep",["farming"] = "farm",["ranged"] = "range",["melees"] = "melee",["casters"] = "caster",["raids"] = "raid",["badges"] = "badge",["bgs"] = "bg",
 ["oils"] = "oil",["tons"] = "ton",["mats"] = "mat",["mauls"] = "maul",["socials"] = "social",["runs"] = "run",["roses"] = "rose",["dreamfoils"] = "dreamfoil",["wands"] = "wand",["mans"] = "man",["vendors"] = "vendor",["spaces"] = "space",
-["ingots"] = "ingot",["dragons"] = "dragon",
+["ingots"] = "ingot",["dragons"] = "dragon",["assignments"] = "assignment",["seconds"] = "second",
 
 ["taurens"] = "tauren",["humans"] = "human",["undeads"] = "undead",["dwarfs"] = "dwarf",["gnomes"] = "gnome",["nightelfs"] = "nightelf",["orcs"] = "orc",["trolls"] = "troll",["highelfs"] = "highelf",["goblins"] = "goblin",
 
@@ -939,7 +978,7 @@ GF_WORD_FIX_SINGLE_WORD = { -- Single word changes. Mostly typos and simple word
 
 -- Added to both single word and before quest.
 ["legss"] = "legs",["bucklet"] = "buckle",["pickerw"] = "pick",["crafterer"] = "crafter",
-["joinn"] = "join",["joinon"] = "join",["jooiinn"] = "join",["jooiin"] = "join",["joiinn"] = "join",["jooin"] = "join",["joiin"] = "join",["join"] = "join",
+["joinn"] = "join",["joinon"] = "join",["jooiinn"] = "join",["jooiin"] = "join",["joiinn"] = "join",["jooin"] = "join",["joiin"] = "join",["join"] = "join",["jpin"] = "join",
 ["lookign"] = "looking",["lookin"] = "looking",["lookinf"] = "looking",["loockin"] = "looking",["mounth"] = "mount",["openen"] = "open",["unlockin"] = "unlock",["cheapzor"] = "cheap",["guilds"] = "guild",["unlocks"] = "unlock",
 ["bwls"] = "bwl",["bwwl"] = "bwl",["bwll"] = "bwl",["hcjal"] = "hyjal",["dpser"] = "dps",["dpsers"] = "dps",["dpsing"] = "dps",["dpss"] = "dps",["dpsin"] = "dps",["healadin"] = "paladin",["starth"] = "stratholme",
 
@@ -952,8 +991,8 @@ GF_WORD_FIX_SINGLE_WORD = { -- Single word changes. Mostly typos and simple word
 ["enchan"] = "enchant",["ehcnater"] = "enchant",["entchanter"] = "enchant",["enhcanter"] = "enchant",["encahnt"] = "enchant",["ecnharter"] = "enchant",["encanter"] = "enchant",["entchants"] = "enchant",["enchjanter"] = "enchant",
 ["entchanting"] = "enchant",["echnater"] = "enchant",["encha"] = "enchant",["enchnater"] = "enchant",["enahcnter"] = "enchant",["enhcnater"] = "enchant",["ecnhater"] = "enchant",["enchent"] = "enchant",["enchhanter"] = "enchant",
 ["encahnters"] = "enchant",["ecnanter"] = "enchant",["entchant"] = "enchant",["enchaunt"] = "enchant",["enchnt"] = "enchant",["enchamt"] = "enchant",["inchaunt"] = "enchant",["enchating"] = "enchant",
-["enchann"] = "enchant",["enchaant"] = "enchant",["inchanting"] = "enchant",["enchain"] = "enchant",["enchntment"] = "enchant",["enchaantment"] = "enchant",["inchaant"] = "enchant",
-["inchantment"] = "enchant",["encahter"] = "enchant",["enchter"] = "enchant",["ecnahnter"] = "enchant",["ecnh"] = "enchant",
+["enchann"] = "enchant",["enchaant"] = "enchant",["inchanting"] = "enchant",["enchain"] = "enchant",["enchntment"] = "enchant",["enchaantment"] = "enchant",["inchaant"] = "enchant",["echater"] = "enchant",
+["inchantment"] = "enchant",["encahter"] = "enchant",["enchter"] = "enchant",["ecnahnter"] = "enchant",["ecnh"] = "enchant",["encharter"] = "enchant",
 ["eng"] = "engineer",["engi"] = "engineer",["engis"] = "engineer",["engenier"] = "engineer",["engener"] = "engineer",["enginer"] = "engineer",["engenner"] = "engineer",["enginner"] = "engineer",["engeneer"] = "engineer",["ingeneer"] = "engineer",
 ["enginere"] = "engineer",["eingineeerr"] = "engineer",["engeener"] = "engineer",["enginir"] = "engineer",["enginerd"] = "engineer",["engneer"] = "engineer",["engeniur"] = "engineer",["ingineer"] = "engineer",["enginerre"] = "engineer",
 ["enginerr"] = "engineer",["eingeer"] = "engineer",["engner"] = "engineer",["engenieer"] = "engineer",["engenere"] = "engineer",["enginerer"] = "engineer",["enjineer"] = "engineer",["ingener"] = "engineer",["enginerie"] = "engineer",
@@ -981,8 +1020,9 @@ GF_WORD_FIX_SINGLE_WORD = { -- Single word changes. Mostly typos and simple word
 ["seliing"] = "selling",["seling"] = "selling",["sellin"] = "selling",["tipz"] = "tip",["tipes"] = "tip",["tipp"] = "tip",["tipps"] = "tip",["tipper"] = "tip",["tippers"] = "tip",["tips"] = "tip",["auct"] = "ah",["auc"] = "ah",
 ["bosst"] = "boost",["sercives"] = "service",["sercive"] = "service",["servicce"] = "service",["sevice"] = "service",["skinnin"] = "skinning",["skinn"] = "skin",["skint"] = "skin",["minning"] = "mine",["cd"] = "cooldown",["cds"] = "cooldown",
 ["arcan"] = "arcane",["aracane"] = "arcane",["elixr"] = "elixir",["elixrs"] = "elixir",["disench"] = "disenchant",["apopli"] = "apply",["thoirum"] = "thorium",["spijes"] = "spike",["plne"] = "plans",
-["orananges"] = "oranges",["orange"] = "oranges",["orannges"] = "oranges",["oranages"] = "oranges",["oraanges"] = "oranges",["orangges"] = "oranges",["orranges"] = "oranges",["orangies"] = "oranges",["orangis"] = "oranges",["oranger"] = "oranges",
-["orrangges"] = "oranges",["ornage"] = "oranges",["oranes"] = "oranges",["onranges"] = "oranges",["oranginos"] = "oranges",["orangees"] = "oranges",["orangeess"] = "oranges",["orangess"] = "oranges",["orabges"] = "oranges",["orang"] = "oranges",
+["orananges"] = "oranges",["orange"] = "oranges",["orannges"] = "oranges",["oranages"] = "oranges",["oraanges"] = "oranges",["orangges"] = "oranges",["orranges"] = "oranges",["orangies"] = "oranges",
+["orangis"] = "oranges",["oranger"] = "oranges",["orrangges"] = "oranges",["ornage"] = "oranges",["oranes"] = "oranges",["onranges"] = "oranges",["oranginos"] = "oranges",["orangees"] = "oranges",
+["orangeess"] = "oranges",["orangess"] = "oranges",["orabges"] = "oranges",["orang"] = "oranges",["ornages"] = "oranges",
 ["vamprism"] = "vampirism",["vampyrsm"] = "vampirism",["campyrsm"] = "vampirism",["vampirisim"] = "vampirism",
 ["mithrill"] = "mithril",["mythril"] = "mithril",["mythrin"] = "mithril",["mith"] = "mithril",["mitral"] = "mithril",["mithral"] = "mithril",["mirthil"] = "mithril",
 ["samsam"] = "sansam",["vender"] = "vendor",["venders"] = "vendor",["baggs"] = "bag",["itme"] = "item",["opne"] = "open",["opex"] = "open",["oppen"] = "open",["opein"] = "open",["opeining"] = "opening",["opning"] = "opening",["payng"] = "paying",
@@ -1001,7 +1041,7 @@ GF_WORD_FIX_SINGLE_WORD = { -- Single word changes. Mostly typos and simple word
 
 ["org"] = "orgrimmar",["orgr"] = "orgrimmar",["orgi"] = "orgrimmar",["orgri"] = "orgrimmar",["og"] = "orgrimmar",["ogri"] = "orgrimmar",["orgtimar"] = "orgrimmar",["ogrimmar"] = "orgrimmar",["ogrimar"] = "orgrimmar",["oggri"] = "orgrimmar",
 ["orgrimm"] = "orgrimmar",["orgrimar"] = "orgrimmar",["orgimmar"] = "orgrimmar",["orgamar"] = "orgrimmar",["orgrimare"] = "orgrimmar",["ogrimmor"] = "orgrimmar",["orgmar"] = "orgrimmar",["ogrimare"] = "orgrimmar",["ogremar"] = "orgrimmar",
-["ogremire"] = "orgrimmar",["orgimar"] = "orgrimmar",["orgrmar"] = "orgrimmar",["orgrimr"] = "orgrimmar",["ogrimarr"] = "orgrimmar",
+["ogremire"] = "orgrimmar",["orgimar"] = "orgrimmar",["orgrmar"] = "orgrimmar",["orgrimr"] = "orgrimmar",["ogrimarr"] = "orgrimmar",["orgry"] = "orgrimmar",
 
 ["arati"] = "arathi",["alteriv"] = "alterac",["azhara"] = "azshara",["ashara"] = "azshara",["azshare"] = "azshara",["azshera"] = "azshara",["silithis"] = "silithus",["sithilus"] = "silithus",["silitshus"] = "silithus",["silthius"] = "silithus",
 ["goldhire"] = "goldshire",
@@ -1016,6 +1056,8 @@ GF_WORD_FIX_SINGLE_WORD = { -- Single word changes. Mostly typos and simple word
 ["wintarspring"] = "winterspring",["winterspreng"] = "winterspring",["winternspring"] = "winterspring",["winsterpring"] = "winterspring",["winerspring"] = "winterspring",["winterspringer"] = "winterspring",
 ["wintersprin"] = "winterspring",["wintespring"] = "winterspring",["winderspring"] = "winterspring",["winterpsring"] = "winterspring",["wintersprign"] = "winterspring",
 ["wester"] = "western",["plaguages"] = "plaguelands",["plagelands"] = "plaguelands",["wetland"] = "wetlands",["wetlnds"] = "wetlands",["wedlands"] = "wetlands",
+
+["barenns"] = "barrens",
 
 ["xroads"] = "crossroads",["gadge"] = "gadget",["hyal"] = "hyjal",["hygal"] = "hyjal",["mointain"] = "mountain",["mts"] = "mountain",["valey"] = "valley",
 ["warson"] = "warsong",["wssg"] = "wsg",["bassin"] = "basin",["ruinse"] = "ruins",
@@ -1056,9 +1098,9 @@ GF_WORD_FIX_SINGLE_WORD = { -- Single word changes. Mostly typos and simple word
 ["courrier"] = "courier",["scyth"] = "scythe",["liutenant"] = "lieutenant",["alvaroid"] = "alverold",["cinders"] = "cinder",["dynders"] = "cynders",["cyndes"] = "cynders",["captaions"] = "captain",["capitain"] = "captain",["captains"] = "captain",
 
 -- Dungeons
-["rf"] = "ragefirechasm",["rsc"] = "ragefirechasm",["rcf"] = "ragefirechasm",["rgc"] = "ragefirechasm",["rfv"] = "ragefirechasm",["rffc"] = "ragefirechasm",["rfg"] = "ragefirechasm",["chasam"] = "chasm",
+["rf"] = "rfc",["rsc"] = "rfc",["rcf"] = "rfc",["rgc"] = "rfc",["rfv"] = "rfc",["rffc"] = "rfc",["rfg"] = "rfc",["chasam"] = "chasm",
 ["dms"] = "dm",["vc"] = "deadmines",["dmines"] = "deadmines",["dmine"] = "deadmines",
-["twc"] = "wailingcaverns",["wcr"] = "wailingcaverns",["waling"] = "wailing",["vailing"] = "wailing",["wailling"] = "wailing",["waililing"] = "wailing",["wailign"] = "wailing",["waialing"] = "wailing",
+["twc"] = "wc",["wcr"] = "wc",["waling"] = "wailing",["vailing"] = "wailing",["wailling"] = "wailing",["waililing"] = "wailing",["wailign"] = "wailing",["waialing"] = "wailing",
 ["cavs"] = "caverns",["caverne"] = "caverns",["carverns"] = "caverns",["cavernes"] = "caverns",["canverns"] = "caverns",["caveras"] = "caverns",
 ["stocls"] = "stock",["stonks"] = "stock",["stockk"] = "stock",["stcks"] = "stocks",
 ["bd"] = "bfd",["bdf"] = "bfd",["bfg"] = "bfd",["bfc"] = "bfd",["bsf"] = "bfd",["bfp"] = "bfd",["fahtom"] = "fathom",
@@ -1081,7 +1123,7 @@ GF_WORD_FIX_SINGLE_WORD = { -- Single word changes. Mostly typos and simple word
 ["gnomergone"] = "gnomeregan",["gnomerigan"] = "gnomeregan",["gnomerregan"] = "gnomeregan",["gnomerreggan"] = "gnomeregan",["gnomerregin"] = "gnomeregan",["gnomger"] = "gnomeregan",["gnomoeregan"] = "gnomeregan",["gnomragen"] = "gnomeregan",
 ["gnomregan"] = "gnomeregan",["gnomregen"] = "gnomeregan",["gnomrigan"] = "gnomeregan",["gnooner"] = "gnomeregan",["gnormeregan"] = "gnomeregan",["gonomeregan"] = "gnomeregan",["gooneragan"] = "gnomeregan",["gooneregan"] = "gnomeregan",
 ["goonergon"] = "gnomeregan",["goonergone"] = "gnomeregan",["nomeragan"] = "gnomeregan",["nomeragon"] = "gnomeregan",["nomeregan"] = "gnomeregan",["vnomeregan"] = "gnomeregan",["gnomerang"] = "gnomeregan",
-["gnomerega"] = "gnomeregan",["gnomiegone"] = "gnomeregan",
+["gnomerega"] = "gnomeregan",["gnomiegone"] = "gnomeregan",["gnomerean"] = "gnomeregan",
 ["monastary"] = "monastery",["monstary"] = "monastery",["monstery"] = "monastery",["monasatry"] = "monastery",["monstry"] = "monastery",["monestry"] = "monastery",["monestary"] = "monastery",["monostary"] = "monastery",["monostery"] = "monastery",
 ["scarlett"] = "scarlet",["scarlette"] = "scarlet",["gv"] = "gy",["grav"] = "gy",["gyy"] = "gy",["smg"] = "smgy",
 ["lib"] = "library",["lyb"] = "library",["libary"] = "library",["librery"] = "library",["libray"] = "library",["librady"] = "library",["libraruy"] = "library",["ibrary"] = "library",["librirary"] = "library",["librabry"] = "library",
@@ -1128,7 +1170,7 @@ GF_WORD_FIX_SINGLE_WORD = { -- Single word changes. Mostly typos and simple word
 ["gilnaeas"] = "gilneas",["gliacas"] = "gilneas",["gcity"] = "gilneas",["gilnaes"] = "gilneas",
 ["hfc"] = "hateforgequarry",["hrg"] = "hateforgequarry",["htq"] = "hateforgequarry",
 ["hijal"] = "hyjal",["hiyal"] = "hyjal",["hayja"] = "hyjal",["hyial"] = "hyjal",["hyall"] = "hyjal",["hyjia"] = "hyjal",["hyja"] = "hyjal",["hyjail"] = "hyjal",["hujal"] = "hyjal",
-["hylai"] = "hyjal",["hajar"] = "hyjal",["hyjao"] = "hyjal",["hjal"] = "hyjal",["hijah"] = "hyjal",["hijuh"] = "hyjal",["hyjial"] = "hyjal",["hjyal"] = "hyjal",
+["hylai"] = "hyjal",["hajar"] = "hyjal",["hyjao"] = "hyjal",["hjal"] = "hyjal",["hijah"] = "hyjal",["hijuh"] = "hyjal",["hyjial"] = "hyjal",["hjyal"] = "hyjal",["hajay"] = "hyjal",
 ["ukh"] = "karazhan",["khara"] = "karazhan",["kz"] = "karazhan",["cara"] = "karazhan",["kata"] = "karazhan",["kharazan"] = "karazhan",["ksrs"] = "karazhan",["lkh"] = "karazhan",["karac"] = "karazhan",["karaz"] = "karazhan",["kahrazan"] = "karazhan",
 ["smv"] = "swv",["svw"] = "swv",["svv"] = "swv",["swb"] = "swv",["xsmv"] = "swv",["nordenaar"] = "nordanaar",
 ["gdmr"] = "dmr",
@@ -1139,15 +1181,12 @@ GF_WORD_FIX_SINGLE_WORD = { -- Single word changes. Mostly typos and simple word
 ["jewelier"] = "jewelcrafter",["jeweller"] = "jewelcrafter",["jc"] = "jewelcrafter",["jw"] = "jewelcrafter",["jwc"] = "jewelcrafter",["jcs"] = "jewelcrafter",["jf"] = "jewelcrafter",
 ["jewe"] = "jewelcrafter",["jewelcraftin"] = "jewelcrafter",["jewelcra"] = "jewelcrafter",
 
-["jwl"] = "gem",["jwel"] = "gem",["jewl"] = "gem",["jawel"] = "gem",["juwe"] = "gem",["juwel"] = "gem",["gemmer"] = "gem",["gemo"] = "gem",
+["jwl"] = "jewel",["jwel"] = "jewel",["jewl"] = "jewel",["jawel"] = "jewel",["juwe"] = "jewel",["juwel"] = "jewel",["gemmer"] = "jewelcrafter",["gemo"] = "jewel",
 ["casle"] = "castle",["castl"] = "castle",["cstle"] = "castle",["castel"] = "castle",["ruinss"] = "ruins",
 ["cripts"] = "crypt",["cript"] = "crypt",["cryps"] = "crypt",["crips"] = "crypt",["crysts"] = "crypt",["cryts"] = "crypt",["cryptes"] = "crypt",["criptes"] = "crypt",["criptt"] = "crypt",["crpts"] = "crypt",
 ["krypts"] = "crypt",["krypt"] = "crypt",["crypsa"] = "crypt",["cripth"] = "crypt",["crypth"] = "crypt",["cryptss"] = "crypt",["crypts"] = "crypt",["cyrpts"] = "crypt",["crytps"] = "crypt",
 
-["artals"] = "alahthalas",["lycon"] = "lycan",
-
-["gillijims"] = "gillijim",["giljim"] = "gillijim",["giljims"] = "gillijim",["gilijim"] = "gillijim",
-
+["artals"] = "alahthalas",["lycon"] = "lycan",["gillijims"] = "gillijim",["giljim"] = "gillijim",["giljims"] = "gillijim",["gilijim"] = "gillijim",
 
 -- Slang/Curse
 ["shits"] = "shit",["shitty"] = "shit",["shity"] = "shit",["shhitty"] = "shit",
@@ -1162,7 +1201,7 @@ GF_WORD_FIX_BEFORE_QUEST = { -- Word changes processed before quests.
 ["anoyne"] = "anyone",["anybdy"] = "anyone",["anyyone"] = "anyone",["aynone"] = "anyone",["someoe"] = "anyone",["anybidy"] = "anyone",
 ["doo"] = "do",["toodo"] = "todo",["upup"] = "up",["whereda"] = "where",["whenda"] = "when",["welcomesh"] = "welcomes",["somthing"] = "something",["dredsteed"] = "dreadsteed",["gravyard"] = "gy",["gyyard"] = "gy",
 ["avaiable"] = "available",["availabe"] = "available",["avaliable"] = "available",["avalaible"] = "available",["avalible"] = "available",["aveliable"] = "available",["vailable"] = "available",["availiable"] = "available",
-["avail"] = "available",["avali"] = "available",
+["avail"] = "available",["avali"] = "available",["happeneing"] = "happen",
 ["tusedays"] = "tuesday",
 
 ["applyd"] = "apply",["attachin"] = "applyin",["attachng"] = "apply",["applyng"] = "apply",["installd"] = "apply",["installin"] = "apply",["installng"] = "apply",
@@ -1173,11 +1212,12 @@ GF_WORD_FIX_BEFORE_QUEST = { -- Word changes processed before quests.
 
 -- Simple word changes
 ["ali"] = "alliance",["alli"] = "alliance",["allies"] = "alliance",["ally"] = "alliance",["ane"] = "any",["anyones"] = "anyone",["asking"] = "ask",["booster"] = "boost",["boosting"] = "boost",["boosts"] = "boost",["cans"] = "can",
-["coupled"] = "couple",["coupler"] = "couple",["couplers"] = "couple",["couples"] = "couple",["damaged"] = "damage",["damager"] = "damage",["damagers"] = "damage",["damages"] = "damage",["escorting"] = "escort",["escorts"] = "escort",["farms"] = "farm",
-["bosses"] = "boss",["fora"] = "for",["foran"] = "for",["forv"] = "for",["fpor"] = "for",["gogo"] = "go",["questing"] = "quest",["quests"] = "quest",["happening"] = "happen",["hordes"] = "horde",["hours"] = "hour",["invited"] = "invite",["inviter"] = "invite",
-["inviters"] = "invite",["invites"] = "invite",["joined"] = "join",["joiner"] = "join",["joiners"] = "join",["joins"] = "join",["minutes"] = "minute",["mobs"] = "mob",["mountains"] = "mountain",["needing"] = "need",["needs"] = "need",["nneding"] = "need",
-["opens"] = "open",["popper"] = "pop",["poppers"] = "pop",["pops"] = "pop",["queued"] = "queue",["queueing"] = "queue",["queuef"] = "queue",["queuer"] = "queue",["queuers"] = "queue",["queues"] = "queue",["raiding"] = "raid",["somes"] = "some",
-["slots"] = "slot",["slotted"] = "slot",["slotter"] = "slot",["slotters"] = "slot",["slotting"] = "slot",["signups"] = "signup",
+["coupled"] = "couple",["coupler"] = "couple",["couplers"] = "couple",["couples"] = "couple",["damaged"] = "damage",["damager"] = "damage",["damagers"] = "damage",["damages"] = "damage",["escorting"] = "escort",["escorts"] = "escort",
+["farms"] = "farm",["bosses"] = "boss",["fora"] = "for",["foran"] = "for",["forv"] = "for",["fpor"] = "for",["gogo"] = "go",["questing"] = "quest",["quests"] = "quest",["hordes"] = "horde",["hours"] = "hour",
+["invited"] = "invite",["inviter"] = "invite",["inviters"] = "invite",["invites"] = "invite",["joined"] = "join",["joiner"] = "join",["joiners"] = "join",["joins"] = "join",["minutes"] = "minute",["mobs"] = "mob",
+["mountains"] = "mountain",["needing"] = "need",["needs"] = "need",["nneding"] = "need",["opens"] = "open",["popper"] = "pop",["poppers"] = "pop",["pops"] = "pop",["queued"] = "queue",["queueing"] = "queue",["queuef"] = "queue",
+["queuer"] = "queue",["queuers"] = "queue",["queues"] = "queue",["raiding"] = "raid",["somes"] = "some",["slots"] = "slot",["slotted"] = "slot",["slotter"] = "slot",["slotters"] = "slot",["slotting"] = "slot",["signups"] = "signup",
+["happening"] = "happen",
 
 -- Complete word changes
 ["folks"] = "people",["assist"] = "help",["could"] = "can",["anybody"] = "anyone",["somebody"] = "anyone",["somewho"] = "anyone",["somone"] = "anyone",["someone"] = "anyone",["somoene"] = "anyone",
@@ -1230,32 +1270,26 @@ GF_WORD_FIX_BEFORE_QUEST = { -- Word changes processed before quests.
 ["arcanumofconstitution"] = "arcanum",["arcanumofrumination"] = "arcanum",["arcanumoftenacity"] = "arcanum",
 
 -- Make sure word is recombined
-["health"] = "health",["anyone"] = "anyone",["beltbuckle"] = "beltbuckle",["guild"] = "guild",["attackpower"] = "ap",["stormwrought"] = "stormwrought",["northernstv"] = "northernstv",["southernstv"] = "southernstv",
+["health"] = "health",["anyone"] = "anyone",["beltbuckle"] = "beltbuckle",["guild"] = "guild",["attackpower"] = "ap",["northernstv"] = "northernstv",["southernstv"] = "southernstv",
 ["bootybay"] = "bootybay",["powerlevel"] = "powerlevel",["dunmorogh"] = "dunmorogh",["twowgroup"] = "twowgroup",["turtlewowgroup"] = "turtlewowgroup",
 ["lfc"] = "lfc",["lfm"] = "lfm",["lfg"] = "lfg",["lfs"] = "lfs",["lfb"] = "lfb",
-["zulfarrak"] = "zulfarrak",
-["atalhakkar"] = "atalhakkar",
-["dme"] = "dme",["dmn"] = "dmn",["dmt"] = "dmt",["dmw"] = "dmw",
-["razorfenkraul"] = "razorfenkraul",["razorfendowns"] = "razorfendowns",
-["smgy"] = "smgy",["smlib"] = "smlib",["smarm"] = "smarm",["smcath"] = "smcath",["swv"] = "swv",["udstrat"] = "udstrat",["livestrat"] = "livestrat",["upperblackrock"] = "upperblackrock",["lowerblackrock"] = "lowerblackrock",
-["stormwroughtcastle"] = "stormwroughtcastle",["stormwroughtruins"] = "stormwroughtruins",["stormwroughtdescent"] = "stormwroughtdescent",
-["alahthalas"] = "alahthalas",["everlook"] = "everlook",["mooncloth"] = "mooncloth",["goingtodrop"] = "goingtodrop",["servertime"] = "servertime",["valleyofspears"] = "valleyofspears",["swampofsorrows"] = "swampofsorrows",
-["zulgurub"] = "zulgurub",["karazhancrypt"] = "karazhancrypt",["karacrypt"] = "karacrypt",["gnomeregan"] = "gnomeregan",
 
+["alahthalas"] = "alahthalas",["everlook"] = "everlook",["mooncloth"] = "mooncloth",["goingtodrop"] = "goingtodrop",["servertime"] = "servertime",["valleyofspears"] = "valleyofspears",["swampofsorrows"] = "swampofsorrows",
+["zulgurub"] = "zulgurub",
 ["onyxiabuff"] = "onyxiabuff",["onyxiahead"] = "onyxiahead",["onyxiacooldown"] = "onyxiacooldown",["nefarianbuff"] = "nefarianbuff",["nefarianhead"] = "nefarianhead",["nefariancooldown"] = "nefariancooldown",
 ["rendbuff"] = "rendbuff",["rendhead"] = "rendhead",["rendcooldown"] = "rendcooldown",["zgbuff"] = "zgbuff",["zghead"] = "zghead",
 ["auctionhouse"] = "auctionhouse",["saltshaker"] = "saltshaker",["signup"] = "signup",["lockbox"] = "lockbox",["thunderbluff"] = "thunderbluff",["deathroll"] = "deathroll",
 ["summoningstone"] = "summoningstone",["summoningstones"] = "summoningstone",["summonstones"] = "summoningstone",
 
 ["bountyondragonmaw"] = "bountyondragonmaw",["dragonmawshinbones"] = "dragonmawshinbones",["huntingdragonmaw"] = "huntingdragonmaw",["dragonmawconflict"] = "dragonmawconflict",["dragonmawthreat"] = "dragonmawthreat",["dragonmawwar"] = "dragonmawwar",
-["destructionofdragonmaw"] = "destructionofdragonmaw",["easternkingdoms"] = "easternkingdoms",["blackfathomdeeps"] = "blackfathomdeeps",["brightdreamshard"] = "brightdreamshard",
+["destructionofdragonmaw"] = "destructionofdragonmaw",["easternkingdoms"] = "easternkingdoms",["brightdreamshard"] = "brightdreamshard",["summoningprincess"] = "summoningprincess",
 
 ["greenhillsofstranglethorn"] = "greenhillsofstranglethorn",["shredderoperatingmanual"] = "shredderoperatingmanual",["keytokarazhanzhan"] = "keytokarazhanzhan",["chainheal"] = "chainheal",["overchargedleyenergy"] = "overchargedleyenergy",
 
 -- Added to both single word and before quest.
 ["joinn"] = "join",["joinon"] = "join",["legss"] = "legs",["enginiring"] = "engineer",["bucklet"] = "buckle",["pickerw"] = "pick",["crafterer"] = "crafter",
 ["lookign"] = "looking",["lookin"] = "looking",["lookinf"] = "looking",["loockin"] = "looking",["mounth"] = "mount",["openen"] = "open",["unlockin"] = "unlock",["cheapzor"] = "cheap",["guilds"] = "guild",["unlocks"] = "unlock",
-["bwls"] = "bwl",["bwwl"] = "bwl",["bwll"] = "bwl",["hcjal"] = "hyjal",["dpser"] = "dps",["dpsers"] = "dps",["dpsing"] = "dps",["dpss"] = "dps",["dpsin"] = "dps",["healadin"] = "paladin",["starth"] = "stratholme",
+["bwls"] = "bwl",["bwwl"] = "bwl",["bwll"] = "bwl",["hcjal"] = "hyjal",["dpser"] = "dps",["dpsers"] = "dps",["dpsing"] = "dps",["dpss"] = "dps",["dpsin"] = "dps",["healadin"] = "paladin",["starth"] = "stratholme",["ogri"] = "orgrimmar",
 
 -- Level(only those will full spelling of "level" because it gets split)
 ["lowlevel"] = "level",["maxlevel"] = "level",
@@ -1283,7 +1317,7 @@ GF_WORD_FIX_BEFORE_QUEST = { -- Word changes processed before quests.
 ["lockip"] = "lockbox",["lovkboxes"] = "lockbox",["locboxes"] = "lockbox",["locbox"] = "lockbox",["loxbox"] = "lockbox",["loxboxes"] = "lockbox",["lockchest"] = "lockbox",["fastunlock"] = "unlock",["quickunlock"] = "unlock",["batteredlockbox"] = "lockbox",
 ["chunklockbox"] = "lockbox",["peskylockbox"] = "lockbox",["lockedboxes"] = "lockbox",["lokpik"] = "lockbox",["lookpick"] = "lockbox",["nlock"] = "unlock",["lockipick"] = "unlock",["lockpickin"] = "lockpicking",
 ["blockrate"] = "block",["blockrating"] = "block",["beltuckle"] = "beltbuckle",["gesmtones"] = "gemstone",["trusilver"] = "truesilver",
-["summonning"] = "summon",["sumonning"] = "summon",
+["summonning"] = "summon",["sumonning"] = "summon",["summonn"] = "summon",
 
 ["deathroller"] = "deathroll",["deathrollers"] = "deathroll",["deathrolling"] = "deathroll",["deathrolls"] = "deathroll",["deathrollerz"] = "deathroll",["deathrollz"] = "deathroll",["dthroller"] = "deathroll",["dthrollers"] = "deathroll",
 ["dthrollerz"] = "deathroll",["deathrollaz"] = "deathroll",["deadroll"] = "deathroll",
@@ -1306,12 +1340,13 @@ GF_WORD_FIX_BEFORE_QUEST = { -- Word changes processed before quests.
 ["wetlandss"] = "wetlands",
 ["highelfzone"] = "thalassianhighlands",
 ["burnign"] = "burning",["burningsteps"] = "burningsteppes",["hinterland"] = "hinterlands",["hunterlands"] = "hinterlands",
-["sortmwrought"] = "stormwrought",["stomrought"] = "stormwrought",["stomwrought"] = "stormwrought",["stormraght"] = "stormwrought",["stormraught"] = "stormwrought",["stormraut"] = "stormwrought",["stormroght"] = "stormwrought",["stormrot"] = "stormwrought",
-["stormrough"] = "stormwrought",["stormrought"] = "stormwrought",["stormthraught"] = "stormwrought",["stormthrought"] = "stormwrought",["stormwaught"] = "stormwrought",["stormworught"] = "stormwrought",["stormwot"] = "stormwrought",
-["stormwought"] = "stormwrought",["stormwraght"] = "stormwrought",["stormwrat"] = "stormwrought",["stormwraugh"] = "stormwrought",["stormwraught"] = "stormwrought",["stormwreaked"] = "stormwrought",["stormwroght"] = "stormwrought",
-["stormwrogut"] = "stormwrought",["stormwrot"] = "stormwrought",["stormwroug"] = "stormwrought",["stormwrough"] = "stormwrought",["stormwrougt"] = "stormwrought",["stormwrouht"] = "stormwrought",["stormwrount"] = "stormwrought",
-["stormwrouth"] = "stormwrought",["stornwrought"] = "stormwrought",["storumwrought"] = "stormwrought",["storwrought"] = "stormwrought",["stromwrought"] = "stormwrought",["sturmwrought"] = "stormwrought",["stormwroughgt"] = "stormwrought",
-["stonewrought"] = "stormwrought",["stormwroughht"] = "stormwrought",
+["sortmwrought"] = "stormwrought",["stomrought"] = "stormwrought",["stomwrought"] = "stormwrought",["stormraght"] = "stormwrought",["stormraught"] = "stormwrought",["stormraut"] = "stormwrought",["stormwroughht"] = "stormwrought",
+["stormroght"] = "stormwrought",["stormrot"] = "stormwrought",["stormrough"] = "stormwrought",["stormrought"] = "stormwrought",["stormthraught"] = "stormwrought",["stormthrought"] = "stormwrought",["stonewrought"] = "stormwrought",
+["stormwaught"] = "stormwrought",["stormworught"] = "stormwrought",["stormwot"] = "stormwrought",["stormwought"] = "stormwrought",["stormwraght"] = "stormwrought",["stormwrat"] = "stormwrought",
+["stormwraugh"] = "stormwrought",["stormwraught"] = "stormwrought",["stormwreaked"] = "stormwrought",["stormwroght"] = "stormwrought",["stormwrogut"] = "stormwrought",["stormwrot"] = "stormwrought",
+["stormwroug"] = "stormwrought",["stormwrough"] = "stormwrought",["stormwrougt"] = "stormwrought",["stormwrouht"] = "stormwrought",["stormwrount"] = "stormwrought",["stormwrouth"] = "stormwrought",
+["stornwrought"] = "stormwrought",["storumwrought"] = "stormwrought",["storwrought"] = "stormwrought",["stromwrought"] = "stormwrought",["sturmwrought"] = "stormwrought",["stormwroughgt"] = "stormwrought",
+
 ["shtorm"] = "storm",["andorhall"] = "andorhal",["suneyglade"] = "sunnyglade",["sunneyglade"] = "sunnyglade",
 
 ["kalindor"] = "kalimdor",["gadgedzan"] = "gadgetzan",["gadgetzn"] = "gadgetzan",["wsgg"] = "wsg",["darnassuss"] = "darnassus",["orgrimmarr"] = "orgrimmar",["orgrimmare"] = "orgrimmar",
@@ -1370,7 +1405,7 @@ GF_WORD_FIX_BEFORE_QUEST = { -- Word changes processed before quests.
 ["ccfarm"] = "cenarionrepfarm",["ccgroup"] = "cenarionrepfarm",["ccrun"] = "cenarionrepfarm",["ccgrind"] = "cenarionrepfarm",["ccrepfarm"] = "cenarionrepfarm",
 ["chfarm"] = "cenarionrepfarm",["chgroup"] = "cenarionrepfarm",["chrun"] = "cenarionrepfarm",["chgrind"] = "cenarionrepfarm",["chrepfarm"] = "cenarionrepfarm",
 ["cocfarm"] = "cenarionrepfarm",["cocgroup"] = "cenarionrepfarm",["cocrun"] = "cenarionrepfarm",["cocgrind"] = "cenarionrepfarm",["cocrepfarm"] = "cenarionrepfarm",
-["farmgroup"] = "repfarm",["farmrun"] = "repfarm",["combattack"] = "combattask",["combattacks"] = "combattask",
+["farmgroup"] = "repfarm",["farmrun"] = "repfarm",["combattack"] = "combattask",["combattacks"] = "combattask",["combatassignment"] = "combattask",
 ["badgegroup"] = "badgefarm",["badgerun"] = "badgefarm",["badgegrind"] = "badgefarm",
 ["raidboss"] = "worldboss",["worlddragon"] = "worldboss",["wboss"] = "worldboss",["wbosses"] = "worldboss",["allwing"] = "questrun",
 ["aqcc"] = "aq",["aqcenarion"] = "aq",["aqcenarionrep"] = "aqrep",["aqcenarionrepfarm"] = "aqrepfarm",["cenarionrepfarm"] = "cenarionrepfarm",
@@ -1381,19 +1416,16 @@ GF_WORD_FIX_BEFORE_QUEST = { -- Word changes processed before quests.
 ["dukessummon"] = "silithusdukes",["dukesummon"] = "silithusdukes",["lordsummon"] = "silithuslords",["lordssummon"] = "silithuslords",["lordsilithus"] = "silithuslords",["windstoneinsilithus"] = "silithusdukes",["windstonesilithus"] = "silithusdukes",
 ["silithuscombatquest"] = "combattask",["fielddutycombatquest"] = "combattask",["silithusboss"] = "silithuslords",["lordsgroup"] = "silithuslords",
 ["summonprincess"] = "summonprincess",["princesstrapped"] = "princesstrapped",["fieldofduty"] = "fieldduty",["blacklashandhematus"] = "brokenalliances",
+["nessingwary"] = "nesingwary",["nesingwarys"] = "nesingwary",["nessingwarys"] = "nesingwary",["nessingway"] = "nesingwary",["nesingway"] = "nesingwary",["nessingways"] = "nesingwary",["nesingways"] = "nesingwary",
 
-["attunementbwl"] = "ubrs",["bwlattunement"] = "ubrs",["bwattunement"] = "ubrs",["attunementtobwl"] = "ubrs",["attunementforbwl"] = "ubrs",
-["attunementblackwinglair"] = "ubrs",["blackwinglairattunement"] = "ubrs",["attunementtoblackwinglair"] = "ubrs",["attunementforblackwinglair"] = "ubrs",
+["attunementonyxia"] = "onyxiaattunement",["onyxiaattunement"] = "onyxiaattunement",["attunementtoonyxia"] = "onyxiaattunement",["attunementforonyxia"] = "onyxiaattunement",["onyxiaquest"] = "onyxiaattunement",["onyxiaprequest"] = "onyxiaattunement",
+["onyquest"] = "onyxiaattunement",["onyprequest"] = "onyxiaattunement",["onypre"] = "onyxiaattunement",["onyxiapre"] = "onyxiaattunement",["onyattunement"] = "onyxiaattunement",["onyxiaattunementquest"] = "onyxiaattunement",
+["onyxiaaccess"] = "onyxiaattunement",["onyxiaattunement"] = "onyxiaattunement",["attunements"] = "attunement",
+
 ["attunementmc"] = "brd",["mcattunement"] = "brd",["attunementtomc"] = "brd",["attunementformc"] = "brd",
 ["attunementmoltencore"] = "brd",["moltencoreattunement"] = "brd",["attunementtomoltencore"] = "brd",["attunementformoltencore"] = "brd",
-
-["attunementonyxia"] = "brd",["onyxiaattunement"] = "onyxiaattunement",["attunementtoonyxia"] = "onyxiaattunement",["attunementforonyxia"] = "onyxiaattunement",["onyxiaquest"] = "onyxiaattunement",["onyxiaprequest"] = "onyxiaattunement",
-["onyquest"] = "onyxiaattunement",["onyprequest"] = "onyxiaattunement",["onypre"] = "onyxiaattunement",["onyxiapre"] = "onyxiaattunement",["onyattunement"] = "onyxiaattunement",["onyxiaattunementquest"] = "onyxiaattunement",
-["onyxiaaccess"] = "onyxiaattunement",
-
-["onyxiaattunement"] = "onyxiaattunement",["attunements"] = "attunement",
-
-["nessingwary"] = "nesingwary",["nesingwarys"] = "nesingwary",["nessingwarys"] = "nesingwary",["nessingway"] = "nesingwary",["nesingway"] = "nesingwary",["nessingways"] = "nesingwary",["nesingways"] = "nesingwary",
+["attunementbwl"] = "ubrs",["bwlattunement"] = "ubrs",["bwattunement"] = "ubrs",["attunementtobwl"] = "ubrs",["attunementforbwl"] = "ubrs",
+["attunementblackwinglair"] = "ubrs",["blackwinglairattunement"] = "ubrs",["attunementtoblackwinglair"] = "ubrs",["attunementforblackwinglair"] = "ubrs",
 
 -- Quest and monster names
 ["hellscreem"] = "hellscream",["protectionofflock"] = "protectingherd",["emissaryromankhna"] = "thecalling",["emissaryromankhan"] = "thecalling",
@@ -1404,16 +1436,16 @@ GF_WORD_FIX_BEFORE_QUEST = { -- Word changes processed before quests.
 ["rcgroup"] = "ragefirechasm",["grouprc"] = "ragefirechasm",["ragebaitechasm"] = "ragefirechasm",["ragebaitchasm"] = "ragefirechasm",
 ["deadmine"] = "deadmines",["ddeadmines"] = "deadmines",["dedmines"] = "deadmines",["dedmine"] = "deadmines",["deathmine"] = "deadmines",["deathmines"] = "deadmines",["vancleef"] = "deadmines",
 ["deadmies"] = "deadmines",["deadmindes"] = "deadmines",["deaadmines"] = "deadmines",["deammine"] = "deadmines",["deammines"] = "deadmines",["deanmine"] = "deadmines",["deanmines"] = "deadmines",["deadmiens"] = "deadmines",["daedmines"] = "deadmines",
-["deadmin"] = "deadmines",["deadmmines"] = "deadmines",["deamines"] = "deadmines",["deadmins"] = "deadmines",["deadminds"] = "deadmines",
+["deadmin"] = "deadmines",["deadmmines"] = "deadmines",["deamines"] = "deadmines",["deadmins"] = "deadmines",["deadminds"] = "deadmines",["deadmiines"] = "deadmines",
 ["blackfathome"] = "blackfathom",["blackfatom"] = "blackfathom",["blackfanthom"] = "blackfathom",["blackfantom"] = "blackfathom",["bloackfathom"] = "blackfathom",["blackfahtom"] = "blackfathom",["blackdathom"] = "blackfathom",
 ["blackfathoms"] = "blackfathom",["bigfathom"] = "blackfathom",["bigflathim"] = "blackfathom",["blackphatom"] = "blackfathom",["blackfathrom"] = "blackfathom",["blackfatham"] = "blackfathom",["blackphathom"] = "blackfathom",
 ["blackathom"] = "blackfathom",["blackfathum"] = "blackfathom",["blackfathon"] = "blackfathom",["blackfathm"] = "blackfathom",["blacfathom"] = "blackfathom",
 ["blackfdeeps"] = "blackfathomdeeps",["blackfdepths"] = "blackfathomdeeps",["blackfathomdepths"] = "blackfathomdeeps",["blackfathomdeep"] = "blackfathomdeeps",["blackfathamdeeps"] = "blackfathomdeeps",["blackdeeps"] = "blackfathomdeeps",
 ["blackfathamdeep"] = "blackfathomdeeps",["blackphathomdeeps"] = "blackfathomdeeps",["blackathomdeeps"] = "blackfathomdeeps",["blackfathumdeeps"] = "blackfathomdeeps",["blackfathomdips"] = "blackfathomdeeps",["blackfathondeeps"] = "blackfathomdeeps",
 ["blackfathomdeepz"] = "blackfathomdeeps",["blackfathomddeeps"] = "blackfathomdeeps",["blackfathomdepes"] = "blackfathomdeeps",["blackfathmdeeps"] = "blackfathomdeeps",["fathemed"] = "fathom",
-["stockadesz"] = "stockade",["stockadez"] = "stockade",["stockade"] = "stockade",["stockaded"] = "stockade",["stockaders"] = "stockade",["stockades"] = "stockade",
+["stockadesz"] = "stockade",["stockadez"] = "stockade",["stockaded"] = "stockade",["stockaders"] = "stockade",["stockades"] = "stockade",
 ["gnomereganb"] = "gnomeregan",["gnomeregane"] = "gnomeregan",["gnomereganh"] = "gnomeregan",
-["shadomwang"] = "sfk",["sfkeep"] = "sfk",["shawdowfang"] = "sfk",["shadowfeng"] = "sfk",["shadowfernkeep"] = "sfk",["shadowfangkeep"] = "sfk",["shadowfkeep"] = "sfk",["sfkk"] = "sfk",["sfks"] = "sfk",["shadwofang"] = "sfk",
+["shadomwang"] = "sfk",["sfkeep"] = "sfk",["shawdowfang"] = "sfk",["shadowfeng"] = "sfk",["shadowfernkeep"] = "sfk",["shadowfkeep"] = "sfk",["sfkk"] = "sfk",["sfks"] = "sfk",["shadwofang"] = "sfk",
 ["razorfren"] = "razorfen",["razofern"] = "razorfen",["razorfer"] = "razorfen",["razorder"] = "razorfen",["razerfen"] = "razorfen",["razoerfen"] = "razorfen",["rpk"] = "rfk",["rfkk"] = "rfk",["rdk"] = "rfk",
 ["razorfrn"] = "razorfen",["wzorfen"] = "razorfen",["wazorfen"] = "razorfen",["razorfenk"] = "razorfenkraul",
 ["libraryu"] = "library",["cathedrale"] = "cathedral",
@@ -1434,38 +1466,37 @@ GF_WORD_FIX_BEFORE_QUEST = { -- Word changes processed before quests.
 ["scholomansa"] = "scholomance",["solomance"] = "scholomance",["schololence"] = "scholomance",["schoolmance"] = "scholomance",["stratcholme"] = "scholomance",["shcolomance"] = "scholomance",["scholmance"] = "scholomance",
 ["scholol"] = "scholomance",["scholor"] = "scholomance",
 ["blackockspire"] = "blackrockspire",["blackcockspire"] = "blackrockspire",["vaalthak"] = "valthalak",["drakisath"] = "drakkisath",["drakki"] = "drakkisath",["lbrd"] = "lbrs",["ubrd"] = "ubrs",
-["diremail"] = "diremaul",["diermail"] = "diremaul",["diermaul"] = "diremaul",["diremual"] = "diremaul",["diremau"] = "diremaul",["dmnt"] = "dmt",["eastdm"] = "dme",["northdm"] = "dmn",["dmlibrary"] = "dmn",["westdm"] = "dmw",["eastdire"] = "dme",
-["northdire"] = "dmn",["westdire"] = "dmw",["dmemaul"] = "dme",["dmnmaul"] = "dmn",["dmwmaul"] = "dmw",["diretribute"] = "dmt",["direeast"] = "dme",["direnorth"] = "dmn",["direwest"] = "dmw",["diren"] = "dmn",["direw"] = "dmw",["diret"] = "dmt",
-["eastdb"] = "dme",["northdb"] = "dmn",["westdb"] = "dmw",["dbtribute"] = "dmt",["dbeast"] = "dme",["dbnorth"] = "dmn",["direm"] = "dm",
-["drmn"] = "dmn",["drmt"] = "dmt",["drmw"] = "dmw",["drme"] = "dme",["drmnorth"] = "dmn",["drmtribute"] = "dmt",["drmwest"] = "dmw",["drmeast"] = "dme",
+["diremail"] = "diremaul",["diermail"] = "diremaul",["diermaul"] = "diremaul",["diremual"] = "diremaul",["diremau"] = "diremaul",["dmnt"] = "dmt",["direm"] = "dm",
 ["stralive"] = "livestrat",["stradlive"] = "livestrat",["lstrat"] = "livestrat",
 ["udstat"] = "udstrat",["straud"] = "udstrat",["udcity"] = "udstrat",["udside"] = "udstrat",["strengthud"] = "udstrat",["statud"] = "udstrat",["stratud"] = "udstrat",["stratun"] = "udstrat",["stratundead"] = "udstrat",["stratdk"] = "udstrat",
 ["startud"] = "udstrat",["startun"] = "udstrat",["udstart"] = "udstrat",["stratholmeud"] = "udstrat",["stratholmeun"] = "udstrat",["stratholmedk"] = "udstrat",["stradud"] = "udstrat",["straddk"] = "udstrat",["stradundead"] = "udstrat",
 ["startingud"] = "udstrat",["startingun"] = "udstrat",["udstarting"] = "udstrat",["stratdead"] = "udstrat",["stratdeth"] = "udstrat",["stratdeath"] = "udstrat",["strandead"] = "udstrat",["stranundead"] = "udstrat",
 
 -- Raids
-["blackwinglare"] = "blackwinglair",["zulgrub"] = "zulgurub",["zulgurbu"] = "zulgurub",
+["blackwinglare"] = "blackwinglair",["zulgrub"] = "zulgurub",["zulgurbu"] = "zulgurub",["blackwind"] = "blackwing",
 ["onyhead"] = "onyxiahead",["nefhead"] = "nefarianhead",["onyhero"] = "onyxiahead",["nefhero"] = "nefarianhead",["onyxiahero"] = "onyxiahead",["nefarianhero"] = "nefarianhead",["onybuff"] = "onyxiabuff",["nefbuff"] = "nefarianbuff",
 ["nefarianinorgrimmar"] = "nefarianhead",["nefarianinstormwind"] = "nefarianhead",
 ["onyxias"] = "onyxia",["onyxial"] = "onyxia",
 ["karas"] = "karazhan",["aqs"] = "aq",
 
 -- Turtle
-["alathalas"] = "alahthalas",["alasthalas"] = "alahthalas",["alahthelas"] = "alahthalas",["alahtalas"] = "alahthalas",["althalas"] = "alahthalas",["altalar"] = "alahthalas",["altalhas"] = "alahthalas",
+["alathalas"] = "alahthalas",["alasthalas"] = "alahthalas",["alahthelas"] = "alahthalas",["alahtalas"] = "alahthalas",["althalas"] = "alahthalas",["altalar"] = "alahthalas",["altalhas"] = "alahthalas",["alastahas"] = "alahthalas",
 ["dragowmaw"] = "dragonmaw",["drangonmaw"] = "dragonmaw",["drahonmaw"] = "dragonmaw",["fragonmaw"] = "dragonmaw",["dragonmow"] = "dragonmaw",["dragonma"] = "dragonmaw",
 ["dragnomaw"] = "dragonmaw",["draonmaw"] = "dragonmaw",["dragomaw"] = "dragonmaw",["dragonwam"] = "dragonmaw",
 ["blackmoras"] = "blackmorass",["blackmorasss"] = "blackmorass",["blackmoss"] = "blackmorass",["blackmoreass"] = "blackmorass",["bblackmmorass"] = "blackmorass",["moreblackass"] = "blackmorass",["bmorass"] = "blackmorass",["blackmors"] = "blackmorass",
 ["eshm"] = "emeraldsanctum",["esnm"] = "emeraldsanctum",["esh"] = "emeraldsanctum",["esm"] = "emeraldsanctum",["hmes"] = "emeraldsanctum",["nmes"] = "emeraldsanctum",["sacnctum"] = "sanctum",["esn"] = "es",
-["gilneascity"] = "gilneas",["gilcity"] = "gilneas",["gilnease"] = "gilneas",["gilneasa"] = "gilneas",
+["gilcity"] = "gilneas",["gilnease"] = "gilneas",["gilneasa"] = "gilneas",
 ["hatforge"] = "hateforge",["hategorhe"] = "hateforge",["loveforge"] = "hateforge",
-["kara"] = "karazhan",["karazan"] = "karazhan",["lowerkara"] = "lowerkarazhan",["karazhanzhan"] = "karazhan",["stormwruins"] = "stormwroughtruins",
+["kara"] = "karazhan",["karazan"] = "karazhan",["lowerkara"] = "lowerkarazhan",["karazhanzhan"] = "karazhan",["stormwruins"] = "stormwroughtruins",["karacrypt"] = "karazhancrypt",
 
 ["notyhwind"] = "northwind",["nortwind"] = "northwind",["nrthwind"] = "northwind",
+["windhor"] = "windhorn",["windhrn"] = "windhorn",["wndhorn"] = "windhorn",["windhornn"] = "windhorn",["windhorrn"] = "windhorn",["windhoorn"] = "windhorn",["windorn"] = "windhorn",["wndhrn"] = "windhorn",["winhorn"] = "windhorn",
+
 ["crescgrove"] = "crescentgrove",
-
 ["blackmawretreat"] = "dragonmawretreat",["fatherlycanevent"] = "fatherlycan",
+["stormvault"] = "stormwindvault",["swvault"] = "stormwindvault",["stormwindv"] = "stormwindvault",
 
-["frostmain"] = "frostmane",["frostman"] = "frostmane",["frostmaine"] = "frostmane",["frostmanie"] = "frostmane",["frostmaen"] = "frostmane",["frosmane"] = "frostmane",["frosmain"] = "frostmane",
+["frostmain"] = "frostmane",["frostman"] = "frostmane",["frostmaine"] = "frostmane",["frostmanie"] = "frostmane",["frostmaen"] = "frostmane",["frosmane"] = "frostmane",["frosmain"] = "frostmane",["frostamen"] = "frostmane",
 ["forstmane"] = "frostmane",["forstmain"] = "frostmane",["frostmame"] = "frostmane",["frostmaim"] = "frostmane",["fostmane"] = "frostmane",["frostmne"] = "frostmane",["frostmanehallow"] = "frostmanehollow",
 
 ["shadowreaver"] = "darkreaver",["esattunement"] = "esattunement",["clockora"] = "clackora",
@@ -1640,7 +1671,7 @@ GF_WORD_FIX_QUEST_DUNGEON = { -- Quest names converted to dungeons. Processed be
 ["savetechbotsbrain"] = "gnomeregan",["gnogaine"] = "gnomeregan",["castpipestask"] = "gnomeregan",["finemess"] = "gnomeregan",["datarescue"] = "gnomeregan",["moregreenglow"] = "gnomeregan",["onlycureisgnomeregan"] = "gnomeregan",
 ["gyrodrillmaticexcavationators"] = "gnomeregan",["essentialartificials"] = "gnomeregan",["sparklematic"] = "gnomeregan",["grimeencrustedring"] = "gnomeregan",["rigwars"] = "gnomeregan",["grandbetrayal"] = "gnomeregan",
 ["blueleaftubers"] = "rfk",["williximporter"] = "rfk",["mortalitywanes"] = "rfk",["goinggoingguano"] = "rfk",["vengefulfate"] = "rfk",["croneofkraul"] = "rfk",["roogug"] = "rfk",["paintrosered"] = "smgy",["scarletwithrage"] = "smgy",
-["heartsofzeal"] = "smfull",["testoflore"] = "smlib",["compendiumoffallen"] = "smlib",["mythologyoftitans"] = "smlib",["innameoflight"] = "smfull",["intoscarletmonastery"] = "smfull",["downscarletpath"] = "smfull",
+["heartsofzeal"] = "smquestrun",["testoflore"] = "smlib",["compendiumoffallen"] = "smlib",["mythologyoftitans"] = "smlib",["innameoflight"] = "smquestrun",["intoscarletmonastery"] = "smquestrun",["downscarletpath"] = "smquestrun",
 ["hostofevil"] = "razorfendowns",["unholyalliance"] = "razorfendowns",["extinguishingidol"] = "razorfendowns",["scourgeofdowns"] = "razorfendowns",["bringlight"] = "razorfendowns",["bringend"] = "razorfendowns",
 ["signofhope"] = "uldaman",["powerstones"] = "uldaman",["powerstone"] = "uldaman",["agmondsfate"] = "uldaman",["solutiontodoom"] = "uldaman",["amuletofsecrets"] = "uldaman",["hiddenchamber"] = "uldaman",["lostdwarves"] = "uldaman",
 ["shatterednecklace"] = "uldaman",["necklacerecovery"] = "uldaman",["uldamantaketwo"] = "uldaman",["uldamantakethree"] = "uldaman",["backtouldaman"] = "uldaman",["badlandsreagentrun"] = "uldaman",["reagentrun"] = "reagentrun",
@@ -1650,20 +1681,24 @@ GF_WORD_FIX_QUEST_DUNGEON = { -- Quest names converted to dungeons. Processed be
 ["scepterofcelebras"] = "maraudon",["corruptionofearth"] = "corruptionofearth",["corruptionofearthandseed"] = "maraudon",["seedoflife"] = "maraudon",
 ["secretofcircle"] = "sunkentemple",["intodepths"] = "sunkentemple",["godhakkar"] = "sunkentemple",["jammalanprophet"] = "sunkentemple",["essenceoferanikus"] = "sunkentemple",["hazeofevil"] = "sunkentemple",["intotempleofatalhakkar"] = "sunkentemple",
 ["intodreamiii"] = "sunkentemple",
-["darkironlegacy"] = "brd",["commandergorshak"] = "brd",["ribblyscrewspigot"] = "brd",["yukascrewspigot"] = "brd",["marshalbrd"] = "brd",["windsor"] = "brd",["abandonedhope"] = "brd",["spectralchalice"] = "brd",
-["lastelement"] = "brd",["whatisgoingon"] = "brd",["killonsight"] = "killonsight",["killonsighthighrankingdarkironofficials"] = "brd",["darkironofficials"] = "darkironofficials",["heartofmountain"] = "brd",["hurleyblackbreath"] = "brd",
-["lostthunderbrewrecipe"] = "brd",["disharmonyoffire"] = "brd",["incendius"] = "brd",["goodstuff"] = "brd",["crumpledupnote"] = "brd",["tasteofflame"] = "brd",["shredofhope"] = "brd",["grimguzzler"] = "brd",["brdfullrun"] = "brd",
-["angerforge"] = "brd",["operationdeathtobrd"] = "brd",["riseofmachines"] = "brd",["precariouspredicament"] = "brd",["kharanmighthammer"] = "brd",["fateofkingdom"] = "brd",["attunementtocore"] = "brd",["atttocore"] = "brd",["brdquestrun"] = "brd",
-["royalrescue"] = "brd",["thechallenge"] = "brd",["princesssaved"] = "brd",["bindingcontract"] = "brd",["golemlord"] = "brd",["hojfarm"] = "brd",["flamelash"] = "brd",["marshalescort"] = "brd",
-["lavajumprun"] = "brd",["lavarun"] = "brd",["brdarena"] = "brd",["brdprison"] = "brd",["brdarenas"] = "brd",["arenarun"] = "brd",["brdmarshal"] = "brd",["arenaspam"] = "brd",["brdfarm"] = "brd",["saveprincess"] = "brd",["savingprincess"] = "brd",
+
+["darkironlegacy"] = "brd",["commandergorshak"] = "brd",["ribblyscrewspigot"] = "brd",["yukascrewspigot"] = "brd",["spectralchalice"] = "brd",["lastelement"] = "brd",["whatisgoingon"] = "brd",["heartofmountain"] = "brd",
+["hurleyblackbreath"] = "brd",["lostthunderbrewrecipe"] = "brd",["disharmonyoffire"] = "brd",["incendius"] = "brd",["goodstuff"] = "brd",["tasteofflame"] = "brd",["grimguzzler"] = "brd",["brdfullrun"] = "brd",["brdquestrun"] = "brd",
+["angerforge"] = "brd",["operationdeathtobrd"] = "brd",["riseofmachines"] = "brd",["precariouspredicament"] = "brd",["kharanmighthammer"] = "brd",["fateofkingdom"] = "brd",["attunementtocore"] = "brd",["atttocore"] = "brd",
+["royalrescue"] = "brd",["thechallenge"] = "brd",["princesssaved"] = "brd",["saveprincess"] = "brd",["savingprincess"] = "brd",["bindingcontract"] = "brd",["golemlord"] = "brd",["hojfarm"] = "brd",["flamelash"] = "brd",["brdfarm"] = "brd",
+["brdmarshal"] = "brd",["marshalbrd"] = "brd",["windsor"] = "brd",["abandonedhope"] = "brd",["crumpledupnote"] = "brd",["shredofhope"] = "brd",["marshalescort"] = "brd",["brdprison"] = "brd",
+["arenaspam"] = "brdarena",["brdarenas"] = "brdarena",["arenarun"] = "brdarena",["lavajumprun"] = "brdemperor",["lavarun"] = "brdemperor",
+
+["killonsight"] = "killonsight",["darkironofficials"] = "darkironofficials",["killonsighthighrankingdarkironofficials"] = "brd",
+
 ["finaltablets"] = "lbrs",["bijousbelongings"] = "lbrs",["enayes"] = "enayes",["enayesteewhy"] = "lbrs",["putherdown"] = "lbrs",["kiblersexoticpets"] = "lbrs",["packmistress"] = "lbrs",["operativebijou"] = "lbrs",
 ["maxwellsquest"] = "lbrs",["warlordscommand"] = "lbrs",["mothersmilk"] = "lbrs",["urokdoomhowl"] = "lbrs",["morgrayhoof"] = "lbrs",
 ["generaldrakkisathsdemise"] = "ubrs",["doomriggersclasp"] = "ubrs",["oculusillusions"] = "ubrs",["blackdragonchampion"] = "blackdragonchampion",["bloodofblackdragonchampion"] = "ubrs",["eggfreezing"] = "ubrs",
 ["darkstonetablet"] = "ubrs",["vivianlagraveandubrs"] = "ubrs",["eggcollection"] = "ubrs",["sealofascension"] = "ubrs",["blackhandscommand"] = "ubrs",["blackhandcommand"] = "ubrs",["demonforge"] = "ubrs",
 ["eyeofemberseer"] = "ubrs",["scarshieldquartermaster"] = "ubrs",
-["lethtendrissweb"] = "dmeast",["pusillin"] = "dme",["dmeandelderazjtordin"] = "dme",["arcanerefreshment"] = "dme",["magewaterquest"] = "dme",["magewaterrankquest"] = "dme",
+["lethtendrissweb"] = "dme",["pusillin"] = "dme",["dmeandelderazjtordin"] = "dme",["arcanerefreshment"] = "dme",["magewaterquest"] = "dme",["magewaterrankquest"] = "dme",
 ["xoroth"] = "dmw",["dreadsteedofdmw"] = "dmw",["dreadsteeddmw"] = "dmw",["dreadsteedquest"] = "dmw",["dreadsteedrun"] = "dmw",["dreadsteedmat"] = "dmw",["dreadsteedsummon"] = "dmw",["warlockmountquest"] = "dmw",["warlockquestmount"] = "dmw",
-["instigatorsenchantment"] = "dmw",["madnesswithin"] = "dmwest",["treasureofshendralar"] = "dmw",
+["instigatorsenchantment"] = "dmw",["madnesswithin"] = "dmw",["treasureofshendralar"] = "dmw",
 ["unfinishedgordokbusiness"] = "dmw",["falrinsvendetta"] = "dmn",["elvenlegends"] = "dmn",["tributerun"] = "dmt",["shardsoffelvine"] = "dme",
 ["krastinovbagofhorrors"] = "scholomance",["plaguedhatchlings"] = "scholomance",["kirtonos"] = "scholomance",["scholomanceherald"] = "scholomance",["krastinovbutcher"] = "scholomance",["lichrasfrostwhisper"] = "scholomance",
 ["dawnsgambit"] = "scholomance",["barovfamilyfortune"] = "scholomance",["paladinmountquest"] = "scholomance",["paladinquestmount"] = "scholomance",
@@ -1679,18 +1714,18 @@ GF_WORD_FIX_QUEST_DUNGEON = { -- Quest names converted to dungeons. Processed be
 ["ktcleanup"] = "naxxramas",["felstrikerhr"] = "ubrs",["felstrikerishr"] = "ubrs",["felstrikeronhr"] = "ubrs",
 
 -- Turtle WoW
-["prototypethievery"] = "deadmines",["rampantweeds"] = "wailingcaverns",["captaingraysonsrevenge"] = "deadmines",["turningofftap"] = "deadmines",["harvestgolemmystery"] = "deadmines",
-["trappedinnightmare"] = "wailingcaverns",["againstkolkardream"] = "wailingcaverns",
+["prototypethievery"] = "deadmines",["rampantweeds"] = "wc",["captaingraysonsrevenge"] = "deadmines",["turningofftap"] = "deadmines",["harvestgolemmystery"] = "deadmines",
+["trappedinnightmare"] = "wc",["againstkolkardream"] = "wc",
 ["missingsorcerer"] = "sfk",["intojaws"] = "sfk",["toolatetoprelate"] = "sfk",
-["highenergyregulator"] = "gnomeregan",["backupsystemactivation"] = "gnomeregan",
+["highenergyregulator"] = "gnomer",["backupsystemactivation"] = "gnomer",
 ["scarletcorruption"] = "smcath",["reminiscentofsteel"] = "smarm",["orbofkaladus"] = "smcath",["goldisgoblinheart"] = "smcath",
-["powersbeyond"] = "razorfendowns",
-["endukorzsandscalp"] = "zulfarrak",["driftingacrosssand"] = "zulfarrak",["plightofsandfury"] = "zulfarrak",
-["ebonmereaffairs"] = "gilneascity",
+["powersbeyond"] = "rfd",
+["endukorzsandscalp"] = "zf",["driftingacrosssand"] = "zf",["plightofsandfury"] = "zf",
+["ebonmereaffairs"] = "gc",
 ["harnessofchimaeran"] = "maraudon",
-["operationhelpjabbey"] = "blackrockdepths",["senatorialrevenge"] = "blackrockdepths",["arcanegolemcore"] = "blackrockdepths",
-["wildshaper"] = "dmeast",["upperbinding"] = "dmwest",
-["raidersraid"] = "lowerblackrock",["finalcrack"] = "lowerblackrock",["foresttrollscum"] = "lowerblackrock",
+["operationhelpjabbey"] = "brd",["senatorialrevenge"] = "brd",["arcanegolemcore"] = "brd",
+["wildshaper"] = "dme",["upperbinding"] = "dmw",
+["raidersraid"] = "lbrs",["finalcrack"] = "lbrs",["foresttrollscum"] = "lbrs",
 ["bronzebetrayal"] = "blackmorass",["cavernsoftimerep"] = "blackmorass",["darkportal"] = "darkportal",["firstopeningofdarkportal"] = "blackmorass",
 ["darkreavermenace"] = "scholomance",
 ["nohonoramongchefs"] = "karazhancrypt",
@@ -1716,8 +1751,8 @@ GF_WORD_SPECIAL_COMBINATION = { -- Letter/Number word fixes("g2g", "5th", "30min
 ["k10"] = "lowerkarazhan",["k40"] = "upperkarazhan",["kar10"] = "lowerkarazhan",["kar40"] = "upperkarazhan",["ka10"] = "lowerkarazhan",["ka40"] = "upperkarazhan",
 ["aw20"] = "aq",["aw15"] = "aq",["aw12"] = "aq",["ak20"] = "aq",["ak15"] = "aq",["ak12"] = "aq",["dream6"] = "dreamvi",["a12"] = "aq",["a15"] = "aq",["a20"] = "aq",["on15"] = "onyxia 15",
 ["strat10"] = "stratholme",["up4"] = "up for",["l4"] = "lf",["t1"] = "tier one",["t2"] = "tier two",["t3"] = "tier three",["t0"] = "tier zero",
-["lv19"] = "level 19",["lv29"] = "level 29",["lv39"] = "level 39",["lv49"] = "level 49",["lv59"] = "level 59",["lv60"] = "level 60",
-["lv10"] = "level 10",["lv20"] = "level 20",["lv30"] = "level 30",["lv40"] = "level 40",["lv50"] = "level 50",["lv60"] = "level 60",
+["lv19"] = "level nineteen",["lv29"] = "level twentynine",["lv39"] = "level thirtynine",["lv49"] = "level fortynine",["lv59"] = "level fiftynine",["lv60"] = "level sixty",
+["lv10"] = "level ten",["lv20"] = "level twenty",["lv30"] = "level thirty",["lv40"] = "level forty",["lv50"] = "level fifty",["level60"] = "level sixty",
 
 ["enchant300"] = "enchant master",["enchant225"] = "enchant artisan",["enchanter300"] = "enchanter master",["enchanter225"] = "enchanter artisan",
 -- Quest Fixes
@@ -1867,7 +1902,8 @@ GF_WORD_GOLD = { -- For detecting money("2g", "2 silver")
 }
 GF_WORD_FIX_ITEM_NAME = { -- Converts "[Crimson Pantaloons]" into "[legs]" for detecting trade sequences.
 ["stone"] = "stone",["bar"] = "bar",["ore"] = "ore",["cloth"] = "cloth",["leather"] = "leather",["buckle"] = "buckle",["gemstone"] = "gemstone",["lockbox"] = "lockbox",["enchant"] = "enchant",["libram"] = "libram",["arcanum"] = "arcanum",
-["plans"] = "plans",["schematic"] = "schematic",["formula"] = "formula",["pattern"] = "pattern",["bag"] = "bag",["water"] = "water",["potion"] = "potion",["elixir"] = "elixir",["flask"] = "flask",["arcanite"] = "arcanite",["scope"] = "scope",
+["plans"] = "plans",["schematic"] = "schematic",["formula"] = "formula",["pattern"] = "pattern",["bag"] = "bag",["water"] = "water",["potion"] = "potion",["elixir"] = "elixir",["flask"] = "flask",["arcanite"] = "arcanite",
+["scope"] = "scope",["accurascope"] = "scope",
 
 ["headband"] = "head",["cap"] = "head",["helm"] = "head",["helmet"] = "head",["hat"] = "head",["coif"] = "head",["hood"] = "head",["cowl"] = "head",["circlet"] = "head",
 ["mask"] = "head",["headdress"] = "head",["crown"] = "head",["headguard"] = "head",["bandana"] = "head",["goggles"] = "goggles",
@@ -2452,7 +2488,7 @@ GF_LFMLFG_PREFIX_GUILD = { -- Before/After groupnames(LF Kara). Subtracts 1 from
 ["invite"] = true,
 }
 GF_GUILD_COMMON_WORDS = {
-["lf"] = "F",["lfg"] = "F",["search"] = "F",["searching"] = "F",["seeking"] = "F",["seek"] = "F",["wtj"] = "F",["look"] = "F",["looking"] = "F",["guild"] = "G",["progress"] = "P",["progressing"] = "P",["progression"] = "P",["recruiter"] = "R",["recruiting"] = "R",["recruitment"] = "R",["above"] = "A",["again"] = "A",["all"] = "A",["also"] = "A",["always"] = "A",["and"] = "A",["anything"] = "A",["appreciate"] = "A",["are"] = "A",["armor"] = "A",["as"] = "A",["ask"] = "A",["at"] = "A",["be"] = "A",["before"] = "A",["beside"] = "A",["beyond"] = "A",["boots"] = "A",["but"] = "A",["can"] = "A",["cat"] = "A",["central"] = "A",["chad"] = "A",["chase"] = "A",["check"] = "A",["close"] = "A",["coast"] = "A",["coin"] = "A",["come"] = "A",["coming"] = "A",["conquer"] = "A",["consider"] = "A",["consumes"] = "A",["continuous"] = "A",["couple"] = "A",["crew"] = "A",["cross"] = "A",["current"] = "A",["currently"] = "A",["damage"] = "A",["desire"] = "A",["desired"] = "A",["do"] = "A",["doing"] = "A",["down"] = "A",["dps"] = "A",["each"] = "A",["east"] = "A",["eight"] = "A",["else"] = "A",["enchant"] = "A",["enhance"] = "A",["enhancement"] = "A",["enjoy"] = "A",["escape"] = "A",["even"] = "A",["eventually"] = "A",["every"] = "A",["everybody"] = "A",["everyone"] = "A",["except"] = "A",["excessive"] = "A",["expect"] = "A",["extremely"] = "A",["farm"] = "A",["feel"] = "A",["feels"] = "A",["feeling"] = "A",["felt"] = "A",["few"] = "A",["fifteen"] = "A",["finish"] = "A",["first"] = "A",["fish"] = "A",["five"] = "A",["focus"] = "A",["following"] = "A",["for"] = "A",["form"] = "A",["forty"] = "A",["four"] = "A",["frequent"] = "A",["from"] = "A",["further"] = "A",["game"] = "A",["get"] = "A",["gets"] = "A",["getting"] = "A",["give"] = "A",["giver"] = "A",["givers"] = "A",["gives"] = "A",["going"] = "A",["guarantee"] = "A",["guaranteed"] = "A",["guy"] = "A",["hand"] = "A",["has"] = "A",["have"] = "A",["having"] = "A",["heal"] = "A",["healer"] = "A",["held"] = "A",["high"] = "A",["how"] = "A",["hs"] = "A",["http"] = "A",["https"] = "A",["if"] = "A",["in"] = "A",["i"] = "A",["info"] = "A",["instance"] = "A",["interest"] = "A",["into"] = "A",["is"] = "A",["it"] = "A",["its"] = "A",["just"] = "A",["kind"] = "A",["kinds"] = "A",["kitty"] = "A",["know"] = "A",["later"] = "A",["lean"] = "A",["leaning"] = "A",["leaving"] = "A",["let"] = "A",["lets"] = "A",["light"] = "A",["lights"] = "A",["lighter"] = "A",["lightest"] = "A",["limit"] = "A",["limits"] = "A",["list"] = "A",["lists"] = "A",["lit"] = "A",["lock"] = "A",["lot"] = "A",["low"] = "A",["lower"] = "A",["make"] = "A",["may"] = "A",["maybe"] = "A",["me"] = "A",["mediocre"] = "A",["miles"] = "A",["minute"] = "A",["more"] = "A",["most"] = "A",["multiple"] = "A",["my"] = "A",["name"] = "A",["nearest"] = "A",["need"] = "A",["never"] = "A",["nine"] = "A",["no"] = "A",["not"] = "A",["now"] = "A",["of"] = "A",["old"] = "A",["on"] = "A",["only"] = "A",["one"] = "A",["opening"] = "A",["or"] = "A",["other"] = "A",["out"] = "A",["own"] = "A",["past"] = "A",["please"] = "A",["prefer"] = "A",["push"] = "A",["range"] = "A",["record"] = "A",["records"] = "A",["remember"] = "A",["remembers"] = "A",["require"] = "A",["required"] = "A",["requirement"] = "A",["requirements"] = "A",["road"] = "A",["rounding"] = "A",["run"] = "A",["said"] = "A",["scratch"] = "A",["send"] = "A",["sends"] = "A",["sending"] = "A",["sent"] = "A",["serve"] = "A",["served"] = "A",["seven"] = "A",["six"] = "A",["so"] = "A",["slot"] = "A",["slow"] = "A",["smooth"] = "A",["some"] = "A",["soon"] = "A",["sound"] = "A",["sounds"] = "A",["sounding"] = "A",["stand"] = "A",["still"] = "A",["stranger"] = "A",["strangers"] = "A",["strong"] = "A",["sub"] = "A",["sun"] = "A",["sure"] = "A",["sword"] = "A",["take"] = "A",["taking"] = "A",["tank"] = "A",["taste"] = "A",["tastes"] = "A",["tasting"] = "A",["tasted"] = "A",["ten"] = "A",["that"] = "A",["thats"] = "A",["their"] = "A",["them"] = "A",["then"] = "A",["there"] = "A",["they"] = "A",["thing"] = "A",["think"] = "A",["thinks"] = "A",["thinking"] = "A",["thought"] = "A",["thoughts"] = "A",["thirty"] = "A",["this"] = "A",["three"] = "A",["through"] = "A",["to"] = "A",["totally"] = "A",["trying"] = "A",["twelve"] = "A",["twenty"] = "A",["two"] = "A",["type"] = "A",["up"] = "A",["various"] = "A",["walk"] = "A",["walks"] = "A",["walked"] = "A",["walking"] = "A",["was"] = "A",["way"] = "A",["ways"] = "A",["we"] = "A",["well"] = "A",["were"] = "A",["west"] = "A",["when"] = "A",["who"] = "A",["why"] = "A",["with"] = "A",["work"] = "A",["world"] = "A",["would"] = "A",["you"] = "A",["your"] = "A",["zone"] = "A",["assemble"] = "B",["assembling"] = "B",["becoming"] = "B",["belong"] = "B",["caster"] = "B",["center"] = "B",["centered"] = "B",["checkout"] = "B",["class"] = "B",["classes"] = "B",["clean"] = "B",["clear"] = "B",["cleared"] = "B",["consistent"] = "B",["day"] = "B",["days"] = "B",["direction"] = "B",["dungeon"] = "B",["everything"] = "B",["faction"] = "B",["fill"] = "B",["find"] = "B",["finish"] = "B",["friday"] = "B",["future"] = "B",["gear"] = "B",["gearing"] = "B",["glory"] = "B",["group"] = "B",["grow"] = "B",["growing"] = "B",["hardmode"] = "B",["hour"] = "B",["hurry"] = "B",["impress"] = "B",["impressed"] = "B",["impresses"] = "B",["impressive"] = "B",["improve"] = "B",["improvement"] = "B",["inclination"] = "B",["include"] = "B",["includes"] = "B",["including"] = "B",["included"] = "B",["interested"] = "B",["invested"] = "B",["joke"] = "B",["late"] = "B",["laugh"] = "B",["laughing"] = "B",["laughter"] = "B",["like"] = "B",["live"] = "B",["loot"] = "B",["lore"] = "B",["love"] = "B",["main"] = "B",["message"] = "B",["monday"] = "B",["night"] = "B",["nights"] = "B",["occasional"] = "B",["offer"] = "B",["offers"] = "B",["offering"] = "B",["outsider"] = "B",["outsiders"] = "B",["pace"] = "B",["people"] = "B",["phase"] = "B",["phases"] = "B",["plan"] = "B",["plans"] = "B",["play"] = "B",["prepare"] = "B",["primarily"] = "B",["raider"] = "B",["raiders"] = "B",["rapidly"] = "B",["role"] = "B",["saturday"] = "B",["server"] = "B",["servertime"] = "B",["share"] = "B",["shared"] = "B",["signup"] = "B",["skill"] = "B",["sunday"] = "B",["talent"] = "B",["talented"] = "B",["talk"] = "B",["talking"] = "B",["teaching"] = "B",["thursday"] = "B",["time"] = "B",["today"] = "B",["tonight"] = "B",["trial"] = "B",["tuesday"] = "B",["wander"] = "B",["wanderer"] = "B",["wanders"] = "B",["wanderers"] = "B",["wandering"] = "B",["wednesday"] = "B",["week"] = "B",["weekday"] = "B",["weekly"] = "B",["welcome"] = "B",["welcomes"] = "B",["whisper"] = "B",["accept"] = "C",["accepts"] = "C",["accepted"] = "C",["access"] = "C",["actively"] = "C",["activity"] = "C",["any"] = "C",["anyone"] = "C",["application"] = "C",["applications"] = "C",["apply"] = "C",["atmosphere"] = "C",["band"] = "C",["begin"] = "C",["bolster"] = "C",["brave"] = "C",["brothers"] = "C",["building"] = "C",["calls"] = "C",["chat"] = "C",["chats"] = "C",["collective"] = "C",["company"] = "C",["core"] = "C",["destiny"] = "C",["discord"] = "C",["discover"] = "C",["drama"] = "C",["enthusiast"] = "C",["environment"] = "C",["epic"] = "C",["event"] = "C",["events"] = "C",["exceptional"] = "C",["expand"] = "C",["fellow"] = "C",["friend"] = "C",["gamer"] = "C",["goal"] = "C",["goals"] = "C",["haven"] = "C",["help"] = "C",["helpful"] = "C",["home"] = "C",["house"] = "C",["initiate"] = "C",["inspire"] = "C",["inspires"] = "C",["inspiration"] = "C",["invite"] = "C",["inviting"] = "C",["join"] = "C",["joined"] = "C",["joining"] = "C",["leadership"] = "C",["lively"] = "C",["meet"] = "C",["member"] = "C",["members"] = "C",["mysteries"] = "C",["mystery"] = "C",["nation"] = "C",["place"] = "C",["planned"] = "C",["rank"] = "C",["ranks"] = "C",["reinforcement"] = "C",["reinforcements"] = "C",["roster"] = "C",["schedules"] = "C",["scout"] = "C",["scouting"] = "C",["scouts"] = "C",["socials"] = "C",["start"] = "C",["starting"] = "C",["stories"] = "C",["strengthen"] = "C",["tale"] = "C",["tales"] = "C",["tavern"] = "C",["together"] = "C",["tolerant"] = "C",["tribe"] = "C",["vibes"] = "C",["ambience"] = "D",["brotherhood"] = "D",["camaraderie"] = "D",["challenge"] = "D",["challenges"] = "D",["chatting"] = "D",["community"] = "D",["dedicated"] = "D",["exploring"] = "D",["guildies"] = "D",["hangout"] = "D",["journey"] = "D",["membership"] = "D",["recruit"] = "D",["recruits"] = "D",["socialize"] = "D",["socializing"] = "D",["teamwork"] = "D",["voyage"] = "D",["accepting"] = "O",["active"] = "O",["adjusted"] = "O",["adult"] = "O",["adults"] = "O",["adventure"] = "O",["adventurer"] = "O",["adventuring"] = "O",["alliance"] = "O",["argentdawn"] = "O",["attractive"] = "O",["beginner"] = "O",["best"] = "O",["better"] = "O",["big"] = "O",["bigger"] = "O",["casual"] = "O",["challenge"] = "O",["challenging"] = "O",["chat"] = "O",["chill"] = "O",["christian"] = "O",["christians"] = "O",["classic"] = "O",["clearing"] = "O",["committed"] = "O",["cozy"] = "O",["dad"] = "O",["dei"] = "O",["discovery"] = "O",["dwarf"] = "O",["elf"] = "O",["elfs"] = "O",["elite"] = "O",["elitist"] = "O",["elves"] = "O",["endeavor"] = "O",["experience"] = "O",["explorer"] = "O",["explorers"] = "O",["family"] = "O",["female"] = "O",["flexible"] = "O",["focused"] = "O",["fresh"] = "O",["friendly"] = "O",["fun"] = "O",["funny"] = "O",["geared"] = "O",["gnome"] = "O",["goblin"] = "O",["good"] = "O",["great"] = "O",["greatest"] = "O",["hardcore"] = "O",["helpful"] = "O",["highelf"] = "O",["highend"] = "O",["highpop"] = "O",["horde"] = "O",["human"] = "O",["hype"] = "O",["improved"] = "O",["inclusive"] = "O",["international"] = "O",["laidback"] = "O",["large"] = "O",["largest"] = "O",["leader"] = "O",["leaders"] = "O",["leading"] = "O",["lesser"] = "O",["level"] = "O",["leveling"] = "O",["lively"] = "O",["magnificent"] = "O",["male"] = "O",["man"] = "O",["massive"] = "O",["mature"] = "O",["mercenary"] = "O",["new"] = "O",["newer"] = "O",["nice"] = "O",["nightelf"] = "O",["novice"] = "O",["old"] = "O",["oldest"] = "O",["only"] = "O",["open"] = "O",["orc"] = "O",["our"] = "O",["player"] = "O",["pleasant"] = "O",["premier"] = "O",["pressure"] = "O",["progress"] = "O",["qanon"] = "O",["queer"] = "O",["quest"] = "O",["quirky"] = "O",["racist"] = "O",["raid"] = "O",["ranking"] = "O",["ready"] = "O",["rebuild"] = "O",["relaxed"] = "O",["reliable"] = "O",["respectable"] = "O",["rich"] = "O",["roleplaying"] = "O",["safe"] = "O",["scholarly"] = "O",["seasoned"] = "O",["serious"] = "O",["skilled"] = "O",["small"] = "O",["social"] = "O",["solid"] = "O",["speak"] = "O",["straight"] = "O",["strict"] = "O",["super"] = "O",["swing"] = "O",["tabard"] = "O",["talkative"] = "O",["tauren"] = "O",["themed"] = "O",["tightknit"] = "O",["top"] = "O",["toprank"] = "O",["troll"] = "O",["undead"] = "O",["upcoming"] = "O",["vagrant"] = "O",["vanilla"] = "O",["vegan"] = "O",["veteran"] = "O",["veterans"] = "O",["vibe"] = "O",["wealthy"] = "O",["welcoming"] = "O",["woke"] = "O",["druid"] = "O",["hunter"] = "O",["mage"] = "O",["paladin"] = "O",["priest"] = "O",["rogue"] = "O",["shaman"] = "O",["warlock"] = "O",["warrior"] = "O",["dungeoncrawling"] = "D",["personalpractice"] = "D",["acdc"] = "O",["crossfaction"] = "O",["endgame"] = "O",["epgp"] = "O",["erp"] = "O",["femboy"] = "O",["lgbt"] = "O",["likeminded"] = "O",["lootcouncil"] = "O",["mediumsized"] = "O",["newlycreated"] = "O",["newlyformed"] = "O",["newlymade"] = "O",["reallybig"] = "O",["recentlyformed"] = "O",["rp"] = "O",["rppve"] = "O",["rppvp"] = "O",["semibased"] = "O",["speedrun"] = "O",["srms"] = "O",["srmsos"] = "O",["stressfree"] = "O",["verybig"] = "O",["verytalkative"] = "O",["warmode"] = "O",["wpvp"] = "O",["raidleader"] = "C",["raidleaders"] = "C",["brothersandsisters"] = "D",["firstroster"] = "D",["freedomofspeech"] = "D",["gbase"] = "D",["guide"] = "D",["guildbase"] = "D",["lootsystem"] = "D",["offersyou"] = "D",["raidteam"] = "D",["secondroster"] = "D",["storyteller"] = "D",["storytellers"] = "D",["tabardportal"] = "D",["battleground"] = "A",["bg"] = "A",["elemental"] = "A",["elementals"] = "A",["immortal"] = "A",["inferno"] = "A",["prebis"] = "A",["pref"] = "A",["semi"] = "A",["spectacle"] = "A",["static"] = "A",["wipe"] = "A",["wipes"] = "A",["aq"] = "A",["blackwinglair"] = "A",["bwl"] = "A",["emeraldsanctum"] = "A",["es"] = "A",["karazhan"] = "A",["onyxia"] = "A",["mc"] = "A",["moltencore"] = "A",["zg"] = "A",["naxxramas"] = "A",["lowerkarazhan"] = "A",["upperkarazhan"] = "A",["karazhanhalls"] = "A",["content"] = "B",["discriminate"] = "B",["est"] = "B",["fri"] = "B",["hellscape"] = "B",["mechanic"] = "B",["mon"] = "B",["nonstop"] = "B",["sat"] = "B",["someday"] = "B",["st"] = "B",["sun"] = "B",["thu"] = "B",["thur"] = "B",["thurs"] = "B",["timeslot"] = "B",["timeslots"] = "B",["timezone"] = "B",["tue"] = "B",["tues"] = "B",["turtle"] = "B",["twow"] = "B",["wed"] = "B",["wow"] = "B",["azeroth"] = "B",["bb"] = "B",["bootybay"] = "B",["ratchet"] = "B",["base"] = "C",["cet"] = "C",["iso"] = "C",["pm"] = "C",["pst"] = "C",["based"] = "O",["cool"] = "O",["dkp"] = "O",["furry"] = "O",["hc"] = "O",["meme"] = "O",["pve"] = "O",["pvp"] = "O",["scourge"] = "O",["kaldorei"] = "O",
+["lf"] = "F",["lfg"] = "F",["search"] = "F",["searching"] = "F",["seeking"] = "F",["seek"] = "F",["wtj"] = "F",["look"] = "F",["looking"] = "F",["guild"] = "G",["progress"] = "P",["progressing"] = "P",["progression"] = "P",["recruiter"] = "R",["recruiting"] = "R",["recruitment"] = "R",["above"] = "A",["again"] = "A",["all"] = "A",["also"] = "A",["always"] = "A",["and"] = "A",["anything"] = "A",["appreciate"] = "A",["are"] = "A",["armor"] = "A",["as"] = "A",["ask"] = "A",["at"] = "A",["be"] = "A",["before"] = "A",["beside"] = "A",["beyond"] = "A",["boots"] = "A",["but"] = "A",["can"] = "A",["cat"] = "A",["central"] = "A",["chad"] = "A",["chase"] = "A",["check"] = "A",["close"] = "A",["coast"] = "A",["coin"] = "A",["come"] = "A",["coming"] = "A",["conquer"] = "A",["consider"] = "A",["consumes"] = "A",["continuous"] = "A",["couple"] = "A",["crew"] = "A",["cross"] = "A",["current"] = "A",["currently"] = "A",["damage"] = "A",["desire"] = "A",["desired"] = "A",["do"] = "A",["doing"] = "A",["down"] = "A",["dps"] = "A",["each"] = "A",["east"] = "A",["eight"] = "A",["else"] = "A",["enchant"] = "A",["enhance"] = "A",["enhancement"] = "A",["enjoy"] = "A",["escape"] = "A",["even"] = "A",["eventually"] = "A",["every"] = "A",["everybody"] = "A",["everyone"] = "A",["except"] = "A",["excessive"] = "A",["expect"] = "A",["extremely"] = "A",["farm"] = "A",["feel"] = "A",["feels"] = "A",["feeling"] = "A",["felt"] = "A",["few"] = "A",["fifteen"] = "A",["finish"] = "A",["first"] = "A",["fish"] = "A",["five"] = "A",["focus"] = "A",["following"] = "A",["for"] = "A",["form"] = "A",["forty"] = "A",["four"] = "A",["frequent"] = "A",["from"] = "A",["further"] = "A",["game"] = "A",["get"] = "A",["gets"] = "A",["getting"] = "A",["give"] = "A",["giver"] = "A",["givers"] = "A",["gives"] = "A",["going"] = "A",["guarantee"] = "A",["guaranteed"] = "A",["guy"] = "A",["hand"] = "A",["has"] = "A",["have"] = "A",["having"] = "A",["heal"] = "A",["healer"] = "A",["held"] = "A",["high"] = "A",["how"] = "A",["hs"] = "A",["http"] = "A",["https"] = "A",["if"] = "A",["in"] = "A",["i"] = "A",["info"] = "A",["instance"] = "A",["interest"] = "A",["into"] = "A",["is"] = "A",["it"] = "A",["its"] = "A",["just"] = "A",["kind"] = "A",["kinds"] = "A",["kitty"] = "A",["know"] = "A",["later"] = "A",["lean"] = "A",["leaning"] = "A",["leaving"] = "A",["let"] = "A",["lets"] = "A",["light"] = "A",["lights"] = "A",["lighter"] = "A",["lightest"] = "A",["limit"] = "A",["limits"] = "A",["list"] = "A",["lists"] = "A",["lit"] = "A",["lock"] = "A",["lot"] = "A",["low"] = "A",["lower"] = "A",["make"] = "A",["may"] = "A",["maybe"] = "A",["me"] = "A",["mediocre"] = "A",["miles"] = "A",["minute"] = "A",["more"] = "A",["most"] = "A",["multiple"] = "A",["my"] = "A",["name"] = "A",["nearest"] = "A",["need"] = "A",["never"] = "A",["next"] = "A",["nine"] = "A",["no"] = "A",["not"] = "A",["now"] = "A",["of"] = "A",["old"] = "A",["on"] = "A",["only"] = "A",["one"] = "A",["opening"] = "A",["or"] = "A",["other"] = "A",["out"] = "A",["own"] = "A",["past"] = "A",["please"] = "A",["prefer"] = "A",["push"] = "A",["range"] = "A",["record"] = "A",["records"] = "A",["relic"] = "A",["remember"] = "A",["remembers"] = "A",["require"] = "A",["required"] = "A",["requirement"] = "A",["requirements"] = "A",["road"] = "A",["rounding"] = "A",["run"] = "A",["said"] = "A",["scratch"] = "A",["send"] = "A",["sends"] = "A",["sending"] = "A",["sent"] = "A",["serve"] = "A",["served"] = "A",["seven"] = "A",["six"] = "A",["so"] = "A",["slot"] = "A",["slow"] = "A",["smooth"] = "A",["some"] = "A",["soon"] = "A",["sound"] = "A",["sounds"] = "A",["sounding"] = "A",["stand"] = "A",["still"] = "A",["stranger"] = "A",["strangers"] = "A",["strong"] = "A",["sub"] = "A",["sun"] = "A",["sure"] = "A",["sword"] = "A",["take"] = "A",["taking"] = "A",["tank"] = "A",["taste"] = "A",["tastes"] = "A",["tasting"] = "A",["tasted"] = "A",["ten"] = "A",["that"] = "A",["thats"] = "A",["their"] = "A",["them"] = "A",["then"] = "A",["there"] = "A",["they"] = "A",["thing"] = "A",["think"] = "A",["thinks"] = "A",["thinking"] = "A",["thought"] = "A",["thoughts"] = "A",["thirty"] = "A",["this"] = "A",["three"] = "A",["through"] = "A",["to"] = "A",["totally"] = "A",["train"] = "A",["trains"] = "A",["training"] = "A",["trying"] = "A",["twelve"] = "A",["twenty"] = "A",["two"] = "A",["type"] = "A",["up"] = "A",["various"] = "A",["walk"] = "A",["walks"] = "A",["walked"] = "A",["walking"] = "A",["was"] = "A",["way"] = "A",["ways"] = "A",["we"] = "A",["well"] = "A",["were"] = "A",["west"] = "A",["when"] = "A",["who"] = "A",["why"] = "A",["with"] = "A",["work"] = "A",["world"] = "A",["would"] = "A",["you"] = "A",["your"] = "A",["zone"] = "A",["assemble"] = "B",["assembling"] = "B",["becoming"] = "B",["belong"] = "B",["caster"] = "B",["center"] = "B",["centered"] = "B",["checkout"] = "B",["class"] = "B",["classes"] = "B",["clean"] = "B",["clear"] = "B",["cleared"] = "B",["combat"] = "B",["consistent"] = "B",["day"] = "B",["days"] = "B",["direction"] = "B",["dungeon"] = "B",["everything"] = "B",["faction"] = "B",["fill"] = "B",["find"] = "B",["finish"] = "B",["friday"] = "B",["future"] = "B",["gear"] = "B",["gearing"] = "B",["generation"] = "B",["glory"] = "B",["group"] = "B",["grow"] = "B",["growing"] = "B",["hardmode"] = "B",["hour"] = "B",["hunting"] = "B",["hurry"] = "B",["impress"] = "B",["impressed"] = "B",["impresses"] = "B",["impressive"] = "B",["improve"] = "B",["improvement"] = "B",["inclination"] = "B",["include"] = "B",["includes"] = "B",["including"] = "B",["included"] = "B",["interested"] = "B",["invested"] = "B",["joke"] = "B",["late"] = "B",["laugh"] = "B",["laughing"] = "B",["laughter"] = "B",["like"] = "B",["live"] = "B",["loot"] = "B",["lore"] = "B",["love"] = "B",["magic"] = "B",["main"] = "B",["message"] = "B",["monday"] = "B",["night"] = "B",["nights"] = "B",["occasional"] = "B",["offer"] = "B",["offers"] = "B",["offering"] = "B",["outsider"] = "B",["outsiders"] = "B",["pace"] = "B",["people"] = "B",["phase"] = "B",["phases"] = "B",["plan"] = "B",["plans"] = "B",["play"] = "B",["prepare"] = "B",["primarily"] = "B",["raider"] = "B",["raiders"] = "B",["rapidly"] = "B",["role"] = "B",["saturday"] = "B",["server"] = "B",["servertime"] = "B",["share"] = "B",["shared"] = "B",["signup"] = "B",["skill"] = "B",["sunday"] = "B",["talent"] = "B",["talented"] = "B",["talk"] = "B",["talking"] = "B",["teaching"] = "B",["thursday"] = "B",["time"] = "B",["today"] = "B",["tonight"] = "B",["trial"] = "B",["tuesday"] = "B",["wander"] = "B",["wanderer"] = "B",["wanders"] = "B",["wanderers"] = "B",["wandering"] = "B",["wednesday"] = "B",["week"] = "B",["weekday"] = "B",["weekly"] = "B",["welcome"] = "B",["welcomes"] = "B",["whisper"] = "B",["accept"] = "C",["accepts"] = "C",["accepted"] = "C",["access"] = "C",["actively"] = "C",["activity"] = "C",["any"] = "C",["anyone"] = "C",["application"] = "C",["applications"] = "C",["apply"] = "C",["atmosphere"] = "C",["band"] = "C",["begin"] = "C",["bolster"] = "C",["brave"] = "C",["brothers"] = "C",["building"] = "C",["calls"] = "C",["chat"] = "C",["chats"] = "C",["collective"] = "C",["company"] = "C",["core"] = "C",["destiny"] = "C",["discord"] = "C",["discover"] = "C",["drama"] = "C",["enthusiast"] = "C",["environment"] = "C",["epic"] = "C",["event"] = "C",["events"] = "C",["exceptional"] = "C",["expand"] = "C",["fellow"] = "C",["friend"] = "C",["gamer"] = "C",["goal"] = "C",["goals"] = "C",["haven"] = "C",["help"] = "C",["helpful"] = "C",["home"] = "C",["house"] = "C",["initiate"] = "C",["inspire"] = "C",["inspires"] = "C",["inspiration"] = "C",["invite"] = "C",["inviting"] = "C",["join"] = "C",["joined"] = "C",["joining"] = "C",["leadership"] = "C",["lively"] = "C",["meet"] = "C",["member"] = "C",["members"] = "C",["mysteries"] = "C",["mystery"] = "C",["nation"] = "C",["place"] = "C",["planned"] = "C",["rank"] = "C",["ranks"] = "C",["reinforcement"] = "C",["reinforcements"] = "C",["roster"] = "C",["schedules"] = "C",["scout"] = "C",["scouting"] = "C",["scouts"] = "C",["socials"] = "C",["start"] = "C",["starting"] = "C",["stories"] = "C",["strengthen"] = "C",["tale"] = "C",["tales"] = "C",["tavern"] = "C",["together"] = "C",["tolerant"] = "C",["tribe"] = "C",["vibes"] = "C",["ambience"] = "D",["brotherhood"] = "D",["camaraderie"] = "D",["challenge"] = "D",["challenges"] = "D",["chatting"] = "D",["community"] = "D",["dedicated"] = "D",["exploring"] = "D",["guildies"] = "D",["hangout"] = "D",["journey"] = "D",["membership"] = "D",["recruit"] = "D",["recruits"] = "D",["socialize"] = "D",["socializing"] = "D",["teamwork"] = "D",["voyage"] = "D",["accepting"] = "O",["active"] = "O",["adjusted"] = "O",["adult"] = "O",["adults"] = "O",["adventure"] = "O",["adventurer"] = "O",["adventuring"] = "O",["alliance"] = "O",["argentdawn"] = "O",["attractive"] = "O",["beginner"] = "O",["best"] = "O",["better"] = "O",["big"] = "O",["bigger"] = "O",["casual"] = "O",["challenge"] = "O",["challenging"] = "O",["chat"] = "O",["chill"] = "O",["christian"] = "O",["christians"] = "O",["classic"] = "O",["clearing"] = "O",["committed"] = "O",["cozy"] = "O",["dad"] = "O",["dei"] = "O",["discovery"] = "O",["dwarf"] = "O",["elf"] = "O",["elfs"] = "O",["elite"] = "O",["elitist"] = "O",["elves"] = "O",["endeavor"] = "O",["experience"] = "O",["explorer"] = "O",["explorers"] = "O",["family"] = "O",["female"] = "O",["flexible"] = "O",["focused"] = "O",["fresh"] = "O",["friendly"] = "O",["fun"] = "O",["funny"] = "O",["geared"] = "O",["gnome"] = "O",["goblin"] = "O",["good"] = "O",["great"] = "O",["greatest"] = "O",["hardcore"] = "O",["helpful"] = "O",["highelf"] = "O",["highend"] = "O",["highpop"] = "O",["horde"] = "O",["human"] = "O",["hype"] = "O",["improved"] = "O",["inclusive"] = "O",["international"] = "O",["laidback"] = "O",["large"] = "O",["largest"] = "O",["leader"] = "O",["leaders"] = "O",["leading"] = "O",["lesser"] = "O",["level"] = "O",["leveling"] = "O",["lively"] = "O",["magnificent"] = "O",["male"] = "O",["man"] = "O",["massive"] = "O",["mature"] = "O",["mercenary"] = "O",["new"] = "O",["newer"] = "O",["nice"] = "O",["nightelf"] = "O",["novice"] = "O",["old"] = "O",["oldest"] = "O",["only"] = "O",["open"] = "O",["orc"] = "O",["our"] = "O",["player"] = "O",["pleasant"] = "O",["premier"] = "O",["pressure"] = "O",["progress"] = "O",["qanon"] = "O",["queer"] = "O",["quest"] = "O",["quirky"] = "O",["racist"] = "O",["raid"] = "O",["ranking"] = "O",["ready"] = "O",["rebuild"] = "O",["relaxed"] = "O",["reliable"] = "O",["respectable"] = "O",["rich"] = "O",["roleplaying"] = "O",["safe"] = "O",["scholarly"] = "O",["seasoned"] = "O",["serious"] = "O",["skilled"] = "O",["small"] = "O",["social"] = "O",["solid"] = "O",["speak"] = "O",["straight"] = "O",["strict"] = "O",["super"] = "O",["swing"] = "O",["tabard"] = "O",["talkative"] = "O",["tauren"] = "O",["themed"] = "O",["tightknit"] = "O",["top"] = "O",["toprank"] = "O",["troll"] = "O",["undead"] = "O",["upcoming"] = "O",["vagrant"] = "O",["vanilla"] = "O",["vegan"] = "O",["veteran"] = "O",["veterans"] = "O",["vibe"] = "O",["wealthy"] = "O",["welcoming"] = "O",["woke"] = "O",["druid"] = "O",["hunter"] = "O",["mage"] = "O",["paladin"] = "O",["priest"] = "O",["rogue"] = "O",["shaman"] = "O",["warlock"] = "O",["warrior"] = "O",["dungeoncrawling"] = "D",["personalpractice"] = "D",["acdc"] = "O",["crossfaction"] = "O",["endgame"] = "O",["epgp"] = "O",["erp"] = "O",["femboy"] = "O",["lgbt"] = "O",["likeminded"] = "O",["lootcouncil"] = "O",["mediumsized"] = "O",["newlycreated"] = "O",["newlyformed"] = "O",["newlymade"] = "O",["reallybig"] = "O",["recentlyformed"] = "O",["rp"] = "O",["rppve"] = "O",["rppvp"] = "O",["semibased"] = "O",["speedrun"] = "O",["srms"] = "O",["srmsos"] = "O",["stressfree"] = "O",["verybig"] = "O",["verytalkative"] = "O",["warmode"] = "O",["wpvp"] = "O",["raidleader"] = "C",["raidleaders"] = "C",["brothersandsisters"] = "D",["firstroster"] = "D",["freedomofspeech"] = "D",["gbase"] = "D",["guide"] = "D",["guildbase"] = "D",["lootsystem"] = "D",["offersyou"] = "D",["raidteam"] = "D",["secondroster"] = "D",["storyteller"] = "D",["storytellers"] = "D",["tabardportal"] = "D",["battleground"] = "A",["bg"] = "A",["elemental"] = "A",["elementals"] = "A",["immortal"] = "A",["inferno"] = "A",["prebis"] = "A",["pref"] = "A",["semi"] = "A",["spectacle"] = "A",["static"] = "A",["wipe"] = "A",["wipes"] = "A",["aq"] = "A",["blackwinglair"] = "A",["bwl"] = "A",["emeraldsanctum"] = "A",["es"] = "A",["karazhan"] = "A",["onyxia"] = "A",["mc"] = "A",["moltencore"] = "A",["zg"] = "A",["naxxramas"] = "A",["lowerkarazhan"] = "A",["upperkarazhan"] = "A",["karazhanhalls"] = "A",["content"] = "B",["discriminate"] = "B",["est"] = "B",["fri"] = "B",["hellscape"] = "B",["mechanic"] = "B",["mon"] = "B",["nonstop"] = "B",["sat"] = "B",["someday"] = "B",["st"] = "B",["sun"] = "B",["thu"] = "B",["thur"] = "B",["thurs"] = "B",["timeslot"] = "B",["timeslots"] = "B",["timezone"] = "B",["tue"] = "B",["tues"] = "B",["turtle"] = "B",["twow"] = "B",["wed"] = "B",["wow"] = "B",["azeroth"] = "B",["bb"] = "B",["bootybay"] = "B",["ratchet"] = "B",["base"] = "C",["cet"] = "C",["iso"] = "C",["pm"] = "C",["pst"] = "C",["based"] = "O",["cool"] = "O",["dkp"] = "O",["furry"] = "O",["hc"] = "O",["meme"] = "O",["pve"] = "O",["pvp"] = "O",["scourge"] = "O",["kaldorei"] = "O",
 ["afghani"] = "O",["algerian"] = "O",["american"] = "O",["argentine"] = "O",["au"] = "O",["auoce"] = "O",["balkan"] = "O",["brazilian"] = "O",["bulgarian"] = "O",["canadian"] = "O",["chad"] = "O",["chilean"] = "O",["chinese"] = "O",["colombian"] = "O",["congolese"] = "O",["cuban"] = "O",["czech"] = "O",["danish"] = "O",["dutch"] = "O",["egyptian"] = "O",["en"] = "O",["english"] = "O",["ethiopian"] = "O",["eu"] = "O",["filipino"] = "O",["finnish"] = "O",["fr"] = "O",["french"] = "O",["german"] = "O",["greek"] = "O",["hungarian"] = "O",["indian"] = "O",["iranian"] = "O",["iraqi"] = "O",["italian"] = "O",["japanese"] = "O",["kazakh"] = "O",["kenyan"] = "O",["korean"] = "O",["lebanese"] = "O",["libyan"] = "O",["malay"] = "O",["mexican"] = "O",["mongolian"] = "O",["moroccan"] = "O",["na"] = "O",["nigerian"] = "O",["nl"] = "O",["nord"] = "O",["norwegian"] = "O",["oce"] = "O",["oceau"] = "O",["pakistani"] = "O",["peruvian"] = "O",["polish"] = "O",["portuguese"] = "O",["quebec"] = "O",["romanian"] = "O",["ru"] = "O",["russian"] = "O",["rwandan"] = "O",["sa"] = "O",["saudi"] = "O",["scandinavian"] = "O",["sea"] = "O",["sfk"] = "O",["slovak"] = "O",["somalian"] = "O",["spanish"] = "O",["swedish"] = "O",["syrian"] = "O",["tajik"] = "O",["thai"] = "O",["turkish"] = "O",["ugandan"] = "O",["uhr"] = "O",["uk"] = "O",["ukrainian"] = "O",["us"] = "O",["venezuelan"] = "O",["vietnamese"] = "O",["yemeni"] = "O",["zimbabwean"] = "O",["ambershire"] = "O",["nordanaar"] = "O",["telabim"] = "O",["afghan"] = "O",["afghanistan"] = "O",["algeria"] = "O",["america"] = "O",["americans"] = "O",["anglo"] = "O",["argentinia"] = "O",["aussie"] = "O",["aussies"] = "O",["australia"] = "O",["australian"] = "O",["aus"] = "O",["balkans"] = "O",["balkanski"] = "O",["br"] = "O",["brasil"] = "O",["brasilian"] = "O",["brazil"] = "O",["bulgaria"] = "O",["canada"] = "O",["canadia"] = "O",["canadians"] = "O",["canuck"] = "O",["canucks"] = "O",["ceska"] = "O",["cesko"] = "O",["chile"] = "O",["china"] = "O",["cn"] = "O",["colombia"] = "O",["congo"] = "O",["cuba"] = "O",["cz"] = "O",["denmark"] = "O",["egypt"] = "O",["england"] = "O",["esp"] = "O",["ethiopia"] = "O",["europa"] = "O",["europe"] = "O",["euros"] = "O",["european"] = "O",["europeans"] = "O",["finland"] = "O",["finn"] = "O",["finns"] = "O",["fra"] = "O",["france"] = "O",["germany"] = "O",["greece"] = "O",["helene"] = "O",["hellenic"] = "O",["hungary"] = "O",["iberia"] = "O",["iberian"] = "O",["india"] = "O",["iran"] = "O",["iraq"] = "O",["ita"] = "O",["italy"] = "O",["kiwis"] = "O",["kiwi"] = "O",["japan"] = "O",["kazakhstan"] = "O",["kenya"] = "O",["korea"] = "O",["lebanon"] = "O",["libya"] = "O",["magyar"] = "O",["malaysia"] = "O",["malaysian"] = "O",["mexico"] = "O",["mongolia"] = "O",["morocco"] = "O",["murica"] = "O",["murican"] = "O",["nederland"] = "O",["nederlands"] = "O",["netherland"] = "O",["netherlands"] = "O",["niger"] = "O",["nippon"] = "O",["nor"] = "O",["nordic"] = "O",["northamerica"] = "O",["northamerican"] = "O",["norway"] = "O",["oceanic"] = "O",["pakistan"] = "O",["peru"] = "O",["philippine"] = "O",["philippines"] = "O",["pl"] = "O",["poland"] = "O",["portugal"] = "O",["quevec"] = "O",["ro"] = "O",["romania"] = "O",["rus"] = "O",["ruskie"] = "O",["russ"] = "O",["russia"] = "O",["russkie"] = "O",["russien"] = "O",["rwanda"] = "O",["scandic"] = "O",["scandinavia"] = "O",["somali"] = "O",["somalia"] = "O",["southafrican"] = "O",["spain"] = "O",["svk"] = "O",["swede"] = "O",["sweden"] = "O",["syria"] = "O",["tajikistan"] = "O",["thailand"] = "O",["trk"] = "O",["turk"] = "O",["turkey"] = "O",["ua"] = "O",["uganda"] = "O",["ukraine"] = "O",["uzbekistan"] = "O",["venezuela"] = "O",["viet"] = "O",["vietnam"] = "O",["yemen"] = "O",["ykrain"] = "O",["zimbabwe"] = "O",["latvian"] = "O",["latvians"] = "O",["latvia"] = "O",
 
 -- Known guilds that get constantly spammed for invites
@@ -2479,6 +2515,8 @@ GF_WORD_LFM = {
 ["anywilling"] = 1.75,["anythatcan"] = 1.5,["anythere"] = 1.5,["anyableto"] = 1.5,["anycareto"] = 1.5,["anyinterested"] = 1.75,["anyhaveto"] = 1.75,["anyfreefor"] = 2,["anyfreeto"] = 2,
 ["anyotherfor"] = 2,["anygamer"] = 1.5,["anyalliance"] = 1.5,["anyhorde"] = 1.5,["anyhealeraround"] = 2,["anytankaround"] = 2,
 
+["anyten"] = 1,["anynineteen"] = 1,["anytwenty"] = 1,["anytwentynine"] = 1,["anythirty"] = 1,["anythirtynine"] = 1,["anyforty"] = 1,["anyfortynine"] = 1,["anyfifty"] = 1,["anyfiftynine"] = 1,["anysixty"] = 1,["anysixties"] = 1,
+
 -- Help
 ["helpkill"] = 2,["helpkilling"] = 2,["helpplease"] = 2,["helpout"] = 2,["helprush"] = 2,["helponthisquest"] = 2,["helpthrough"] = 2,
 ["helpwith"] = 1.75,["helpwit"] = 1.75,["helpfor"] = 1.75,["helpme"] = 1.75,["helphere"] = 1.75,["helpclear"] = 1.75,["helpdo"] = 1.75,["helpget"] = 1.75,["helpgetting"] = 1.75,
@@ -2504,7 +2542,7 @@ GF_WORD_LFM = {
 ["needtank"] = 2,["cometank"] = 2,["moretank"] = 2,["jointank"] = 2,["lasttank"] = 2,["pleasetank"] = 2,["tankneeded"] = 2,
 ["needdruid"] = 2,["needhunter"] = 2,["needmage"] = 2,["needpaladin"] = 2,["needpriest"] = 2,["needrogue"] = 2,["needshaman"] = 2,["needwarlock"] = 2,["needlock"] = 2,["needwarrior"] = 2,
 ["needall"] = 1.5,["needmore"] = 1.75,["needanyone"] = 1.75,["needone"] = 1.5,["needtwo"] = 1.5,["needthree"] = 1.5,["needother"] = 1,["needanother"] = 1,["needlast"] = 1.5,["needonly"] = 1.5,["needsome"] = 1.5,
-["needrange"] = 2,["needcaster"] = 2,["needmelee"] = 2,["needaoe"] = 2,["needstealth"] = 2,
+["needrange"] = 2,["needcaster"] = 2,["needmelee"] = 2,["needaoe"] = 2,["needstealth"] = 2,["needlevelsixty"] = 2,
 ["needraid"] = 1.5,["needdungeon"] = 1.5,["needgroup"] = 1.5,["needcarry"] = 1.75,["needrun"] = 1.75,["needspeedrun"] = 1.75,["needplayer"] = 1.5,["needpeople"] = 1.5,["needgamer"] = 1.5,["needperson"] = 1.5,["needdouser"] = 2,["needcrew"] = 1.75,
 
 -- Group words
@@ -2531,6 +2569,8 @@ GF_WORD_LFM = {
 
 ["formfresh"] = 2,["startfresh"] = 2,["startingfresh"] = 2,["makefresh"] = 2,["hostfresh"] = 2,["gathergroup"] = 2,["gatheringgroup"] = 2,
 ["formgroup"] = 1.75,["startgroup"] = 1.75,["startinggroup"] = 1.75,["makegroup"] = 1.75,["hostgroup"] = 1.75,["creategroup"] = 1.75,["formraid"] = 1.75,["startraid"] = 1.75,["startingraid"] = 1.75,["makeraid"] = 1.75,["hostraid"] = 1.75,["createraid"] = 1.75,
+["startinsec"] = 2,["startinsecond"] = 2,["startinminute"] = 2,["startinhour"] = 2,["startnew"] = 1.5,["startinginsec"] = 2,["startinginsecond"] = 2,["startinginminute"] = 2,["startinginhour"] = 2,["startingnew"] = 1.5,
+
 
 ["anyhcgroup"] = 2,["anyhardcoregroup"] = 2,["istherehcgroup"] = 2,["istherehardcoregroup"] = 2,["whowillgo"] = 1.25,
 ["ineedbackup"] = 1.25,["pleasecome"] = 1.25,["missingone"] = .5,["missingtwo"] = .5,["missingthree"] = .5,["abouttostart"] = 1,
@@ -2540,6 +2580,18 @@ GF_WORD_LFM = {
 
 -- LFM Triggers
 ["anyone"] = 1.5,["anyonein"] = 1.5,["anyonenear"] = 1.5,["needto"] = 1.5,["boost"] = 1.25,["carry"] = 1.25,["powerlevel"] = 1.25,["backupat"] = 1.5,["levelin"] = 1,["around"] = 1,
+
+["tenat"] = 1.5,["tenin"] = 1.5,["tennear"] = 1.5,
+["twentyat"] = 1.5,["twentyin"] = 1.5,["twentynear"] = 1.5,
+["thirtyat"] = 1.5,["thirtyin"] = 1.5,["thirtynear"] = 1.5,
+["fortyat"] = 1.5,["fortyin"] = 1.5,["fortynear"] = 1.5,
+["fiftyat"] = 1.5,["fiftyin"] = 1.5,["fiftynear"] = 1.5,
+["sixtyat"] = 1.5,["sixtyin"] = 1.5,["sixtynear"] = 1.5,
+["twentiesat"] = 1.5,["twentiesin"] = 1.5,["twentiesnear"] = 1.5,
+["thirtiesat"] = 1.5,["thirtiesin"] = 1.5,["thirtiesnear"] = 1.5,
+["fortiesat"] = 1.5,["fortiesin"] = 1.5,["fortiesnear"] = 1.5,
+["fiftiesat"] = 1.5,["fiftiesin"] = 1.5,["fiftiesnear"] = 1.5,
+["sixtiesat"] = 1.5,["sixtiesin"] = 1.5,["sixtiesnear"] = 1.5,
 
 -- Needto
 ["needtorun"] = 2,["needtospeedrun"] = 2,["needtohelp"] = 1.75,["needtogo"] = 1.75,["needtocome"] = 1.75,["needtogroup"] = 2,["needtoraid"] = 2,["needtokill"] = 1.75,["needtodo"] = 1.75,["needtostart"] = 1.75,
@@ -2641,7 +2693,7 @@ GF_LFM_BEFORE = { -- Up to three words before
 ["moreslayers"] = 1,
 ["multiplerun"] = 1,["multiplespeedrun"] = 1,
 ["needhelp"] = 1,["needmore"] = 1,["needall"] = 1,["needdo"] = 1,["needtotry"] = 1,["needone"] = 1,["needtwo"] = 1,["needthree"] = 1,["needrun"] = 1,["needtorun"] = 1,["needspeedrun"] = 1,["needtospeedrun"] = 1,["needhelpwith"] = 1,
-["onemore"] = 1,["twomore"] = 1,["threemore"] = 1,
+["onemore"] = 1,["twomore"] = 1,["threemore"] = 1,["oneplayer"] = .75,["twoplayer"] = .75,["threeplayer"] = .75,["oneperson"] = .75,["twoperson"] = .75,["threeperson"] = .75,
 ["peopleto"] = 1,["peoplefor"] = 1,
 ["pleaseguy"] = 1,
 ["queueto"] = 1,["queuefor"] = 1,["queuetolevel"] = 1,["queueforlevel"] = 1,
@@ -2655,7 +2707,6 @@ GF_LFM_BEFORE = { -- Up to three words before
 ["signfor"] = 1,
 ["someraidfor"] = 1,["somehcraidfor"] = 1,["somehardcoreraidfor"] = 1,
 ["speedrunfor"] = .75,
-["startinminute"] = 1,["startinhour"] = 1,["startnew"] = 1,["startinginminute"] = 1,["startinginhour"] = 1,["startingnew"] = 1,
 ["stealthrun"] = 1,
 ["takemethrough"] = 1,["takemeto"] = 1,["takemefor"] = 1,
 ["tanklast"] = 1,["tankfor"] = 1,["tankon"] = 1,["tankto"] = 1,["tankmy"] = 1,["tankinterestedin"] = 1,
@@ -2665,6 +2716,7 @@ GF_LFM_BEFORE = { -- Up to three words before
 
 ["druidfor"] = 1,["hunterfor"] = 1,["magefor"] = 1,["paladinfor"] = 1,["priestfor"] = 1,["roguefor"] = 1,["shamanfor"] = 1,["warlockfor"] = 1,["warriorfor"] = 1,
 ["anytauren"] = 1,["anyundead"] = 1,["anyhuman"] = 1,["anydwarf"] = 1,["anygnome"] = 1,["anynightelf"] = 1,["anyorc"] = 1,["anytroll"] = 1,["anyhighelf"] = 1,["anygoblin"] = 1,
+["dpsdo"] = 1,["damagedo"] = 1,["tankdo"] = 1,["healdo"] = 1,["healerdo"] = 1,
 
 ["come"] = 1,["coming"] = 1,["doing"] = 1,["go"] = 1,["going"] = 1,["invite"] = 1,
 ["damage"] = .75,["dps"] = 1,["heal"] = .75,["healer"] = .75,["tank"] = .75,
@@ -2694,6 +2746,7 @@ GF_LFM_AFTER = { -- Up to two words after
 ["instanceheal"] = 1,["instancehealer"] = 1,["dungeonheal"] = 1,["dungeonhealer"] = 1,
 ["hrsr"] = 1,
 ["ifpossible"] = 1,
+["isopen"] = 1,["isstarting"] = 1,
 ["juststart"] = 1,
 ["lastcall"] = 1,
 ["lastminute"] = 1,
@@ -2719,7 +2772,6 @@ GF_LFM_AFTER = { -- Up to two words after
 ["realquick"] = 1,
 ["recruitinghealer"] = 1,["recruitingtank"] = 1,
 ["speedrun"] = 1,["speedrungoing"] = 1,
-["startinminute"] = 1,["startinhour"] = 1,["startinginminute"] = 1,["startinginhour"] = 1,
 ["stealthrun"] = 1,
 ["upboys"] = 1,
 ["wme"] = 1,
@@ -2820,6 +2872,18 @@ GF_LFM_BYPASS = { -- Won't detect LFM/LFM Before/After if these words
 }
 GF_LFM_TRIGGER = {
 ["anyone"] = true,["anyonein"] = true,["anyonenear"] = true,["needto"] = true,["boost"] = true,["carry"] = true,["powerlevel"] = true,["backupat"] = true,["levelin"] = true,["around"] = true,
+
+["tenat"] = true,["tenin"] = true,["tennear"] = true,
+["twentyat"] = true,["twentyin"] = true,["twentynear"] = true,
+["thirtyat"] = true,["thirtyin"] = true,["thirtynear"] = true,
+["fortyat"] = true,["fortyin"] = true,["fortynear"] = true,
+["fiftyat"] = true,["fiftyin"] = true,["fiftynear"] = true,
+["sixtyat"] = true,["sixtyin"] = true,["sixtynear"] = true,
+["twentiesat"] = true,["twentiesin"] = true,["twentiesnear"] = true,
+["thirtiesat"] = true,["thirtiesin"] = true,["thirtiesnear"] = true,
+["fortiesat"] = true,["fortiesin"] = true,["fortiesnear"] = true,
+["fiftiesat"] = true,["fiftiesin"] = true,["fiftiesnear"] = true,
+["sixtiesat"] = true,["sixtiesin"] = true,["sixtiesnear"] = true,
 }
 GF_LFM_CONNECT_WORDS_BEFORE = { -- Connecting words before Groupname(needhealer(for)dm)
 -- Classes/Roles
@@ -2919,6 +2983,7 @@ GF_GROUP_PHRASE = { -- Force detect with this string
 ["avup"] = true,
 }
 GF_GROUP_PHRASE_QUESTION = {
+["group"] = true,["run"] = true,["raid"] = true,
 }
 GF_GROUP_NO_QUESTION = { -- "No 'dungeon' group?"
 ["no"] = { ["group"] = true,["run"] = true, },
@@ -3611,33 +3676,30 @@ GF_QUEST_TRIGGER = {
 }
 GF_WORD_DUNGEON = {
 ["rfc"] = 15,["ragefire"] = 15,["deadmines"] = 21,["dm"] = 21,["wc"] = 21,["shadowfang"] = 24,["sfk"] = 24,["blackfathom"] = 25,["bfd"] = 25,["stock"] = 26,["stockade"] = 26,["gnomer"] = 32,["gnomeregan"] = 32,
-["kraul"] = 32,["rfk"] = 32,["downs"] = 39,["rfd"] = 39,["gy"] = 31,["smgy"] = 31,["lib"] = 35,["library"] = 35,["smlib"] = 35,["smarm"] = 39,["armory"] = 39,["smcath"] = 40,["cathedral"] = 40,["smfull"] = 39,
-["ulda"] = 45,["uldaman"] = 45,["zf"] = 48,["zulfarrak"] = 48,["mallet"] = 48,["mara"] = 49,["maraudon"] = 49,["princess"] = 49,["st"] = 54,["sunken"] = 54,["atalhakkar"] = 54,["arena"] = 55,["brd"] = 58,["jailbreak"] = 58,["emperor"] = 58,
+["kraul"] = 32,["rfk"] = 32,["downs"] = 39,["rfd"] = 39,["gy"] = 31,["smgy"] = 31,["library"] = 35,["smlib"] = 35,["smarm"] = 39,["armory"] = 39,["smcath"] = 40,["cathedral"] = 40,["smfull"] = 39,["smquestrun"] = 39,
+["ulda"] = 45,["uldaman"] = 45,["zf"] = 48,["zulfarrak"] = 48,["mallet"] = 48,["mara"] = 49,["maraudon"] = 49,["princess"] = 50,["st"] = 54,["sunken"] = 54,["atalhakkar"] = 54,["arena"] = 55,["brd"] = 58,["jailbreak"] = 58,["emperor"] = 58,
 ["attunement"] = 60,["lbrs"] = 60,["brs"] = 60,["dme"] = 57,["dmn"] = 62,["dmt"] = 62,["dmw"] = 62,["scholomance"] = 62.1,["krastinov"] = 62.1,["stratholme"] = 62.2,["baron"] = 62.2,["ubrs"] = 63.1,["rend"] = 63.1,["valthalak"] = 63.1,
 ["sm"] = 0,["razorfen"] = 0,["dungeon"] = 0,["blackrock"] = 0,["scarlet"] = 0,
 
--- Two Words
-["ragefirechasm"] = 15,["wailingcaverns"] = 21,["blackfathomdeeps"] = 25,["razorfenkraul"] = 32,["razorfendowns"] = 39,["sunkentemple"] = 54,["blackrockdepths"] = 58,["maulwest"] = 62,["mauleast"] = 57,["maulnorth"] = 62,["maultrib"] = 62,["maultribute"] = 62,
-["blackrockspire"] = 60,["lowerblackrock"] = 60,["livestrat"] = 62.2,["udstrat"] = 62.2,["stratrep"] = 62.2,["upperblackrock"] = 63.1,["drakefireamulet"] = 63.1,["diremaul"] = 58,["scarletmonastery"] = 0,
-["foranything"] = 0,["lfganything"] = 0,["anyinstance"] = 0,
-
-["lowerblackrockspire"] = 60,["upperblackrockspire"] = 60,
+-- Multiwords
+["ragefirechasm"] = 15,["wailingcaverns"] = 21,["blackfathomdeeps"] = 25,["razorfenkraul"] = 32,["razorfendowns"] = 39,["sunkentemple"] = 54,["blackrockdepths"] = 58,["brdarena"] = 55,["brdemperor"] = 60,
+["purpleside"] = 49,["maraudonpurple"] = 49,["orangeside"] = 49,["maraudonorange"] = 49,["maraudonprincess"] = 50,["princessrun"] = 50,
+["diremaul"] = 58,["blackrockspire"] = 60,["lowerblackrock"] = 60,["livestrat"] = 62.2,["udstrat"] = 62.2,["upperblackrock"] = 63.1,["drakefireamulet"] = 63.1,["lowerblackrockspire"] = 60,["upperblackrockspire"] = 60,
+["foranything"] = 0,["lfganything"] = 0,["anyinstance"] = 0,["scarletmonastery"] = 0,
 
 -- RepFarm
-["repfarmstrat"] = 62,["stratrepfarm"] = 62,
+["stratrep"] = 62,["repfarmstrat"] = 62,["stratrepfarm"] = 62,
 
 -- Turtle WoW
-["dragonmaw"] = 30,["dmr"] = 30,["crescent"] = 36,["grove"] = 36,["crescentgrove"] = 36,["cg"] = 36,["tcg"] = 36,["stormwrought"] = 39,["gc"] = 48,["gilneas"] = 48,["hateforge"] = 56,["quarry"] = 56,["hq"] = 56,["hf"] = 56,["hfq"] = 56,
-["sv"] = 62.3,["swv"] = 62.3,["vault"] = 62.3,["morass"] = 62.4,["bm"] = 62.4,["cot"] = 62.4,["crypt"] = 63.2,["karazhancrypt"] = 63.2,
-["swc"] = 39,["swr"] = 39,["swd"] = 39,["fmh"] = 15,
+["fmh"] = 15,["frostmane"] = 15,["windhorn"] = 29,["whc"] = 29,["wh"] = 29,["dragonmaw"] = 30,["dmr"] = 30,["crescent"] = 36,["grove"] = 36,["crescentgrove"] = 36,["cg"] = 36,["tcg"] = 36,["stormwrought"] = 39,["gc"] = 48,["gilneas"] = 48,
+["hateforge"] = 56,["quarry"] = 56,["hq"] = 56,["hf"] = 56,["hfq"] = 56,["sv"] = 62.3,["swv"] = 62.3,["vault"] = 62.3,["morass"] = 62.4,["bm"] = 62.4,["cot"] = 62.4,["crypt"] = 63.2,["karazhancrypt"] = 63.2,
+["swc"] = 39,["swr"] = 39,["swd"] = 39,
 
--- Two Words
-["dragonmawretreat"] = 30,["stormwroughtruins"] = 39,["stormwroughtdescent"] = 39,["stormwroughtcastle"] = 39,["gilneascity"] = 48,["hateforgequarry"] = 56,["stormwindv"] = 62.3,["stormwindvault"] = 62.3,["blackmorass"] = 62.4,
-["frostmanehollow"] = 15,
+-- Multiwords
+["frostmanehollow"] = 15,["windhorncanyon"] = 29,["dragonmawretreat"] = 30,["stormwroughtruins"] = 39,["stormwroughtdescent"] = 39,["stormwroughtcastle"] = 39,["gilneascity"] = 48,["hateforgequarry"] = 56,
+["stormwindvault"] = 62.3,["blackmorass"] = 62.4,["cavernsoftime"] = 62.4,
 
--- Three Words
-["cavernsoftime"] = 62.4,
-
+-- Misc
 ["weeklyrun"] = 60,["weeklydungeon"] = 60,["weekly"] = 60,["weeklies"] = 60,
 }
 GF_WORD_RAID = {
@@ -3689,7 +3751,7 @@ GF_WORD_TRADE = {
 ["A"] = .25,["B"] = .5,["D"] = 1.5,["L"] = 1,["NL"] = .5,
 ["C"] = 1,["CO"] = 1,["CL"] = .5,["CAL"] = .5,["CBL"] = .5,["CT"] = .5,["CA"] = .25,["CCH"] = .25,["LD"] = .25,
 ["E"] = .5,["EBO"] = .25,
-["F"] = 1.25,["FO"] = 1,["FAO"] = .75,["FL"] = 1,["FB"] = .5,["FP"] = .5,["FT"] = .5,["FZP"] = 1.5,["FH"] = .5, -- Had to reduce "F" to 1.25 because it was too aggressive
+["F"] = 1.25,["FO"] = 1,["FAO"] = .75,["FL"] = 1,["FB"] = .5,["FP"] = .5,["FT"] = .5,["FZP"] = 1.5,["FH"] = .5,["FI"] = .25,["FII"] = .5, -- Had to reduce "F" to 1.25 because it was too aggressive
 ["O"] = .5,["OC"] = .5,
 ["RB"] = 1,["RE"] = 1,["RL"] = 1,["RP"] = 1,["RG"] = 1,["RH"] = 1,["RI"] = 1,["RNG"] = 1,["RZ"] = 1,
 ["T"] = 1,["TP"] = .5,["TG"] = 1,["TH"] = 1,["TI"] = 1,["TPZ"] = .5,["TPAZ"] = .5,["BPAZ"] = .25,["BPNZ"] = .25,["TAH"] = .5,["FPZ"] = .25,
@@ -3945,8 +4007,8 @@ GF_TRADE_WORD_EXCLUSION = {
 }
 GF_TRADE_COMMON_WORDS = {
 ["enchant"] = "E",["lockbox"] = "L",["portal"] = "P",["summon"] = "P",["lf"] = "C",["lfg"] = "C",["lfm"] = "C",["seek"] = "F",["seeking"] = "F",["deathroll"] = "J",
-["alahthalas"] = "Z",["alterac"] = "Z",["aq"] = "Z",["arathi"] = "Z",["arathihighlands"] = "Z",["argentdawn"] = "Z",["ashenvale"] = "Z",["astranaar"] = "Z",["auberdine"] = "Z",["azshara"] = "Z",["badlands"] = "Z",["balor"] = "Z",["barrens"] = "Z",["blackrock"] = "Z",["blackrockmountain"] = "Z",["blasted"] = "Z",["blastedlands"] = "Z",["bb"] = "Z",["bootybay"] = "Z",["brm"] = "Z",["cavernsoftime"] = "Z",["cenarion"] = "Z",["cot"] = "Z",["crossroads"] = "Z",["darkmoon"] = "Z",["darkmoonfaire"] = "Z",["darkshire"] = "Z",["darkshore"] = "Z",["darn"] = "Z",["darnassus"] = "Z",["deadmines"] = "Z",["deadwind"] = "Z",["desolace"] = "Z",["diremaul"] = "Z",["dm"] = "Z",["dme"] = "Z",["dmw"] = "Z",["dmn"] = "Z",["dragonmaw"] = "Z",["durotar"] = "Z",["duskwood"] = "Z",["dustwallow"] = "Z",["easternplaguelands"] = "Z",["ep"] = "Z",["epl"] = "Z",["es"] = "Z",["everlook"] = "Z",["feathermoon"] = "Z",["felwood"] = "Z",["feralas"] = "Z",["gadget"] = "Z",["gadgetzan"] = "Z",["gc"] = "Z",["goldshire"] = "Z",["gromgol"] = "Z",["hateforge"] = "Z",["hillsbrad"] = "Z",["hinterlands"] = "Z",["hydraxian"] = "Z",["hyjal"] = "Z",["if"] = "Z",["ironforge"] = "Z",["jaedenar"] = "Z",["karazhan"] = "Z",["kargath"] = "Z",["lakeshire"] = "Z",["lightshope"] = "Z",["mara"] = "Z",["maraudon"] = "Z",["moonglade"] = "Z",["mulgore"] = "Z",["nordanaar"] = "Z",["orgrimmar"] = "Z",["ratchet"] = "Z",["razorhill"] = "Z",["redridge"] = "Z",["senjin"] = "Z",["silithus"] = "Z",["sm"] = "Z",["stockade"] = "Z",["stonard"] = "Z",["stonetalon"] = "Z",["storm"] = "Z",["stormwind"] = "Z",["stranglethorn"] = "Z",["stv"] = "Z",["stratholme"] = "Z",["swampofsorrows"] = "Z",["tanaris"] = "Z",["tarrenmill"] = "Z",["teldrassil"] = "Z",["theramore"] = "Z",["thunder"] = "Z",["thunderbluff"] = "Z",["tirisfal"] = "Z",["ubrs"] = "Z",["uldaman"] = "Z",["undercity"] = "Z",["ungoro"] = "Z",["upperblackrock"] = "Z",["valleyofspears"] = "Z",["wailingcaverns"] = "Z",["wc"] = "Z",["westernplaguelands"] = "Z",["westfall"] = "Z",["wetlands"] = "Z",["wintergrasp"] = "Z",["winterspring"] = "Z",["wpl"] = "Z",["zone"] = "Z",["zoramstrand"] = "Z",["about"] = "N",["ace"] = "N",["am"] = "N",["and"] = "N",["are"] = "N",["at"] = "N",["be"] = "N",["being"] = "N",["bored"] = "N",["boss"] = "N",["bro"] = "N",["but"] = "N",["chat"] = "N",["clear"] = "N",["cleared"] = "N",["coming"] = "N",["cool"] = "N",["cute"] = "N",["day"] = "N",["days"] = "N",["direction"] = "N",["enjoyer"] = "N",["enjoyers"] = "N",["etc"] = "N",["even"] = "N",["finally"] = "N",["feel"] = "N",["fit"] = "N",["fuck"] = "N",["geared"] = "N",["grab"] = "N",["happen"] = "N",["he"] = "N",["hero"] = "N",["hi"] = "N",["i"] = "N",["im"] = "N",["in"] = "N",["into"] = "N",["invite"] = "N",["is"] = "N",["it"] = "N",["its"] = "N",["just"] = "N",["label"] = "N",["later"] = "N",["logging"] = "N",["love"] = "N",["lowbie"] = "N",["maybe"] = "N",["no"] = "N",["of"] = "N",["ofc"] = "N",["off"] = "N",["or"] = "N",["other"] = "N",["over"] = "N",["predict"] = "N",["sage"] = "N",["share"] = "N",["so"] = "N",["spare"] = "N",["still"] = "N",["stop"] = "N",["style"] = "N",["sweet"] = "N",["than"] = "N",["that"] = "N",["their"] = "N",["them"] = "N",["they"] = "N",["there"] = "N",["those"] = "N",["throw"] = "N",["throwing"] = "N",["to"] = "N",["train"] = "N",["trans"] = "N",["transmog"] = "N",["transmogs"] = "N",["try"] = "N",["turtle"] = "N",["via"] = "N",["was"] = "N",["way"] = "N",["we"] = "N",["well"] = "N",["when"] = "N",["where"] = "N",["will"] = "N",["winter"] = "N",["yes"] = "N",["you"] = "N",["young"] = "N",["your"] = "N",["yourself"] = "N",["able"] = "A",["above"] = "A",["afford"] = "A",["ah"] = "A",["all"] = "A",["alley"] = "A",["also"] = "A",["amount"] = "A",["anything"] = "A",["apparel"] = "A",["appreciate"] = "A",["around"] = "A",["ask"] = "A",["awesome"] = "A",["better"] = "A",["below"] = "A",["big"] = "A",["bit"] = "A",["blood"] = "A",["bloody"] = "A",["bloodstone"] = "A",["bonus"] = "A",["bring"] = "A",["bunch"] = "A",["by"] = "A",["call"] = "A",["can"] = "A",["capital"] = "A",["capitals"] = "A",["chad"] = "A",["check"] = "A",["city"] = "A",["come"] = "A",["complete"] = "A",["completed"] = "A",["decent"] = "A",["district"] = "A",["do"] = "A",["does"] = "A",["doing"] = "A",["door"] = "A",["double"] = "A",["drop"] = "A",["dropping"] = "A",["else"] = "A",["evening"] = "A",["every"] = "A",["everyone"] = "A",["everything"] = "A",["extra"] = "A",["faster"] = "A",["few"] = "A",["find"] = "A",["fine"] = "A",["for"] = "A",["forge"] = "A",["forging"] = "A",["fresh"] = "A",["friend"] = "A",["from"] = "A",["front"] = "A",["full"] = "A",["give"] = "A",["giver"] = "A",["givers"] = "A",["gives"] = "A",["gnomish"] = "A",["go"] = "A",["going"] = "A",["good"] = "A",["great"] = "A",["greatly"] = "A",["guild"] = "A",["guy"] = "A",["hard"] = "A",["has"] = "A",["have"] = "A",["hello"] = "A",["here"] = "A",["high"] = "A",["his"] = "A",["homemade"] = "A",["house"] = "A",["ill"] = "A",["info"] = "A",["information"] = "A",["kind"] = "A",["kinds"] = "A",["last"] = "A",["left"] = "A",["less"] = "A",["like"] = "A",["link"] = "A",["look"] = "A",["lot"] = "A",["low"] = "A",["lower"] = "A",["lowest"] = "A",["major"] = "A",["many"] = "A",["me"] = "A",["mid"] = "A",["mind"] = "A",["more"] = "A",["most"] = "A",["much"] = "A",["must"] = "A",["my"] = "A",["next"] = "A",["nice"] = "A",["now"] = "A",["on"] = "A",["only"] = "A",["order"] = "A",["out"] = "A",["outside"] = "A",["people"] = "A",["place"] = "A",["plenty"] = "A",["pop"] = "A",["present"] = "A",["pretty"] = "A",["put"] = "A",["quick"] = "A",["rate"] = "A",["ready"] = "A",["reasonable"] = "A",["really"] = "A",["send"] = "A",["sexy"] = "A",["some"] = "A",["something"] = "A",["success"] = "A",["superior"] = "A",["take"] = "A",["thank"] = "A",["thanks"] = "A",["these"] = "A",["this"] = "A",["time"] = "A",["today"] = "A",["tonight"] = "A",["top"] = "A",["tree"] = "A",["trying"] = "A",["under"] = "A",["up"] = "A",["use"] = "A",["vampiric"] = "A",["very"] = "A",["what"] = "A",["who"] = "A",["willing"] = "A",["with"] = "A",["would"] = "A",["affordable"] = "B",["alliance"] = "B",["bank"] = "B",["best"] = "B",["borrow"] = "B",["bridge"] = "B",["business"] = "B",["charge"] = "B",["charges"] = "B",["charging"] = "B",["commission"] = "B",["contact"] = "B",["couple"] = "B",["deal"] = "B",["delivered"] = "B",["delivery"] = "B",["desperate"] = "B",["donate"] = "B",["donation"] = "B",["each"] = "B",["enough"] = "B",["eight"] = "B",["express"] = "B",["five"] = "B",["fountain"] = "B",["four"] = "B",["get"] = "B",["gets"] = "B",["getting"] = "B",["guarantee"] = "B",["half"] = "B",["hardcore"] = "B",["help"] = "B",["horde"] = "B",["include"] = "B",["includes"] = "B",["including"] = "B",["included"] = "B",["interested"] = "B",["job"] = "B",["know"] = "B",["knows"] = "B",["known"] = "B",["listed"] = "B",["looking"] = "B",["minute"] = "B",["near"] = "B",["nine"] = "B",["one"] = "B",["poor"] = "A",["premium"] = "B",["quality"] = "B",["rent"] = "B",["roof"] = "B",["seven"] = "B",["six"] = "B",["nineteen"] = "B",["twentynine"] = "B",["thirtynine"] = "B",["fortynine"] = "B",["fiftynine"] = "B",["twenties"] = "B",["thirties"] = "B",["forties"] = "B",["fifties"] = "B",["sixties"] = "B",["stair"] = "B",["steps"] = "B",["stuff"] = "B",["ten"] = "B",["thankful"] = "B",["third"] = "B",["three"] = "B",["tip"] = "B",["transport"] = "B",["todo"] = "B",["ton"] = "B",["town"] = "B",["two"] = "B",["value"] = "B",["valuable"] = "B",["onemore"] = "B",["twomore"] = "B",["threemore"] = "B",["fourmore"] = "B",["fivemore"] = "B",["alchemist"] = "O",["blacksmith"] = "O",["cook"] = "O",["chef"] = "O",["engineer"] = "O",["herbalist"] = "O",["jc"] = "O",["leatherworker"] = "O",["miner"] = "O",["skinner"] = "O",["smelter"] = "O",["smith"] = "O",["tailor"] = "O",["artisan"] = "B",["master"] = "B",["dragonscale"] = "B",["elemental"] = "B",["specialization"] = "B",["tribal"] = "B",["cooldown"] = "B",["dance"] = "B",["highend"] = "B",["level"] = "A",["leveling"] = "A",["max"] = "A",["min"] = "A",["minimum"] = "A",["participant"] = "B",["play"] = "B",["pool"] = "B",["prize"] = "B",["save"] = "B",["set"] = "B",["slot"] = "B",["store"] = "B",["token"] = "B",["win"] = "B",["winner"] = "B",["conjure"] = "B",["mage"] = "K",["stack"] = "B",["warlock"] = "K",["wl"] = "K",["druid"] = "A",["hunter"] = "A",["paladin"] = "A",["priest"] = "A",["shaman"] = "A",["warrior"] = "A",["caster"] = "A",["healer"] = "A",["melee"] = "A",["box"] = "B",["lock"] = "B",["pick"] = "B",["rogue"] = "K",["unlock"] = "B",["add"] = "B",["apply"] = "B",["dealer"] = "B",["made"] = "B",["maker"] = "B",["mat"] = "B",["material"] = "B",["stock"] = "B",["auction"] = "B",["de"] = "A",["disenchant"] = "B",["exchange"] = "B",["pay"] = "B",["price"] = "B",["worth"] = "B",["xsilver"] = "B",["create"] = "C",["make"] = "C",["produce"] = "C",["open"] = "M",["opened"] = "M",["opener"] = "M",["opening"] = "M",["available"] = "C",["any"] = "C",["anyone"] = "C",["anywhere"] = "C",["discount"] = "C",["everycorner"] = "C",["fast"] = "C",["free"] = "C",["gold"] = "C",["magewater"] = "C",["money"] = "C",["need"] = "C",["needed"] = "C",["needone"] = "C",["needtwo"] = "C",["needthree"] = "C",["online"] = "C",["paid"] = "C",["please"] = "C",["request"] = "C",["sale"] = "C",["search"] = "C",["service"] = "C",["welcome"] = "C",["work"] = "C",["wherever"] = "C",["agility"] = "O",["arcane"] = "O",["armor"] = "O",["attackspeed"] = "O",["block"] = "O",["crit"] = "O",["damage"] = "O",["defense"] = "O",["dodge"] = "O",["fire"] = "O",["fish"] = "O",["frost"] = "O",["glow"] = "O",["haste"] = "O",["heal"] = "O",["health"] = "O",["herb"] = "O",["hit"] = "O",["impact"] = "O",["intellect"] = "O",["mana"] = "O",["mount"] = "O",["nature"] = "O",["resist"] = "O",["riding"] = "O",["shadow"] = "O",["skin"] = "O",["speed"] = "O",["spell"] = "O",["spirit"] = "O",["stamina"] = "O",["stealth"] = "O",["strength"] = "O",["striking"] = "O",["subtlety"] = "O",["allresist"] = "O",["crusader"] = "O",["beastslayer"] = "O",["beastslaying"] = "O",["counterweight"] = "O",["fiery"] = "O",["icychill"] = "O",["icy"] = "O",["minorspeed"] = "O",["mountspeed"] = "O",["movespeed"] = "O",["demonslayer"] = "O",["demonslaying"] = "O",["lifesteal"] = "O",["resistall"] = "O",["ridingskill"] = "O",["ridingspeed"] = "O",["runspeed"] = "O",["shieldspike"] = "O",["spelldamage"] = "O",["spike"] = "O",["spur"] = "O",["unholy"] = "O",["vampirism"] = "O",["weaponchain"] = "O",["wintersmight"] = "O",["gear"] = "B",["inventory"] = "B",["item"] = "B",["maxskill"] = "B",["reagent"] = "B",["reagents"] = "B",["shardsleft"] = "C",["skill"] = "B",["skilled"] = "B",["ag"] = "N",["hmu"] = "C",["message"] = "B",["whisper"] = "B",["w"] = "C",["wme"] = "C",["ap"] = "B",["ar"] = "B",["fr"] = "B",["hp"] = "B",["mp"] = "B",["nr"] = "B",["sr"] = "B",["stat"] = "B",["mine"] = "B",["threat"] = "B",["bis"] = "B",["hc"] = "B",["pm"] = "B",["u"] = "A",["crack"] = "B",["cracking"] = "B",["comingup"] = "C",["flightpath"] = "N",["enc"] = "A",["enhancement"] = "A",["easternkingdoms"] = "N",["kalimdor"] = "N",["lb"] = "N",["group"] = "N",["skillup"] = "N",["boost"] = "S",["carry"] = "S",["human"] = "X",["nightelf"] = "X",["dwarf"] = "X",["gnome"] = "X",["orc"] = "X",["troll"] = "X",["undead"] = "X",["tauren"] = "X",["goblin"] = "X",["highelf"] = "X",["elf"] = "X",["scourge"] = "X",
-["head"] = "I",["legs"] = "I",["neck"] = "I",["ring"] = "I",["cloak"] = "I",["shoulder"] = "I",["shirt"] = "I",["back"] = "I",["chest"] = "I",["wrist"] = "I",["gloves"] = "I",["hand"] = "I",["shield"] = "I",["boots"] = "I",["weapon"] = "I",["belt"] = "I",["beltbuckle"] = "I",["gem"] = "I",["gemstone"] = "I",["jewel"] = "I",["handsword"] = "I",["handaxe"] = "I",["handmace"] = "I",["handstaff"] = "I",["handdagger"] = "I",["arcanum"] = "I",["libram"] = "I",["axe"] = "I",["bow"] = "I",["dagger"] = "I",["greater"] = "I",["gun"] = "I",["lesser"] = "I",["mace"] = "I",["mighty"] = "I",["minor"] = "I",["polearm"] = "I",["staff"] = "I",["sword"] = "I",["trinket"] = "I",["wand"] = "I",["blueitem"] = "I",["epicitem"] = "I",["greenitem"] = "I",["bag"] = "I",["cluster"] = "I",["elixir"] = "I",["feather"] = "I",["fish"] = "I",["flask"] = "I",["food"] = "I",["formula"] = "I",["goggles"] = "I",["meat"] = "I",["pattern"] = "I",["plans"] = "I",["pot"] = "G",["potion"] = "I",["pots"] = "G",["recipe"] = "I",["rocket"] = "I",["rod"] = "I",["schematic"] = "I",["scope"] = "I",["arcanite"] = "H",["ruggedhide"] = "H",["hitem"] = "H",["mooncloth"] = "H",["oj"] = "H",["oranges"] = "H",["water"] = "H",["arthas"] = "G",["blackmouth"] = "G",["firefin"] = "G",["khadgar"] = "G",["khadgars"] = "G",["silversage"] = "G",["steelbloom"] = "G",["stonescale"] = "G",["undeath"] = "G",["arcanecrystal"] = "H",["arthastears"] = "H",["blacklotus"] = "H",["blindweed"] = "H",["briarthorn"] = "H",["bruiseweed"] = "H",["dreamdust"] = "H",["dreamfoil"] = "H",["earthroot"] = "H",["fadeleaf"] = "H",["firebloom"] = "H",["firefinsnapper"] = "H",["flamesac"] = "H",["ghostmushroom"] = "H",["goldensansam"] = "H",["goldthorn"] = "H",["gravemoss"] = "H",["gromsblood"] = "H",["heartofwild"] = "H",["icecap"] = "H",["illusiondust"] = "H",["khadgarswhisker"] = "H",["khadgarwhisker"] = "H",["kingsblood"] = "H",["liferoot"] = "H",["mageroyal"] = "H",["mountainsilversage"] = "H",["oilyblackmouth"] = "H",["peacebloom"] = "H",["plaguebloom"] = "H",["purplelotus"] = "H",["silverleaf"] = "H",["souldust"] = "H",["stonescaleoil"] = "H",["strangedust"] = "H",["stranglekelp"] = "H",["sungrass"] = "H",["swiftthistle"] = "H",["swifttthistle"] = "H",["venomsac"] = "H",["visiondust"] = "H",["volatilerum"] = "H",["wildsteelbloom"] = "H",["wintersbite"] = "H",["astral"] = "A",["brilliant"] = "A",["eternal"] = "A",["glimmering"] = "A",["glowing"] = "A",["magic"] = "A",["mystic"] = "A",["nether"] = "A",["nexus"] = "A",["radiant"] = "A",["essence"] = "G",["shard"] = "G",["black"] = "N",["blue"] = "N",["blues"] = "N",["dark"] = "N",["golden"] = "N",["green"] = "N",["greens"] = "N",["huge"] = "N",["large"] = "N",["massive"] = "N",["perfect"] = "N",["red"] = "N",["small"] = "N",["wizard"] = "N",["yellow"] = "N",["air"] = "N",["breath"] = "N",["core"] = "N",["earth"] = "N",["frozen"] = "N",["lava"] = "N",["wind"] = "N",["bar"] = "I",["cloth"] = "I",["leather"] = "I",["mail"] = "I",["ore"] = "I",["plate"] = "I",["stone"] = "I",["heavy"] = "A",["light"] = "A",["medium"] = "A",["thick"] = "A",["rugged"] = "A",["bronze"] = "A",["copper"] = "A",["iron"] = "A",["mithril"] = "A",["ornate"] = "A",["reinforced"] = "A",["silver"] = "A",["steel"] = "A",["strong"] = "A",["sturdy"] = "A",["tin"] = "A",["truesilver"] = "A",["linen"] = "A",["mageweave"] = "A",["silk"] = "A",["thorium"] = "A",["wool"] = "A",["coarse"] = "A",["rough"] = "A",["solid"] = "A",["dense"] = "A",["cured"] = "A",["refined"] = "A",["deeprock"] = "I",["salt"] = "A",["greenhillsofstranglethorn"] = "H",["shredderoperatingmanual"] = "H",["shredder"] = "A",["page"] = "A",["pages"] = "A",["hide"] = "B",["orange"] = "B",["mongoose"] = "A",["giants"] = "A",["azerothian"] = "G",["diamond"] = "G",["emerald"] = "G",["moonstone"] = "G",["opal"] = "G",["ruby"] = "G",["sapphire"] = "G",["tigerseye"] = "G",["aquamarine"] = "H",["bloodofmountain"] = "H",["citrine"] = "H",["jade"] = "H",["malachite"] = "H",["mossagate"] = "H",["shadowgem"] = "H",["bolt"] = "G",["bomb"] = "G",["casing"] = "G",["eel"] = "G",["egg"] = "G",["fang"] = "G",["mojo"] = "G",["mortar"] = "G",["oil"] = "G",["pearl"] = "G",["rune"] = "G",["runed"] = "G",["sagefish"] = "G",["scale"] = "G",["soil"] = "G",["tenderloin"] = "G",["widget"] = "G",["chimaerok"] = "G",["chimera"] = "G",["devilsaur"] = "G",["dynamite"] = "G",["frostsaber"] = "G",["globe"] = "G",["heart"] = "G",["ichor"] = "G",["ironweb"] = "G",["obsidian"] = "G",["scorpid"] = "G",["star"] = "G",["titans"] = "G",["transformer"] = "G",["tube"] = "G",["warbear"] = "G",["beasts"] = "G",["chromatic"] = "G",["counterweight"] = "G",["constitution"] = "G",["dawnbringer"] = "G",["deviate"] = "G",["dreamsteel"] = "G",["dreamstone"] = "G",["elementium"] = "G",["fortitude"] = "G",["grinding"] = "G",["incendicite"] = "G",["invisibility"] = "G",["invocation"] = "G",["iridescent"] = "G",["lustrous"] = "G",["powerful"] = "G",["primal"] = "G",["pristine"] = "G",["protection"] = "G",["runeetched"] = "G",["sansam"] = "G",["spyglass"] = "G",["stronghold"] = "G",["supreme"] = "G",["swiftness"] = "G",["swimspeed"] = "G",["voracity"] = "G",["warlords"] = "G",["whitesoul"] = "G",["wildthorn"] = "G",["wisdom"] = "G",["blackguard"] = "H",["blackvitriol"] = "H",["blastingpowder"] = "H",["bloodvine"] = "H",["carapace"] = "H",["darkironbar"] = "H",["darkironore"] = "H",["darkrune"] = "H",["dragonsinew"] = "H",["dreamscale"] = "H",["expansivemind"] = "H",["eyeofshadow"] = "H",["felcloth"] = "H",["frozenrune"] = "H",["fusedwiring"] = "H",["ghostdye"] = "H",["giftofarthas"] = "H",["gyrochronatom"] = "H",["ironfeather"] = "H",["larvalacid"] = "H",["leyorb"] = "H",["livingessence"] = "H",["moonwell"] = "H",["morrowgrain"] = "H",["nightfinsnapper"] = "H",["overchargedleyenergy"] = "H",["poisonresist"] = "H",["righteousorb"] = "H",["rumseyrum"] = "H",["runntumtuber"] = "H",["sandworm"] = "H",["scaleofonyxia"] = "H",["sigilofleeching"] = "H",["sigilofpenetration"] = "H",["sigilofquickness"] = "H",["sigilofresilience"] = "H",["snowball"] = "H",["souldarite"] = "H",["spidersilk"] = "H",["spiderssilk"] = "H",["stormwreaver"] = "H",["sulfuroningot"] = "H",["unstabletrigger"] = "H",["wickedclaw"] = "H",["wildvine"] = "H",["wintersquid"] = "H",["zulianmudskunk"] = "H",["fortitudeofscourge"] = "H",["mightofscourge"] = "H",["powerofscourge"] = "H",["resilienceofscourge"] = "H",["pvphead"] = "H",["pvpshoulder"] = "H",["pvpchest"] = "H",["pvpwrist"] = "H",["pvpgloves"] = "H",["pvphand"] = "H",["pvplegs"] = "H",["pvpbelt"] = "H",["pvpring"] = "H",["pvpboots"] = "H",["pvpneck"] = "H",["pvpback"] = "H",["pvpcloak"] = "H",["pvpweapon"] = "H",
+["alahthalas"] = "Z",["alterac"] = "Z",["aq"] = "Z",["arathi"] = "Z",["arathihighlands"] = "Z",["argentdawn"] = "Z",["ashenvale"] = "Z",["astranaar"] = "Z",["auberdine"] = "Z",["azshara"] = "Z",["badlands"] = "Z",["balor"] = "Z",["barrens"] = "Z",["blackrock"] = "Z",["blackrockmountain"] = "Z",["blasted"] = "Z",["blastedlands"] = "Z",["bb"] = "Z",["bootybay"] = "Z",["brm"] = "Z",["cavernsoftime"] = "Z",["cenarion"] = "Z",["cot"] = "Z",["crossroads"] = "Z",["darkmoon"] = "Z",["darkmoonfaire"] = "Z",["darkshire"] = "Z",["darkshore"] = "Z",["darn"] = "Z",["darnassus"] = "Z",["deadmines"] = "Z",["deadwind"] = "Z",["desolace"] = "Z",["diremaul"] = "Z",["dm"] = "Z",["dme"] = "Z",["dmw"] = "Z",["dmn"] = "Z",["dragonmaw"] = "Z",["durotar"] = "Z",["duskwood"] = "Z",["dustwallow"] = "Z",["easternplaguelands"] = "Z",["ep"] = "Z",["epl"] = "Z",["es"] = "Z",["everlook"] = "Z",["feathermoon"] = "Z",["felwood"] = "Z",["feralas"] = "Z",["gadget"] = "Z",["gadgetzan"] = "Z",["gc"] = "Z",["goldshire"] = "Z",["gromgol"] = "Z",["hateforge"] = "Z",["hillsbrad"] = "Z",["hinterlands"] = "Z",["hydraxian"] = "Z",["hyjal"] = "Z",["if"] = "Z",["ironforge"] = "Z",["jaedenar"] = "Z",["karazhan"] = "Z",["kargath"] = "Z",["lakeshire"] = "Z",["lightshope"] = "Z",["mara"] = "Z",["maraudon"] = "Z",["moonglade"] = "Z",["mulgore"] = "Z",["nordanaar"] = "Z",["orgrimmar"] = "Z",["ratchet"] = "Z",["razorhill"] = "Z",["redridge"] = "Z",["senjin"] = "Z",["silithus"] = "Z",["sm"] = "Z",["stockade"] = "Z",["stonard"] = "Z",["stonetalon"] = "Z",["storm"] = "Z",["stormwind"] = "Z",["stranglethorn"] = "Z",["stv"] = "Z",["stratholme"] = "Z",["swampofsorrows"] = "Z",["tanaris"] = "Z",["tarrenmill"] = "Z",["teldrassil"] = "Z",["theramore"] = "Z",["thunder"] = "Z",["thunderbluff"] = "Z",["tirisfal"] = "Z",["ubrs"] = "Z",["uldaman"] = "Z",["undercity"] = "Z",["ungoro"] = "Z",["upperblackrock"] = "Z",["valleyofspears"] = "Z",["wailingcaverns"] = "Z",["wc"] = "Z",["westernplaguelands"] = "Z",["westfall"] = "Z",["wetlands"] = "Z",["wintergrasp"] = "Z",["winterspring"] = "Z",["wpl"] = "Z",["zone"] = "Z",["zoramstrand"] = "Z",["about"] = "N",["ace"] = "N",["am"] = "N",["and"] = "N",["are"] = "N",["at"] = "N",["be"] = "N",["being"] = "N",["bored"] = "N",["boss"] = "N",["bro"] = "N",["but"] = "N",["chat"] = "N",["clear"] = "N",["cleared"] = "N",["coming"] = "N",["cool"] = "N",["cute"] = "N",["day"] = "N",["days"] = "N",["direction"] = "N",["enjoyer"] = "N",["enjoyers"] = "N",["etc"] = "N",["even"] = "N",["finally"] = "N",["feel"] = "N",["fit"] = "N",["fuck"] = "N",["geared"] = "N",["grab"] = "N",["happen"] = "N",["he"] = "N",["hero"] = "N",["hi"] = "N",["i"] = "N",["im"] = "N",["in"] = "N",["into"] = "N",["invite"] = "N",["is"] = "N",["it"] = "N",["its"] = "N",["just"] = "N",["label"] = "N",["later"] = "N",["logging"] = "N",["love"] = "N",["lowbie"] = "N",["main"] = "N",["maybe"] = "N",["no"] = "N",["of"] = "N",["ofc"] = "N",["off"] = "N",["or"] = "N",["other"] = "N",["over"] = "N",["predict"] = "N",["sage"] = "N",["scurvy"] = "N",["share"] = "N",["so"] = "N",["spare"] = "N",["still"] = "N",["stop"] = "N",["style"] = "N",["sweet"] = "N",["than"] = "N",["that"] = "N",["their"] = "N",["them"] = "N",["then"] = "N",["they"] = "N",["there"] = "N",["those"] = "N",["throw"] = "N",["throwing"] = "N",["to"] = "N",["train"] = "N",["trans"] = "N",["transmog"] = "N",["transmogs"] = "N",["try"] = "N",["turtle"] = "N",["via"] = "N",["was"] = "N",["way"] = "N",["we"] = "N",["well"] = "N",["when"] = "N",["where"] = "N",["will"] = "N",["winter"] = "N",["yes"] = "N",["you"] = "N",["young"] = "N",["your"] = "N",["yourself"] = "N",["able"] = "A",["above"] = "A",["afford"] = "A",["ah"] = "A",["all"] = "A",["alley"] = "A",["also"] = "A",["amount"] = "A",["anything"] = "A",["apparel"] = "A",["appreciate"] = "A",["around"] = "A",["ask"] = "A",["awesome"] = "A",["better"] = "A",["below"] = "A",["big"] = "A",["bit"] = "A",["blood"] = "A",["bloody"] = "A",["bloodstone"] = "A",["bonus"] = "A",["bring"] = "A",["bunch"] = "A",["by"] = "A",["call"] = "A",["can"] = "A",["capital"] = "A",["capitals"] = "A",["chad"] = "A",["check"] = "A",["city"] = "A",["come"] = "A",["complete"] = "A",["completed"] = "A",["decent"] = "A",["district"] = "A",["do"] = "A",["does"] = "A",["doing"] = "A",["door"] = "A",["double"] = "A",["drop"] = "A",["dropping"] = "A",["else"] = "A",["evening"] = "A",["every"] = "A",["everyone"] = "A",["everything"] = "A",["extra"] = "A",["faster"] = "A",["few"] = "A",["find"] = "B",["fine"] = "A",["for"] = "A",["forge"] = "A",["forging"] = "A",["fresh"] = "A",["friend"] = "A",["from"] = "A",["front"] = "A",["full"] = "A",["give"] = "A",["giver"] = "A",["givers"] = "A",["gives"] = "A",["gnomish"] = "A",["go"] = "A",["going"] = "A",["good"] = "A",["great"] = "A",["greatly"] = "A",["guild"] = "A",["guy"] = "A",["hard"] = "A",["has"] = "A",["have"] = "A",["hello"] = "A",["here"] = "A",["high"] = "A",["his"] = "A",["homemade"] = "A",["house"] = "A",["ill"] = "A",["info"] = "A",["information"] = "A",["kind"] = "A",["kinds"] = "A",["last"] = "A",["left"] = "A",["less"] = "A",["like"] = "A",["link"] = "A",["look"] = "A",["lot"] = "A",["low"] = "A",["lower"] = "A",["lowest"] = "A",["major"] = "A",["many"] = "A",["me"] = "A",["mid"] = "A",["mind"] = "A",["more"] = "A",["most"] = "A",["much"] = "A",["must"] = "A",["my"] = "A",["next"] = "A",["nice"] = "A",["now"] = "A",["on"] = "A",["only"] = "A",["order"] = "A",["out"] = "A",["outside"] = "A",["people"] = "A",["place"] = "A",["plenty"] = "A",["pop"] = "A",["present"] = "A",["pretty"] = "A",["put"] = "A",["quick"] = "A",["rate"] = "A",["ready"] = "A",["reasonable"] = "A",["really"] = "A",["send"] = "A",["sexy"] = "A",["significant"] = "A",["significantly"] = "A",["slight"] = "A",["slightly"] = "A",["some"] = "A",["something"] = "A",["success"] = "A",["superior"] = "A",["take"] = "A",["thank"] = "A",["thanks"] = "A",["these"] = "A",["this"] = "A",["time"] = "A",["today"] = "A",["tonight"] = "A",["top"] = "A",["tree"] = "A",["trying"] = "A",["under"] = "A",["up"] = "A",["use"] = "A",["vampiric"] = "A",["very"] = "A",["what"] = "A",["who"] = "A",["willing"] = "A",["with"] = "A",["would"] = "A",["affordable"] = "B",["alliance"] = "B",["bank"] = "B",["best"] = "B",["borrow"] = "B",["bridge"] = "B",["business"] = "B",["charge"] = "B",["charges"] = "B",["charging"] = "B",["commission"] = "B",["contact"] = "B",["cost"] = "C",["couple"] = "B",["deal"] = "B",["delivered"] = "B",["delivery"] = "B",["desperate"] = "B",["donate"] = "B",["donation"] = "B",["each"] = "B",["enough"] = "B",["eight"] = "B",["express"] = "B",["five"] = "B",["fountain"] = "B",["four"] = "B",["get"] = "B",["gets"] = "B",["getting"] = "B",["guarantee"] = "B",["half"] = "B",["hardcore"] = "B",["help"] = "B",["horde"] = "B",["include"] = "B",["includes"] = "B",["including"] = "B",["included"] = "B",["interested"] = "B",["job"] = "B",["know"] = "B",["knows"] = "B",["known"] = "B",["listed"] = "B",["looking"] = "B",["minute"] = "B",["near"] = "B",["nine"] = "B",["one"] = "B",["poor"] = "A",["premium"] = "B",["quality"] = "B",["rent"] = "B",["roof"] = "B",["seven"] = "B",["six"] = "B",["nineteen"] = "B",["twentynine"] = "B",["thirtynine"] = "B",["fortynine"] = "B",["fiftynine"] = "B",["twenties"] = "B",["thirties"] = "B",["forties"] = "B",["fifties"] = "B",["sixties"] = "B",["stair"] = "B",["steps"] = "B",["stuff"] = "B",["ten"] = "B",["thankful"] = "B",["third"] = "B",["three"] = "B",["tip"] = "B",["transport"] = "B",["todo"] = "B",["ton"] = "B",["town"] = "B",["two"] = "B",["value"] = "B",["valuable"] = "B",["onemore"] = "B",["twomore"] = "B",["threemore"] = "B",["fourmore"] = "B",["fivemore"] = "B",["alchemist"] = "O",["blacksmith"] = "O",["cook"] = "O",["chef"] = "O",["engineer"] = "O",["herbalist"] = "O",["jc"] = "O",["leatherworker"] = "O",["miner"] = "O",["skinner"] = "O",["smelter"] = "O",["smith"] = "O",["tailor"] = "O",["artisan"] = "B",["master"] = "B",["dragonscale"] = "B",["elemental"] = "B",["specialization"] = "B",["tribal"] = "B",["cooldown"] = "B",["dance"] = "B",["highend"] = "B",["level"] = "A",["leveling"] = "A",["max"] = "A",["min"] = "A",["minimum"] = "A",["participant"] = "B",["play"] = "B",["pool"] = "B",["prize"] = "B",["save"] = "B",["set"] = "B",["slot"] = "B",["store"] = "B",["token"] = "B",["win"] = "B",["winner"] = "B",["conjure"] = "B",["mage"] = "K",["stack"] = "B",["warlock"] = "K",["wl"] = "K",["druid"] = "A",["hunter"] = "A",["paladin"] = "A",["priest"] = "A",["shaman"] = "A",["warrior"] = "A",["caster"] = "A",["healer"] = "A",["melee"] = "A",["box"] = "B",["lock"] = "B",["pick"] = "B",["rogue"] = "K",["unlock"] = "B",["add"] = "B",["apply"] = "B",["dealer"] = "B",["made"] = "B",["maker"] = "B",["mat"] = "B",["material"] = "B",["stock"] = "B",["auction"] = "B",["de"] = "A",["disenchant"] = "B",["exchange"] = "B",["pay"] = "B",["price"] = "B",["worth"] = "B",["xsilver"] = "B",["create"] = "C",["make"] = "C",["produce"] = "C",["open"] = "M",["opened"] = "M",["opener"] = "M",["opening"] = "M",["available"] = "C",["any"] = "C",["anyone"] = "C",["anywhere"] = "C",["discount"] = "C",["everycorner"] = "C",["fast"] = "C",["free"] = "C",["gold"] = "C",["magewater"] = "C",["money"] = "C",["need"] = "C",["needed"] = "C",["needone"] = "C",["needtwo"] = "C",["needthree"] = "C",["online"] = "C",["paid"] = "C",["please"] = "C",["request"] = "C",["sale"] = "C",["search"] = "C",["service"] = "C",["welcome"] = "C",["work"] = "C",["wherever"] = "C",["agility"] = "O",["arcane"] = "O",["armor"] = "O",["attackspeed"] = "O",["block"] = "O",["crit"] = "O",["damage"] = "O",["defense"] = "O",["dodge"] = "O",["fire"] = "O",["fish"] = "O",["frost"] = "O",["glow"] = "O",["haste"] = "O",["heal"] = "O",["health"] = "O",["herb"] = "O",["hit"] = "O",["impact"] = "O",["intellect"] = "O",["mana"] = "O",["mount"] = "O",["nature"] = "O",["resist"] = "O",["riding"] = "O",["shadow"] = "O",["skin"] = "O",["speed"] = "O",["spell"] = "O",["spirit"] = "O",["stamina"] = "O",["stealth"] = "O",["strength"] = "O",["striking"] = "O",["subtlety"] = "O",["allresist"] = "O",["crusader"] = "O",["beastslayer"] = "O",["beastslaying"] = "O",["counterweight"] = "O",["fiery"] = "O",["icychill"] = "O",["icy"] = "O",["minorspeed"] = "O",["mountspeed"] = "O",["movespeed"] = "O",["demonslayer"] = "O",["demonslaying"] = "O",["lifesteal"] = "O",["resistall"] = "O",["ridingskill"] = "O",["ridingspeed"] = "O",["runspeed"] = "O",["shieldspike"] = "O",["spelldamage"] = "O",["spike"] = "O",["spur"] = "O",["unholy"] = "O",["vampirism"] = "O",["weaponchain"] = "O",["wintersmight"] = "O",["gear"] = "B",["inventory"] = "B",["item"] = "B",["maxskill"] = "B",["reagent"] = "B",["reagents"] = "B",["shardsleft"] = "C",["skill"] = "B",["skilled"] = "B",["ag"] = "N",["hmu"] = "C",["message"] = "B",["whisper"] = "B",["w"] = "C",["wme"] = "C",["ap"] = "B",["ar"] = "B",["fr"] = "B",["hp"] = "B",["mp"] = "B",["nr"] = "B",["sr"] = "B",["stat"] = "B",["mine"] = "B",["threat"] = "B",["bis"] = "B",["hc"] = "B",["pm"] = "B",["u"] = "A",["crack"] = "B",["cracking"] = "B",["comingup"] = "C",["flightpath"] = "N",["enc"] = "A",["enhancement"] = "A",["easternkingdoms"] = "N",["kalimdor"] = "N",["lb"] = "N",["group"] = "N",["skillup"] = "N",["boost"] = "S",["carry"] = "S",["human"] = "X",["nightelf"] = "X",["dwarf"] = "X",["gnome"] = "X",["orc"] = "X",["troll"] = "X",["undead"] = "X",["tauren"] = "X",["goblin"] = "X",["highelf"] = "X",["elf"] = "X",["scourge"] = "X",
+["head"] = "I",["legs"] = "I",["neck"] = "I",["ring"] = "I",["cloak"] = "I",["shoulder"] = "I",["shirt"] = "I",["back"] = "I",["chest"] = "I",["wrist"] = "I",["gloves"] = "I",["hand"] = "I",["shield"] = "I",["boots"] = "I",["weapon"] = "I",["belt"] = "I",["beltbuckle"] = "I",["gem"] = "I",["gemstone"] = "I",["jewel"] = "I",["handsword"] = "I",["handaxe"] = "I",["handmace"] = "I",["handstaff"] = "I",["handdagger"] = "I",["arcanum"] = "I",["libram"] = "I",["axe"] = "I",["bow"] = "I",["dagger"] = "I",["greater"] = "I",["gun"] = "I",["lesser"] = "I",["mace"] = "I",["mighty"] = "I",["minor"] = "I",["polearm"] = "I",["staff"] = "I",["sword"] = "I",["trinket"] = "I",["wand"] = "I",["blueitem"] = "I",["epicitem"] = "I",["greenitem"] = "I",["bag"] = "I",["cluster"] = "I",["elixir"] = "I",["feather"] = "I",["fish"] = "I",["flask"] = "I",["food"] = "I",["formula"] = "I",["goggles"] = "I",["meat"] = "I",["pattern"] = "I",["plans"] = "I",["pot"] = "G",["potion"] = "I",["pots"] = "G",["recipe"] = "I",["rocket"] = "I",["rod"] = "I",["schematic"] = "I",["scope"] = "I",["arcanite"] = "H",["ruggedhide"] = "H",["hitem"] = "H",["mooncloth"] = "H",["oj"] = "H",["oranges"] = "H",["water"] = "H",["arthas"] = "G",["blackmouth"] = "G",["firefin"] = "G",["khadgar"] = "G",["khadgars"] = "G",["silversage"] = "G",["steelbloom"] = "G",["stonescale"] = "G",["undeath"] = "G",["arcanecrystal"] = "H",["arthastears"] = "H",["blacklotus"] = "H",["blindweed"] = "H",["briarthorn"] = "H",["bruiseweed"] = "H",["dreamdust"] = "H",["dreamfoil"] = "H",["earthroot"] = "H",["fadeleaf"] = "H",["firebloom"] = "H",["firefinsnapper"] = "H",["flamesac"] = "H",["ghostmushroom"] = "H",["goldensansam"] = "H",["goldthorn"] = "H",["gravemoss"] = "H",["gromsblood"] = "H",["heartofwild"] = "H",["icecap"] = "H",["illusiondust"] = "H",["khadgarswhisker"] = "H",["khadgarwhisker"] = "H",["kingsblood"] = "H",["liferoot"] = "H",["mageroyal"] = "H",["mountainsilversage"] = "H",["oilyblackmouth"] = "H",["peacebloom"] = "H",["plaguebloom"] = "H",["purplelotus"] = "H",["silverleaf"] = "H",["souldust"] = "H",["stonescaleoil"] = "H",["strangedust"] = "H",["stranglekelp"] = "H",["sungrass"] = "H",["swiftthistle"] = "H",["swifttthistle"] = "H",["venomsac"] = "H",["visiondust"] = "H",["volatilerum"] = "H",["wildsteelbloom"] = "H",["wintersbite"] = "H",["astral"] = "A",["brilliant"] = "A",["eternal"] = "A",["glimmering"] = "A",["glowing"] = "A",["magic"] = "A",["mystic"] = "A",["nether"] = "A",["nexus"] = "A",["radiant"] = "A",["essence"] = "G",["shard"] = "G",["black"] = "N",["blue"] = "N",["blues"] = "N",["dark"] = "N",["golden"] = "N",["green"] = "N",["greens"] = "N",["huge"] = "N",["large"] = "N",["massive"] = "N",["perfect"] = "N",["red"] = "N",["small"] = "N",["wizard"] = "N",["yellow"] = "N",["air"] = "N",["breath"] = "N",["core"] = "N",["earth"] = "N",["frozen"] = "N",["lava"] = "N",["wind"] = "N",["bar"] = "I",["cloth"] = "I",["leather"] = "I",["mail"] = "I",["ore"] = "I",["plate"] = "I",["stone"] = "I",["heavy"] = "A",["light"] = "A",["medium"] = "A",["thick"] = "A",["rugged"] = "A",["bronze"] = "A",["copper"] = "A",["iron"] = "A",["mithril"] = "A",["ornate"] = "A",["reinforced"] = "A",["silver"] = "A",["steel"] = "A",["strong"] = "A",["sturdy"] = "A",["tin"] = "A",["truesilver"] = "A",["linen"] = "A",["mageweave"] = "A",["silk"] = "A",["thorium"] = "A",["wool"] = "A",["coarse"] = "A",["rough"] = "A",["solid"] = "A",["dense"] = "A",["cured"] = "A",["refined"] = "A",["deeprock"] = "I",["salt"] = "A",["greenhillsofstranglethorn"] = "H",["shredderoperatingmanual"] = "H",["shredder"] = "A",["page"] = "A",["pages"] = "A",["hide"] = "B",["mongoose"] = "A",["giants"] = "A",["azerothian"] = "G",["diamond"] = "G",["emerald"] = "G",["moonstone"] = "G",["opal"] = "G",["ruby"] = "G",["sapphire"] = "G",["tigerseye"] = "G",["aquamarine"] = "H",["bloodofmountain"] = "H",["citrine"] = "H",["jade"] = "H",["malachite"] = "H",["mossagate"] = "H",["shadowgem"] = "H",["bolt"] = "G",["bomb"] = "G",["casing"] = "G",["eel"] = "G",["egg"] = "G",["fang"] = "G",["mojo"] = "G",["mortar"] = "G",["oil"] = "G",["pearl"] = "G",["rune"] = "G",["runed"] = "G",["sagefish"] = "G",["scale"] = "G",["soil"] = "G",["tenderloin"] = "G",["widget"] = "G",["chimaerok"] = "G",["chimera"] = "G",["devilsaur"] = "G",["dynamite"] = "G",["frostsaber"] = "G",["globe"] = "G",["heart"] = "G",["ichor"] = "G",["ironweb"] = "G",["obsidian"] = "G",["scorpid"] = "G",["star"] = "G",["titans"] = "G",["transformer"] = "G",["tube"] = "G",["warbear"] = "G",["beasts"] = "G",["chromatic"] = "G",["counterweight"] = "G",["constitution"] = "G",["dawnbringer"] = "G",["deviate"] = "G",["dreamsteel"] = "G",["dreamstone"] = "G",["elementium"] = "G",["fortitude"] = "G",["grinding"] = "G",["incendicite"] = "G",["invisibility"] = "G",["invocation"] = "G",["iridescent"] = "G",["lustrous"] = "G",["powerful"] = "G",["primal"] = "G",["pristine"] = "G",["protection"] = "G",["runeetched"] = "G",["sansam"] = "G",["spyglass"] = "G",["stronghold"] = "G",["supreme"] = "G",["swiftness"] = "G",["swimspeed"] = "G",["voracity"] = "G",["warlords"] = "G",["whitesoul"] = "G",["wildthorn"] = "G",["wisdom"] = "G",["blackguard"] = "H",["blackvitriol"] = "H",["blastingpowder"] = "H",["bloodvine"] = "H",["carapace"] = "H",["darkironbar"] = "H",["darkironore"] = "H",["darkrune"] = "H",["dragonsinew"] = "H",["dreamscale"] = "H",["expansivemind"] = "H",["eyeofshadow"] = "H",["felcloth"] = "H",["frozenrune"] = "H",["fusedwiring"] = "H",["ghostdye"] = "H",["giftofarthas"] = "H",["gyrochronatom"] = "H",["ironfeather"] = "H",["larvalacid"] = "H",["leyorb"] = "H",["livingessence"] = "H",["moonwell"] = "H",["morrowgrain"] = "H",["nightfinsnapper"] = "H",["overchargedleyenergy"] = "H",["poisonresist"] = "H",["righteousorb"] = "H",["rumseyrum"] = "H",["runntumtuber"] = "H",["sandworm"] = "H",["scaleofonyxia"] = "H",["sigilofleeching"] = "H",["sigilofpenetration"] = "H",["sigilofquickness"] = "H",["sigilofresilience"] = "H",["snowball"] = "H",["souldarite"] = "H",["spidersilk"] = "H",["spiderssilk"] = "H",["stormwreaver"] = "H",["sulfuroningot"] = "H",["unstabletrigger"] = "H",["wickedclaw"] = "H",["wildvine"] = "H",["wintersquid"] = "H",["zulianmudskunk"] = "H",["fortitudeofscourge"] = "H",["mightofscourge"] = "H",["powerofscourge"] = "H",["resilienceofscourge"] = "H",["pvphead"] = "H",["pvpshoulder"] = "H",["pvpchest"] = "H",["pvpwrist"] = "H",["pvpgloves"] = "H",["pvphand"] = "H",["pvplegs"] = "H",["pvpbelt"] = "H",["pvpring"] = "H",["pvpboots"] = "H",["pvpneck"] = "H",["pvpback"] = "H",["pvpcloak"] = "H",["pvpweapon"] = "H",
 }
 
 GF_GROUP_IDS = {
@@ -3956,9 +4018,10 @@ GF_GROUP_IDS = {
 ["razorfen"] = "RZRF",["kraul"] = "RFK",["razorfenkraul"] = "RFK",["rfk"] = "RFK",["downs"] = "RFD",["razorfendowns"] = "RFD",["rfd"] = "RFD",
 ["smgy"] = "GY",["graveyard"] = "GY",["gy"] = "GY",["scarletmonasterygraveyard"] = "GY",["lib"] = "LIB",["library"] = "LIB",["smlib"] = "LIB",["smarm"] = "ARM",["arms"] = "ARM",["armory"] = "ARM",["scarletmonasteryarmory"] = "ARM",
 ["smcath"] = "CATH",["cathedral"] = "CATH",["smfull"] = "SM",["smquestrun"] = "SM",["sm"] = "SM",["scarletmonastery"] = "SM",["monastery"] = "SM",["scarlet"] = "SM",
-["ulda"] = "ULDA",["uldaman"] = "ULDA",["zf"] = "ZF",["zulfarrak"] = "ZF",["mallet"] = "ZF",["mara"] = "MARA",["maraudon"] = "MARA",["princess"] = "MARA",
+["ulda"] = "ULDA",["uldaman"] = "ULDA",["zf"] = "ZF",["zulfarrak"] = "ZF",["mallet"] = "ZF",
+["mara"] = "MARA",["maraudon"] = "MARA",["princess"] = "MARA",["purpleside"] = "MARA",["maraudonpurple"] = "MARA",["orangeside"] = "MARA",["maraudonorange"] = "MARA",["maraudonprincess"] = "MARA",["princessrun"] = "MARA",
 ["st"] = "ST",["sunken"] = "ST",["temple"] = "ST",["sunkentemple"] = "ST",["atalhakkar"] = "ST",
-["arena"] = "BRD",["brd"] = "BRD",["jailbreak"] = "BRD",["emperor"] = "BRD",["attunement"] = "BRD",["blackrockdepths"] = "BRD",
+["arena"] = "BRD",["brd"] = "BRD",["jailbreak"] = "BRD",["emperor"] = "BRD",["attunement"] = "BRD",["blackrockdepths"] = "BRD",["brdarena"] = "BRD",["brdemperor"] = "BRD",
 ["lbrs"] = "LBRS",["lowerblackrock"] = "LBRS",["lowerblackrockspire"] = "BRS",["upperblackrockspire"] = "BRS",["brs"] = "BRS",["blackrock"] = "BRS",["blackrockspire"] = "BRS",
 ["dme"] = "DME",["dmn"] = "DMN",["dmt"] = "DMT",["dmw"] = "DMW",["dmeast"] = "DME",["dmnorth"] = "DMN",["dmtrib"] = "DMT",["dmtribute"] = "DMT",["dmwest"] = "DMW",
 ["mauleast"] = "DME",["maulnorth"] = "DMN",["maultrib"] = "DMT",["maultribute"] = "DMT",["maulwest"] = "DMW",
@@ -3977,7 +4040,7 @@ GF_GROUP_IDS = {
 ["crypt"] = "CRYPT",["crypts"] = "CRYPT",["karacrypt"] = "CRYPT",["karacrypts"] = "CRYPT",["karazhancrypt"] = "CRYPT",["karazhancrypts"] = "CRYPT",
 ["dragonmawretreat"] = "DRAG",["dragonmaw"] = "DRAG",["dmr"] = "DRAG",
 ["stormwrought"] = "STORM",["stormwroughtruins"] = "STORM",["stormwroughtcastle"] = "STORM",["stormwroughtdescent"] = "STORM",["swc"] = "STORM",["swr"] = "STORM",["swd"] = "STORM",
-["frostmanehollow"] = "FROST",["fmh"] = "FROST",
+["frostmane"] = "FROST",["frostmanehollow"] = "FROST",["fmh"] = "FROST",["windhorn"] = "WIND",["windhorncanyon"] = "WIND",["whc"] = "WIND",["wh"] = "WIND",
 
 ["zul"] = "ZG",["zg"] = "ZG",["gurub"] = "ZG",["zulgurub"] = "ZG",["hakkar"] = "ZG",["aq"] = "AQ",["ahn"] = "AQ",["qiraj"] = "AQ",["ahnqiraj"] = "AQ",["ossirian"] = "AQ",["ossi"] = "AQ",["cthun"] = "AQ",["ruinsofahnqiraj"] = "AQ",["aqrepfarm"] = "AQ",
 ["mc"] = "MC",["moltencore"] = "MC",["molten"] = "MC",["core"] = "MC",["rag"] = "MC",["ragnaros"] = "MC",["onyxia"] = "ONY",["ony"] = "ONY",["nef"] = "BWL",
@@ -4314,7 +4377,51 @@ GF_Error_Messages = {
 [SPELL_FAILED_UNIT_NOT_BEHIND] = true,
 [SPELL_FAILED_UNIT_NOT_INFRONT] = true,
 }
-GF_LFT_Dungeons = {
+GF_LFT_ALIAS = {
+--["razorfen"] = {"rfk","rfd"},["sm"] = {"smgy","smlib","smarm","smcath"},["scarletmonastery"] = {"smgy","smlib","smarm","smcath"},["scarlet"] = {"smgy","smlib","smarm","smcath"},["brs"] = {"brs"},["blackrockspire"] = {"brs"},["blackrock"] = {"brs"},["diremaul"] = {"dm"},
+["rfc"] = {"rfc"},["ragefire"] = {"rfc"},["ragefirechasm"] = {"rfc"},
+["dm"] = {"dm"},["deadmines"] = {"dm"},
+["wc"] = {"wc"},["wailingcaverns"] = {"wc"},
+["sfk"] = {"sfk"},["shadowfang"] = {"sfk"},["shadowfangkeep"] = {"sfk"},
+["bfd"] = {"bfd"},["blackfathom"] = {"bfd"},["blackfathomdeeps"] = {"bfd"},
+["stock"] = {"stockade"},["stockade"] = {"stockade"},
+["gnomer"] = {"gnomer"},["gnomeregan"] = {"gnomer"},
+["rfk"] = {"rfk"},["razorfenkraul"] = {"rfk"},["kraul"] = {"rfk"},
+["rfd"] = {"rfd"},["razorfendowns"] = {"rfd"},["downs"] = {"rfd"},
+["gy"] = {"smgy"},["smgy"] = {"smgy"},
+["smlib"] = {"smlib"},["library"] = {"smlib"},
+["smarm"] = {"smarm"},["armory"] = {"smarm"},
+["smcath"] = {"smcath"},["cathedral"] = {"smcath"},
+["ulda"] = {"ulda"},["uldaman"] = {"ulda"},
+["zf"] = {"zf"},["zulfarrak"] = {"zf"},["mallet"] = {"zf"},
+["mara"] = {"maraudonorange","maraudonpurple"},["maraudon"] = {"maraudonorange","maraudonpurple"},
+["maraudonorange"] = {"maraudonorange"},["maraudonpurple"] = {"maraudonpurple"},["orangeside"] = {"maraudonorange"},["purpleside"] = {"maraudonpurple"},
+["princess"] = {"maraudonprincess"},["maraudonprincess"] = {"maraudonprincess"},["princessrun"] = {"maraudonprincess"},
+["st"] = {"st"},["sunken"] = {"st"},["atalhakkar"] = {"st"},["sunkentemple"] = {"st"},
+["brd"] = {"brd"},["arena"] = {"brdarena"},["emperor"] = {"brdemperor"},["blackrockdepths"] = {"brd"},["brdarena"] = {"brdarena"},["brdemperor"] = {"brdemperor"},["jailbreak"] = {"brd"},
+
+["lbrs"] = {"lbrs"},["lowerblackrock"] = {"lbrs"},["lowerblackrockspire"] = {"lbrs"},
+
+["dme"] = {"dme"},["dmn"] = {"dmn"},["dmt"] = {"dmt"},["dmw"] = {"dmw"},
+["scholomance"] = {"scholomance"},["krastinov"] = {"scholomance"},
+["stratholme"] = {"livestrat","udstrat"},["stratrep"] = {"udstrat"},["repfarmstrat"] = {"udstrat"},["stratrepfarm"] = {"udstrat"},
+["livestrat"] = {"livestrat"},
+["baron"] = {"udstrat"},["udstrat"] = {"udstrat"},
+["ubrs"] = {"ubrs"},["rend"] = {"ubrs"},["valthalak"] = {"ubrs"},["upperblackrock"] = {"ubrs"},["upperblackrockspire"] = {"ubrs"},
+
+["fmh"] = {"fmh"},["frostmanehollow"] = {"fmh"},
+["dmr"] = {"dmr"},["dragonmaw"] = {"dmr"},["dragonmawretreat"] = {"dmr"},
+["crescent"] = {"tcg"},["grove"] = {"tcg"},["crescentgrove"] = {"tcg"},["cg"] = {"tcg"},["tcg"] = {"tcg"},
+
+["gc"] = {"gc"},["gilneas"] = {"gc"},["gilneascity"] = {"gc"},
+["hateforge"] = {"hfq"},["quarry"] = {"hfq"},["hq"] = {"hfq"},["hf"] = {"hfq"},["hfq"] = {"hfq"},["hateforgequarry"] = {"hfq"},
+
+["sv"] = {"swv"},["swv"] = {"swv"},["vault"] = {"swv"},["stormwindvault"] = {"swv"},
+["morass"] = {"cot"},["bm"] = {"cot"},["cot"] = {"cot"},["blackmorass"] = {"cot"},["cavernsoftime"] = {"cot"},
+["crypt"] = {"crypt"},["karazhancrypt"] = {"crypt"},
+["stormwrought"] = {"swc","swd"},["stormwroughtruins"] = {"swc","swd"},["swr"] = {"swc","swd"},
+["swc"] = {"swc"},["stormwroughtcastle"] = {"swc"},
+["swd"] = {"swd"},["stormwroughtdescent"] = {"swd"},
 }
 
 GF_QUEST_CONVERT = {
@@ -4376,5 +4483,16 @@ function GF_AddTurtleWoWDungeonsRaids()
 	-- New Hunter level 10 quests ["trainingbeast"]={80755,10,40016,5536},["tamingbeast"]={80342,10,40016,12},["hunterpath"]={80366,10,40016,1537},
 	-- ["thecollector"]={41296,48,8,8},["serpentbloom"]={60125,18,718,718},["noborucudgel"]={40030,36,8,8},["herosreward"]={40675,20,14,16},["hermit"]={40210,51,0,10},["hammerfall"]={41540,58,17,17},["goodfriend"]={41797,28,0,141},
 	-- ["betrayalfromwithin"]={40560,35,15,15},["etchedrune"]={80350,1,40016,1},
+	end
+	if LFTFrame then
+		GF_LFT_DUNGEONS = {
+			[LFT_DUNGEON_BFD] = "bfd",[LFT_DUNGEON_BRD] = "brd",[LFT_DUNGEON_BRDARENA] = "brdarena",[LFT_DUNGEON_BRDEMP] = "brdemperor",[LFT_DUNGEON_COTBM] = "bm",[LFT_DUNGEON_DM] = "dm",
+			[LFT_DUNGEON_DME] = "dme",[LFT_DUNGEON_DMN] = "dmn",[LFT_DUNGEON_DMR] = "dmr",[LFT_DUNGEON_DMT] = "dmt",[LFT_DUNGEON_DMW] = "dmw",[LFT_DUNGEON_FMH] = "fmh",[LFT_DUNGEON_GILNEAS] = "gc",
+			[LFT_DUNGEON_GNOMER] = "gnomer",[LFT_DUNGEON_HFQ] = "hfq",[LFT_DUNGEON_KC] = "crypt",[LFT_DUNGEON_LBRS] = "lbrs",[LFT_DUNGEON_MARAORANGE] = "maraudonorange",[LFT_DUNGEON_MARAPRINCESS] = "maraudonprincess",
+			[LFT_DUNGEON_MARAPURPLE] = "maraudonpurple",[LFT_DUNGEON_RFC] = "rfc",[LFT_DUNGEON_RFD] = "rfd",[LFT_DUNGEON_RFK] = "rfk",[LFT_DUNGEON_SCHOLO] = "scholomance",[LFT_DUNGEON_SFK] = "sfk",
+			[LFT_DUNGEON_SMARM] = "smarm",[LFT_DUNGEON_SMCATH] = "smcath",[LFT_DUNGEON_SMLIB] = "smlib",[LFT_DUNGEON_SM_GY] = "smgy",[LFT_DUNGEON_ST] = "st",[LFT_DUNGEON_STOCKS] = "stockade",
+			[LFT_DUNGEON_STRATLIVE] = "livestrat",[LFT_DUNGEON_STRATUD] = "udstrat",[LFT_DUNGEON_SWC] = "swc",[LFT_DUNGEON_SWD] = "swd",[LFT_DUNGEON_SWV] = "swv",
+			[LFT_DUNGEON_TCG] = "tcg",[LFT_DUNGEON_ULDA] = "ulda",[LFT_DUNGEON_WC] = "wc",[LFT_DUNGEON_WINDHORN] = "windhorn",[LFT_DUNGEON_ZF] = "zf",
+		}
 	end
 end

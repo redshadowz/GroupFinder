@@ -2901,25 +2901,29 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												if GF_LFGDescriptionEditBoxHasFocus[2] + .005 &lt; GetTime() then GF_LFGDescriptionEditBoxHasFocus = {nil,GetTime()} end
 												GF_PerCharVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText()
 												this:HighlightText(string.len(this:GetText())+1)
-												if GF_PerCharVariables.searchlfgtext ~= "" then GF_LFGDescriptionClearButton:Show() else GF_LFGDescriptionClearButton:Hide() GF_UpdateQueueLFTButton() end
+												if GF_PerCharVariables.searchlfgtext ~= "" then GF_LFGDescriptionClearButton:Show() else GF_LFGDescriptionClearButton:Hide() end
+												GF_UpdateQueueLFTButton()
 											</OnEditFocusLost>
 											<OnTabPressed>
 												GF_PerCharVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText()
 												this:ClearFocus()
 												this:HighlightText(string.len(this:GetText())+1)
-												if GF_PerCharVariables.searchlfgtext ~= "" then GF_LFGDescriptionClearButton:Show() else GF_LFGDescriptionClearButton:Hide() GF_UpdateQueueLFTButton() end
+												if GF_PerCharVariables.searchlfgtext ~= "" then GF_LFGDescriptionClearButton:Show() else GF_LFGDescriptionClearButton:Hide() end
+												GF_UpdateQueueLFTButton()
 											</OnTabPressed>
 											<OnEnterPressed>
 												GF_PerCharVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText()
 												this:ClearFocus()
 												this:HighlightText(string.len(this:GetText())+1)
-												if GF_PerCharVariables.searchlfgtext ~= "" then GF_LFGDescriptionClearButton:Show() else GF_LFGDescriptionClearButton:Hide() GF_UpdateQueueLFTButton() end
+												if GF_PerCharVariables.searchlfgtext ~= "" then GF_LFGDescriptionClearButton:Show() else GF_LFGDescriptionClearButton:Hide() end
+												GF_UpdateQueueLFTButton()
 											</OnEnterPressed>
 											<OnEscapePressed>
 												GF_PerCharVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText()
 												this:ClearFocus()
 												this:HighlightText(string.len(this:GetText())+1)
-												if GF_PerCharVariables.searchlfgtext ~= "" then GF_LFGDescriptionClearButton:Show() else GF_LFGDescriptionClearButton:Hide() GF_UpdateQueueLFTButton() end
+												if GF_PerCharVariables.searchlfgtext ~= "" then GF_LFGDescriptionClearButton:Show() else GF_LFGDescriptionClearButton:Hide() end
+												GF_UpdateQueueLFTButton()
 											</OnEscapePressed>
 										</Scripts>
 									</EditBox>

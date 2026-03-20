@@ -104,7 +104,7 @@ local GF_DifficultyColors = { ["RED"] = "ff0000",["ORANGE"] = "ff8040",["YELLOW"
 local GF_TankClasses						= {	["DRUID"]=true,["WARRIOR"]=true,["PALADIN"]=true,["SHAMAN"]=true }
 local GF_HealingClasses						= {	["PRIEST"]=true,["DRUID"]=true,["PALADIN"]=true,["SHAMAN"]=true }
 local languageName,foundIgnore,foundGuild,foundGuildExclusion,foundLFM,foundLFG,foundClass,foundDungeon,foundRaid,foundTrades,foundTradesExclusion,foundPvP,foundHC,foundNotHC,foundBlockList,fixedType
-local lfmlfgName,groupName,foundQuest,foundDFlags,foundPFlags,lfmPosition,groupPosition = {},{},{},{},{},{},{}
+local lfmlfgName,groupName,foundQuest,foundDFlags,foundPFlags,lfmPosition,groupPosition,LFTGroups = {},{},{},{},{},{},{},{}
 GF_HELP_TEXT_SIMPLE = HELP_TEXT_SIMPLE
 
 local GF_Parser = {
@@ -459,7 +459,6 @@ function GF_LoadSettings()
 	GF_SetStringSize()
 	GF_SetDropdownWidths()
 	GF_SetLFGRoleButtons()
-	GF_UpdateQueueLFTButton()
 end
 function GF_SetStringSize()
 	local fontName,fontSizeMinimap,fontSizeLarge,fontSizeButton
@@ -838,6 +837,7 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 		elseif event ~= "WHO_LIST_UPDATE" or not GF_BlockNextWho or WhoFrame:IsVisible() then
 			old_FriendsFrame_OnEvent(event)
 			GF_BlockNextWho = nil
+			if event == "WHO_LIST_UPDATE" then SetWhoToUI(0) end
 		end
 	end
 	local old_SetItemRef = SetItemRef
@@ -884,16 +884,6 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 		if not GF_SavedVariables.systemfilter or not GF_Error_Messages[message] then old_UIErrorsFrame_OnEvent(event,message,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9) end
 	end
 	if LFTFrame then
-		GF_LFT_Dungeons = {
-			[LFT_DUNGEON_BFD] = "Blackfathom Deeps",[LFT_DUNGEON_BRD] = "Blackrock Depths",[LFT_DUNGEON_BRDARENA] = "BRD Arena",[LFT_DUNGEON_BRDEMP] = "BRD Emperor",[LFT_DUNGEON_COTBM] = "Black Morass",[LFT_DUNGEON_DM] = "Deadmines",
-			[LFT_DUNGEON_DME] = "Dire Maul East",[LFT_DUNGEON_DMN] = "Dire Maul North",[LFT_DUNGEON_DMR] = "Dragonmaw Retreat",[LFT_DUNGEON_DMT] = "Dire Maul Tribute",[LFT_DUNGEON_DMW] = "Dire Maul West",[LFT_DUNGEON_GILNEAS] = "Gilneas City",
-			[LFT_DUNGEON_GNOMER] = "Gnomeregan",[LFT_DUNGEON_HFC] = "Hateforge Quarry",[LFT_DUNGEON_KC] = "Karazhan Crypt",[LFT_DUNGEON_LBRS] = "Lower Blackrock Spire",[LFT_DUNGEON_MARAORANGE] = "Maraudon",[LFT_DUNGEON_MARAPRINCESS] = "Maraudon Princess",
-			[LFT_DUNGEON_MARAPURPLE] = "Maraudon",[LFT_DUNGEON_RFC] = "Ragefire Chasm",[LFT_DUNGEON_RFD] = "Razorfen Downs",[LFT_DUNGEON_RFK] = "Razorfen Kraul",[LFT_DUNGEON_SCHOLO] = "Scholomance",[LFT_DUNGEON_SFK] = "Shadowfang Keep",
-			[LFT_DUNGEON_SMARM] = "SM Armory",[LFT_DUNGEON_SMCATH] = "SM Cathedral",[LFT_DUNGEON_SMLIB] = "SM Library",[LFT_DUNGEON_SM_GY] = "SM Graveyard",[LFT_DUNGEON_ST] = "Sunken Temple",[LFT_DUNGEON_STOCKS] = "Stockades",
-			[LFT_DUNGEON_STRATLIVE] = "Stratholme Live",[LFT_DUNGEON_STRATUD] = "UD Stratholme",[LFT_DUNGEON_SWC] = "Stormwrought Castle",[LFT_DUNGEON_SWD] = "Stormwrought Descent",[LFT_DUNGEON_SWV] = "Stormwind Vault",
-			[LFT_DUNGEON_TCG] = "Crescent Grove",[LFT_DUNGEON_ULDA] = "Uldaman",[LFT_DUNGEON_WC] = "Wailing Caverns",
-			[LFT_DUNGEON_ZF] = "Zul'Farrak",
-		}
 		local old_LFTFrame_OnEvent = LFTFrame_OnEvent
 		function LFTFrame_OnEvent()
 			old_LFTFrame_OnEvent()
@@ -1732,7 +1722,6 @@ function GF_WhoListUpdated()
 			for name,entry in pairs(GF_ClassWhoTable) do if entry[4] <= time() then GF_GetWhoName = name GF_GetWhoNameLabel:SetText(GF_CreateGetWhoNameLink(name)) break end end
 		end
 	end
-	SetWhoToUI(0)
 	GF_NextAvailableWhoTime = time() + GF_WhoCooldownTime
 end
 function GF_AddNameToWhoQueue(name,addToTopOfList)
@@ -3178,7 +3167,7 @@ function GF_GetTypes(arg1, showanyway)
 				elseif not lfs then	foundTrades = foundTrades + 1.5 if showanyway == true then print("tradeonly? trades 1.5") end end
 			end
 			wordString = ""
-			for i=1,tempVal-1 do wordString = wordString..wordTable[i] end if (GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString]) and wordTable[tempVal] == GF_GROUP_LOCALIZED then foundLFG = 2 if showanyway == true then print("group? lfg 2") end end
+			for i=1,tempVal-1 do wordString = wordString..wordTable[i] end if (GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString]) and GF_GROUP_PHRASE_QUESTION[wordTable[tempVal]] then foundLFG = 2 if showanyway == true then print("group? lfg 2") end end
 			for i=1,tempVal do
 				if GF_WORD_RAID[wordTable[i]] then
 					if GF_RAID_BEFORE[wordTable[i-1]] and (GF_RAID_BEFORE[wordTable[i-1]][wordTable[i+1]] or (wordTable[i+2] and GF_RAID_BEFORE[wordTable[i-1]][wordTable[i+1]..wordTable[i+2]])) then if foundLFG < 3 then foundLFG = 3 if showanyway == true then print("1 word before/1-2 words after raid ?") end end end
@@ -5041,16 +5030,16 @@ function GF_ClickQueueLFT() -- TODO: Need to click "Find More" when group leader
 	if LFTFrameMainButtonText:GetText() == LFT_GENERAL_LEAVE_QUEUE_TEXT then
 		LFTFrameMainButton:Click()
 	else
-		if GF_PerCharVariables.lfgtank then if not LFTFrameRoleTankCheckButton:GetChecked() then LFTFrameRoleTankCheckButton:Click() end else if LFTFrameRoleTankCheckButton:GetChecked() then LFTFrameRoleTankCheckButton:Click() end end
-		if GF_PerCharVariables.lfgheal then if not LFTFrameRoleHealerCheckButton:GetChecked() then LFTFrameRoleHealerCheckButton:Click() end else if LFTFrameRoleHealerCheckButton:GetChecked() then LFTFrameRoleHealerCheckButton:Click() end end
-		if GF_PerCharVariables.lfgdps then if not LFTFrameRoleDamageCheckButton:GetChecked() then LFTFrameRoleDamageCheckButton:Click() end else if LFTFrameRoleDamageCheckButton:GetChecked() then LFTFrameRoleDamageCheckButton:Click() end end
+		if GF_PerCharVariables.lfgtank then if not LFTFrameRole1CheckButton:GetChecked() then LFTFrameRole1CheckButton:Click() end else if LFTFrameRole1CheckButton:GetChecked() then LFTFrameRole1CheckButton:Click() end end
+		if GF_PerCharVariables.lfgheal then if not LFTFrameRole2CheckButton:GetChecked() then LFTFrameRole2CheckButton:Click() end else if LFTFrameRole2CheckButton:GetChecked() then LFTFrameRole2CheckButton:Click() end end
+		if GF_PerCharVariables.lfgdps then if not LFTFrameRole3CheckButton:GetChecked() then LFTFrameRole3CheckButton:Click() end else if LFTFrameRole3CheckButton:GetChecked() then LFTFrameRole3CheckButton:Click() end end
 
 		for i=1, 100 do
-			if getglobal("LFTFrameInstancesListEntry"..i) then -- Just need to click the instances in my lfgtext(and unclick any instances not)
-				if string.find(GF_PerCharVariables.searchlfgtext, GF_LFT_Dungeons[getglobal("LFTFrameInstancesListEntry"..i.."Name"):GetText()]) then
-					if not getglobal("LFTFrameInstancesListEntry"..i.."CheckButton"):GetChecked() then getglobal("LFTFrameInstancesListEntry"..i.."CheckButton"):Click() end
+			if getglobal("LFTFrameInstanceEntry"..i) then -- Just need to click the instances in my lfgtext(and unclick any instances not)
+				if LFTGroups[GF_LFT_DUNGEONS[getglobal("LFTFrameInstanceEntry"..i.."Name"):GetText()]] then
+					if not getglobal("LFTFrameInstanceEntry"..i.."CheckButton"):GetChecked() then getglobal("LFTFrameInstanceEntry"..i.."CheckButton"):Click() end
 				else
-					if getglobal("LFTFrameInstancesListEntry"..i.."CheckButton"):GetChecked() then getglobal("LFTFrameInstancesListEntry"..i.."CheckButton"):Click() end
+					if getglobal("LFTFrameInstanceEntry"..i.."CheckButton"):GetChecked() then getglobal("LFTFrameInstanceEntry"..i.."CheckButton"):Click() end
 				end
 			else
 				break
@@ -5068,9 +5057,9 @@ function GF_UpdateQueueLFTButton() -- Updates(gets dungeon list) on login and wh
 			GF_GenTooltips["GF_QueuetoLFTButton"].tooltip1 = GF_QUEUED_FOR
 			local wordString = ""
 			for i=1, 100 do
-				if getglobal("LFTFrameInstancesListEntry"..i) and getglobal("LFTFrameInstancesListEntry"..i):IsShown() then
-					if getglobal("LFTFrameInstancesListEntry"..i.."CheckButton"):GetChecked() then
-						wordString = wordString..getglobal("LFTFrameInstancesListEntry"..i.."Name"):GetText()..", "
+				if getglobal("LFTFrameInstanceEntry"..i) and getglobal("LFTFrameInstanceEntry"..i):IsShown() then
+					if getglobal("LFTFrameInstanceEntry"..i.."CheckButton"):GetChecked() then
+						wordString = wordString..getglobal("LFTFrameInstanceEntry"..i.."Name"):GetText()..", "
 					end
 				else
 					break
@@ -5078,20 +5067,22 @@ function GF_UpdateQueueLFTButton() -- Updates(gets dungeon list) on login and wh
 			end
 			if wordString ~= "" then
 				wordString = strsub(wordString,1,-3)..GF_LFT_AS
-				if LFTFrameRoleTankCheckButton:GetChecked() then wordString = wordString..GF_TANK..", " end
-				if LFTFrameRoleHealerCheckButton:GetChecked() then wordString = wordString..GF_HEALER..", " end
-				if LFTFrameRoleDamageCheckButton:GetChecked() then wordString = wordString..GF_DPS..", " end
+				if LFTFrameRole1CheckButton:GetChecked() then wordString = wordString..GF_TANK..", " end
+				if LFTFrameRole2CheckButton:GetChecked() then wordString = wordString..GF_HEALER..", " end
+				if LFTFrameRole3CheckButton:GetChecked() then wordString = wordString..GF_DPS..", " end
 				GF_GenTooltips["GF_QueuetoLFTButton"].tooltip2 = strsub(wordString,1,-3)
 			end
 		else
+			if not getglobal("LFTFrameInstanceEntry1Name"):GetText() then LFTFrameTab2:Click() end
+			GF_GetDungeonsFromText(GF_PerCharVariables.searchlfgtext)
 			GF_QueuetoLFTButton:SetText(GF_QUEUE_IN_LFT)
 			GF_QueuetoLFTButton:Hide()
 			GF_GenTooltips["GF_QueuetoLFTButton"].tooltip1 = GF_QUEUE_FOR
 			local wordString = ""
 			for i=1, 100 do
-				if getglobal("LFTFrameInstancesListEntry"..i) and getglobal("LFTFrameInstancesListEntry"..i):IsShown() then
-					if string.find(GF_PerCharVariables.searchlfgtext, GF_LFT_Dungeons[getglobal("LFTFrameInstancesListEntry"..i.."Name"):GetText()]) and (GF_PerCharVariables.lfgdps or GF_PerCharVariables.lfgheal or GF_PerCharVariables.lfgtank) then
-						wordString = wordString..getglobal("LFTFrameInstancesListEntry"..i.."Name"):GetText()..", "
+				if getglobal("LFTFrameInstanceEntry"..i) and getglobal("LFTFrameInstanceEntry"..i):IsShown() then
+					if LFTGroups[GF_LFT_DUNGEONS[getglobal("LFTFrameInstanceEntry"..i.."Name"):GetText()]] and (GF_PerCharVariables.lfgdps or GF_PerCharVariables.lfgheal or GF_PerCharVariables.lfgtank) then
+						wordString = wordString..getglobal("LFTFrameInstanceEntry"..i.."Name"):GetText()..", "
 					end
 				else
 					break
@@ -5108,10 +5099,11 @@ function GF_UpdateQueueLFTButton() -- Updates(gets dungeon list) on login and wh
 		end
 	end
 end
-function GF_GetDungeonsFromText(arg1) -- /script GF_GetDungeonsFromText("deadmines wailing caverns molten core")
+function GF_GetDungeonsFromText(arg1)
 	local lfs,lfe,wordString,tempString,tempVal,possibleGold
 	local wordTable = {}
-	foundDFlags = {}
+	foundDFlags,LFTGroups = {},{}
+
 
 	arg1 = " "..gsub(gsub(strlower(gsub(gsub(gsub(arg1, "|[%x%p]+(H%a+).-|h%[%[?%[?(.-)%]?%]?%]|h|r"," %1 >zqz[%2]"),"%.[gG][gG]/%S+", ""),"([a-z ][a-z])([A-Z])","%1 %2")),"[\"#\$\%&\*,\.@\\\^_`~|]"," "),"'","").." "
 
@@ -5389,9 +5381,12 @@ function GF_GetDungeonsFromText(arg1) -- /script GF_GetDungeonsFromText("deadmin
 		end
 	end
 	for i=1, getn(foundDFlags) do
-		print(foundDFlags[i])
+		if GF_LFT_ALIAS[foundDFlags[i]] then
+			for j=1, getn(GF_LFT_ALIAS[foundDFlags[i]]) do
+				LFTGroups[GF_LFT_ALIAS[foundDFlags[i]][j]] = true
+			end
+		end
 	end
--- I got all the groups, need to make aliases for turtle dungeons
 end
 
 function print(msg) -- I added this only temporarily so I could work on the addon without having to turn on other addons(reload faster)
