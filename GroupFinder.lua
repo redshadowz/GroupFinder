@@ -2164,13 +2164,10 @@ function self:CHAT_MSG_COMBAT_PET_HITS()
 		for _,name in {'COMBATHITOTHEROTHER','COMBATHITCRITOTHEROTHER','COMBATHITSCHOOLOTHEROTHER','COMBATHITCRITSCHOOLOTHEROTHER'} do
 			local _,_,wordString,_,tempString = string.find(arg1,GF_Parser[name])
 			if tempString then
-				if GF_PetCurrentlyInGroup[wordString] then
-					wordString = GF_PetCurrentlyInGroup[wordString]
-					if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString] then
-						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString] = { GF_WhoTable[GF_RealmName][wordString][1],GF_WhoTable[GF_RealmName][wordString][2],tonumber(tempString) }
-					else
-						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] + tonumber(tempString)
-					end
+				if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")] then
+					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")] = { UnitLevel("player"),({UnitClass("player")})[2],tonumber(tempString) }
+				else
+					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] + tonumber(tempString)
 				end
 				return
 			end
@@ -2194,6 +2191,13 @@ function GF_Process_Other_COMBAT()
 			local _,_,wordString,_,tempString = string.find(arg1,GF_Parser[name])
 			if tempString then
 				if GF_PlayersCurrentlyInGroup[wordString] then
+					if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString] then
+						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString] = { GF_WhoTable[GF_RealmName][wordString][1],GF_WhoTable[GF_RealmName][wordString][2],tonumber(tempString) }
+					else
+						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] + tonumber(tempString)
+					end
+				elseif GF_PetCurrentlyInGroup[wordString] then
+					wordString = GF_PetCurrentlyInGroup[wordString]
 					if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString] then
 						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString] = { GF_WhoTable[GF_RealmName][wordString][1],GF_WhoTable[GF_RealmName][wordString][2],tonumber(tempString) }
 					else
@@ -2230,13 +2234,10 @@ function self:CHAT_MSG_SPELL_PET_DAMAGE()
 		for _,name in {'SPELLLOGOTHEROTHER','SPELLLOGCRITOTHEROTHER','SPELLLOGSCHOOLOTHEROTHER','SPELLLOGCRITSCHOOLOTHEROTHER'} do
 			local _,_,wordString,_,_,tempString = string.find(arg1,GF_Parser[name])
 			if tempString then
-				if GF_PetCurrentlyInGroup[wordString] then
-					wordString = GF_PetCurrentlyInGroup[wordString]
-					if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString] then
-						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString] = { GF_WhoTable[GF_RealmName][wordString][1],GF_WhoTable[GF_RealmName][wordString][2],tonumber(tempString) }
-					else
-						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] + tonumber(tempString)
-					end
+				if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")] then
+					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")] = { UnitLevel("player"),({UnitClass("player")})[2],tonumber(tempString) }
+				else
+					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] + tonumber(tempString)
 				end
 				return
 			end
@@ -2260,6 +2261,13 @@ function GF_Process_Other_SPELL()
 			local _,_,wordString,_,_,tempString = string.find(arg1,GF_Parser[name])
 			if tempString then
 				if GF_PlayersCurrentlyInGroup[wordString] then
+					if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString] then
+						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString] = { GF_WhoTable[GF_RealmName][wordString][1],GF_WhoTable[GF_RealmName][wordString][2],tonumber(tempString) }
+					else
+						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] + tonumber(tempString)
+					end
+				elseif GF_PetCurrentlyInGroup[wordString] then
+					wordString = GF_PetCurrentlyInGroup[wordString]
 					if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString] then
 						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString] = { GF_WhoTable[GF_RealmName][wordString][1],GF_WhoTable[GF_RealmName][wordString][2],tonumber(tempString) }
 					else
@@ -3737,6 +3745,7 @@ function GF_UpdateGroup() -- Get Group/Friends/Guildies information(turns off ig
 				GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], GetGuildInfo("raid"..i) or "", time() }
 				GF_PlayersCurrentlyInGroup[name] = true
 				GF_NumPartyMembers = GF_NumPartyMembers + 1
+				if UnitExists("raidpet"..i) then GF_PetCurrentlyInGroup[UnitName("raidpet"..i)] = UnitName("raid"..i) end
 			end
 		end
 	else
@@ -3746,11 +3755,10 @@ function GF_UpdateGroup() -- Get Group/Friends/Guildies information(turns off ig
 				GF_PlayersCurrentlyInGroup[UnitName("party"..i)] = true
 				GF_WhoTable[GF_RealmName][UnitName("party"..i)] = { UnitLevel("party"..i), ({UnitClass("party"..i)})[2], GetGuildInfo("party"..i) or "", time() }
 				GF_NumPartyMembers = GF_NumPartyMembers + 1
+				if UnitExists("partypet"..i) then GF_PetCurrentlyInGroup[UnitName("partypet"..i)] = UnitName("party"..i) end
 			end
 		end
 	end
---GF_PetCurrentlyInGroup .. TODO: Need to attach the pet to the owner GF_PetCurrentlyInGroup[PetName] = OwnerName
---I think it is just GF_PetCurrentlyInGroup[UnitName("partypet1")] = UnitName("party1")... GF_PetCurrentlyInGroup[UnitName("raidpet1")] = UnitName("raid1")
 	if GF_WasPartyLeaderBefore and not UnitIsPartyLeader("player") and GF_NumPartyMembers > 1 then
 		GF_TurnOffAnnounce(GF_JOINED_GROUP_ANNOUNCE_OFF)
 		GF_WasPartyLeaderBefore = nil
@@ -5074,29 +5082,31 @@ function GF_LFGCommonCleanup(entryName)
 end
 
 function GF_ClickQueueLFT() -- TODO: Does this work properly when in a group as leader?
-	if LFTFrameMainButtonText:GetText() == LFT_GENERAL_LEAVE_QUEUE_TEXT then
-		LFTFrameMainButton:Click()
-	else
-		if GF_PerCharVariables.lfgtank then if not LFTFrameRole1CheckButton:GetChecked() then LFTFrameRole1CheckButton:Click() end else if LFTFrameRole1CheckButton:GetChecked() then LFTFrameRole1CheckButton:Click() end end
-		if GF_PerCharVariables.lfgheal then if not LFTFrameRole2CheckButton:GetChecked() then LFTFrameRole2CheckButton:Click() end else if LFTFrameRole2CheckButton:GetChecked() then LFTFrameRole2CheckButton:Click() end end
-		if GF_PerCharVariables.lfgdps then if not LFTFrameRole3CheckButton:GetChecked() then LFTFrameRole3CheckButton:Click() end else if LFTFrameRole3CheckButton:GetChecked() then LFTFrameRole3CheckButton:Click() end end
+	if LFTFrameMainButtonText then 
+		if LFTFrameMainButtonText:GetText() == LFT_GENERAL_LEAVE_QUEUE_TEXT then
+			LFTFrameMainButton:Click()
+		else
+			if LFTFrameRole1CheckButton and GF_PerCharVariables.lfgtank then if not LFTFrameRole1CheckButton:GetChecked() then LFTFrameRole1CheckButton:Click() end else if LFTFrameRole1CheckButton:GetChecked() then LFTFrameRole1CheckButton:Click() end end
+			if LFTFrameRole2CheckButton and GF_PerCharVariables.lfgheal then if not LFTFrameRole2CheckButton:GetChecked() then LFTFrameRole2CheckButton:Click() end else if LFTFrameRole2CheckButton:GetChecked() then LFTFrameRole2CheckButton:Click() end end
+			if LFTFrameRole3CheckButton and GF_PerCharVariables.lfgdps then if not LFTFrameRole3CheckButton:GetChecked() then LFTFrameRole3CheckButton:Click() end else if LFTFrameRole3CheckButton:GetChecked() then LFTFrameRole3CheckButton:Click() end end
 
-		for i=1, 100 do
-			if getglobal("LFTFrameInstanceEntry"..i) then -- Just need to click the instances in my lfgtext(and unclick any instances not)
-				if LFTGroups[GF_LFT_DUNGEONS[getglobal("LFTFrameInstanceEntry"..i.."Name"):GetText()]] then
-					if not getglobal("LFTFrameInstanceEntry"..i.."CheckButton"):GetChecked() then getglobal("LFTFrameInstanceEntry"..i.."CheckButton"):Click() end
+			for i=1, 100 do
+				if getglobal("LFTFrameInstanceEntry"..i) then -- Just need to click the instances in my lfgtext(and unclick any instances not)
+					if LFTGroups[GF_LFT_DUNGEONS[getglobal("LFTFrameInstanceEntry"..i.."Name"):GetText()]] then
+						if not getglobal("LFTFrameInstanceEntry"..i.."CheckButton"):GetChecked() then getglobal("LFTFrameInstanceEntry"..i.."CheckButton"):Click() end
+					else
+						if getglobal("LFTFrameInstanceEntry"..i.."CheckButton"):GetChecked() then getglobal("LFTFrameInstanceEntry"..i.."CheckButton"):Click() end
+					end
 				else
-					if getglobal("LFTFrameInstanceEntry"..i.."CheckButton"):GetChecked() then getglobal("LFTFrameInstanceEntry"..i.."CheckButton"):Click() end
+					break
 				end
-			else
-				break
 			end
+			LFTFrameMainButton:Click()
 		end
-		LFTFrameMainButton:Click()
 	end
 end
 function GF_UpdateQueueLFTButton() -- Updates(gets dungeon list) on login and when leveling up... Otherwise, just check if groups match GF_PerCharVariables.searchlfgtext and show/hide the Queue Button... Always show button if in queue
-	if LFTFrame then
+	if LFTFrameMainButtonText and LFTFrameTab2 then
 		if GF_MainFrameShowBoth and not GF_SavedVariables.mainframelogisopen then GF_QueuetoLFTButton:Hide() return end
 		if LFTFrameMainButtonText:GetText() == LFT_GENERAL_LEAVE_QUEUE_TEXT then
 			GF_QueuetoLFTButton:SetText(GF_LEAVE_QUEUE)
@@ -5114,9 +5124,9 @@ function GF_UpdateQueueLFTButton() -- Updates(gets dungeon list) on login and wh
 			end
 			if wordString ~= "" then
 				wordString = strsub(wordString,1,-3)..GF_LFT_AS
-				if LFTFrameRole1CheckButton:GetChecked() then wordString = wordString..GF_TANK..", " end
-				if LFTFrameRole2CheckButton:GetChecked() then wordString = wordString..GF_HEALER..", " end
-				if LFTFrameRole3CheckButton:GetChecked() then wordString = wordString..GF_DPS..", " end
+				if LFTFrameRole1CheckButton and LFTFrameRole1CheckButton:GetChecked() then wordString = wordString..GF_TANK..", " end
+				if LFTFrameRole2CheckButton and LFTFrameRole2CheckButton:GetChecked() then wordString = wordString..GF_HEALER..", " end
+				if LFTFrameRole3CheckButton and LFTFrameRole3CheckButton:GetChecked() then wordString = wordString..GF_DPS..", " end
 				GF_GenTooltips["GF_QueuetoLFTButton"].tooltip2 = strsub(wordString,1,-3)
 			end
 		else
