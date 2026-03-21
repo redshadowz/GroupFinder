@@ -54,6 +54,7 @@ GF_AutoAnnounceTimer						= nil
 local GF_NumPartyMembers					= 0
 local GF_WasPartyLeaderBefore				= nil
 local GF_PlayersCurrentlyInGroup			= {}
+local GF_PetCurrentlyInGroup				= {}
 local GF_Friends							= {}
 local GF_Guildies							= {}
 local GF_CurrentNumFriends					= 0
@@ -2075,7 +2076,7 @@ function self:PLAYER_ENTERING_WORLD() -- When logging in in a group, PLAYER_ENTE
 	'CHAT_MSG_EMOTE','CHAT_MSG_TEXT_EMOTE','CHAT_MSG_MONSTER_SAY','CHAT_MSG_MONSTER_EMOTE','CHAT_MSG_MONSTER_YELL','CHAT_MSG_CHANNEL','CHAT_MSG_COMBAT_FACTION_CHANGE','ZONE_CHANGED','ZONE_CHANGED_INDOORS','ZONE_CHANGED_NEW_AREA',
 	'CHAT_MSG_COMBAT_SELF_HITS','CHAT_MSG_COMBAT_PARTY_HITS','CHAT_MSG_COMBAT_FRIENDLYPLAYER_HITS','CHAT_MSG_COMBAT_HOSTILEPLAYER_HITS','CHAT_MSG_SPELL_SELF_DAMAGE','CHAT_MSG_SPELL_PARTY_DAMAGE','CHAT_MSG_SPELL_FRIENDLYPLAYER_DAMAGE',
 	'CHAT_MSG_SPELL_HOSTILEPLAYER_DAMAGE','CHAT_MSG_SPELL_SELF_BUFF','CHAT_MSG_SPELL_PARTY_BUFF','CHAT_MSG_SPELL_FRIENDLYPLAYER_BUFF','CHAT_MSG_SPELL_HOSTILEPLAYER_BUFF','CHAT_MSG_SPELL_PERIODIC_SELF_BUFFS','CHAT_MSG_SPELL_PERIODIC_PARTY_BUFFS',
-	'CHAT_MSG_SPELL_PERIODIC_FRIENDLYPLAYER_BUFFS','CHAT_MSG_SPELL_PERIODIC_HOSTILEPLAYER_BUFFS','CHAT_MSG_SPELL_PERIODIC_CREATURE_DAMAGE',	} do
+	'CHAT_MSG_SPELL_PERIODIC_FRIENDLYPLAYER_BUFFS','CHAT_MSG_SPELL_PERIODIC_HOSTILEPLAYER_BUFFS','CHAT_MSG_SPELL_PERIODIC_CREATURE_DAMAGE','CHAT_MSG_COMBAT_PET_HITS','CHAT_MSG_SPELL_PET_DAMAGE',	} do
 		self:RegisterEvent(event)
 	end
 	self:SetScript('OnUpdate', function() GF_OnUpdate() end)
@@ -2156,6 +2157,26 @@ function self:CHAT_MSG_COMBAT_SELF_HITS() -- Melee Hits... TODO: Add pet damage.
 		end
 	end
 end
+function self:CHAT_MSG_COMBAT_PET_HITS()
+--COMBATHITOTHEROTHER,COMBATHITCRITOTHEROTHER,COMBATHITSCHOOLOTHEROTHER,COMBATHITCRITSCHOOLOTHEROTHER
+--"%s hits %s for %d.", "%s crits %s for %d.", "%s hits %s for %d %s damage.", "%s crits %s for %d %s damage."
+	if GF_NumPartyMembers > 1 then
+		for _,name in {'COMBATHITOTHEROTHER','COMBATHITCRITOTHEROTHER','COMBATHITSCHOOLOTHEROTHER','COMBATHITCRITSCHOOLOTHEROTHER'} do
+			local _,_,wordString,_,tempString = string.find(arg1,GF_Parser[name])
+			if tempString then
+				if GF_PetCurrentlyInGroup[wordString] then
+					wordString = GF_PetCurrentlyInGroup[wordString]
+					if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString] then
+						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString] = { GF_WhoTable[GF_RealmName][wordString][1],GF_WhoTable[GF_RealmName][wordString][2],tonumber(tempString) }
+					else
+						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] + tonumber(tempString)
+					end
+				end
+				return
+			end
+		end
+	end
+end
 function self:CHAT_MSG_COMBAT_PARTY_HITS()
 	GF_Process_Other_COMBAT()
 end
@@ -2196,6 +2217,26 @@ function self:CHAT_MSG_SPELL_SELF_DAMAGE() -- Spell Hits
 					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")] = { UnitLevel("player"),({UnitClass("player")})[2],tonumber(tempString) }
 				else
 					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] + tonumber(tempString)
+				end
+				return
+			end
+		end
+	end
+end
+function self:CHAT_MSG_SPELL_PET_DAMAGE()
+--SPELLLOGOTHEROTHER,SPELLLOGCRITOTHEROTHER,SPELLLOGSCHOOLOTHEROTHER,SPELLLOGCRITSCHOOLOTHEROTHER
+--"%s's %s hits %s for %d.", "%s's %s crits %s for %d.","%s's %s hits %s for %d %s damage.", "%s's %s crits %s for %d %s damage."
+	if GF_NumPartyMembers > 1 then
+		for _,name in {'SPELLLOGOTHEROTHER','SPELLLOGCRITOTHEROTHER','SPELLLOGSCHOOLOTHEROTHER','SPELLLOGCRITSCHOOLOTHEROTHER'} do
+			local _,_,wordString,_,_,tempString = string.find(arg1,GF_Parser[name])
+			if tempString then
+				if GF_PetCurrentlyInGroup[wordString] then
+					wordString = GF_PetCurrentlyInGroup[wordString]
+					if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString] then
+						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString] = { GF_WhoTable[GF_RealmName][wordString][1],GF_WhoTable[GF_RealmName][wordString][2],tonumber(tempString) }
+					else
+						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] + tonumber(tempString)
+					end
 				end
 				return
 			end
@@ -3292,6 +3333,10 @@ function GF_GetTypes(arg1, showanyway)
 			if GF_WORD_IGNORE[wordTable[groupPosition[i][2]+1]..wordTable[groupPosition[i][2]+2]] then foundIgnore = foundIgnore + GF_WORD_IGNORE[wordTable[groupPosition[i][2]+1]..wordTable[groupPosition[i][2]+2]] if showanyway == true then print(wordTable[groupPosition[i][2]+1]..wordTable[groupPosition[i][2]+2].." ignore "..GF_WORD_IGNORE[wordTable[groupPosition[i][2]+1]..wordTable[groupPosition[i][2]+2]]) end end
 			if GF_WORD_IGNORE_AFTER[wordTable[groupPosition[i][2]+1]..wordTable[groupPosition[i][2]+2]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_AFTER[wordTable[groupPosition[i][2]+1]..wordTable[groupPosition[i][2]+2]] if showanyway == true then print(wordTable[groupPosition[i][2]+1]..wordTable[groupPosition[i][2]+2].." ignore "..GF_WORD_IGNORE_AFTER[wordTable[groupPosition[i][2]+1]..wordTable[groupPosition[i][2]+2]]) end end
 		end
+		if wordTable[groupPosition[i][2]+3] then
+			if GF_WORD_IGNORE[wordTable[groupPosition[i][2]+1]..wordTable[groupPosition[i][2]+2]..wordTable[groupPosition[i][2]+3]] then foundIgnore = foundIgnore + GF_WORD_IGNORE[wordTable[groupPosition[i][2]+1]..wordTable[groupPosition[i][2]+2]..wordTable[groupPosition[i][2]+3]] if showanyway == true then print(wordTable[groupPosition[i][2]+1]..wordTable[groupPosition[i][2]+2]..wordTable[groupPosition[i][2]+3].." ignore "..GF_WORD_IGNORE[wordTable[groupPosition[i][2]+1]..wordTable[groupPosition[i][2]+2]..wordTable[groupPosition[i][2]+3]]) end end
+			if GF_WORD_IGNORE_AFTER[wordTable[groupPosition[i][2]+1]..wordTable[groupPosition[i][2]+2]..wordTable[groupPosition[i][2]+3]] then foundIgnore = foundIgnore + GF_WORD_IGNORE_AFTER[wordTable[groupPosition[i][2]+1]..wordTable[groupPosition[i][2]+2]..wordTable[groupPosition[i][2]+3]] if showanyway == true then print(wordTable[groupPosition[i][2]+1]..wordTable[groupPosition[i][2]+2]..wordTable[groupPosition[i][2]+3].." ignore "..GF_WORD_IGNORE_AFTER[wordTable[groupPosition[i][2]+1]..wordTable[groupPosition[i][2]+2]..wordTable[groupPosition[i][2]+3]]) end end
+		end
 		if wordTable[groupPosition[i][1]-2] then
 			if GF_WORD_IGNORE[wordTable[groupPosition[i][1]-2]..wordTable[groupPosition[i][1]-1]] then
 				foundIgnore = foundIgnore + GF_WORD_IGNORE[wordTable[groupPosition[i][1]-2]..wordTable[groupPosition[i][1]-1]]
@@ -3704,6 +3749,8 @@ function GF_UpdateGroup() -- Get Group/Friends/Guildies information(turns off ig
 			end
 		end
 	end
+--GF_PetCurrentlyInGroup .. TODO: Need to attach the pet to the owner GF_PetCurrentlyInGroup[PetName] = OwnerName
+--I think it is just GF_PetCurrentlyInGroup[UnitName("partypet1")] = UnitName("party1")... GF_PetCurrentlyInGroup[UnitName("raidpet1")] = UnitName("raid1")
 	if GF_WasPartyLeaderBefore and not UnitIsPartyLeader("player") and GF_NumPartyMembers > 1 then
 		GF_TurnOffAnnounce(GF_JOINED_GROUP_ANNOUNCE_OFF)
 		GF_WasPartyLeaderBefore = nil
@@ -5026,7 +5073,7 @@ function GF_LFGCommonCleanup(entryName)
 	GF_PerCharVariables.searchlfgtext = gsub(gsub(gsub(gsub(gsub(gsub(gsub(GF_PerCharVariables.searchlfgtext, "^%d+", ""),"for "..entryName,""),"need "..entryName,""),entryName,""),"/ "," "), "%(HC%)", ""),"%s%s+"," ")
 end
 
-function GF_ClickQueueLFT() -- TODO: Need to click "Find More" when group leader and looking for more.
+function GF_ClickQueueLFT() -- TODO: Does this work properly when in a group as leader?
 	if LFTFrameMainButtonText:GetText() == LFT_GENERAL_LEAVE_QUEUE_TEXT then
 		LFTFrameMainButton:Click()
 	else
