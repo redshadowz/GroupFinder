@@ -635,7 +635,7 @@ GF_WORD_FIX = { -- Word changes processed after quests. Not simple typos.
 ["abday"] = "ab",["avday"] = "av",["wsgday"] = "wsg",["arathibasinday"] = "arathibasin",["alteracvalleyday"] = "alteracvalley",["warsongday"] = "warsong",["warsonggulchday"] = "warsonggulch",
 
 -- Locations
-["lightshopechapel"] = "wpl",["manstrat"] = "strat",["manstart"] = "start",["manschool"] = "school",["manhateful"] = "hateful",
+["lightshopechapel"] = "epl",["lhc"] = "epl",["manstrat"] = "strat",["manstart"] = "start",["manschool"] = "school",["manhateful"] = "hateful",
 
 ["lgbtq"] = "lgbt",["lgbtqia"] = "lgbt",
 
@@ -1187,6 +1187,7 @@ GF_WORD_FIX_SINGLE_WORD = { -- Single word changes. Mostly typos and simple word
 ["krypts"] = "crypt",["krypt"] = "crypt",["crypsa"] = "crypt",["cripth"] = "crypt",["crypth"] = "crypt",["cryptss"] = "crypt",["crypts"] = "crypt",["cyrpts"] = "crypt",["crytps"] = "crypt",
 
 ["artals"] = "alahthalas",["lycon"] = "lycan",["gillijims"] = "gillijim",["giljim"] = "gillijim",["giljims"] = "gillijim",["gilijim"] = "gillijim",
+["snarclaw"] = "snarlclaw",["snarlcalw"] = "snarlclaw",
 
 -- Slang/Curse
 ["shits"] = "shit",["shitty"] = "shit",["shity"] = "shit",["shhitty"] = "shit",
@@ -1292,7 +1293,7 @@ GF_WORD_FIX_BEFORE_QUEST = { -- Word changes processed before quests.
 ["bwls"] = "bwl",["bwwl"] = "bwl",["bwll"] = "bwl",["hcjal"] = "hyjal",["dpser"] = "dps",["dpsers"] = "dps",["dpsing"] = "dps",["dpss"] = "dps",["dpsin"] = "dps",["healadin"] = "paladin",["starth"] = "stratholme",["ogri"] = "orgrimmar",
 
 -- Level(only those will full spelling of "level" because it gets split)
-["lowlevel"] = "level",["maxlevel"] = "level",
+["lowlevel"] = "level",["maxlevel"] = "level",["highlevel"] = "level",
 ["lv"] = "level",["levelling"] = "leveling",["leveln"] = "leveling",["levelnig"] = "leveling",["leveluing"] = "leveling",
 ["levellers"] = "level",["leveler"] = "level",["levelers"] = "level",
 
@@ -1324,7 +1325,7 @@ GF_WORD_FIX_BEFORE_QUEST = { -- Word changes processed before quests.
 ["hydraxianlords"] = "hydraxian",
 
 -- Locations
-["arathihighlinds"] = "arathihighlands",["hghlands"] = "highlands",["highlinds"] = "highlands",["higlands"] = "highlands",["arathihighland"] = "arathihighlands",
+["arathihighlinds"] = "arathihighlands",["hghlands"] = "highlands",["highlinds"] = "highlands",["higlands"] = "highlands",["arathihighland"] = "arathihighlands",["arathibain"] = "arathibasin",
 ["crystalfalls"] = "northwindelite",
 ["dustwallor"] = "dustwallow",["dustwollow"] = "dustwallow",["dustwillow"] = "dustwallow",["dustwalow"] = "dustwallow",["duswallow"] = "dustwallow",["dustwallo"] = "dustwallow",["duswollow"] = "dustwallow",["duswalow"] = "dustwallow",
 ["dustwallowe"] = "dustwallow",["dustwullaw"] = "dustwallow",["dustwalloow"] = "dustwallow",["dustwallowk"] = "dustwallow",["dustwaallow"] = "dustwallow",["dustwallar"] = "dustwallow",["dutwallow"] = "dustwallow",["dustwallw"] = "dustwallow",
@@ -2180,7 +2181,7 @@ GF_WORD_IGNORE = { -- Phrases to help prevent group false-positives.
 ["totalkwith"] = .5,["aboutrotation"] = .5,["rotationandgear"] = .5,["youcaneven"] = .25,["youneedsolid"] = .25,["whentryingto"] = .5,["lffriend"] = .25,["buttoonly"] = .5,["isitconsidered"] = .5,["kindofsucky"] = .5,["sinceyoucant"] = .5,
 
 ["needtobekicked"] = .5,["kickedindick"] = .5,["explainwhere"] = .5,["whereentrance"] = .5,["whereentranceto"] = .5,["thereisprobably"] = .5,["probablyplenty"] = .5,["buttheydonot"] = .5,["donothavegear"] = .5,
-["chosespecialization"] = .5,["choosespecialization"] = .5,["forthatmatter"] = .5,["healerforthatmatter"] = .5,["tankforthatmatter"] = .5,["doeswholeraid"] = .5,["cananyoneconfirm"] = .5,
+["chosespecialization"] = .5,["choosespecialization"] = .5,["forthatmatter"] = .5,["healerforthatmatter"] = .5,["tankforthatmatter"] = .5,["doeswholeraid"] = .5,["cananyoneconfirm"] = .5,["shouldimakemy"] = .5,
 
 --[[
 [""] = .5,
@@ -2231,6 +2232,7 @@ GF_WORD_IGNORE = { -- Phrases to help prevent group false-positives.
 ["druidquestion"] = .5,["hunterquestion"] = .5,["magequestion"] = .5,["paladinquestion"] = .5,["priestquestion"] = .5,["roguequestion"] = .5,["shamanquestion"] = .5,["warlockquestion"] = .5,["warriorquestion"] = .5,
 ["antidruid"] = 1,["antihunter"] = 1,["antimage"] = 1,["antipaladin"] = 1,["antipriest"] = 1,["antirogue"] = 1,["antishaman"] = 1,["antiwarlock"] = 1,["antiwarrior"] = 1,
 ["doesdruid"] = .5,["doeshunter"] = .5,["doesmage"] = .5,["doespaladin"] = .5,["doespriest"] = .5,["doesrogue"] = .5,["doesshaman"] = .5,["doeswarlock"] = .5,["doeswarrior"] = .5,
+["makemydruid"] = .5,["makemyhunter"] = .5,["makemymage"] = .5,["makemypaladin"] = .5,["makemypriest"] = .5,["makemyrogue"] = .5,["makemyshaman"] = .5,["makemywarlock"] = .5,["makemywarrior"] = .5,
 
 ["raiddruid"] = 1,["raidhunter"] = 1,["raidpaladin"] = 1,["raidpriest"] = 1,["raidrogue"] = 1,["raidmage"] = 1,["raidshaman"] = 1,["raidwarlock"] = 1,["raidwarrior"] = 1,
 ["makedruid"] = 1,["makehunter"] = 1,["makemage"] = 1,["makepaladin"] = 1,["makepriest"] = 1,["makerogue"] = 1,["makeshaman"] = 1,["makewarlock"] = 1,["makewarrior"] = 1,
@@ -2608,8 +2610,8 @@ GF_WORD_LFM = {
 ["damageandgo"] = 2,["dpsandgo"] = 2,["healandgo"] = 2,["healerandgo"] = 2,["tankandgo"] = 2,
 ["damagemissingthengo"] = 2,["dpsmissingthengo"] = 2,["healmissingthengo"] = 2,["healermissingthengo"] = 2,["tankmissingthengo"] = 2,
 ["killbossin"] = 2,["killbossfor"] = 2,["interestedinrunning"] = 2,["canusemore"] = 2,["comeanddo"] = 2,["comewithme"] = 2,["lastcallfor"] = 2,["outtheredoing"] = 2,["calltoarmto"] = 2,["wehavesummon"] = 2,["charityrun"] = 1.5,
-["comeclear"] = 1.75,["beforereset"] = 1.5,["srmsos"] = 2,["msos"] = 2,["hrtwosr"] = 2,["signup"] = 2,["whisperforsignup"] = 3,["weeklygroup"] = 1.75,["readytogrind"] = 2,["signinforraid"] = 2,["requiredgearcheck"] = 2,["requiresgearcheck"] = 2,
-["summonready"] = 2,["wforinvite"] = 2,["whisperforinvite"] = 2,["invitegroup"] = 2,["inviteforgroup"] = 2,["invitetogroup"] = 2,
+["comeclear"] = 1.75,["beforereset"] = 1.5,["srmsos"] = 2,["msos"] = 2,["hrtwosr"] = 2,["signup"] = 2,["signin"] = .5,["signfor"] = .5,["whisperforsignup"] = 3,["weeklygroup"] = 1.75,["readytogrind"] = 2,["signinforraid"] = 2,
+["requiredgearcheck"] = 2,["requiresgearcheck"] = 2,["summonready"] = 2,["wforinvite"] = 2,["whisperforinvite"] = 2,["invitegroup"] = 2,["inviteforgroup"] = 2,["invitetogroup"] = 2,
 ["whoisdown"] = 1.75,["whodownfor"] = 1.75,["continuingfrom"] = 1.75,["wearecontinuing"] = 2,["groupdelvinginto"] = 2,["stillongoing"] = 2,["haveongoing"] = 1.75,
 
 ["clothuserfor"] = 1.75,["leatheruserfor"] = 1.75,["mailuserfor"] = 1.75,["plateuserfor"] = 1.75,
@@ -2692,6 +2694,7 @@ GF_LFM_BEFORE = { -- Up to three words before
 ["lastminute"] = 1,
 ["letsdo"] = 1,["letsgo"] = 1,["letsgoboys"] = 1,
 ["letsrun"] = 1,["letsspeedrun"] = 1,
+["levelfor"] = .75,
 ["lookingto"] = 1,
 ["lovetodo"] = 1,
 ["morefor"] = 1,
@@ -3070,9 +3073,9 @@ GF_WORD_LEVEL_ZONE = { -- Single Word only
 
 -- Turtle Level Zones
 ["ambershire"] = 32,["balor"] = 32,["lapidis"] = 52,["gillijim"] = 52,["reaches"] = 36,["thalassian"] = 7,["gilneas"] = 43,["ravenshire"] = 43,["ravenwood"] = 45,["northwind"] = 32,["telabim"] = 58,["blackstone"] = 7,["hyjal"] = 60,
-["alahthalas"] = 10,
+["alahthalas"] = 10,["moonwhisper"] = 53,
 
-["grimreaches"] = 36,["lapidisisle"] = 52,["gillijimsisle"] = 52,["thalassianhighlands"] = 7,["blackstoneisland"] = 7,
+["grimreaches"] = 36,["lapidisisle"] = 52,["gillijimsisle"] = 52,["thalassianhighlands"] = 7,["blackstoneisland"] = 7,["moonwhispercoast"] = 53,
 
 -- Other for detection
 ["barov"] = 60,["bootybay"] = 40,
