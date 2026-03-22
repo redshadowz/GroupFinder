@@ -3736,6 +3736,7 @@ end
 function GF_UpdateGroup() -- Get Group/Friends/Guildies information(turns off ignore/blacklist or adds their character information)
 	local lastParty = GF_NumPartyMembers
 	GF_PlayersCurrentlyInGroup = {}
+	GF_PetCurrentlyInGroup = {}
 	GF_PlayersCurrentlyInGroup[UnitName("player")] = true
 	if GetNumRaidMembers() > 1 then
 		GF_NumPartyMembers = 0
