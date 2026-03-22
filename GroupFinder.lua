@@ -884,16 +884,16 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 	function UIErrorsFrame_OnEvent(event,message,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9)
 		if not GF_SavedVariables.systemfilter or not GF_Error_Messages[message] then old_UIErrorsFrame_OnEvent(event,message,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9) end
 	end
-	if LFTFrame then
+	if LFTFrame and LFTFrameRole1CheckButton and LFTRoleCheckFrameConfirmButton then
 		local old_LFTFrame_OnEvent = LFTFrame_OnEvent
 		function LFTFrame_OnEvent()
 			old_LFTFrame_OnEvent()
 			if event == "CHAT_MSG_ADDON" and arg1 == LFT_ADDON_PREFIX then
 				if strfind(arg2, "S2C_ROLECHECK_START") then
 					if GF_PerCharVariables.lfgtank or GF_PerCharVariables.lfgheal or GF_PerCharVariables.lfgdps then
-						if GF_PerCharVariables.lfgtank then if not LFTRoleCheckFrameRoleTankCheckButton:GetChecked() then LFTRoleCheckFrameRoleTankCheckButton:Click() end else if LFTRoleCheckFrameRoleTankCheckButton:GetChecked() then LFTRoleCheckFrameRoleTankCheckButton:Click() end end
-						if GF_PerCharVariables.lfgheal then if not LFTRoleCheckFrameRoleHealerCheckButton:GetChecked() then LFTRoleCheckFrameRoleHealerCheckButton:Click() end else if LFTRoleCheckFrameRoleHealerCheckButton:GetChecked() then LFTRoleCheckFrameRoleHealerCheckButton:Click() end end
-						if GF_PerCharVariables.lfgdps then if not LFTRoleCheckFrameRoleDamageCheckButton:GetChecked() then LFTRoleCheckFrameRoleDamageCheckButton:Click() end else if LFTRoleCheckFrameRoleDamageCheckButton:GetChecked() then LFTRoleCheckFrameRoleDamageCheckButton:Click() end end
+						if GF_PerCharVariables.lfgtank then if not LFTFrameRole1CheckButton:GetChecked() then LFTFrameRole1CheckButton:Click() end else if LFTFrameRole1CheckButton:GetChecked() then LFTFrameRole1CheckButton:Click() end end
+						if GF_PerCharVariables.lfgheal then if not LFTFrameRole2CheckButton:GetChecked() then LFTFrameRole2CheckButton:Click() end else if LFTFrameRole2CheckButton:GetChecked() then LFTFrameRole2CheckButton:Click() end end
+						if GF_PerCharVariables.lfgdps then if not LFTFrameRole3CheckButton:GetChecked() then LFTFrameRole3CheckButton:Click() end else if LFTFrameRole3CheckButton:GetChecked() then LFTFrameRole3CheckButton:Click() end end
 						LFTRoleCheckFrameConfirmButton:Click()
 						DEFAULT_CHAT_FRAME:AddMessage("GF: "..GF_AUTO_QUEUE_IN_LFT,1,1,0.5)
 					end
@@ -2921,7 +2921,7 @@ function GF_GetTypes(arg1, showanyway)
 	lfs = 1 -- To detect space/word/number+/space combinations(eg "k10" = lowerkarazhan)
 	while true do lfs,lfe,wordString = strfind(arg1,"[%p%s](%a+%s?[:%-]?%s?%d+)s?[%p%s]",lfs) if wordString then wordString = gsub(wordString,"[%s:%-]","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = strsub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..strsub(arg1,lfe) end lfs = lfs + strlen(wordString) + 1 else break end end
 	lfs = 1 -- To detect words with explanation points "!" (eg "hungry!","lost!")... To help identify quests with short names.
-	while true do lfs,lfe,wordString = strfind(arg1, "[%p%s](%a+%s?!) ",lfs) if wordString then wordString = gsub(wordString," ","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = strsub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..strsub(arg1,lfe) end lfs = lfs + strlen(wordString) + 1 else break end end
+	while true do lfs,lfe,wordString,tempString = strfind(arg1, "[%p%s](%a+%s?([!%+])) ",lfs) if wordString then wordString = gsub(wordString," ","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = strsub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..strsub(arg1,lfe) elseif tempString == "+" and GF_GROUP_IDS[strsub(wordString,1,strlen(wordString)-1)] then arg1 = strsub(arg1,1,lfs)..wordString.." "..GF_GROUP_LOCALIZED..strsub(arg1,lfe) end lfs = lfs + strlen(wordString) + 1 else break end end
 	lfs = 1 -- To detect space/number+/word/space combinations(eg "10th" = tenth, "5g" = 5gold)
 	while true do
 		lfs,lfe,wordString,tempString = strfind(arg1,"[%p%s](%d+%s?(%a+))[%p%s]",lfs)
@@ -4248,9 +4248,9 @@ function GF_GroupFinishedAddToGroupHistoryList()
 	for i=1, getn(GF_PerCharVariables.CurrentGroup) do
 		if GF_PerCharVariables.CurrentGroup[i] ~= "" and GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]].v and GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][2] + 300 < time() then
 			local numNames,numItems = 0,0
-			for name,_ in GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][3] do numNames = numNames + 1 if not GF_GroupHistory[GF_RealmName]["PLAYERS"][name] then GF_GroupHistory[GF_RealmName]["PLAYERS"][name] = 1 else GF_GroupHistory[GF_RealmName]["PLAYERS"][name] = GF_GroupHistory[GF_RealmName]["PLAYERS"][name] + 1 end end
 			for _,_ in GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][4] do numItems = numItems + 1 end
-			if numNames > 1 and numItems > 0 then
+			if numItems > 0 then for name,_ in GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][3] do numNames = numNames + 1 if not GF_GroupHistory[GF_RealmName]["PLAYERS"][name] then GF_GroupHistory[GF_RealmName]["PLAYERS"][name] = 1 else GF_GroupHistory[GF_RealmName]["PLAYERS"][name] = GF_GroupHistory[GF_RealmName]["PLAYERS"][name] + 1 end end end
+			if numNames > 1 then
 				table.insert(GF_GroupHistory[GF_RealmName]["Groups"],1,{GF_PerCharVariables.CurrentGroup[i],time(),GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][3],GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][4]})
 				if getn(GF_GroupHistory[GF_RealmName]["Groups"]) > 20 then table.remove(GF_LogHistory[GF_RealmName],21) end
 				if not GF_GroupHistory[GF_RealmName][strsub(GF_PerCharVariables.CurrentGroup[i],1,12)] then GF_GroupHistory[GF_RealmName][strsub(GF_PerCharVariables.CurrentGroup[i],1,12)] = {} end
