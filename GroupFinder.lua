@@ -242,6 +242,29 @@ function GF_LoadVariables()
 		if GF_SavedVariables.blacklistforeign == nil then GF_SavedVariables.blacklistforeign = true end
 		if GF_SavedVariables.iconpriority == nil then GF_SavedVariables.iconpriority = false end
 		if GF_SavedVariables.friendsToRemove == nil then GF_SavedVariables.friendsToRemove = {} end
+
+		if type(GF_SavedVariables.blocklist) ~= "table" then GF_SavedVariables.blocklist = {} end -- Could get rid of in final release
+		for name,_ in GF_PlayerMessages do if type(GF_PlayerMessages[name][1]) ~= "table" then GF_PlayerMessages = {} break end end -- Get rid of older style PlayerMessages - Could get rid of in final release
+		for i=1, getn(GF_LogHistory[GF_RealmName]) do -- Get rid of older style LogHistory entries - Could get rid of in final release
+			if not GF_LogHistory[GF_RealmName][i] then break elseif not GF_LogHistory[GF_RealmName][i][3] then table.remove(GF_LogHistory[GF_RealmName],i) i = i - 1 end
+		end
+		for i=1, getn(GF_MessageList[GF_RealmName]) do -- Get rid of broken Messagelist entries caused by changes to the Addon sharing algorithm - Could get rid of in final release
+			if not GF_MessageList[GF_RealmName][i].flags or type(GF_MessageList[GF_RealmName][i].flags) ~= "table" then GF_MessageList[GF_RealmName] = {} break end
+			if not GF_MessageList[GF_RealmName][i] then break elseif tonumber(GF_MessageList[GF_RealmName][i]) then table.remove(GF_MessageList[GF_RealmName],i) i = i - 1 end
+		end
+		for i=1, getn(GF_WhisperLogData[GF_RealmName]) do -- Convert older style Whisper Log entries - Could get rid of in final release
+			if type(GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][1]) ~= "table" then
+				for j=1, getn(GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]]) do
+					if strfind(GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j], " %[[TFrom]+%] |cff") then
+						GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j] = { GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j], "WHISPER" }
+					elseif strfind(GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j], " [O] |cff",1,1) then
+						GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j] = { GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j], "OFFICER" }
+					else
+						GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j] = { GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j], "GUILD" }
+					end
+				end
+			end
+		end
 	end
 	if not GF_PerCharVariables then GF_PerCharVariables = {} end
 	if not GF_PerCharVariables.version or GF_PerCharVariables.version < GF_CurrentVersion then
@@ -269,36 +292,12 @@ function GF_LoadVariables()
 		if GF_PerCharVariables.lfgshown == nil then GF_PerCharVariables.lfgshown = false end
 		if GF_PerCharVariables.getwhoshown == nil then GF_PerCharVariables.getwhoshown = false end
 		if GF_PerCharVariables.blockedchannels == nil then GF_PerCharVariables.blockedchannels = {} end
-
-		if type(GF_SavedVariables.blocklist) ~= "table" then GF_SavedVariables.blocklist = {} end -- Could get rid of in final release
-		for name,_ in GF_PlayerMessages do if type(GF_PlayerMessages[name][1]) ~= "table" then GF_PlayerMessages = {} break end end -- Get rid of older style PlayerMessages - Could get rid of in final release
-		for i=1, getn(GF_LogHistory[GF_RealmName]) do -- Get rid of older style LogHistory entries - Could get rid of in final release
-			if not GF_LogHistory[GF_RealmName][i] then break elseif not GF_LogHistory[GF_RealmName][i][3] then table.remove(GF_LogHistory[GF_RealmName],i) i = i - 1 end
-		end
-		for i=1, getn(GF_MessageList[GF_RealmName]) do -- Get rid of broken Messagelist entries caused by changes to the Addon sharing algorithm - Could get rid of in final release
-			if not GF_MessageList[GF_RealmName][i].flags or type(GF_MessageList[GF_RealmName][i].flags) ~= "table" then GF_MessageList[GF_RealmName] = {} break end
-			if not GF_MessageList[GF_RealmName][i] then break elseif tonumber(GF_MessageList[GF_RealmName][i]) then table.remove(GF_MessageList[GF_RealmName],i) i = i - 1 end
-		end
-		for i=1, getn(GF_WhisperLogData[GF_RealmName]) do -- Convert older style Whisper Log entries - Could get rid of in final release
-			if type(GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][1]) ~= "table" then
-				for j=1, getn(GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]]) do
-					if strfind(GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j], " %[[TFrom]+%] |cff") then
-						GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j] = { GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j], "WHISPER" }
-					elseif strfind(GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j], " [O] |cff",1,1) then
-						GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j] = { GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j], "OFFICER" }
-					else
-						GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j] = { GF_WhisperLogData[GF_RealmName][GF_WhisperLogData[GF_RealmName][i]][j], "GUILD" }
-					end
-				end
-			end
-		end
 	end
 	for name,data in GF_GroupHistory[GF_RealmName] do -- Convert older style Group History entries - Could get rid of in final release
 		if type(GF_GroupHistory[GF_RealmName][name]) == "table" and GF_GroupHistory[GF_RealmName][name][1] and type(GF_GroupHistory[GF_RealmName][name][1]) == "string" then
-			GF_GroupHistory = {}
-			GF_GroupHistory[GF_RealmName] = {}
+			GF_GroupHistory = { [GF_RealmName] = { ["Groups"] = {} } }
 			table.insert(GF_GroupHistory[GF_RealmName], "Groups")
-			GF_GroupHistory[GF_RealmName]["Groups"] = {}
+			break
 		end
 	end
 	for i=1, getn(GF_GroupHistory[GF_RealmName]) do
@@ -312,6 +311,9 @@ function GF_LoadVariables()
 		for j=1,getn(GF_GroupHistory[GF_RealmName][GF_GroupHistory[GF_RealmName][i]]) do
 			for item,data in GF_GroupHistory[GF_RealmName][GF_GroupHistory[GF_RealmName][i]][j][4] do -- GF_GroupHistory = {}
 				if type(data) ~= "table" then GF_GroupHistory[GF_RealmName][GF_GroupHistory[GF_RealmName][i]][j][4][item] = {data} end
+			end
+			for name,data in GF_GroupHistory[GF_RealmName][GF_GroupHistory[GF_RealmName][i]][j][3] do
+				if not data[4] then GF_GroupHistory[GF_RealmName][GF_GroupHistory[GF_RealmName][i]][j][3][name][4] = 0 end
 			end
 		end
 	end
@@ -361,8 +363,9 @@ function GF_LoadVariables()
 		GF_Parser[name] = text
 	end
 	GF_CurrentZone = GetRealZoneText()
-	if not GF_PerCharVariables.CurrentGroup then
-		GF_PerCharVariables.CurrentGroup = { [GF_CurrentZone] = {} }
+	if GF_CurrentZone and not GF_PerCharVariables.CurrentGroup then
+		GF_PerCharVariables.CurrentGroup = { [GF_CurrentZone] = { GF_CurrentZone,time(),{},{} } }
+		table.insert(GF_PerCharVariables.CurrentGroup,GF_CurrentZone)
 	else
 		for i=1,getn(GF_PerCharVariables.CurrentGroup) do
 			if not GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][4] then
@@ -370,6 +373,13 @@ function GF_LoadVariables()
 			else
 				for item,data in GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][4] do
 					if type(data) ~= "table" then GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][4][item] = {data} end
+				end
+				for name,data in GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][3] do
+					if not data[4] then
+						GF_PerCharVariables.CurrentGroup = { [GF_CurrentZone] = { GF_CurrentZone,time(),{},{} } }
+						table.insert(GF_PerCharVariables.CurrentGroup,GF_CurrentZone)
+						break
+					end
 				end
 			end
 		end
@@ -391,10 +401,14 @@ function GF_LoadSettings()
 		end
 	end
 	if not GF_PlayingOnTurtle then GF_PerCharVariables.hardcore = 1 GF_TextColors["HARDCORE"] = nil end
-	if GF_Hardcore and not GF_PerCharVariables.disablehardcore then
-		GF_BUTTONS_LIST.LFGHardCore[1][4] = true
-		GF_BUTTONS_LIST.LFGHardCore[2] = {GF_SHOW_HARDCORE,1,60,true,nil,true}
-		GF_BUTTONS_LIST.LFGHardCore[3] = {GF_SHOW_NORMAL,1,60,nil,true,nil}
+	if GF_Hardcore then
+		if not GF_PerCharVariables.disablehardcore then
+			GF_BUTTONS_LIST.LFGHardCore[1][4] = true
+			GF_BUTTONS_LIST.LFGHardCore[2] = {GF_SHOW_HARDCORE,1,60,true,nil,true}
+			GF_BUTTONS_LIST.LFGHardCore[3] = {GF_SHOW_NORMAL,1,60,nil,true,nil}
+		end
+	else
+		GF_DisableHardcoreCheckButton:Hide()
 	end
 	if GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][4] then GF_WorldAnnounceMessageTextLabel:SetText(GF_HARDCORE_SEND_TEXT) else GF_WorldAnnounceMessageTextLabel:SetText(GF_WORLD_SEND_TEXT.." "..GF_SavedVariables.groupchannelname.." "..GF_LOG_CHANNEL) end
 	GF_LFGHardCoreDropdownTextLabel:SetText(GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][1])
@@ -2147,11 +2161,7 @@ function self:CHAT_MSG_COMBAT_SELF_HITS() -- Melee Hits... TODO: Add pet damage.
 		for _,name in {'COMBATHITSELFOTHER','COMBATHITCRITSELFOTHER','COMBATHITSCHOOLSELFOTHER','COMBATHITCRITSCHOOLSELFOTHER'} do
 			local _,_,_,tempString = string.find(arg1,GF_Parser[name])
 			if tempString then
-				if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")] then
-					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")] = { UnitLevel("player"),({UnitClass("player")})[2],tonumber(tempString) }
-				else
-					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] + tonumber(tempString)
-				end
+				GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] + tonumber(tempString)
 				return
 			end
 		end
@@ -2164,11 +2174,7 @@ function self:CHAT_MSG_COMBAT_PET_HITS()
 		for _,name in {'COMBATHITOTHEROTHER','COMBATHITCRITOTHEROTHER','COMBATHITSCHOOLOTHEROTHER','COMBATHITCRITSCHOOLOTHEROTHER'} do
 			local _,_,wordString,_,tempString = string.find(arg1,GF_Parser[name])
 			if tempString then
-				if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")] then
-					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")] = { UnitLevel("player"),({UnitClass("player")})[2],tonumber(tempString) }
-				else
-					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] + tonumber(tempString)
-				end
+				GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] + tonumber(tempString)
 				return
 			end
 		end
@@ -2191,18 +2197,9 @@ function GF_Process_Other_COMBAT()
 			local _,_,wordString,_,tempString = string.find(arg1,GF_Parser[name])
 			if tempString then
 				if GF_PlayersCurrentlyInGroup[wordString] then
-					if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString] then
-						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString] = { GF_WhoTable[GF_RealmName][wordString][1],GF_WhoTable[GF_RealmName][wordString][2],tonumber(tempString) }
-					else
-						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] + tonumber(tempString)
-					end
+					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] + tonumber(tempString)
 				elseif GF_PetCurrentlyInGroup[wordString] then
-					wordString = GF_PetCurrentlyInGroup[wordString]
-					if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString] then
-						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString] = { GF_WhoTable[GF_RealmName][wordString][1],GF_WhoTable[GF_RealmName][wordString][2],tonumber(tempString) }
-					else
-						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] + tonumber(tempString)
-					end
+					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][GF_PetCurrentlyInGroup[wordString]][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][GF_PetCurrentlyInGroup[wordString]][3] + tonumber(tempString)
 				end
 				return
 			end
@@ -2217,11 +2214,7 @@ function self:CHAT_MSG_SPELL_SELF_DAMAGE() -- Spell Hits
 		for _,name in {'SPELLLOGSELFOTHER','SPELLLOGCRITSELFOTHER','SPELLLOGSCHOOLSELFOTHER','SPELLLOGCRITSCHOOLSELFOTHER'} do
 			local _,_,_,_,tempString = string.find(arg1,GF_Parser[name])
 			if tempString then
-				if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")] then
-					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")] = { UnitLevel("player"),({UnitClass("player")})[2],tonumber(tempString) }
-				else
-					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] + tonumber(tempString)
-				end
+				GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] + tonumber(tempString)
 				return
 			end
 		end
@@ -2234,11 +2227,7 @@ function self:CHAT_MSG_SPELL_PET_DAMAGE()
 		for _,name in {'SPELLLOGOTHEROTHER','SPELLLOGCRITOTHEROTHER','SPELLLOGSCHOOLOTHEROTHER','SPELLLOGCRITSCHOOLOTHEROTHER'} do
 			local _,_,wordString,_,_,tempString = string.find(arg1,GF_Parser[name])
 			if tempString then
-				if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")] then
-					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")] = { UnitLevel("player"),({UnitClass("player")})[2],tonumber(tempString) }
-				else
-					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] + tonumber(tempString)
-				end
+				GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] + tonumber(tempString)
 				return
 			end
 		end
@@ -2261,18 +2250,9 @@ function GF_Process_Other_SPELL()
 			local _,_,wordString,_,_,tempString = string.find(arg1,GF_Parser[name])
 			if tempString then
 				if GF_PlayersCurrentlyInGroup[wordString] then
-					if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString] then
-						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString] = { GF_WhoTable[GF_RealmName][wordString][1],GF_WhoTable[GF_RealmName][wordString][2],tonumber(tempString) }
-					else
-						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] + tonumber(tempString)
-					end
+					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] + tonumber(tempString)
 				elseif GF_PetCurrentlyInGroup[wordString] then
-					wordString = GF_PetCurrentlyInGroup[wordString]
-					if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString] then
-						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString] = { GF_WhoTable[GF_RealmName][wordString][1],GF_WhoTable[GF_RealmName][wordString][2],tonumber(tempString) }
-					else
-						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] + tonumber(tempString)
-					end
+					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][GF_PetCurrentlyInGroup[wordString]][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][GF_PetCurrentlyInGroup[wordString]][3] + tonumber(tempString)
 				end
 				return
 			end
@@ -2287,11 +2267,7 @@ function self:CHAT_MSG_SPELL_SELF_BUFF() -- Healing spells... TODO: Check for ov
 		for _,name in {'HEALEDSELFOTHER','HEALEDCRITSELFOTHER','HEALEDSELFSELF','HEALEDCRITSELFSELF'} do
 			local _,_,_,_,tempString = string.find(arg1,GF_Parser[name])
 			if tempString then
-				if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")] then
-					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")] = { UnitLevel("player"),({UnitClass("player")})[2],tonumber(tempString) }
-				else
-					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] + tonumber(tempString)
-				end
+				GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][4] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][4] + tonumber(tempString)
 				return
 			end
 		end
@@ -2314,11 +2290,7 @@ function GF_Process_Other_BUFF()
 			local _,_,wordString,_,_,tempString = string.find(arg1,GF_Parser[name])
 			if tempString then
 				if GF_PlayersCurrentlyInGroup[wordString] then
-					if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString] then
-						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString] = { GF_WhoTable[GF_RealmName][wordString][1],GF_WhoTable[GF_RealmName][wordString][2],tonumber(tempString) }
-					else
-						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] + tonumber(tempString)
-					end
+					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][4] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][4] + tonumber(tempString)
 				end
 				return
 			end
@@ -2335,20 +2307,10 @@ function self:CHAT_MSG_SPELL_PERIODIC_SELF_BUFFS() -- Periodic Healing spells...
 			if tempString then
 				if id == 2 then
 					if GF_PlayersCurrentlyInGroup[wordString] then
-						if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString] then
-							GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString] = { GF_WhoTable[GF_RealmName][wordString][1],GF_WhoTable[GF_RealmName][wordString][2],tonumber(tempString) }
-						else
-							GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] + tonumber(tempString)
-						end
+						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][4] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][4] + tonumber(tempString)
 					end
 				else
-					if GF_NumPartyMembers > 1 then
-						if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")] then
-							GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")] = { UnitLevel("player"),({UnitClass("player")})[2],tonumber(tempString) }
-						else
-							GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] + tonumber(tempString)
-						end
-					end
+					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][4] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][4] + tonumber(tempString)
 				end
 				return
 			end
@@ -2372,18 +2334,10 @@ function GF_Process_Other_PERIODIC()
 			local _,_,_,tempString,wordString = string.find(arg1,GF_Parser[name])
 			if tempString then
 				if id == 2 then
-					if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")] then
-						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")] = { UnitLevel("player"),({UnitClass("player")})[2],tonumber(tempString) }
-					else
-						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] + tonumber(tempString)
-					end
+					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][4] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][4] + tonumber(tempString)
 				else
 					if GF_PlayersCurrentlyInGroup[wordString] then
-						if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString] then
-							GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString] = { GF_WhoTable[GF_RealmName][wordString][1],GF_WhoTable[GF_RealmName][wordString][2],tonumber(tempString) }
-						else
-							GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] + tonumber(tempString)
-						end
+						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][4] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][4] + tonumber(tempString)
 					end
 				end
 				return
@@ -2400,18 +2354,10 @@ function self:CHAT_MSG_SPELL_PERIODIC_CREATURE_DAMAGE() -- Spell periodic damage
 			local _,_,_,tempString,_,wordString = string.find(arg1,GF_Parser[name])
 			if tempString then
 				if id == 2 then
-					if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")] then
-						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")] = { UnitLevel("player"),({UnitClass("player")})[2],tonumber(tempString) }
-					else
-						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] + tonumber(tempString)
-					end
+					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] + tonumber(tempString)
 				else
 					if GF_PlayersCurrentlyInGroup[wordString] then
-						if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString] then
-							GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString] = { GF_WhoTable[GF_RealmName][wordString][1],GF_WhoTable[GF_RealmName][wordString][2],tonumber(tempString) }
-						else
-							GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] + tonumber(tempString)
-						end
+						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] + tonumber(tempString)
 					end
 				end
 				return
@@ -2921,7 +2867,7 @@ function GF_GetTypes(arg1, showanyway)
 	lfs = 1 -- To detect space/word/number+/space combinations(eg "k10" = lowerkarazhan)
 	while true do lfs,lfe,wordString = strfind(arg1,"[%p%s](%a+%s?[:%-]?%s?%d+)s?[%p%s]",lfs) if wordString then wordString = gsub(wordString,"[%s:%-]","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = strsub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..strsub(arg1,lfe) end lfs = lfs + strlen(wordString) + 1 else break end end
 	lfs = 1 -- To detect words with explanation points "!" (eg "hungry!","lost!")... To help identify quests with short names.
-	while true do lfs,lfe,wordString,tempString = strfind(arg1, "[%p%s](%a+%s?([!%+])) ",lfs) if wordString then wordString = gsub(wordString," ","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = strsub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..strsub(arg1,lfe) elseif tempString == "+" and GF_GROUP_IDS[strsub(wordString,1,strlen(wordString)-1)] then arg1 = strsub(arg1,1,lfs)..wordString.." "..GF_GROUP_LOCALIZED..strsub(arg1,lfe) end lfs = lfs + strlen(wordString) + 1 else break end end
+	while true do lfs,lfe,wordString,tempString = strfind(arg1, "[%p%s](%a+%s?([!%+])) ",lfs) if wordString then wordString = gsub(wordString," ","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = strsub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..strsub(arg1,lfe) elseif tempString == "+" and GF_GROUP_IDS[strsub(wordString,1,strlen(wordString)-1)] then arg1 = strsub(arg1,1,lfs)..wordString.." "..GF_PLUS_LOCALIZED..strsub(arg1,lfe) end lfs = lfs + strlen(wordString) + 1 else break end end
 	lfs = 1 -- To detect space/number+/word/space combinations(eg "10th" = tenth, "5g" = 5gold)
 	while true do
 		lfs,lfe,wordString,tempString = strfind(arg1,"[%p%s](%d+%s?(%a+))[%p%s]",lfs)
@@ -3009,9 +2955,9 @@ function GF_GetTypes(arg1, showanyway)
 				lfs = lfe+1
 			else
 				if GF_WORD_GROUP_BYPASS[wordString] then
+					if GF_WORD_GROUP_BYPASS[wordTable[getn(wordTable)]] then wordTable[getn(wordTable)] = GF_WORD_GROUP_BYPASS[wordTable[getn(wordTable)]] end
 					_,tempVal,tempString = strfind(arg1,"(.-)[%s%p%d]+",lfe+1)
 					if tempString then
-						-- Problem is, in dps lfg rc... it finds dps > lfg and inserts dps and lfg but then skips to RC... I could hardcore a second word
 						if GF_WORD_GROUP_BYPASS[tempString] then
 							table.insert(wordTable, GF_WORD_GROUP_BYPASS[wordString]) table.insert(wordTable, GF_WORD_GROUP_BYPASS[tempString])
 							lfs = tempVal+1
@@ -3029,7 +2975,6 @@ function GF_GetTypes(arg1, showanyway)
 								lfs = lfe+1
 							end
 						else
-							if GF_WORD_GROUP_BYPASS[wordTable[getn(wordTable)]] then wordTable[getn(wordTable)] = GF_WORD_GROUP_BYPASS[wordTable[getn(wordTable)]] end
 							table.insert(wordTable, wordString)
 							lfs = lfe+1
 						end
@@ -3359,24 +3304,24 @@ function GF_GetTypes(arg1, showanyway)
 		end
 
 		if not GF_LFM_BYPASS[groupPosition[i][3]] then
-			if GF_LFM_BEFORE[wordTable[groupPosition[i][1]-1]] then table.insert(lfmPosition, {groupPosition[i][1]-1,groupPosition[i][1]-1,GF_LFM_BEFORE[wordTable[groupPosition[i][1]-1]],true}) foundTradesExclusion = foundTradesExclusion + 1 if GF_LFMLFG_PREFIX_GUILD[wordTable[groupPosition[i][1]-1]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(groupPosition[i][3].." triggername lfm 1/2(D).. tradesex 1") end end
-			if GF_LFG_BEFORE[wordTable[groupPosition[i][1]-1]] then table.insert(lfmPosition, {groupPosition[i][1]-1,groupPosition[i][1]-1,GF_LFG_BEFORE[wordTable[groupPosition[i][1]-1]]}) foundTradesExclusion = foundTradesExclusion + 1 if GF_LFMLFG_PREFIX_GUILD[wordTable[groupPosition[i][1]-1]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(groupPosition[i][3].." triggername lfg 1/2(D).. tradesex 1") end end
-			if GF_LFM_AFTER[wordTable[groupPosition[i][2]+1]] then table.insert(lfmPosition, {groupPosition[i][2]+1,groupPosition[i][2]+1,GF_LFM_AFTER[wordTable[groupPosition[i][2]+1]],true}) foundTradesExclusion = foundTradesExclusion + 1 if GF_LFMLFG_PREFIX_GUILD[wordTable[groupPosition[i][2]+1]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(groupPosition[i][3].." triggername lfm 1/2(D).. tradesex 1") end end
-			if GF_LFG_AFTER[wordTable[groupPosition[i][2]+1]] then table.insert(lfmPosition, {groupPosition[i][2]+1,groupPosition[i][2]+1,GF_LFG_AFTER[wordTable[groupPosition[i][2]+1]]}) foundTradesExclusion = foundTradesExclusion + 1 if GF_LFMLFG_PREFIX_GUILD[wordTable[groupPosition[i][2]+1]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(groupPosition[i][3].." triggername lfg 1/2(D).. tradesex 1") end end
+			if GF_LFM_BEFORE[wordTable[groupPosition[i][1]-1]] then table.insert(lfmPosition, {groupPosition[i][1]-1,groupPosition[i][1]-1,GF_LFM_BEFORE[wordTable[groupPosition[i][1]-1]],true}) if GF_LFMLFG_PREFIX_GUILD[wordTable[groupPosition[i][1]-1]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(groupPosition[i][3].." triggername lfm 1/2(D).. tradesex 1") end end
+			if GF_LFG_BEFORE[wordTable[groupPosition[i][1]-1]] then table.insert(lfmPosition, {groupPosition[i][1]-1,groupPosition[i][1]-1,GF_LFG_BEFORE[wordTable[groupPosition[i][1]-1]]}) if GF_LFMLFG_PREFIX_GUILD[wordTable[groupPosition[i][1]-1]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(groupPosition[i][3].." triggername lfg 1/2(D).. tradesex 1") end end
+			if GF_LFM_AFTER[wordTable[groupPosition[i][2]+1]] then table.insert(lfmPosition, {groupPosition[i][2]+1,groupPosition[i][2]+1,GF_LFM_AFTER[wordTable[groupPosition[i][2]+1]],true}) if GF_LFMLFG_PREFIX_GUILD[wordTable[groupPosition[i][2]+1]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(groupPosition[i][3].." triggername lfm 1/2(D).. tradesex 1") end end
+			if GF_LFG_AFTER[wordTable[groupPosition[i][2]+1]] then table.insert(lfmPosition, {groupPosition[i][2]+1,groupPosition[i][2]+1,GF_LFG_AFTER[wordTable[groupPosition[i][2]+1]]}) if GF_LFMLFG_PREFIX_GUILD[wordTable[groupPosition[i][2]+1]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(groupPosition[i][3].." triggername lfg 1/2(D).. tradesex 1") end end
 			if wordTable[groupPosition[i][2]+2] then
-				if GF_LFM_AFTER[wordTable[groupPosition[i][2]+1]..wordTable[groupPosition[i][2]+2]] then table.insert(lfmPosition, {groupPosition[i][2]+1,groupPosition[i][2]+2,GF_LFM_AFTER[wordTable[groupPosition[i][2]+1]..wordTable[groupPosition[i][2]+2]],true}) foundTradesExclusion = foundTradesExclusion + 1 if GF_LFMLFG_PREFIX_GUILD[wordTable[groupPosition[i][2]+1]..wordTable[groupPosition[i][2]+2]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(groupPosition[i][3].." triggername lfm 1/2(D).. tradesex 1") end end
-				if GF_LFG_AFTER[wordTable[groupPosition[i][2]+1]..wordTable[groupPosition[i][2]+2]] then table.insert(lfmPosition, {groupPosition[i][2]+1,groupPosition[i][2]+2,GF_LFG_AFTER[wordTable[groupPosition[i][2]+1]..wordTable[groupPosition[i][2]+2]]}) foundTradesExclusion = foundTradesExclusion + 1 if GF_LFMLFG_PREFIX_GUILD[wordTable[groupPosition[i][2]+1]..wordTable[groupPosition[i][2]+2]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(groupPosition[i][3].." triggername lfg 1/2(D).. tradesex 1") end end
+				if GF_LFM_AFTER[wordTable[groupPosition[i][2]+1]..wordTable[groupPosition[i][2]+2]] then table.insert(lfmPosition, {groupPosition[i][2]+1,groupPosition[i][2]+2,GF_LFM_AFTER[wordTable[groupPosition[i][2]+1]..wordTable[groupPosition[i][2]+2]],true}) if GF_LFMLFG_PREFIX_GUILD[wordTable[groupPosition[i][2]+1]..wordTable[groupPosition[i][2]+2]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(groupPosition[i][3].." triggername lfm 1/2(D).. tradesex 1") end end
+				if GF_LFG_AFTER[wordTable[groupPosition[i][2]+1]..wordTable[groupPosition[i][2]+2]] then table.insert(lfmPosition, {groupPosition[i][2]+1,groupPosition[i][2]+2,GF_LFG_AFTER[wordTable[groupPosition[i][2]+1]..wordTable[groupPosition[i][2]+2]]}) if GF_LFMLFG_PREFIX_GUILD[wordTable[groupPosition[i][2]+1]..wordTable[groupPosition[i][2]+2]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(groupPosition[i][3].." triggername lfg 1/2(D).. tradesex 1") end end
 			end
 			if wordTable[groupPosition[i][1]-2] then
-				if GF_LFM_BEFORE[wordTable[groupPosition[i][1]-2]..wordTable[groupPosition[i][1]-1]] then table.insert(lfmPosition, {groupPosition[i][1]-2,groupPosition[i][1]-1,GF_LFM_BEFORE[wordTable[groupPosition[i][1]-2]..wordTable[groupPosition[i][1]-1]],true}) foundTradesExclusion = foundTradesExclusion + 1 if GF_LFMLFG_PREFIX_GUILD[wordTable[groupPosition[i][1]-2]..wordTable[groupPosition[i][1]-1]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(groupPosition[i][3].." triggername lfm 1/2(D).. tradesex 1") end end
-				if GF_LFG_BEFORE[wordTable[groupPosition[i][1]-2]..wordTable[groupPosition[i][1]-1]] then table.insert(lfmPosition, {groupPosition[i][1]-2,groupPosition[i][1]-1,GF_LFG_BEFORE[wordTable[groupPosition[i][1]-2]..wordTable[groupPosition[i][1]-1]]}) foundTradesExclusion = foundTradesExclusion + 1 if GF_LFMLFG_PREFIX_GUILD[wordTable[groupPosition[i][1]-2]..wordTable[groupPosition[i][1]-1]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(groupPosition[i][3].." triggername lfg 1/2(D).. tradesex 1") end end
+				if GF_LFM_BEFORE[wordTable[groupPosition[i][1]-2]..wordTable[groupPosition[i][1]-1]] then table.insert(lfmPosition, {groupPosition[i][1]-2,groupPosition[i][1]-1,GF_LFM_BEFORE[wordTable[groupPosition[i][1]-2]..wordTable[groupPosition[i][1]-1]],true}) if GF_LFMLFG_PREFIX_GUILD[wordTable[groupPosition[i][1]-2]..wordTable[groupPosition[i][1]-1]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(groupPosition[i][3].." triggername lfm 1/2(D).. tradesex 1") end end
+				if GF_LFG_BEFORE[wordTable[groupPosition[i][1]-2]..wordTable[groupPosition[i][1]-1]] then table.insert(lfmPosition, {groupPosition[i][1]-2,groupPosition[i][1]-1,GF_LFG_BEFORE[wordTable[groupPosition[i][1]-2]..wordTable[groupPosition[i][1]-1]]}) if GF_LFMLFG_PREFIX_GUILD[wordTable[groupPosition[i][1]-2]..wordTable[groupPosition[i][1]-1]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(groupPosition[i][3].." triggername lfg 1/2(D).. tradesex 1") end end
 			end
 			if wordTable[groupPosition[i][1]-3] then
-				if GF_LFM_BEFORE[wordTable[groupPosition[i][1]-3]..wordTable[groupPosition[i][1]-2]..wordTable[groupPosition[i][1]-1]] then table.insert(lfmPosition, {groupPosition[i][1]-3,groupPosition[i][1]-1,GF_LFM_BEFORE[wordTable[groupPosition[i][1]-3]..wordTable[groupPosition[i][1]-2]..wordTable[groupPosition[i][1]-1]],true}) foundTradesExclusion = foundTradesExclusion + 1 if GF_LFMLFG_PREFIX_GUILD[wordTable[groupPosition[i][1]-3]..wordTable[groupPosition[i][1]-2]..wordTable[groupPosition[i][1]-1]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(groupPosition[i][3].." triggername lfm 1/2(D).. tradesex 1") end end
-				if GF_LFG_BEFORE[wordTable[groupPosition[i][1]-3]..wordTable[groupPosition[i][1]-2]..wordTable[groupPosition[i][1]-1]] then table.insert(lfmPosition, {groupPosition[i][1]-3,groupPosition[i][1]-1,GF_LFG_BEFORE[wordTable[groupPosition[i][1]-3]..wordTable[groupPosition[i][1]-2]..wordTable[groupPosition[i][1]-1]]}) foundTradesExclusion = foundTradesExclusion + 1 if GF_LFMLFG_PREFIX_GUILD[wordTable[groupPosition[i][1]-3]..wordTable[groupPosition[i][1]-2]..wordTable[groupPosition[i][1]-1]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(groupPosition[i][3].." triggername lfg 1/2(D).. tradesex 1") end end
+				if GF_LFM_BEFORE[wordTable[groupPosition[i][1]-3]..wordTable[groupPosition[i][1]-2]..wordTable[groupPosition[i][1]-1]] then table.insert(lfmPosition, {groupPosition[i][1]-3,groupPosition[i][1]-1,GF_LFM_BEFORE[wordTable[groupPosition[i][1]-3]..wordTable[groupPosition[i][1]-2]..wordTable[groupPosition[i][1]-1]],true}) if GF_LFMLFG_PREFIX_GUILD[wordTable[groupPosition[i][1]-3]..wordTable[groupPosition[i][1]-2]..wordTable[groupPosition[i][1]-1]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(groupPosition[i][3].." triggername lfm 1/2(D).. tradesex 1") end end
+				if GF_LFG_BEFORE[wordTable[groupPosition[i][1]-3]..wordTable[groupPosition[i][1]-2]..wordTable[groupPosition[i][1]-1]] then table.insert(lfmPosition, {groupPosition[i][1]-3,groupPosition[i][1]-1,GF_LFG_BEFORE[wordTable[groupPosition[i][1]-3]..wordTable[groupPosition[i][1]-2]..wordTable[groupPosition[i][1]-1]]}) if GF_LFMLFG_PREFIX_GUILD[wordTable[groupPosition[i][1]-3]..wordTable[groupPosition[i][1]-2]..wordTable[groupPosition[i][1]-1]] then foundGuildExclusion = foundGuildExclusion + 1 end if showanyway == true then print(groupPosition[i][3].." triggername lfg 1/2(D).. tradesex 1") end end
 			end
 
-			if GF_LFM_TRIGGER_BEFORE[wordTable[groupPosition[i][1]-1]] and GF_LFM_TRIGGER_AFTER[wordTable[groupPosition[i][2]+1]] then table.insert(lfmPosition, {groupPosition[i][1]-1,groupPosition[i][2]+1,GF_LFM_TRIGGER_BEFORE[wordTable[groupPosition[i][1]-1]] + GF_LFM_TRIGGER_AFTER[wordTable[groupPosition[i][2]+1]],true,true}) if showanyway == true then print(groupPosition[i][3].." triggername lfm 1/2(D).. before/after") end end
+			if GF_LFM_TRIGGER_BEFORE[wordTable[groupPosition[i][1]-1]] and GF_LFM_TRIGGER_AFTER[wordTable[groupPosition[i][2]+1]] then table.insert(lfmPosition, {groupPosition[i][1]-1,groupPosition[i][2]+1,GF_LFM_TRIGGER_BEFORE[wordTable[groupPosition[i][1]-1]] + GF_LFM_TRIGGER_AFTER[wordTable[groupPosition[i][2]+1]],true,true}) foundTradesExclusion = foundTradesExclusion + .5 if showanyway == true then print(groupPosition[i][3].." triggername lfm 1/2(D).. before/after") end end
 
 			if GF_TRADE_PORTAL_SUMMON[wordTable[i-1]] or GF_TRADE_PORTAL_SUMMON[wordTable[i+1]] then foundTrades = foundTrades + 1 if showanyway == true then print("portalzone trade 1") end
 			elseif wordTable[i+2] and GF_TRADE_GROUP_SUMMON[wordTable[i+1]..wordTable[i+2]] then foundTradesExclusion = foundTradesExclusion + 1.5 if showanyway == true then print(wordString.." havesummon .. tradesex 1.5") end end
@@ -3386,7 +3331,7 @@ function GF_GetTypes(arg1, showanyway)
 	for i=1, getn(lfmPosition) do
 		lfs = lfmPosition[i][3]
 		for k=lfmPosition[i][2]+1, tempVal do
-			for j=1, getn(groupPosition) do if lfe == 0 and k == groupPosition[j][1] then lfs = lfs + 1 foundTradesExclusion = foundTradesExclusion + .5 if showanyway == true then print(lfmPosition[i][3].." reached group 1") end lfe = 1 if GF_LFM_CONNECT_WORDS_AFTER[wordTable[k+1]] then lfs = lfs + GF_LFM_CONNECT_WORDS_AFTER[wordTable[k+1]] if showanyway == true then print(lfmPosition[i][3].." "..wordTable[k+1].." "..GF_LFM_CONNECT_WORDS_AFTER[wordTable[k+1]]) end end break end end
+			for j=1, getn(groupPosition) do if lfe == 0 and k == groupPosition[j][1] then lfs = lfs + 1 foundTradesExclusion = foundTradesExclusion + 1.5 if showanyway == true then print(lfmPosition[i][3].." reached group 1") end lfe = 1 if GF_LFM_CONNECT_WORDS_AFTER[wordTable[k+1]] then lfs = lfs + GF_LFM_CONNECT_WORDS_AFTER[wordTable[k+1]] if showanyway == true then print(lfmPosition[i][3].." "..wordTable[k+1].." "..GF_LFM_CONNECT_WORDS_AFTER[wordTable[k+1]]) end end break end end
 			if wordTable[k] then
 				if GF_LFM_CONNECT_WORDS_BEFORE[wordTable[k]] and (not groupName[wordTable[k]] or getn(groupPosition) > 0) then
 					lfs = lfs + GF_LFM_CONNECT_WORDS_BEFORE[wordTable[k]]
@@ -3398,7 +3343,7 @@ function GF_GetTypes(arg1, showanyway)
 			end
 		end
 		for k=lfmPosition[i][1]-1, 1, -1 do
-			for j=1, getn(groupPosition) do if lfe == 0 and k == groupPosition[j][2] then lfs = lfs + 1 foundTradesExclusion = foundTradesExclusion + .5 if showanyway == true then print(lfmPosition[i][3].." reached group 1") end lfe = 1 if GF_LFM_CONNECT_WORDS_BEFORE[wordTable[k-1]] then lfs = lfs + GF_LFM_CONNECT_WORDS_BEFORE[wordTable[k-1]] if showanyway == true then print(lfmPosition[i][3].." "..wordTable[k-1].." "..GF_LFM_CONNECT_WORDS_BEFORE[wordTable[k-1]]) end end break end end
+			for j=1, getn(groupPosition) do if lfe == 0 and k == groupPosition[j][2] then lfs = lfs + 1 foundTradesExclusion = foundTradesExclusion + 1.5 if showanyway == true then print(lfmPosition[i][3].." reached group 1") end lfe = 1 if GF_LFM_CONNECT_WORDS_BEFORE[wordTable[k-1]] then lfs = lfs + GF_LFM_CONNECT_WORDS_BEFORE[wordTable[k-1]] if showanyway == true then print(lfmPosition[i][3].." "..wordTable[k-1].." "..GF_LFM_CONNECT_WORDS_BEFORE[wordTable[k-1]]) end end break end end
 			if wordTable[k] then
 				if GF_LFM_CONNECT_WORDS_AFTER[wordTable[k]] and (not groupName[wordTable[k]] or getn(groupPosition) > 0) then
 					lfs = lfs + GF_LFM_CONNECT_WORDS_AFTER[wordTable[k]]
@@ -3412,7 +3357,7 @@ function GF_GetTypes(arg1, showanyway)
 		for j=1, getn(groupPosition) do -- If groupposition is within the lfmposition, don't count it if GF_LFM_BYPASS or GF_WORD_LEVEL_ZONE or GF_GROUP_IDS
 			if groupPosition[j][2] == lfmPosition[i][2] and not GF_LFM_BYPASS[wordTable[lfmPosition[i][2]]] and not GF_WORD_LEVEL_ZONE[wordTable[lfmPosition[i][2]]] and not GF_GROUP_IDS[wordTable[lfmPosition[i][2]]]
 			and not (lfmPosition[i][2] > 1 and (GF_LFM_BYPASS[wordTable[lfmPosition[i][2]-1]..wordTable[lfmPosition[i][2]]] or GF_WORD_LEVEL_ZONE[wordTable[lfmPosition[i][2]-1]..wordTable[lfmPosition[i][2]]] or GF_GROUP_IDS[wordTable[lfmPosition[i][2]-1]..wordTable[lfmPosition[i][2]]])) then
-				lfs = lfs + 1 if lfe == 0 then foundTradesExclusion = foundTradesExclusion + .5 lfe = 1 end
+				lfs = lfs + 1 if lfe == 0 then foundTradesExclusion = foundTradesExclusion + 1.5 lfe = 1 end
 				if showanyway == true then print(lfmPosition[i][3].." reached group 1") end
 				break
 			end
@@ -3586,7 +3531,8 @@ function GF_SearchMessageForTextString(msg,textstring,entry)
 end
 function GF_GroupHistoryZoneUpdate()
 	GF_CurrentZone = GetRealZoneText()
-	if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone] then GF_PerCharVariables.CurrentGroup[GF_CurrentZone] = {GF_CurrentZone,time(),{},{}} table.insert(GF_PerCharVariables.CurrentGroup,GF_CurrentZone) end
+	if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone] then GF_PerCharVariables.CurrentGroup[GF_CurrentZone] = { GF_CurrentZone,time(),{},{} } table.insert(GF_PerCharVariables.CurrentGroup,GF_CurrentZone) end
+	GF_UpdateGroup()
 end
 
 function GF_JoinWorld() -- Event-related
@@ -3738,6 +3684,7 @@ function GF_UpdateGroup() -- Get Group/Friends/Guildies information(turns off ig
 	GF_PlayersCurrentlyInGroup = {}
 	GF_PetCurrentlyInGroup = {}
 	GF_PlayersCurrentlyInGroup[UnitName("player")] = true
+	if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone] then GF_CurrentZone = GetRealZoneText() GF_PerCharVariables.CurrentGroup[GF_CurrentZone] = { GF_CurrentZone,time(),{},{} } table.insert(GF_PerCharVariables.CurrentGroup,GF_CurrentZone) end
 	if GetNumRaidMembers() > 1 then
 		GF_NumPartyMembers = 0
 		for i=1,40 do
@@ -3747,16 +3694,19 @@ function GF_UpdateGroup() -- Get Group/Friends/Guildies information(turns off ig
 				GF_PlayersCurrentlyInGroup[name] = true
 				GF_NumPartyMembers = GF_NumPartyMembers + 1
 				if UnitExists("raidpet"..i) then GF_PetCurrentlyInGroup[UnitName("raidpet"..i)] = UnitName("raid"..i) end
+				if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("raid"..i)] then GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("raid"..i)] = { GF_WhoTable[GF_RealmName][UnitName("raid"..i)][1],GF_WhoTable[GF_RealmName][UnitName("raid"..i)][2],0,0 } end
 			end
 		end
 	else
 		GF_NumPartyMembers = 1
+		if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")] then GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")] = { UnitLevel("player"),({UnitClass("player")})[2],0,0 } end
 		for i=1,4 do
 			if UnitExists("party"..i) and UnitName("party"..i) ~= UNKNOWN and GF_Classes[({UnitClass("party"..i)})[2]] then
 				GF_PlayersCurrentlyInGroup[UnitName("party"..i)] = true
 				GF_WhoTable[GF_RealmName][UnitName("party"..i)] = { UnitLevel("party"..i), ({UnitClass("party"..i)})[2], GetGuildInfo("party"..i) or "", time() }
 				GF_NumPartyMembers = GF_NumPartyMembers + 1
 				if UnitExists("partypet"..i) then GF_PetCurrentlyInGroup[UnitName("partypet"..i)] = UnitName("party"..i) end
+				if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("party"..i)] then GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("party"..i)] = { GF_WhoTable[GF_RealmName][UnitName("party"..i)][1],GF_WhoTable[GF_RealmName][UnitName("party"..i)][2],0,0 } end
 			end
 		end
 	end
@@ -3774,7 +3724,6 @@ function GF_UpdateOther()
 	if GF_AutoAnnounceTimer and GF_NumPartyMembers >= GF_BUTTONS_LIST.LFGSize[GF_PerCharVariables.lfgsize][4] then GF_TurnOffAnnounce(GF_NO_MORE_PLAYERS_NEEDED) end
 	if GF_PerCharVariables.lfgauto then GF_FixLFGStrings(true) end
 	if GF_NumPartyMembers == 1 then GF_UpdateAndRequestTimer = 0 GroupHistoryFinishTimer = time() + 120 else GroupHistoryFinishTimer = nil end
-	if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone] then GF_PerCharVariables.CurrentGroup[GF_CurrentZone] = {GF_CurrentZone,time(),{},{}} table.insert(GF_PerCharVariables.CurrentGroup,GF_CurrentZone) end
 	if LFTFrame then
 		LFT_Update()
 		if GetNumRaidMembers() > 1 then
@@ -4227,7 +4176,7 @@ function GF_WhisperReceivedAddToWhisperHistoryList(arg1,arg2,event,nodelay)
 		end
 		table.insert(GF_LogHistory[GF_RealmName],1,{arg1,4,event})
 		if getn(GF_LogHistory[GF_RealmName]) > 500 then table.remove(GF_LogHistory[GF_RealmName],501) end
-		if GF_SavedVariables.showwhisperlogs == 1 and (GF_WhisperLogCurrentButtonID < 2 or arg2 == getglobal("GF_WhisperHistoryButton"..GF_WhisperLogCurrentButtonID):GetText()) then
+		if GF_WhisperLogCurrentButtonID == 0 or GF_SavedVariables.showwhisperlogs == 1 and (GF_WhisperLogCurrentButtonID == 1 or arg2 == getglobal("GF_WhisperHistoryButton"..GF_WhisperLogCurrentButtonID):GetText()) then
 			if GF_ConvertMessagesToLinks then
 				local _,_,startString,endString = strfind(arg1, "(.-%].-|Hplayer.-|h|r:? )(.*)")
 				if startString then
@@ -4400,7 +4349,7 @@ function GF_GroupHistoryDisplayLog(name) -- TODO: Add a feature to search by pla
 				for names,data in GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][3] do
 					table.insert(tempTable, {names,data})
 				end
-				table.sort(tempTable, function(a,b) return a[2][3]>b[2][3] end)
+				table.sort(tempTable, function(a,b) return a[2][3]+a[2][4]>b[2][3]+b[2][3] end)
 				for i=1, getn(tempTable) do
 					wordString = wordString.."|cff"..(GF_ClassColors[tempTable[i][2][2]] or "9d9d9d").."|Hplayer:"..tempTable[i][1].."|h["..tempTable[i][1]..", "..tempTable[i][2][1].."]|h|r "
 				end
@@ -4419,12 +4368,6 @@ function GF_GroupHistoryDisplayLog(name) -- TODO: Add a feature to search by pla
 			end
 		end
 	end
--- GF_GroupHistory[GF_RealmName]["Groups"] = [1+] = { [1] = "InstanceID", [2] = time(), [3] = { ["playername1"] = { [1] = level, [2] = ClassID}, [4] = { ["itemid"] = "playername", }, [5] = TotalEntries, } }
--- I really want to create my own scrolling frame. It would almost certainly have better performance, and be more easily customizable.
--- The scrolling frame would basically have to be a bunch of buttons... and I would have to arrange the buttons and set their text and width.
--- The basic idea is to create 40+ buttons for raid members, then buttons for items... arrange raid members by class, then add items.
--- When displaying, put classes together with table.sort(GF_GroupHistory[GF_RealmName]["Groups"][3], function(a,b) return a[2]<b[2] end) Then 'for name,_ in GF_GroupHistory[GF_RealmName]["Groups"][3] do'.
--- Problem: There's no way to show damage/healing, except maybe as some sort of link popup when clicking 'Molten Core'
 end
 function GF_WhisperHistoryPriorityListCheckButtonPressed(id,name,priority)
 	if GF_SavedVariables.showwhisperlogs == 1 then
@@ -4444,12 +4387,12 @@ function GF_GroupHistoryDisplayEntryLog(offset) -- TODO: Display items together.
 		counter = counter + 1
 		if counter > offset then table.insert(playerTable, {pname,data}) end
 	end
-	table.sort(playerTable, function(a,b) return a[2][3]>b[2][3] end)
+	table.sort(playerTable, function(a,b) return a[2][3]+a[2][4]>b[2][3]+b[2][3] end)
 	local playerSize = getn(playerTable)
 	if playerSize > maxpsize then playerSize = maxpsize end
 	for i=1, playerSize do
 		getglobal("GF_GroupHistoryLogPlayer"..i):SetText("|cff"..(GF_ClassColors[playerTable[i][2][2]] or "9d9d9d").."|Hplayer:"..playerTable[i][1].."|h["..playerTable[i][1]..", "..playerTable[i][2][1].."]|h|r")
-		getglobal("GF_GroupHistoryLogPlayer"..i.."TextLabel"):SetText("("..playerTable[i][2][3]..")")
+		getglobal("GF_GroupHistoryLogPlayer"..i.."TextLabel"):SetText("("..playerTable[i][2][3]..")|cff00FF00("..playerTable[i][2][4]..")|r")
 		getglobal("GF_GroupHistoryLogPlayer"..i):SetWidth(getglobal("GF_GroupHistoryLogPlayer"..i):GetFontString():GetStringWidth())
 		getglobal("GF_GroupHistoryLogPlayer"..i):Show()
 	end
