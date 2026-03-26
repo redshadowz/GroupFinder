@@ -1354,7 +1354,7 @@ GF_WORD_FIX_BEFORE_QUEST = { -- Word changes processed before quests.
 ["sortmwrought"] = "stormwrought",["stomrought"] = "stormwrought",["stomwrought"] = "stormwrought",["stormraght"] = "stormwrought",["stormraught"] = "stormwrought",["stormraut"] = "stormwrought",["stormwroughht"] = "stormwrought",
 ["stormroght"] = "stormwrought",["stormrot"] = "stormwrought",["stormrough"] = "stormwrought",["stormrought"] = "stormwrought",["stormthraught"] = "stormwrought",["stormthrought"] = "stormwrought",["stonewrought"] = "stormwrought",
 ["stormwaught"] = "stormwrought",["stormworught"] = "stormwrought",["stormwot"] = "stormwrought",["stormwought"] = "stormwrought",["stormwraght"] = "stormwrought",["stormwrat"] = "stormwrought",["stormwrath"] = "stormwrought",
-["stormwraugh"] = "stormwrought",["stormwraught"] = "stormwrought",["stormwreaked"] = "stormwrought",["stormwroght"] = "stormwrought",["stormwrogut"] = "stormwrought",["stormwrot"] = "stormwrought",
+["stormwraugh"] = "stormwrought",["stormwraught"] = "stormwrought",["stormwreaked"] = "stormwrought",["stormwroght"] = "stormwrought",["stormwrogut"] = "stormwrought",["stormwrot"] = "stormwrought",["stormwrougth"] = "stormwrought",
 ["stormwroug"] = "stormwrought",["stormwrough"] = "stormwrought",["stormwrougt"] = "stormwrought",["stormwrouht"] = "stormwrought",["stormwrount"] = "stormwrought",["stormwrouth"] = "stormwrought",
 ["stornwrought"] = "stormwrought",["storumwrought"] = "stormwrought",["storwrought"] = "stormwrought",["stromwrought"] = "stormwrought",["sturmwrought"] = "stormwrought",["stormwroughgt"] = "stormwrought",
 
@@ -3079,7 +3079,7 @@ GF_WORD_LEVEL_DETECT = {
 ["dungeon"] = true,["instance"] = true,["anything"] = true,
 }
 GF_WORD_LEVEL_ZONE = { -- Single Word only
-["alterac"] = 38,["arathi"] = 38,["highlands"] = 38,["ashenvale"] = 26,["auberdine"] = 16,["azshara"] = 55,["badlands"] = 42,["barrens"] = 17,["blasted"] = 55,
+["alterac"] = 37,["arathi"] = 37,["highlands"] = 37,["ashenvale"] = 26,["auberdine"] = 16,["azshara"] = 55,["badlands"] = 42,["barrens"] = 17,["blasted"] = 55,
 ["cenarion"] = 60,["darkshore"] = 16,["darkshire"] = 28,["deadwind"] = 60,["desolace"] = 36,["elwynn"] = 7,["morogh"] = 7,["durotar"] = 7,["duskwood"] = 28,
 ["dustwallow"] = 40,["epl"] = 58,["feathermoon"] = 46,["felwood"] = 55,["feralas"] = 46,["glenshire"] = 17,["pyrewood"] = 17,["hillsbrad"] = 28,["hinterlands"] = 47,["hjyal"] = 60,["lakeshire"] = 23,["loch"] = 17,
 ["modan"] = 17,["moonglade"] = 55,["mulgore"] = 7,["plaguelands"] = 58,["redridge"] = 23,["gorge"] = 50,["silithus"] = 58,["silverpine"] = 17,["sos"] = 38,["sorrows"] = 40,
@@ -3088,7 +3088,7 @@ GF_WORD_LEVEL_ZONE = { -- Single Word only
 
 
 -- In case word is combined
-["arathihighlands"] = 38,["alteracmountain"] = 38,["blastedlands"] = 55,["deadwindpass"] = 60,["dunmorogh"] = 7,["dustwallowmarsh"] = 40,["elwynnforest"] = 7,["lochmodan"] = 17,["westernplaguelands"] = 58,["easternplaguelands"] = 58,
+["arathihighlands"] = 37,["alteracmountain"] = 37,["blastedlands"] = 55,["deadwindpass"] = 60,["dunmorogh"] = 7,["dustwallowmarsh"] = 40,["elwynnforest"] = 7,["lochmodan"] = 17,["westernplaguelands"] = 58,["easternplaguelands"] = 58,
 ["searinggorge"] = 50,["stonetalonmountain"] = 25,["stranglethornvale"] = 37,["thousandneedles"] = 30,["valleyofspears"] = 5,["hillsbradfoothills"] = 28,["redridgemountain"] = 23,["silverpineforest"] = 17,["swampofsorrows"] = 40,
 ["feathermoonstronghold"] = 46,["tirisfalglades"] = 7,["ungorocrater"] = 53,["northernstv"] = 36,["southernstv"] = 45,
 
