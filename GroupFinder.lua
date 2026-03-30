@@ -905,9 +905,9 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 			if event == "CHAT_MSG_ADDON" and arg1 == LFT_ADDON_PREFIX then
 				if strfind(arg2, "S2C_ROLECHECK_START") then
 					if GF_PerCharVariables.lfgtank or GF_PerCharVariables.lfgheal or GF_PerCharVariables.lfgdps then
-						if GF_PerCharVariables.lfgtank then if not LFTRoleCheckFrameRole1CheckButton:GetChecked() then LFTRoleCheckFrameRole1CheckButton:Click() end else if LFTRoleCheckFrameRole1CheckButton:GetChecked() then LFTRoleCheckFrameRole1CheckButton:Click() end end
-						if GF_PerCharVariables.lfgheal then if not LFTRoleCheckFrameRole2CheckButton:GetChecked() then LFTRoleCheckFrameRole2CheckButton:Click() end else if LFTRoleCheckFrameRole2CheckButton:GetChecked() then LFTRoleCheckFrameRole2CheckButton:Click() end end
 						if GF_PerCharVariables.lfgdps then if not LFTRoleCheckFrameRole3CheckButton:GetChecked() then LFTRoleCheckFrameRole3CheckButton:Click() end else if LFTRoleCheckFrameRole3CheckButton:GetChecked() then LFTRoleCheckFrameRole3CheckButton:Click() end end
+						if GF_PerCharVariables.lfgheal then if not LFTRoleCheckFrameRole2CheckButton:GetChecked() then LFTRoleCheckFrameRole2CheckButton:Click() end else if LFTRoleCheckFrameRole2CheckButton:GetChecked() then LFTRoleCheckFrameRole2CheckButton:Click() end end
+						if GF_PerCharVariables.lfgtank then if not LFTRoleCheckFrameRole1CheckButton:GetChecked() then LFTRoleCheckFrameRole1CheckButton:Click() end else if LFTRoleCheckFrameRole1CheckButton:GetChecked() then LFTRoleCheckFrameRole1CheckButton:Click() end end
 						LFTRoleCheckFrameConfirmButton:Click()
 						DEFAULT_CHAT_FRAME:AddMessage("GF: "..GF_AUTO_QUEUE_IN_LFT,1,1,0.5)
 					end
@@ -2595,21 +2595,28 @@ function GF_CheckForEmotes(arg1,arg2)
 	GF_PreviousMessage[arg2] = {true}
 end
 function GF_CheckForLoot(arg1) -- TODO: If an item is "WON" and then looted later, it will show the item twice? Add Green items but only show blue or better in scrolling chatframe. Put Green items at the end of the list(epics at top).
-	local tempVal,wordString = 0
+	local wordString
 	local _,_,itemid = strfind(arg1,"|%x+|H(item:[%d+:]+)")
 	if itemid then
 		local _,_,iQuality = GetItemInfo(itemid)
 		if iQuality == 0 then if not GF_SavedVariables.showloottexts then GF_PreviousMessage["SYSTEM"] = {} return end -- Block grey Items
 		elseif iQuality == 2 then
 			if not GF_SavedVariables.showloottexts then for i=1, 7 do if strfind(arg1, GF_LootFilters[i]) then GF_PreviousMessage["SYSTEM"] = {} return end end end -- Block 'selected need/greed/pass' and rolls on green items
-			tempVal = 1
 		elseif iQuality > 2 then
 			if not GF_SavedVariables.showloottexts then for i=1, 2 do if strfind(arg1, GF_LootFilters[i]) then GF_PreviousMessage["SYSTEM"] = {} return end end end -- Block only 'need/greed' rolls on other items
-			for i=8,10 do _,_,wordString = strfind(arg1, GF_LootFilters[i]) if wordString then tempVal = 2 break end end
-		end
-		if GF_NumPartyMembers > 1 then
-			if tempVal == 1 then GF_PerCharVariables.CurrentGroup[GF_CurrentZone].v = true
-			elseif tempVal == 2 then GF_PerCharVariables.CurrentGroup[GF_CurrentZone].v = true if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][4][itemid] then GF_PerCharVariables.CurrentGroup[GF_CurrentZone][4][itemid] = {wordString} else table.insert(GF_PerCharVariables.CurrentGroup[GF_CurrentZone][4][itemid],wordString) end end
+			for i=8,10 do
+				_,_,wordString = strfind(arg1, GF_LootFilters[i])
+				if wordString then
+					if GF_NumPartyMembers > 1 then
+						if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][4][itemid] then
+							GF_PerCharVariables.CurrentGroup[GF_CurrentZone][4][itemid] = {wordString}
+						else
+							table.insert(GF_PerCharVariables.CurrentGroup[GF_CurrentZone][4][itemid],wordString)
+						end
+					end
+					break
+				end
+			end
 		end
 	end
 	GF_PreviousMessage["SYSTEM"] = {true}
@@ -4199,9 +4206,9 @@ function GF_WhisperReceivedAddToWhisperHistoryList(arg1,arg2,event,nodelay)
 end
 function GF_GroupFinishedAddToGroupHistoryList()
 	for i=1, getn(GF_PerCharVariables.CurrentGroup) do
-		if GF_PerCharVariables.CurrentGroup[i] ~= "" and GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]].v and GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][2] + 300 < time() then
+		if GF_PerCharVariables.CurrentGroup[i] ~= "" and GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][2] + 300 < time() then
 			local numNames = 0
-			for name,_ in GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][3] do numNames = numNames + 1 if not GF_GroupHistory[GF_RealmName]["PLAYERS"][name] then GF_GroupHistory[GF_RealmName]["PLAYERS"][name] = 1 else GF_GroupHistory[GF_RealmName]["PLAYERS"][name] = GF_GroupHistory[GF_RealmName]["PLAYERS"][name] + 1 end end
+			for name,_ in GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][3] do if GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][3][name][3] + GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][3][name][4] > 0 then numNames = numNames + 1 if not GF_GroupHistory[GF_RealmName]["PLAYERS"][name] then GF_GroupHistory[GF_RealmName]["PLAYERS"][name] = 1 else GF_GroupHistory[GF_RealmName]["PLAYERS"][name] = GF_GroupHistory[GF_RealmName]["PLAYERS"][name] + 1 end end end
 			if numNames > 1 then
 				table.insert(GF_GroupHistory[GF_RealmName]["Groups"],1,{GF_PerCharVariables.CurrentGroup[i],time(),GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][3],GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][4]})
 				if getn(GF_GroupHistory[GF_RealmName]["Groups"]) > 20 then table.remove(GF_LogHistory[GF_RealmName],21) end
@@ -5048,9 +5055,9 @@ function GF_ClickQueueLFT() -- TODO: Does this work properly when in a group as 
 		if LFTFrameMainButtonText:GetText() == LFT_GENERAL_LEAVE_QUEUE_TEXT then
 			LFTFrameMainButton:Click()
 		else
-			if LFTFrameRole1CheckButton and GF_PerCharVariables.lfgtank then if not LFTFrameRole1CheckButton:GetChecked() then LFTFrameRole1CheckButton:Click() end else if LFTFrameRole1CheckButton:GetChecked() then LFTFrameRole1CheckButton:Click() end end
-			if LFTFrameRole2CheckButton and GF_PerCharVariables.lfgheal then if not LFTFrameRole2CheckButton:GetChecked() then LFTFrameRole2CheckButton:Click() end else if LFTFrameRole2CheckButton:GetChecked() then LFTFrameRole2CheckButton:Click() end end
 			if LFTFrameRole3CheckButton and GF_PerCharVariables.lfgdps then if not LFTFrameRole3CheckButton:GetChecked() then LFTFrameRole3CheckButton:Click() end else if LFTFrameRole3CheckButton:GetChecked() then LFTFrameRole3CheckButton:Click() end end
+			if LFTFrameRole2CheckButton and GF_PerCharVariables.lfgheal then if not LFTFrameRole2CheckButton:GetChecked() then LFTFrameRole2CheckButton:Click() end else if LFTFrameRole2CheckButton:GetChecked() then LFTFrameRole2CheckButton:Click() end end
+			if LFTFrameRole1CheckButton and GF_PerCharVariables.lfgtank then if not LFTFrameRole1CheckButton:GetChecked() then LFTFrameRole1CheckButton:Click() end else if LFTFrameRole1CheckButton:GetChecked() then LFTFrameRole1CheckButton:Click() end end
 
 			for i=1, 100 do
 				if getglobal("LFTFrameInstanceEntry"..i) then -- Just need to click the instances in my lfgtext(and unclick any instances not)
