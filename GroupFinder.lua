@@ -362,29 +362,32 @@ function GF_LoadVariables()
 		lfs = 1 while true do lfs,lfe = strfind(text,"%d",lfs,true) if lfs then if lfs == 1 then text = "(%d+)"..strsub(text,lfe+1) else text = strsub(text,1,lfs-1).."(%d+)"..strsub(text,lfe+1) end lfs = lfe + 4 else break end end
 		GF_Parser[name] = text
 	end
+	if GF_SavedVariables.systemfilter then HELP_TEXT_SIMPLE = nil else HELP_TEXT_SIMPLE = GF_HELP_TEXT_SIMPLE end
+
 	GF_CurrentZone = GetRealZoneText()
-	if GF_CurrentZone and not GF_PerCharVariables.CurrentGroup then
-		GF_PerCharVariables.CurrentGroup = { [GF_CurrentZone] = { GF_CurrentZone,time(),{},{} } }
-		table.insert(GF_PerCharVariables.CurrentGroup,GF_CurrentZone)
+	if not GF_PerCharVariables.CurrentGroup then
+		GF_PerCharVariables.CurrentGroup = {}
+		GF_GroupHistoryZoneUpdate(true)
 	else
 		for i=1,getn(GF_PerCharVariables.CurrentGroup) do
 			if not GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][4] then
 				GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]] = {GF_PerCharVariables.CurrentGroup[i],GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][1],GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][2],GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][3]}
+			elseif not GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][5] then
+				GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][5] = time()
 			else
 				for item,data in GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][4] do
 					if type(data) ~= "table" then GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][4][item] = {data} end
 				end
 				for name,data in GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][3] do
 					if not data[4] then
-						GF_PerCharVariables.CurrentGroup = { [GF_CurrentZone] = { GF_CurrentZone,time(),{},{} } }
-						table.insert(GF_PerCharVariables.CurrentGroup,GF_CurrentZone)
+						GF_GroupHistoryZoneUpdate(true)
 						break
 					end
 				end
 			end
 		end
+		GF_GroupHistoryZoneUpdate(true)
 	end
-	if GF_SavedVariables.systemfilter then HELP_TEXT_SIMPLE = nil else HELP_TEXT_SIMPLE = GF_HELP_TEXT_SIMPLE end
 end
 function GF_LoadSettings()
 	if GF_TURTLE_SERVERS_LIST[GF_RealmName] then GF_AddTurtleWoWDungeonsRaids() GF_WhoCooldownTime = 30 GF_PlayingOnTurtle = true end -- See if I'm not Turtle servers.
@@ -3540,9 +3543,12 @@ function GF_SearchMessageForTextString(msg,textstring,entry)
 		end
 	end
 end
-function GF_GroupHistoryZoneUpdate()
+function GF_GroupHistoryZoneUpdate(loadonly)
+	if GF_PerCharVariables.CurrentGroup[GF_CurrentZone] then GF_PerCharVariables.CurrentGroup[GF_CurrentZone][5] = time() end
 	GF_CurrentZone = GetRealZoneText()
-	if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone] then GF_PerCharVariables.CurrentGroup[GF_CurrentZone] = { GF_CurrentZone,time(),{},{} } table.insert(GF_PerCharVariables.CurrentGroup,GF_CurrentZone) end
+	if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone] then GF_PerCharVariables.CurrentGroup[GF_CurrentZone] = { GF_CurrentZone,time(),{},{},time() } table.insert(GF_PerCharVariables.CurrentGroup,GF_CurrentZone)
+	elseif GF_PerCharVariables.CurrentGroup[GF_CurrentZone][5] + 600 < time() then GF_GroupFinishedAddToGroupHistoryList(GF_CurrentZone) end
+	if loadonly then return end
 	GF_UpdateGroup()
 end
 
@@ -3664,8 +3670,10 @@ function GF_PruneTheWhoTable()
 				end
 			end
 		end
-		for name,_ in GF_GroupHistory[realm]["PLAYERS"] do
-			if name and not tempTable[name] then GF_GroupHistory[realm]["PLAYERS"][name] = nil end
+		if GF_GroupHistory[realm]["PLAYERS"] then
+			for name,_ in GF_GroupHistory[realm]["PLAYERS"] do
+				if name and not tempTable[name] then GF_GroupHistory[realm]["PLAYERS"][name] = nil end
+			end
 		end
 	end
 	for realm,_ in GF_MessageList do
@@ -3695,7 +3703,7 @@ function GF_UpdateGroup() -- Get Group/Friends/Guildies information(turns off ig
 	GF_PlayersCurrentlyInGroup = {}
 	GF_PetCurrentlyInGroup = {}
 	GF_PlayersCurrentlyInGroup[UnitName("player")] = true
-	if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone] then GF_CurrentZone = GetRealZoneText() GF_PerCharVariables.CurrentGroup[GF_CurrentZone] = { GF_CurrentZone,time(),{},{} } table.insert(GF_PerCharVariables.CurrentGroup,GF_CurrentZone) end
+	if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone] then GF_GroupHistoryZoneUpdate(true) end
 	if GetNumRaidMembers() > 1 then
 		GF_NumPartyMembers = 0
 		for i=1,40 do
@@ -4204,9 +4212,9 @@ function GF_WhisperReceivedAddToWhisperHistoryList(arg1,arg2,event,nodelay)
 		table.insert(GF_LogHistory[GF_RealmName]["Delay"], {"Whisper",time()+20,arg1,arg2,event})
 	end
 end
-function GF_GroupFinishedAddToGroupHistoryList()
+function GF_GroupFinishedAddToGroupHistoryList(zone)
 	for i=1, getn(GF_PerCharVariables.CurrentGroup) do
-		if GF_PerCharVariables.CurrentGroup[i] ~= "" and GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][2] + 300 < time() then
+		if GF_PerCharVariables.CurrentGroup[i] ~= "" and (GF_PerCharVariables.CurrentGroup[i] == zone or (not zone and GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][2] + 300 < time())) then
 			local numNames = 0
 			for name,_ in GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][3] do if GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][3][name][3] + GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][3][name][4] > 0 then numNames = numNames + 1 if not GF_GroupHistory[GF_RealmName]["PLAYERS"][name] then GF_GroupHistory[GF_RealmName]["PLAYERS"][name] = 1 else GF_GroupHistory[GF_RealmName]["PLAYERS"][name] = GF_GroupHistory[GF_RealmName]["PLAYERS"][name] + 1 end end end
 			if numNames > 1 then
@@ -4217,9 +4225,10 @@ function GF_GroupFinishedAddToGroupHistoryList()
 				if getn(GF_GroupHistory[GF_RealmName][strsub(GF_PerCharVariables.CurrentGroup[i],1,12)]) > 20 then table.remove(GF_LogHistory[GF_RealmName],21) end
 				if GF_SavedVariables.showwhisperlogs == 2 then GF_GroupHistoryUpdateFrame(strsub(GF_PerCharVariables.CurrentGroup[i],1,12)) else GF_GroupHistoryUpdateFrame(strsub(GF_PerCharVariables.CurrentGroup[i],1,12),true) end
 			end
+			if zone then GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]] = { GF_CurrentZone,time(),{},{},time() } break end
 		end
 	end
-	GF_PerCharVariables.CurrentGroup = {}
+	if not zone then GF_PerCharVariables.CurrentGroup = {} end
 	if GF_SavedVariables.showwhisperlogs == 2 and GF_WhisperLogCurrentButtonID == 1 then GF_GroupHistoryDisplayLog("Groups") end
 end
 function GF_WhisperHistoryUpdateFrame(name,insertonly)
