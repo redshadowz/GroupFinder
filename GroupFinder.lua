@@ -105,7 +105,7 @@ local GF_DifficultyColors = { ["RED"] = "ff0000",["ORANGE"] = "ff8040",["YELLOW"
 local GF_TankClasses						= {	["DRUID"]=true,["WARRIOR"]=true,["PALADIN"]=true,["SHAMAN"]=true }
 local GF_HealingClasses						= {	["PRIEST"]=true,["DRUID"]=true,["PALADIN"]=true,["SHAMAN"]=true }
 local languageName,foundIgnore,foundGuild,foundGuildExclusion,foundLFM,foundLFG,foundClass,foundDungeon,foundRaid,foundTrades,foundTradesExclusion,foundPvP,foundHC,foundNotHC,foundBlockList,fixedType
-local lfmlfgName,groupName,foundQuest,foundDFlags,foundPFlags,lfmPosition,groupPosition,LFTGroups = {},{},{},{},{},{},{},{}
+local lfmlfgName,groupName,foundQuest,foundDFlags,foundPFlags,lfmPosition,groupPosition,LFTGroups = {},{},{},{},{},{},{},{},{}
 GF_HELP_TEXT_SIMPLE = HELP_TEXT_SIMPLE
 
 local GF_Parser = {
@@ -319,7 +319,7 @@ function GF_LoadVariables()
 	end
 	if GF_WhoTable[GF_RealmName]["LOADED"][4] < time() then -- Prune the WhoTable once per day
 		GF_WhoTable[GF_RealmName]["LOADED"] = { UnitLevel("player"), ({UnitClass("player")})[2], "", time() + 86400 }
-		GF_PruneTheWhoTable()
+		GF_PruneDataTables()
 	end
 	GF_LogHistory[GF_RealmName].lastLogin = time()
 	if not GF_LogHistory[GF_RealmName]["Delay"] then GF_LogHistory[GF_RealmName]["Delay"] = {} end
@@ -2162,10 +2162,10 @@ function self:CHAT_MSG_COMBAT_SELF_HITS() -- Melee Hits... TODO: Add pet damage.
 --COMBATHITSELFOTHER,COMBATHITCRITSELFOTHER,COMBATHITSCHOOLSELFOTHER,COMBATHITCRITSCHOOLSELFOTHER
 --"You hit %s for %d.", "You crit %s for %d.", "You hit %s for %d %s damage.", "You crit %s for %d %s damage."
 	if GF_NumPartyMembers > 1 then
-		for _,name in {'COMBATHITSELFOTHER','COMBATHITCRITSELFOTHER','COMBATHITSCHOOLSELFOTHER','COMBATHITCRITSCHOOLSELFOTHER'} do
-			local _,_,_,tempString = string.find(arg1,GF_Parser[name])
-			if tempString then
-				GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] + tonumber(tempString)
+		for _,text in {'COMBATHITSELFOTHER','COMBATHITCRITSELFOTHER','COMBATHITSCHOOLSELFOTHER','COMBATHITCRITSCHOOLSELFOTHER'} do
+			local _,_,_,damage = string.find(arg1,GF_Parser[text])
+			if damage then
+				GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] + tonumber(damage)
 				return
 			end
 		end
@@ -2175,10 +2175,10 @@ function self:CHAT_MSG_COMBAT_PET_HITS()
 --COMBATHITOTHEROTHER,COMBATHITCRITOTHEROTHER,COMBATHITSCHOOLOTHEROTHER,COMBATHITCRITSCHOOLOTHEROTHER
 --"%s hits %s for %d.", "%s crits %s for %d.", "%s hits %s for %d %s damage.", "%s crits %s for %d %s damage."
 	if GF_NumPartyMembers > 1 then
-		for _,name in {'COMBATHITOTHEROTHER','COMBATHITCRITOTHEROTHER','COMBATHITSCHOOLOTHEROTHER','COMBATHITCRITSCHOOLOTHEROTHER'} do
-			local _,_,wordString,_,tempString = string.find(arg1,GF_Parser[name])
-			if tempString then
-				GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] + tonumber(tempString)
+		for _,text in {'COMBATHITOTHEROTHER','COMBATHITCRITOTHEROTHER','COMBATHITSCHOOLOTHEROTHER','COMBATHITCRITSCHOOLOTHEROTHER'} do
+			local _,_,_,_,damage = string.find(arg1,GF_Parser[text])
+			if damage then
+				GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] + tonumber(damage)
 				return
 			end
 		end
@@ -2197,13 +2197,13 @@ function GF_Process_Other_COMBAT()
 --COMBATHITOTHEROTHER,COMBATHITCRITOTHEROTHER,COMBATHITSCHOOLOTHEROTHER,COMBATHITCRITSCHOOLOTHEROTHER
 --"%s hits %s for %d.", "%s crits %s for %d.", "%s hits %s for %d %s damage.", "%s crits %s for %d %s damage."
 	if GF_NumPartyMembers > 1 then
-		for _,name in {'COMBATHITOTHEROTHER','COMBATHITCRITOTHEROTHER','COMBATHITSCHOOLOTHEROTHER','COMBATHITCRITSCHOOLOTHEROTHER'} do
-			local _,_,wordString,_,tempString = string.find(arg1,GF_Parser[name])
-			if tempString then
-				if GF_PlayersCurrentlyInGroup[wordString] then
-					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] + tonumber(tempString)
-				elseif GF_PetCurrentlyInGroup[wordString] then
-					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][GF_PetCurrentlyInGroup[wordString]][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][GF_PetCurrentlyInGroup[wordString]][3] + tonumber(tempString)
+		for _,text in {'COMBATHITOTHEROTHER','COMBATHITCRITOTHEROTHER','COMBATHITSCHOOLOTHEROTHER','COMBATHITCRITSCHOOLOTHEROTHER'} do
+			local _,_,source,_,damage = string.find(arg1,GF_Parser[text])
+			if damage then
+				if GF_PlayersCurrentlyInGroup[source] then
+					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][source][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][source][3] + tonumber(damage)
+				elseif GF_PetCurrentlyInGroup[source] then
+					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][GF_PetCurrentlyInGroup[source][1]][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][GF_PetCurrentlyInGroup[source][1]][3] + tonumber(damage)
 				end
 				return
 			end
@@ -2215,10 +2215,10 @@ function self:CHAT_MSG_SPELL_SELF_DAMAGE() -- Spell Hits
 --SPELLLOGSELFOTHER,SPELLLOGCRITSELFOTHER,SPELLLOGSCHOOLSELFOTHER,SPELLLOGCRITSCHOOLSELFOTHER
 --"Your %s hits %s for %d.", "Your %s crits %s for %d.","Your %s hits %s for %d %s damage.", "Your %s crits %s for %d %s damage."
 	if GF_NumPartyMembers > 1 then
-		for _,name in {'SPELLLOGSELFOTHER','SPELLLOGCRITSELFOTHER','SPELLLOGSCHOOLSELFOTHER','SPELLLOGCRITSCHOOLSELFOTHER'} do
-			local _,_,_,_,tempString = string.find(arg1,GF_Parser[name])
-			if tempString then
-				GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] + tonumber(tempString)
+		for _,text in {'SPELLLOGSELFOTHER','SPELLLOGCRITSELFOTHER','SPELLLOGSCHOOLSELFOTHER','SPELLLOGCRITSCHOOLSELFOTHER'} do
+			local _,_,_,_,damage = string.find(arg1,GF_Parser[text])
+			if damage then
+				GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] + tonumber(damage)
 				return
 			end
 		end
@@ -2228,10 +2228,10 @@ function self:CHAT_MSG_SPELL_PET_DAMAGE()
 --SPELLLOGOTHEROTHER,SPELLLOGCRITOTHEROTHER,SPELLLOGSCHOOLOTHEROTHER,SPELLLOGCRITSCHOOLOTHEROTHER
 --"%s's %s hits %s for %d.", "%s's %s crits %s for %d.","%s's %s hits %s for %d %s damage.", "%s's %s crits %s for %d %s damage."
 	if GF_NumPartyMembers > 1 then
-		for _,name in {'SPELLLOGOTHEROTHER','SPELLLOGCRITOTHEROTHER','SPELLLOGSCHOOLOTHEROTHER','SPELLLOGCRITSCHOOLOTHEROTHER'} do
-			local _,_,wordString,_,_,tempString = string.find(arg1,GF_Parser[name])
-			if tempString then
-				GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] + tonumber(tempString)
+		for _,text in {'SPELLLOGOTHEROTHER','SPELLLOGCRITOTHEROTHER','SPELLLOGSCHOOLOTHEROTHER','SPELLLOGCRITSCHOOLOTHEROTHER'} do
+			local _,_,_,_,_,damage = string.find(arg1,GF_Parser[text])
+			if damage then
+				GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] + tonumber(damage)
 				return
 			end
 		end
@@ -2250,13 +2250,13 @@ function GF_Process_Other_SPELL()
 --SPELLLOGOTHEROTHER,SPELLLOGCRITOTHEROTHER,SPELLLOGSCHOOLOTHEROTHER,SPELLLOGCRITSCHOOLOTHEROTHER
 --"%s's %s hits %s for %d.", "%s's %s crits %s for %d.","%s's %s hits %s for %d %s damage.", "%s's %s crits %s for %d %s damage."
 	if GF_NumPartyMembers > 1 then
-		for _,name in {'SPELLLOGOTHEROTHER','SPELLLOGCRITOTHEROTHER','SPELLLOGSCHOOLOTHEROTHER','SPELLLOGCRITSCHOOLOTHEROTHER'} do
-			local _,_,wordString,_,_,tempString = string.find(arg1,GF_Parser[name])
-			if tempString then
-				if GF_PlayersCurrentlyInGroup[wordString] then
-					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] + tonumber(tempString)
-				elseif GF_PetCurrentlyInGroup[wordString] then
-					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][GF_PetCurrentlyInGroup[wordString]][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][GF_PetCurrentlyInGroup[wordString]][3] + tonumber(tempString)
+		for _,text in {'SPELLLOGOTHEROTHER','SPELLLOGCRITOTHEROTHER','SPELLLOGSCHOOLOTHEROTHER','SPELLLOGCRITSCHOOLOTHEROTHER'} do
+			local _,_,source,_,_,damage = string.find(arg1,GF_Parser[text])
+			if damage then
+				if GF_PlayersCurrentlyInGroup[source] then
+					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][source][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][source][3] + tonumber(damage)
+				elseif GF_PetCurrentlyInGroup[source] then
+					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][GF_PetCurrentlyInGroup[source][1]][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][GF_PetCurrentlyInGroup[source][1]][3] + tonumber(damage)
 				end
 				return
 			end
@@ -2268,11 +2268,17 @@ function self:CHAT_MSG_SPELL_SELF_BUFF() -- Healing spells... TODO: Check for ov
 --HEALEDSELFOTHER,HEALEDCRITSELFOTHER,HEALEDSELFSELF,HEALEDCRITSELFSELF
 --"Your %s heals %s for %d.","Your %s critically heals %s for %d.","Your %s heals you for %d.","Your %s critically heals you for %d."
 	if GF_NumPartyMembers > 1 then
-		for _,name in {'HEALEDSELFOTHER','HEALEDCRITSELFOTHER','HEALEDSELFSELF','HEALEDCRITSELFSELF'} do
-			local _,_,_,_,tempString = string.find(arg1,GF_Parser[name])
-			if tempString then
-				GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][4] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][4] + tonumber(tempString)
+		for _,text in {'HEALEDSELFOTHER','HEALEDCRITSELFOTHER','HEALEDSELFSELF','HEALEDCRITSELFSELF'} do
+			local _,_,_,target,healing = string.find(arg1,GF_Parser[text])
+			if healing then
+				if GF_PlayersCurrentlyInGroup[target] then
+					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][4] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][4] + math.min(UnitHealthMax(GF_PlayersCurrentlyInGroup[target]) - UnitHealth(GF_PlayersCurrentlyInGroup[target]), tonumber(healing))
+				elseif GF_PetCurrentlyInGroup[target] then
+					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][4] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][4] + math.min(UnitHealthMax(GF_PetCurrentlyInGroup[target][2]) - UnitHealth(GF_PetCurrentlyInGroup[target][2]), tonumber(healing))
+				end
 				return
+			elseif target then
+				GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][4] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][4] + math.min(UnitHealthMax("player") - UnitHealth("player"), tonumber(target))
 			end
 		end
 	end
@@ -2290,13 +2296,19 @@ function GF_Process_Other_BUFF()
 --HEALEDOTHEROTHER,HEALEDCRITOTHEROTHER,HEALEDOTHERSELF,HEALEDCRITOTHERSELF
 --"%s's %s heals %s for %d.","%s's %s critically heals %s for %d.","%s's %s heals you for %d.","%s's %s critically heals you for %d."
 	if GF_NumPartyMembers > 1 then
-		for _,name in {'HEALEDOTHEROTHER','HEALEDCRITOTHEROTHER','HEALEDOTHERSELF','HEALEDCRITOTHERSELF'} do
-			local _,_,wordString,_,_,tempString = string.find(arg1,GF_Parser[name])
-			if tempString then
-				if GF_PlayersCurrentlyInGroup[wordString] then
-					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][4] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][4] + tonumber(tempString)
+		for _,text in {'HEALEDOTHEROTHER','HEALEDCRITOTHEROTHER','HEALEDOTHERSELF','HEALEDCRITOTHERSELF'} do
+			local _,_,source,_,target,healing = string.find(arg1,GF_Parser[text])
+			if healing then
+				if GF_PlayersCurrentlyInGroup[source] then
+					if GF_PlayersCurrentlyInGroup[target] then
+						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][source][4] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][source][4] + math.min(UnitHealthMax(GF_PlayersCurrentlyInGroup[target]) - UnitHealth(GF_PlayersCurrentlyInGroup[target]), tonumber(healing))
+					elseif GF_PetCurrentlyInGroup[target] then
+						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][source][4] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][source][4] + math.min(UnitHealthMax(GF_PetCurrentlyInGroup[target][2]) - UnitHealth(GF_PetCurrentlyInGroup[target][2]), tonumber(healing))
+					end
 				end
 				return
+			elseif target then -- I'm the target, so target is healing
+				GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][source][4] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][source][4] + math.min(UnitHealthMax("player") - UnitHealth("player"), tonumber(target))
 			end
 		end
 	end
@@ -2306,15 +2318,15 @@ function self:CHAT_MSG_SPELL_PERIODIC_SELF_BUFFS() -- Periodic Healing spells...
 --PERIODICAURAHEALOTHERSELF,PERIODICAURAHEALSELFSELF
 --"You gain %d health from %s's %s.","You gain %d health from %s."
 	if GF_NumPartyMembers > 1 then
-		for id,name in {'PERIODICAURAHEALOTHERSELF','PERIODICAURAHEALSELFSELF'} do
-			local _,_,tempString,wordString = string.find(arg1,GF_Parser[name])
-			if tempString then
-				if id == 2 then
-					if GF_PlayersCurrentlyInGroup[wordString] then
-						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][4] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][4] + tonumber(tempString)
+		for id,text in {'PERIODICAURAHEALOTHERSELF','PERIODICAURAHEALSELFSELF'} do
+			local _,_,healing,source = string.find(arg1,GF_Parser[text])
+			if source then
+				if id == 1 then
+					if GF_PlayersCurrentlyInGroup[source] then
+						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][source][4] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][source][4] + math.min(UnitHealthMax("player") - UnitHealth("player"), tonumber(healing))
 					end
 				else
-					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][4] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][4] + tonumber(tempString)
+					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][4] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][4] + math.min(UnitHealthMax("player") - UnitHealth("player"), tonumber(healing))
 				end
 				return
 			end
@@ -2334,14 +2346,22 @@ function GF_Process_Other_PERIODIC()
 --PERIODICAURAHEALOTHEROTHER,PERIODICAURAHEALSELFOTHER
 --"%s gains %d health from %s's %s.","%s gains %d health from your %s."
 	if GF_NumPartyMembers > 1 then
-		for id,name in {'PERIODICAURAHEALOTHEROTHER','PERIODICAURAHEALSELFOTHER'} do
-			local _,_,_,tempString,wordString = string.find(arg1,GF_Parser[name])
-			if tempString then
+		for id,text in {'PERIODICAURAHEALOTHEROTHER','PERIODICAURAHEALSELFOTHER'} do
+			local _,_,target,healing,source = string.find(arg1,GF_Parser[text])
+			if source then
 				if id == 2 then
-					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][4] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][4] + tonumber(tempString)
+					if GF_PlayersCurrentlyInGroup[target] then
+						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][4] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][4] + math.min(UnitHealthMax(GF_PlayersCurrentlyInGroup[target]) - UnitHealth(GF_PlayersCurrentlyInGroup[target]), tonumber(healing))
+					elseif GF_PetCurrentlyInGroup[target] then
+						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][4] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][4] + math.min(UnitHealthMax(GF_PetCurrentlyInGroup[target][2]) - UnitHealth(GF_PetCurrentlyInGroup[target][2]), tonumber(healing))
+					end
 				else
-					if GF_PlayersCurrentlyInGroup[wordString] then
-						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][4] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][4] + tonumber(tempString)
+					if GF_PlayersCurrentlyInGroup[source] then
+						if GF_PlayersCurrentlyInGroup[target] then
+							GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][source][4] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][source][4] + math.min(UnitHealthMax(GF_PlayersCurrentlyInGroup[target]) - UnitHealth(GF_PlayersCurrentlyInGroup[target]), tonumber(healing))
+						elseif GF_PetCurrentlyInGroup[target] then
+							GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][source][4] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][source][4] + math.min(UnitHealthMax(GF_PetCurrentlyInGroup[target][2]) - UnitHealth(GF_PetCurrentlyInGroup[target][2]), tonumber(healing))
+						end
 					end
 				end
 				return
@@ -2354,14 +2374,14 @@ function self:CHAT_MSG_SPELL_PERIODIC_CREATURE_DAMAGE() -- Spell periodic damage
 --PERIODICAURADAMAGEOTHEROTHER,PERIODICAURADAMAGESELFOTHER
 --"%s suffers %d %s damage from %s's %s.","%s suffers %d %s damage from your %s."
 	if GF_NumPartyMembers > 1 then
-		for id,name in {'PERIODICAURADAMAGEOTHEROTHER','PERIODICAURADAMAGESELFOTHER'} do
-			local _,_,_,tempString,_,wordString = string.find(arg1,GF_Parser[name])
-			if tempString then
+		for id,text in {'PERIODICAURADAMAGEOTHEROTHER','PERIODICAURADAMAGESELFOTHER'} do
+			local _,_,_,damage,_,source = string.find(arg1,GF_Parser[text])
+			if damage then
 				if id == 2 then
-					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] + tonumber(tempString)
+					GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")][3] + tonumber(damage)
 				else
-					if GF_PlayersCurrentlyInGroup[wordString] then
-						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][wordString][3] + tonumber(tempString)
+					if GF_PlayersCurrentlyInGroup[source] then
+						GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][source][3] = GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][source][3] + tonumber(damage)
 					end
 				end
 				return
@@ -2603,10 +2623,12 @@ function GF_CheckForLoot(arg1) -- TODO: If an item is "WON" and then looted late
 	if itemid then
 		local _,_,iQuality = GetItemInfo(itemid)
 		if iQuality == 0 then if not GF_SavedVariables.showloottexts then GF_PreviousMessage["SYSTEM"] = {} return end -- Block grey Items
-		elseif iQuality == 2 then
-			if not GF_SavedVariables.showloottexts then for i=1, 7 do if strfind(arg1, GF_LootFilters[i]) then GF_PreviousMessage["SYSTEM"] = {} return end end end -- Block 'selected need/greed/pass' and rolls on green items
-		elseif iQuality > 2 then
-			if not GF_SavedVariables.showloottexts then for i=1, 2 do if strfind(arg1, GF_LootFilters[i]) then GF_PreviousMessage["SYSTEM"] = {} return end end end -- Block only 'need/greed' rolls on other items
+		elseif iQuality > 1 then
+			if iQuality == 2 then
+				if not GF_SavedVariables.showloottexts then for i=1, 7 do if strfind(arg1, GF_LootFilters[i]) then GF_PreviousMessage["SYSTEM"] = {} return end end end -- Block 'selected need/greed/pass' and rolls on green items
+			else
+				if not GF_SavedVariables.showloottexts then for i=1, 2 do if strfind(arg1, GF_LootFilters[i]) then GF_PreviousMessage["SYSTEM"] = {} return end end end -- Block only 'need/greed' rolls on other items
+			end
 			for i=8,10 do
 				_,_,wordString = strfind(arg1, GF_LootFilters[i])
 				if wordString then
@@ -3547,7 +3569,12 @@ function GF_GroupHistoryZoneUpdate(loadonly)
 	if GF_PerCharVariables.CurrentGroup[GF_CurrentZone] then GF_PerCharVariables.CurrentGroup[GF_CurrentZone][5] = time() end
 	GF_CurrentZone = GetRealZoneText()
 	if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone] then GF_PerCharVariables.CurrentGroup[GF_CurrentZone] = { GF_CurrentZone,time(),{},{},time() } table.insert(GF_PerCharVariables.CurrentGroup,GF_CurrentZone)
-	elseif GF_PerCharVariables.CurrentGroup[GF_CurrentZone][5] + 600 < time() then GF_GroupFinishedAddToGroupHistoryList(GF_CurrentZone) end
+	else
+		for i=1, getn(GF_PerCharVariables.CurrentGroup) do
+			if GF_PerCharVariables.CurrentGroup[i] ~= "" and GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][5] + 900 < time() then GF_GroupFinishedAddToGroupHistoryList(GF_PerCharVariables.CurrentGroup[i]) end
+		end
+		if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][6] then GF_GroupHistoryDisplayLogCurrent(GF_CurrentZone) end
+	end
 	if loadonly then return end
 	GF_UpdateGroup()
 end
@@ -3641,7 +3668,7 @@ function GF_SetLFGRoleButtons()
 		GF_LFGMyRole:SetPoint("RIGHT", "GF_LFGMyRoleDPSCheckButton", "LEFT", 0, 2)
 	end
 end
-function GF_PruneTheWhoTable()
+function GF_PruneDataTables()
 	for realm,_ in GF_WhoTable do
 		for name, whoData in GF_WhoTable[realm] do
 			if whoData[4] and ((whoData[1] == 60 and whoData[4] + 1209600 < time()) or (whoData[1] < 60 and whoData[4] + 86400 < time())) then -- Keep WhoData for 14 days for 60's. One day for under 60.
@@ -3650,7 +3677,7 @@ function GF_PruneTheWhoTable()
 		end
 	end
 	for realm,_ in GF_WhisperLogData do -- After two pages, trim from 128 messages to 16
-		for i=39, getn(GF_WhisperLogData[realm]) do -- Starts at the first name on page 3
+		for i=38, getn(GF_WhisperLogData[realm]) do -- Starts at the first name on page 3
 			for j=17, getn(GF_WhisperLogData[realm][GF_WhisperLogData[realm][i]]) do
 				table.remove(GF_WhisperLogData[realm][GF_WhisperLogData[realm][i]],17)
 			end
@@ -3659,8 +3686,8 @@ function GF_PruneTheWhoTable()
 	for realm,_ in GF_GroupHistory do
 		local tempTable = {}
 		for i=1, getn(GF_GroupHistory[realm]) do
-			for j=1, getn(GF_GroupHistory[realm][GF_GroupHistory[realm][i]]) do
-				if GF_GroupHistory[realm][GF_GroupHistory[realm][i]][j] and GF_GroupHistory[realm][GF_GroupHistory[realm][i]][j][2] + 5184000 < time() then -- Keep for 60 days
+			for j=1, getn(GF_GroupHistory[realm][GF_GroupHistory[realm][i]]) do -- Delete anything older than 60 days except first two groups in each section, or if older than 6 months.
+				if GF_GroupHistory[realm][GF_GroupHistory[realm][i]][j] and (j > 2 and GF_GroupHistory[realm][GF_GroupHistory[realm][i]][j][2] + 5184000 < time() or GF_GroupHistory[realm][GF_GroupHistory[realm][i]][j][2] + 15552000 < time()) then
 					table.remove(GF_GroupHistory[realm][GF_GroupHistory[realm][i]],j)
 					j = j - 1
 				elseif GF_GroupHistory[realm][GF_GroupHistory[realm][i]][j] then
@@ -3700,9 +3727,9 @@ end
 
 function GF_UpdateGroup() -- Get Group/Friends/Guildies information(turns off ignore/blacklist or adds their character information)
 	local lastParty = GF_NumPartyMembers
-	GF_PlayersCurrentlyInGroup = {}
+	GF_PlayersCurrentlyInGroup = {[GF_YOU_LOCALIZED] = "player",[GF_YOUR_LOCALIZED] = "player",[UnitName("player")] = "player"}
 	GF_PetCurrentlyInGroup = {}
-	GF_PlayersCurrentlyInGroup[UnitName("player")] = true
+	if UnitExists("pet") then GF_PetCurrentlyInGroup[UnitName("pet")] = {UnitName("player"),"pet"} end
 	if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone] then GF_GroupHistoryZoneUpdate(true) end
 	if GetNumRaidMembers() > 1 then
 		GF_NumPartyMembers = 0
@@ -3710,9 +3737,9 @@ function GF_UpdateGroup() -- Get Group/Friends/Guildies information(turns off ig
 			local name,_,_,level,class = GetRaidRosterInfo(i)
 			if name and name ~= UNKNOWN and class and GF_Classes[class] then
 				GF_WhoTable[GF_RealmName][name] = { level, GF_Classes[class], GetGuildInfo("raid"..i) or "", time() }
-				GF_PlayersCurrentlyInGroup[name] = true
+				GF_PlayersCurrentlyInGroup[name] = "raid"..i
 				GF_NumPartyMembers = GF_NumPartyMembers + 1
-				if UnitExists("raidpet"..i) then GF_PetCurrentlyInGroup[UnitName("raidpet"..i)] = UnitName("raid"..i) end
+				if UnitExists("raidpet"..i) then GF_PetCurrentlyInGroup[UnitName("raidpet"..i)] = {UnitName("raid"..i),"raidpet"..i} end
 				if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("raid"..i)] then GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("raid"..i)] = { GF_WhoTable[GF_RealmName][UnitName("raid"..i)][1],GF_WhoTable[GF_RealmName][UnitName("raid"..i)][2],0,0 } end
 			end
 		end
@@ -3721,10 +3748,10 @@ function GF_UpdateGroup() -- Get Group/Friends/Guildies information(turns off ig
 		if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")] then GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("player")] = { UnitLevel("player"),({UnitClass("player")})[2],0,0 } end
 		for i=1,4 do
 			if UnitExists("party"..i) and UnitName("party"..i) ~= UNKNOWN and GF_Classes[({UnitClass("party"..i)})[2]] then
-				GF_PlayersCurrentlyInGroup[UnitName("party"..i)] = true
+				GF_PlayersCurrentlyInGroup[UnitName("party"..i)] = "party"..i
 				GF_WhoTable[GF_RealmName][UnitName("party"..i)] = { UnitLevel("party"..i), ({UnitClass("party"..i)})[2], GetGuildInfo("party"..i) or "", time() }
 				GF_NumPartyMembers = GF_NumPartyMembers + 1
-				if UnitExists("partypet"..i) then GF_PetCurrentlyInGroup[UnitName("partypet"..i)] = UnitName("party"..i) end
+				if UnitExists("partypet"..i) then GF_PetCurrentlyInGroup[UnitName("partypet"..i)] = {UnitName("party"..i),"partypet"..i} end
 				if not GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("party"..i)] then GF_PerCharVariables.CurrentGroup[GF_CurrentZone][3][UnitName("party"..i)] = { GF_WhoTable[GF_RealmName][UnitName("party"..i)][1],GF_WhoTable[GF_RealmName][UnitName("party"..i)][2],0,0 } end
 			end
 		end
@@ -4229,7 +4256,11 @@ function GF_GroupFinishedAddToGroupHistoryList(zone)
 		end
 	end
 	if not zone then GF_PerCharVariables.CurrentGroup = {} end
-	if GF_SavedVariables.showwhisperlogs == 2 and GF_WhisperLogCurrentButtonID == 1 then GF_GroupHistoryDisplayLog("Groups") end
+	if GF_SavedVariables.showwhisperlogs == 2 and GF_WhisperLogCurrentButtonID == 1 then GF_OnUpdateFunctions["GroupLog"] = GF_UpdateGroupLog end
+end
+function GF_UpdateGroupLog()
+	GF_OnUpdateFunctions["GroupLog"] = nil
+	GF_GroupHistoryDisplayLog("Groups")
 end
 function GF_WhisperHistoryUpdateFrame(name,insertonly)
 	local numPriority,counter,nameWasPriority = 0,2
@@ -4352,42 +4383,48 @@ function GF_GroupHistoryDisplayLog(name) -- TODO: Add a feature to search by pla
 		end
 		for item,_ in GF_GroupHistory[GF_RealmName][name][i][4] do
 			local iName,_,iQuality = GetItemInfo(item)
-			if iName then
-				local _,_,_,color = GetItemQualityColor(iQuality)
-				wordString = wordString..color.. "|H"..item.."|h["..iName.."]|h|r "
-			else
-				wordString = wordString.."|cffffffff|H"..item.."|h[unknown]|h|r "
+			if iQuality > 2 then
+				if iName then
+					local _,_,_,color = GetItemQualityColor(iQuality)
+					wordString = wordString..color.. "|H"..item.."|h["..iName.."]|h|r "
+				else
+					wordString = wordString.."|cffffffff|H"..item.."|h[unknown]|h|r "
+				end
 			end
 		end
 		GF_Log:AddMessage(wordString,1,1,1)
 	end
 	if GF_WhisperLogCurrentButtonID == 1 then
 		for i=1, getn(GF_PerCharVariables.CurrentGroup) do
-			if GF_PerCharVariables.CurrentGroup[i] ~= "" then
-				local wordString = "|cffccccff|Hgfcg:"..GF_PerCharVariables.CurrentGroup[i].."|h"..date("[%m/%d] [%H:%M]",GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][2]).." {"..GF_PerCharVariables.CurrentGroup[i].."}".."|h|r - "
-				local tempTable = {}
-				for names,data in GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][3] do
-					if data[1] > 0 and data[3] + data[4] > 0 then table.insert(tempTable, {names,data}) end
-				end
-				if getn(tempTable) > 1 then
-					table.sort(tempTable, function(a,b) return a[2][3]+a[2][4]>b[2][3]+b[2][4] end)
-					for i=1, getn(tempTable) do
-						wordString = wordString.."|cff"..(GF_ClassColors[tempTable[i][2][2]] or "9d9d9d").."|Hplayer:"..tempTable[i][1].."|h["..tempTable[i][1]..", "..tempTable[i][2][1].."]|h|r "
-					end
-					for item,_ in GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][4] do
-						local iName,_,iQuality = GetItemInfo(item)
-						if iName then
-							local _,_,_,color = GetItemQualityColor(iQuality)
-							wordString = wordString..color.. "|H"..item.."|h["..iName.."]|h|r "
-						else
-							wordString = wordString.."|cffffffff|H"..item.."|h[unknown]|h|r "
-						end
-					end
-					if getn(tempTable) > 1 then
-						GF_Log:AddMessage(wordString,1,1,1)
-					end
+			if GF_PerCharVariables.CurrentGroup[i] ~= "" then GF_GroupHistoryDisplayLogCurrent(GF_PerCharVariables.CurrentGroup[i]) end
+		end
+	end
+end
+function GF_GroupHistoryDisplayLogCurrent(name)
+	local wordString = "|cffccccff|Hgfcg:"..name.."|h"..date("[%m/%d] [%H:%M]",GF_PerCharVariables.CurrentGroup[name][2]).." {"..name.."}".."|h|r - "
+	local tempTable = {}
+	for names,data in GF_PerCharVariables.CurrentGroup[name][3] do
+		if data[1] > 0 and data[3] + data[4] > 0 then table.insert(tempTable, {names,data}) end
+	end
+	if getn(tempTable) > 1 then
+		table.sort(tempTable, function(a,b) return a[2][3]+a[2][4]>b[2][3]+b[2][4] end)
+		for i=1, getn(tempTable) do
+			wordString = wordString.."|cff"..(GF_ClassColors[tempTable[i][2][2]] or "9d9d9d").."|Hplayer:"..tempTable[i][1].."|h["..tempTable[i][1]..", "..tempTable[i][2][1].."]|h|r "
+		end
+		for item,_ in GF_PerCharVariables.CurrentGroup[name][4] do
+			local iName,_,iQuality = GetItemInfo(item)
+			if iQuality > 2 then
+				if iName then
+					local _,_,_,color = GetItemQualityColor(iQuality)
+					wordString = wordString..color.. "|H"..item.."|h["..iName.."]|h|r "
+				else
+					wordString = wordString.."|cffffffff|H"..item.."|h[unknown]|h|r "
 				end
 			end
+		end
+		if getn(tempTable) > 1 then
+			GF_Log:AddMessage(wordString,1,1,1)
+			GF_PerCharVariables.CurrentGroup[name][6] = true
 		end
 	end
 end
@@ -4402,68 +4439,47 @@ function GF_WhisperHistoryPriorityListCheckButtonPressed(id,name,priority)
 end
 function GF_GroupHistoryDisplayEntryLog(offset) -- TODO: Display items together. Sort by rarity... Display both healing and damage... Add pet damage.
 	if not GroupHistoryLogTable then return end
-	local maxsize,maxpsize = 25,25
+	local maxsize,maxpsize = 50,25
 	local playerTable = {} -- Players
-	local counter = 0
+	local itemTable = {} -- Players
+-- Players
 	for pname,data in GroupHistoryLogTable[3] do
-		counter = counter + 1
-		if counter > offset then table.insert(playerTable, {pname,data}) end
+		table.insert(playerTable, {pname,data})
 	end
 	table.sort(playerTable, function(a,b) return a[2][3]+a[2][4]>b[2][3]+b[2][4] end)
-	local playerSize = getn(playerTable)
-	if playerSize > maxpsize then playerSize = maxpsize end
+	local playerSize = getn(playerTable) - offset
+	if playerSize > maxpsize then playerSize = maxpsize elseif playerSize < 0 then playerSize = 0 end
 	for i=1, playerSize do
-		getglobal("GF_GroupHistoryLogPlayer"..i):SetText("|cff"..(GF_ClassColors[playerTable[i][2][2]] or "9d9d9d").."|Hplayer:"..playerTable[i][1].."|h["..playerTable[i][1]..", "..playerTable[i][2][1].."]|h|r")
-		getglobal("GF_GroupHistoryLogPlayer"..i.."TextLabel"):SetText("("..playerTable[i][2][3]..")|cff00FF00("..playerTable[i][2][4]..")|r")
+		getglobal("GF_GroupHistoryLogPlayer"..i):SetText("|cff"..(GF_ClassColors[playerTable[i+offset][2][2]] or "9d9d9d").."|Hplayer:"..playerTable[i+offset][1].."|h["..playerTable[i+offset][1]..", "..playerTable[i+offset][2][1].."]|h|r")
+		getglobal("GF_GroupHistoryLogPlayer"..i.."TextLabel"):SetText("("..playerTable[i+offset][2][3]..")|cff00FF00("..playerTable[i+offset][2][4]..")|r")
 		getglobal("GF_GroupHistoryLogPlayer"..i):SetWidth(getglobal("GF_GroupHistoryLogPlayer"..i):GetFontString():GetStringWidth())
 		getglobal("GF_GroupHistoryLogPlayer"..i):Show()
 	end
 	for i=playerSize+1,maxpsize do getglobal("GF_GroupHistoryLogPlayer"..i):Hide() end
-	counter = 0
-	local itemSize = 0
-	for itemid,wdata in GroupHistoryLogTable[4] do
-		counter = counter + 1
-		if counter > offset*2 then 
-			itemSize = itemSize + 1
+
+-- Items
+	for itemid,data in GroupHistoryLogTable[4] do
+		for i=1, getn(data) do
 			local iName,_,iQuality = GetItemInfo(itemid)
-			if iName then
-				local _,_,_,color = GetItemQualityColor(iQuality)
-				if strlen(iName) > 25 then
-					getglobal("GF_GroupHistoryLogItem"..itemSize):SetText(color.. "|H"..itemid.."|h["..strsub(iName,1,22).."..]|h|r")
-				else
-					getglobal("GF_GroupHistoryLogItem"..itemSize):SetText(color.. "|H"..itemid.."|h["..iName.."]|h|r")
-				end
-			else
-				getglobal("GF_GroupHistoryLogItem"..itemSize):SetText("|cffffffff|H"..itemid.."|h[unknown]|h|r")
-			end
-			getglobal("GF_GroupHistoryLogItem"..itemSize.."TextLabel"):SetText("("..wdata[1]..")")
-			getglobal("GF_GroupHistoryLogItem"..itemSize):SetWidth(getglobal("GF_GroupHistoryLogItem"..itemSize):GetFontString():GetStringWidth())
-			getglobal("GF_GroupHistoryLogItem"..itemSize):Show()
-		end
-		if itemSize == maxsize*2 then break end
-	end
-	for itemid,wdata in GroupHistoryLogTable[4] do
-		if itemSize == maxsize*2 then break end
-		for j=2, getn(wdata) do
-			if itemSize == maxsize*2 then break end
-			itemSize=itemSize+1
-			local iName,_,iQuality = GetItemInfo(itemid)
-			if iName then
-				local _,_,_,color = GetItemQualityColor(iQuality)
-				if strlen(iName) > 25 then
-					getglobal("GF_GroupHistoryLogItem"..itemSize):SetText(color.. "|H"..itemid.."|h["..strsub(iName,1,22).."..]|h|r")
-				else
-					getglobal("GF_GroupHistoryLogItem"..itemSize):SetText(color.. "|H"..itemid.."|h["..iName.."]|h|r")
-				end
-			else
-				getglobal("GF_GroupHistoryLogItem"..itemSize):SetText("|cffffffff|H"..itemid.."|h[unknown]|h|r")
-			end
-			getglobal("GF_GroupHistoryLogItem"..itemSize.."TextLabel"):SetText("("..wdata[j]..")")
-			getglobal("GF_GroupHistoryLogItem"..itemSize):SetWidth(getglobal("GF_GroupHistoryLogItem"..itemSize):GetFontString():GetStringWidth())
-			getglobal("GF_GroupHistoryLogItem"..itemSize):Show()
+			if iName then table.insert(itemTable, {itemid,iName,iQuality,data[i]}) else table.insert(itemTable, {itemid,"unknown",1,data[i]}) end
 		end
 	end
-	for i=itemSize+1,maxsize*2 do getglobal("GF_GroupHistoryLogItem"..i):Hide() end
+	table.sort(itemTable, function(a,b) return a[3]>b[3] end)
+	offset = offset * 2
+	local itemSize = getn(itemTable) - offset
+	if itemSize > maxsize then itemSize = maxsize elseif itemSize < 0 then itemSize = 0 end
+	for i=1, itemSize do
+		local _,_,_,color = GetItemQualityColor(itemTable[i+offset][3])
+		if strlen(itemTable[i+offset][2]) > 25 then
+			getglobal("GF_GroupHistoryLogItem"..i):SetText(color.. "|H"..itemTable[i+offset][1].."|h["..strsub(itemTable[i+offset][2],1,22).."..]|h|r")
+		else
+			getglobal("GF_GroupHistoryLogItem"..i):SetText(color.. "|H"..itemTable[i+offset][1].."|h["..itemTable[i+offset][2].."]|h|r")
+		end
+		getglobal("GF_GroupHistoryLogItem"..i.."TextLabel"):SetText("("..itemTable[i+offset][4]..")")
+		getglobal("GF_GroupHistoryLogItem"..i):SetWidth(getglobal("GF_GroupHistoryLogItem"..i):GetFontString():GetStringWidth())
+		getglobal("GF_GroupHistoryLogItem"..i):Show()
+	end
+	for i=itemSize+1,maxsize do getglobal("GF_GroupHistoryLogItem"..i):Hide() end
 	local prows = playerSize/ceil(playerSize/maxpsize)
 	local irows = ceil(itemSize/2)
 	if prows >= irows then
