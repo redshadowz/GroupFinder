@@ -3361,7 +3361,7 @@ function GF_GetTypes(arg1, showanyway)
 	for i=1, getn(lfmPosition) do
 		lfs = lfmPosition[i][3]
 		for k=lfmPosition[i][2]+1, tempVal do
-			for j=1, getn(groupPosition) do if lfe == 0 and k == groupPosition[j][1] then lfs = lfs + 1 foundTradesExclusion = foundTradesExclusion + 1.5 if showanyway == true then print(lfmPosition[i][3].." reached group 1(R)") end lfe = 1 if GF_LFM_CONNECT_WORDS_AFTER[wordTable[k+1]] then lfs = lfs + GF_LFM_CONNECT_WORDS_AFTER[wordTable[k+1]] if showanyway == true then print(lfmPosition[i][3].." "..wordTable[k+1].."(R) "..GF_LFM_CONNECT_WORDS_AFTER[wordTable[k+1]]) end end k = tempVal + 1 break end end
+			for j=1, getn(groupPosition) do if k == groupPosition[j][1] and lfmPosition[i][2] >= lfmPosition[i][1] then lfs = lfs + 1 if lfe == 0 then lfe = 1 foundTradesExclusion = foundTradesExclusion + 1.5 end if showanyway == true then print(lfmPosition[i][3].." reached group 1(R)") end if GF_LFM_CONNECT_WORDS_AFTER[wordTable[k+1]] then lfs = lfs + GF_LFM_CONNECT_WORDS_AFTER[wordTable[k+1]] if showanyway == true then print(lfmPosition[i][3].." "..wordTable[k+1].."(R) "..GF_LFM_CONNECT_WORDS_AFTER[wordTable[k+1]]) end end k = tempVal + 1 break end end
 			if wordTable[k] then
 				if GF_LFM_CONNECT_WORDS_BEFORE[wordTable[k]] and (not groupName[wordTable[k]] or getn(groupPosition) > 0) then
 					lfs = lfs + GF_LFM_CONNECT_WORDS_BEFORE[wordTable[k]]
@@ -3373,7 +3373,7 @@ function GF_GetTypes(arg1, showanyway)
 			end
 		end
 		for k=lfmPosition[i][1]-1, 1, -1 do
-			for j=1, getn(groupPosition) do if lfe == 0 and k == groupPosition[j][2] then lfs = lfs + 1 foundTradesExclusion = foundTradesExclusion + 1.5 if showanyway == true then print(lfmPosition[i][3].." reached group 1(L)") end lfe = 1 if GF_LFM_CONNECT_WORDS_BEFORE[wordTable[k-1]] then lfs = lfs + GF_LFM_CONNECT_WORDS_BEFORE[wordTable[k-1]] if showanyway == true then print(lfmPosition[i][3].." "..wordTable[k-1].."(L) "..GF_LFM_CONNECT_WORDS_BEFORE[wordTable[k-1]]) end end k = 0 break end end
+			for j=1, getn(groupPosition) do if k == groupPosition[j][2] and lfmPosition[i][2] >= lfmPosition[i][1] then lfs = lfs + 1 if lfe == 0 then lfe = 1 foundTradesExclusion = foundTradesExclusion + 1.5 end if showanyway == true then print(lfmPosition[i][3].." reached group 1(L)") end if GF_LFM_CONNECT_WORDS_BEFORE[wordTable[k-1]] then lfs = lfs + GF_LFM_CONNECT_WORDS_BEFORE[wordTable[k-1]] if showanyway == true then print(lfmPosition[i][3].." "..wordTable[k-1].."(L) "..GF_LFM_CONNECT_WORDS_BEFORE[wordTable[k-1]]) end end k = 0 break end end
 			if wordTable[k] then
 				if GF_LFM_CONNECT_WORDS_AFTER[wordTable[k]] and (not groupName[wordTable[k]] or getn(groupPosition) > 0) then
 					lfs = lfs + GF_LFM_CONNECT_WORDS_AFTER[wordTable[k]]
@@ -3387,7 +3387,7 @@ function GF_GetTypes(arg1, showanyway)
 		for j=1, getn(groupPosition) do -- If groupposition is within the lfmposition, don't count it if GF_LFM_BYPASS or GF_WORD_LEVEL_ZONE or GF_GROUP_IDS
 			if groupPosition[j][2] == lfmPosition[i][2] and not GF_LFM_BYPASS[wordTable[lfmPosition[i][2]]] and not GF_WORD_LEVEL_ZONE[wordTable[lfmPosition[i][2]]] and not GF_GROUP_IDS[wordTable[lfmPosition[i][2]]]
 			and not (lfmPosition[i][2] > 1 and (GF_LFM_BYPASS[wordTable[lfmPosition[i][2]-1]..wordTable[lfmPosition[i][2]]] or GF_WORD_LEVEL_ZONE[wordTable[lfmPosition[i][2]-1]..wordTable[lfmPosition[i][2]]] or GF_GROUP_IDS[wordTable[lfmPosition[i][2]-1]..wordTable[lfmPosition[i][2]]])) then
-				lfs = lfs + 1 if lfe == 0 then foundTradesExclusion = foundTradesExclusion + 1.5 lfe = 1 end
+				lfs = lfs + 1 if lfe == 0 then lfe = 1 foundTradesExclusion = foundTradesExclusion + 1.5 end
 				if showanyway == true then print(lfmPosition[i][3].." reached group 1(O)") end
 				break
 			end
