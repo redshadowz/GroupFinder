@@ -1028,7 +1028,7 @@ function GF_GetQuestInfo(text,printinfo) -- TODO: Add full quest name with quest
 			else
 				DEFAULT_CHAT_FRAME:AddMessage("GF: "..text..GF_QUEST_IS_LEVEL_TEXT..GF_WORD_QUEST[wordString][2].."("..GF_QUEST_ZONE_ID[GF_WORD_QUEST[wordString][3]]..")",1,1,0.5)
 			end
-		end 
+		end
 		return GF_WORD_QUEST[wordString]
 	end
 	return {wordString}
@@ -5698,25 +5698,11 @@ function GetModifiedQuestName(entryname)
 							table.insert(wordTable,lfs,GF_WORD_FIX_BEFORE_QUEST_SECOND[tempString][2]) tempVal=tempVal+1
 						end
 					end
-				elseif GF_WORD_FIX_QUEST_DUNGEON[wordString] then
-					wordTable[lfs] = GF_WORD_FIX_QUEST_DUNGEON[wordString]
-					for k=1, j do table.remove(wordTable,lfs+1) tempVal=tempVal-1 end
-					if wordString ~= GF_WORD_FIX_QUEST_DUNGEON[wordString] then
-						if lfs > 1 then lfs = lfs - 2 else lfs = lfs - 1 end
-					elseif lfs > 1 then
-						tempString = wordTable[lfs-1]
-						for k=1, j do if wordTable[lfs-1+k] then tempString = tempString..wordTable[lfs-1+k] end end
-						if GF_WORD_FIX_QUEST_DUNGEON[tempString] then
-							wordTable[lfs-1] = GF_WORD_FIX_QUEST_DUNGEON[tempString]
-							for k=1, j do if wordTable[lfs] then table.remove(wordTable,lfs) tempVal=tempVal-1 end end
-						end
-					end
 				end
 			end
 			lfs = lfs + 1
 		end
 	end
-
 	return wordTable
 end
 function CompileFixedQuestZones(continue) -- /script CompileFixedQuestZones() /script CompileFixedQuestZones(true)
