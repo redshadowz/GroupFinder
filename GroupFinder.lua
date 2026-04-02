@@ -372,6 +372,7 @@ function GF_LoadVariables()
 		for i=1,getn(GF_PerCharVariables.CurrentGroup) do
 			if not GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][4] then
 				GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]] = {GF_PerCharVariables.CurrentGroup[i],GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][1],GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][2],GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][3]}
+				GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][5] = time()
 			elseif not GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][5] then
 				GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.CurrentGroup[i]][5] = time()
 			else
@@ -684,22 +685,26 @@ function GF_FormatBlockListWords(arg1,display)
 				lfs = lfe+1
 			else
 				if GF_WORD_GROUP_BYPASS[wordString] then
+					if GF_WORD_GROUP_BYPASS[wordTable[getn(wordTable)]] then wordTable[getn(wordTable)] = GF_WORD_GROUP_BYPASS[wordTable[getn(wordTable)]] end
 					_,tempVal,tempString = strfind(arg1,"(.-)[%s%p%d]+",lfe+1)
 					if tempString then
 						if GF_WORD_GROUP_BYPASS[tempString] then
 							table.insert(wordTable, GF_WORD_GROUP_BYPASS[wordString]) table.insert(wordTable, GF_WORD_GROUP_BYPASS[tempString])
 							lfs = tempVal+1
+							_,tempVal,tempString = strfind(arg1,"(.-)[%s%p%d]+",lfs)
+							if GF_WORD_GROUP_BYPASS[tempString] then table.insert(wordTable, GF_WORD_GROUP_BYPASS[tempString]) lfs = tempVal+1 end
 						elseif GF_WORD_GROUP_BYPASS_SECOND[wordString..tempString] then
 							_,tempVal,tempString = strfind(arg1,"(.-)[%s%p%d]+",tempVal+1)
 							if GF_WORD_GROUP_BYPASS[tempString] then
 								table.insert(wordTable, GF_WORD_GROUP_BYPASS[wordString]) table.insert(wordTable, GF_WORD_GROUP_BYPASS[tempString])
 								lfs = tempVal+1
+								_,tempVal,tempString = strfind(arg1,"(.-)[%s%p%d]+",lfs)
+								if GF_WORD_GROUP_BYPASS[tempString] then table.insert(wordTable, GF_WORD_GROUP_BYPASS[tempString]) lfs = tempVal+1 end
 							else
 								table.insert(wordTable, wordString)
 								lfs = lfe+1
 							end
 						else
-							if GF_WORD_GROUP_BYPASS[wordTable[getn(wordTable)]] then wordTable[getn(wordTable)] = GF_WORD_GROUP_BYPASS[wordTable[getn(wordTable)]] end
 							table.insert(wordTable, wordString)
 							lfs = lfe+1
 						end
@@ -722,7 +727,7 @@ function GF_FormatBlockListWords(arg1,display)
 		end
 	end
 	tempVal = getn(wordTable)
-	for j=0,3 do -- Fix Quest Words
+	for j=0,3 do
 		lfs = 1
 		while lfs <= tempVal do
 			if lfs+j <= tempVal then
@@ -734,26 +739,27 @@ function GF_FormatBlockListWords(arg1,display)
 					if wordString ~= GF_WORD_FIX_BEFORE_QUEST[wordString] then
 						if lfs > 1 then lfs = lfs - 2 else lfs = lfs - 1 end
 					elseif lfs > 1 then
-						wordString = wordTable[lfs-1]
-						for k=1, j do if wordTable[lfs-1+k] then wordString = wordString..wordTable[lfs-1+k] end end
-						if GF_WORD_FIX_BEFORE_QUEST[wordString] then
-							wordTable[lfs-1] = GF_WORD_FIX_BEFORE_QUEST[wordString]
+						tempString = wordTable[lfs-1]
+						for k=1, j do if wordTable[lfs-1+k] then tempString = tempString..wordTable[lfs-1+k] end end
+						if GF_WORD_FIX_BEFORE_QUEST[tempString] then
+							wordTable[lfs-1] = GF_WORD_FIX_BEFORE_QUEST[tempString]
 							for k=1, j do if wordTable[lfs] then table.remove(wordTable,lfs) tempVal=tempVal-1 end end
 						end
 					end
-				elseif GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString] then
+				end
+				if GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString] then
 					wordTable[lfs] = GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][1]
 					for k=1, j do table.remove(wordTable,lfs+1) tempVal=tempVal-1 end
 					table.insert(wordTable,lfs+1,GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][2]) tempVal=tempVal+1
 					if wordString ~= GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][1]..GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][2] then
 						if lfs > 1 then lfs = lfs - 2 else lfs = lfs - 1 end
 					elseif lfs > 1 then
-						wordString = wordTable[lfs-1]
-						for k=1, j do if wordTable[lfs-1+k] then wordString = wordString..wordTable[lfs-1+k] end end
-						if GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString] then
-							wordTable[lfs-1] = GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][1]
+						tempString = wordTable[lfs-1]
+						for k=1, j do if wordTable[lfs-1+k] then tempString = tempString..wordTable[lfs-1+k] end end
+						if GF_WORD_FIX_BEFORE_QUEST_SECOND[tempString] then
+							wordTable[lfs-1] = GF_WORD_FIX_BEFORE_QUEST_SECOND[tempString][1]
 							for k=1, j do if wordTable[lfs] then table.remove(wordTable,lfs) tempVal=tempVal-1 end end
-							table.insert(wordTable,lfs,GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][2]) tempVal=tempVal+1
+							table.insert(wordTable,lfs,GF_WORD_FIX_BEFORE_QUEST_SECOND[tempString][2]) tempVal=tempVal+1
 						end
 					end
 				elseif GF_WORD_FIX_QUEST_DUNGEON[wordString] then
@@ -762,10 +768,10 @@ function GF_FormatBlockListWords(arg1,display)
 					if wordString ~= GF_WORD_FIX_QUEST_DUNGEON[wordString] then
 						if lfs > 1 then lfs = lfs - 2 else lfs = lfs - 1 end
 					elseif lfs > 1 then
-						wordString = wordTable[lfs-1]
-						for k=1, j do if wordTable[lfs-1+k] then wordString = wordString..wordTable[lfs-1+k] end end
-						if GF_WORD_FIX_QUEST_DUNGEON[wordString] then
-							wordTable[lfs-1] = GF_WORD_FIX_QUEST_DUNGEON[wordString]
+						tempString = wordTable[lfs-1]
+						for k=1, j do if wordTable[lfs-1+k] then tempString = tempString..wordTable[lfs-1+k] end end
+						if GF_WORD_FIX_QUEST_DUNGEON[tempString] then
+							wordTable[lfs-1] = GF_WORD_FIX_QUEST_DUNGEON[tempString]
 							for k=1, j do if wordTable[lfs] then table.remove(wordTable,lfs) tempVal=tempVal-1 end end
 						end
 					end
@@ -5309,22 +5315,26 @@ function GF_GetDungeonsFromText(arg1)
 				lfs = lfe+1
 			else
 				if GF_WORD_GROUP_BYPASS[wordString] then
+					if GF_WORD_GROUP_BYPASS[wordTable[getn(wordTable)]] then wordTable[getn(wordTable)] = GF_WORD_GROUP_BYPASS[wordTable[getn(wordTable)]] end
 					_,tempVal,tempString = strfind(arg1,"(.-)[%s%p%d]+",lfe+1)
 					if tempString then
 						if GF_WORD_GROUP_BYPASS[tempString] then
 							table.insert(wordTable, GF_WORD_GROUP_BYPASS[wordString]) table.insert(wordTable, GF_WORD_GROUP_BYPASS[tempString])
 							lfs = tempVal+1
+							_,tempVal,tempString = strfind(arg1,"(.-)[%s%p%d]+",lfs)
+							if GF_WORD_GROUP_BYPASS[tempString] then table.insert(wordTable, GF_WORD_GROUP_BYPASS[tempString]) lfs = tempVal+1 end
 						elseif GF_WORD_GROUP_BYPASS_SECOND[wordString..tempString] then
 							_,tempVal,tempString = strfind(arg1,"(.-)[%s%p%d]+",tempVal+1)
 							if GF_WORD_GROUP_BYPASS[tempString] then
 								table.insert(wordTable, GF_WORD_GROUP_BYPASS[wordString]) table.insert(wordTable, GF_WORD_GROUP_BYPASS[tempString])
 								lfs = tempVal+1
+								_,tempVal,tempString = strfind(arg1,"(.-)[%s%p%d]+",lfs)
+								if GF_WORD_GROUP_BYPASS[tempString] then table.insert(wordTable, GF_WORD_GROUP_BYPASS[tempString]) lfs = tempVal+1 end
 							else
 								table.insert(wordTable, wordString)
 								lfs = lfe+1
 							end
 						else
-							if GF_WORD_GROUP_BYPASS[wordTable[getn(wordTable)]] then wordTable[getn(wordTable)] = GF_WORD_GROUP_BYPASS[wordTable[getn(wordTable)]] end
 							table.insert(wordTable, wordString)
 							lfs = lfe+1
 						end
@@ -5611,22 +5621,26 @@ function GetModifiedQuestName(entryname)
 				lfs = lfe+1
 			else
 				if GF_WORD_GROUP_BYPASS[wordString] then
+					if GF_WORD_GROUP_BYPASS[wordTable[getn(wordTable)]] then wordTable[getn(wordTable)] = GF_WORD_GROUP_BYPASS[wordTable[getn(wordTable)]] end
 					_,tempVal,tempString = strfind(arg1,"(.-)[%s%p%d]+",lfe+1)
 					if tempString then
 						if GF_WORD_GROUP_BYPASS[tempString] then
 							table.insert(wordTable, GF_WORD_GROUP_BYPASS[wordString]) table.insert(wordTable, GF_WORD_GROUP_BYPASS[tempString])
 							lfs = tempVal+1
+							_,tempVal,tempString = strfind(arg1,"(.-)[%s%p%d]+",lfs)
+							if GF_WORD_GROUP_BYPASS[tempString] then table.insert(wordTable, GF_WORD_GROUP_BYPASS[tempString]) lfs = tempVal+1 end
 						elseif GF_WORD_GROUP_BYPASS_SECOND[wordString..tempString] then
 							_,tempVal,tempString = strfind(arg1,"(.-)[%s%p%d]+",tempVal+1)
 							if GF_WORD_GROUP_BYPASS[tempString] then
 								table.insert(wordTable, GF_WORD_GROUP_BYPASS[wordString]) table.insert(wordTable, GF_WORD_GROUP_BYPASS[tempString])
 								lfs = tempVal+1
+								_,tempVal,tempString = strfind(arg1,"(.-)[%s%p%d]+",lfs)
+								if GF_WORD_GROUP_BYPASS[tempString] then table.insert(wordTable, GF_WORD_GROUP_BYPASS[tempString]) lfs = tempVal+1 end
 							else
 								table.insert(wordTable, wordString)
 								lfs = lfe+1
 							end
 						else
-							if GF_WORD_GROUP_BYPASS[wordTable[getn(wordTable)]] then wordTable[getn(wordTable)] = GF_WORD_GROUP_BYPASS[wordTable[getn(wordTable)]] end
 							table.insert(wordTable, wordString)
 							lfs = lfe+1
 						end
@@ -5661,33 +5675,47 @@ function GetModifiedQuestName(entryname)
 					if wordString ~= GF_WORD_FIX_BEFORE_QUEST[wordString] then
 						if lfs > 1 then lfs = lfs - 2 else lfs = lfs - 1 end
 					elseif lfs > 1 then
-						wordString = wordTable[lfs-1]
-						for k=1, j do if wordTable[lfs-1+k] then wordString = wordString..wordTable[lfs-1+k] end end
-						if GF_WORD_FIX_BEFORE_QUEST[wordString] then
-							wordTable[lfs-1] = GF_WORD_FIX_BEFORE_QUEST[wordString]
+						tempString = wordTable[lfs-1]
+						for k=1, j do if wordTable[lfs-1+k] then tempString = tempString..wordTable[lfs-1+k] end end
+						if GF_WORD_FIX_BEFORE_QUEST[tempString] then
+							wordTable[lfs-1] = GF_WORD_FIX_BEFORE_QUEST[tempString]
 							for k=1, j do if wordTable[lfs] then table.remove(wordTable,lfs) tempVal=tempVal-1 end end
 						end
 					end
-				elseif GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString] then
+				end
+				if GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString] then
 					wordTable[lfs] = GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][1]
 					for k=1, j do table.remove(wordTable,lfs+1) tempVal=tempVal-1 end
 					table.insert(wordTable,lfs+1,GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][2]) tempVal=tempVal+1
 					if wordString ~= GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][1]..GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][2] then
 						if lfs > 1 then lfs = lfs - 2 else lfs = lfs - 1 end
 					elseif lfs > 1 then
-						wordString = wordTable[lfs-1]
-						for k=1, j do if wordTable[lfs-1+k] then wordString = wordString..wordTable[lfs-1+k] end end
-						if GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString] then
-							wordTable[lfs-1] = GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][1]
+						tempString = wordTable[lfs-1]
+						for k=1, j do if wordTable[lfs-1+k] then tempString = tempString..wordTable[lfs-1+k] end end
+						if GF_WORD_FIX_BEFORE_QUEST_SECOND[tempString] then
+							wordTable[lfs-1] = GF_WORD_FIX_BEFORE_QUEST_SECOND[tempString][1]
 							for k=1, j do if wordTable[lfs] then table.remove(wordTable,lfs) tempVal=tempVal-1 end end
-							table.insert(wordTable,lfs,GF_WORD_FIX_BEFORE_QUEST_SECOND[wordString][2]) tempVal=tempVal+1
+							table.insert(wordTable,lfs,GF_WORD_FIX_BEFORE_QUEST_SECOND[tempString][2]) tempVal=tempVal+1
+						end
+					end
+				elseif GF_WORD_FIX_QUEST_DUNGEON[wordString] then
+					wordTable[lfs] = GF_WORD_FIX_QUEST_DUNGEON[wordString]
+					for k=1, j do table.remove(wordTable,lfs+1) tempVal=tempVal-1 end
+					if wordString ~= GF_WORD_FIX_QUEST_DUNGEON[wordString] then
+						if lfs > 1 then lfs = lfs - 2 else lfs = lfs - 1 end
+					elseif lfs > 1 then
+						tempString = wordTable[lfs-1]
+						for k=1, j do if wordTable[lfs-1+k] then tempString = tempString..wordTable[lfs-1+k] end end
+						if GF_WORD_FIX_QUEST_DUNGEON[tempString] then
+							wordTable[lfs-1] = GF_WORD_FIX_QUEST_DUNGEON[tempString]
+							for k=1, j do if wordTable[lfs] then table.remove(wordTable,lfs) tempVal=tempVal-1 end end
 						end
 					end
 				end
 			end
 			lfs = lfs + 1
 		end
-	end	
+	end
 
 	return wordTable
 end
@@ -5723,6 +5751,12 @@ function CompileFixedQuestZones(continue) -- /script CompileFixedQuestZones() /s
 				if counter > 500 then print("stopping at 500") break end
 			end
 		end
+	end
+end
+function CompileQuestTemp() -- /script CompileQuestTemp()
+	GF_SavedVariables.questconversion = {}
+	for entryname,wtable in GF_QUEST_CONVERT do
+		GF_SavedVariables.questconversion[entryname] = wtable
 	end
 end
 
