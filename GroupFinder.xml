@@ -698,6 +698,40 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</OnLeave>
 		</Scripts>
 	</Frame>
+	<Frame name="GF_DPSMeterEntryTemplate" virtual="true">
+		<Size>
+			<AbsDimension x="160" y="18"/>
+		</Size>
+		<Layers>
+			<Layer level="OVERLAY">
+				<FontString inherits="GF_NormalFont" name="$parentNameLabel" justifyH="LEFT" maxLines="1">
+					<Size>
+						<AbsDimension x="80" y="16"/>
+					</Size>
+					<Anchors>
+						<Anchor point="LEFT">
+							<Offset>
+								<AbsDimension x="5" y="0"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString inherits="GF_NormalFont" name="$parentDataLabel" justifyH="RIGHT" maxLines="1">
+					<Size>
+						<AbsDimension x="80" y="16"/>
+					</Size>
+					<Anchors>
+						<Anchor point="RIGHT">
+							<Offset>
+								<AbsDimension x="-5" y="0"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+					<Color r="1.0" g="1.0" b="1.0"/>
+				</FontString>
+			</Layer>
+		</Layers>
+	</Frame>
 	<Button name="GF_BlackListTemplate" maxLines="1" virtual="true">
 		<Size>
 			<AbsDimension x="620" y="18"/>
@@ -944,7 +978,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</OnDragStop>
 		</Scripts>
 	</Button>
-	<Frame name="GF_MainFrame" movable="true" toplevel="true" enableMouse="true" hidden="true" frameStrata="MEDIUM" parent="UIParent">
+	<Frame name="GF_MainFrame" movable="true" enableMouse="true" hidden="true" frameStrata="MEDIUM" parent="UIParent">
 		<Size>
 			<AbsDimension x="700" y="500"/>
 		</Size>
@@ -1065,6 +1099,23 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				<Scripts>
 					<OnClick>
 						GF_ToggleMainFrame()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="GF_ToggleDPSMeterButton" inherits="GF_ButtonTemplate" text="GF_DPS_Meter">
+				<Size>
+					<AbsDimension x="80" y="20"/>
+				</Size>
+				<Anchors>
+					<Anchor point="RIGHT" relativeTo="$parentCloseButton" relativePoint="LEFT">
+						<Offset>
+							<AbsDimension x="0" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						if GF_DamageMeterFrame:IsVisible() then GF_DamageMeterFrame:Hide() GF_PerCharVariables.dpsmetershown = false else GF_DamageMeterFrame:Show() GF_PerCharVariables.dpsmetershown = true end
 					</OnClick>
 				</Scripts>
 			</Button>
@@ -1673,7 +1724,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							</OnEscapePressed>
 						</Scripts>
 					</EditBox>
-					<Button name="GF_SearchListClearButton" inherits="UIPanelCloseButton" frameStrata="DIALOG" toplevel="true" hidden="true">
+					<Button name="GF_SearchListClearButton" inherits="UIPanelCloseButton" toplevel="true" hidden="true">
 						<Size x="30" y="30"/>
 						<Anchors>
 							<Anchor point="RIGHT" relativeTo="GF_SearchListDropdown" relativePoint="LEFT">
@@ -2333,7 +2384,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											</OnEscapePressed>
 										</Scripts>
 									</EditBox>
-									<Button name="GF_GetWhoClearButton" inherits="UIPanelCloseButton" frameStrata="DIALOG" toplevel="true" hidden="true">
+									<Button name="GF_GetWhoClearButton" inherits="UIPanelCloseButton" toplevel="true" hidden="true">
 										<Size x="30" y="30"/>
 										<Anchors>
 											<Anchor point="LEFT" relativeTo="GF_GetWhoWhisperEditBox" relativePoint="RIGHT">
@@ -2927,7 +2978,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											</OnEscapePressed>
 										</Scripts>
 									</EditBox>
-									<Button name="GF_LFGDescriptionClearButton" inherits="UIPanelCloseButton" frameStrata="DIALOG" toplevel="true" hidden="true">
+									<Button name="GF_LFGDescriptionClearButton" inherits="UIPanelCloseButton" toplevel="true" hidden="true">
 										<Size x="30" y="30"/>
 										<Anchors>
 											<Anchor point="LEFT" relativeTo="GF_LFGDescriptionEditBox" relativePoint="RIGHT">
@@ -3004,7 +3055,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										<Scripts>
 											<OnClick>
 												if GF_ResultsListOffset > 0 then
-													GF_ResultsListOffset = GF_ResultsListOffset - GF_ResultsListOffsetSize
+													GF_ResultsListOffset = math.max(GF_ResultsListOffset - GF_ResultsListOffsetSize,0)
 													GF_UpdateResults()
 												end
 											</OnClick>
@@ -3027,7 +3078,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Anchors>
 										<Scripts>
 											<OnClick>
-												if getn(GF_FilteredResultsList) >GF_ResultsListOffset + GF_ResultsListOffsetSize then
+												if getn(GF_FilteredResultsList) > GF_ResultsListOffset + GF_ResultsListOffsetSize then
 													GF_ResultsListOffset = GF_ResultsListOffset + GF_ResultsListOffsetSize
 													GF_UpdateResults()
 												end
@@ -3041,6 +3092,22 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Frames>
 							</Frame>
 						</Frames>
+						<Scripts>
+							<OnMouseWheel>
+								if arg1 == -1 and getn(GF_FilteredResultsList) > GF_ResultsListOffset + GF_ResultsListOffsetSize then
+									if GF_ResultsListOffset + GF_ResultsListOffsetSize + 3 > getn(GF_FilteredResultsList) then
+										GF_ResultsListOffset = GF_ResultsListOffset + (getn(GF_FilteredResultsList) - (GF_ResultsListOffset + GF_ResultsListOffsetSize))
+										if GF_ResultsListOffset &lt; 0 then GF_ResultsListOffset = 0 end
+										GF_UpdateResults()
+									else
+										GF_ResultsListOffset = GF_ResultsListOffset + 3
+										GF_UpdateResults()
+									end
+								elseif arg1 == 1 and GF_ResultsListOffset > 0 then
+									GF_ResultsListOffset = math.max(GF_ResultsListOffset - 3,0) GF_UpdateResults()
+								end
+							</OnMouseWheel>
+						</Scripts>
 					</Frame>
 				</Frames>
 			</Frame>
@@ -5307,7 +5374,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Anchors>
 									<Anchor point="TOP">
 										<Offset>
-											<AbsDimension x="-60" y="-10"/>
+											<AbsDimension x="-50" y="-10"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -5318,6 +5385,24 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnClick>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_USE_FRIENDS_LIST_WHO)
+									</OnLoad>
+								</Scripts>
+							</CheckButton>
+							<CheckButton name="GF_UseDPSMeterCheckButton" inherits="GF_CheckButtonTemplate_Label">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GF_UseFriendsListCheckButton" relativePoint="BOTTOMLEFT">
+										<Offset>
+											<AbsDimension x="0" y="-5"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										if this:GetChecked() then GF_PerCharVariables.usedpsmeter = true else GF_PerCharVariables.usedpsmeter = false end
+										GF_SetupDPSMeter()
+									</OnClick>
+									<OnLoad>
+										getglobal(this:GetName().."TextLabel"):SetText(GF_USE_DPS_METER)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -5737,7 +5822,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					<Button name="GF_GroupHistoryLogItem47" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOPRIGHT" relativeTo="GF_GroupHistoryLogItem45" relativePoint="BOTTOMRIGHT"/></Anchors></Button>
 					<Button name="GF_GroupHistoryLogItem49" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOPRIGHT" relativeTo="GF_GroupHistoryLogItem47" relativePoint="BOTTOMRIGHT"/></Anchors></Button>
 
-					<Button name="GF_GroupHistoryLogItem2" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOP"><Offset x="0" y="-4"/></Anchor></Anchors></Button>
+					<Button name="GF_GroupHistoryLogItem2" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOP"><Offset x="50" y="-4"/></Anchor></Anchors></Button>
 					<Button name="GF_GroupHistoryLogItem4" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOP" relativeTo="GF_GroupHistoryLogItem2" relativePoint="BOTTOM"/></Anchors></Button>
 					<Button name="GF_GroupHistoryLogItem6" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOP" relativeTo="GF_GroupHistoryLogItem4" relativePoint="BOTTOM"/></Anchors></Button>
 					<Button name="GF_GroupHistoryLogItem8" inherits="GF_GroupHistoryItemButtonTemplate"><Anchors><Anchor point="TOP" relativeTo="GF_GroupHistoryLogItem6" relativePoint="BOTTOM"/></Anchors></Button>
@@ -5839,6 +5924,143 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				GF_SavedVariables.mainframestatus = 0
 				if pfUI and pfUI.chat and pfUI.chat.urlcopy then pfUI.chat.urlcopy:SetWidth(270) pfUI.chat.urlcopy.text:SetWidth(250) end
 			</OnHide>
+		</Scripts>
+	</Frame>
+	<Frame name="GF_DamageMeterFrame" inherits="GF_OptionFrameBoxTemplate" toplevel="true" hidden="true" clampedToScreen="true" movable="true" enableMouse="true" frameStrata="MEDIUM" parent="UIParent">
+		<Size>
+			<AbsDimension x="160" y="25"/>
+		</Size>
+		<Anchors>
+			<Anchor point="CENTER">
+				<Offset>
+					<AbsDimension x="0" y="0"/>
+				</Offset>
+			</Anchor>
+		</Anchors>
+		<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border">
+			<BackgroundInsets>
+				<AbsInset left="4" right="4" top="4" bottom="4"/>
+			</BackgroundInsets>
+			<EdgeSize>
+				<AbsValue val="16"/>
+			</EdgeSize>
+			<BorderColor r="0.6" g="0.6" b="0.6"/>
+		</Backdrop>
+		<Layers>
+			<Layer level ="BACKGROUND">
+				<Texture file="Interface\ChatFrame\ChatFrameBackground">
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="4" y="-4"/>
+						</Anchor>
+						<Anchor point="BOTTOMRIGHT">
+							<Offset x="-4" y="4"/>
+						</Anchor>
+					</Anchors>
+					<Gradient orientation="VERTICAL">
+						<MinColor r="0" g="0" b="0" a="0.9"/>
+						<MaxColor r="0.2" g="0.2" b="0.2" a="0.9"/>
+					</Gradient>
+				</Texture>
+			</Layer>
+			<Layer level="ARTWORK">
+				<FontString name="$parentTitleLabel" justifyH="CENTER" inherits="GF_NormalFont" nonspacewrap="false">
+					<Anchors>
+						<Anchor point="TOP">
+							<Offset>
+								<AbsDimension x="0" y="-4"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>										
+			</Layer>
+		</Layers>
+		<Frames>
+			<Button name="$parentCloseButton" inherits="UIPanelCloseButton">
+				<Size>
+					<AbsDimension x="20" y="20"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPRIGHT">
+						<Offset>
+							<AbsDimension x="0" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						GF_PerCharVariables.dpsmetershown = false
+						GF_DamageMeterFrame:Hide()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="$parentPrev">
+				<Size>
+					<AbsDimension x="16" y="16"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="5" y="-3"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						if GF_PerCharVariables.dpsmeter == 1 then GF_PerCharVariables.dpsmeter = getn(GF_BUTTONS_LIST["DPSMeter"]) else GF_PerCharVariables.dpsmeter = GF_PerCharVariables.dpsmeter - 1 end
+						GF_DamageMeterFrameTitleLabel:SetText(GF_BUTTONS_LIST["DPSMeter"][GF_PerCharVariables.dpsmeter])
+						GF_UpdateDPSMeter()
+					</OnClick>
+				</Scripts>
+				<NormalTexture file="Interface\Buttons\UI-SpellbookIcon-PrevPage-Up"/>
+				<PushedTexture file="Interface\Buttons\UI-SpellbookIcon-PrevPage-Down"/>
+				<DisabledTexture file="Interface\Buttons\UI-SpellbookIcon-PrevPage-Disabled"/>
+				<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD"/>
+			</Button>
+			<Button name="$parentNext">
+				<Size>
+					<AbsDimension x="16" y="16"/>
+				</Size>
+				<Anchors>
+					<Anchor point="LEFT" relativeTo="$parentPrev" relativePoint="RIGHT">
+						<Offset>
+							<AbsDimension x="0" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						if GF_PerCharVariables.dpsmeter == getn(GF_BUTTONS_LIST["DPSMeter"]) then GF_PerCharVariables.dpsmeter = 1 else GF_PerCharVariables.dpsmeter = GF_PerCharVariables.dpsmeter + 1 end
+						GF_DamageMeterFrameTitleLabel:SetText(GF_BUTTONS_LIST["DPSMeter"][GF_PerCharVariables.dpsmeter])
+						GF_UpdateDPSMeter()
+					</OnClick>
+				</Scripts>
+				<NormalTexture file="Interface\Buttons\UI-SpellbookIcon-NextPage-Up"/>
+				<PushedTexture file="Interface\Buttons\UI-SpellbookIcon-NextPage-Down"/>
+				<DisabledTexture file="Interface\Buttons\UI-SpellbookIcon-NextPage-Disabled"/>
+				<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD"/>
+			</Button>
+			<Frame name="GF_DPSMeterEntry1" inherits="GF_DPSMeterEntryTemplate"><Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="0" y="-20"/></Offset></Anchor></Anchors></Frame>
+			<Frame name="GF_DPSMeterEntry2" inherits="GF_DPSMeterEntryTemplate"><Anchors><Anchor point="TOP" relativeTo="GF_DPSMeterEntry1" relativePoint="BOTTOM"></Anchor></Anchors></Frame>
+			<Frame name="GF_DPSMeterEntry3" inherits="GF_DPSMeterEntryTemplate"><Anchors><Anchor point="TOP" relativeTo="GF_DPSMeterEntry2" relativePoint="BOTTOM"></Anchor></Anchors></Frame>
+			<Frame name="GF_DPSMeterEntry4" inherits="GF_DPSMeterEntryTemplate"><Anchors><Anchor point="TOP" relativeTo="GF_DPSMeterEntry3" relativePoint="BOTTOM"></Anchor></Anchors></Frame>
+			<Frame name="GF_DPSMeterEntry5" inherits="GF_DPSMeterEntryTemplate"><Anchors><Anchor point="TOP" relativeTo="GF_DPSMeterEntry4" relativePoint="BOTTOM"></Anchor></Anchors></Frame>
+			<Frame name="GF_DPSMeterEntry6" inherits="GF_DPSMeterEntryTemplate"><Anchors><Anchor point="TOP" relativeTo="GF_DPSMeterEntry5" relativePoint="BOTTOM"></Anchor></Anchors></Frame>
+			<Frame name="GF_DPSMeterEntry7" inherits="GF_DPSMeterEntryTemplate"><Anchors><Anchor point="TOP" relativeTo="GF_DPSMeterEntry6" relativePoint="BOTTOM"></Anchor></Anchors></Frame>
+			<Frame name="GF_DPSMeterEntry8" inherits="GF_DPSMeterEntryTemplate"><Anchors><Anchor point="TOP" relativeTo="GF_DPSMeterEntry7" relativePoint="BOTTOM"></Anchor></Anchors></Frame>
+			<Frame name="GF_DPSMeterEntry9" inherits="GF_DPSMeterEntryTemplate"><Anchors><Anchor point="TOP" relativeTo="GF_DPSMeterEntry8" relativePoint="BOTTOM"></Anchor></Anchors></Frame>
+			<Frame name="GF_DPSMeterEntry10" inherits="GF_DPSMeterEntryTemplate"><Anchors><Anchor point="TOP" relativeTo="GF_DPSMeterEntry9" relativePoint="BOTTOM"></Anchor></Anchors></Frame>
+		</Frames>
+		<Scripts>
+			<OnDragStart>
+				this:StartMoving()
+			</OnDragStart>
+			<OnDragStop>
+				this:StopMovingOrSizing()
+			</OnDragStop>
+			<OnLoad>
+				this:RegisterForDrag("LeftButton")
+			</OnLoad>
 		</Scripts>
 	</Frame>
 </Ui>
