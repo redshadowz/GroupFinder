@@ -2182,9 +2182,9 @@ function self:ADDON_LOADED() -- Event handlers called directly
 			if datatype == "heal" then
 				if GF_PlayersCurrentlyInGroup[source] then
 					if GF_PlayersCurrentlyInGroup[target] then
-						if UnitExists(GF_PlayersCurrentlyInGroup[target]) then GF_AddHealingToLog(source,GF_PlayersCurrentlyInGroup[target],healing) end
+						if UnitExists(GF_PlayersCurrentlyInGroup[target]) then GF_AddHealingToLog(source,GF_PlayersCurrentlyInGroup[target],value) end
 					elseif GF_PetCurrentlyInGroup[target] then
-						if UnitExists(GF_PetCurrentlyInGroup[target][2]) then GF_AddHealingToLog(source,GF_PetCurrentlyInGroup[target][2],healing) end
+						if UnitExists(GF_PetCurrentlyInGroup[target][2]) then GF_AddHealingToLog(source,GF_PetCurrentlyInGroup[target][2],value) end
 					end
 				end
 			elseif datatype == "damage" then
