@@ -103,6 +103,7 @@ local ThingsToHide = { "GF_LogBottomButton","GF_LogDownButton","GF_LogUpButton",
 "GF_LFGFrameToggleButton","GF_GetWhoFrameToggleButton","GF_AnnounceToLFGButton", -- 3 Group-related
 "GF_SettingsFrameButton","GF_ShowBlacklistButton","GF_ShowGroupsButton","GF_LogFrameButton",
 "GF_QueuetoLFTButton","GF_GetWhoFrame","GF_LFGFrame","GF_MessageFrame","GF_LogFilterDropdownMenu","GF_GroupFilterDropdownMenu","GF_ChatFilterDropdownMenu","GF_LFGHardCoreDropdown","GF_FontName","GF_GroupChannelName","GF_BlockList","GF_AutoBlacklistDropdownMenu","GF_LogChannelName" }
+GF_MenusToHide								= {}
 local GF_DifficultyColors = { ["RED"] = "ff0000",["ORANGE"] = "ff8040",["YELLOW"] = "ffff00",["GREEN"] = "1eff00",["GREY"] = "808080", }
 local GF_TankClasses						= {	["DRUID"]=true,["WARRIOR"]=true,["PALADIN"]=true,["SHAMAN"]=true }
 local GF_HealingClasses						= {	["PRIEST"]=true,["DRUID"]=true,["PALADIN"]=true,["SHAMAN"]=true }
@@ -2209,11 +2210,11 @@ function self:PARTY_INVITE_REQUEST()
 end
 function self:PARTY_MEMBERS_CHANGED()
 	GF_OnUpdateFunctions["UpdateGroup"] = GF_UpdateGroup
-	GF_UpdateTicker = GF_UpdateTicker + .1
+	GF_UpdateTicker = GetTime() + .1
 end
 function self:PARTY_LEADER_CHANGED()
 	GF_OnUpdateFunctions["UpdateGroup"] = GF_UpdateGroup
-	GF_UpdateTicker = GF_UpdateTicker + .1
+	GF_UpdateTicker = GetTime() + .1
 end
 function self:PLAYER_ENTERING_WORLD() -- When logging in in a group, PLAYER_ENTERING_WORLD > PARTY_MEMBERS_CHANGED > PARTY_MEMBERS_CHANGED again > ZONE_CHANGED_NEW_AREA... When party member goes offline, PARTY_MEMBERS_CHANGED... online, PARTY_MEMBERS_CHANGED
 -- When switching to raid, PARTY_MEMBERS_CHANGED > RAID_ROSTER_UPDATE... when raid member goes offline PARTY_MEMBERS_CHANGED > RAID_ROSTER_UPDATE... online PARTY_MEMBERS_CHANGED > RAID_ROSTER_UPDATE... reloading UI does nothing
@@ -2264,10 +2265,10 @@ function self:PLAYER_LEVEL_UP()
 end
 function self:RAID_ROSTER_UPDATE()
 	GF_OnUpdateFunctions["UpdateGroup"] = GF_UpdateGroup
-	GF_UpdateTicker = GF_UpdateTicker + .1
+	GF_UpdateTicker = GetTime() + .1
 end
 function self:UNIT_NAME_UPDATE()
-	if ProcessedFirstChannelMessage and string.sub(arg1,1,2) ~= "0x" then GF_OnUpdateFunctions["UpdateGroup"] = GF_UpdateGroup GF_UpdateTicker = GF_UpdateTicker + .1 end
+	if ProcessedFirstChannelMessage and string.sub(arg1,1,2) ~= "0x" then GF_OnUpdateFunctions["UpdateGroup"] = GF_UpdateGroup GF_UpdateTicker = GetTime() + .1 end
 end
 function self:UPDATE_MOUSEOVER_UNIT()
 	if UnitIsPlayer("mouseover") and UnitIsFriend("player","mouseover") then GF_WhoTable[GF_RealmName][UnitName("mouseover")] = { UnitLevel("mouseover"), ({UnitClass("mouseover")})[2], GetGuildInfo("mouseover") or "", time() } end
@@ -3218,7 +3219,7 @@ function GF_GetTypes(arg1, showanyway)
 			if (GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString]) then foundLFG = 2 if showanyway == true then print("group? lfg 2") end
 			elseif GF_WORD_TRADE_QUESTION[tempString] then foundTrades = 2 if showanyway == true then print("trades? trades ") end end
 			wordString = ""
-			for i=1,tempVal-1 do wordString = wordString..wordTable[i] end if (GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString]) and GF_GROUP_PHRASE_QUESTION[wordTable[tempVal]] then foundLFG = 2 if showanyway == true then print("group? lfg 2") end end
+			for i=1,tempVal-1 do wordString = wordString..wordTable[i] end if (GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString]) and GF_GROUP_SHORT_TRIGGER[wordTable[tempVal]] then foundLFG = 2 if showanyway == true then print("group? lfg 2") end end
 			for i=1,tempVal do
 				if GF_WORD_RAID[wordTable[i]] then
 					if GF_RAID_BEFORE[wordTable[i-1]] and (GF_RAID_BEFORE[wordTable[i-1]][wordTable[i+1]] or (wordTable[i+2] and GF_RAID_BEFORE[wordTable[i-1]][wordTable[i+1]..wordTable[i+2]])) then if foundLFG < 3 then foundLFG = 3 if showanyway == true then print("1 word before/1-2 words after raid ?") end end end
@@ -3230,10 +3231,12 @@ function GF_GetTypes(arg1, showanyway)
 			if tempVal <= 4 then
 				if GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]] then foundTrades = foundTrades + GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]] if showanyway == true then print("first two trades "..GF_TRADE_FIRST_TWO[wordTableTrade[1]..wordTableTrade[2]]) end end
 				if GF_TRADE_FIRST_LAST[wordTableTrade[1]] and GF_TRADE_FIRST_LAST[wordTableTrade[1]][wordTableTrade[tempVal]] then foundTrades = foundTrades + 3 if showanyway == true then print("firstlast trades 3") end end
-				if foundLFM == 0 then
+				if foundLFM == 0 and foundLFG == 0 then
 					if GF_LFM_AFTER[wordTable[tempVal-1]..wordTable[tempVal]] then foundLFM = 2 table.insert(lfmlfgName, wordTable[tempVal-1]..wordTable[tempVal]) if showanyway == true then print("word lfmafter lfm 2") end end
 					if GF_GROUP_FIRST_LAST[wordTable[1]] and GF_GROUP_FIRST_LAST[wordTable[1]][wordTable[tempVal]] then foundLFM = 2 if showanyway == true then print("firstlast lfm 2") end end
 					if GF_GROUP_FIRST_TWO_SHORT[wordTable[1]..wordTable[2]] then if GF_GROUP_FIRST_TWO_SHORT[wordTable[1]..wordTable[2]] > foundLFM then foundLFM = GF_GROUP_FIRST_TWO_SHORT[wordTable[1]..wordTable[2]] table.insert(lfmlfgName, wordTable[1]..wordTable[2]) table.insert(lfmPosition, {1,2,GF_GROUP_FIRST_TWO_SHORT[wordTable[1]..wordTable[2]],true}) if showanyway == true then print(wordTable[1]..wordTable[2].." lfm "..GF_GROUP_FIRST_TWO_SHORT[wordTable[1]..wordTable[2]]) end end end
+					wordString = ""
+					for i=1,tempVal-1 do wordString = wordString..wordTable[i] end if (GF_WORD_DUNGEON[wordString] or GF_WORD_RAID[wordString] or GF_WORD_PVP[wordString]) and GF_GROUP_SHORT_TRIGGER[wordTable[tempVal]] then foundLFM = 2 if showanyway == true then print("<group> trigger lfm 2") end end
 				end
 			end
 			if not lfs then	foundTrades = foundTrades + 1.25 if showanyway == true then print("tradeonly trades 1.25") end end
@@ -3944,9 +3947,9 @@ function GF_UpdateResults()
 	local groupListLength = getn(GF_FilteredResultsList)
 	GF_MinimapIconTextLabel:SetText(groupListLength)
 	GF_MinimapIconTextLabel:Show()
-	while GF_ResultsListOffset > (groupListLength + .1) do GF_ResultsListOffset = math.max(GF_ResultsListOffset - GF_ResultsListOffsetSize,0) end
+	while GF_ResultsListOffset > (groupListLength + .1) do GF_ResultsListOffset = GF_ResultsListOffset - 1 end
 	GF_ResultsLabel:SetText(GF_FOUND..groupListLength.." / "..getn(GF_MessageList[GF_RealmName]))
-	GF_PageLabel:SetText(GF_PAGE.." "..math.min(math.max(ceil((GF_ResultsListOffset+(GF_ResultsListOffsetSize/2) + .1) / GF_ResultsListOffsetSize),1),math.max(ceil(groupListLength / GF_ResultsListOffsetSize),1)).." / "..math.max(ceil(groupListLength / GF_ResultsListOffsetSize),1))
+	GF_PageLabel:SetText(GF_PAGE.." "..math.min(ceil(math.max(GF_ResultsListOffset,1) / (GF_ResultsListOffsetSize - (GF_ResultsListOffsetSize * math.min(GF_ResultsListOffsetSize/groupListLength,1)))),math.max(ceil(groupListLength / GF_ResultsListOffsetSize),1)).." / "..math.max(ceil(groupListLength / GF_ResultsListOffsetSize),1))
 	GF_PageLabel:Show()
 	local timeMin, timeSec
 	for i=1, GF_ResultsBaseListOffsetSize do
@@ -4379,7 +4382,7 @@ function GF_GroupFinishedAddToGroupHistoryList()
 		for j=1, getn(GF_PerCharVariables.CurrentGroup) do if GF_PerCharVariables.CurrentGroup[j] == GF_PerCharVariables.groupfinishtimer[2][i] then table.remove(GF_PerCharVariables.CurrentGroup,j) GF_PerCharVariables.CurrentGroup[GF_PerCharVariables.groupfinishtimer[2][i]] = nil break end end
 	end
 	GF_PerCharVariables.groupfinishtimer = nil
-	if GF_SavedVariables.showwhisperlogs == 2 and GF_WhisperLogCurrentButtonID == 1 then GF_UpdateTicker = GF_UpdateTicker + .1 GF_OnUpdateFunctions["GroupLog"] = GF_UpdateGroupLog end
+	if GF_SavedVariables.showwhisperlogs == 2 and GF_WhisperLogCurrentButtonID == 1 then GF_UpdateTicker = GetTime() + .1 GF_OnUpdateFunctions["GroupLog"] = GF_UpdateGroupLog end
 end
 function GF_UpdateGroupLog()
 	GF_OnUpdateFunctions["GroupLog"] = nil
@@ -4498,7 +4501,7 @@ function GF_GroupHistoryDisplayLog(name) -- TODO: Add a feature to search by pla
 		local wordString = "|cffccccff|Hgfgh:"..name..":"..i.."|h"..date("[%m/%d] [%H:%M]",GF_GroupHistory[GF_RealmName][name][i][2]).." ["..GF_GroupHistory[GF_RealmName][name][i][1].."]|h|r - "
 		local tempTable = {}
 		for pname,data in GF_GroupHistory[GF_RealmName][name][i][3] do
-			if data[5] > 0 or not GF_PerCharVariables.usedpsmeter then table.insert(tempTable, {pname,data}) end
+			if (data[3] + data[4]) > 0 or not GF_PerCharVariables.usedpsmeter then table.insert(tempTable, {pname,data}) end
 		end
 		table.sort(tempTable, function(a,b) return a[2][3]+a[2][4]>b[2][3]+b[2][4] end)
 		for i=1, getn(tempTable) do
@@ -4528,7 +4531,7 @@ function GF_GroupHistoryDisplayLogCurrent(name,istempdata)
 	local wordString = "|cffccccff|Hgfcg:"..GF_PerCharVariables.CurrentGroup[name][1].."|h"..date("[%m/%d] [%H:%M]",GF_PerCharVariables.CurrentGroup[name][2]).." {"..GF_PerCharVariables.CurrentGroup[name][1].."}".."|h|r - "
 	local tempTable = {}
 	for names,data in GF_PerCharVariables.CurrentGroup[name][3] do
-		if data[1] > 0 and (data[5] > 0 or not GF_PerCharVariables.usedpsmeter) then table.insert(tempTable, {names,data}) end
+		if data[1] > 0 and ((data[3] + data[4]) > 0 or not GF_PerCharVariables.usedpsmeter) then table.insert(tempTable, {names,data}) end
 	end
 	if getn(tempTable) > 1 then
 		table.sort(tempTable, function(a,b) return a[2][3]+a[2][4]>b[2][3]+b[2][4] end)
@@ -5020,7 +5023,11 @@ function GF_GetDropDownButtons(fName,maxSize,showAll,MatchLFG) -- Create dropdow
 	getglobal("GF_"..fName):SetHeight(12 + ceil(getn(buttons)/ceil(getn(buttons)/maxSize)) * 18)
 	getglobal("GF_"..fName):SetWidth((width + 45) * ceil(getn(buttons)/maxSize))
 	getglobal("GF_"..fName):ClearAllPoints()
-	getglobal("GF_"..fName):SetPoint("TOPLEFT", getglobal("GF_"..fName.."Dropdown"), "BOTTOMLEFT", -1*(width + 45)*math.floor((getn(buttons)-1)/maxSize), 4)
+	if getn(buttons)/maxSize > 1 then 
+		getglobal("GF_"..fName):SetPoint("TOPLEFT", getglobal("GF_"..fName.."Dropdown"), "BOTTOMLEFT", (-1*(width + 45)*math.floor((getn(buttons)-1)/maxSize))/2 - width/1.5, 4)
+	else
+		getglobal("GF_"..fName):SetPoint("TOPLEFT", getglobal("GF_"..fName.."Dropdown"), "BOTTOMLEFT", -1*(width + 45)*math.floor((getn(buttons)-1)/maxSize), 4)
+	end
 	getglobal("GF_"..fName):Show()
 end
 function GF_GetWhoClassDropdownShow()
@@ -5079,6 +5086,13 @@ function GF_LogChannelNameDropdownShow()
 end
 function GF_SearchListDropdownShow()
 	GF_GetDropDownButtons("SearchList",10,nil,true)
+end
+function GF_HideDropdownMenus()
+	for name,_ in GF_MenusToHide do
+		if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), GF_MenusToHide[name]) then getglobal(name):Hide() end
+	end
+	GF_MenusToHide = {}
+	GF_OnUpdateFunctions["HideMenus"] = nil
 end
 
 function GF_ButtonListFunctions(fName,entryName,entryID,add) -- Functions for Button Add/Remove

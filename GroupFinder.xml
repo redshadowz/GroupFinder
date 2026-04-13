@@ -234,8 +234,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</OnEnter>
 			<OnLeave>
 				GameTooltip:Hide()
-				if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), this:GetParent():GetName()) then 
-					this:GetParent():Hide()
+				if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), this:GetParent():GetName()) then
+					GF_MenusToHide[this:GetParent():GetName()] = this:GetParent():GetName()
+					GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
 				end
 			</OnLeave>
 			<OnClick>
@@ -978,7 +979,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</OnDragStop>
 		</Scripts>
 	</Button>
-	<Frame name="GF_MainFrame" movable="true" enableMouse="true" hidden="true" frameStrata="MEDIUM" parent="UIParent">
+	<Frame name="GF_MainFrame" movable="true" enableMouse="true" toplevel="true" hidden="true" frameStrata="MEDIUM" parent="UIParent">
 		<Size>
 			<AbsDimension x="700" y="500"/>
 		</Size>
@@ -1220,7 +1221,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							</OnClick>
 							<OnLeave>
 								if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "GF_GroupFilter") then 
-									GF_GroupFilterDropdownMenu:Hide()
+									GF_MenusToHide["GF_GroupFilterDropdownMenu"] = "GF_GroupFilter"
+									GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
 								end
 							</OnLeave>
 							<OnLoad>
@@ -1346,7 +1348,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						<Scripts>
 							<OnLeave>
 								if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "GF_GroupFilter") then 
-									GF_GroupFilterDropdownMenu:Hide()
+									GF_MenusToHide["GF_GroupFilterDropdownMenu"] = "GF_GroupFilter"
+									GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
 								end
 							</OnLeave>
 						</Scripts>
@@ -1369,7 +1372,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							</OnClick>
 							<OnLeave>
 								if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "LFGHardCore") then 
-									GF_LFGHardCore:Hide()
+									GF_MenusToHide["GF_LFGHardCore"] = "LFGHardCore"
+									GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
 								end
 							</OnLeave>
 							<OnLoad>
@@ -1391,7 +1395,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							</OnClick>
 							<OnLeave>
 								if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "GF_ChatFilter") then 
-									GF_ChatFilterDropdownMenu:Hide()
+									GF_MenusToHide["GF_ChatFilterDropdownMenu"] = "GF_ChatFilter"
+									GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
 								end
 							</OnLeave>
 							<OnLoad>
@@ -1584,7 +1589,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						<Scripts>
 							<OnLeave>
 								if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "GF_ChatFilter") then 
-									GF_ChatFilterDropdownMenu:Hide()
+									GF_MenusToHide["GF_ChatFilterDropdownMenu"] = "GF_ChatFilter"
+									GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
 								end
 							</OnLeave>
 						</Scripts>
@@ -1632,7 +1638,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							</OnClick>
 							<OnLeave>
 								if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "SearchList") then 
-									GF_SearchList:Hide()
+									GF_MenusToHide["GF_SearchList"] = "SearchList"
+									GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
 								end
 							</OnLeave>
 						</Scripts>
@@ -1671,7 +1678,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						<Scripts>
 							<OnLeave>
 								if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "SearchList") then 
-									GF_SearchList:Hide()
+									GF_MenusToHide["GF_SearchList"] = "SearchList"
+									GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
 								end
 							</OnLeave>
 						</Scripts>
@@ -1744,7 +1752,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							</OnClick>
 							<OnLeave>
 								if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "SearchList") then 
-									GF_SearchList:Hide()
+									GF_MenusToHide["GF_SearchList"] = "SearchList"
+									GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
 								end
 							</OnLeave>
 						</Scripts>
@@ -1780,7 +1789,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						<Scripts>
 							<OnLeave>
 								if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "LFGHardCore") then 
-									GF_LFGHardCore:Hide()
+									GF_MenusToHide["GF_LFGHardCore"] = "LFGHardCore"
+									GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
 								end
 							</OnLeave>
 						</Scripts>
@@ -2210,7 +2220,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											</OnClick>
 											<OnLeave>
 												if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "GetWhoClass") then 
-													GF_GetWhoClass:Hide()
+													GF_MenusToHide["GF_GetWhoClass"] = "GetWhoClass"
+													GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
 												end
 											</OnLeave>
 										</Scripts>
@@ -2249,7 +2260,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										<Scripts>
 											<OnLeave>
 												if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "GetWhoClass") then 
-													GF_GetWhoClass:Hide()
+													GF_MenusToHide["GF_GetWhoClass"] = "GetWhoClass"
+													GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
 												end
 											</OnLeave>
 										</Scripts>
@@ -2272,7 +2284,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											</OnClick>
 											<OnLeave>
 												if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "GetWhoLevel") then 
-													GF_GetWhoLevel:Hide()
+													GF_MenusToHide["GF_GetWhoLevel"] = "GetWhoLevel"
+													GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
 												end
 											</OnLeave>
 										</Scripts>
@@ -2311,7 +2324,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										<Scripts>
 											<OnLeave>
 												if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "GetWhoLevel") then 
-													GF_GetWhoLevel:Hide()
+													GF_MenusToHide["GF_GetWhoLevel"] = "GetWhoLevel"
+													GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
 												end
 											</OnLeave>
 										</Scripts>
@@ -2505,7 +2519,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											</OnClick>
 											<OnLeave>
 												if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "LFGSize") then 
-													GF_LFGSize:Hide()
+													GF_MenusToHide["GF_LFGSize"] = "LFGSize"
+													GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
 												end
 											</OnLeave>
 										</Scripts>
@@ -2544,7 +2559,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										<Scripts>
 											<OnLeave>
 												if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "LFGSize") then 
-													GF_LFGSize:Hide()
+													GF_MenusToHide["GF_LFGSize"] = "LFGSize"
+													GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
 												end
 											</OnLeave>
 										</Scripts>
@@ -2571,7 +2587,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											</OnClick>
 											<OnLeave>
 												if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "LFGLFM") then 
-													GF_LFGLFM:Hide()
+													GF_MenusToHide["GF_LFGLFM"] = "LFGLFM"
+													GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
 												end
 											</OnLeave>
 											<OnLoad>
@@ -2613,7 +2630,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										<Scripts>
 											<OnLeave>
 												if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "LFGLFM") then 
-													GF_LFGLFM:Hide()
+													GF_MenusToHide["GF_LFGLFM"] = "LFGLFM"
+													GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
 												end
 											</OnLeave>
 										</Scripts>
@@ -2640,7 +2658,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											</OnClick>
 											<OnLeave>
 												if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "LFGDungeon") then 
-													GF_LFGDungeon:Hide()
+													GF_MenusToHide["GF_LFGDungeon"] = "LFGDungeon"
+													GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
 												end
 											</OnLeave>
 											<OnLoad>
@@ -2682,7 +2701,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										<Scripts>
 											<OnLeave>
 												if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "LFGDungeon") then 
-													GF_LFGDungeon:Hide()
+													GF_MenusToHide["GF_LFGDungeon"] = "LFGDungeon"
+													GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
 												end
 											</OnLeave>
 										</Scripts>
@@ -2709,7 +2729,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											</OnClick>
 											<OnLeave>
 												if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "LFGRaid") then 
-													GF_LFGRaid:Hide()
+													GF_MenusToHide["GF_LFGRaid"] = "LFGRaid"
+													GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
 												end
 											</OnLeave>
 											<OnLoad>
@@ -2751,7 +2772,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										<Scripts>
 											<OnLeave>
 												if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "LFGRaid") then 
-													GF_LFGRaid:Hide()
+													GF_MenusToHide["GF_LFGRaid"] = "LFGRaid"
+													GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
 												end
 											</OnLeave>
 										</Scripts>
@@ -2778,7 +2800,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											</OnClick>
 											<OnLeave>
 												if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "LFGRole") then 
-													GF_LFGRole:Hide()
+													GF_MenusToHide["GF_LFGRole"] = "LFGRole"
+													GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
 												end
 											</OnLeave>
 											<OnLoad>
@@ -2820,7 +2843,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										<Scripts>
 											<OnLeave>
 												if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "LFGRole") then 
-													GF_LFGRole:Hide()
+													GF_MenusToHide["GF_LFGRole"] = "LFGRole"
+													GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
 												end
 											</OnLeave>
 										</Scripts>
@@ -3477,7 +3501,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnClick>
 									<OnLeave>
 										if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "GF_LogFilter") then 
-											GF_LogFilterDropdownMenu:Hide()
+											GF_MenusToHide["GF_LogFilterDropdownMenu"] = "GF_LogFilter"
+											GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
 										end
 									</OnLeave>
 									<OnLoad>
@@ -3703,7 +3728,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Scripts>
 									<OnLeave>
 										if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "GF_LogFilter") then 
-											GF_LogFilterDropdownMenu:Hide()
+											GF_MenusToHide["GF_LogFilterDropdownMenu"] = "GF_LogFilter"
+											GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
 										end
 									</OnLeave>
 								</Scripts>
@@ -3728,7 +3754,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnClick>
 									<OnLeave>
 										if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "GF_LogChannelFilter") then 
-											GF_LogChannelFilterDropdownMenu:Hide()
+											GF_MenusToHide["GF_LogChannelFilterDropdownMenu"] = "GF_LogChannelFilter"
+											GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
 										end
 									</OnLeave>
 									<OnLoad>
@@ -3915,7 +3942,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Scripts>
 									<OnLeave>
 										if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "GF_LogChannelFilter") then 
-											GF_LogChannelFilterDropdownMenu:Hide()
+											GF_MenusToHide["GF_LogChannelFilterDropdownMenu"] = "GF_LogChannelFilter"
+											GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
 										end
 									</OnLeave>
 								</Scripts>
@@ -3940,7 +3968,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnClick>
 									<OnLeave>
 										if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "LogChannelName") then 
-											GF_LogChannelName:Hide()
+											GF_MenusToHide["GF_LogChannelName"] = "LogChannelName"
+											GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
 										end
 									</OnLeave>
 								</Scripts>
@@ -3979,7 +4008,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Scripts>
 									<OnLeave>
 										if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "LogChannelName") then 
-											GF_LogChannelName:Hide()
+											GF_MenusToHide["GF_LogChannelName"] = "LogChannelName"
+											GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
 										end
 									</OnLeave>
 								</Scripts>
@@ -4281,7 +4311,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnClick>
 									<OnLeave>
 										if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "GroupChannelName") then 
-											GF_GroupChannelName:Hide()
+											GF_MenusToHide["GF_GroupChannelName"] = "GroupChannelName"
+											GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
 										end
 									</OnLeave>
 								</Scripts>
@@ -4320,7 +4351,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Scripts>
 									<OnLeave>
 										if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "GroupChannelName") then 
-											GF_GroupChannelName:Hide()
+											GF_MenusToHide["GF_GroupChannelName"] = "GroupChannelName"
+											GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
 										end
 									</OnLeave>
 								</Scripts>
@@ -4461,7 +4493,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnClick>
 									<OnLeave>
 										if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "BlockList") then 
-											GF_BlockList:Hide()
+											GF_MenusToHide["GF_BlockList"] = "BlockList"
+											GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
 										end
 									</OnLeave>
 									<OnLoad>
@@ -4503,7 +4536,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Scripts>
 									<OnLeave>
 										if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "BlockList") then 
-											GF_BlockList:Hide()
+											GF_MenusToHide["GF_BlockList"] = "BlockList"
+											GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
 										end
 									</OnLeave>
 								</Scripts>
@@ -4703,7 +4737,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnClick>
 									<OnLeave>
 										if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "FontName") then 
-											GF_FontName:Hide()
+											GF_MenusToHide["GF_FontName"] = "FontName"
+											GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
 										end
 									</OnLeave>
 								</Scripts>
@@ -4742,7 +4777,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Scripts>
 									<OnLeave>
 										if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "FontName") then 
-											GF_FontName:Hide()
+											GF_MenusToHide["GF_FontName"] = "FontName"
+											GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
 										end
 									</OnLeave>
 								</Scripts>
@@ -4803,7 +4839,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnClick>
 									<OnLeave>
 										if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "AutoBlacklist") then 
-											GF_AutoBlacklistDropdownMenu:Hide()
+											GF_MenusToHide["GF_AutoBlacklistDropdownMenu"] = "AutoBlacklist"
+											GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
 										end
 									</OnLeave>
 								</Scripts>
@@ -4922,7 +4959,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Scripts>
 									<OnLeave>
 										if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "AutoBlacklist") then 
-											GF_AutoBlacklistDropdownMenu:Hide()
+											GF_MenusToHide["GF_AutoBlacklistDropdownMenu"] = "AutoBlacklist"
+											GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
 										end
 									</OnLeave>
 								</Scripts>
