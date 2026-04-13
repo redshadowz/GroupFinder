@@ -2803,8 +2803,8 @@ function GF_GetTypes(arg1, showanyway)
 	if strfind(arg1, "%d+p[%p%s]") then foundLFM = 2 if showanyway == true then print("##p lfm 2") end end -- "10p heal" messages from chinese
 	lfs = 1 -- To detect space/lf##m/letter(eg "lf15mbwl" = lfm bwl)
 	while true do lfs,lfe,wordString = strfind(arg1,"[%p%s]([lk][fv]?%s?%d+m)[%p%s]",lfs) if wordString then arg1 = strsub(arg1,1,lfs)..GF_LFM_LOCALIZED.." "..strsub(arg1,lfs+strlen(wordString)+1) lfs = lfs + 4 foundLFM = 3 foundGuildExclusion = 1 foundTradesExclusion = 1 if showanyway == true then print("lf##m lfm 3 .. guildex 1... tradesex 1") end else break end end
-	lfs = 1 -- To detect space/number+/punctuation/number+/space for groups
-	while true do lfs,lfe,wordString = strfind(arg1,"[%p%s]%d%d?([=/v])%d%d?[%p%s]",lfs) if wordString then if wordString == "=" then foundLFM = 2 lfs = lfe else arg1 = strsub(arg1,1,lfs)..GF_GROUP_OPEN_LOCALIZED..strsub(arg1,lfe) lfs = lfs + 6 end else break end end
+	lfs = 1 -- To detect space/number+/punctuation/number+/space for groups(eg "4v5" or "4/5" = group, "4=5" triggers foundLFM)
+	while true do lfs,lfe,tempString,wordString = strfind(arg1,"[%p%s](%d%d?([=/v:])%d%d?)[%p%s]",lfs) if wordString then if wordString == "=" then foundLFM = 2 lfs = lfe elseif wordString == ":" then if strlen(tempString) == 5 and strsub(tempString,-1) == "0" and strfind(arg1,"^"..GF_SERVERTIME_ABBREV_LOCALIZED.."[%p%s]",lfe+1) then arg1 = strsub(arg1,1,lfs)..GF_SERVERTIME_LOCALIZED..strsub(arg1,lfe+strlen(GF_SERVERTIME_ABBREV_LOCALIZED)+1) lfs = lfe + strlen(GF_SERVERTIME_ABBREV_LOCALIZED) + 1 else lfs = lfe end else arg1 = strsub(arg1,1,lfs)..GF_GROUP_OPEN_LOCALIZED..strsub(arg1,lfe) lfs = lfs + 6 end else break end end
 	lfs,lfe,wordString,tempString = strfind(arg1,"[%p%s](%d?%d?%s?\-?([-\+±]))\-?%s?%d?%d?[%p%s]")
 	if wordString then -- To detect "+- or ±"
 		if tempString == "±" then foundTrades = foundTrades + 1 if showanyway == true then print("± trade 1") end

@@ -260,6 +260,8 @@ GF_YOUR_LOCALIZED = "your"
 GF_PLUS_LOCALIZED = "plus"
 GF_ELITE_LOCALIZED = "elite"
 GF_BOSS_LOCALIZED = "boss"
+GF_SERVERTIME_ABBREV_LOCALIZED = "st"
+GF_SERVERTIME_LOCALIZED = "servertime"
 
 --if GetLocale() == "zhCN" then
 --elseif GetLocale() == "zhTW" then
@@ -736,7 +738,7 @@ GF_WORD_FIX = { -- Word changes processed after quests. Not simple typos.
 ["gnomeregan"] = "gnomeregan",
 ["stormwrought"] = "stormwrought",
 ["zulfarrak"] = "zulfarrak",
-["atalhakkar"] = "atalhakkar",["sunkentemple"] = "st",
+["atalhakkar"] = "atalhakkar",["sunkentemple"] = "sunkentemple",
 ["smgy"] = "smgy",["smlib"] = "smlib",["smarm"] = "smarm",["smcath"] = "smcath",
 ["udstrat"] = "udstrat",["livestrat"] = "livestrat",["upperblackrock"] = "upperblackrock",["lowerblackrock"] = "lowerblackrock",
 ["stratrep"] = "stratrep",["repfarmstrat"] = "repfarmstrat",["stratrepfarm"] = "stratrepfarm",
@@ -1088,7 +1090,7 @@ GF_WORD_FIX_SINGLE_WORD = { -- Single word changes. Mostly typos and simple word
 ["ogremire"] = "orgrimmar",["orgimar"] = "orgrimmar",["orgrmar"] = "orgrimmar",["orgrimr"] = "orgrimmar",["ogrimarr"] = "orgrimmar",["orgry"] = "orgrimmar",
 
 ["arati"] = "arathi",["alteriv"] = "alterac",["azhara"] = "azshara",["ashara"] = "azshara",["azshare"] = "azshara",["azshera"] = "azshara",["azashara"] = "azshara",
-["silithis"] = "silithus",["sithilus"] = "silithus",["silitshus"] = "silithus",["silthius"] = "silithus",
+["silithis"] = "silithus",["sithilus"] = "silithus",["silitshus"] = "silithus",["silthius"] = "silithus",["silith"] = "silithus",
 ["goldhire"] = "goldshire",
 ["hinter"] = "hinterlands",
 ["stonrad"] = "stonard",["thersmore"] = "theramore",["theramor"] = "theramore",["theraore"] = "theramore",["thera"] = "theramore",["thermore"] = "theramore",["teramore"] = "theramore",
@@ -1325,7 +1327,7 @@ GF_WORD_FIX_BEFORE_QUEST = { -- Word changes processed before quests.
 -- Make sure word is recombined
 ["health"] = "health",["anyone"] = "anyone",["beltbuckle"] = "beltbuckle",["guild"] = "guild",["attackpower"] = "ap",["northernstv"] = "northernstv",["southernstv"] = "southernstv",
 ["bootybay"] = "bootybay",["powerlevel"] = "powerlevel",["dunmorogh"] = "dunmorogh",["twowgroup"] = "twowgroup",["turtlewowgroup"] = "turtlewowgroup",
-["lfc"] = "lfc",["lfm"] = "lfm",["lfg"] = "lfg",["lfs"] = "lfs",["lfb"] = "lfb",["groupfinder"] = "groupfinder",
+["lfc"] = "lfc",["lfm"] = "lfm",["lfg"] = "lfg",["lfs"] = "lfs",["lfb"] = "lfb",["groupfinder"] = "groupfinder",["groupfinding"] = "groupfinder",
 
 ["alahthalas"] = "alahthalas",["everlook"] = "everlook",["mooncloth"] = "mooncloth",["goingtodrop"] = "goingtodrop",["servertime"] = "servertime",["valleyofspears"] = "valleyofspears",["swampofsorrows"] = "swampofsorrows",
 ["zulgurub"] = "zulgurub",["timbermawhold"] = "timbermawhold",
@@ -1670,7 +1672,7 @@ GF_WORD_FIX_BEFORE_QUEST_SECOND = {
 ["lovepotion"] = {"azshara","quest"},["silithusraidgroup"] = {"silithus","repfarm"},["farmtimbermawrep"] = {"timbermaw","repfarm"},["anygr"] = {"any","group"},["giantsws"] = {"frostmaul","winterspring"},["needto"] = {"need","to"},
 ["lokmodan"] = {"loch","modan"},
 
-["needps"] = {"need","dps"},["whohave"] = {"anyone","have"},["tankkf"] = {"tank","lf"},
+["needps"] = {"need","dps"},["whohave"] = {"anyone","have"},["tankkf"] = {"tank","lf"},["lfgtool"] = {"groupfinder","tool"},
 ["elitequeue"] = {"elite","quest"},["alahquest"] = {"alahthalas","quest"},["alahelite"] = {"alahthalas","elite"},["alahqueue"] = {"alahthalas","quest"},["helpmew"] = {"help","with"},
 ["lfr"] = {"lf","raid"},["lastds"] = {"last","dps"},["comeonecomeall"] = {"need","all"},["anyonehordeneed"] = {"anyone","need"},["anyoneallianceneed"] = {"anyone","need"},["whereallda"] = {"where","all"},
 ["someupfor"] = {"anyone","upfor"},["neeall"] = {"need","all"},["upfor"] = {"up","for"},["lktodo"] = {"looking","todo"},["lkfor"] = {"looking","for"},["anyonedawnfor"] = {"anyone","need"},
@@ -1917,7 +1919,7 @@ GF_WORD_REP_LEFT = { -- Words that get fixed if accidentally combined("fishingen
 ["willing"] = true,["with"] = true,["worldboss"] = true,["wpl"] = true,["wpvp"] = true,["wrist"] = true,["wsg"] = true,["wtb"] = true,["wts"] = true,
 ["wtt"] = true,["ysondre"] = true,["zg"] = true,["zulfarrak"] = true,["zulgurub"] = true,
 
-["slayer"] = true,["beast"] = true,["demon"] = true,["beastslayer"] = true,["demonslayer"] = true,["craftman"] = true,["craftsman"] = true,["boss"] = true,["htq"] = true,
+["slayer"] = true,["beast"] = true,["demon"] = true,["beastslayer"] = true,["demonslayer"] = true,["craftman"] = true,["craftsman"] = true,["boss"] = true,["htq"] = true,["stonetalon"] = true,
 }
 GF_WORD_REP_RIGHT = { -- These are longer words that shouldn't be split from GF_WORD_REP_LEFT
 -- Left or Right
@@ -1959,7 +1961,7 @@ GF_WORD_REP_RIGHT = { -- These are longer words that shouldn't be split from GF_
 ["willing"] = true,["with"] = true,["worldboss"] = true,["wpl"] = true,["wpvp"] = true,["wrist"] = true,["wsg"] = true,["wtb"] = true,["wts"] = true,
 ["wtt"] = true,["ysondre"] = true,["zg"] = true,["zulfarrak"] = true,["zulgurub"] = true,
 
-["slayer"] = true,["beast"] = true,["demon"] = true,["beastslayer"] = true,["demonslayer"] = true,["craftman"] = true,["craftsman"] = true,["boss"] = true,["htq"] = true,
+["slayer"] = true,["beast"] = true,["demon"] = true,["beastslayer"] = true,["demonslayer"] = true,["craftman"] = true,["craftsman"] = true,["boss"] = true,["htq"] = true,["stonetalon"] = true,
 
 -- Right Only
 ["anyones"] = true,["arenas"] = true,["attached"] = true,["attacher"] = true,["attachers"] = true,["attaches"] = true,["attunements"] = true,["auctioned"] = true,["auctioneer"] = true,
@@ -2148,7 +2150,7 @@ GF_WORD_IGNORE = { -- Phrases to help prevent group false-positives.
 ["isreallygood"] = .5,["istart"] = .5,["isthereareason"] = .5,["istheresomething"] = .5,["istillneedmore"] = .5,["iswear"] = .5,["iswild"] = .5,["isworthit"] = .5,["isxfaction"] = .5,
 ["itbackon"] = .5,["itbugged"] = .5,["itemdrop"] = .5,["ithinkthereis"] = .5,["ithinkthey"] = .5,["itmeans"] = .5,["itryto"] = .5,["itsbecause"] = .5,
 ["itsdying"] = .5,["itsnotaround"] = .5,["itsnowhere"] = .5,["itssaying"] = .5,["ittransfersyou"] = .5,["itwasinsane"] = .5,["iwashavingfun"] = .5,["iwillsay"] = .5,["iwishthere"] = .5,
-["iwouldnot"] = .5,["joinany"] = .5,["jointhat"] = .5,["jointhatone"] = .5,["joking"] = .5,["justaslegit"] = .5,["justcold"] = .5,["justfine"] = .5,["justfinished"] = .5,
+["joinany"] = .5,["jointhat"] = .5,["jointhatone"] = .5,["joking"] = .5,["justaslegit"] = .5,["justcold"] = .5,["justfine"] = .5,["justfinished"] = .5,
 ["justforhimself"] = .5,["justhaveto"] = .5,["justhot"] = .5,["justnotenough"] = .5,["justout"] = .5,["justquest"] = .5,["justwarm"] = .5,["justwasting"] = .5,
 ["keepfailing"] = .5,["kickedeveryone"] = .5,["kickedfrom"] = .5,["kickedyou"] = .5,["kickinganyone"] = .5,["kicksyou"] = .5,["killingbeginner"] = .5,["killinglowbie"] = .5,["killlowbie"] = .5,
 ["knowaboutthis"] = .5,["knowanaddon"] = .5,["knowwhereat"] = .5,["knowwherein"] = .5,["knowwherethis"] = .5,["lastmonth"] = .5,["lastsheep"] = .5,["lastyear"] = .5,["lecturehowto"] = .5,
@@ -2307,6 +2309,7 @@ GF_WORD_IGNORE = { -- Phrases to help prevent group false-positives.
 
 ["sayyoudonot"] = .5,["justsayyoudo"] = .5,["youdonothave"] = .5,["rememberwhen"] = .25,["doyouremember"] = .25,["rememberwhenwe"] = .25,["rememberwhenwehad"] = .25,
 ["waitcanwe"] = .25,["burnourgold"] = .5,["googleplay"] = .5,["googleplaycard"] = .5,["groupdead"] = .5,["entiregroupdead"] = .5,["butshedied"] = .5,["buthedied"] = .5,["diedfirst"] = .5,
+["iwouldnot"] = .5,["iwouldnotbe"] = .25,["wouldnotbeopposed"] = .5,["opposedtosummoningstone"] = 1,["caniteleport"] = .5,["doesitteleport"] = .5,["willitteleport"] = .5,
 
 --[[
 [""] = .5,
@@ -2360,7 +2363,7 @@ GF_WORD_IGNORE = { -- Phrases to help prevent group false-positives.
 ["makemydruid"] = .5,["makemyhunter"] = .5,["makemymage"] = .5,["makemypaladin"] = .5,["makemypriest"] = .5,["makemyrogue"] = .5,["makemyshaman"] = .5,["makemywarlock"] = .5,["makemywarrior"] = .5,
 ["specfordruid"] = 1,["specforhunter"] = 1,["specformage"] = 1,["specforpaladin"] = 1,["specforpriest"] = 1,["specforrogue"] = 1,["specforshaman"] = 1,["specforwarlock"] = 1,["specforwarrior"] = 1,
 
-["raiddruid"] = 1,["raidhunter"] = 1,["raidpaladin"] = 1,["raidpriest"] = 1,["raidrogue"] = 1,["raidmage"] = 1,["raidshaman"] = 1,["raidwarlock"] = 1,["raidwarrior"] = 1,
+["raiddruid"] = .5,["raidhunter"] = .5,["raidpaladin"] = .5,["raidpriest"] = .5,["raidrogue"] = .5,["raidmage"] = .5,["raidshaman"] = .5,["raidwarlock"] = .5,["raidwarrior"] = .5,
 ["makedruid"] = 1,["makehunter"] = 1,["makemage"] = 1,["makepaladin"] = 1,["makepriest"] = 1,["makerogue"] = 1,["makeshaman"] = 1,["makewarlock"] = 1,["makewarrior"] = 1,
 ["playingdruid"] = 1,["playinghunter"] = 1,["playingmage"] = 1,["playingpaladin"] = 1,["playingpriest"] = 1,["playingrogue"] = 1,["playingshaman"] = 1,["playingwarlock"] = 1,["playingwarrior"] = 1,
 ["itfordruid"] = 1,["itforhunter"] = 1,["itformage"] = 1,["itforpaladin"] = 1,["itforpriest"] = 1,["itforrogue"] = 1,["itforshaman"] = 1,["itforwarlock"] = 1,["itforwarrior"] = 1,
@@ -2414,7 +2417,7 @@ GF_WORD_IGNORE = { -- Phrases to help prevent group false-positives.
 GF_WORD_IGNORE_BEFORE = { -- Up to three words before LFM/LFG phrase or before target of prefix(e.g. "'do not tank' <karazhan>")
 ["bisfor"] = 1,["cleanseplease"] = 1,["cleanse"] = 1,["donottank"] = 1,["donotneed"] = 1,["simplethingslike"] = 1,["theyare"] = .5,["donot"] = 1,["wedonot"] = 1,["difficultto"] = .5,["difficulttomake"] = .5,["refuseto"] = .5,["no"] = .25,["from"] = .25,
 ["planfrom"] = .5,["schematicfrom"] = .5,["formulafrom"] = .5,["patternfrom"] = .5,["bagfrom"] = .5,["waterfrom"] = .5,["potionfrom"] = .5,["elixirfrom"] = .5,["flaskfrom"] = .5,["ifitsraid"] = .5,["isntin"] = .5,["sucks"] = .5,["whobeenin"] = .5,
-["wipe"] = .5,["doorin"] = .5,["howmany"] = .5,["funnythey"] = 1,["noone"] = 1,["because"] = .5,["tent"] = .25,["suckyto"] = .5,["worthrunning"] = .5,["atleast"] = .5,["punching"] = .5,["notfully"] = .5,
+["wipe"] = .5,["doorin"] = .5,["howmany"] = .5,["funnythey"] = 1,["noone"] = 1,["because"] = .5,["tent"] = .25,["suckyto"] = .5,["worthrunning"] = .5,["atleast"] = .5,["punching"] = .5,["notfully"] = .5,["ditch"] = .5,["ditches"] = .5,["ditched"] = .5,
 
 -- Negative
 ["ishost"] = -.5,["isstart"] = -.5,["isstarting"] = -.5,["isform"] = -.5,["isdoing"] = -.5,["isplanning"] = -.5,["hordeplayerto"] = -.5,["allianceplayerto"] = -.5,["allianceplayerfor"] = -.5,["allianceplayerfor"] = -.5,["dungeonand"] = -.5,["dungeonor"] = -.5,
@@ -2725,7 +2728,7 @@ GF_WORD_LFM = {
 ["startinsec"] = 2,["startinsecond"] = 2,["startinminute"] = 2,["startinhour"] = 2,["startnew"] = 1.5,["startinginsec"] = 2,["startinginsecond"] = 2,["startinginminute"] = 2,["startinginhour"] = 2,["startingnew"] = 1.5,["isnowactive"] = 1.25,
 
 ["anyhcgroup"] = 2,["anyhardcoregroup"] = 2,["istherehcgroup"] = 2,["istherehardcoregroup"] = 2,["whowillgo"] = 1.25,
-["ineedbackup"] = 1.25,["pleasecome"] = 1.25,["missingone"] = .5,["missingtwo"] = .5,["missingthree"] = .5,["abouttostart"] = 1,
+["ineedbackup"] = 1.25,["pleasecome"] = 1.25,["missingone"] = .5,["missingtwo"] = .5,["missingthree"] = .5,["abouttostart"] = 1,["shouldistart"] = 1.5,
 
 ["anyonebored"] = 1,["boostme"] = 1,["boostmy"] = 1,["boostlowbie"] = 1,["somefunin"] = 1.25,["somefunon"] = 1.25,
 
