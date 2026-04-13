@@ -1842,25 +1842,23 @@ function GF_UpdateFriendsList()
 	end
 end
 function GF_CheckForAnnounce()
-	if GF_AutoAnnounceTimer then
-		GF_AutoAnnounceTimer = GF_AutoAnnounceTimer + 1
-		if not GF_ChatJoinedChannels[strlower(GF_GroupChannelEditBox:GetText())] then GF_GetJoinedChannels() if not GF_ChatJoinedChannels[strlower(GF_GroupChannelEditBox:GetText())] then GF_TurnOffAnnounce(GF_AUTO_ANNOUNCE_NOT_IN_CHANNEL) return end end
-		if GF_LFGDescriptionEditBox:GetText() == "" then GF_TurnOffAnnounce(GF_NOTHING_TO_ANNOUNCE) return end
-		if GF_AutoAnnounceTimer > GF_SavedVariables.announcetimer then
-			GF_AutoAnnounceTimer = 0
-			GF_GetJoinedChannels()
-			if not GF_PerCharVariables.disablehardcore and GF_Hardcore and GF_PerCharVariables.hardcore ~= 3 then
-				SendChatMessage(GF_LFGDescriptionEditBox:GetText(), "HARDCORE", nil, nil)
-			else
-				SendChatMessage(GF_LFGDescriptionEditBox:GetText(), "CHANNEL", nil, GF_ChatJoinedChannels[strlower(GF_SavedVariables.groupchannelname)])
-			end
-			DEFAULT_CHAT_FRAME:AddMessage(GF_SENT..GF_LFGDescriptionEditBox:GetText(),1,1,0.5)
-			GF_AnnounceToLFGButton:SetText(GF_ANNOUNCE_STOP_ANNOUNCE.."-"..GF_SavedVariables.announcetimer - GF_AutoAnnounceTimer)
-			GF_MinimapMessageFrameA1:AddMessage(GF_ANNOUNCED_LFG_EXT,1,1,0.5,1, UIERRORS_HOLD_TIME)
-			PlaySound("TellMessage")
+	GF_AutoAnnounceTimer = GF_AutoAnnounceTimer + 1
+	if not GF_ChatJoinedChannels[strlower(GF_GroupChannelEditBox:GetText())] then GF_GetJoinedChannels() if not GF_ChatJoinedChannels[strlower(GF_GroupChannelEditBox:GetText())] then GF_TurnOffAnnounce(GF_AUTO_ANNOUNCE_NOT_IN_CHANNEL) return end end
+	if GF_LFGDescriptionEditBox:GetText() == "" then GF_TurnOffAnnounce(GF_NOTHING_TO_ANNOUNCE) return end
+	if GF_AutoAnnounceTimer > GF_SavedVariables.announcetimer then
+		GF_AutoAnnounceTimer = 0
+		GF_GetJoinedChannels()
+		if not GF_PerCharVariables.disablehardcore and GF_Hardcore and GF_PerCharVariables.hardcore ~= 3 then
+			SendChatMessage(GF_LFGDescriptionEditBox:GetText(), "HARDCORE", nil, nil)
 		else
-			GF_AnnounceToLFGButton:SetText(GF_ANNOUNCE_STOP_ANNOUNCE.."-"..GF_SavedVariables.announcetimer - GF_AutoAnnounceTimer)
+			SendChatMessage(GF_LFGDescriptionEditBox:GetText(), "CHANNEL", nil, GF_ChatJoinedChannels[strlower(GF_SavedVariables.groupchannelname)])
 		end
+		DEFAULT_CHAT_FRAME:AddMessage(GF_SENT..GF_LFGDescriptionEditBox:GetText(),1,1,0.5)
+		GF_AnnounceToLFGButton:SetText(GF_ANNOUNCE_STOP_ANNOUNCE.."-"..GF_SavedVariables.announcetimer - GF_AutoAnnounceTimer)
+		GF_MinimapMessageFrameA1:AddMessage(GF_ANNOUNCED_LFG_EXT,1,1,0.5,1, UIERRORS_HOLD_TIME)
+		PlaySound("TellMessage")
+	else
+		GF_AnnounceToLFGButton:SetText(GF_ANNOUNCE_STOP_ANNOUNCE.."-"..GF_SavedVariables.announcetimer - GF_AutoAnnounceTimer)
 	end
 end
 function GF_TurnOffAnnounce(messageText)
@@ -2610,7 +2608,7 @@ function GF_ProcessChatMessages(event,arg1,arg2,arg8,arg9,delayed) -- Chat proce
 	local logType = GF_FilterMessageType(gsub(arg1,"[\\\"]", " "),arg2,arg9,event) or 5 -- 1=group,2=newgroup,3=filteredgroup,4=me,5=chat,6=loot,7=spam,8=guild,9=trade,10=blacklist,11=level
 	--print(GetTime())
 	if fixedType then logType = fixedType arg1 = ">>"..strsub(arg1,3) end
-	if logType > 7 and GF_PlayerMessages[arg2] and GF_PlayerMessages[arg2][1] and GF_PlayerMessages[arg2][1][1] then GF_PlayerMessages[arg2][1][1] = GF_PlayerMessages[arg2][1][1] + 1 end -- To block multiple messages in series(Guild,Trade,Blacklist,Level)
+	if logType > 7 and GF_PlayerMessages[arg2] and GF_PlayerMessages[arg2][1] and GF_PlayerMessages[arg2][1][1] then GF_PlayerMessages[arg2][1][1] = time() + 1 end -- To block multiple messages in series(Guild,Trade,Blacklist,Level)
 	GF_AddLogMessage(arg1,logType,true,arg2,arg8,arg9,event)
 	if arg2 == UnitName("player") or (GF_SavedVariables.alwaysshowguild and (GF_Guildies[arg2] or GF_Friends[arg2] or GF_PlayersCurrentlyInGroup[arg2])) or GF_ChatCheckFilters(logType,arg1,arg2,event) then
 		if delayed then
@@ -3508,7 +3506,9 @@ function GF_CheckForSpam(arg1,arg2,foundInGroup)
 		if GF_WhoTable[GF_RealmName][arg2] and GF_WhoTable[GF_RealmName][arg2][1] < GF_SavedVariables.blockmessagebelowlevel and GF_WhoTable[GF_RealmName][arg2][4] + 86400 > time() then return 11 end  -- Block lowlevel
 		if GF_SavedVariables.spamfilter then
 			if GF_PlayerMessages[arg2][1][1] > time() then return 7 end -- Returns spam for the duration of the spam filter
-			if (strlen(arg1) > 30 and ((GF_PlayerMessages[arg2][1][1] + 120 > time() and strfind(arg1,strsub(GF_PlayerMessages[arg2][2][1],math.random(ceil(strlen(GF_PlayerMessages[arg2][2][1])/4)),math.random(ceil(strlen(GF_PlayerMessages[arg2][2][1])/4))*-1),1,true)) or (GF_PlayerMessages[arg2][1][2] + 120 > time() and strfind(arg1,strsub(GF_PlayerMessages[arg2][2][2],math.random(ceil(strlen(GF_PlayerMessages[arg2][2][2])/4)),math.random(ceil(strlen(GF_PlayerMessages[arg2][2][2])/4))*-1),1,true)) or (GF_PlayerMessages[arg2][1][3] + 120 > time() and strfind(arg1,strsub(GF_PlayerMessages[arg2][2][3],math.random(ceil(strlen(GF_PlayerMessages[arg2][2][3])/4)),math.random(ceil(strlen(GF_PlayerMessages[arg2][2][3])/4))*-1),1,true))))
+			local snipa = math.random(ceil(strlen(GF_PlayerMessages[arg2][2][1])/4))
+			local snipb = math.random(ceil(strlen(GF_PlayerMessages[arg2][2][1])/4))*-1
+			if (strlen(arg1) > 30 and ((GF_PlayerMessages[arg2][1][1] + 120 > time() and strfind(arg1,strsub(GF_PlayerMessages[arg2][2][1],snipa,snipb),1,true)) or (GF_PlayerMessages[arg2][1][2] + 120 > time() and strfind(arg1,strsub(GF_PlayerMessages[arg2][2][2],snipa,snipb),1,true)) or (GF_PlayerMessages[arg2][1][3] + 120 > time() and strfind(arg1,strsub(GF_PlayerMessages[arg2][2][3],snipa,snipb),1,true))))
 			or (GF_PlayerMessages[arg2][1][1] + 120 > time() and arg1 == GF_PlayerMessages[arg2][2][1]) and (GF_PlayerMessages[arg2][1][2] + 120 > time() and arg1 == GF_PlayerMessages[arg2][2][2]) then		-- Found Spammer
 				if GF_SavedVariables.autoblacklist and not GF_BlackList[GF_RealmName][arg2] and strlen(arg1) > 120 and arg1 == GF_PlayerMessages[arg2][2][1] and arg1 == GF_PlayerMessages[arg2][2][2] and
 				((GF_SavedVariables.blacklisttrades and foundTrades > 2.9) or (GF_SavedVariables.blacklistguild and foundGuild > 2.9) or (GF_SavedVariables.blacklistchat and foundGuild < 3 and foundTrades < 3) or (GF_SavedVariables.blacklistforeign and languageName ~= "en")) then
@@ -3523,8 +3523,10 @@ function GF_CheckForSpam(arg1,arg2,foundInGroup)
 						if GF_SavedVariables.usewhoongroups and not GF_WhoQueue[name] then GF_WhoTable[GF_RealmName][arg2] = nil GF_AddNameToWhoQueue(arg2,true) end
 					end
 				end
-				table.insert(GF_PlayerMessages[arg2][1],1,GF_PlayerMessages[arg2][1][1] + GF_SavedVariables.spamfilterduration)
+				table.insert(GF_PlayerMessages[arg2][1],1,time() + GF_SavedVariables.spamfilterduration)
 				table.remove(GF_PlayerMessages[arg2][1],4)
+				table.insert(GF_PlayerMessages[arg2][2],1,arg1)
+				table.remove(GF_PlayerMessages[arg2][2],4)
 				return 7
 			end
 			table.insert(GF_PlayerMessages[arg2][1],1,time())
@@ -3549,7 +3551,7 @@ function GF_GetGroupInformation(arg1,arg2,sentTime,event) -- Searches messages f
 	elseif foundDungeon and (not foundQuest[1] or foundQuest[1] == 0 or (foundDungeon ~= 0 and foundDungeon >= foundQuest[1] - 5)) then
 		entry.type = "D" entry.flags = {} for i=1, getn(foundDFlags) do table.insert(entry.flags, GF_GROUP_IDS[foundDFlags[i]]) end
 	elseif foundQuest[1] and (foundQuest[1] > 0 or (not foundPvP or foundPvP == 0)) then entry.type = "Q" foundDungeon = nil entry.flags = {"QUEST"}
-	else entry.type = "N" if foundPvP then if foundPvP == 0 then foundPvP = 60 end	entry.flags = {} for i=1, getn(foundPFlags) do table.insert(entry.flags, GF_GROUP_IDS[foundPFlags[i]]) end else entry.flags = {""} end end
+	else entry.type = "N" if foundPvP then if foundPvP == 0 then foundPvP = 60 end entry.flags = {} for i=1, getn(foundPFlags) do table.insert(entry.flags, GF_GROUP_IDS[foundPFlags[i]]) end else entry.flags = {""} end end
 	if not entry.flags[1] then return end
 	entry.dlevel = math.floor(foundRaid or foundDungeon or foundQuest[1] or foundPvP or foundClass or 0)
 	if entry.dlevel == 0 and not GF_WhoTable[GF_RealmName][entry.op] then
@@ -5088,8 +5090,8 @@ function GF_SearchListDropdownShow()
 	GF_GetDropDownButtons("SearchList",10,nil,true)
 end
 function GF_HideDropdownMenus()
-	for name,_ in GF_MenusToHide do
-		if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), GF_MenusToHide[name]) then getglobal(name):Hide() end
+	for name,data in GF_MenusToHide do
+		if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), data[1]) then if data[2] + .5 < GetTime() then getglobal(name):Hide() else return end end
 	end
 	GF_MenusToHide = {}
 	GF_OnUpdateFunctions["HideMenus"] = nil
