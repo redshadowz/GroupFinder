@@ -3814,11 +3814,10 @@ GF_BUTTONS_LIST = {
 {"Stratholme", 55, 60, "STRAT", },
 {"Upper Blackrock Spire", 55, 60, "UBRS", "BRS", },
 {"Zul'Gurub", 60, 60, "ZG", },
-{"AQ20", 60, 60, "AQ" },
 {"Molten Core", 60, 60, "MC", },
 {"Onyxia's Lair", 60, 60, "ONY", },
 {"Blackwing Lair", 60, 60, "BWL", },
-{"AQ40", 60, 60, "AQ", },
+{"Ahn'Qiraj", 60, 60, "AQ", },
 {"Naxxramas", 60, 60, "NAXX", },
 {"World Boss", 60, 60, "WB" },
 {"Quests", 1, 60, "QUEST" },
@@ -4141,8 +4140,9 @@ GF_QUEST_CONVERT_NEGATIVE_ID = {
 GF_HIGH_ELF = "High Elf"
 GF_GOBLIN = "Goblin"
 local GF_TurtleSearchList = {
-{"Emerald Sanctum",60,60,"ES"},
 {"Karazhan",60,60,"KARA"},
+{"Timbermaw Hold",60,60,"TMH"},
+{"Emerald Sanctum",60,60,"ES"},
 {"Karazhan Crypt",60,60,"CRYPT"},
 {"Black Morass",60,60,"COT"},
 {"Stormwind Vault",60,60,"SWV"},
