@@ -2209,7 +2209,7 @@ GF_WORD_IGNORE = { -- Phrases to help prevent group false-positives.
 ["storystuff"] = .5,["streamit"] = .5,["succubus"] = .5,["succubuss"] = .5,["suckforyou"] = .5,["suckingtemple"] = 2,["sucksasson"] = .5,["suckson"] = .5,
 ["sugardaddy"] = .5,["sugarmomma"] = .5,["summonedme"] = .5,["supposedtoqueue"] = .5,["takeforeverto"] = .5,["takesage"] = .5,["taketomuch"] = .5,["talents"] = .5,["talenttree"] = .5,
 ["talkabout"] = .5,["tankaddon"] = .5,["tankcouch"] = .5,["tankgetquickerqueue"] = .5,["tankgetsquickerqueue"] = .5,["tankinfo"] = .5,["tankiseasy"] = .5,["tankplates"] = .5,["tauntinggroup"] = .5,["tauntingraid"] = .5,
-["taxdeductible"] = .5,["tbh"] = .5,["teachme"] = .5,["tellingmeto"] = .5,["tellmethat"] = .5,["tellmewhere"] = .5,["thankyouall"] = .5,["thankyoufor"] = .5,["thatguy"] = .5,
+["taxdeductible"] = .5,["tbh"] = .5,["teachme"] = .5,["tellingmeto"] = .5,["tellmethat"] = .5,["tellmewhere"] = .5,["thankyouall"] = .5,["thatguy"] = .5,
 ["thatissue"] = .5,["thatkilled"] = .5,["thatquestchain"] = .5,["thatsbadsign"] = .5,["thatsalot"] = .5,["thatsawesome"] = .5,["thatsgoingto"] = .5,["thatshitwas"] = .5,["thatswhy"] = .5,
 ["thatwas"] = .5,["theironythe"] = .5,["thenthisis"] = .5,["thenyou"] = .5,["thereareno"] = .5,["thereiseuropean"] = .5,["thereismob"] = .5,["thereisamerican"] = .5,["thereisempty"] = .5,
 ["thereisrussian"] = .5,["thereisno"] = .5,["thereisnofun"] = .5,["thereisnoquest"] = .5,["thesameodds"] = .5,["thescourge"] = .5,["theyarefine"] = .5,["theyarelooking"] = .5,["theyoncethey"] = .5,
@@ -2326,10 +2326,12 @@ GF_WORD_IGNORE = { -- Phrases to help prevent group false-positives.
 ["warmane"] = .25,["screwthat"] = .25,
 ["transportedtotheirdungeon"] = .5,["transportedtotheirgroup"] = .5,["transportedtodungeon"] = .5,["transportedtogroup"] = .5,["teleportedtotheirdungeon"] = .5,["teleportedtotheirgroup"] = .5,["teleportedtodungeon"] = .5,["teleportedtogroup"] = .5,
 
+
 --[[
 [""] = .5,
 [""] = 1,
 --]]
+--["thankyoufor"] = .5,
 
 -- Other
 ["taurenandhuman"] = .5,["taurenanddwarf"] = .5,["taurenandgnome"] = .5,["taurenandhighelf"] = .5,["taurenandnightelf"] = .5,["taurenandorc"] = .5,["taurenandundead"] = .5,["taurenandtroll"] = .5,["taurenandgoblin"] = .5,
@@ -2986,7 +2988,8 @@ GF_LFG_BEFORE = { -- Up to two words before
 ["lookingto"] = 1,
 ["lovetodo"] = 1,
 ["takeme"] = 1,["takemethrough"] = 1,["takemeto"] = 1,["takemefor"] = 1,
-["seekraid"] = 1,
+["searchgroup"] = 1,["searchraid"] = 1,
+["seekgroup"] = 1,["seekraid"] = 1,
 ["tankready"] = 1,
 ["upfor"] = 1,
 
@@ -2999,6 +3002,8 @@ GF_LFG_AFTER = { -- Up to two words after
 ["need"] = 1,
 ["invite"] = 1,
 ["lfg"] = 1,
+["searchgroup"] = 1,["searchraid"] = 1,
+["seekgroup"] = 1,["seekraid"] = 1,
 }
 GF_LFM_TRIGGER_BEFORE = { -- One word before and after
 -- Before

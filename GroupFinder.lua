@@ -4021,6 +4021,7 @@ function GF_EntryMatchesGroupFilterCriteria(entry)
 	end
 end
 function GF_GetDifficultyColor(level)
+	if level > 63 then return "|cff"..GF_DifficultyColors["RED"] end
 	local color = GetDifficultyColor(level) or GetQuestDifficultyColor(level)
 	if color.r and color.g and color.b then return string.format("|cff%02x%02x%02x",color.r*255,color.g*255,color.b*255) else return "|cff"..GF_DifficultyColors["GREY"] end
 end
