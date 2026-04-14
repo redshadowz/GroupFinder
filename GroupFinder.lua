@@ -2804,7 +2804,7 @@ function GF_GetTypes(arg1, showanyway)
 	lfs = 1 -- To detect space/lf##m/letter(eg "lf15mbwl" = lfm bwl)
 	while true do lfs,lfe,wordString = strfind(arg1,"[%p%s]([lk][fv]?%s?%d+m)[%p%s]",lfs) if wordString then arg1 = strsub(arg1,1,lfs)..GF_LFM_LOCALIZED.." "..strsub(arg1,lfs+strlen(wordString)+1) lfs = lfs + 4 foundLFM = 3 foundGuildExclusion = 1 foundTradesExclusion = 1 if showanyway == true then print("lf##m lfm 3 .. guildex 1... tradesex 1") end else break end end
 	lfs = 1 -- To detect space/number+/punctuation/number+/space for groups(eg "4v5" or "4/5" = group, "4=5" triggers foundLFM)
-	while true do lfs,lfe,tempString,wordString = strfind(arg1,"[%p%s](%d%d?([=/v:])%d%d?)[%p%s]",lfs) if wordString then if wordString == "=" then foundLFM = 2 lfs = lfe elseif wordString == ":" then if strlen(tempString) == 5 and strsub(tempString,-1) == "0" and strfind(arg1,"^"..GF_SERVERTIME_ABBREV_LOCALIZED.."[%p%s]",lfe+1) then arg1 = strsub(arg1,1,lfs)..GF_SERVERTIME_LOCALIZED..strsub(arg1,lfe+strlen(GF_SERVERTIME_ABBREV_LOCALIZED)+1) lfs = lfe + strlen(GF_SERVERTIME_ABBREV_LOCALIZED) + 1 else lfs = lfe end else arg1 = strsub(arg1,1,lfs)..GF_GROUP_OPEN_LOCALIZED..strsub(arg1,lfe) lfs = lfs + 6 end else break end end
+	while true do lfs,lfe,tempString,wordString = strfind(arg1,"[%p%s](%d%d?([=/v:%-])%d%d?)[%p%s]",lfs) if wordString then if wordString == "=" then foundLFM = 2 lfs = lfe elseif wordString == "-" then if strlen(tempString) == 5 and strsub(tempString,-1) == "9" and GF_WORD_SPECIAL_COMBINATION[tempString] then arg1 = strsub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[tempString]..strsub(arg1,lfe) lfs = lfs + strlen(GF_WORD_SPECIAL_COMBINATION[tempString]) + 1 else lfs = lfe end elseif wordString == ":" then if strlen(tempString) == 5 and strsub(tempString,-1) == "0" and strfind(arg1,"^"..GF_SERVERTIME_ABBREV_LOCALIZED.."[%p%s]",lfe+1) then arg1 = strsub(arg1,1,lfs)..GF_SERVERTIME_LOCALIZED..strsub(arg1,lfe+strlen(GF_SERVERTIME_ABBREV_LOCALIZED)+1) lfs = lfe + strlen(GF_SERVERTIME_ABBREV_LOCALIZED) + 1 else lfs = lfe end else arg1 = strsub(arg1,1,lfs)..GF_GROUP_OPEN_LOCALIZED..strsub(arg1,lfe) lfs = lfs + 6 end else break end end
 	lfs,lfe,wordString,tempString = strfind(arg1,"[%p%s](%d?%d?%s?\-?([-\+±]))\-?%s?%d?%d?[%p%s]")
 	if wordString then -- To detect "+- or ±"
 		if tempString == "±" then foundTrades = foundTrades + 1 if showanyway == true then print("± trade 1") end
@@ -3261,28 +3261,28 @@ function GF_GetTypes(arg1, showanyway)
 				elseif GF_GUILD_WORD_EXCLUSION[wordString] then foundGuildExclusion = foundGuildExclusion + GF_GUILD_WORD_EXCLUSION[wordString] if showanyway == true then print(wordString.." guildex") end end
 				if GF_TRADE_WORD_EXCLUSION[wordString] then foundTradesExclusion = foundTradesExclusion + GF_TRADE_WORD_EXCLUSION[wordString] if showanyway == true then print(wordString.." tradesex") end end
 				if GF_WORD_LFM[wordString] and (not GF_LFM_TRIGGER[wordString] or GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] or GF_GROUP_IDS[wordTable[i+j+1]] or GF_GROUP_IDS[wordTable[i-1]] or GF_WORD_LEVEL_ZONE[wordTable[i-1]]) then
-					if GF_WORD_LFM[wordString] > foundLFM then foundLFM = GF_WORD_LFM[wordString] table.insert(lfmlfgName, wordString) if showanyway == true then print(wordString.." lfm "..GF_WORD_LFM[wordString]) end end
+					table.insert(lfmlfgName, wordString)
+					if showanyway == true then print(wordString.." lfm "..GF_WORD_LFM[wordString]) end
 					if GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] then
-						if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] > foundQuest[1] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] end
-						if GF_WORD_LFM[wordString] + .5 > foundLFM then foundLFM = GF_WORD_LFM[wordString] + .5 table.insert(lfmPosition, {i,i+j+1,GF_WORD_LFM[wordString] + .5,true}) else table.insert(lfmPosition, {i,i+j+1,GF_WORD_LFM[wordString],true}) end
+						if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] > foundQuest[1] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] table.insert(lfmPosition, {i,i+j+1,GF_WORD_LFM[wordString] + .5,true}) else table.insert(lfmPosition, {i,i+j+1,GF_WORD_LFM[wordString],true}) end
 					elseif GF_GROUP_IDS[wordTable[i+j+1]] then
-						if GF_WORD_LFM[wordString] + .5 > foundLFM then foundLFM = GF_WORD_LFM[wordString] + .5 table.insert(lfmPosition, {i,i+j+1,GF_WORD_LFM[wordString] + .5,true}) else table.insert(lfmPosition, {i,i+j+1,GF_WORD_LFM[wordString],true}) end
+						table.insert(lfmPosition, {i,i+j+1,GF_WORD_LFM[wordString] + .5,true})
 					elseif GF_WORD_LEVEL_ZONE[wordTable[i-1]] then
-						if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i-1]] > foundQuest[1] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-1]] end
-						if GF_WORD_LFM[wordString] + .5 > foundLFM then foundLFM = GF_WORD_LFM[wordString] + .5 table.insert(lfmPosition, {i-1,i+j,GF_WORD_LFM[wordString] + .5,true}) else table.insert(lfmPosition, {i-1,i+j,GF_WORD_LFM[wordString],true}) end
+						if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i-1]] > foundQuest[1] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-1]] table.insert(lfmPosition, {i-1,i+j,GF_WORD_LFM[wordString] + .5,true}) else table.insert(lfmPosition, {i-1,i+j,GF_WORD_LFM[wordString],true}) end
 					elseif GF_GROUP_IDS[wordTable[i-1]] then
-						if GF_WORD_LFM[wordString] + .5 > foundLFM then foundLFM = GF_WORD_LFM[wordString] + .5 table.insert(lfmPosition, {i-1,i+j,GF_WORD_LFM[wordString] + .5,true}) else table.insert(lfmPosition, {i-1,i+j,GF_WORD_LFM[wordString],true}) end
+						table.insert(lfmPosition, {i-1,i+j,GF_WORD_LFM[wordString] + .5,true})
 					else
 						table.insert(lfmPosition, {i,i+j,GF_WORD_LFM[wordString],true})
 					end
 					if GF_QUEST_ONLY_AFTER_LFM[wordTable[i+j+1]] then if not foundQuest[1] or GF_QUEST_ONLY_AFTER_LFM[wordTable[i+j+1]] > foundQuest[1] then foundQuest[1] = GF_QUEST_ONLY_AFTER_LFM[wordTable[i+j+1]] if showanyway == true then print(wordTable[i+j+1].." only after lfm") end end end
 				elseif GF_WORD_LFG[wordString] then
-					if GF_WORD_LFG[wordString] > foundLFG then foundLFG = GF_WORD_LFG[wordString] table.insert(lfmlfgName, wordString) if showanyway == true then print(wordString.." lfg "..GF_WORD_LFG[wordString]) end end
+					table.insert(lfmlfgName, wordString)
+					if showanyway == true then print(wordString.." lfg "..GF_WORD_LFG[wordString]) end
 					if GF_QUEST_ONLY_AFTER_LFG[wordTable[i+j+1]] then if not foundQuest[1] or GF_QUEST_ONLY_AFTER_LFG[wordTable[i+j+1]] > foundQuest[1] then foundQuest[1] = GF_QUEST_ONLY_AFTER_LFG[wordTable[i+j+1]] if showanyway == true then print(wordTable[i+j+1].." only after lfm") end end end
 					if GF_GROUP_IDS[wordTable[i+j+1]] then
-						if GF_WORD_LFG[wordString] + .5 > foundLFG then foundLFG = GF_WORD_LFG[wordString] + .5 table.insert(lfmPosition, {i,i+j+1,GF_WORD_LFG[wordString] + .5}) else table.insert(lfmPosition, {i,i+j+1,GF_WORD_LFG[wordString]}) end
+						table.insert(lfmPosition, {i,i+j+1,GF_WORD_LFG[wordString] + .5})
 					elseif GF_GROUP_IDS[wordTable[i-1]] then
-						if GF_WORD_LFG[wordString] + .5 > foundLFG then foundLFG = GF_WORD_LFG[wordString] + .5 table.insert(lfmPosition, {i-1,i+j,GF_WORD_LFG[wordString] + .5}) else table.insert(lfmPosition, {i-1,i+j,GF_WORD_LFG[wordString]}) end
+						table.insert(lfmPosition, {i-1,i+j,GF_WORD_LFG[wordString] + .5})
 					else
 						table.insert(lfmPosition, {i,i+j,GF_WORD_LFG[wordString]})
 					end
