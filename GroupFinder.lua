@@ -348,7 +348,7 @@ function GF_LoadVariables()
 	for i=1,getn(GF_SavedVariables.blocklist) do table.insert(GF_BUTTONS_LIST["BlockList"],{GF_SavedVariables.blocklist[i]}) GF_WORD_BLOCK_LIST[GF_FormatBlockListWords(GF_SavedVariables.blocklist[i])] = true end
 	
 	GF_BUTTONS_LIST["FontName"][1][2] = ChatFontNormal:GetFont()
-	if pfUI and pfUI.gui and pfUI.gui.dropdowns and pfUI.gui.dropdowns.fonts then
+	if IsAddOnLoaded("pfUI") and pfUI.gui and pfUI.gui.dropdowns and pfUI.gui.dropdowns.fonts then
 		for i=1, getn(pfUI.gui.dropdowns.fonts) do
 			for fontPath,fontName in string.gfind(pfUI.gui.dropdowns.fonts[i], "(.*):(.*)") do
 				if not GF_BUTTONS_LIST["FontName"][strupper(fontName)] then table.insert(GF_BUTTONS_LIST["FontName"],{fontName,fontPath}) end
@@ -493,7 +493,7 @@ function GF_LoadSettings()
 	if GF_PerCharVariables.DPSMeterXPos then GF_DamageMeterFrame:SetPoint("TOPLEFT",UIParent,"TOPLEFT", GF_PerCharVariables.DPSMeterXPos, GF_PerCharVariables.DPSMeterYPos) end
 	if GF_PerCharVariables.dpsmetershown then GF_DamageMeterFrame:Show() end
 	if GF_SavedVariables.mainframestatus ~= 0 and not GF_SavedVariables.mainframeishidden then if GF_SavedVariables.mainframelogisopen then GF_ToggleMainFrame(2) else GF_ToggleMainFrame(1) end else if GF_SavedVariables.mainframelogisopen then GF_GroupsFrame:Hide() GF_LogFrame:Show() else GF_GroupsFrame:Show() GF_LogFrame:Hide() end end
-	if GF_SavedVariables.purgepfdb and GF_SavedVariables.showformattedchat then pfUI_playerDB = {} end
+	if IsAddOnLoaded("pfUI") and GF_SavedVariables.purgepfdb and GF_SavedVariables.showformattedchat then pfUI_playerDB = {} end
 	if GF_SavedVariables.iconpriority then if pfMinimap then GF_RelevelMinimapIcons(pfMinimap) else GF_RelevelMinimapIcons(Minimap) end end
 	GF_UpdateMinimapIcon()
 	GF_UpdateFriendsList()
@@ -915,7 +915,7 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 	end
 	local old_QuestLogTitleButton_OnClick = QuestLogTitleButton_OnClick
 	function QuestLogTitleButton_OnClick(button,self)
-		if GF_SavedVariables.questmod and (ChatFrameEditBox:IsVisible() or GF_LFGDescriptionEditBoxHasFocus[1]) and not IsAddOnLoaded("pfQuest") and not IsAddOnLoaded("Questie") and button == "LeftButton" and IsShiftKeyDown() then
+		if GF_SavedVariables.questmod and not IsAddOnLoaded("pfQuest") and not IsAddOnLoaded("Questie") and (ChatFrameEditBox:IsVisible() or GF_LFGDescriptionEditBoxHasFocus[1]) and button == "LeftButton" and IsShiftKeyDown() then
 			local qtable = GF_GetQuestInfo(GetQuestLogTitle(this:GetID() + FauxScrollFrame_GetOffset(EQL3_QuestLogListScrollFrame or ShaguQuest_QuestLogListScrollFrame or QuestLogListScrollFrame)),nil)
 			if qtable[2] then
 				if GF_LFGDescriptionEditBoxHasFocus[1] then
@@ -1153,7 +1153,7 @@ function GF_ToggleMainFrame(tab)
 		local _,_,_,xpos, ypos = GF_MainFrame:GetPoint() GF_SavedVariables.MainFrameXPos = xpos GF_SavedVariables.MainFrameYPos = ypos
 		GF_MainFrame:Show()
 		GF_SavedVariables.mainframeishidden = false
-		if pfUI and pfUI.chat and pfUI.chat.urlcopy then pfUI.chat.urlcopy:SetWidth(700) pfUI.chat.urlcopy.text:SetWidth(680) end
+		if IsAddOnLoaded("pfUI") and pfUI.chat and pfUI.chat.urlcopy then pfUI.chat.urlcopy:SetWidth(700) pfUI.chat.urlcopy.text:SetWidth(680) end
 	end
 	GF_LFGGetWhoUpdateOffset()
 	GF_UpdateMainFrameHeight()
@@ -1351,7 +1351,7 @@ function GF_RelevelMinimapIcons(frame)
 	GF_MinimapIcon:SetFrameStrata("MEDIUM")
 end
 function GF_SetPFUIAddonButtons()
-	if pfUI and pfUI.addonbuttons and pfUI_cache and pfUI_cache["abuttons"] and pfUI_cache["abuttons"]["del"] then
+	if IsAddOnLoaded("pfUI") and pfUI.addonbuttons and pfUI_cache and pfUI_cache["abuttons"] and pfUI_cache["abuttons"]["del"] then
 		if GF_SavedVariables.iconpriority then
 			table.insert(pfUI_cache["abuttons"]["del"],"GF_MinimapIcon")
 		else
@@ -2168,8 +2168,7 @@ function self:ADDON_LOADED() -- Event handlers called directly
 				local questName, questLevel = pfQuestCompat.GetQuestLogTitle(this:GetID() + FauxScrollFrame_GetOffset(EQL3_QuestLogListScrollFrame or ShaguQuest_QuestLogListScrollFrame or QuestLogListScrollFrame))
 				local questids = pfDatabase:GetQuestIDs(this:GetID() + FauxScrollFrame_GetOffset(EQL3_QuestLogListScrollFrame or ShaguQuest_QuestLogListScrollFrame or QuestLogListScrollFrame))
 				local questid = questids and tonumber(questids[1]) or 0
-
-				GF_LFGDescriptionEditBox:Insert(pfUI.api.rgbhex(pfQuestCompat.GetDifficultyColor(questLevel)).."|Hquest:"..questid..":"..questLevel.."|h["..questName.."]|h|r")
+				GF_LFGDescriptionEditBox:Insert(GF_GetDifficultyColor(questLevel).."|Hquest:"..questid..":"..questLevel.."|h["..questName.."]|h|r")
 				return true
 			end
 			old_QuestLogTitleButton_OnClick(button,self)
@@ -4022,12 +4021,8 @@ function GF_EntryMatchesGroupFilterCriteria(entry)
 	end
 end
 function GF_GetDifficultyColor(level)
-	if level == 0 then return "|cff"..GF_DifficultyColors["GREY"]
-	elseif level - UnitLevel("player") > 3 then return "|cff"..GF_DifficultyColors["RED"]
-	elseif level - UnitLevel("player") > 1 then return "|cff"..GF_DifficultyColors["ORANGE"]
-	elseif level - UnitLevel("player") > -2 then return "|cff"..GF_DifficultyColors["YELLOW"]
-	elseif level - UnitLevel("player") * .95 > -3.05 then return "|cff"..GF_DifficultyColors["GREEN"]
-	else return "|cff"..GF_DifficultyColors["GREY"] end
+	local color = GetDifficultyColor(level) or GetQuestDifficultyColor(level)
+	if color.r and color.g and color.b then return string.format("|cff%02x%02x%02x",color.r*255,color.g*255,color.b*255) else return "|cff"..GF_DifficultyColors["GREY"] end
 end
 function GF_GetLevelString(level,flags)
 	if level == 0 then if flags[1] == "SM" then return "[35]|r |cffffffff["..flags[1].."]|r " elseif flags[1] == "" then return "[NA]|r " else return "[NA]|r |cffffffff["..flags[1].."]|r " end

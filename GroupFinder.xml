@@ -1826,6 +1826,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								GF_SavedVariables.MainFrameYPos = ypos
 							end
 							GF_SavedVariables.mainframestatus = 1
+							GF_ResultsListOffset = 0
 							GF_ToggleMainFrame(3)
 						end
 					</OnClick>
@@ -1864,6 +1865,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								GF_SavedVariables.MainFrameYPos = ypos
 							end
 							GF_SavedVariables.mainframestatus = 2
+							GF_ResultsListOffset = 0
 							GF_ToggleMainFrame(3)
 						end
 					</OnClick>
@@ -3118,17 +3120,19 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Frames>
 						<Scripts>
 							<OnMouseWheel>
-								if arg1 == -1 and getn(GF_FilteredResultsList) > GF_ResultsListOffset + GF_ResultsListOffsetSize then
-									if GF_ResultsListOffset + GF_ResultsListOffsetSize + 3 > getn(GF_FilteredResultsList) then
-										GF_ResultsListOffset = GF_ResultsListOffset + (getn(GF_FilteredResultsList) - (GF_ResultsListOffset + GF_ResultsListOffsetSize))
-										if GF_ResultsListOffset &lt; 0 then GF_ResultsListOffset = 0 end
-										GF_UpdateResults()
-									else
-										GF_ResultsListOffset = GF_ResultsListOffset + 3
-										GF_UpdateResults()
+								if GF_SavedVariables.mainframestatus == 0 then
+									if arg1 == -1 and getn(GF_FilteredResultsList) > GF_ResultsListOffset + GF_ResultsListOffsetSize then
+										if GF_ResultsListOffset + GF_ResultsListOffsetSize + 3 > getn(GF_FilteredResultsList) then
+											GF_ResultsListOffset = GF_ResultsListOffset + (getn(GF_FilteredResultsList) - (GF_ResultsListOffset + GF_ResultsListOffsetSize))
+											if GF_ResultsListOffset &lt; 0 then GF_ResultsListOffset = 0 end
+											GF_UpdateResults()
+										else
+											GF_ResultsListOffset = GF_ResultsListOffset + 3
+											GF_UpdateResults()
+										end
+									elseif arg1 == 1 and GF_ResultsListOffset > 0 then
+										GF_ResultsListOffset = math.max(GF_ResultsListOffset - 3,0) GF_UpdateResults()
 									end
-								elseif arg1 == 1 and GF_ResultsListOffset > 0 then
-									GF_ResultsListOffset = math.max(GF_ResultsListOffset - 3,0) GF_UpdateResults()
 								end
 							</OnMouseWheel>
 						</Scripts>
@@ -5323,11 +5327,29 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnValueChanged>
 								</Scripts>
 							</Slider>
+							<CheckButton name="GF_UseDPSMeterCheckButton" inherits="GF_CheckButtonTemplate_Label">
+								<Anchors>
+									<Anchor point="TOPLEFT">
+										<Offset>
+											<AbsDimension x="20" y="-13"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										if this:GetChecked() then GF_PerCharVariables.usedpsmeter = true else GF_PerCharVariables.usedpsmeter = false end
+										GF_SetupDPSMeter()
+									</OnClick>
+									<OnLoad>
+										getglobal(this:GetName().."TextLabel"):SetText(GF_USE_DPS_METER)
+									</OnLoad>
+								</Scripts>
+							</CheckButton>
 							<CheckButton name="GF_SquareMinimapCheckButton" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="TOPLEFT">
 										<Offset>
-											<AbsDimension x="50" y="-13"/>
+											<AbsDimension x="160" y="-13"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -5343,9 +5365,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							</CheckButton>
 							<CheckButton name="GF_MinimapIconPriorityCheckButton" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
-									<Anchor point="TOP">
+									<Anchor point="TOPLEFT">
 										<Offset>
-											<AbsDimension x="-50" y="-13"/>
+											<AbsDimension x="300" y="-13"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -5423,24 +5445,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnClick>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_USE_FRIENDS_LIST_WHO)
-									</OnLoad>
-								</Scripts>
-							</CheckButton>
-							<CheckButton name="GF_UseDPSMeterCheckButton" inherits="GF_CheckButtonTemplate_Label">
-								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="GF_UseFriendsListCheckButton" relativePoint="BOTTOMLEFT">
-										<Offset>
-											<AbsDimension x="0" y="-5"/>
-										</Offset>
-									</Anchor>
-								</Anchors>
-								<Scripts>
-									<OnClick>
-										if this:GetChecked() then GF_PerCharVariables.usedpsmeter = true else GF_PerCharVariables.usedpsmeter = false end
-										GF_SetupDPSMeter()
-									</OnClick>
-									<OnLoad>
-										getglobal(this:GetName().."TextLabel"):SetText(GF_USE_DPS_METER)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
