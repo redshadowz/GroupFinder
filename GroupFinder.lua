@@ -3260,7 +3260,7 @@ function GF_GetTypes(arg1, showanyway)
 				elseif GF_GUILD_WORD_EXCLUSION[wordString] then foundGuildExclusion = foundGuildExclusion + GF_GUILD_WORD_EXCLUSION[wordString] if showanyway == true then print(wordString.." guildex") end end
 				if GF_TRADE_WORD_EXCLUSION[wordString] then foundTradesExclusion = foundTradesExclusion + GF_TRADE_WORD_EXCLUSION[wordString] if showanyway == true then print(wordString.." tradesex") end end
 				if GF_WORD_LFM[wordString] and (not GF_LFM_TRIGGER[wordString] or GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] or GF_GROUP_IDS[wordTable[i+j+1]] or GF_GROUP_IDS[wordTable[i-1]] or GF_WORD_LEVEL_ZONE[wordTable[i-1]]) then
-					table.insert(lfmlfgName, wordString)
+					table.insert(lfmlfgName,wordString)
 					if showanyway == true then print(wordString.." lfm "..GF_WORD_LFM[wordString]) end
 					if GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] then
 						if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] > foundQuest[1] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] table.insert(lfmPosition, {i,i+j+1,GF_WORD_LFM[wordString] + .5,true}) else table.insert(lfmPosition, {i,i+j+1,GF_WORD_LFM[wordString],true}) end
@@ -3275,7 +3275,7 @@ function GF_GetTypes(arg1, showanyway)
 					end
 					if GF_QUEST_ONLY_AFTER_LFM[wordTable[i+j+1]] then if not foundQuest[1] or GF_QUEST_ONLY_AFTER_LFM[wordTable[i+j+1]] > foundQuest[1] then foundQuest[1] = GF_QUEST_ONLY_AFTER_LFM[wordTable[i+j+1]] if showanyway == true then print(wordTable[i+j+1].." only after lfm") end end end
 				elseif GF_WORD_LFG[wordString] then
-					table.insert(lfmlfgName, wordString)
+					table.insert(lfmlfgName,wordString)
 					if showanyway == true then print(wordString.." lfg "..GF_WORD_LFG[wordString]) end
 					if GF_QUEST_ONLY_AFTER_LFG[wordTable[i+j+1]] then if not foundQuest[1] or GF_QUEST_ONLY_AFTER_LFG[wordTable[i+j+1]] > foundQuest[1] then foundQuest[1] = GF_QUEST_ONLY_AFTER_LFG[wordTable[i+j+1]] if showanyway == true then print(wordTable[i+j+1].." only after lfm") end end end
 					if GF_GROUP_IDS[wordTable[i+j+1]] then
@@ -3301,7 +3301,9 @@ function GF_GetTypes(arg1, showanyway)
 				elseif GF_WORD_PVP[wordString] then
 					if showanyway == true then print(wordString.." pvp") end
 					if not foundPvP or GF_WORD_PVP[wordString] > foundPvP then foundPvP = GF_WORD_PVP[wordString] table.insert(foundPFlags,1,wordString) else table.insert(foundPFlags, wordString) end table.insert(groupPosition,{i,i+j,wordString})
-					if foundPvP == 0 then for num in string.gfind(arg1, "(%d+)[%splevl%-'s]+") do if tonumber(num) > foundPvP and tonumber(num) > 8 and tonumber(num) < 61 then foundPvP = tonumber(num) end end end
+					if foundPvP == 0 then for num,word in string.gfind(arg1, "[%p%s](%d+)%s?(%a+)[%p%s]") do if (GF_WORD_PVP[word] or GF_PVP_DETECTION[word]) and tonumber(num) > foundPvP and tonumber(num) > 8 and tonumber(num) < 61 then foundPvP = tonumber(num) break end end end
+					if foundPvP == 0 then for word,num in string.gfind(arg1, "[%p%s](%a+)%s?(%d+)[%p%s]") do if (GF_WORD_PVP[word] or GF_PVP_DETECTION[word]) and tonumber(num) > foundPvP and tonumber(num) > 8 and tonumber(num) < 61 then foundPvP = tonumber(num) break end end end
+					if foundPvP == 0 then table.insert(groupName,wordString) groupName[wordString] = true end
 					foundTradesExclusion = foundTradesExclusion + .3 foundGuildExclusion = foundGuildExclusion + .1
 				end
 				if GF_WORD_LEVEL_ZONE[wordString] and (wordTable[i-1] == GF_PORTAL_LOCALIZED or wordTable[i+1] == GF_PORTAL_LOCALIZED) then foundTrades = foundTrades + 1 if showanyway == true then print("portalzone trade 1") end end
@@ -4575,7 +4577,7 @@ function GF_GroupHistoryDisplayEntryLog(offset)
 	for i=1, playerSize do
 		getglobal("GF_GroupHistoryLogPlayer"..i):SetText("|cff"..(GF_ClassColors[playerTable[i+offset][2][2]] or "9d9d9d").."|Hplayer:"..playerTable[i+offset][1].."|h["..playerTable[i+offset][1]..", "..playerTable[i+offset][2][1].."]|h|r")
 		if playerTable[i+offset][2][5] > 0 then
-			getglobal("GF_GroupHistoryLogPlayer"..i.."TextLabel"):SetText("("..playerTable[i+offset][2][3]..")("..ceil(playerTable[i+offset][2][3]/playerTable[i+offset][2][5])..")|cff00FF00("..playerTable[i+offset][2][4]..")|r")
+			getglobal("GF_GroupHistoryLogPlayer"..i.."TextLabel"):SetText("("..playerTable[i+offset][2][3]..")|cffFF4646("..ceil(playerTable[i+offset][2][3]/playerTable[i+offset][2][5])..")|r|cff00FF00("..playerTable[i+offset][2][4]..")|r")
 		else
 			getglobal("GF_GroupHistoryLogPlayer"..i.."TextLabel"):SetText("("..playerTable[i+offset][2][3]..")|cff00FF00("..playerTable[i+offset][2][4]..")|r")
 		end
