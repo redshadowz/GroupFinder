@@ -10,6 +10,21 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 		</Size>
 		<Layers>
 			<Layer level="OVERLAY">
+				<Texture name ="$parentTextureGreen" hidden="true">
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset>
+								<AbsDimension x="3" y="-2"/>
+							</Offset>
+						</Anchor>
+						<Anchor point="BOTTOMRIGHT">
+							<Offset>
+								<AbsDimension x="-3" y="-2"/>
+							</Offset>
+						</Anchor>						
+					</Anchors>
+					<Color r="0" g="1" b="0" a="0.1"/>
+				</Texture>
 				<Texture name ="$parentTextureGold" hidden="true">
 					<Anchors>
 						<Anchor point="TOPLEFT">
@@ -3335,7 +3350,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</OnLoad>
 				</Scripts>
 			</Frame>
-			<Frame name="GF_LogFrame" hidden="true">
+			<Frame name="GF_LogFrame" toplevel="true" hidden="true">
 				<Size>
 					<AbsDimension x="700" y="500"/>
 				</Size>
@@ -4018,7 +4033,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLeave>
 								</Scripts>
 							</Frame>
-							<Frame name = "GF_WhisperHistoryButtonLog" hidden="true">
+							<Frame name = "GF_WhisperHistoryButtonLog" enableMouse="true" hidden="true">
 								<Size>
 									<AbsDimension x="100" y="435"/>
 								</Size>
@@ -4114,7 +4129,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										<Scripts>
 											<OnClick>
 												if GF_WhisperLogOffset > 0 then
-													GF_WhisperLogOffset = GF_WhisperLogOffset - 18
+													GF_WhisperLogOffset = math.max(GF_WhisperLogOffset - 18,0)
 													if GF_SavedVariables.showwhisperlogs == 1 then GF_WhisperHistoryUpdateFrame() elseif GF_SavedVariables.showwhisperlogs == 2 then GF_GroupHistoryUpdateFrame() end
 												end
 											</OnClick>
@@ -4216,6 +4231,39 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Frames>
 					</Frame>
 				</Frames>
+				<Scripts>
+					<OnMouseWheel>
+						if GF_SavedVariables.mainframestatus == 0 or GF_MainFrameShowBoth then
+							if GF_SavedVariables.showwhisperlogs == 1 then
+								if arg1 == -1 and getn(GF_WhisperLogData[GF_RealmName]) > GF_WhisperLogOffset + 19 then
+									if GF_WhisperLogOffset + 19 + 3 > getn(GF_WhisperLogData[GF_RealmName]) then
+										GF_WhisperLogOffset = GF_WhisperLogOffset + (getn(GF_WhisperLogData[GF_RealmName]) - (GF_WhisperLogOffset + 19))
+										if GF_WhisperLogOffset &lt; 0 then GF_WhisperLogOffset = 0 end
+										GF_WhisperHistoryUpdateFrame()
+									else
+										GF_WhisperLogOffset = math.max(math.min(GF_WhisperLogOffset + 3,getn(GF_WhisperLogData[GF_RealmName])+1 - 19),0)
+										GF_WhisperHistoryUpdateFrame()
+									end
+								elseif arg1 == 1 and GF_WhisperLogOffset > 0 then
+									GF_WhisperLogOffset = math.max(GF_WhisperLogOffset - 3,0) GF_WhisperHistoryUpdateFrame()
+								end
+							elseif GF_SavedVariables.showwhisperlogs == 2 then
+								if arg1 == -1 and getn(GF_GroupHistory[GF_RealmName]) > GF_WhisperLogOffset + 19 then
+									if GF_WhisperLogOffset + 19 + 3 > getn(GF_GroupHistory[GF_RealmName]) then
+										GF_WhisperLogOffset = GF_WhisperLogOffset + (getn(GF_GroupHistory[GF_RealmName]) - (GF_WhisperLogOffset + 19))
+										if GF_WhisperLogOffset &lt; 0 then GF_WhisperLogOffset = 0 end
+										GF_GroupHistoryUpdateFrame()
+									else
+										GF_WhisperLogOffset = math.max(math.min(GF_WhisperLogOffset + 3,getn(GF_GroupHistory[GF_RealmName]) - 19),0)
+										GF_GroupHistoryUpdateFrame()
+									end
+								elseif arg1 == 1 and GF_WhisperLogOffset > 0 then
+									GF_WhisperLogOffset = math.max(GF_WhisperLogOffset - 3,0) GF_GroupHistoryUpdateFrame()
+								end
+							end
+						end
+					</OnMouseWheel>
+				</Scripts>
 			</Frame>
 			<Frame name="GF_SettingsFrame" hidden="true">
 				<Size>
