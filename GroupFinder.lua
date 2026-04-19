@@ -993,6 +993,7 @@ function GF_HandleItemRefLinks(link,text,button)
 						return true
 					elseif ChatFrameEditBox:IsVisible() then
 						ChatFrameEditBox:Insert(text)
+						return true
 					else
 						for i=1, getn(GF_UrgentWhoRequest) do
 							if GF_UrgentWhoRequest[i] == name then table.remove(GF_UrgentWhoRequest, i) break end
@@ -3170,27 +3171,25 @@ function GF_GetTypes(arg1, showanyway)
 		if wordTable[lfs] then
 			wordString = wordTable[lfs]
 			if GF_WORD_FIX[wordString] then
-				wordTable[lfs] = GF_WORD_FIX[wordString] wordTableTrade[lfs] = GF_WORD_FIX[wordString] wordTableGuild[lfs] = GF_WORD_FIX[wordString]
+				wordString = GF_WORD_FIX[wordString] wordTable[lfs] = wordString wordTableTrade[lfs] = wordString wordTableGuild[lfs] = wordString
 			elseif GF_WORD_FIX_SECOND[wordString] then
-				wordTable[lfs] = GF_WORD_FIX_SECOND[wordString][1] wordTableTrade[lfs] = GF_WORD_FIX_SECOND[wordString][1] wordTableGuild[lfs] = GF_WORD_FIX_SECOND[wordString][1]
+				wordString = GF_WORD_FIX_SECOND[wordString][1] wordTable[lfs] = wordString wordTableTrade[lfs] = wordString wordTableGuild[lfs] = wordString
 				table.insert(wordTable,lfs+1,GF_WORD_FIX_SECOND[wordString][2]) table.insert(wordTableTrade,lfs+1,GF_WORD_FIX_SECOND[wordString][2]) table.insert(wordTableGuild,lfs+1,GF_WORD_FIX_SECOND[wordString][2])
 				tempVal=tempVal+1
-				lfs = lfs + 1
-			else
-				if GF_WORD_FIX_TRADE[wordString] and not TradeFixNames[wordString] then
-					if GF_TRADE_TRIGGER[wordString] then
-						if GF_WORD_LEVEL_ZONE[wordTable[lfs-1]] or GF_GROUP_IDS[wordTable[lfs-1]] then
-							wordTableTrade[lfs] = GF_TRADE_COMMON_WORDS[wordString]
-						end
-					else
-						wordTableTrade[lfs] = GF_WORD_FIX_TRADE[wordString][1]
-						TradeFixNames[wordString] = true
-					end
-					possibleGold = nil
-				end
-				if wordTableGuild["BRACKETS"] == wordString then wordTableGuild[lfs] = "G"
-				elseif GF_WORD_FIX_GUILD[wordString] then wordTableGuild[lfs] = GF_WORD_FIX_GUILD[wordString][1] end
 			end
+			if GF_WORD_FIX_TRADE[wordString] and not TradeFixNames[wordString] then
+				if GF_TRADE_TRIGGER[wordString] then
+					if GF_WORD_LEVEL_ZONE[wordTable[lfs-1]] or GF_GROUP_IDS[wordTable[lfs-1]] then
+						wordTableTrade[lfs] = GF_TRADE_COMMON_WORDS[wordString]
+					end
+				else
+					wordTableTrade[lfs] = GF_WORD_FIX_TRADE[wordString][1]
+					TradeFixNames[wordString] = true
+				end
+				possibleGold = nil
+			end
+			if wordTableGuild["BRACKETS"] == wordString then wordTableGuild[lfs] = "G"
+			elseif GF_WORD_FIX_GUILD[wordString] then wordTableGuild[lfs] = GF_WORD_FIX_GUILD[wordString][1] end
 		end
 		lfs = lfs + 1
 	end
