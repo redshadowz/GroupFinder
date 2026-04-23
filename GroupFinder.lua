@@ -130,6 +130,7 @@ local ShaguDPSLoaded = nil
 local ProcessedFirstChannelMessage = nil
 local GroupHistoryLogTable = {}
 local SomeoneInCombat = nil
+local gfind = string.gmatch or string.gfind
 
 local self = CreateFrame'Frame'
 self:Hide()
@@ -350,7 +351,7 @@ function GF_LoadVariables()
 	GF_BUTTONS_LIST["FontName"][1][2] = ChatFontNormal:GetFont()
 	if IsAddOnLoaded("pfUI") and pfUI.gui and pfUI.gui.dropdowns and pfUI.gui.dropdowns.fonts then
 		for i=1, getn(pfUI.gui.dropdowns.fonts) do
-			for fontPath,fontName in string.gfind(pfUI.gui.dropdowns.fonts[i], "(.*):(.*)") do
+			for fontPath,fontName in gfind(pfUI.gui.dropdowns.fonts[i], "(.*):(.*)") do
 				if not GF_BUTTONS_LIST["FontName"][strupper(fontName)] then table.insert(GF_BUTTONS_LIST["FontName"],{fontName,fontPath}) end
 			end
 		end
@@ -749,7 +750,7 @@ function GF_FormatBlockListWords(arg1,display)
 				if strbyte(arg1,lfs-1) == 90 then -- From Link
 					tempString = ""
 					if strlen(wordString) < 45 then
-						for word in string.gfind(wordString, "(%a+)") do if word == "thunderfury" or GF_WORD_FIX_ITEM_NAME[word] == "enchant" then break elseif GF_WORD_FIX_ITEM_NAME[word] then tempString = word end end
+						for word in gfind(wordString, "(%a+)") do if word == "thunderfury" or GF_WORD_FIX_ITEM_NAME[word] == "enchant" then break elseif GF_WORD_FIX_ITEM_NAME[word] then tempString = word end end
 						if tempString ~= "" then arg1 = strsub(arg1,1,lfs)..GF_WORD_FIX_ITEM_NAME[tempString]..strsub(arg1,lfe) end
 					end
 				end
@@ -2103,7 +2104,7 @@ function GF_ParseIncomingAddonMessages(msg)
 
 -- This system prevents groups and "W" from being sent for multiple "U"'s... The issue is that, if multiple people log on within 1-30 seconds(random), where one needs all groups and the other needs none, it will send none.
 	if strsub(msg,1,1) == "U" then -- (From OP) Sent on login with a list of names from OP's group list(up to 240 characters).
-		for name in string.gfind(strsub(msg,3), "(%w+)") do
+		for name in gfind(strsub(msg,3), "(%w+)") do
 			GF_AddonOPSentNamesOnLogin[name] = true
 			GF_AddonAllNamesForResponseToLogin[name] = nil
 		end
@@ -2120,14 +2121,14 @@ function GF_ParseIncomingAddonMessages(msg)
 		GF_UpdateAndRequestTimer = 0
 		GF_OnUpdateFunctions["Broadcast"] = GF_CheckForBroadCast
 	elseif strsub(msg,1,1) == "W" then -- (To Everyone) A list of names available to be requested(up to 240 characters). Add to 'GF_AddonNamesToBeSentAsARequest' if the name is not in 'GF_WhoTable'. Then delete from 'GF_AddonAllNamesForResponseToLogin'.
-		for sentname in string.gfind(msg, ":(%w+)") do -- This works 100% correctly. 'GF_AddonAllNamesForResponseToLogin' is removed either when responding with a "R" message or when receiving either a ":" or full group message.
+		for sentname in gfind(msg, ":(%w+)") do -- This works 100% correctly. 'GF_AddonAllNamesForResponseToLogin' is removed either when responding with a "R" message or when receiving either a ":" or full group message.
 			if not GF_WhoTable[GF_RealmName][sentname] then GF_AddonNamesToBeSentAsARequest[sentname] = true end
 			GF_AddonAllNamesForResponseToLogin[sentname] = nil
 		end
 		GF_TimeTillNextBroadcast = (math.random(80))/4
 		GF_OnUpdateFunctions["Broadcast"] = GF_CheckForBroadCast
 	elseif strsub(msg,1,1) == "R" then -- (To Everyone) The list of names requested(up to 240 characters). Add to 'GF_AddonWhoDataToBeSentBuffer' if I have 'GF_WhoTable'. Then delete the names I was going to request('GF_AddonNamesToBeSentAsARequest').
-		for sentname in string.gfind(msg, ":(%w+)") do -- This works 100% correctly. 'GF_AddonWhoDataToBeSentBuffer' is removed when sending or receiving a ":" message or a full group message.
+		for sentname in gfind(msg, ":(%w+)") do -- This works 100% correctly. 'GF_AddonWhoDataToBeSentBuffer' is removed when sending or receiving a ":" message or a full group message.
 			if GF_WhoTable[GF_RealmName][sentname] and (GF_WhoTable[GF_RealmName][sentname][1] == 60 or GF_WhoTable[GF_RealmName][sentname][4] + 86400 > time()) then
 				GF_AddonWhoDataToBeSentBuffer[sentname] = GF_WhoTable[GF_RealmName][sentname]
 			end
@@ -2136,7 +2137,7 @@ function GF_ParseIncomingAddonMessages(msg)
 		GF_TimeTillNextBroadcast = (math.random(80))/4
 		GF_OnUpdateFunctions["Broadcast"] = GF_CheckForBroadCast
 	elseif strsub(msg,1,1) == ":" then -- (To Everyone) This is 'GF_WhoTable' data. Add to your 'GF_WhoTable' and delete from 'GF_AddonAllNamesForResponseToLogin', 'GF_AddonNamesToBeSentAsARequest', and 'GF_AddonWhoDataToBeSentBuffer'.
-		for sentlevel,sentname,sentclass,sentguild,senttime in string.gfind(msg, ":(%d+)([a-zA-Z]+)(%d)([a-zA-Z%s]+)(%d+)") do -- This works 100% correctly.
+		for sentlevel,sentname,sentclass,sentguild,senttime in gfind(msg, ":(%d+)([a-zA-Z]+)(%d)([a-zA-Z%s]+)(%d+)") do -- This works 100% correctly.
 			if sentguild == "Z" then sentguild = "" end
 			if tonumber(senttime) <= time() and GF_ClassIDs[tonumber(sentclass)] and (not GF_WhoTable[GF_RealmName][sentname] or tonumber(senttime) > GF_WhoTable[GF_RealmName][sentname][4]) then
 				GF_WhoTable[GF_RealmName][sentname] = { tonumber(sentlevel), GF_ClassIDs[tonumber(sentclass)], sentguild, tonumber(senttime) }
@@ -2146,7 +2147,7 @@ function GF_ParseIncomingAddonMessages(msg)
 			GF_AddonWhoDataToBeSentBuffer[sentname] = nil
 		end
 	elseif strlen(msg) > 2 then -- (To Everyone) Add group information to your 'GF_MessageList' and delete from 'GF_AddonAllNamesForResponseToLogin', 'GF_AddonNamesToBeSentAsARequest', 'GF_AddonWhoDataToBeSentBuffer', 'GF_AddonGroupDataToBeSentBuffer'.
-		for senttime,sentname,message in string.gfind(msg, "(%d+)([a-zA-Z]+):(.+)") do -- This works 100% correctly.
+		for senttime,sentname,message in gfind(msg, "(%d+)([a-zA-Z]+):(.+)") do -- This works 100% correctly.
 			GF_GetTypes(gsub(gsub(gsub(gsub(gsub(strlower(gsub(gsub(gsub(gsub(" "..message.." ", " |+h%[([%w%s%p]+)%]|+h|+r", " %1 "), "|c%x+|+(%w+)[%d:]+|+h", " %1 "), "|+h|+r", " "),"([a-z ][a-z])([A-Z])","%1 %2")),".gg/%w+", ""),"([%p%s])(%w%w+)([%p%s])","%1 %2 %3"),"[%s%.%[](%a)[%s%.](%a)[%s%.]","%1%2"),"%s%s+", " "),"[']", ""))
 			for i=1, getn(GF_MessageList[GF_RealmName]) do
 				if GF_MessageList[GF_RealmName][i] and GF_MessageList[GF_RealmName][i].op and GF_MessageList[GF_RealmName][i].op == sentname then
@@ -2814,7 +2815,7 @@ function GF_CheckForSystem(arg1)
 				end
 			end
 		end
-		for name in string.gfind(arg1, "(%w+)") do
+		for name in gfind(arg1, "(%w+)") do
 			if GF_SavedVariables.friendsToRemove[name] and GF_SavedVariables.friendsToRemove[name] + 30 > time() then
 				GF_PreviousMessage["SYSTEM"] = {}
 				return
@@ -3065,13 +3066,13 @@ function GF_GetTypes(arg1, showanyway)
 					end
 					tempString = ""
 					if strlen(wordString) < 45 then
-						for word in string.gfind(wordString, "(%a+)") do if word == "thunderfury" or GF_WORD_FIX_ITEM_NAME[word] == "enchant" then break elseif GF_WORD_FIX_ITEM_NAME[word] then tempString = word end end
+						for word in gfind(wordString, "(%a+)") do if word == "thunderfury" or GF_WORD_FIX_ITEM_NAME[word] == "enchant" then break elseif GF_WORD_FIX_ITEM_NAME[word] then tempString = word end end
 						if tempString ~= "" then arg1 = strsub(arg1,1,lfs)..GF_WORD_FIX_ITEM_NAME[tempString]..strsub(arg1,lfe) end
 					end
 				end
 			elseif strbyte(arg1,lfs) == 60 and strbyte(arg1,lfe) == 62 then -- "<>"
 				tempString = ""
-				for word in string.gfind(wordString,"%a+") do if GF_WORD_FIX[word] then tempString = tempString..GF_WORD_FIX[word] else tempString = tempString..word end end
+				for word in gfind(wordString,"%a+") do if GF_WORD_FIX[word] then tempString = tempString..GF_WORD_FIX[word] else tempString = tempString..word end end
 				if strlen(tempString) < 25 then wordTableGuild["BRACKETS"] = tempString end
 				tempString = strsub(arg1,1,lfs)
 				_,_,wordString = strfind(tempString, "[%p%s](%a+)%s?<$") if wordString then if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_BRACKET_PREFIX_SUFFIX[wordString] then foundGuild = foundGuild + GF_GUILD_BRACKET_PREFIX_SUFFIX[wordString] if showanyway == true then print(wordString.." guild "..GF_GUILD_BRACKET_PREFIX_SUFFIX[wordString]) end end end
@@ -3430,8 +3431,8 @@ function GF_GetTypes(arg1, showanyway)
 				elseif GF_WORD_PVP[wordString] then
 					if showanyway == true then print(wordString.." pvp") end
 					if not foundPvP or GF_WORD_PVP[wordString] > foundPvP then foundPvP = GF_WORD_PVP[wordString] table.insert(foundPFlags,1,wordString) else table.insert(foundPFlags, wordString) end table.insert(groupPosition,{i,i+j,wordString})
-					if foundPvP == 0 then for num,word in string.gfind(arg1, "[%p%s](%d+)%s?(%a+)[%p%s]") do if (GF_WORD_PVP[word] or GF_PVP_DETECTION[word]) and tonumber(num) > foundPvP and tonumber(num) > 8 and tonumber(num) < 61 then foundPvP = tonumber(num) break end end end
-					if foundPvP == 0 then for word,num in string.gfind(arg1, "[%p%s](%a+)%s?(%d+)[%p%s]") do if (GF_WORD_PVP[word] or GF_PVP_DETECTION[word]) and tonumber(num) > foundPvP and tonumber(num) > 8 and tonumber(num) < 61 then foundPvP = tonumber(num) break end end end
+					if foundPvP == 0 then for num,word in gfind(arg1, "[%p%s](%d+)%s?(%a+)[%p%s]") do if (GF_WORD_PVP[word] or GF_PVP_DETECTION[word]) and tonumber(num) > foundPvP and tonumber(num) > 8 and tonumber(num) < 61 then foundPvP = tonumber(num) break end end end
+					if foundPvP == 0 then for word,num in gfind(arg1, "[%p%s](%a+)%s?(%d+)[%p%s]") do if (GF_WORD_PVP[word] or GF_PVP_DETECTION[word]) and tonumber(num) > foundPvP and tonumber(num) > 8 and tonumber(num) < 61 then foundPvP = tonumber(num) break end end end
 					if foundPvP == 0 then table.insert(groupName,wordString) groupName[wordString] = true end
 					foundTradesExclusion = foundTradesExclusion + .3 foundGuildExclusion = foundGuildExclusion + .1
 					numGroupWords = numGroupWords + 1 + j
@@ -3594,15 +3595,15 @@ function GF_GetTypes(arg1, showanyway)
 	end
 
 	if foundDungeon == 0 then
-		for word,num in string.gfind(arg1, "(%a+)%p?%s?(%d+)") do if GF_WORD_FIX[word] then word = GF_WORD_FIX[word] end if GF_WORD_LEVEL_DETECT[word] and tonumber(num) > 8 and tonumber(num) < 61 then foundDungeon = tonumber(num) break end end
-		if foundDungeon == 0 then for num,word in string.gfind(arg1, "(%d+)%p?%s?(%a+)") do if GF_WORD_FIX[word] then word = GF_WORD_FIX[word] end if GF_WORD_LEVEL_DETECT[word] and tonumber(num) > 8 and tonumber(num) < 61 then foundDungeon = tonumber(num) break end end end
+		for word,num in gfind(arg1, "(%a+)%p?%s?(%d+)") do if GF_WORD_FIX[word] then word = GF_WORD_FIX[word] end if GF_WORD_LEVEL_DETECT[word] and tonumber(num) > 8 and tonumber(num) < 61 then foundDungeon = tonumber(num) break end end
+		if foundDungeon == 0 then for num,word in gfind(arg1, "(%d+)%p?%s?(%a+)") do if GF_WORD_FIX[word] then word = GF_WORD_FIX[word] end if GF_WORD_LEVEL_DETECT[word] and tonumber(num) > 8 and tonumber(num) < 61 then foundDungeon = tonumber(num) break end end end
 	elseif foundQuest[1] == 0 then
-		for word,num in string.gfind(arg1, "(%a+)%p?%s?(%d+)") do if GF_WORD_FIX[word] then word = GF_WORD_FIX[word] end if GF_WORD_LEVEL_DETECT[word] and tonumber(num) > 8 and tonumber(num) < 61 then foundQuest[1] = tonumber(num) break end end
-		if foundQuest[1] == 0 then for num,word in string.gfind(arg1, "(%d+)%p?%s?(%a+)") do if GF_WORD_FIX[word] then word = GF_WORD_FIX[word] end if GF_WORD_LEVEL_DETECT[word] and tonumber(num) > 8 and tonumber(num) < 61 then foundQuest[1] = tonumber(num) break end end end
+		for word,num in gfind(arg1, "(%a+)%p?%s?(%d+)") do if GF_WORD_FIX[word] then word = GF_WORD_FIX[word] end if GF_WORD_LEVEL_DETECT[word] and tonumber(num) > 8 and tonumber(num) < 61 then foundQuest[1] = tonumber(num) break end end
+		if foundQuest[1] == 0 then for num,word in gfind(arg1, "(%d+)%p?%s?(%a+)") do if GF_WORD_FIX[word] then word = GF_WORD_FIX[word] end if GF_WORD_LEVEL_DETECT[word] and tonumber(num) > 8 and tonumber(num) < 61 then foundQuest[1] = tonumber(num) break end end end
 		if foundQuest[1] == 0 then for i=1, tempVal do if GF_WORD_LEVEL_ZONE[wordTable[i]] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i]] break end end end
 	elseif foundClass == 0 then
-		for word,num in string.gfind(arg1, "(%a+)%p?%s?(%d+)") do if GF_WORD_FIX[word] then word = GF_WORD_FIX[word] end if GF_WORD_LEVEL_DETECT[word] and tonumber(num) > 8 and tonumber(num) < 61 then foundClass = tonumber(num) break end end
-		if foundClass == 0 then for num,word in string.gfind(arg1, "(%d+)%p?%s?(%a+)") do if GF_WORD_FIX[word] then word = GF_WORD_FIX[word] end if GF_WORD_LEVEL_DETECT[word] and tonumber(num) > 8 and tonumber(num) < 61 then foundClass = tonumber(num) break end end end
+		for word,num in gfind(arg1, "(%a+)%p?%s?(%d+)") do if GF_WORD_FIX[word] then word = GF_WORD_FIX[word] end if GF_WORD_LEVEL_DETECT[word] and tonumber(num) > 8 and tonumber(num) < 61 then foundClass = tonumber(num) break end end
+		if foundClass == 0 then for num,word in gfind(arg1, "(%d+)%p?%s?(%a+)") do if GF_WORD_FIX[word] then word = GF_WORD_FIX[word] end if GF_WORD_LEVEL_DETECT[word] and tonumber(num) > 8 and tonumber(num) < 61 then foundClass = tonumber(num) break end end end
 	end
 
 	if showanyway == true then
@@ -3687,7 +3688,7 @@ function GF_GetGroupInformation(arg1,arg2,sentTime,event) -- Searches messages f
 	entry.dlevel = math.floor(foundRaid or foundDungeon or foundQuest[1] or foundPvP or foundClass or 0)
 	if entry.dlevel == 0 and not GF_WhoTable[GF_RealmName][entry.op] then
 		local number = 0
-		for num in string.gfind(arg1, "(%d+)[%s\[\]\+]?") do
+		for num in gfind(arg1, "(%d+)[%s\[\]\+]?") do
 			if tonumber(num) > number and tonumber(num) > 10 and tonumber(num) < 61 then number = tonumber(num) end
 		end
 		entry.dlevel = number
@@ -3713,7 +3714,7 @@ function GF_GetGroupInformation(arg1,arg2,sentTime,event) -- Searches messages f
 	return entry, 1
 end
 function GF_SearchMessageForTextString(msg,textstring,entry)
-	for w in string.gfind(textstring, "([%w%s]+),") do
+	for w in gfind(textstring, "([%w%s]+),") do
 		if strfind(msg, w) then return true end
 		for i=1, getn(entry.flags) do
 			if entry.flags[i] == GF_GROUP_IDS[strlower(gsub(w," ",""))] or entry.flags[i] == strupper(gsub(w," ", "")) then return true end
@@ -5619,7 +5620,7 @@ function GF_GetDungeonsFromText(arg1)
 				if strbyte(arg1,lfs-1) == 90 then -- From Link
 					tempString = ""
 					if strlen(wordString) < 45 then
-						for word in string.gfind(wordString, "(%a+)") do if word == "thunderfury" or GF_WORD_FIX_ITEM_NAME[word] == "enchant" then break elseif GF_WORD_FIX_ITEM_NAME[word] then tempString = word end end
+						for word in gfind(wordString, "(%a+)") do if word == "thunderfury" or GF_WORD_FIX_ITEM_NAME[word] == "enchant" then break elseif GF_WORD_FIX_ITEM_NAME[word] then tempString = word end end
 						if tempString ~= "" then arg1 = strsub(arg1,1,lfs)..GF_WORD_FIX_ITEM_NAME[tempString]..strsub(arg1,lfe) end
 					end
 				end
@@ -5975,7 +5976,7 @@ function GetModifiedQuestName(entryname)
 				if strbyte(arg1,lfs-1) == 90 then -- From Link
 					tempString = ""
 					if strlen(wordString) < 45 then
-						for word in string.gfind(wordString, "(%a+)") do if word == "thunderfury" or GF_WORD_FIX_ITEM_NAME[word] == "enchant" then break elseif GF_WORD_FIX_ITEM_NAME[word] then tempString = word end end
+						for word in gfind(wordString, "(%a+)") do if word == "thunderfury" or GF_WORD_FIX_ITEM_NAME[word] == "enchant" then break elseif GF_WORD_FIX_ITEM_NAME[word] then tempString = word end end
 						if tempString ~= "" then arg1 = strsub(arg1,1,lfs)..GF_WORD_FIX_ITEM_NAME[tempString]..strsub(arg1,lfe) end
 					end
 				end
