@@ -6068,7 +6068,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 		<Frames>
 			<Button name="$parentCloseButton" inherits="UIPanelCloseButton">
 				<Size>
-					<AbsDimension x="20" y="20"/>
+					<AbsDimension x="24" y="24"/>
 				</Size>
 				<Anchors>
 					<Anchor point="TOPRIGHT">
