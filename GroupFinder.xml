@@ -42,13 +42,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Texture>	
 			</Layer>
 		</Layers>
-		<Anchors>
-			<Anchor point="TOPRIGHT">
-				<Offset>
-					<AbsDimension x="97" y="0"/>
-				</Offset>
-			</Anchor>
-		</Anchors>
 		<Scripts>
 			<OnClick>
 				GF_WhisperHistoryButtonPressed(this:GetID())
@@ -260,7 +253,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</OnClick>
 		</Scripts>
 	</CheckButton>
-	<Frame name="GF_OptionFrameBoxTemplate" inherits="OptionFrameBoxTemplate" virtual="true">
+	<Frame name="GF_OptionFrameBoxTemplate" inherits="OptionFrameBoxTemplate" virtual="true"><!-- Changed from OptionFrameBoxTemplate and added FontString.. Changed "this" to "self". Added "self" to MessageFrameScrollButton_OnLoad/MessageFrameScrollButton_OnUpdate-->
 		<Scripts>
 			<OnLoad>
 				this:SetBackdropBorderColor(0.4,0.4,0.4)
@@ -4049,6 +4042,13 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										<Size>
 											<AbsDimension x="100" y="26"/>
 										</Size>
+										<Anchors>
+											<Anchor point="TOPLEFT" relativePoint="TOPRIGHT">
+												<Offset>
+													<AbsDimension x="-3" y="0"/>
+												</Offset>
+											</Anchor>
+										</Anchors>
 										<Scripts>
 											<OnLoad>
 												this:Show()
@@ -5423,7 +5423,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									<OnClick>
 										if this:GetChecked() then GF_SavedVariables.iconpriority = true else GF_SavedVariables.iconpriority = false end
 										GF_SetPFUIAddonButtons()
-										if GF_SavedVariables.iconpriority then if pfMinimap then GF_RelevelMinimapIcons(pfMinimap) else GF_RelevelMinimapIcons(Minimap) end end
+										if GF_SavedVariables.iconpriority then if pfMinimap then GF_RelevelMinimapIcons(pfMinimap) else GF_RelevelMinimapIcons(Minimap) end GF_MinimapIcon:SetFrameStrata("HIGH") end
 									</OnClick>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_MINIMAP_ICON_PRIO)
