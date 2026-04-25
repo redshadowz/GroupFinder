@@ -97,7 +97,9 @@ local GF_TextColors = { ["SYSTEM"] = {1,1,0},["SAY"] = {1,1,1},["YELL"] = {1,0.2
 local EventIDAlias = { ["SAY"] = "[S] ",["YELL"] = "[Y] ",["GUILD"] = "[G] ",["OFFICER"] = "[O] ",["WHISPER"] = "",["WHISPER_INFORM"] = "[To] ",["PARTY"] = "[P] ",["RAID"] = "[R] ",["RAID_LEADER"] = "[RL] ",["RAID_WARNING"] = "[RW] ",
 ["BATTLEGROUND"] = "[BG] ",["BATTLEGROUND_LEADER"] = "[BL] ",["SYSTEM"] = "",}
 local GF_ChatNameAlias = { ["OFFICER"] = "GUILD",["RAID"] = "PARTY",["RAID_LEADER"] = "PARTY",["RAID_WARNING"] = "PARTY",["BATTLEGROUND"] = "PARTY",["BATTLEGROUND_LEADER"] = "PARTY",["WHISPER_INFORM"] = "WHISPER",}
-local GF_ChatBypass = { ["MONEY"] = true,["LOOT"] = true,["COMBAT_FACTION_CHANGE"] = true,["COMBAT_XP_GAIN"] = true,["COMBAT_HONOR_GAIN"] = true,["EMOTE"] = true,["TEXT_EMOTE"] = true,["MONSTER_SAY"] = true,["MONSTER_EMOTE"] = true,["MONSTER_YELL"] = true,}
+local GF_ChatBypass = { ["CHAT_MSG_MONEY"] = true,["CHAT_MSG_LOOT"] = true,["CHAT_MSG_COMBAT_FACTION_CHANGE"] = true,["CHAT_MSG_COMBAT_XP_GAIN"] = true,["CHAT_MSG_COMBAT_HONOR_GAIN"] = true,["CHAT_MSG_EMOTE"] = true,["CHAT_MSG_TEXT_EMOTE"] = true,["CHAT_MSG_MONSTER_SAY"] = true,["CHAT_MSG_MONSTER_EMOTE"] = true,["CHAT_MSG_MONSTER_YELL"] = true,}
+local GF_ChatProcess = { ["CHAT_MSG_SYSTEM"] = true,["CHAT_MSG_SAY"] = true,["CHAT_MSG_YELL"] = true,["CHAT_MSG_CHANNEL"] = true,["CHAT_MSG_GUILD"] = true,["CHAT_MSG_OFFICER"] = true,["CHAT_MSG_WHISPER"] = true,["CHAT_MSG_WHISPER_INFORM"] = true,
+["CHAT_MSG_PARTY"] = true,["CHAT_MSG_RAID"] = true,["CHAT_MSG_RAID_LEADER"] = true,["CHAT_MSG_RAID_WARNING"] = true,["CHAT_MSG_BATTLEGROUND"] = true,["CHAT_MSG_BATTLEGROUND_LEADER"] = true,["CHAT_MSG_HARDCORE"] = true, }
 local ThingsToHide = { "GF_LogBottomButton","GF_LogDownButton","GF_LogUpButton","GF_LogFilterDropdownButton","GF_LogChannelFilterDropdownButton","GF_LogChannelNameDropdown","GF_ConvertLogMessagesToURL","GF_WhisperLogButton","GF_GroupLogButton",-- 9 Log-related
 "GF_MainFrameCloseButton","GF_GroupChatOptionsFrame", -- 2 both
 "GF_LFGFrameToggleButton","GF_GetWhoFrameToggleButton","GF_AnnounceToLFGButton", -- 3 Group-related
@@ -220,17 +222,11 @@ function GF_LoadVariables()
 		if GF_SavedVariables.MinimapIconXPos == nil then GF_SavedVariables.MinimapIconXPos = 11 end
 		if GF_SavedVariables.MinimapIconYPos == nil then GF_SavedVariables.MinimapIconYPos = -72 end
 		if GF_SavedVariables.squareminimap == nil then GF_SavedVariables.squareminimap = false end
-		if GF_SavedVariables.MinimapMsgArcOffset == nil then GF_SavedVariables.MinimapMsgArcOffset = 345 end
-		if GF_SavedVariables.MinimapMsgRadiusOffset == nil then GF_SavedVariables.MinimapMsgRadiusOffset = 90 end
+		if GF_SavedVariables.MinimapMsgArcOffset == nil then GF_SavedVariables.MinimapMsgArcOffset = 330 end
+		if GF_SavedVariables.MinimapMsgRadiusOffset == nil then GF_SavedVariables.MinimapMsgRadiusOffset = 40 end
 
 		if GF_SavedVariables.questmod == nil then GF_SavedVariables.questmod = true end
 		if GF_SavedVariables.purgepfdb == nil then GF_SavedVariables.purgepfdb = false end
-
-		if not GF_SavedVariables.MainFrameXPos or not GF_SavedVariables.MainFrameYPos then
-			local _,_,_,xpos, ypos = GF_MainFrame:GetPoint()
-			GF_SavedVariables.MainFrameXPos = xpos
-			GF_SavedVariables.MainFrameYPos = ypos
-		end
 
 		if GF_SavedVariables.mainframestatus == nil then GF_SavedVariables.mainframestatus = 0 end -- status is 0(normal), 1(left), or 2(right)... save window position and restore
 		if GF_SavedVariables.mainframeheight == nil then GF_SavedVariables.mainframeheight = false end
@@ -282,12 +278,6 @@ function GF_LoadVariables()
 		if GF_PerCharVariables.dpsmeter == nil then GF_PerCharVariables.dpsmeter = 1 end
 		if GF_PerCharVariables.dpsmetershown == nil then GF_PerCharVariables.dpsmetershown = false end
 		if GF_PerCharVariables.usedpsmeter == nil then GF_PerCharVariables.usedpsmeter = true end
-
-		if not GF_PerCharVariables.DPSMeterXPos or not GF_PerCharVariables.DPSMeterYPos then
-			local _,_,_,xpos,ypos = GF_DamageMeterFrame:GetPoint()
-			GF_PerCharVariables.DPSMeterXPos = xpos
-			GF_PerCharVariables.DPSMeterYPos = ypos
-		end
 	end
 	if GF_WhoTable[GF_RealmName]["LOADED"][4] < time() then -- Prune the WhoTable once per day
 		GF_WhoTable[GF_RealmName]["LOADED"] = { UnitLevel("player"), ({UnitClass("player")})[2], "", time() + 86400 }
@@ -425,9 +415,9 @@ function GF_LoadSettings()
 	GF_BUTTONS_LIST["LFGLFM"][5] = { UnitClass("player").." LFG", 1, 60, }
 
 	GF_MainFrame:SetAlpha(GF_FrameTransparencySlider:GetValue())
-	GF_MainFrame:SetScale(GF_UIScaleSlider:GetValue())
+	GF_MainFrame:SetScale(GF_UIScaleSlider:GetValue()/10)
 	if GF_SavedVariables.MainFrameXPos then GF_MainFrame:SetPoint("TOPLEFT",UIParent,"TOPLEFT", GF_SavedVariables.MainFrameXPos, GF_SavedVariables.MainFrameYPos) end
-	if GF_PerCharVariables.DPSMeterXPos then GF_DamageMeterFrame:SetPoint("TOPLEFT",UIParent,"TOPLEFT", GF_PerCharVariables.DPSMeterXPos, GF_PerCharVariables.DPSMeterYPos) end
+	if GF_PerCharVariables.DPSMeterXPos then GF_DamageMeterFrame:SetPoint("TOPLEFT",UIParent,"TOPLEFT",GF_PerCharVariables.DPSMeterXPos,GF_PerCharVariables.DPSMeterYPos) end
 	if GF_PerCharVariables.dpsmetershown then GF_DamageMeterFrame:Show() end
 	if GF_SavedVariables.mainframestatus ~= 0 and not GF_SavedVariables.mainframeishidden then if GF_SavedVariables.mainframelogisopen then GF_ToggleMainFrame(2) else GF_ToggleMainFrame(1) end else if GF_SavedVariables.mainframelogisopen then GF_GroupsFrame:Hide() GF_LogFrame:Show() else GF_GroupsFrame:Show() GF_LogFrame:Hide() end end
 	if IsAddOnLoaded("pfUI") and GF_SavedVariables.purgepfdb and GF_SavedVariables.showformattedchat then pfUI_playerDB = {} end
@@ -682,7 +672,7 @@ function GF_FormatBlockListWords(arg1,display)
 	lfs = 2 -- To detect words between and next to "[] or ()" (eg "(human only)", "[item] for free").
 	while true do lfs,lfe,wordString = strfind(arg1, "[<%(%[](.-)[%)%]>]",lfs)
 		if wordString then
-			if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_BRACKET[gsub(wordString," ","")] then foundGuild = foundGuild + GF_GUILD_BRACKET[gsub(wordString," ","")] if showanyway == true then print(wordString.." guild "..GF_GUILD_BRACKET[gsub(wordString," ","")]) end end
+			if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_BRACKET[gsub(wordString," ","")] then foundGuild = foundGuild + GF_GUILD_BRACKET[gsub(wordString," ","")] end
 			if strbyte(arg1,lfs) == 91 and strbyte(arg1,lfe) == 93 then -- "[]"
 				if strbyte(arg1,lfs-1) == 90 then -- From Link
 					tempString = ""
@@ -871,7 +861,7 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 			ProcessedFirstChannelMessage = true
 			GF_Frame:SetScript('OnUpdate', function() GF_OnUpdate() end)
 			GF_OnUpdateFunctions = {["Broadcast"] = GF_CheckForBroadCast,["Groups"] = GF_UpdateGroupsFrame,["Who"] = GF_SendWhoIfNameInQueue,["Delayed"] = GF_CheckForDelayedMessages,["Log"] = GF_DisplayLogFirst,["UpdateGroup"] = GF_UpdateGroup,["UpdateMeter"] = GF_UpdateDPSMeterOnLoad }
-			if GF_SavedVariables.usefriendslist and GF_SavedVariables.usewhoongroups then GF_OnUpdateFunctions["Friendslist"] = GF_UpdateWhoDataViaFriendsList end
+			if GF_SavedVariables.usefriendslist then GF_OnUpdateFunctions["Friendslist"] = GF_UpdateWhoDataViaFriendsList end
 			GF_UpdateTicker = GetTime() + .1
 		end
 		if not arg1 or not GF_TextColors[strsub(event,10)] or (arg9 and strlower(arg9) == "lft") then old_ChatFrame_OnEvent(event) return end -- Changed
@@ -882,7 +872,7 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 			--fixedType = nil
 			GF_ChatFunctions(event,arg1,arg2,arg8,arg9)
 			--if fixedType then GF_PreviousMessage[arg2][2] = strsub(arg1,3) end
-			if not GF_ChatBypass[strsub(event,10)] and GF_SavedVariables.showformattedchat and GF_PreviousMessage[arg2] and GF_PreviousMessage[arg2][1] then
+			if GF_ChatProcess[event] and GF_SavedVariables.showformattedchat and GF_PreviousMessage[arg2] and GF_PreviousMessage[arg2][1] then
 				if GF_PreviousMessage[arg2][2] then arg1 = GF_PreviousMessage[arg2][2] end
 				if event == "CHAT_MSG_CHANNEL" then GF_AddChannelMessage(arg1,arg2,arg8,arg9) else GF_AddChatMessage(arg1,arg2,strsub(event,10)) end
 				GF_PreviousMessage[arg2] = {}
@@ -914,7 +904,7 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 		old_SendWho(name)
 	end
 	local old_FriendsFrame_OnEvent = FriendsFrame_OnEvent
-	function FriendsFrame_OnEvent(...)
+	function FriendsFrame_OnEvent(...) -- Changed
 		if event == "FRIENDLIST_UPDATE" then
 			for i=1, GetNumFriends() do if GF_SavedVariables.friendsToRemove[GetFriendInfo(i)] then GF_UpdateFriendsList() return end end
 			old_FriendsFrame_OnEvent(event)
@@ -929,7 +919,7 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 		if not GF_HandleItemRefLinks(link,text,button) then old_SetItemRef(link,text,button) end
 	end
 	local old_ContainerFrameItemButton_OnClick = ContainerFrameItemButton_OnClick
-	function ContainerFrameItemButton_OnClick(mouseButton,ignoreModifiers)
+	function ContainerFrameItemButton_OnClick(mouseButton,ignoreModifiers) -- Changed to ContainerFrameItemButton_OnClick(self,button)... Removed GF_LFGDescriptionEditBoxHasFocus
 		if mouseButton == "LeftButton" and IsShiftKeyDown() and GF_LFGDescriptionEditBoxHasFocus[1] and GetContainerItemInfo(this:GetParent():GetID(),this:GetID()) then
 			GF_LFGDescriptionEditBox:Insert(GetContainerItemLink(this:GetParent():GetID(),this:GetID()))
 			return true
@@ -937,7 +927,7 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 		old_ContainerFrameItemButton_OnClick(mouseButton,ignoreModifiers)
 	end
 	local old_QuestLogTitleButton_OnClick = QuestLogTitleButton_OnClick
-	function QuestLogTitleButton_OnClick(button,self)
+	function QuestLogTitleButton_OnClick(button,self) -- Changed to QuestLogTitleButton_OnClick(self,button)
 		if GF_SavedVariables.questmod and not IsAddOnLoaded("pfQuest") and not IsAddOnLoaded("Questie") and (ChatFrameEditBox:IsVisible() or GF_LFGDescriptionEditBoxHasFocus[1]) and button == "LeftButton" and IsShiftKeyDown() then
 			local qtable = GF_GetQuestInfo(GetQuestLogTitle(this:GetID() + FauxScrollFrame_GetOffset(EQL3_QuestLogListScrollFrame or ShaguQuest_QuestLogListScrollFrame or QuestLogListScrollFrame)),nil)
 			if qtable[2] then
@@ -952,7 +942,7 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 		old_QuestLogTitleButton_OnClick(button,self)
 	end
 	local old_JoinChannelByName = JoinChannelByName	
-	function JoinChannelByName(channel,a2,a3,a4)
+	function JoinChannelByName(channel,a2,a3,a4) -- Changed to JoinPermanentChannel
 		old_JoinChannelByName(channel,a2,a3,a4)
 		GF_PerCharVariables.blockedchannels[strlower(channel)] = nil
 		GF_ChatJoinedChannels = {}
@@ -963,8 +953,8 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 		if strlower(channel) == strlower(GF_SavedVariables.groupchannelname) then GF_SavedVariables.joinworld = false GF_AutoJoinGroupChannelCheckButton:SetChecked(false) end
 		GF_ChatJoinedChannels = {}
 	end
-	local old_UIErrorsFrame_OnEvent = UIErrorsFrame_OnEvent	
-	function UIErrorsFrame_OnEvent(event,message,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9)
+	local old_UIErrorsFrame_OnEvent = UIErrorsFrame_OnEvent
+	function UIErrorsFrame_OnEvent(event,message,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9) -- Changed to UIErrorsFrame_OnEvent(self,event,...)
 		if not GF_SavedVariables.systemfilter or not GF_Error_Messages[message] then old_UIErrorsFrame_OnEvent(event,message,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9) end
 	end
 	if LFTFrame and LFTRoleCheckFrameRole1CheckButton and LFTRoleCheckFrameConfirmButton then
@@ -1102,6 +1092,8 @@ function GF_SlashHandler(msg)
 	if strlower(msg) == "reset" then
 		GF_MainFrame:ClearAllPoints()
 		GF_MainFrame:SetPoint("CENTER", UIParent, "CENTER",0,0)
+		GF_SavedVariables.MainFrameXPos = nil
+		GF_SavedVariables.MainFrameYPos = nil
 		GF_GroupsFrame:Show()
 		GF_LogFrame:Hide()
 		GF_BlackListFrame:Hide()
@@ -1138,7 +1130,6 @@ function GF_ToggleMainFrame(tab)
 	if GF_SavedVariables.mainframestatus == 0 then if GF_SavedVariables.mainframelogisopen then GF_GroupsFrame:Hide() else GF_LogFrame:Hide() end GF_MainFrameShowBoth = nil end
 	PlaySound("igCharacterInfoTab")
 	if GF_MainFrame:IsVisible() and tab ~= 3 and tab ~= 4 and (not tab or (tab == 2 and GF_SavedVariables.mainframelogisopen) or (tab == 1 and not GF_SavedVariables.mainframelogisopen)) then
-		local _,_,_,xpos, ypos = GF_MainFrame:GetPoint() GF_SavedVariables.MainFrameXPos = xpos GF_SavedVariables.MainFrameYPos = ypos
 		GF_MainFrame:Hide()
 		GF_MainFrameShowBoth = nil
 	else
@@ -1176,7 +1167,6 @@ function GF_ToggleMainFrame(tab)
 			GF_BlackListFrame:Hide()
 			GF_SettingsFrame:Hide()
 		end
-		local _,_,_,xpos, ypos = GF_MainFrame:GetPoint() GF_SavedVariables.MainFrameXPos = xpos GF_SavedVariables.MainFrameYPos = ypos
 		GF_MainFrame:Show()
 		GF_SavedVariables.mainframeishidden = false
 		if IsAddOnLoaded("pfUI") and pfUI.chat and pfUI.chat.urlcopy then pfUI.chat.urlcopy:SetWidth(700) pfUI.chat.urlcopy.text:SetWidth(680) end
@@ -1350,22 +1340,24 @@ function GF_UpdateMainFrame()
 end
 function GF_UpdateMinimapIcon()
 	local relativepos
-	local directionMultiplier = 1
+	local directionMultiplierX = 1
+	local directionMultiplierY = 1
 	if Minimap:GetLeft() > GetScreenWidth()/2 then -- Minimap on the Right
-		if Minimap:GetTop() > GetScreenHeight()/2 then relativepos = "TOPRIGHT"	directionMultiplier = -1 else relativepos = "BOTTOMRIGHT" end -- Minimap on Top/Bottom
+		directionMultiplierX = -1
+		if Minimap:GetTop() > GetScreenHeight()/2 then relativepos = "TOPRIGHT"	directionMultiplierY = -1 else relativepos = "BOTTOMRIGHT" end -- Minimap on Top/Bottom
 	else
-		if Minimap:GetTop() > GetScreenHeight()/2 then relativepos = "TOPLEFT" directionMultiplier = -1 else relativepos = "BOTTOMLEFT" end -- Minimap on Left and Top/Bottom
+		if Minimap:GetTop() > GetScreenHeight()/2 then relativepos = "TOPLEFT" directionMultiplierY = -1 else relativepos = "BOTTOMLEFT" end -- Minimap on Left and Top/Bottom
 	end
-	local xpos = (0 - ((GF_SavedVariables.MinimapMsgRadiusOffset) * cos(GF_SavedVariables.MinimapMsgArcOffset + (180 - (180*Minimap:GetRight()/GetScreenWidth()))))) - 55
-	local ypos = ((GF_SavedVariables.MinimapMsgRadiusOffset) * sin(GF_SavedVariables.MinimapMsgArcOffset + (180 - (180*Minimap:GetTop()/GetScreenHeight())))) - 55
+	local xpos = (0 - ((GF_SavedVariables.MinimapMsgRadiusOffset + Minimap:GetWidth()/2+50) * cos(GF_SavedVariables.MinimapMsgArcOffset + (180 - (180*Minimap:GetRight()/GetScreenWidth())))))
+	local ypos = ((GF_SavedVariables.MinimapMsgRadiusOffset + Minimap:GetWidth()/2+50) * sin(GF_SavedVariables.MinimapMsgArcOffset + (180 - (180*Minimap:GetTop()/GetScreenHeight()))))
 
 	GF_MoveMinimapIcon()
 	GF_MinimapMessageFrameA1:SetPoint(relativepos, "Minimap", relativepos,xpos,ypos)
-	GF_MinimapMessageFrameA2:SetPoint(relativepos, "Minimap", relativepos,xpos,ypos+42*directionMultiplier)
-	GF_MinimapMessageFrameA3:SetPoint(relativepos, "Minimap", relativepos,xpos,ypos+84*directionMultiplier)
-	GF_MinimapMessageFrameA4:SetPoint(relativepos, "Minimap", relativepos,xpos,ypos+126*directionMultiplier)
-	GF_MinimapMessageFrameA5:SetPoint(relativepos, "Minimap", relativepos,xpos,ypos+168*directionMultiplier)
-	GF_MinimapMessageFrameA6:SetPoint(relativepos, "Minimap", relativepos,xpos,ypos+210*directionMultiplier)
+	GF_MinimapMessageFrameA2:SetPoint(relativepos, "Minimap", relativepos,xpos,ypos+42*directionMultiplierY)
+	GF_MinimapMessageFrameA3:SetPoint(relativepos, "Minimap", relativepos,xpos,ypos+84*directionMultiplierY)
+	GF_MinimapMessageFrameA4:SetPoint(relativepos, "Minimap", relativepos,xpos,ypos+126*directionMultiplierY)
+	GF_MinimapMessageFrameA5:SetPoint(relativepos, "Minimap", relativepos,xpos,ypos+168*directionMultiplierY)
+	GF_MinimapMessageFrameA6:SetPoint(relativepos, "Minimap", relativepos,xpos,ypos+210*directionMultiplierY)
 end
 function GF_RelevelMinimapIcons(frame)
 	if strataEnum[frame:GetFrameStrata()] > 4 then frame:SetFrameStrata(strataEnum[4]) end
@@ -1393,10 +1385,10 @@ function GF_IconDraggingOnUpdate()
 	GF_MoveMinimapIcon()
 end
 function GF_MoveMinimapIcon()
-	if GF_SavedVariables.squareminimap then
-		GF_MinimapIcon:SetPoint("TOPLEFT","Minimap","TOPLEFT",52-math.max(-82,math.min(110 * cos(math.deg(math.atan2(GF_SavedVariables.MinimapIconYPos,GF_SavedVariables.MinimapIconXPos))),84)),math.max(-86,math.min(110 * sin(math.deg(math.atan2(GF_SavedVariables.MinimapIconYPos,GF_SavedVariables.MinimapIconXPos))),82))-52)
+	if GF_SavedVariables.squareminimap then -- Changed, could probably import into vanilla
+		GF_MinimapIcon:SetPoint("TOPLEFT","Minimap","TOPLEFT",(Minimap:GetWidth()/2-18)-math.max(-(Minimap:GetWidth()/2+12),math.min((Minimap:GetWidth()/2+10)*1.57 * cos(math.deg(math.atan2(GF_SavedVariables.MinimapIconYPos,GF_SavedVariables.MinimapIconXPos))),(Minimap:GetWidth()/2+14))),math.max(-(Minimap:GetWidth()/2+16),math.min((Minimap:GetWidth()/2+10)*1.57 * sin(math.deg(math.atan2(GF_SavedVariables.MinimapIconYPos,GF_SavedVariables.MinimapIconXPos))),(Minimap:GetWidth()/2+12)))-(Minimap:GetWidth()/2-18))
 	else
-		GF_MinimapIcon:SetPoint("TOPLEFT","Minimap","TOPLEFT",52-80*cos(math.deg(math.atan2(GF_SavedVariables.MinimapIconYPos,GF_SavedVariables.MinimapIconXPos))),80*sin(math.deg(math.atan2(GF_SavedVariables.MinimapIconYPos,GF_SavedVariables.MinimapIconXPos)))-52)
+		GF_MinimapIcon:SetPoint("TOPLEFT","Minimap","TOPLEFT",(Minimap:GetWidth()/2-18)-(Minimap:GetWidth()/2+10)*cos(math.deg(math.atan2(GF_SavedVariables.MinimapIconYPos,GF_SavedVariables.MinimapIconXPos))),(Minimap:GetWidth()/2+10)*sin(math.deg(math.atan2(GF_SavedVariables.MinimapIconYPos,GF_SavedVariables.MinimapIconXPos)))-(Minimap:GetWidth()/2-18))
 	end
 end
 function GF_LFGGetWhoUpdateOffset()
@@ -1454,7 +1446,7 @@ end
 function GF_AddChannelMessage(arg1,arg2,arg8,arg9,nodelay) -- Message Handlers
 	if not GF_SavedVariables.friendsToRemove[arg2] or nodelay or GF_WhoTable[GF_RealmName][arg2] or not GF_SavedVariables.usewhoongroups or not GF_SavedVariables.usefriendslist then
 		arg9 = string.gsub(arg9, " - .*", "")
-		arg1 = "["..arg8..". "..strupper(strsub(arg9,1,1))..strsub(arg9,2).."] "..GF_MakeBasicChatString(arg1,arg2)
+		arg1 = "["..arg8..". "..strupper(strsub(arg9,1,1))..strsub(arg9,2).."] "..GF_MakeBasicChatString(arg1,arg2,"CHANNEL")
 		for i=1,NUM_CHAT_WINDOWS do
 			channellist = { GetChatWindowChannels(i) }
 			for j=1, getn(channellist) do
@@ -1485,7 +1477,7 @@ function GF_AddChatMessage(arg1,arg2,event,nodelay)
 	end
 end
 function GF_MakeBasicChatString(arg1,arg2,event)
-	if arg2 == "SYSTEM" or GF_ChatBypass[event] then
+	if arg2 == "SYSTEM" or GF_ChatBypass["CHAT_MSG_"..event] then
 		return arg1
 	elseif arg2 == UnitName("player") then
 		return "|cff"..(GF_ClassColors[({UnitClass("player")})[2]] or "9d9d9d").."|Hplayer:"..arg2.."|h["..arg2..", "..UnitLevel("player").."]|h|r: "..GF_ChatReplaceHplayer(arg1)
@@ -1905,13 +1897,15 @@ function GF_UpdateGroupsFrame()
 	if GF_UpdateAndRequestTimer < 0 then
 		GF_UpdateAndRequestTimer = 30
 		for i=1, getn(GF_MessageList[GF_RealmName]) do
-			if GF_SavedVariables.usewhoongroups and not GF_WhoTable[GF_RealmName][GF_MessageList[GF_RealmName][i].op] and not GF_WhoQueue[GF_MessageList[GF_RealmName][i].op] then
+			if GF_SavedVariables.usewhoongroups and not GF_MessageList[GF_RealmName][i].u and not GF_WhoTable[GF_RealmName][GF_MessageList[GF_RealmName][i].op] and not GF_WhoQueue[GF_MessageList[GF_RealmName][i].op] then
 				if not GF_FriendUnknown[GF_MessageList[GF_RealmName][i].op] or GF_FriendUnknown[GF_MessageList[GF_RealmName][i].op] < time() then
 					if GF_SavedVariables.usefriendslist then
 						GF_AddNameToWhoQueue(GF_MessageList[GF_RealmName][i].op,3)
 					else
 						GF_AddNameToWhoQueue(GF_MessageList[GF_RealmName][i].op,true)
 					end
+				else
+					GF_MessageList[GF_RealmName][i].u = true
 				end
 			end
 			if GF_AddonMakeAListOfGroupsForSending and not GF_AddonOPSentNamesOnLogin[GF_MessageList[GF_RealmName][i].op] and GF_MessageList[GF_RealmName][i].t + 300 > time() then
@@ -2272,15 +2266,6 @@ function GF_Frame:PLAYER_ENTERING_WORLD() -- When logging in in a group, PLAYER_
 	GF_Frame:UnregisterEvent("ADDON_LOADED")
 end
 function GF_Frame:PLAYER_LEAVING_WORLD()
-	if GF_SavedVariables.mainframestatus == 0 then
-		local _,_,_,xpos, ypos = GF_MainFrame:GetPoint()
-		GF_SavedVariables.MainFrameXPos = xpos
-		GF_SavedVariables.MainFrameYPos = ypos
-	end
-	local _,_,_,xpos, ypos = GF_DamageMeterFrame:GetPoint()
-	GF_PerCharVariables.DPSMeterXPos = xpos
-	GF_PerCharVariables.DPSMeterYPos = ypos
-
 	GF_PerCharVariables.searchtext = GF_GroupsFrameDescriptionEditBox:GetText()
 	GF_PerCharVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText()
 	GF_PerCharVariables.searchlfgwhispertext = GF_GetWhoWhisperEditBox:GetText()
@@ -2734,7 +2719,7 @@ function GF_CheckForLoot(arg1) -- TODO: If an item is "WON" and then looted late
 	GF_PreviousMessage["SYSTEM"] = {true}
 end
 function GF_CheckForSystem(arg1)
-	if arg1 == ERR_FRIEND_WRONG_FACTION then
+	if arg1 == ERR_FRIEND_WRONG_FACTION or arg1 == ERR_FRIEND_NOT_FOUND then
 		GF_PreviousMessage["SYSTEM"] = {}
 		return
 	elseif strfind(arg1, WHO_NUM_RESULTS) or strfind(arg1, WHO_NUM_RESULTS_P1) then -- Changed elseif strfind(arg1, WHO_NUM_RESULTS) then
@@ -5590,7 +5575,7 @@ function GF_GetDungeonsFromText(arg1)
 	lfs = 2 -- To detect words between and next to "[] or ()" (eg "(human only)", "[item] for free").
 	while true do lfs,lfe,wordString = strfind(arg1, "[<%(%[](.-)[%)%]>]",lfs)
 		if wordString then
-			if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_BRACKET[gsub(wordString," ","")] then foundGuild = foundGuild + GF_GUILD_BRACKET[gsub(wordString," ","")] if showanyway == true then print(wordString.." guild "..GF_GUILD_BRACKET[gsub(wordString," ","")]) end end
+			if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_BRACKET[gsub(wordString," ","")] then foundGuild = foundGuild + GF_GUILD_BRACKET[gsub(wordString," ","")] end
 			if strbyte(arg1,lfs) == 91 and strbyte(arg1,lfe) == 93 then -- "[]"
 				if strbyte(arg1,lfs-1) == 90 then -- From Link
 					tempString = ""
@@ -5946,7 +5931,7 @@ function GetModifiedQuestName(entryname)
 	lfs = 2 -- To detect words between and next to "[] or ()" (eg "(human only)", "[item] for free").
 	while true do lfs,lfe,wordString = strfind(arg1, "[<%(%[](.-)[%)%]>]",lfs)
 		if wordString then
-			if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_BRACKET[gsub(wordString," ","")] then foundGuild = foundGuild + GF_GUILD_BRACKET[gsub(wordString," ","")] if showanyway == true then print(wordString.." guild "..GF_GUILD_BRACKET[gsub(wordString," ","")]) end end
+			if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_BRACKET[gsub(wordString," ","")] then foundGuild = foundGuild + GF_GUILD_BRACKET[gsub(wordString," ","")] end
 			if strbyte(arg1,lfs) == 91 and strbyte(arg1,lfe) == 93 then -- "[]"
 				if strbyte(arg1,lfs-1) == 90 then -- From Link
 					tempString = ""

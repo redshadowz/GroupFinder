@@ -1617,10 +1617,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								GF_UpdateResults()
 								if not GF_SavedVariables.usewhoongroups then
 									GF_WhoQueue = {}
-									for name,data in GF_SavedVariables.friendsToRemove do if data > time() then GF_SavedVariables.friendsToRemove[name] = nil end end
-									GF_OnUpdateFunctions["Friendslist"] = nil
-								elseif GF_SavedVariables.usefriendslist then GF_OnUpdateFunctions["Friendslist"] = GF_UpdateWhoDataViaFriendsList
-								else GF_OnUpdateFunctions["Friendslist"] = nil end
+									for name,data in pairs(GF_SavedVariables.friendsToRemove) do if data > time() then GF_SavedVariables.friendsToRemove[name] = nil end end
+								end
 							</OnClick>
 							<OnLoad>
 								getglobal(this:GetName().."TextLabel"):SetText(GF_USE_WHO_ON_GROUPS)
@@ -5229,8 +5227,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Scripts>
 									<OnLoad>
 										getglobal(this:GetName().."High"):SetText("360")
-										getglobal(this:GetName().."Low"):SetText("0")
-										this:SetMinMaxValues(0,360)
+										getglobal(this:GetName().."Low"):SetText("265")
+										this:SetMinMaxValues(265,360)
 										this:SetValueStep(1)
 										getglobal(this:GetName().."Text"):SetText(GF_MINIMAP_TEXT_ANGLE)
 									</OnLoad>
@@ -5310,12 +5308,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									<OnLoad>
 										getglobal(this:GetName().."High"):SetText("1")
 										getglobal(this:GetName().."Low"):SetText(".8")
-										this:SetMinMaxValues(.8,1)
-										this:SetValueStep(.2)
+										this:SetMinMaxValues(8,10)
+										this:SetValueStep(2)
 									</OnLoad>
 									<OnValueChanged>
 										GF_SavedVariables.MainFrameUIScale = this:GetValue()
-										getglobal(this:GetName().."Text"):SetText(GF_ADJUST_UISCALE.." - "..math.floor(this:GetValue()*10+.5)/10)
+										getglobal(this:GetName().."Text"):SetText(GF_ADJUST_UISCALE.." - "..math.floor(this:GetValue()+.5)/10)
 									</OnValueChanged>
 								</Scripts>
 							</Slider>
@@ -5332,7 +5330,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										GF_MainFrame:SetScale(GF_SavedVariables.MainFrameUIScale)
+										GF_MainFrame:SetScale(GF_SavedVariables.MainFrameUIScale/10)
 									</OnClick>
 								</Scripts>
 							</Button>
@@ -5489,7 +5487,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Scripts>
 									<OnClick>
 										if this:GetChecked() then GF_SavedVariables.usefriendslist = true else GF_SavedVariables.usefriendslist = false end
-										if GF_SavedVariables.usefriendslist and GF_SavedVariables.usewhoongroups then GF_OnUpdateFunctions["Friendslist"] = GF_UpdateWhoDataViaFriendsList else GF_OnUpdateFunctions["Friendslist"] = nil end
+										if GF_SavedVariables.usefriendslist and GF_SavedVariables.usefriendslist = true GF_OnUpdateFunctions["Friendslist"] = GF_UpdateWhoDataViaFriendsList else GF_SavedVariables.usefriendslist = false GF_OnUpdateFunctions["Friendslist"] = nil end
 									</OnClick>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_USE_FRIENDS_LIST_WHO)
@@ -5982,6 +5980,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</OnDragStart>
 			<OnDragStop>
 				this:StopMovingOrSizing()
+				_,_,_,GF_SavedVariables.MainFrameXPos,GF_SavedVariables.MainFrameYPos = GF_MainFrame:GetPoint()
 			</OnDragStop>
 			<OnLoad>
 				this:RegisterForDrag("LeftButton")
@@ -6147,6 +6146,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</OnDragStart>
 			<OnDragStop>
 				this:StopMovingOrSizing()
+				_,_,_,GF_PerCharVariables.DPSMeterXPos,GF_PerCharVariables.DPSMeterYPos = GF_DamageMeterFrame:GetPoint()
 			</OnDragStop>
 			<OnLoad>
 				this:RegisterForDrag("LeftButton")
