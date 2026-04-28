@@ -75,7 +75,7 @@ local GF_MiniMapMessages					= {0,0,0,0,0,0,{}}
 local GF_LogMessageCodes = { GF_LOGGED_GROUPS,GF_LOGGED_NEW,GF_LOGGED_FILTERED,GF_LOGGED_ME,GF_LOGGED_CHAT,GF_LOGGED_LOOT,GF_LOGGED_SPAM,GF_LOGGED_GUILD,GF_LOGGED_TRADES,GF_LOGGED_BLACKLIST,GF_LOGGED_BELOWLEVEL }
 local info 									= {}
 GF_PlayerNotes								= {}
-
+local GF_PlaySoundNextUpdate				= nil
 local GF_BaseFontSize						= 12
 local GF_ChatChannelsGroups					= {}
 GF_ChatJoinedChannels						= {}
@@ -362,9 +362,9 @@ function GF_LoadSettings()
 	if GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][4] then GF_WorldAnnounceMessageTextLabel:SetText(GF_HARDCORE_SEND_TEXT) else GF_WorldAnnounceMessageTextLabel:SetText(GF_WORLD_SEND_TEXT.." "..GF_SavedVariables.groupchannelname.." "..GF_LOG_CHANNEL) end
 	GF_LFGHardCoreDropdownTextLabel:SetText(GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][1])
 
-	local VarsToSet = { GF_SavedVariables.MinimapMsgArcOffset,GF_SavedVariables.MinimapMsgRadiusOffset,GF_SavedVariables.FilterLevel,GF_SavedVariables.MainFrameTransparency,GF_SavedVariables.autoblacklistminlevel,GF_SavedVariables.blockmessagebelowlevel,
+	local VarsToSet = { GF_SavedVariables.FilterLevel,GF_SavedVariables.MainFrameTransparency,GF_SavedVariables.autoblacklistminlevel,GF_SavedVariables.blockmessagebelowlevel,
 		GF_SavedVariables.grouplistingduration,GF_PerCharVariables.autofilterlevelvar, GF_SavedVariables.MainFrameUIScale, }
-	local VarNames = { "GF_MinimapMsgArcSlider","GF_MinimapMsgRadiusSlider","GF_FilterLevelSlider",	"GF_FrameTransparencySlider","GF_FrameSpamBlacklistMinLevelSlider","GF_FrameBlockMessagesBelowLevelSlider",
+	local VarNames = { "GF_FilterLevelSlider",	"GF_FrameTransparencySlider","GF_FrameSpamBlacklistMinLevelSlider","GF_FrameBlockMessagesBelowLevelSlider",
 		"GF_GroupListingDurationSlider","GF_AutoFilterLevelSlider","GF_UIScaleSlider", }
 	for i=1, getn(VarNames) do getglobal(VarNames[i]):SetValue(VarsToSet[i]) end
 
@@ -409,8 +409,8 @@ function GF_LoadSettings()
 
 	GF_MainFrame:SetAlpha(GF_FrameTransparencySlider:GetValue())
 	GF_MainFrame:SetScale(GF_UIScaleSlider:GetValue()/10)
-	if GF_SavedVariables.MainFrameXPos then GF_MainFrame:SetPoint("TOPLEFT",UIParent,"TOPLEFT", GF_SavedVariables.MainFrameXPos, GF_SavedVariables.MainFrameYPos) end
-	if GF_PerCharVariables.DPSMeterXPos then GF_DamageMeterFrame:SetPoint("TOPLEFT",UIParent,"TOPLEFT",GF_PerCharVariables.DPSMeterXPos,GF_PerCharVariables.DPSMeterYPos) end
+	if GF_SavedVariables.MainFrameXPos then GF_MainFrame:SetPoint("TOPLEFT",UIParent,"TOPLEFT", GF_PerCharVariables.MainFrameXPos, GF_PerCharVariables.MainFrameYPos) end -- Changed from TOPLEFT to CENTER
+	if GF_PerCharVariables.DPSMeterXPos then GF_DamageMeterFrame:SetPoint("TOPLEFT",UIParent,"TOPLEFT", GF_PerCharVariables.DPSMeterXPos, GF_PerCharVariables.DPSMeterYPos) end -- Changed from TOPLEFT to CENTER
 	if GF_PerCharVariables.dpsmetershown then GF_DamageMeterFrame:Show() end
 	if GF_SavedVariables.mainframestatus ~= 0 and not GF_SavedVariables.mainframeishidden then if GF_SavedVariables.mainframelogisopen then GF_ToggleMainFrame(2) else GF_ToggleMainFrame(1) end else if GF_SavedVariables.mainframelogisopen then GF_GroupsFrame:Hide() GF_LogFrame:Show() else GF_GroupsFrame:Show() GF_LogFrame:Hide() end end
 	if IsAddOnLoaded("pfUI") and GF_SavedVariables.purgepfdb and GF_SavedVariables.showformattedchat then pfUI_playerDB = {} end
@@ -427,89 +427,87 @@ function GF_LoadSettings()
 	GF_SetupDPSMeter()
 end
 function GF_SetStringSize()
-	if not GetPlayerInfoByGUID then
-		local fontName,fontSizeMinimap,fontSizeLarge,fontSizeButton
-		local fontAdjust = 0
-		fontName = GF_BUTTONS_LIST["FontName"][GF_SavedVariables.fontname][2]
-
-		GF_UIScaleSliderLabel:SetText("Join the group channel")
-		for i=0, 100 do
-			GF_UIScaleSliderLabel:SetFont(fontName,20-i)
-			if GF_UIScaleSliderLabel:GetStringWidth() < 126 then GF_BaseFontSize = 20-i break end
-		end
-		GF_UIScaleSliderLabel:SetText("MC hosted by <Weird Vibes> is starting in a couple of minutes! Run")
-		for i=0, 100 do
-			GF_UIScaleSliderLabel:SetFont(fontName,20-i)
-			if GF_UIScaleSliderLabel:GetStringWidth() < 407 then fontSizeLarge = 20-i break end
-		end
-		GF_UIScaleSliderLabel:SetText("Druidsarebis")
-		for i=0, 100 do
-			GF_UIScaleSliderLabel:SetFont(fontName,20-i)
-			if GF_UIScaleSliderLabel:GetStringWidth() < 80 then fontSizeButton = 20-i break end
-		end
-		GF_UIScaleSliderLabel:SetText("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 ")
-		for i=0, 100 do
-			GF_UIScaleSliderLabel:SetFont(fontName,20-i)
-			if GF_UIScaleSliderLabel:GetStringWidth() < 332 then fontSizeMinimap = 20-i break end
-		end
-
-		for i=0,19 do
-			getglobal("GF_WhisperHistoryButton"..i):SetFont(fontName,fontSizeButton)
-		end
-		for i=1,20 do
-			getglobal("GF_BlackListItem"..i.."NameLabel"):SetFont(fontName,GF_BaseFontSize)
-			getglobal("GF_BlackListItem"..i.."NoteLabel"):SetFont(fontName,GF_BaseFontSize)
-			getglobal("GF_BlackListItem"..i.."DeleteButton"):SetFont(fontName,GF_BaseFontSize)
-		end
-		for i=1,22 do
-			getglobal("GF_NewItem"..i.."NameLabel"):SetFont(fontName,fontSizeLarge)
-			getglobal("GF_NewItem"..i.."MoreLabel"):SetFont(fontName,fontSizeLarge)
-			getglobal("GF_NewItem"..i.."MoreLeftLabel"):SetFont(fontName,fontSizeLarge)
-			getglobal("GF_NewItem"..i.."GroupWhoButton"):SetFont(fontName,fontSizeLarge)
-			getglobal("GF_NewItem"..i.."LFGInviteButton"):SetFont(fontName,fontSizeLarge)
-			getglobal("GF_NewItem"..i.."LFMWhisperRequestInviteButton"):SetFont(fontName,fontSizeLarge)
-		end
-
-		local frameNames = { "GF_AutoFilterCheckButtonTextLabel","GF_PlaySoundOnResultsCheckButtonTextLabel","GF_GroupsFrameShowLFMCheckButtonTextLabel","GF_GroupsFrameShowLFGCheckButtonTextLabel","GF_LFGHardCoreDropdownTextLabel",
-		"GF_ChatFilterDropdownButtonTextLabel","GF_GroupFilterDropdownButtonTextLabel","GF_FrameUseWhoOnGroupsCheckButtonTextLabel","GF_GroupsFrameDescriptionEditBoxTextLabel","GF_GetWhoClassDropdownTextLabel","GF_GetWhoLevelDropdownTextLabel",
-		"GF_GroupAutoCheckButtonTextLabel","GF_LFGSizeDropdownTextLabel","GF_LFGLFMDropdownTextLabel","GF_LFGDungeonDropdownTextLabel","GF_LFGRaidDropdownTextLabel","GF_LFGRoleDropdownTextLabel","GF_LFGMyRoleLevelCheckButtonTextLabel",
-		"GF_LFGMyRoleTankCheckButtonTextLabel","GF_LFGMyRoleHealCheckButtonTextLabel","GF_LFGMyRoleDPSCheckButtonTextLabel","GF_GroupFilterShowDungeonCheckButtonTextLabel","GF_GroupFilterShowRaidCheckButtonTextLabel",
-		"GF_MinimapIconPriorityCheckButtonTextLabel","GF_GroupFilterShowQuestCheckButtonTextLabel","GF_GroupFilterShowOtherCheckButtonTextLabel","GF_ChatFilterGroupsInChatCheckButtonTextLabel","GF_ChatFilterGroupsNewOnlyCheckButtonTextLabel",
-		"GF_ChatFilterGroupsInMinimapCheckButtonTextLabel","GF_ChatFilterShowChatCheckButtonTextLabel","GF_ChatFilterShowTradesCheckButtonTextLabel","GF_ChatFilterShowLootCheckButtonTextLabel","GF_ChatFilterShowGuildsCheckButtonTextLabel",
-		"GF_LogFilterDropdownButtonTextLabel","GF_LogChannelFilterDropdownButtonTextLabel","GF_AutoJoinGroupChannelCheckButtonTextLabel","GF_FrameSpamFilterCheckButtonTextLabel","GF_FrameSystemFilterCheckButtonTextLabel",
-		"GF_AutomaticBlacklistCheckButtonTextLabel","GF_FrameShowFormattedChatCheckButtonTextLabel","GF_AlwaysShowGuildFriendsCheckButtonTextLabel","GF_FrameQuestModCheckButtonTextLabel","GF_PurgePFDBCheckButtonTextLabel","GF_ResetAllSettingsDialogHeadingLabel",
-		"GF_UseClickCombosCheckButtonTextLabel","GF_UseFriendsListCheckButtonTextLabel","GF_DisableHardcoreCheckButtonTextLabel","GF_AutoBlacklistTradesCheckButtonTextLabel","GF_AutoBlacklistGuildCheckButtonTextLabel","GF_EditPlayerNoteFrameTitleLabel",
-		"GF_AutoBlacklistChatCheckButtonTextLabel","GF_AutoBlacklistForeignCheckButtonTextLabel","GF_FontNameDropdownTextLabel","GF_BlockListDropdownTextLabel","GF_SquareMinimapCheckButtonTextLabel","GF_AddPlayerFrameContentLabel",
-		"GF_SettingsFrameChatSettingsTitle","GF_SettingsFrameGroupSettingsTitle","GF_SettingsFrameLFxSettingsTitle","GF_SettingsFrameOtherSettingsTitle","GF_PageLabel","GF_UseDPSMeterCheckButtonTextLabel",}
-		for i=1, getn(frameNames) do getglobal(frameNames[i]):SetFont(fontName,GF_BaseFontSize) end
-		frameNames = { "GF_GetWhoTotalNames","GF_AnnounceToLFGButton","GF_GetWhoButton","GF_GetWhoSkipButton","GF_GetWhoWhisperButton","GF_GetWhoNameLabel","GF_ShowGroupsButton",	"GF_SettingsFrameButton","GF_PlayerNoteFrameOKButton","GF_QueuetoLFTButton",
-		"GF_PlayerNoteFrameDeleteButton","GF_ShowBlacklistButton","GF_LogFrameButton","GF_LFGFrameToggleButton","GF_GetWhoFrameToggleButton","GF_ConvertLogMessagesToURL","GF_UIScaleSliderUpdateButton","GF_ResetAllSettingsDialogCloseButton","GF_ShowGroupLogEntryFrameCloseButton",
-		"GF_ResetAllSettingsButton","GF_AddPlayerButton","GF_BlackListFramePageLabel","GF_WhisperLogButton","GF_GroupLogButton","GF_MinimapIconTextLabel","GF_AddPlayerFrameOkButton","GF_AddPlayerFrameCloseButton","GF_ResetAllSettingsDialogOkButton",}
-		for i=1, getn(frameNames) do getglobal(frameNames[i]):SetFont(fontName,fontSizeButton) end
-		frameNames = {"GF_LFGMyRole","GF_WorldAnnounceMessageTextLabel","GF_ShowGroupsInLabel","GF_ShowChatTypesLabel","GF_LogFrameInternalFrameTitle","GF_ShowMainFrameLabel",
-		"GF_GroupChannelNameTextLabel","GF_BlockListTextLabel","GF_BlockAddListButton","GF_ResultsLabel", }
-		for i=1, getn(frameNames) do getglobal(frameNames[i]):SetFont(fontName,fontSizeLarge) end
-		for i=1,6 do
-			getglobal("GF_MinimapMessageFrameA"..i):SetFont(fontName,fontSizeMinimap)
-			getglobal("GF_MinimapMessageFrameB"..i):SetFont(fontName,fontSizeMinimap)
-		end
-		--for i=1,10 do
-			--getglobal("GF_DPSMeterEntry"..i.."NameLabel"):SetFont(fontName,GF_BaseFontSize)
-			--getglobal("GF_DPSMeterEntry"..i.."DataLabel"):SetFont(fontName,GF_BaseFontSize)
-		--end
-		GF_Log:SetFont(fontName,fontSizeLarge)
-
-		frameNames = { "GF_GroupNewTimeoutSlider","GF_FilterLevelSlider","GF_MinimapMsgArcSlider","GF_UIScaleSlider","GF_FrameTransparencySlider","GF_GroupListingDurationSlider","GF_AutoFilterLevelSlider","GF_FrameAnnounceTimerSlider",
-		"GF_FrameBlockMessagesBelowLevelSlider","GF_MinimapMsgRadiusSlider","GF_FrameSpamFilterDurationSlider","GF_FrameSpamBlacklistMinLevelSlider", }
-		for i=1, getn(frameNames) do
-			getglobal(frameNames[i].."Text"):SetFont(fontName,GF_BaseFontSize)
-			getglobal(frameNames[i].."Label"):SetFont(fontName,GF_BaseFontSize)
-			getglobal(frameNames[i].."High"):SetFont(fontName,GF_BaseFontSize)
-			getglobal(frameNames[i].."Low"):SetFont(fontName,GF_BaseFontSize)
-		end
-		for i=1,25 do getglobal("GF_GroupHistoryLogPlayer"..i):SetFont(GF_BUTTONS_LIST["FontName"][GF_SavedVariables.fontname][2],GF_BaseFontSize) getglobal("GF_GroupHistoryLogPlayer"..i.."TextLabel"):SetFont(GF_BUTTONS_LIST["FontName"][GF_SavedVariables.fontname][2],GF_BaseFontSize) end
-		for i=1,50 do getglobal("GF_GroupHistoryLogItem"..i):SetFont(GF_BUTTONS_LIST["FontName"][GF_SavedVariables.fontname][2],GF_BaseFontSize) getglobal("GF_GroupHistoryLogItem"..i.."TextLabel"):SetFont(GF_BUTTONS_LIST["FontName"][GF_SavedVariables.fontname][2],GF_BaseFontSize) end
+	local fontName,fontSizeMinimap,fontSizeLarge,fontSizeButton
+	local fontAdjust = 0
+	fontName = GF_BUTTONS_LIST["FontName"][GF_SavedVariables.fontname][2]
+	GF_UIScaleSliderLabel:SetText("Join the group channel")
+	for i=0, 100 do
+		GF_UIScaleSliderLabel:SetFont(fontName,20-i)
+		if GF_UIScaleSliderLabel:GetStringWidth() < 126 then GF_BaseFontSize = 20-i break end
 	end
+	GF_UIScaleSliderLabel:SetText("MC hosted by <Weird Vibes> is starting in a couple of minutes! Run")
+	for i=0, 100 do
+		GF_UIScaleSliderLabel:SetFont(fontName,20-i)
+		if GF_UIScaleSliderLabel:GetStringWidth() < 407 then fontSizeLarge = 20-i break end
+	end
+	GF_UIScaleSliderLabel:SetText("Druidsarebis")
+	for i=0, 100 do
+		GF_UIScaleSliderLabel:SetFont(fontName,20-i)
+		if GF_UIScaleSliderLabel:GetStringWidth() < 80 then fontSizeButton = 20-i break end
+	end
+	GF_UIScaleSliderLabel:SetText("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 ")
+	for i=0, 100 do
+		GF_UIScaleSliderLabel:SetFont(fontName,20-i)
+		if GF_UIScaleSliderLabel:GetStringWidth() < 332 then fontSizeMinimap = 20-i break end
+	end
+
+	for i=0,19 do
+		getglobal("GF_WhisperHistoryButton"..i):SetFont(fontName,fontSizeButton)
+	end
+	for i=1,20 do
+		getglobal("GF_BlackListItem"..i.."NameLabel"):SetFont(fontName,GF_BaseFontSize)
+		getglobal("GF_BlackListItem"..i.."NoteLabel"):SetFont(fontName,GF_BaseFontSize)
+		getglobal("GF_BlackListItem"..i.."DeleteButton"):SetFont(fontName,GF_BaseFontSize)
+	end
+	for i=1,22 do
+		getglobal("GF_NewItem"..i.."NameLabel"):SetFont(fontName,fontSizeLarge)
+		getglobal("GF_NewItem"..i.."MoreLabel"):SetFont(fontName,fontSizeLarge)
+		getglobal("GF_NewItem"..i.."MoreLeftLabel"):SetFont(fontName,fontSizeLarge)
+		getglobal("GF_NewItem"..i.."GroupWhoButton"):SetFont(fontName,fontSizeLarge)
+		getglobal("GF_NewItem"..i.."LFGInviteButton"):SetFont(fontName,fontSizeLarge)
+		getglobal("GF_NewItem"..i.."LFMWhisperRequestInviteButton"):SetFont(fontName,fontSizeLarge)
+	end
+
+	local frameNames = { "GF_AutoFilterCheckButtonTextLabel","GF_PlaySoundOnResultsCheckButtonTextLabel","GF_GroupsFrameShowLFMCheckButtonTextLabel","GF_GroupsFrameShowLFGCheckButtonTextLabel","GF_LFGHardCoreDropdownTextLabel",
+	"GF_ChatFilterDropdownButtonTextLabel","GF_GroupFilterDropdownButtonTextLabel","GF_FrameUseWhoOnGroupsCheckButtonTextLabel","GF_GroupsFrameDescriptionEditBoxTextLabel","GF_GetWhoClassDropdownTextLabel","GF_GetWhoLevelDropdownTextLabel",
+	"GF_GroupAutoCheckButtonTextLabel","GF_LFGSizeDropdownTextLabel","GF_LFGLFMDropdownTextLabel","GF_LFGDungeonDropdownTextLabel","GF_LFGRaidDropdownTextLabel","GF_LFGRoleDropdownTextLabel","GF_LFGMyRoleLevelCheckButtonTextLabel",
+	"GF_LFGMyRoleTankCheckButtonTextLabel","GF_LFGMyRoleHealCheckButtonTextLabel","GF_LFGMyRoleDPSCheckButtonTextLabel","GF_GroupFilterShowDungeonCheckButtonTextLabel","GF_GroupFilterShowRaidCheckButtonTextLabel",
+	"GF_MinimapIconPriorityCheckButtonTextLabel","GF_GroupFilterShowQuestCheckButtonTextLabel","GF_GroupFilterShowOtherCheckButtonTextLabel","GF_ChatFilterGroupsInChatCheckButtonTextLabel","GF_ChatFilterGroupsNewOnlyCheckButtonTextLabel",
+	"GF_ChatFilterGroupsInMinimapCheckButtonTextLabel","GF_ChatFilterShowChatCheckButtonTextLabel","GF_ChatFilterShowTradesCheckButtonTextLabel","GF_ChatFilterShowLootCheckButtonTextLabel","GF_ChatFilterShowGuildsCheckButtonTextLabel",
+	"GF_LogFilterDropdownButtonTextLabel","GF_LogChannelFilterDropdownButtonTextLabel","GF_AutoJoinGroupChannelCheckButtonTextLabel","GF_FrameSpamFilterCheckButtonTextLabel","GF_FrameSystemFilterCheckButtonTextLabel",
+	"GF_AutomaticBlacklistCheckButtonTextLabel","GF_FrameShowFormattedChatCheckButtonTextLabel","GF_AlwaysShowGuildFriendsCheckButtonTextLabel","GF_FrameQuestModCheckButtonTextLabel","GF_PurgePFDBCheckButtonTextLabel","GF_ResetAllSettingsDialogHeadingLabel",
+	"GF_UseClickCombosCheckButtonTextLabel","GF_UseFriendsListCheckButtonTextLabel","GF_DisableHardcoreCheckButtonTextLabel","GF_AutoBlacklistTradesCheckButtonTextLabel","GF_AutoBlacklistGuildCheckButtonTextLabel","GF_EditPlayerNoteFrameTitleLabel",
+	"GF_AutoBlacklistChatCheckButtonTextLabel","GF_AutoBlacklistForeignCheckButtonTextLabel","GF_FontNameDropdownTextLabel","GF_BlockListDropdownTextLabel","GF_SquareMinimapCheckButtonTextLabel","GF_AddPlayerFrameContentLabel",
+	"GF_SettingsFrameChatSettingsTitle","GF_SettingsFrameGroupSettingsTitle","GF_SettingsFrameLFxSettingsTitle","GF_SettingsFrameOtherSettingsTitle","GF_PageLabel","GF_UseDPSMeterCheckButtonTextLabel",}
+	for i=1,getn(frameNames) do getglobal(frameNames[i]):SetFont(fontName,GF_BaseFontSize) end
+	frameNames = { "GF_GetWhoTotalNames","GF_AnnounceToLFGButton","GF_GetWhoButton","GF_GetWhoSkipButton","GF_GetWhoWhisperButton","GF_GetWhoNameLabel","GF_ShowGroupsButton","GF_SettingsFrameButton","GF_PlayerNoteFrameOKButton",
+	"GF_QueuetoLFTButton","GF_PlayerNoteFrameDeleteButton","GF_ShowBlacklistButton","GF_LogFrameButton","GF_LFGFrameToggleButton","GF_GetWhoFrameToggleButton","GF_ConvertLogMessagesToURL","GF_UIScaleSliderUpdateButton",
+	"GF_ResetAllSettingsDialogCloseButton","GF_ShowGroupLogEntryFrameCloseButton","GF_ResetAllSettingsButton","GF_AddPlayerButton","GF_BlackListFramePageLabel","GF_WhisperLogButton","GF_GroupLogButton","GF_MinimapIconTextLabel",
+	"GF_AddPlayerFrameOkButton","GF_AddPlayerFrameCloseButton","GF_ResetAllSettingsDialogOkButton","GF_MinimapMessageMoverButton"}
+	for i=1,getn(frameNames) do getglobal(frameNames[i]):SetFont(fontName,fontSizeButton) end
+	frameNames = {"GF_LFGMyRole","GF_WorldAnnounceMessageTextLabel","GF_ShowGroupsInLabel","GF_ShowChatTypesLabel","GF_LogFrameInternalFrameTitle","GF_ShowMainFrameLabel",
+	"GF_GroupChannelNameTextLabel","GF_BlockListTextLabel","GF_ResultsLabel","GF_MessageAnchorButtonText", }
+	for i=1,getn(frameNames) do getglobal(frameNames[i]):SetFont(fontName,fontSizeLarge) end
+	for i=1,6 do
+		getglobal("GF_MinimapMessageFrameA"..i):SetFont(fontName,fontSizeMinimap)
+		getglobal("GF_MinimapMessageFrameB"..i):SetFont(fontName,fontSizeMinimap)
+	end
+	for i=1,10 do
+		getglobal("GF_DPSMeterEntry"..i.."NameLabel"):SetFont(fontName,GF_BaseFontSize)
+		getglobal("GF_DPSMeterEntry"..i.."DataLabel"):SetFont(fontName,GF_BaseFontSize)
+	end
+	GF_Log:SetFont(fontName,fontSizeLarge)
+
+	frameNames = { "GF_GroupNewTimeoutSlider","GF_FilterLevelSlider","GF_UIScaleSlider","GF_FrameTransparencySlider","GF_GroupListingDurationSlider","GF_AutoFilterLevelSlider","GF_FrameAnnounceTimerSlider",
+	"GF_FrameBlockMessagesBelowLevelSlider","GF_FrameSpamFilterDurationSlider","GF_FrameSpamBlacklistMinLevelSlider", }
+	for i=1,getn(frameNames) do
+		getglobal(frameNames[i].."Text"):SetFont(fontName,GF_BaseFontSize)
+		getglobal(frameNames[i].."Label"):SetFont(fontName,GF_BaseFontSize)
+		getglobal(frameNames[i].."High"):SetFont(fontName,GF_BaseFontSize)
+		getglobal(frameNames[i].."Low"):SetFont(fontName,GF_BaseFontSize)
+	end
+	for i=1,25 do getglobal("GF_GroupHistoryLogPlayer"..i):SetFont(GF_BUTTONS_LIST["FontName"][GF_SavedVariables.fontname][2],GF_BaseFontSize) getglobal("GF_GroupHistoryLogPlayer"..i.."TextLabel"):SetFont(GF_BUTTONS_LIST["FontName"][GF_SavedVariables.fontname][2],GF_BaseFontSize) end
+	for i=1,50 do getglobal("GF_GroupHistoryLogItem"..i):SetFont(GF_BUTTONS_LIST["FontName"][GF_SavedVariables.fontname][2],GF_BaseFontSize) getglobal("GF_GroupHistoryLogItem"..i.."TextLabel"):SetFont(GF_BUTTONS_LIST["FontName"][GF_SavedVariables.fontname][2],GF_BaseFontSize) end
 	GF_LogFilterDropdownButton:SetPoint("LEFT", "GF_LogFrameInternalFrameTitle", "RIGHT", 5, 0)
 	GF_LFGMyRoleLevelCheckButton:SetPoint("RIGHT", -1*getglobal(GF_LFGMyRoleLevelCheckButton:GetName().."TextLabel"):GetStringWidth() -2, -3)
 	GF_ChatFilterDropdownButton:SetPoint("TOPRIGHT", GF_MainFrameCloseButton, "BOTTOMRIGHT", -1*getglobal(GF_ChatFilterDropdownButton:GetName().."TextLabel"):GetStringWidth() -15, 6)
@@ -667,8 +665,8 @@ function GF_FormatBlockListWords(arg1,display)
 			if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_BRACKET[gsub(wordString," ","")] then foundGuild = foundGuild + GF_GUILD_BRACKET[gsub(wordString," ","")] end
 			if strbyte(arg1,lfs) == 91 and strbyte(arg1,lfe) == 93 then -- "[]"
 				if strbyte(arg1,lfs-1) == 90 then -- From Link
-					tempString = ""
-					if strlen(wordString) < 45 then
+					if strlen(wordString) < 45 and strsub(arg1,lfs-8,lfs) ~= "hquest Z[" then
+						tempString = ""
 						for word in gfind(wordString, "(%a+)") do if word == "thunderfury" or GF_WORD_FIX_ITEM_NAME[word] == "enchant" then break elseif GF_WORD_FIX_ITEM_NAME[word] then tempString = word end end
 						if tempString ~= "" then arg1 = strsub(arg1,1,lfs)..GF_WORD_FIX_ITEM_NAME[tempString]..strsub(arg1,lfe) end
 					end
@@ -856,13 +854,13 @@ function GF_OnLoad() -- Onload, Tooltips, and Frame/Minimap Functions
 			if GF_SavedVariables.usefriendslist then GF_OnUpdateFunctions["Friendslist"] = GF_UpdateWhoDataViaFriendsList end
 			GF_UpdateTicker = GetTime() + .1
 		end
-		if not arg1 or not GF_TextColors[strsub(event,10)] or (arg9 and strlower(arg9) == "lft") then old_ChatFrame_OnEvent(event) return end -- Changed
+		if not arg1 or not GF_TextColors[strsub(event,10)] or GF_CHANNEL_BYPASS_LIST[strlower(arg9)] then old_ChatFrame_OnEvent(event) return end -- Changed
 		if not arg2 or arg2 == "" then arg2 = "SYSTEM" end
 		if not GF_ProcessedFirstMessage[arg2] or GF_ProcessedFirstMessage[arg2][1] ~= arg1 or GF_ProcessedFirstMessage[arg2][2] <= GetTime() then
 			--print(GetTime())
 			GF_ProcessedFirstMessage[arg2] = {arg1,GetTime() + .25}
 			--fixedType = nil
-			GF_ChatFunctions(event,arg1,arg2,arg8,arg9)
+			GF_ChatFunctions(strsub(event,10),arg1,arg2,arg8,arg9)
 			--if fixedType then GF_PreviousMessage[arg2][2] = strsub(arg1,3) end
 			if GF_ChatProcess[event] and GF_SavedVariables.showformattedchat and GF_PreviousMessage[arg2] and GF_PreviousMessage[arg2][1] then
 				if GF_PreviousMessage[arg2][2] then arg1 = GF_PreviousMessage[arg2][2] end
@@ -1331,25 +1329,13 @@ function GF_UpdateMainFrame()
 	GF_UpdateQueueLFTButton()
 end
 function GF_UpdateMinimapIcon()
-	local relativepos
-	local directionMultiplierX = 1
-	local directionMultiplierY = 1
-	if Minimap:GetLeft() > GetScreenWidth()/2 then -- Minimap on the Right
-		directionMultiplierX = -1
-		if Minimap:GetTop() > GetScreenHeight()/2 then relativepos = "TOPRIGHT"	directionMultiplierY = -1 else relativepos = "BOTTOMRIGHT" end -- Minimap on Top/Bottom
-	else
-		if Minimap:GetTop() > GetScreenHeight()/2 then relativepos = "TOPLEFT" directionMultiplierY = -1 else relativepos = "BOTTOMLEFT" end -- Minimap on Left and Top/Bottom
-	end
-	local xpos = (0 - ((GF_SavedVariables.MinimapMsgRadiusOffset + Minimap:GetWidth()/2+50) * cos(GF_SavedVariables.MinimapMsgArcOffset + (180 - (180*Minimap:GetRight()/GetScreenWidth())))))
-	local ypos = ((GF_SavedVariables.MinimapMsgRadiusOffset + Minimap:GetWidth()/2+50) * sin(GF_SavedVariables.MinimapMsgArcOffset + (180 - (180*Minimap:GetTop()/GetScreenHeight()))))
-
 	GF_MoveMinimapIcon()
-	GF_MinimapMessageFrameA1:SetPoint(relativepos, "Minimap", relativepos,xpos,ypos)
-	GF_MinimapMessageFrameA2:SetPoint(relativepos, "Minimap", relativepos,xpos,ypos+42*directionMultiplierY)
-	GF_MinimapMessageFrameA3:SetPoint(relativepos, "Minimap", relativepos,xpos,ypos+84*directionMultiplierY)
-	GF_MinimapMessageFrameA4:SetPoint(relativepos, "Minimap", relativepos,xpos,ypos+126*directionMultiplierY)
-	GF_MinimapMessageFrameA5:SetPoint(relativepos, "Minimap", relativepos,xpos,ypos+168*directionMultiplierY)
-	GF_MinimapMessageFrameA6:SetPoint(relativepos, "Minimap", relativepos,xpos,ypos+210*directionMultiplierY)
+	GF_MessageAnchorButton:ClearAllPoints()
+	if GF_PerCharVariables.MessageXPos then
+		GF_MessageAnchorButton:SetPoint("TOPLEFT",UIParent,"TOPLEFT",GF_PerCharVariables.MessageXPos,GF_PerCharVariables.MessageYPos)
+	else
+		GF_MessageAnchorButton:SetPoint("TOPRIGHT",UIParent,"TOPRIGHT",-50 - Minimap:GetWidth(),-125)
+	end
 end
 function GF_RelevelMinimapIcons(frame)
 	if strataEnum[frame:GetFrameStrata()] > 4 then frame:SetFrameStrata(strataEnum[4]) end
@@ -1483,8 +1469,6 @@ end
 function GF_ChatCheckFilters(logType,arg1,arg2,event)
 	if logType == 7 or logType == 10 or logType == 11 then
 		return
-	elseif event == "SAY" then
-		return true
 	elseif (logType == 1 or logType == 2) then 
 		if GF_SavedVariables.showgroupsinminimap then GF_ShowGroupsOnMinimap(arg1,arg2) end
 		if GF_SavedVariables.showgroupsinchat or (logType == 2 and GF_SavedVariables.showgroupsnewonly) then return true end
@@ -1666,28 +1650,28 @@ end
 function GF_CheckForDelayedMessages()
 	for i=1, getn(GF_LogHistory[GF_RealmName]["Delay"]) do
 		if GF_LogHistory[GF_RealmName]["Delay"][i] then
-			if GF_LogHistory[GF_RealmName]["Delay"][i][1] == "Log" and (GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][6]] or GF_LogHistory[GF_RealmName]["Delay"][i][2] < time()) then
+			if GF_LogHistory[GF_RealmName]["Delay"][i][1] == "Log" and (not GF_SavedVariables.friendsToRemove[GF_LogHistory[GF_RealmName]["Delay"][i][6]] or GF_SavedVariables.friendsToRemove[GF_LogHistory[GF_RealmName]["Delay"][i][6]] + 5 < time()) and (GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][6]] or GF_LogHistory[GF_RealmName]["Delay"][i][2] < time()) then
 				if GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][6]] and GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][6]][1] < GF_SavedVariables.blockmessagebelowlevel then GF_LogHistory[GF_RealmName]["Delay"][i][4] = 9 end
 				GF_AddLogMessage(GF_LogHistory[GF_RealmName]["Delay"][i][3],GF_LogHistory[GF_RealmName]["Delay"][i][4],GF_LogHistory[GF_RealmName]["Delay"][i][5],GF_LogHistory[GF_RealmName]["Delay"][i][6],GF_LogHistory[GF_RealmName]["Delay"][i][7],GF_LogHistory[GF_RealmName]["Delay"][i][8],GF_LogHistory[GF_RealmName]["Delay"][i][9],true)
 				table.remove(GF_LogHistory[GF_RealmName]["Delay"],i)
 				i = i - 1
-			elseif GF_LogHistory[GF_RealmName]["Delay"][i][1] == "Channel" and (GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][4]] or GF_LogHistory[GF_RealmName]["Delay"][i][2] < time()) then
+			elseif GF_LogHistory[GF_RealmName]["Delay"][i][1] == "Channel" and (not GF_SavedVariables.friendsToRemove[GF_LogHistory[GF_RealmName]["Delay"][i][4]] or GF_SavedVariables.friendsToRemove[GF_LogHistory[GF_RealmName]["Delay"][i][4]] + 5 < time()) and (GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][4]] or GF_LogHistory[GF_RealmName]["Delay"][i][2] < time()) then
 				if not GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][4]] or GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][4]][1] >= GF_SavedVariables.blockmessagebelowlevel then
 					GF_AddChannelMessage(GF_LogHistory[GF_RealmName]["Delay"][i][3],GF_LogHistory[GF_RealmName]["Delay"][i][4],GF_LogHistory[GF_RealmName]["Delay"][i][5],GF_LogHistory[GF_RealmName]["Delay"][i][6],true)
 				end
 				table.remove(GF_LogHistory[GF_RealmName]["Delay"],i)
 				i = i - 1
-			elseif GF_LogHistory[GF_RealmName]["Delay"][i][1] == "Chat" and (GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][4]] or GF_LogHistory[GF_RealmName]["Delay"][i][2] < time()) then
+			elseif GF_LogHistory[GF_RealmName]["Delay"][i][1] == "Chat" and (not GF_SavedVariables.friendsToRemove[GF_LogHistory[GF_RealmName]["Delay"][i][4]] or GF_SavedVariables.friendsToRemove[GF_LogHistory[GF_RealmName]["Delay"][i][4]] + 5 < time()) and (GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][4]] or GF_LogHistory[GF_RealmName]["Delay"][i][2] < time()) then
 				if not GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][4]] or GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][4]][1] >= GF_SavedVariables.blockmessagebelowlevel then
 					GF_AddChatMessage(GF_LogHistory[GF_RealmName]["Delay"][i][3],GF_LogHistory[GF_RealmName]["Delay"][i][4],GF_LogHistory[GF_RealmName]["Delay"][i][5],true)
 				end
 				table.remove(GF_LogHistory[GF_RealmName]["Delay"],i)
 				i = i - 1
-			elseif GF_LogHistory[GF_RealmName]["Delay"][i][1] == "Whisper" and (GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][4]] or GF_LogHistory[GF_RealmName]["Delay"][i][2] < time()) then
+			elseif GF_LogHistory[GF_RealmName]["Delay"][i][1] == "Whisper" and (not GF_SavedVariables.friendsToRemove[GF_LogHistory[GF_RealmName]["Delay"][i][4]] or GF_SavedVariables.friendsToRemove[GF_LogHistory[GF_RealmName]["Delay"][i][4]] + 5 < time()) and (GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][4]] or GF_LogHistory[GF_RealmName]["Delay"][i][2] < time()) then
 				GF_WhisperReceivedAddToWhisperHistoryList(GF_LogHistory[GF_RealmName]["Delay"][i][3],GF_LogHistory[GF_RealmName]["Delay"][i][4],GF_LogHistory[GF_RealmName]["Delay"][i][5],true)
 				table.remove(GF_LogHistory[GF_RealmName]["Delay"],i)
 				i = i - 1
-			elseif GF_LogHistory[GF_RealmName]["Delay"][i][1] == "Minimap" and (GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][4]] or GF_LogHistory[GF_RealmName]["Delay"][i][2] < time()) then
+			elseif GF_LogHistory[GF_RealmName]["Delay"][i][1] == "Minimap" and (not GF_SavedVariables.friendsToRemove[GF_LogHistory[GF_RealmName]["Delay"][i][4]] or GF_SavedVariables.friendsToRemove[GF_LogHistory[GF_RealmName]["Delay"][i][4]] + 5 < time()) and (GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][4]] or GF_LogHistory[GF_RealmName]["Delay"][i][2] < time()) then
 				if not GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][4]] or GF_WhoTable[GF_RealmName][GF_LogHistory[GF_RealmName]["Delay"][i][4]][1] >= GF_SavedVariables.blockmessagebelowlevel then
 					GF_ShowGroupsOnMinimap(GF_LogHistory[GF_RealmName]["Delay"][i][3],GF_LogHistory[GF_RealmName]["Delay"][i][4],true)
 				end
@@ -1797,7 +1781,6 @@ end
 function GF_GetWhoData(arg2,groupfound)
 	if GF_SavedVariables.usewhoongroups and (not GF_WhoQueue[arg2] or GF_WhoQueue[arg2] + 60 < time()) and (groupfound or GF_SavedVariables.showformattedchat)
 	and (not GF_WhoTable[GF_RealmName][arg2] or GF_WhoTable[GF_RealmName][arg2][4] + 1209600 < time() or (GF_WhoTable[GF_RealmName][arg2][1] < 60 and GF_WhoTable[GF_RealmName][arg2][4] + 86400 < time())) then -- If level 60, get new whodata after 14 days(for guild name changes). If below level 60, get new data every 24 hours.
-		if GF_SavedVariables.usefriendslist and not GF_SavedVariables.friendsToRemove[arg2] then GF_WhoTable[GF_RealmName][arg2] = nil end
 		GF_AddNameToWhoQueue(arg2,groupfound)
 	else
 		return GF_WhoTable[GF_RealmName][arg2]
@@ -1896,6 +1879,7 @@ function GF_UpdateGroupsFrame()
 		GF_AddonOPSentNamesOnLogin = {}
 		GF_ApplyFiltersToGroupList()
 		for name,data in pairs(GF_ProcessedFirstMessage) do if data and data[2] + .25 < GetTime() then GF_ProcessedFirstMessage[name] = nil end end
+		if GF_PlaySoundNextUpdate then PlaySoundFile( "Sound\\Interface\\PickUp\\PutDownRing.wav" ) GF_PlaySoundNextUpdate = nil end
 	else
 		local timeMin, timeSec
 		for i=1, GF_ResultsListOffsetSize do
@@ -2521,105 +2505,105 @@ function GF_ChatFunctions(event,arg1,arg2,arg8,arg9) -- Functions above reset th
 	getglobal("GF_"..event)(event,arg1,arg2,arg8,arg9)
 end
 
-function GF_CHAT_MSG_BATTLEGROUND()
+function GF_BATTLEGROUND(event,arg1,arg2,arg8,arg9)
 	if not GF_WhoTable[GF_RealmName][arg2] or GF_WhoTable[GF_RealmName][arg2][1] == 0 then GF_UpdateGroup() end
-	GF_AddLogMessage(arg1,4,true,arg2,arg8,arg9,strsub(event,10))
+	GF_AddLogMessage(arg1,4,true,arg2,arg8,arg9,event)
 	GF_PreviousMessage[arg2] = {true}
 end
-function GF_CHAT_MSG_BATTLEGROUND_LEADER()
+function GF_BATTLEGROUND_LEADER(event,arg1,arg2,arg8,arg9)
 	if not GF_WhoTable[GF_RealmName][arg2] or GF_WhoTable[GF_RealmName][arg2][1] == 0 then GF_UpdateGroup() end
-	GF_AddLogMessage(arg1,4,true,arg2,arg8,arg9,strsub(event,10))
+	GF_AddLogMessage(arg1,4,true,arg2,arg8,arg9,event)
 	GF_PreviousMessage[arg2] = {true}
 end
-function GF_CHAT_MSG_CHANNEL(event,arg1,arg2,arg8,arg9)
+function GF_CHANNEL(event,arg1,arg2,arg8,arg9)
 	GF_ProcessChatMessages(event,arg1,arg2,arg8,arg9)
 end
-function GF_CHAT_MSG_COMBAT_FACTION_CHANGE()
-	GF_AddLogMessage(arg1,6,true,"SYSTEM",arg8,arg9,strsub(event,10))
+function GF_COMBAT_FACTION_CHANGE(event,arg1,arg2,arg8,arg9)
+	GF_AddLogMessage(arg1,6,true,"SYSTEM",arg8,arg9,event)
 	if GF_SavedVariables.showloottexts then GF_PreviousMessage["SYSTEM"] = {true} else GF_PreviousMessage["SYSTEM"] = {} end
 end
-function GF_CHAT_MSG_COMBAT_HONOR_GAIN()
-	GF_AddLogMessage(arg1,6,true,"SYSTEM",arg8,arg9,strsub(event,10))
+function GF_COMBAT_HONOR_GAIN(event,arg1,arg2,arg8,arg9)
+	GF_AddLogMessage(arg1,6,true,"SYSTEM",arg8,arg9,event)
 	if GF_SavedVariables.showloottexts then GF_PreviousMessage["SYSTEM"] = {true} else GF_PreviousMessage["SYSTEM"] = {} end
 end
-function GF_CHAT_MSG_COMBAT_XP_GAIN()
-	GF_AddLogMessage(arg1,6,true,"SYSTEM",arg8,arg9,strsub(event,10))
+function GF_COMBAT_XP_GAIN(event,arg1,arg2,arg8,arg9)
+	GF_AddLogMessage(arg1,6,true,"SYSTEM",arg8,arg9,event)
 	if GF_SavedVariables.showloottexts then GF_PreviousMessage["SYSTEM"] = {true} else GF_PreviousMessage["SYSTEM"] = {} end
 end
-function GF_CHAT_MSG_EMOTE()
+function GF_EMOTE(event,arg1,arg2,arg8,arg9)
 	GF_CheckForEmotes(arg1,arg2)
 end
-function GF_CHAT_MSG_GUILD()
-	GF_WhisperReceivedAddToWhisperHistoryList(arg1,arg2,strsub(event,10))
+function GF_GUILD(event,arg1,arg2,arg8,arg9)
+	GF_WhisperReceivedAddToWhisperHistoryList(arg1,arg2,event)
 	GF_PreviousMessage[arg2] = {true}
 end
-function GF_CHAT_MSG_HARDCORE()
+function GF_HARDCORE(event,arg1,arg2,arg8,arg9)
 	GF_ProcessChatMessages(event,arg1,arg2,arg8,arg9)
 end
-function GF_CHAT_MSG_LOOT()
-	GF_AddLogMessage(arg1,6,true,"SYSTEM",arg8,arg9,strsub(event,10))
+function GF_LOOT(event,arg1,arg2,arg8,arg9)
+	GF_AddLogMessage(arg1,6,true,"SYSTEM",arg8,arg9,event)
 	GF_CheckForLoot(arg1)
 end
-function GF_CHAT_MSG_MONEY()
-	GF_AddLogMessage(arg1,6,true,"SYSTEM",arg8,arg9,strsub(event,10))
+function GF_MONEY(event,arg1,arg2,arg8,arg9)
+	GF_AddLogMessage(arg1,6,true,"SYSTEM",arg8,arg9,event)
 	if GF_SavedVariables.showloottexts then GF_PreviousMessage["SYSTEM"] = {true} else GF_PreviousMessage["SYSTEM"] = {} end
 end
-function GF_CHAT_MSG_MONSTER_EMOTE()
+function GF_MONSTER_EMOTE(event,arg1,arg2,arg8,arg9)
 	GF_CheckForMonsterEmote(arg1,arg2)
 end
-function GF_CHAT_MSG_MONSTER_SAY()
+function GF_MONSTER_SAY(event,arg1,arg2,arg8,arg9)
 	GF_CheckForMonsterEmote(arg1,arg2)
 end
-function GF_CHAT_MSG_MONSTER_YELL()
+function GF_MONSTER_YELL(event,arg1,arg2,arg8,arg9)
 	GF_CheckForMonsterEmote(arg1,arg2)
 end
-function GF_CHAT_MSG_OFFICER()
-	GF_WhisperReceivedAddToWhisperHistoryList(arg1,arg2,strsub(event,10))
+function GF_OFFICER(event,arg1,arg2,arg8,arg9)
+	GF_WhisperReceivedAddToWhisperHistoryList(arg1,arg2,event)
 	GF_PreviousMessage[arg2] = {true}
 end
-function GF_CHAT_MSG_PARTY()
+function GF_PARTY(event,arg1,arg2,arg8,arg9)
 	if not GF_WhoTable[GF_RealmName][arg2] or GF_WhoTable[GF_RealmName][arg2][1] == 0 then GF_UpdateGroup() end
-	GF_AddLogMessage(arg1,4,true,arg2,arg8,arg9,strsub(event,10))
+	GF_AddLogMessage(arg1,4,true,arg2,arg8,arg9,event)
 	GF_PreviousMessage[arg2] = {true}
 end
-function GF_CHAT_MSG_RAID()
+function GF_RAID(event,arg1,arg2,arg8,arg9)
 	if not GF_WhoTable[GF_RealmName][arg2] or GF_WhoTable[GF_RealmName][arg2][1] == 0 then GF_UpdateGroup() end
-	GF_AddLogMessage(arg1,4,true,arg2,arg8,arg9,strsub(event,10))
+	GF_AddLogMessage(arg1,4,true,arg2,arg8,arg9,event)
 	GF_PreviousMessage[arg2] = {true}
 end
-function GF_CHAT_MSG_RAID_LEADER()
+function GF_RAID_LEADER(event,arg1,arg2,arg8,arg9)
 	if not GF_WhoTable[GF_RealmName][arg2] or GF_WhoTable[GF_RealmName][arg2][1] == 0 then GF_UpdateGroup() end
-	GF_AddLogMessage(arg1,4,true,arg2,arg8,arg9,strsub(event,10))
+	GF_AddLogMessage(arg1,4,true,arg2,arg8,arg9,event)
 	GF_PreviousMessage[arg2] = {true}
 end
-function GF_CHAT_MSG_RAID_WARNING()
+function GF_RAID_WARNING(event,arg1,arg2,arg8,arg9)
 	if not GF_WhoTable[GF_RealmName][arg2] or GF_WhoTable[GF_RealmName][arg2][1] == 0 then GF_UpdateGroup() end
-	GF_AddLogMessage(arg1,4,true,arg2,arg8,arg9,strsub(event,10))
+	GF_AddLogMessage(arg1,4,true,arg2,arg8,arg9,event)
 	GF_PreviousMessage[arg2] = {true}
 end
-function GF_CHAT_MSG_SAY()
+function GF_SAY(event,arg1,arg2,arg8,arg9)
 	GF_ProcessChatMessages(event,arg1,arg2,arg8,arg9)
 end
-function GF_CHAT_MSG_SYSTEM()
+function GF_SYSTEM(event,arg1,arg2,arg8,arg9)
 	if strfind(arg1, MARKED_AFK) then if GF_AutoAnnounceTimer then GF_TurnOffAnnounce(GF_AFK_ANNOUNCE_OFF) end return end
 	GF_CheckForSystem(arg1)
 end
-function GF_CHAT_MSG_TEXT_EMOTE()
+function GF_TEXT_EMOTE(event,arg1,arg2,arg8,arg9)
 	GF_CheckForEmotes(arg1,arg2)
 end
-function GF_CHAT_MSG_WHISPER()
+function GF_WHISPER(event,arg1,arg2,arg8,arg9)
 	if not GF_WhoTable[GF_RealmName][arg2] and GF_PlayingOnTurtle and GF_SavedVariables.usewhoongroups and GF_SavedVariables.usefriendslist then GF_GetWhoData(arg2) end
-	GF_WhisperReceivedAddToWhisperHistoryList(arg1,arg2,strsub(event,10))
+	GF_WhisperReceivedAddToWhisperHistoryList(arg1,arg2,event)
 	table.insert(DEFAULT_CHAT_FRAME.editBox.lastTell,1,arg2)
 	GF_PreviousMessage[arg2] = {true}
 end
-function GF_CHAT_MSG_WHISPER_INFORM()
+function GF_WHISPER_INFORM(event,arg1,arg2,arg8,arg9)
 	if not GF_WhoTable[GF_RealmName][arg2] and GF_PlayingOnTurtle and GF_SavedVariables.usewhoongroups and GF_SavedVariables.usefriendslist then GF_GetWhoData(arg2) end
-	GF_WhisperReceivedAddToWhisperHistoryList(arg1,arg2,strsub(event,10))
+	GF_WhisperReceivedAddToWhisperHistoryList(arg1,arg2,event)
 	table.insert(DEFAULT_CHAT_FRAME.editBox.lastTell,1,arg2)
 	GF_PreviousMessage[arg2] = {true}
 end
-function GF_CHAT_MSG_YELL()
+function GF_YELL(event,arg1,arg2,arg8,arg9)
 	GF_ProcessChatMessages(event,arg1,arg2,arg8,arg9)
 end
 
@@ -2627,14 +2611,13 @@ function GF_ProcessChatMessages(event,arg1,arg2,arg8,arg9,delayed) -- Chat proce
 	if GF_SavedVariables.showformattedchat and not delayed and not GF_ChatReplaceItemLink(arg1,true) then table.insert(GF_LogHistory[GF_RealmName]["Delay"], {"Item",time()+1,event,arg1,arg2,arg8,arg9}) GF_PreviousMessage[arg2] = {} return end
 	arg1 = GF_CleanUpMessagesOfBadLinks(arg1)
 	arg2 = gsub(arg2,".* ","")
-	event = strsub(event,10)
 	--print(GetTime())
 	local logType = GF_FilterMessageType(gsub(arg1,"[\\\"]", " "),arg2,arg9,event) or 5 -- 1=group,2=newgroup,3=filteredgroup,4=me,5=chat,6=loot,7=spam,8=guild,9=trade,10=blacklist,11=level
 	--print(GetTime())
 	--if fixedType then logType = fixedType arg1 = ">>"..strsub(arg1,3) end
 	if logType > 7 and GF_PlayerMessages[arg2] and GF_PlayerMessages[arg2][1] and GF_PlayerMessages[arg2][1][1] then GF_PlayerMessages[arg2][1][1] = time() + 1 end -- To block multiple messages in series(Guild,Trade,Blacklist,Level)
 	GF_AddLogMessage(arg1,logType,true,arg2,arg8,arg9,event)
-	if arg2 == UnitName("player") or (GF_SavedVariables.alwaysshowguild and (GF_Guildies[arg2] or GF_Friends[arg2] or GF_PlayersCurrentlyInGroup[arg2])) or GF_ChatCheckFilters(logType,arg1,arg2,event) then
+	if arg2 == UnitName("player") or arg2 == "SYSTEM" or event == "SAY" or (GF_SavedVariables.alwaysshowguild and (GF_Guildies[arg2] or GF_Friends[arg2] or GF_PlayersCurrentlyInGroup[arg2])) or GF_ChatCheckFilters(logType,arg1,arg2,event) then
 		if delayed then
 			if event == "CHANNEL" then GF_AddChannelMessage(arg1,arg2,arg8,arg9) else GF_AddChatMessage(arg1,arg2,event) end
 		else
@@ -2805,7 +2788,7 @@ function GF_CheckForGroups(arg1,arg2,event)
 		if not GF_EntryMatchesGroupFilterCriteria(entry) then
 			foundInGroup = 3
 		elseif GF_PerCharVariables.playsounds then
-			PlaySoundFile( "Sound\\Interface\\PickUp\\PutDownRing.wav" )
+			GF_PlaySoundNextUpdate = true
 		end
 	end
 	return GF_CheckForSpam(arg1,arg2,foundInGroup) or foundInGroup
@@ -2954,9 +2937,9 @@ function GF_GetTypes(arg1, showanyway)
 	while true do lfs,lfe,wordString,tempString = strfind(arg1, "[%p%s](%a+%s?([!%+]))[ %]]",lfs) if wordString then wordString = gsub(wordString," ","") if GF_WORD_SPECIAL_COMBINATION[wordString] then arg1 = strsub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..strsub(arg1,lfe) elseif tempString == "+" and GF_GROUP_IDS[strsub(wordString,1,strlen(wordString)-1)] then arg1 = strsub(arg1,1,lfs)..wordString.." "..GF_PLUS_LOCALIZED..strsub(arg1,lfe) end lfs = lfs + strlen(wordString) + 1 else break end end
 	lfs = 1 -- To detect space/number+/word/space combinations(eg "10th" = tenth, "5g" = 5gold)
 	while true do
-		lfs,lfe,wordString,tempString = strfind(arg1,"[%p%s](%d+%s?(%a+))[%p%s]",lfs)
+		lfs,lfe,wordString,tempString = strfind(arg1,"[%p%s](%d+%s?/?(%a+))[%p%s]",lfs)
 		if wordString then
-			wordString = gsub(wordString," ","")
+			wordString = gsub(wordString,"[ /]","")
 			if GF_WORD_FIX[tempString] then wordString = strsub(wordString,1,strlen(wordString) - strlen(tempString))..GF_WORD_FIX[tempString] end
 			if GF_WORD_SPECIAL_COMBINATION[wordString] then
 				arg1 = strsub(arg1,1,lfs)..GF_WORD_SPECIAL_COMBINATION[wordString]..strsub(arg1,lfe)
@@ -3003,7 +2986,7 @@ function GF_GetTypes(arg1, showanyway)
 							if showanyway == true then print(tempString.." trade <word>[]<word> 2.5") end
 						end
 					end
-					if strlen(wordString) < 45 and strsub(arg1,lfs-7,lfs) == "hitem Z[" then
+					if strlen(wordString) < 45 and strsub(arg1,lfs-8,lfs) ~= "hquest Z[" then
 						tempString = ""
 						for word in gfind(wordString, "(%a+)") do if word == "thunderfury" or GF_WORD_FIX_ITEM_NAME[word] == "enchant" then break elseif GF_WORD_FIX_ITEM_NAME[word] then tempString = word end end
 						if tempString ~= "" then arg1 = strsub(arg1,1,lfs)..GF_WORD_FIX_ITEM_NAME[tempString]..strsub(arg1,lfe) end
@@ -3169,10 +3152,10 @@ function GF_GetTypes(arg1, showanyway)
 					if GF_WORD_QUEST[wordString] then
 						lfs,lfe = 0,0
 						if GF_QUEST_TRIGGER[wordString] then
-							if wordTable[i-2] and (GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]]) then wordString = wordTable[i-2]..wordTable[i-1]..wordString lfs = 2 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]] > foundQuest[1] or (foundQuest[2] < j and GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]] > foundQuest[1]+5) then if strfind(arg1,GF_ELITE_LOCALIZED) or strfind(arg1,GF_BOSS_LOCALIZED) then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]] + 3 foundQuest[2] = j else foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]] foundQuest[2] = j end end table.insert(groupPosition,{i-2,i+j,wordString})
-							elseif wordTable[i+j+2] and (GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]]) then wordString = wordString..wordTable[i+j+1]..wordTable[i+j+2] lfe = 2 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]] > foundQuest[1] or (foundQuest[2] < j and GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]] > foundQuest[1]+5) then if strfind(arg1,GF_ELITE_LOCALIZED) or strfind(arg1,GF_BOSS_LOCALIZED) then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]] + 3 foundQuest[2] = j else foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]] foundQuest[2] = j end end table.insert(groupPosition,{i,i+j+2,wordString})
-							elseif GF_WORD_LEVEL_ZONE[wordTable[i-1]] then wordString = wordTable[i-1]..wordString lfs = 1 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i-1]] > foundQuest[1] or (foundQuest[2] < j and GF_WORD_LEVEL_ZONE[wordTable[i-1]] > foundQuest[1]+5) then if strfind(arg1,GF_ELITE_LOCALIZED) or strfind(arg1,GF_BOSS_LOCALIZED) then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-1]] + 3 foundQuest[2] = j else foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-1]] foundQuest[2] = j end end table.insert(groupPosition,{i-1,i+j,wordString})
-							elseif GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] then wordString = wordString..wordTable[i+j+1] lfe = 1 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] > foundQuest[1] or (foundQuest[2] < j and GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] > foundQuest[1]+5) then if strfind(arg1,GF_ELITE_LOCALIZED) or strfind(arg1,GF_BOSS_LOCALIZED) then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] + 3 foundQuest[2] = j else foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] foundQuest[2] = j end end table.insert(groupPosition,{i,i+j+1,wordString})
+							if wordTable[i-2] and (GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]]) then wordString = wordTable[i-2]..wordTable[i-1]..wordString lfs = 2 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]] > foundQuest[1] or (foundQuest[2] < j and GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]] > foundQuest[1]+5) then if GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]] ~= 0 and strfind(arg1,GF_ELITE_LOCALIZED) or strfind(arg1,GF_BOSS_LOCALIZED) then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]] + 3 foundQuest[2] = j else foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]] foundQuest[2] = j end end table.insert(groupPosition,{i-2,i+j,wordString})
+							elseif wordTable[i+j+2] and (GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]]) then wordString = wordString..wordTable[i+j+1]..wordTable[i+j+2] lfe = 2 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]] > foundQuest[1] or (foundQuest[2] < j and GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]] > foundQuest[1]+5) then if GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]] ~= 0 and strfind(arg1,GF_ELITE_LOCALIZED) or strfind(arg1,GF_BOSS_LOCALIZED) then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]] + 3 foundQuest[2] = j else foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]] foundQuest[2] = j end end table.insert(groupPosition,{i,i+j+2,wordString})
+							elseif GF_WORD_LEVEL_ZONE[wordTable[i-1]] then wordString = wordTable[i-1]..wordString lfs = 1 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i-1]] > foundQuest[1] or (foundQuest[2] < j and GF_WORD_LEVEL_ZONE[wordTable[i-1]] > foundQuest[1]+5) then if GF_WORD_LEVEL_ZONE[wordTable[i-1]] ~= 0 and strfind(arg1,GF_ELITE_LOCALIZED) or strfind(arg1,GF_BOSS_LOCALIZED) then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-1]] + 3 foundQuest[2] = j else foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-1]] foundQuest[2] = j end end table.insert(groupPosition,{i-1,i+j,wordString})
+							elseif GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] then wordString = wordString..wordTable[i+j+1] lfe = 1 if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] > foundQuest[1] or (foundQuest[2] < j and GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] > foundQuest[1]+5) then if GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] ~= 0 and strfind(arg1,GF_ELITE_LOCALIZED) or strfind(arg1,GF_BOSS_LOCALIZED) then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] + 3 foundQuest[2] = j else foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] foundQuest[2] = j end end table.insert(groupPosition,{i,i+j+1,wordString})
 							else if not foundQuest[1] or GF_WORD_QUEST[wordString][2] > foundQuest[1] or (foundQuest[2] < j and GF_WORD_QUEST[wordString][2] > foundQuest[1]+5) then foundQuest[1] = GF_WORD_QUEST[wordString][2] foundQuest[2] = j end table.insert(groupPosition,{i,i+j,wordString}) end
 						else
 							if not foundQuest[1] or GF_WORD_QUEST[wordString][2] > foundQuest[1] or (foundQuest[2] < j and GF_WORD_QUEST[wordString][2] > foundQuest[1]+5) then foundQuest[1] = GF_WORD_QUEST[wordString][2] foundQuest[2] = j end table.insert(groupPosition,{i,i+j,wordString})
@@ -3328,33 +3311,40 @@ function GF_GetTypes(arg1, showanyway)
 					if showanyway == true then print(wordString.." lfm "..GF_WORD_LFM[wordString]) end
 					if GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] then
 						if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] > foundQuest[1] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] table.insert(lfmPosition, {i,i+j+1,GF_WORD_LFM[wordString] + .75,true}) if not firstLFMLFG then foundTradesExclusion = foundTradesExclusion + 1.5 foundGuildExclusion = foundGuildExclusion + .1 firstLFMLFG = true end else table.insert(lfmPosition, {i,i+j,GF_WORD_LFM[wordString],true}) table.insert(groupPosition,{i+j+1,i+j+1,wordTable[i+j+1]}) end
+					elseif wordTable[i+j+2] and GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]] then
+						if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]] > foundQuest[1] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]] table.insert(lfmPosition, {i,i+j+2,GF_WORD_LFM[wordString] + .75,true}) if not firstLFMLFG then foundTradesExclusion = foundTradesExclusion + 1.5 foundGuildExclusion = foundGuildExclusion + .1 firstLFMLFG = true end else table.insert(lfmPosition, {i,i+j,GF_WORD_LFM[wordString],true}) table.insert(groupPosition,{i+j+1,i+j+2,wordTable[i+j+1]..wordTable[i+j+2]}) end
 					elseif GF_GROUP_IDS[wordTable[i+j+1]] then
 						table.insert(lfmPosition, {i,i+j+1,GF_WORD_LFM[wordString] + .75,true}) if not firstLFMLFG then foundTradesExclusion = foundTradesExclusion + 1.5 foundGuildExclusion = foundGuildExclusion + .1 firstLFMLFG = true end
 					elseif GF_WORD_LEVEL_ZONE[wordTable[i-1]] then
 						if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i-1]] > foundQuest[1] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-1]] table.insert(lfmPosition, {i-1,i+j,GF_WORD_LFM[wordString] + .75,true}) if not firstLFMLFG then foundTradesExclusion = foundTradesExclusion + 1.5 foundGuildExclusion = foundGuildExclusion + .1 firstLFMLFG = true end else table.insert(lfmPosition, {i,i+j,GF_WORD_LFM[wordString],true}) table.insert(groupPosition,{i-1,i-1,wordTable[i-1]}) end
+					elseif wordTable[i-2] and GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]] then
+						if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]] > foundQuest[1] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]] table.insert(lfmPosition, {i-2,i+j,GF_WORD_LFM[wordString] + .75,true}) if not firstLFMLFG then foundTradesExclusion = foundTradesExclusion + 1.5 foundGuildExclusion = foundGuildExclusion + .1 firstLFMLFG = true end else table.insert(lfmPosition, {i,i+j,GF_WORD_LFM[wordString],true}) table.insert(groupPosition,{i-2,i-1,wordTable[i-2]..wordTable[i-1]}) end
 					elseif GF_GROUP_IDS[wordTable[i-1]] then
 						table.insert(lfmPosition, {i-1,i+j,GF_WORD_LFM[wordString] + .75,true}) if not firstLFMLFG then foundTradesExclusion = foundTradesExclusion + 1.5 foundGuildExclusion = foundGuildExclusion + .1 firstLFMLFG = true end
 					else
 						table.insert(lfmPosition, {i,i+j,GF_WORD_LFM[wordString],true}) 
 					end
-					if GF_QUEST_ONLY_AFTER_LFM[wordTable[i+j+1]] then if not foundQuest[1] or GF_QUEST_ONLY_AFTER_LFM[wordTable[i+j+1]] > foundQuest[1] then foundQuest[1] = GF_QUEST_ONLY_AFTER_LFM[wordTable[i+j+1]] if showanyway == true then print(wordTable[i+j+1].." only after lfm") end end end
+					if GF_QUEST_ONLY_AFTER_LFM[wordTable[i+j+1]] then if not foundQuest[1] or GF_QUEST_ONLY_AFTER_LFM[wordTable[i+j+1]] > foundQuest[1] then foundQuest[1] = GF_QUEST_ONLY_AFTER_LFM[wordTable[i+j+1]] lfmPosition[1][2] = lfmPosition[1][2] + 1 lfmPosition[1][3] = lfmPosition[1][3] + .75 if showanyway == true then print(wordTable[i+j+1].." only after lfm") end end end
 					numGroupWords = numGroupWords + 1 + j
 				elseif GF_WORD_LFG[wordString] then
 					table.insert(lfmlfgName,wordString)
 					if showanyway == true then print(wordString.." lfg "..GF_WORD_LFG[wordString]) end
-					if GF_QUEST_ONLY_AFTER_LFG[wordTable[i+j+1]] then if not foundQuest[1] or GF_QUEST_ONLY_AFTER_LFG[wordTable[i+j+1]] > foundQuest[1] then foundQuest[1] = GF_QUEST_ONLY_AFTER_LFG[wordTable[i+j+1]] if showanyway == true then print(wordTable[i+j+1].." only after lfm") end end end
 					if GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] then
 						if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] > foundQuest[1] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]] table.insert(lfmPosition, {i,i+j+1,GF_WORD_LFG[wordString] + .75}) if not firstLFMLFG then foundTradesExclusion = foundTradesExclusion + 1.5 foundGuildExclusion = foundGuildExclusion + .1 firstLFMLFG = true end else table.insert(lfmPosition, {i,i+j,GF_WORD_LFG[wordString]}) table.insert(groupPosition,{i+j+1,i+j+1,wordTable[i+j+1]}) end
+					elseif wordTable[i+j+2] and GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]] then
+						if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]] > foundQuest[1] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i+j+1]..wordTable[i+j+2]] table.insert(lfmPosition, {i,i+j+2,GF_WORD_LFG[wordString] + .75}) if not firstLFMLFG then foundTradesExclusion = foundTradesExclusion + 1.5 foundGuildExclusion = foundGuildExclusion + .1 firstLFMLFG = true end else table.insert(lfmPosition, {i,i+j,GF_WORD_LFG[wordString]}) table.insert(groupPosition,{i+j+1,i+j+2,wordTable[i+j+1]..wordTable[i+j+2]}) end
 					elseif GF_GROUP_IDS[wordTable[i+j+1]] then
 						table.insert(lfmPosition, {i,i+j+1,GF_WORD_LFG[wordString] + .75}) if not firstLFMLFG then foundTradesExclusion = foundTradesExclusion + 1.5 foundGuildExclusion = foundGuildExclusion + .1 firstLFMLFG = true end
 					elseif GF_WORD_LEVEL_ZONE[wordTable[i-1]] then
 						if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i-1]] > foundQuest[1] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-1]] table.insert(lfmPosition, {i-1,i+j,GF_WORD_LFG[wordString] + .75}) if not firstLFMLFG then foundTradesExclusion = foundTradesExclusion + 1.5 foundGuildExclusion = foundGuildExclusion + .1 firstLFMLFG = true end else table.insert(lfmPosition, {i,i+j,GF_WORD_LFG[wordString]}) table.insert(groupPosition,{i-1,i-1,wordTable[i-1]}) end
+					elseif wordTable[i-2] and GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]] then
+						if not foundQuest[1] or GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]] > foundQuest[1] then foundQuest[1] = GF_WORD_LEVEL_ZONE[wordTable[i-2]..wordTable[i-1]] table.insert(lfmPosition, {i-2,i+j,GF_WORD_LFG[wordString] + .75}) if not firstLFMLFG then foundTradesExclusion = foundTradesExclusion + 1.5 foundGuildExclusion = foundGuildExclusion + .1 firstLFMLFG = true end else table.insert(lfmPosition, {i,i+j,GF_WORD_LFG[wordString]}) table.insert(groupPosition,{i-2,i-1,wordTable[i-2]..wordTable[i-1]}) end
 					elseif GF_GROUP_IDS[wordTable[i-1]] then
 						table.insert(lfmPosition, {i-1,i+j,GF_WORD_LFG[wordString] + .75}) if not firstLFMLFG then foundTradesExclusion = foundTradesExclusion + 1.5 foundGuildExclusion = foundGuildExclusion + .1 firstLFMLFG = true end
 					else
 						table.insert(lfmPosition, {i,i+j,GF_WORD_LFG[wordString]})
 					end
-					if not firstLFMLFG then foundTradesExclusion = foundTradesExclusion + 1.5 foundGuildExclusion = foundGuildExclusion + .1 firstLFMLFG = true end
+					if GF_QUEST_ONLY_AFTER_LFG[wordTable[i+j+1]] then if not foundQuest[1] or GF_QUEST_ONLY_AFTER_LFG[wordTable[i+j+1]] > foundQuest[1] then foundQuest[1] = GF_QUEST_ONLY_AFTER_LFG[wordTable[i+j+1]] lfmPosition[1][2] = lfmPosition[1][2] + 1 lfmPosition[1][3] = lfmPosition[1][3] + .75 if showanyway == true then print(wordTable[i+j+1].." only after lfg") end end end
 					numGroupWords = numGroupWords + 1 + j
 				end
 				if GF_WORD_CLASSES[wordString] then foundClass = GF_WORD_CLASSES[wordString] table.insert(groupName,wordString) groupName[wordString] = true numGroupWords = numGroupWords + 1 + j
@@ -3522,7 +3512,7 @@ function GF_GetTypes(arg1, showanyway)
 		if lfe == 1 then break end
 	end
 	if foundLFM > foundLFG then foundLFG = 0 end
-	if getn(lfmlfgName) == 1 and groupName[1] and not foundDungeon and not foundRaid and (not foundQuest[1] or GF_LFM_BYPASS[groupName[1]]) then lfs = 0 lfe = 0 for i=1,getn(groupName) do if strfind(lfmlfgName[1],groupName[i]) then lfs = lfs + 1 end if GF_LFM_BYPASS[groupName[i]] or GF_WORD_CLASSES[groupName[i]] then lfe = lfe + 1 end end if lfs == getn(groupName) then foundLFM = 0 foundLFG = 0 if showanyway == true then print("groupname is in lfmname") end elseif tempVal > 4 and lfe == getn(groupName) and foundLFM < 2.5 and foundLFG < 2.5 then foundLFM = 0 foundLFG = 0 if showanyway == true then print("GF_LFM_BYPASS didn't reach 2.5") end end end
+	if getn(lfmlfgName) == 1 and groupName[1] and not foundDungeon and not foundRaid and (not foundQuest[1] or GF_LFM_BYPASS[groupName[1]]) and (not foundPvP or foundPvP == 0) then lfs = 0 lfe = 0 for i=1,getn(groupName) do if strfind(lfmlfgName[1],groupName[i]) then lfs = lfs + 1 end if GF_LFM_BYPASS[groupName[i]] or GF_WORD_CLASSES[groupName[i]] then lfe = lfe + 1 end end if lfs == getn(groupName) then foundLFM = 0 foundLFG = 0 if showanyway == true then print("groupname is in lfmname") end elseif tempVal > 4 and lfe == getn(groupName) and foundLFM < 2.5 and foundLFG < 2.5 then foundLFM = 0 foundLFG = 0 if showanyway == true then print("GF_LFM_BYPASS didn't reach 2.5") end end end
 	
 	if foundGuild < 100 and strfind(arg1, "[<~][a-zA-Z0-9%&%-/ ]+[>~]") then foundGuild = foundGuild + 2 foundTradesExclusion = foundTradesExclusion + 1 if showanyway == true then print("<words> guild 2 .. tradesex 1") end end
 	while foundGuild > 100 do foundGuild = foundGuild - 100 end
@@ -5558,8 +5548,8 @@ function GF_GetDungeonsFromText(arg1)
 			if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_BRACKET[gsub(wordString," ","")] then foundGuild = foundGuild + GF_GUILD_BRACKET[gsub(wordString," ","")] end
 			if strbyte(arg1,lfs) == 91 and strbyte(arg1,lfe) == 93 then -- "[]"
 				if strbyte(arg1,lfs-1) == 90 then -- From Link
-					tempString = ""
-					if strlen(wordString) < 45 then
+					if strlen(wordString) < 45 and strsub(arg1,lfs-8,lfs) ~= "hquest Z[" then
+						tempString = ""
 						for word in gfind(wordString, "(%a+)") do if word == "thunderfury" or GF_WORD_FIX_ITEM_NAME[word] == "enchant" then break elseif GF_WORD_FIX_ITEM_NAME[word] then tempString = word end end
 						if tempString ~= "" then arg1 = strsub(arg1,1,lfs)..GF_WORD_FIX_ITEM_NAME[tempString]..strsub(arg1,lfe) end
 					end
@@ -5914,8 +5904,8 @@ function GetModifiedQuestName(entryname)
 			if GF_WORD_FIX[wordString] then wordString = GF_WORD_FIX[wordString] end if GF_GUILD_BRACKET[gsub(wordString," ","")] then foundGuild = foundGuild + GF_GUILD_BRACKET[gsub(wordString," ","")] end
 			if strbyte(arg1,lfs) == 91 and strbyte(arg1,lfe) == 93 then -- "[]"
 				if strbyte(arg1,lfs-1) == 90 then -- From Link
-					tempString = ""
-					if strlen(wordString) < 45 then
+					if strlen(wordString) < 45 and strsub(arg1,lfs-8,lfs) ~= "hquest Z[" then
+						tempString = ""
 						for word in gfind(wordString, "(%a+)") do if word == "thunderfury" or GF_WORD_FIX_ITEM_NAME[word] == "enchant" then break elseif GF_WORD_FIX_ITEM_NAME[word] then tempString = word end end
 						if tempString ~= "" then arg1 = strsub(arg1,1,lfs)..GF_WORD_FIX_ITEM_NAME[tempString]..strsub(arg1,lfe) end
 					end

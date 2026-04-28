@@ -885,11 +885,30 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</OnLeave>
 		</Scripts>
 	</Button>
+	<Button name="GF_MessageAnchorButton" inherits="UIRadioButtonTemplate" parent="UIParent" enableMouse="true" movable="true" frameStrata="MEDIUM" toplevel="true" clampedToScreen="true" hidden="true">
+		<Size>
+			<AbsDimension x="20" y="20"/>
+		</Size>
+		<Scripts>
+			<OnLoad> this:RegisterForDrag("LeftButton") this:RegisterForClicks("LeftButtonUp","RightButtonUp") this:LockHighlight() getglobal(this:GetName().."Text"):SetText(GF_MOVE_ME) </OnLoad>
+			<OnDragStart> this:StartMoving() </OnDragStart>
+			<OnDragStop>
+				this:StopMovingOrSizing() _,_,_,GF_PerCharVariables.MessageXPos,GF_PerCharVariables.MessageYPos = GF_MessageAnchorButton:GetPoint()
+			</OnDragStop>
+			<OnClick> if arg1 == "RightButton" then this:Hide() end </OnClick>
+			<OnEnter>
+				GF_ShowTooltip(this)
+			</OnEnter>
+			<OnLeave>
+				GameTooltip:Hide()
+			</OnLeave>
+		</Scripts>
+	</Button>
 	<MessageFrame name="GF_MinimapMessageFrameTemplateA" frameStrata="BACKGROUND" toplevel="true" displayDuration="20.0" maxLines="1" virtual="true">
 		<Size>
 			<AbsDimension x="256" y="16"/>
 		</Size>
-		<FontString justifyH="RIGHT" nonspacewrap="false">
+		<FontString inherits="GameFontNormal" justifyH="RIGHT" nonspacewrap="false">
 			<Color r="1" g="1" b="1" a="1"/>
 		</FontString>
 	</MessageFrame>
@@ -897,21 +916,21 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 		<Size>
 			<AbsDimension x="256" y="16"/>
 		</Size>
-		<FontString justifyH="RIGHT" nonspacewrap="false" maxLines="2">
+		<FontString inherits="GameFontNormal" justifyH="RIGHT" nonspacewrap="false" maxLines="2">
 			<Color r="1" g="1" b="1" a="1"/>
 		</FontString>
 	</MessageFrame>
-	<MessageFrame name="GF_MinimapMessageFrameA1" inherits="GF_MinimapMessageFrameTemplateA"></MessageFrame>
+	<MessageFrame name="GF_MinimapMessageFrameA1" inherits="GF_MinimapMessageFrameTemplateA"><Anchors><Anchor point="RIGHT" relativeTo="GF_MessageAnchorButton" relativePoint="LEFT"><Offset><AbsDimension x="0" y="0"/></Offset></Anchor></Anchors></MessageFrame>
+	<MessageFrame name="GF_MinimapMessageFrameA2" inherits="GF_MinimapMessageFrameTemplateA"><Anchors><Anchor point="TOP" relativeTo="GF_MinimapMessageFrameA1" relativePoint="BOTTOM"><Offset><AbsDimension x="0" y="-42"/></Offset></Anchor></Anchors></MessageFrame>
+	<MessageFrame name="GF_MinimapMessageFrameA3" inherits="GF_MinimapMessageFrameTemplateA"><Anchors><Anchor point="TOP" relativeTo="GF_MinimapMessageFrameA2" relativePoint="BOTTOM"><Offset><AbsDimension x="0" y="-42"/></Offset></Anchor></Anchors></MessageFrame>
+	<MessageFrame name="GF_MinimapMessageFrameA4" inherits="GF_MinimapMessageFrameTemplateA"><Anchors><Anchor point="TOP" relativeTo="GF_MinimapMessageFrameA3" relativePoint="BOTTOM"><Offset><AbsDimension x="0" y="-42"/></Offset></Anchor></Anchors></MessageFrame>
+	<MessageFrame name="GF_MinimapMessageFrameA5" inherits="GF_MinimapMessageFrameTemplateA"><Anchors><Anchor point="TOP" relativeTo="GF_MinimapMessageFrameA4" relativePoint="BOTTOM"><Offset><AbsDimension x="0" y="-42"/></Offset></Anchor></Anchors></MessageFrame>
+	<MessageFrame name="GF_MinimapMessageFrameA6" inherits="GF_MinimapMessageFrameTemplateA"><Anchors><Anchor point="TOP" relativeTo="GF_MinimapMessageFrameA5" relativePoint="BOTTOM"><Offset><AbsDimension x="0" y="-42"/></Offset></Anchor></Anchors></MessageFrame>
 	<MessageFrame name="GF_MinimapMessageFrameB1" inherits="GF_MinimapMessageFrameTemplateB"><Anchors><Anchor point="TOP" relativeTo="GF_MinimapMessageFrameA1" relativePoint="BOTTOM"/></Anchors></MessageFrame>
-	<MessageFrame name="GF_MinimapMessageFrameA2" inherits="GF_MinimapMessageFrameTemplateA"></MessageFrame>
 	<MessageFrame name="GF_MinimapMessageFrameB2" inherits="GF_MinimapMessageFrameTemplateB"><Anchors><Anchor point="TOP" relativeTo="GF_MinimapMessageFrameA2" relativePoint="BOTTOM"/></Anchors></MessageFrame>
-	<MessageFrame name="GF_MinimapMessageFrameA3" inherits="GF_MinimapMessageFrameTemplateA"></MessageFrame>
 	<MessageFrame name="GF_MinimapMessageFrameB3" inherits="GF_MinimapMessageFrameTemplateB"><Anchors><Anchor point="TOP" relativeTo="GF_MinimapMessageFrameA3" relativePoint="BOTTOM"/></Anchors></MessageFrame>
-	<MessageFrame name="GF_MinimapMessageFrameA4" inherits="GF_MinimapMessageFrameTemplateA"></MessageFrame>
 	<MessageFrame name="GF_MinimapMessageFrameB4" inherits="GF_MinimapMessageFrameTemplateB"><Anchors><Anchor point="TOP" relativeTo="GF_MinimapMessageFrameA4" relativePoint="BOTTOM"/></Anchors></MessageFrame>
-	<MessageFrame name="GF_MinimapMessageFrameA5" inherits="GF_MinimapMessageFrameTemplateA"></MessageFrame>
 	<MessageFrame name="GF_MinimapMessageFrameB5" inherits="GF_MinimapMessageFrameTemplateB"><Anchors><Anchor point="TOP" relativeTo="GF_MinimapMessageFrameA5" relativePoint="BOTTOM"/></Anchors></MessageFrame>
-	<MessageFrame name="GF_MinimapMessageFrameA6" inherits="GF_MinimapMessageFrameTemplateA"></MessageFrame>
 	<MessageFrame name="GF_MinimapMessageFrameB6" inherits="GF_MinimapMessageFrameTemplateB"><Anchors><Anchor point="TOP" relativeTo="GF_MinimapMessageFrameA6" relativePoint="BOTTOM"/></Anchors></MessageFrame>
 	<Button name="GF_MinimapIcon" enableMouse="true" frameStrata="LOW" toplevel="true" parent="Minimap" movable="true">
 		<Size>
@@ -1589,7 +1608,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										if this:GetChecked() then GF_SavedVariables.showloottexts = true else GF_SavedVariables.showloottexts = false end
 									</OnClick>
 									<OnLoad>
-										getglobal(this:GetName().."TextLabel"):SetText(GF_LOOT)
+										getglobal(this:GetName().."TextLabel"):SetText(GF_LOOTS)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -1826,11 +1845,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							GF_SavedVariables.mainframestatus = 0
 							GF_ToggleMainFrame(3)
 						else	
-							if GF_SavedVariables.mainframestatus == 0 then
-								local _,_,_,xpos, ypos = GF_MainFrame:GetPoint()
-								GF_SavedVariables.MainFrameXPos = xpos
-								GF_SavedVariables.MainFrameYPos = ypos
-							end
 							GF_SavedVariables.mainframestatus = 1
 							GF_ResultsListOffset = 0
 							GF_ToggleMainFrame(3)
@@ -1865,11 +1879,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							GF_SavedVariables.mainframestatus = 0
 							GF_ToggleMainFrame(3)
 						else	
-							if GF_SavedVariables.mainframestatus == 0 then
-								local _,_,_,xpos, ypos = GF_MainFrame:GetPoint()
-								GF_SavedVariables.MainFrameXPos = xpos
-								GF_SavedVariables.MainFrameYPos = ypos
-							end
 							GF_SavedVariables.mainframestatus = 2
 							GF_ResultsListOffset = 0
 							GF_ToggleMainFrame(3)
@@ -3673,7 +3682,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 											</OnClick>
 											<OnLoad>
-												getglobal(this:GetName().."TextLabel"):SetText(GF_LOOT)
+												getglobal(this:GetName().."TextLabel"):SetText(GF_LOOTS)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -5190,7 +5199,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</Frame>
 					<Frame name="GF_SettingsFrameLFxSettings" inherits="GF_OptionFrameBoxTemplate">
 						<Size>
-							<AbsDimension x="650" y="105"/>
+							<AbsDimension x="650" y="75"/>
 						</Size>
 						<Anchors>
 							<Anchor point="TOPLEFT" relativeTo="GF_SettingsFrameGroupSettings" relativePoint="BOTTOMLEFT">
@@ -5200,94 +5209,14 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							</Anchor>
 						</Anchors>
 						<Frames>
-							<Slider name="GF_MinimapMsgArcSlider" inherits="GF_OptionsSliderTemplate">
-								<Size>
-									<AbsDimension x="190" y="16"/>
-								</Size>
-								<Anchors>
-									<Anchor point="BOTTOMLEFT">
-										<Offset>
-											<AbsDimension x="10" y="25" />
-										</Offset>
-									</Anchor>
-								</Anchors>
-								<Layers>
-									<Layer level="OVERLAY">
-										<FontString inherits="GF_NormalFont" name="GF_MinimapMsgArcSliderLabel">
-											<Anchors>
-												<Anchor point="BOTTOM">
-													<Offset>
-														<AbsDimension x="0" y="-11"/>
-													</Offset>
-												</Anchor>
-											</Anchors>
-										</FontString>
-									</Layer>
-								</Layers>
-								<Scripts>
-									<OnLoad>
-										getglobal(this:GetName().."High"):SetText("360")
-										getglobal(this:GetName().."Low"):SetText("265")
-										this:SetMinMaxValues(265,360)
-										this:SetValueStep(1)
-										getglobal(this:GetName().."Text"):SetText(GF_MINIMAP_TEXT_ANGLE)
-									</OnLoad>
-									<OnValueChanged>
-										GF_SavedVariables.MinimapMsgArcOffset = this:GetValue()
-										getglobal(this:GetName().."Label"):SetText(this:GetValue())
-										GF_UpdateMinimapIcon()
-										GF_MinimapMessageFrameA1:AddMessage("|cff".."ffffff"..GF_MAIN_HEADER.. "|r", 1, 0.8, 0)
-									</OnValueChanged>
-								</Scripts>
-							</Slider>
-							<Slider name="GF_MinimapMsgRadiusSlider" inherits="GF_OptionsSliderTemplate">
-								<Size>
-									<AbsDimension x="190" y="16"/>
-								</Size>
-								<Anchors>
-									<Anchor point="BOTTOM">
-										<Offset>
-											<AbsDimension x="0" y="25" />
-										</Offset>
-									</Anchor>
-								</Anchors>
-								<Layers>
-									<Layer level="OVERLAY">
-										<FontString inherits="GF_NormalFont" name="GF_MinimapMsgRadiusSliderLabel">
-											<Anchors>
-												<Anchor point="BOTTOM">
-													<Offset>
-														<AbsDimension x="0" y="-11"/>
-													</Offset>
-												</Anchor>
-											</Anchors>
-										</FontString>
-									</Layer>
-								</Layers>
-								<Scripts>
-									<OnLoad>
-										getglobal(this:GetName().."High"):SetText("160")
-										getglobal(this:GetName().."Low"):SetText("0")
-										this:SetMinMaxValues(0,160)
-										this:SetValueStep(1)
-										getglobal(this:GetName().."Text"):SetText(GF_MINIMAP_TEXT_RADIUS)
-									</OnLoad>
-									<OnValueChanged>
-										GF_SavedVariables.MinimapMsgRadiusOffset = this:GetValue()
-										getglobal(this:GetName().."Label"):SetText(this:GetValue())
-										GF_UpdateMinimapIcon()
-										GF_MinimapMessageFrameA1:AddMessage("|cff".."ffffff"..GF_MAIN_HEADER.. "|r", 1, 0.8, 0)
-									</OnValueChanged>
-								</Scripts>
-							</Slider>
 							<Slider name="GF_UIScaleSlider" inherits="GF_OptionsSliderTemplate">
 								<Size>
 									<AbsDimension x="190" y="16"/>
 								</Size>
 								<Anchors>
-									<Anchor point="BOTTOMRIGHT">
+									<Anchor point="TOP">
 										<Offset>
-											<AbsDimension x="-15" y="25" />
+											<AbsDimension x="0" y="-19" />
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -5324,7 +5253,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Anchors>
 									<Anchor point="TOP" relativeTo="GF_UIScaleSlider" relativePoint="BOTTOM">
 										<Offset>
-											<AbsDimension x="0" y="5"/>
+											<AbsDimension x="0" y="-3"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -5368,34 +5297,33 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 									<OnValueChanged>
 										GF_SavedVariables.MainFrameTransparency = this:GetValue()
-										getglobal(this:GetName().."Label"):SetText(math.floor(this:GetValue()*100).."%")
+										getglobal(this:GetName().."Text"):SetText(GF_ADJUST_TRANSPARENCY.." - "..math.floor(this:GetValue()*100).."%")
 										GF_MainFrame:SetAlpha(this:GetValue())
 									</OnValueChanged>
 								</Scripts>
 							</Slider>
-							<CheckButton name="GF_UseDPSMeterCheckButton" inherits="GF_CheckButtonTemplate_Label">
+							<Button name="GF_MinimapMessageMoverButton" inherits="GF_ButtonTemplate" text="GF_MESSAGE_LOCATION">
+								<Size>
+									<AbsDimension x="140" y="25"/>
+								</Size>
 								<Anchors>
-									<Anchor point="TOPLEFT">
+									<Anchor point="TOP" relativeTo="GF_FrameTransparencySlider" relativePoint="BOTTOM">
 										<Offset>
-											<AbsDimension x="20" y="-13"/>
+											<AbsDimension x="0" y="-3"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if this:GetChecked() then GF_PerCharVariables.usedpsmeter = true else GF_PerCharVariables.usedpsmeter = false end
-										GF_SetupDPSMeter()
+										if GF_MessageAnchorButton:IsVisible() then GF_MessageAnchorButton:Hide() else GF_MessageAnchorButton:Show() end
 									</OnClick>
-									<OnLoad>
-										getglobal(this:GetName().."TextLabel"):SetText(GF_USE_DPS_METER)
-									</OnLoad>
 								</Scripts>
-							</CheckButton>
+							</Button>
 							<CheckButton name="GF_SquareMinimapCheckButton" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="TOPLEFT">
 										<Offset>
-											<AbsDimension x="160" y="-13"/>
+											<AbsDimension x="20" y="-10"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -5411,9 +5339,9 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							</CheckButton>
 							<CheckButton name="GF_MinimapIconPriorityCheckButton" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
-									<Anchor point="TOPLEFT">
+									<Anchor point="TOPLEFT" relativeTo="GF_SquareMinimapCheckButton" relativePoint="BOTTOMLEFT">
 										<Offset>
-											<AbsDimension x="300" y="-13"/>
+											<AbsDimension x="0" y="-5"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -5432,7 +5360,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					</Frame>
 					<Frame name="GF_SettingsFrameOtherSettings" inherits="GF_OptionFrameBoxTemplate">
 						<Size>
-							<AbsDimension x="650" y="70"/>
+							<AbsDimension x="650" y="100"/>
 						</Size>
 						<Anchors>
 							<Anchor point="TOPLEFT" relativeTo="GF_SettingsFrameLFxSettings" relativePoint="BOTTOMLEFT">
@@ -5442,11 +5370,29 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							</Anchor>
 						</Anchors>
 						<Frames>
-							<CheckButton name="GF_FrameQuestModCheckButton" inherits="GF_CheckButtonTemplate_Label">
+							<CheckButton name="GF_UseDPSMeterCheckButton" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="TOPLEFT">
 										<Offset>
 											<AbsDimension x="20" y="-10"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										if this:GetChecked() then GF_PerCharVariables.usedpsmeter = true else GF_PerCharVariables.usedpsmeter = false end
+										GF_SetupDPSMeter()
+									</OnClick>
+									<OnLoad>
+										getglobal(this:GetName().."TextLabel"):SetText(GF_USE_DPS_METER)
+									</OnLoad>
+								</Scripts>
+							</CheckButton>
+							<CheckButton name="GF_FrameQuestModCheckButton" inherits="GF_CheckButtonTemplate_Label">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GF_UseDPSMeterCheckButton" relativePoint="BOTTOMLEFT">
+										<Offset>
+											<AbsDimension x="0" y="-5"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -5486,8 +5432,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if this:GetChecked() then GF_SavedVariables.usefriendslist = true else GF_SavedVariables.usefriendslist = false end
-										if GF_SavedVariables.usefriendslist and GF_SavedVariables.usefriendslist = true GF_OnUpdateFunctions["Friendslist"] = GF_UpdateWhoDataViaFriendsList else GF_SavedVariables.usefriendslist = false GF_OnUpdateFunctions["Friendslist"] = nil end
+										if this:GetChecked() then GF_SavedVariables.usefriendslist = true GF_OnUpdateFunctions["Friendslist"] = GF_UpdateWhoDataViaFriendsList else GF_SavedVariables.usefriendslist = false GF_OnUpdateFunctions["Friendslist"] = nil end
 									</OnClick>
 									<OnLoad>
 										getglobal(this:GetName().."TextLabel"):SetText(GF_USE_FRIENDS_LIST_WHO)
@@ -5980,7 +5925,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</OnDragStart>
 			<OnDragStop>
 				this:StopMovingOrSizing()
-				_,_,_,GF_SavedVariables.MainFrameXPos,GF_SavedVariables.MainFrameYPos = GF_MainFrame:GetPoint()
+				_,_,_,GF_PerCharVariables.MainFrameXPos,GF_PerCharVariables.MainFrameYPos = GF_MainFrame:GetPoint()
 			</OnDragStop>
 			<OnLoad>
 				this:RegisterForDrag("LeftButton")
