@@ -438,10 +438,10 @@ function GF_SetStringSize()
 		GF_UIScaleSliderLabel:SetFont(fontName,20-i)
 		if GF_UIScaleSliderLabel:GetStringWidth() < 407 then fontSizeLarge = 20-i break end
 	end
-	GF_UIScaleSliderLabel:SetText("Druidsarebis")
+	GF_UIScaleSliderLabel:SetText("Micromanager")
 	for i=0, 100 do
 		GF_UIScaleSliderLabel:SetFont(fontName,20-i)
-		if GF_UIScaleSliderLabel:GetStringWidth() < 80 then fontSizeButton = 20-i break end
+		if GF_UIScaleSliderLabel:GetStringWidth() < 89 then fontSizeButton = 20-i break end
 	end
 	GF_UIScaleSliderLabel:SetText("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 ")
 	for i=0, 100 do

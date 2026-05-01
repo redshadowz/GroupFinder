@@ -3543,7 +3543,7 @@ GF_WORD_QUEST = {
 ["scytheboss"]={0,60,0},["scythewolfboss"]={0,60,0},["scythehr"]={0,60,0},["hrscythe"]={0,60,0},["scythefirstley"]={0,60,0},["scytheley"]={0,60,0},["scythesr"]={0,60,0},["srscythe"]={0,60,0},
 
 -- Epoch New Quests
-["ringofstrength"]={0,40,0},["dailies"]={0,60,0},["daily"]={0,60,0},["fishingdaily"]={0,60,0},
+["ringofstrength"]={0,40,0},["ros"]={0,40,0},["dailies"]={0,60,0},["daily"]={0,60,0},["fishingdaily"]={0,60,0},
 ["sealquest"]={0,0,0},["kinggnok"]={0,45,0},["ringarenaquest"] = {0,40,0},["arenaquest"] = {0,40,0},
 ["elvensinsouthernbarrens"]={0,18,0},["elvensinbarrens"]={0,18,0},
 

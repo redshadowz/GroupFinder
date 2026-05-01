@@ -2087,7 +2087,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				<Anchors>
 					<Anchor point="RIGHT" relativeTo="GF_SettingsFrameButton" relativePoint="LEFT">
 						<Offset>
-							<AbsDimension x="10" y="0"/>
+							<AbsDimension x="11" y="0"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -2108,7 +2108,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				<Anchors>
 					<Anchor point="RIGHT" relativeTo="GF_ShowBlacklistButton" relativePoint="LEFT">
 						<Offset>
-							<AbsDimension x="10" y="0"/>
+							<AbsDimension x="11" y="0"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -2130,7 +2130,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				<Anchors>
 					<Anchor point="RIGHT" relativeTo="GF_LogFrameButton" relativePoint="LEFT">
 						<Offset>
-							<AbsDimension x="5" y="8"/>
+							<AbsDimension x="6" y="8"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -2226,7 +2226,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeTo="GF_ShowGroupsButton" relativePoint="TOPRIGHT">
 										<Offset>
-											<AbsDimension x="-5" y="3"/>
+											<AbsDimension x="-4" y="4"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
@@ -5350,6 +5350,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Scripts>
 									<OnClick>
 										GF_MainFrame:SetScale(GF_SavedVariables.MainFrameUIScale/10)
+										GF_SetStringSize()
 									</OnClick>
 								</Scripts>
 							</Button>
