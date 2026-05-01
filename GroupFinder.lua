@@ -448,54 +448,11 @@ function GF_SetStringSize()
 		GF_UIScaleSliderLabel:SetFont(fontName,20-i)
 		if GF_UIScaleSliderLabel:GetStringWidth() < 332 then fontSizeMinimap = 20-i break end
 	end
-
-	for i=0,19 do
-		getglobal("GF_WhisperHistoryButton"..i):SetFont(fontName,fontSizeButton)
-	end
-	for i=1,20 do
-		getglobal("GF_BlackListItem"..i.."NameLabel"):SetFont(fontName,GF_BaseFontSize)
-		getglobal("GF_BlackListItem"..i.."NoteLabel"):SetFont(fontName,GF_BaseFontSize)
-		getglobal("GF_BlackListItem"..i.."DeleteButton"):SetFont(fontName,GF_BaseFontSize)
-	end
-	for i=1,22 do
-		getglobal("GF_NewItem"..i.."NameLabel"):SetFont(fontName,fontSizeLarge)
-		getglobal("GF_NewItem"..i.."MoreLabel"):SetFont(fontName,fontSizeLarge)
-		getglobal("GF_NewItem"..i.."MoreLeftLabel"):SetFont(fontName,fontSizeLarge)
-		getglobal("GF_NewItem"..i.."GroupWhoButton"):SetFont(fontName,fontSizeLarge)
-		getglobal("GF_NewItem"..i.."LFGInviteButton"):SetFont(fontName,fontSizeLarge)
-		getglobal("GF_NewItem"..i.."LFMWhisperRequestInviteButton"):SetFont(fontName,fontSizeLarge)
-	end
-
-	local frameNames = { "GF_AutoFilterCheckButtonTextLabel","GF_PlaySoundOnResultsCheckButtonTextLabel","GF_GroupsFrameShowLFMCheckButtonTextLabel","GF_GroupsFrameShowLFGCheckButtonTextLabel","GF_LFGHardCoreDropdownTextLabel",
-	"GF_ChatFilterDropdownButtonTextLabel","GF_GroupFilterDropdownButtonTextLabel","GF_FrameUseWhoOnGroupsCheckButtonTextLabel","GF_GroupsFrameDescriptionEditBoxTextLabel","GF_GetWhoClassDropdownTextLabel","GF_GetWhoLevelDropdownTextLabel",
-	"GF_GroupAutoCheckButtonTextLabel","GF_LFGSizeDropdownTextLabel","GF_LFGLFMDropdownTextLabel","GF_LFGDungeonDropdownTextLabel","GF_LFGRaidDropdownTextLabel","GF_LFGRoleDropdownTextLabel","GF_LFGMyRoleLevelCheckButtonTextLabel",
-	"GF_LFGMyRoleTankCheckButtonTextLabel","GF_LFGMyRoleHealCheckButtonTextLabel","GF_LFGMyRoleDPSCheckButtonTextLabel","GF_GroupFilterShowDungeonCheckButtonTextLabel","GF_GroupFilterShowRaidCheckButtonTextLabel",
-	"GF_MinimapIconPriorityCheckButtonTextLabel","GF_GroupFilterShowQuestCheckButtonTextLabel","GF_GroupFilterShowOtherCheckButtonTextLabel","GF_ChatFilterGroupsInChatCheckButtonTextLabel","GF_ChatFilterGroupsNewOnlyCheckButtonTextLabel",
-	"GF_ChatFilterGroupsInMinimapCheckButtonTextLabel","GF_ChatFilterShowChatCheckButtonTextLabel","GF_ChatFilterShowTradesCheckButtonTextLabel","GF_ChatFilterShowLootCheckButtonTextLabel","GF_ChatFilterShowGuildsCheckButtonTextLabel",
-	"GF_LogFilterDropdownButtonTextLabel","GF_LogChannelFilterDropdownButtonTextLabel","GF_AutoJoinGroupChannelCheckButtonTextLabel","GF_FrameSpamFilterCheckButtonTextLabel","GF_FrameSystemFilterCheckButtonTextLabel",
-	"GF_AutomaticBlacklistCheckButtonTextLabel","GF_FrameShowFormattedChatCheckButtonTextLabel","GF_AlwaysShowGuildFriendsCheckButtonTextLabel","GF_FrameQuestModCheckButtonTextLabel","GF_PurgePFDBCheckButtonTextLabel","GF_ResetAllSettingsDialogHeadingLabel",
-	"GF_UseClickCombosCheckButtonTextLabel","GF_UseFriendsListCheckButtonTextLabel","GF_DisableHardcoreCheckButtonTextLabel","GF_AutoBlacklistTradesCheckButtonTextLabel","GF_AutoBlacklistGuildCheckButtonTextLabel","GF_EditPlayerNoteFrameTitleLabel",
-	"GF_AutoBlacklistChatCheckButtonTextLabel","GF_AutoBlacklistForeignCheckButtonTextLabel","GF_FontNameDropdownTextLabel","GF_BlockListDropdownTextLabel","GF_SquareMinimapCheckButtonTextLabel","GF_AddPlayerFrameContentLabel",
-	"GF_SettingsFrameChatSettingsTitle","GF_SettingsFrameGroupSettingsTitle","GF_SettingsFrameLFxSettingsTitle","GF_SettingsFrameOtherSettingsTitle","GF_PageLabel","GF_UseDPSMeterCheckButtonTextLabel","GF_IntegrateWithLFGLFTCheckButtonTextLabel",
-	"GF_GroupFilterShowTanksCheckButtonTextLabel","GF_GroupFilterShowHealersCheckButtonTextLabel","GF_GroupFilterShowDPSCheckButtonTextLabel",}
-	for i=1,getn(frameNames) do getglobal(frameNames[i]):SetFont(fontName,GF_BaseFontSize) end
-	frameNames = { "GF_GetWhoTotalNames","GF_AnnounceToLFGButton","GF_GetWhoButton","GF_GetWhoSkipButton","GF_GetWhoWhisperButton","GF_GetWhoNameLabel","GF_ShowGroupsButton","GF_SettingsFrameButton","GF_PlayerNoteFrameOKButton",
-	"GF_QueuetoLFTButton","GF_PlayerNoteFrameDeleteButton","GF_ShowBlacklistButton","GF_LogFrameButton","GF_LFGFrameToggleButton","GF_GetWhoFrameToggleButton","GF_ConvertLogMessagesToURL","GF_UIScaleSliderUpdateButton",
-	"GF_ResetAllSettingsDialogCloseButton","GF_ShowGroupLogEntryFrameCloseButton","GF_ResetAllSettingsButton","GF_AddPlayerButton","GF_BlackListFramePageLabel","GF_WhisperLogButton","GF_GroupLogButton","GF_MinimapIconTextLabel",
-	"GF_AddPlayerFrameOkButton","GF_AddPlayerFrameCloseButton","GF_ResetAllSettingsDialogOkButton","GF_MinimapMessageMoverButton"}
-	for i=1,getn(frameNames) do getglobal(frameNames[i]):SetFont(fontName,fontSizeButton) end
-	frameNames = {"GF_LFGMyRole","GF_WorldAnnounceMessageTextLabel","GF_ShowGroupsInLabel","GF_ShowChatTypesLabel","GF_LogFrameInternalFrameTitle","GF_ShowMainFrameLabel",
-	"GF_GroupChannelNameTextLabel","GF_BlockListTextLabel","GF_ResultsLabel","GF_MessageAnchorButtonText", }
-	for i=1,getn(frameNames) do getglobal(frameNames[i]):SetFont(fontName,fontSizeLarge) end
-	for i=1,6 do
-		getglobal("GF_MinimapMessageFrameA"..i):SetFont(fontName,fontSizeMinimap)
-		getglobal("GF_MinimapMessageFrameB"..i):SetFont(fontName,fontSizeMinimap)
-	end
-	for i=1,10 do
-		getglobal("GF_DPSMeterEntry"..i.."NameLabel"):SetFont(fontName,GF_BaseFontSize)
-		getglobal("GF_DPSMeterEntry"..i.."DataLabel"):SetFont(fontName,GF_BaseFontSize)
-	end
-	GF_Log:SetFont(fontName,fontSizeLarge)
+	GF_BaseFont:SetFont(fontName,GF_BaseFontSize)
+	GF_MinimapFont:SetFont(fontName,fontSizeMinimap)
+	GF_ButtonFont:SetFont(fontName,fontSizeButton)
+	GF_ButtonFontWhite:SetFont(fontName,fontSizeButton)
+	GF_LargeFontWhite:SetFont(fontName,fontSizeLarge)
 
 	frameNames = { "GF_GroupNewTimeoutSlider","GF_FilterLevelSlider","GF_UIScaleSlider","GF_FrameTransparencySlider","GF_GroupListingDurationSlider","GF_AutoFilterLevelSlider","GF_FrameAnnounceTimerSlider",
 	"GF_FrameBlockMessagesBelowLevelSlider","GF_FrameSpamFilterDurationSlider","GF_FrameSpamBlacklistMinLevelSlider", }
@@ -505,6 +462,25 @@ function GF_SetStringSize()
 		getglobal(frameNames[i].."High"):SetFont(fontName,GF_BaseFontSize)
 		getglobal(frameNames[i].."Low"):SetFont(fontName,GF_BaseFontSize)
 	end
+	for i=0,19 do getglobal("GF_WhisperHistoryButton"..i):SetFont(fontName,fontSizeButton) end
+	for i=1,20 do getglobal("GF_BlackListItem"..i.."DeleteButton"):SetFont(fontName,GF_BaseFontSize) end
+	for i=1,22 do
+		getglobal("GF_NewItem"..i.."GroupWhoButton"):SetFont(fontName,fontSizeLarge)
+		getglobal("GF_NewItem"..i.."LFGInviteButton"):SetFont(fontName,fontSizeLarge)
+		getglobal("GF_NewItem"..i.."LFMWhisperRequestInviteButton"):SetFont(fontName,fontSizeLarge)
+	end
+
+	frameNames = { "GF_GetWhoTotalNames","GF_AnnounceToLFGButton","GF_GetWhoButton","GF_GetWhoSkipButton","GF_GetWhoWhisperButton","GF_GetWhoNameLabel","GF_ShowGroupsButton","GF_SettingsFrameButton","GF_PlayerNoteFrameOKButton",
+	"GF_QueuetoLFTButton","GF_PlayerNoteFrameDeleteButton","GF_ShowBlacklistButton","GF_LogFrameButton","GF_LFGFrameToggleButton","GF_GetWhoFrameToggleButton","GF_ConvertLogMessagesToURL","GF_UIScaleSliderUpdateButton",
+	"GF_ResetAllSettingsDialogCloseButton","GF_ShowGroupLogEntryFrameCloseButton","GF_ResetAllSettingsButton","GF_AddPlayerButton","GF_WhisperLogButton","GF_GroupLogButton","GF_AddPlayerFrameOkButton","GF_AddPlayerFrameCloseButton",
+	"GF_ResetAllSettingsDialogOkButton","GF_MinimapMessageMoverButton"}
+	for i=1,getn(frameNames) do getglobal(frameNames[i]):SetFont(fontName,fontSizeButton) end
+	for i=1,6 do
+		getglobal("GF_MinimapMessageFrameA"..i):SetFont(fontName,fontSizeMinimap)
+		getglobal("GF_MinimapMessageFrameB"..i):SetFont(fontName,fontSizeMinimap)
+	end
+
+	GF_Log:SetFont(fontName,fontSizeLarge)
 	for i=1,25 do getglobal("GF_GroupHistoryLogPlayer"..i):SetFont(GF_BUTTONS_LIST["FontName"][GF_SavedVariables.fontname][2],GF_BaseFontSize) getglobal("GF_GroupHistoryLogPlayer"..i.."TextLabel"):SetFont(GF_BUTTONS_LIST["FontName"][GF_SavedVariables.fontname][2],GF_BaseFontSize) end
 	for i=1,50 do getglobal("GF_GroupHistoryLogItem"..i):SetFont(GF_BUTTONS_LIST["FontName"][GF_SavedVariables.fontname][2],GF_BaseFontSize) getglobal("GF_GroupHistoryLogItem"..i.."TextLabel"):SetFont(GF_BUTTONS_LIST["FontName"][GF_SavedVariables.fontname][2],GF_BaseFontSize) end
 	GF_LogFilterDropdownButton:SetPoint("LEFT", "GF_LogFrameInternalFrameTitle", "RIGHT", 5, 0)
@@ -1097,7 +1073,7 @@ function GF_SlashHandler(msg)
 	elseif strlower(msg) == "toggle" then
 		GF_ToggleMainFrame()
 	elseif strlen(msg) > 5 and strsub(strlower(msg),1,4) == "test" then
-		GF_FilterMessageType(strsub(msg,5),"R","","CHAT_MSG_YELL",true)
+		dontCheckSpam = nil GF_FilterMessageType(strsub(msg,5),"R","","CHAT_MSG_YELL",true)
 	else
 		DEFAULT_CHAT_FRAME:AddMessage("'/gf reset' to reset screen position",1,1,0.5)
 		DEFAULT_CHAT_FRAME:AddMessage("'/gf toggle' to toggle the frame",1,1,0.5)
@@ -1514,7 +1490,7 @@ function GF_ChatReplaceItemLink(arg1,checkOnly)
 		lfs,lfe,preFix,itemLink = strfind(arg1,"|(%x+|H(item:[%d+:]+)|h%[).-%]|h|r",lfs)
 		if itemLink then
 			itemName = GetItemInfo(itemLink)
-			if checkOnly then if not itemName then broken = true end -- if not ItemRefTooltip:IsVisible() then ItemRefTooltip:SetOwner(UIParent, "ANCHOR_PRESERVE") ItemRefTooltip:SetHyperlink(itemLink) ItemRefTooltip:Hide() end end
+			if checkOnly then if not itemName then broken = true ItemRefTooltip:SetOwner(UIParent, "ANCHOR_PRESERVE") ItemRefTooltip:SetHyperlink(itemLink) ItemRefTooltip:Hide() end
 			elseif itemName then arg1 = strsub(arg1,1,lfs)..preFix..itemName..strsub(arg1,lfe-4) end
 			lfs = lfe + 1
 		else
@@ -1546,8 +1522,12 @@ function GF_ShowGroupsOnMinimap(arg1,arg2,delayed)
 	for i=1,6 do
 		if GF_MiniMapMessages[i] <= GetTime() then
 			if GF_MiniMapMessages[7][arg2] and GF_MiniMapMessages[7][arg2][1] > GetTime() then i = GF_MiniMapMessages[7][arg2][2] end
-			if GF_WhoTable[GF_RealmName][arg2] and GF_WhoTable[GF_RealmName][arg2][1] ~= 0 then 
-				getglobal("GF_MinimapMessageFrameA"..i):AddMessage("|cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][arg2][2]] or "ffffff").."|Hplayer:"..arg2.."|h "..arg2..", "..GF_WhoTable[GF_RealmName][arg2][1].." "..GF_WhoTable[GF_RealmName][arg2][2].."|h|r", 1, 1, 1)
+			if GF_WhoTable[GF_RealmName][arg2] then
+				if GF_WhoTable[GF_RealmName][arg2][1] == 0 then 
+					getglobal("GF_MinimapMessageFrameA"..i):AddMessage("|cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][arg2][2]] or "ffffff").."|Hplayer:"..arg2.."|h "..arg2..", "..GF_WhoTable[GF_RealmName][arg2][2].."|h|r", 1, 1, 1)
+				else
+					getglobal("GF_MinimapMessageFrameA"..i):AddMessage("|cff"..(GF_ClassColors[GF_WhoTable[GF_RealmName][arg2][2]] or "ffffff").."|Hplayer:"..arg2.."|h "..arg2..", "..GF_WhoTable[GF_RealmName][arg2][1].." "..GF_WhoTable[GF_RealmName][arg2][2].."|h|r", 1, 1, 1)
+				end
 			else
 				getglobal("GF_MinimapMessageFrameA"..i):AddMessage("|Hplayer:"..arg2.."|h "..arg2.."|h",1,1,1)
 			end
@@ -1847,7 +1827,7 @@ function GF_CheckForAnnounce()
 		if not GF_PerCharVariables.disablehardcore and GF_Hardcore and GF_PerCharVariables.hardcore ~= 3 then
 			SendChatMessage(GF_LFGDescriptionEditBox:GetText(), "HARDCORE", nil, nil)
 		else
-			SendChatMessage(GF_LFGDescriptionEditBox:GetText(), "CHANNEL", nil, GF_ChatJoinedChannels[strlower(GF_SavedVariables.groupchannelname)])
+			SendChatMessage(GF_LFGDescriptionEditBox:GetText(), "CHANNEL", nil, GetChannelName(GF_SavedVariables.groupchannelname))
 		end
 		DEFAULT_CHAT_FRAME:AddMessage(GF_SENT..GF_LFGDescriptionEditBox:GetText(),1,1,0.5)
 		GF_AnnounceToLFGButton:SetText(GF_ANNOUNCE_STOP_ANNOUNCE.."-"..GF_SavedVariables.announcetimer - GF_AutoAnnounceTimer)
@@ -2625,7 +2605,7 @@ function GF_YELL(event,arg1,arg2,arg8,arg9)
 end
 
 function GF_ProcessChatMessages(event,arg1,arg2,arg8,arg9,delayed) -- Chat processing functions
-	if GF_SavedVariables.showformattedchat and not delayed and not GF_ChatReplaceItemLink(arg1,true) then table.insert(GF_LogHistory[GF_RealmName]["Delay"], {"Item",time()+1,event,arg1,arg2,arg8,arg9}) GF_PreviousMessage[arg2] = {} return end
+	if GF_SavedVariables.showformattedchat and not ItemRefTooltip:IsVisible() and not delayed and not GF_ChatReplaceItemLink(arg1,true) then table.insert(GF_LogHistory[GF_RealmName]["Delay"], {"Item",time()+1,event,arg1,arg2,arg8,arg9}) GF_PreviousMessage[arg2] = {} return end
 	arg1 = GF_CleanUpMessagesOfBadLinks(arg1)
 	arg2 = gsub(arg2,".* ","")
 	if GF_LFG_BLOCK_TRIGGER[({string.find(arg1,"^(.-):")})[3]] then dontCheckSpam = 1 elseif GF_LFG_TIMEOUT_TRIGGER[strsub(arg1,1,4)] then dontCheckSpam = 2 else dontCheckSpam = nil end
@@ -5381,7 +5361,7 @@ function GF_ClickQueueLFT() -- TODO: Does this work properly when in a group as 
 			LFTFrameMainButton:Click()
 		end
 	elseif LFGMain and leaveQueueButton and findGroupButton and findMoreButton then
-		if leaveQueueButton:IsVisible() and leaveQueueButton:IsEnabled() == 1 then
+		if leaveQueueButton:IsShown() and leaveQueueButton:IsEnabled() == 1 then
 			leaveQueueButton:Click()
 		else
 			if RoleDamage and GF_PerCharVariables.lfgdps then if not RoleDamage:GetChecked() then RoleDamage:Click() end else if RoleDamage:GetChecked() then RoleDamage:Click() end end
@@ -5397,7 +5377,7 @@ function GF_ClickQueueLFT() -- TODO: Does this work properly when in a group as 
 					end
 				end
 			end
-			if findGroupButton:IsVisible() then findGroupButton:Click() else findMoreButton:Click() end
+			if findGroupButton:IsShown() then findGroupButton:Click() else findMoreButton:Click() end
 		end
 	end
 end
@@ -5453,7 +5433,7 @@ function GF_UpdateQueueLFTButton() -- Updates(gets dungeon list) on login and wh
 			end
 		end
 	elseif LFGMain and leaveQueueButton and findGroupButton and findMoreButton then
-		if leaveQueueButton:IsVisible() and leaveQueueButton:IsEnabled() == 1 then
+		if leaveQueueButton:IsShown() and leaveQueueButton:IsEnabled() == 1 then
 			GF_QueuetoLFTButton:SetText(GF_LEAVE_QUEUE)
 			GF_QueuetoLFTButton:Show()
 			GF_GenTooltips["GF_QueuetoLFTButton"].tooltip1 = GF_QUEUED_FOR
