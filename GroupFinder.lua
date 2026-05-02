@@ -2786,7 +2786,7 @@ function GF_CheckForGroups(arg1,arg2,event)
 			table.insert(GF_MessageList[GF_RealmName],1,entry)
 			if GF_UpdateAndRequestTimer > 5 then GF_UpdateAndRequestTimer = 4 end
 		end
-		if not GF_EntryMatchesGroupFilterCriteria(entry) then foundInGroup = 3 elseif add then if GF_PerCharVariables.playsounds then GF_PlaySoundNextUpdate = true end if GF_SavedVariables.showgroupsinminimap then GF_ShowGroupsOnMinimap(arg1,arg2) end end
+		if not GF_EntryMatchesGroupFilterCriteria(entry) then foundInGroup = 3 elseif add then if GF_PerCharVariables.playsounds then GF_PlaySoundNextUpdate = true end if GF_SavedVariables.showgroupsinminimap then GF_ShowGroupsOnMinimap(entry.message,arg2) end end
 	end
 	return GF_CheckForSpam(arg1,arg2,foundInGroup) or foundInGroup
 end
@@ -3661,8 +3661,25 @@ function GF_GetGroupInformation(arg1,arg2,sentTime,event) -- Searches messages f
 	end
 end
 function GF_GetRolesFromLFGText(arg1)
-	local _,_,m,t,h,d = strfind(arg1,"(.-):(%d+):(%d+):(%d+)")
-	if m and t and h and d then return gsub(m.." have "..(tonumber(t) and tonumber(t) > 0 and (t.."tank ") or "")..(tonumber(h) and tonumber(h) > 0 and (h.."heal ") or "")..(tonumber(d) and tonumber(d) > 0 and (d.."dps ") or ""),":"," ") else return gsub(arg1,":"," ") end
+	local lfs,lfe,f,d,t,h,p = strfind(arg1,"([LFGM]+):(%w+):(%w+):?(%d?%d?):?(%d?%d?)")
+	if f == "LFM" and t and h and p then
+		return gsub(f.." "..d.." have "..(tonumber(t) > 0 and (t.."tank ") or "")..(tonumber(h) > 0 and (h.."heal ") or "")..(tonumber(p) > 0 and (p.."dps ") or ""),":"," ")
+	elseif t then
+		f = t.." "..f.." "..d
+		lfs = lfe+1
+		while true do
+			lfs,lfe,d = strfind(arg1,"[LFGM]+:(%w+):%w+",lfs)
+			if lfs then
+				f = f.."/"..d
+				lfs = lfe + 1
+			else
+				break
+			end
+		end
+		return f
+	else
+		return gsub(arg1,":"," ")
+	end
 end
 function GF_SearchMessageForTextString(msg,textstring,entry)
 	for word in gfind(textstring, "([%w%s]+),") do

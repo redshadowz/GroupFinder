@@ -1343,7 +1343,7 @@ GF_WORD_FIX_BEFORE_QUEST = { -- Word changes processed before quests.
 ["cutedruid"] = "druid",["cutehunter"] = "hunter",["cutemage"] = "mage",["cutepaladin"] = "paladin",["cutepriest"] = "priest",["cuterogue"] = "rogue",["cuteshaman"] = "shaman",["cutewarlock"] = "warlock",["cutewarrior"] = "warrior",["cutetank"] = "tank",["cutehealer"] = "tank",
 ["friendlydruid"] = "druid",["friendlyhunter"] = "hunter",["friendlymage"] = "mage",["friendlypaladin"] = "paladin",["friendlypriest"] = "priest",["friendlyrogue"] = "rogue",["friendlyshaman"] = "shaman",["friendlywarlock"] = "warlock",["friendlywarrior"] = "warrior",["friendlytank"] = "tank",["friendlyhealer"] = "tank",
 ["kinddruid"] = "druid",["kindhunter"] = "hunter",["kindmage"] = "mage",["kindpaladin"] = "paladin",["kindpriest"] = "priest",["kindrogue"] = "rogue",["kindshaman"] = "shaman",["kindwarlock"] = "warlock",["kindwarrior"] = "warrior",["kindtank"] = "tank",["kindhealer"] = "tank",
-["alliancedruid"] = "druid",["alliancehunter"] = "hunter",["alliancemage"] = "mage",["alliancepaladin"] = "paladin",["alliancepriest"] = "priest",["alliancerogue"] = "rogue",["allianceshaman"] = "shaman",["alliancewarlock"] = "warlock",["alliancewarrior"] = "warrior",["alliancetank"] = "tank",["alliancehealer"] = "tank",["alliancedamage"] = "damage",["alliancedps"] = "dps",
+["alliancedruid"] = "druid",["alliancehunter"] = "hunter",["alliancemage"] = "mage",["alliancepaladin"] = "paladin",["alliancepriest"] = "priest",["alliancerogue"] = "rogue",["allianceshaman"] = "shaman",["alliancewarlock"] = "warlock",["alliancewarrior"] = "warrior",["alliancetank"] = "tank",["alliancehealer"] = "healer",["alliancedamage"] = "damage",["alliancedps"] = "dps",
 ["hordedruid"] = "druid",["hordehunter"] = "hunter",["hordemage"] = "mage",["hordepaladin"] = "paladin",["hordepriest"] = "priest",["horderogue"] = "rogue",["hordeshaman"] = "shaman",["hordewarlock"] = "warlock",["hordewarrior"] = "warrior",["hordetank"] = "tank",["hordehealer"] = "tank",["hordedamage"] = "damage",["hordedps"] = "dps",
 ["leveldruid"] = "druid",["levelhunter"] = "hunter",["levelmage"] = "mage",["levelpaladin"] = "paladin",["levelpriest"] = "priest",["levelrogue"] = "rogue",["levelshaman"] = "shaman",["levelwarlock"] = "warlock",["levelwarrior"] = "warrior",["leveltank"] = "tank",["levelhealer"] = "tank",["leveldamage"] = "damage",["leveldps"] = "dps",
 ["experiencedruid"] = "druid",["experiencehunter"] = "hunter",["experiencemage"] = "mage",["experiencepaladin"] = "paladin",["experiencepriest"] = "priest",["experiencerogue"] = "rogue",["experienceshaman"] = "shaman",["experiencewarlock"] = "warlock",["experiencewarrior"] = "warrior",["experiencetank"] = "tank",["experiencehealer"] = "healer",["experienceheal"] = "healer",["experiencedps"] = "dps",["experiencedamage"] = "damage",
@@ -2453,7 +2453,7 @@ GF_WORD_IGNORE = { -- Phrases to help prevent group false-positives.
 ["questbugged"] = .25,["questbuggy"] = .25,["iknowthereis"] = .5,["knowthereishorde"] = .5,["thereishordeone"] = .5,["anyoneknowprice"] = .5,["knowpriceof"] = .5,["knowprice"] = .25,["joinmyguild"] = .25,["illteachyou"] = .25,["howtobe"] = .25,
 
 ["lolhr"] = .5,["islikewtf"] = .5,["anyonecompletethisquest"] = .25,["peopledonot"] = .25,["peopledonotlike"] = .25,["donotlike"] = .25,["beforethreat"] = .25,["fulldick"] = .25,["whatdoyouneed"] = .25,["applylfgaddon"] = .5,["spamminginchat"] = .5,
-["comekillme"] = .25,["killmeonce"] = .25,["cantevenkill"] = .5,["isawhim"] = .25,["yeahforsure"] = .25,["isawhimgank"] = .25,
+["comekillme"] = .25,["killmeonce"] = .25,["cantevenkill"] = .5,["isawhim"] = .25,["yeahforsure"] = .25,["isawhimgank"] = .25,["ifisay"] = .25,["nextperson"] = .25,["nextpersonsay"] = .25,["getballpark"] = .25,["howmanyiwill"] = .25,
 
 --[[
 [""] = .5,
@@ -2854,7 +2854,7 @@ GF_WORD_LFM = {
 ["needall"] = 1.25,["needmore"] = 1.25,["needanyone"] = 1.25,["needone"] = 1.25,["needtwo"] = 1.25,["needthree"] = 1.25,["needother"] = 1,["needanother"] = 1,["needlast"] = 1.25,["needonly"] = 1.25,["needsome"] = 1.25,
 ["needrange"] = 1.5,["needcaster"] = 1.5,["needmelee"] = 1.5,["needaoe"] = 1.5,["needstealth"] = 1.5,["needlevelsixty"] = 1.5,
 ["needraid"] = 1.25,["needdungeon"] = 1.25,["needgroup"] = 1.25,["needcarry"] = 1.25,["needrun"] = 1.25,["needspeedrun"] = 1.25,["needplayer"] = 1.25,["needpeople"] = 1.25,["needgamer"] = 1.25,["needperson"] = 1.25,["needdouser"] = 1.5,["needcrew"] = 1.25,
-["needassistance"] = 1.25,
+["needassistance"] = 1.25,["needtry"] = .25,
 
 ["needdruid"] = 1.5,["needhunter"] = 1.5,["needmage"] = 1.5,["needpaladin"] = 1.5,["needpriest"] = 1.5,["needrogue"] = 1.5,["needshaman"] = 1.5,["needwarlock"] = 1.5,["needlock"] = 1.5,["needwarrior"] = 1.5,
 ["druidneed"] = 1.5,["hunterneed"] = 1.5,["mageneed"] = 1.5,["paladinneed"] = 1.5,["priestneed"] = 1.5,["rogueneed"] = 1.5,["shamanneed"] = 1.5,["warlockneed"] = 1.5,["lockneed"] = 1.5,["warriorneed"] = 1.5,
@@ -2884,7 +2884,6 @@ GF_WORD_LFM = {
 ["queuenow"] = 1.5,["queueagain"] = 1.5,["queuefuck"] = 1.5,["queuemore"] = 1.5,["queueitup"] = 1.5,["joinqueue"] = 1.5,["queuedaily"] = 1.5,["queuesome"] = 1.5,["qingup"] = 1.5,["qingupto"] = 1.5,["qingupfor"] = 1.5,
 ["queueto"] = 1.5,["queuefor"] = 1.5,["queueup"] = 1.5,["queuebg"] = 1.5,
 ["queuetennineteen"] = .5,["queuetwentytwentynine"] = .5,["queuethirtythirtynine"] = .5,["queuefortyfortynine"] = .5,["queuefiftyfiftynine"] = .5,
-
 
 ["formfresh"] = 1.5,["startfresh"] = 1.5,["startingfresh"] = 1.5,["makefresh"] = 1.5,["hostfresh"] = 1.5,["gathergroup"] = 1.5,["gatheringgroup"] = 1.5,["planningto"] = 1,
 ["formgroup"] = 1.25,["startgroup"] = 1.25,["startinggroup"] = 1.25,["makegroup"] = 1.25,["hostgroup"] = 1.25,["creategroup"] = 1.25,["formraid"] = 1.25,["startraid"] = 1.25,["startingraid"] = 1.25,["makeraid"] = 1.25,["hostraid"] = 1.25,["createraid"] = 1.25,
@@ -3254,7 +3253,7 @@ GF_LFM_CONNECT_WORDS_BEFORE = { -- Connecting words before Groupname(needhealer(
 ["spot"] = .5,["slot"] = .5,["some"] = .5,["more"] = .5,["room"] = .5,["space"] = .5,
 
 -- Number
-["all"] = .25,["one"] = .25,["two"] = .25,["three"] = .25,["couple"] = .25,["few"] = .25,["you"] = 0,
+["all"] = .25,["one"] = .25,["two"] = .25,["three"] = .25,["four"] = .25,["five"] = .25,["couple"] = .25,["few"] = .25,["you"] = 0,
 ["ten"] = .25,["nineteen"] = .25,["twenty"] = .25,["twentynine"] = .25,["thirty"] = .25,["thirtynine"] = .25,["forty"] = .25,["fortynine"] = .25,["fifty"] = .25,["fiftynine"] = .25,["sixty"] = .25,
 ["twenties"] = .25,["thirties"] = .25,["forties"] = .25,["fifties"] = .25,["sixties"] = .25,
 ["new"] = .25,["up"] = .25,["open"] = .25,["opened"] = .25,["down"] = .25,["work"] = .5,["out"] = .25,["near"] = .25,["free"] = .25,["roll"] = .25,["can"] = .25,["use"] = .25,["minute"] = 0,["hour"] = 0,["morning"] = .5,["evening"] = .5,["log"] = .25,
@@ -3299,7 +3298,7 @@ GF_LFM_CONNECT_WORDS_AFTER = { -- Connecting words after Groupname(dm(need)heale
 ["spot"] = .5,["slot"] = .5,["some"] = .5,["more"] = .5,["room"] = .5,["space"] = .5,
 
 -- Number
-["all"] = .25,["one"] = .25,["two"] = .25,["three"] = .25,["couple"] = .25,["few"] = .25,["you"] = 0,
+["all"] = .25,["one"] = .25,["two"] = .25,["three"] = .25,["four"] = .25,["five"] = .25,["couple"] = .25,["few"] = .25,["you"] = 0,
 ["ten"] = .25,["nineteen"] = .25,["twenty"] = .25,["twentynine"] = .25,["thirty"] = .25,["thirtynine"] = .25,["forty"] = .25,["fortynine"] = .25,["fifty"] = .25,["fiftynine"] = .25,["sixty"] = .25,
 ["twenties"] = .25,["thirties"] = .25,["forties"] = .25,["fifties"] = .25,["sixties"] = .25,
 ["new"] = .25,["up"] = .25,["open"] = .25,["opened"] = .25,["down"] = .25,["work"] = .5,["out"] = .25,["near"] = .25,["free"] = .25,["roll"] = .25,["can"] = .25,["use"] = .25,["minute"] = 0,["hour"] = 0,["morning"] = .5,["evening"] = .5,["log"] = .25,
