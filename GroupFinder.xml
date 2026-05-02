@@ -1000,7 +1000,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					<Anchors>
 						<Anchor point="CENTER">
 							<Offset>
-								<AbsDimension x="-1" y="2"/>
+								<AbsDimension x="-1" y="0"/>
 							</Offset>
 						</Anchor>
 					</Anchors>
@@ -3019,26 +3019,20 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Layers>
 									<Layer level="ARTWORK">
 										<FontString inherits="GF_NormalFont" name="GF_PageLabel" nonspacewrap="false">
-											<Size>
-												<AbsDimension x="70" y="20"/>
-											</Size>
 											<Anchors>
 												<Anchor point="BOTTOMRIGHT">
 													<Offset>
-														<AbsDimension x="-20" y="-5"/>
+														<AbsDimension x="-18" y="-5"/>
 													</Offset>
 												</Anchor>
 											</Anchors>
 										</FontString>
 										<FontString inherits="GF_NormalFont" name="GF_ResultsLabel" nonspacewrap="false" text="GF_FOUND">
 											<Color r="0.9" g="0.9" b="0.9"/>
-											<Size>
-												<AbsDimension x="100" y="20"/>
-											</Size>
 											<Anchors>
 												<Anchor point="BOTTOM" relativeTo="GF_PageLabel" relativePoint="TOP">
 													<Offset>
-														<AbsDimension x="0" y="-2"/>
+														<AbsDimension x="0" y="8"/>
 													</Offset>
 												</Anchor>
 											</Anchors>
