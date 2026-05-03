@@ -117,7 +117,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				this:HighlightText(string.len(this:GetText())+1)
 			</OnEditFocusLost>
 		</Scripts>
-		<FontString inherits="ChatFontNormal"/>
 	</EditBox>
 	<Button name="GF_ButtonTemplate" inherits="UIPanelButtonTemplate" virtual="true">
 		<Size x="24" y="24"/>
@@ -334,7 +333,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Offset>
 					</Anchor>
 				</Anchors>
-				<FontString inherits="ChatFontNormal"/>
 				<Scripts>
 					<OnShow>
 						this:SetFocus()
@@ -1810,7 +1808,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Offset>
 							</Anchor>
 						</Anchors>
-						<FontString inherits="ChatFontNormal"/>
 						<Scripts>
 							<OnEnter>
 								GF_ShowTooltip(this)
@@ -2575,13 +2572,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 											<Size>
 												<AbsDimension x="70" y="20"/>
 											</Size>
-											<Anchors>
-												<Anchor point="RIGHT" relativeTo="GF_LFGMyRoleDPSCheckButton" relativePoint="LEFT">
-													<Offset>
-														<AbsDimension x="0" y="2"/>
-													</Offset>
-												</Anchor>
-											</Anchors>
 										</FontString>
 									</Layer>
 								</Layers>
@@ -3173,7 +3163,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										<Anchors>
 											<Anchor point="RIGHT" relativeTo="GF_PageLabel" relativePoint="LEFT">
 												<Offset>
-													<AbsDimension x="3" y="0"/>
+													<AbsDimension x="2" y="0"/>
 												</Offset>
 											</Anchor>
 										</Anchors>
@@ -3197,7 +3187,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										<Anchors>
 											<Anchor point="LEFT" relativeTo="GF_PageLabel" relativePoint="RIGHT">
 												<Offset>
-													<AbsDimension x="-3" y="0"/>
+													<AbsDimension x="-2" y="0"/>
 												</Offset>
 											</Anchor>
 										</Anchors>
@@ -3393,7 +3383,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Offset>
 									</Anchor>
 								</Anchors>
-								<FontString inherits="ChatFontNormal"/>
 								<Scripts>
 									<OnLoad>
 										this:SetTextInsets(4,0,0,0)
@@ -3512,19 +3501,16 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Anchors>
 										<Scripts>
 											<OnLoad>
-												MessageFrameScrollButton_OnLoad()
+												MessageFrameScrollButton_OnLoad(this)
 											</OnLoad>
-											<OnUpdate>
-												MessageFrameScrollButton_OnUpdate(arg1)
-											</OnUpdate>
-											<OnClick>
-												if (this:GetButtonState() == "PUSHED") then
-													this.clickDelay = MESSAGE_SCROLLBUTTON_INITIAL_DELAY
-												else
-													PlaySound("igChatScrollDown")
-													this:GetParent():ScrollDown()
-												end
-											</OnClick>
+											<OnMouseDown>
+												PlaySound("igChatScrollDown")
+												this:GetParent():ScrollDown()
+												this:GetParent():ScrollDown()
+												this:GetParent():ScrollDown()
+												this:GetParent():ScrollDown()
+												this:GetParent():ScrollDown()
+											</OnMouseDown>
 										</Scripts>
 										<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up"/>
 										<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Down"/>
@@ -3540,19 +3526,16 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Anchors>
 										<Scripts>
 											<OnLoad>
-												MessageFrameScrollButton_OnLoad()
+												MessageFrameScrollButton_OnLoad(this)
 											</OnLoad>
-											<OnUpdate>
-												MessageFrameScrollButton_OnUpdate(arg1)
-											</OnUpdate>
-											<OnClick>
-												if (this:GetButtonState() == "PUSHED") then
-													this.clickDelay = MESSAGE_SCROLLBUTTON_INITIAL_DELAY
-												else
-													PlaySound("igChatScrollUp")
-													this:GetParent():ScrollUp()
-												end
-											</OnClick>
+											<OnMouseDown>
+												PlaySound("igChatScrollUp")
+												this:GetParent():ScrollUp()
+												this:GetParent():ScrollUp()
+												this:GetParent():ScrollUp()
+												this:GetParent():ScrollUp()
+												this:GetParent():ScrollUp()
+											</OnMouseDown>
 										</Scripts>
 										<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollUp-Up"/>
 										<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollUp-Down"/>
@@ -5680,6 +5663,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Offset>
 							</Anchor>
 						</Anchors>
+						<FontString inherits="ChatFontNormal"/>
 						<Layers>
 							<Layer level="BACKGROUND">
 								<Texture>
@@ -5691,7 +5675,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Texture>
 							</Layer>
 						</Layers>
-						<FontString inherits="ChatFontNormal"/>
 						<Scripts>
 							<OnShow>
 								this:SetFocus()
@@ -5829,7 +5812,6 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Offset>
 							</Anchor>
 						</Anchors>
-						<FontString inherits="ChatFontNormal"/>
 						<Scripts>
 							<OnLoad>
 								this:SetTextInsets(4,0,0,0)
