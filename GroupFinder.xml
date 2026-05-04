@@ -2216,7 +2216,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							<Frame name="GF_NewItem20"  inherits="GF_NewItemTemplate" id="20"></Frame>
 							<Frame name="GF_NewItem21"  inherits="GF_NewItemTemplate" id="21"></Frame>
 							<Frame name="GF_NewItem22"  inherits="GF_NewItemTemplate" id="22"></Frame>
-							<Button name="GF_LFGFrameToggleButton" inherits="GF_ButtonTemplate" text="GF_LFG">
+							<Button name="GF_GetWhoFrameToggleButton" inherits="GF_ButtonTemplate" text="WHO">
 								<Size>
 									<AbsDimension x="40" y="22"/>
 								</Size>
@@ -2229,7 +2229,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if GF_PerCharVariables.lfgshown then GF_PerCharVariables.lfgshown = nil else GF_PerCharVariables.lfgshown = true end
+										if GF_PerCharVariables.getwhoshown then GF_PerCharVariables.getwhoshown = nil else GF_PerCharVariables.getwhoshown = true end
 										GF_LFGGetWhoUpdateOffset()
 										GF_UpdateMainFrameHeight()
 										GF_UpdateMainFrameWidth()
@@ -2238,12 +2238,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnClick>
 								</Scripts>
 							</Button>
-							<Button name="GF_GetWhoFrameToggleButton" inherits="GF_ButtonTemplate" text="WHO">
+							<Button name="GF_LFGFrameToggleButton" inherits="GF_ButtonTemplate" text="GF_LFG">
 								<Size>
 									<AbsDimension x="40" y="22"/>
 								</Size>
 								<Anchors>
-									<Anchor point="LEFT" relativeTo="GF_LFGFrameToggleButton" relativePoint="RIGHT">
+									<Anchor point="LEFT" relativeTo="GF_GetWhoFrameToggleButton" relativePoint="RIGHT">
 										<Offset>
 											<AbsDimension x="2" y="0"/>
 										</Offset>
@@ -2251,7 +2251,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if GF_PerCharVariables.getwhoshown then GF_PerCharVariables.getwhoshown = nil else GF_PerCharVariables.getwhoshown = true end
+										if GF_PerCharVariables.lfgshown then GF_PerCharVariables.lfgshown = nil else GF_PerCharVariables.lfgshown = true end
 										GF_LFGGetWhoUpdateOffset()
 										GF_UpdateMainFrameHeight()
 										GF_UpdateMainFrameWidth()
