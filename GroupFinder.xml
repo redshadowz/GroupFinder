@@ -50,10 +50,10 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 		</Layers>
 		<Scripts>
 			<OnClick>
-				GF_WhisperHistoryButtonPressed(self:GetID())
+				GF_WhisperHistoryButtonPressed(this:GetID())
 			</OnClick>
 			<OnMouseDown>
-				if arg1 == "RightButton" and self:GetID() > 1 then GF_ToggleWhisperDropDownMenu(self,self:GetID(),arg1) end
+				if arg1 == "RightButton" and this:GetID() > 1 then GF_ToggleWhisperDropDownMenu(this,this:GetID()) end
 			</OnMouseDown>
 		</Scripts>
 		<NormalFont style="GF_ButtonFontWhite"/>
@@ -72,12 +72,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				GameTooltip:Hide()
 			</OnLeave>
 			<OnClick>
-				if self:GetChecked() then
+				if this:GetChecked() then
 					PlaySound("igMainMenuOptionCheckBoxOff")
 				else
 					PlaySound("igMainMenuOptionCheckBoxOn")
 				end
-				GF_WhisperHistoryPriorityListCheckButtonPressed(self:GetID(),getglobal("GF_WhisperHistoryButton"..self:GetID()):GetText(),self:GetChecked())
+				GF_WhisperHistoryPriorityListCheckButtonPressed(this:GetID(),getglobal("GF_WhisperHistoryButton"..this:GetID()):GetText(),this:GetChecked())
 			</OnClick>
 		</Scripts>
 	</CheckButton>
@@ -105,16 +105,16 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 		</Layers>
 		<Scripts>
 			<OnLoad>
-				self:SetTextInsets(0, 8, 0, 0)
+				this:SetTextInsets(0, 8, 0, 0)
 			</OnLoad>
 			<OnEnterPressed>
-				self:ClearFocus()
+				this:ClearFocus()
 			</OnEnterPressed>
 			<OnEditFocusGained>
-				self:HighlightText(string.len(self:GetText())+1)
+				this:HighlightText(string.len(this:GetText())+1)
 			</OnEditFocusGained>
 			<OnEditFocusLost>
-				self:HighlightText(string.len(self:GetText())+1)
+				this:HighlightText(string.len(this:GetText())+1)
 			</OnEditFocusLost>
 		</Scripts>
 	</EditBox>
@@ -135,7 +135,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 		</Layers>
 		<Scripts>
 			<OnEnter>
-				GF_ShowTooltip(self)
+				GF_ShowTooltip(this)
 			</OnEnter>
 			<OnLeave>
 				GameTooltip:Hide()
@@ -148,7 +148,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 	<Button name="GF_CharacterFrameTabButtonTemplate" inherits="WorldStateScoreFrameTabButtonTemplate" virtual="true">
 		<Scripts>
 			<OnLoad>
-				self:SetFrameLevel(GF_MainFrame:GetFrameLevel() + 1)
+				this:SetFrameLevel(GF_MainFrame:GetFrameLevel() + 1)
 			</OnLoad>
 		</Scripts>
 		<NormalFont style="GF_ButtonFont"/>
@@ -183,7 +183,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				GameTooltip:Hide()
 			</OnLeave>
 			<OnClick>
-				if self:GetChecked() then
+				if this:GetChecked() then
 					PlaySound("igMainMenuOptionCheckBoxOff")
 				else
 					PlaySound("igMainMenuOptionCheckBoxOn")
@@ -217,12 +217,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</OnEnter>
 			<OnLeave>
 				GameTooltip:Hide()
-				if not GetMouseFocus() or not GetMouseFocus():GetName() or string.sub(GetMouseFocus():GetName(),1,10) ~= string.sub(self:GetParent():GetName(),1,10) then 
-					self:GetParent():Hide()
+				if not GetMouseFocus() or not GetMouseFocus():GetName() or string.sub(GetMouseFocus():GetName(),1,10) ~= string.sub(this:GetParent():GetName(),1,10) then 
+					this:GetParent():Hide()
 				end
 			</OnLeave>
 			<OnClick>
-				if self:GetChecked() then
+				if this:GetChecked() then
 					PlaySound("igMainMenuOptionCheckBoxOff")
 				else
 					PlaySound("igMainMenuOptionCheckBoxOn")
@@ -256,43 +256,30 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</OnEnter>
 			<OnLeave>
 				GameTooltip:Hide()
-				if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), self:GetParent():GetName()) then
-					GF_MenusToHide[self:GetParent():GetName()] = {self:GetParent():GetName(),GetTime()}
+				if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), this:GetParent():GetName()) then
+					GF_MenusToHide[this:GetParent():GetName()] = {this:GetParent():GetName(),GetTime()}
 					GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
 				end
 			</OnLeave>
 			<OnClick>
-				GF_ButtonListFunctions(gsub(self:GetName(),"%d","").."AddRemove",getglobal(self:GetName().."TextLabel"):GetText(),GF_ButtonIDAliases[string.sub(gsub(self:GetName(),"%d",""),4)][getglobal(self:GetName().."TextLabel"):GetText()],self:GetChecked())
-				if GF_AutoAnnounceTimer and string.find(self:GetName(),"LFG") then GF_TurnOffAnnounce(GF_AUTO_ANNOUNCE_SETTINGS_CHANGED) end
+				GF_ButtonListFunctions(gsub(this:GetName(),"%d","").."AddRemove",getglobal(this:GetName().."TextLabel"):GetText(),GF_ButtonIDAliases[string.sub(gsub(this:GetName(),"%d",""),4)][getglobal(this:GetName().."TextLabel"):GetText()],this:GetChecked())
+				if GF_AutoAnnounceTimer and string.find(this:GetName(),"LFG") then GF_TurnOffAnnounce(GF_AUTO_ANNOUNCE_SETTINGS_CHANGED) end
 			</OnClick>
 		</Scripts>
 	</CheckButton>
-	<Frame name="GF_OptionFrameBoxTemplate" inherits="OptionsFrameListTemplate" virtual="true"><!-- Changed from OptionFrameBoxTemplate. Added FontString.. Changed "this" to "self". Added "self" to MessageFrameScrollButton_OnLoad/MessageFrameScrollButton_OnUpdate-->
-		<Layers>
-			<Layer level="OVERLAY">
-				<FontString inherits="GF_TitleFont" name="$parentTitle" justifyH="LEFT">
-					<Anchors>
-						<Anchor point="BOTTOMLEFT" relativeTo="$parent" relativePoint="TOPLEFT">
-							<Offset>
-								<AbsDimension x="5" y="1"/>
-							</Offset>
-						</Anchor>
-					</Anchors>
-				</FontString>
-			</Layer>
-		</Layers>
+	<Frame name="GF_OptionFrameBoxTemplate" inherits="OptionFrameBoxTemplate" virtual="true"><!-- Changed from OptionFrameBoxTemplate and added FontString.. Changed "this" to "self". Added "self" to MessageFrameScrollButton_OnLoad/MessageFrameScrollButton_OnUpdate-->
 		<Scripts>
 			<OnLoad>
-				self:SetBackdropBorderColor(0.4,0.4,0.4)
-				self:SetBackdropColor(0.15,0.15,0.15)
+				this:SetBackdropBorderColor(0.4,0.4,0.4)
+				this:SetBackdropColor(0.15,0.15,0.15)
 			</OnLoad>
 		</Scripts>
 	</Frame>
 	<Frame name="GF_OptionsSliderTemplate" inherits="OptionsSliderTemplate" virtual="true">
 		<Scripts>
 			<OnLoad>
-				self:SetBackdropBorderColor(0.4, 0.4, 0.4)
-				self:SetBackdropColor(0.15, 0.15, 0.15)
+				this:SetBackdropBorderColor(0.4, 0.4, 0.4)
+				this:SetBackdropColor(0.15, 0.15, 0.15)
 			</OnLoad>
 		</Scripts>
 	</Frame>
@@ -348,21 +335,21 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Anchors>
 				<Scripts>
 					<OnShow>
-						self:SetFocus()
+						this:SetFocus()
 					</OnShow>
 					<OnLoad>
-						self:SetTextInsets(4,0,0,0)
+						this:SetTextInsets(4,0,0,0)
 					</OnLoad>
 					<OnEnterPressed>
-						self:ClearFocus()
+						this:ClearFocus()
 						GF_BlacklistAddPlayerDialogOKButton_OnCLick()
-						self:HighlightText(string.len(self:GetText())+1)
+						this:HighlightText(string.len(this:GetText())+1)
 					</OnEnterPressed>
 					<OnEscapePressed>
-						self:ClearFocus()
+						this:ClearFocus()
 						GF_AddPlayerFrameEditBox:SetText("")
 						GF_AddPlayerFrame:Hide()
-						self:HighlightText(string.len(self:GetText())+1)
+						this:HighlightText(string.len(this:GetText())+1)
 					</OnEscapePressed>
 				</Scripts>
 			</EditBox>
@@ -396,7 +383,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						self:GetParent():Hide()
+						this:GetParent():Hide()
 					</OnClick>
 				</Scripts>
 			</Button>
@@ -458,11 +445,11 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						GF_PerCharVariables = {}
 						GF_LoadVariables()
 						GF_LoadSettings()
-						self:GetParent():Hide()
+						this:GetParent():Hide()
 						DEFAULT_CHAT_FRAME:AddMessage("GF: "..GF_YOUR_SETTINGS_RESET, 1, 1, 0.5)
 					</OnClick>
 					<OnHide>
-						self:GetParent():Hide()
+						this:GetParent():Hide()
 					</OnHide>
 				</Scripts>
 			</Button>
@@ -479,7 +466,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						self:GetParent():Hide()
+						this:GetParent():Hide()
 					</OnClick>
 				</Scripts>
 			</Button>
@@ -610,15 +597,15 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Anchors>
 				<Scripts>
 					<OnEnter>
-						GF_ListItemAuxLeft_ShowTooltip(self:GetParent(),self:GetParent():GetID())
-						GF_ResultItem_Hover_On(self:GetParent())
+						GF_ListItemAuxLeft_ShowTooltip(this:GetParent(),this:GetParent():GetID())
+						GF_ResultItem_Hover_On(this:GetParent())
 					</OnEnter>
 					<OnLeave>
 						GameTooltip:Hide()
-						GF_ResultItem_Hover_Off(self:GetParent())
+						GF_ResultItem_Hover_Off(this:GetParent())
 					</OnLeave>
 					<OnMouseDown>
-						GF_ToggleGroupsDropDownMenu(self,self:GetParent():GetID(),arg1)
+						GF_ToggleGroupsDropDownMenu(this,this:GetParent():GetID())
 					</OnMouseDown>
 				</Scripts>
 			</Frame>
@@ -635,14 +622,14 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Size>
 				<Scripts>
 					<OnClick>
-						GF_GetGroupWhoButton(self:GetParent(),self:GetParent():GetID())
+						GF_GetGroupWhoButton(this:GetParent(),this:GetParent():GetID())
 					</OnClick>
 					<OnEnter>
-						GF_ResultItem_Hover_On(self:GetParent())
+						GF_ResultItem_Hover_On(this:GetParent())
 					</OnEnter>
 					<OnLeave>
 						GameTooltip:Hide()
-						GF_ResultItem_Hover_Off(self:GetParent())
+						GF_ResultItem_Hover_Off(this:GetParent())
 					</OnLeave>
 				</Scripts>
 			</Button>
@@ -659,14 +646,14 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Size>
 				<Scripts>
 					<OnClick>
-						GF_LFGInviteButton(self:GetParent(),self:GetParent():GetID())
+						GF_LFGInviteButton(this:GetParent(),this:GetParent():GetID())
 					</OnClick>
 					<OnEnter>
-						GF_ResultItem_Hover_On(self:GetParent())
+						GF_ResultItem_Hover_On(this:GetParent())
 					</OnEnter>
 					<OnLeave>
 						GameTooltip:Hide()
-						GF_ResultItem_Hover_Off(self:GetParent())
+						GF_ResultItem_Hover_Off(this:GetParent())
 					</OnLeave>
 				</Scripts>
 			</Button>
@@ -683,14 +670,14 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Size>
 				<Scripts>
 					<OnClick>
-						GF_LFMWhisperRequestInviteButton(self:GetParent(),self:GetParent():GetID())
+						GF_LFMWhisperRequestInviteButton(this:GetParent(),this:GetParent():GetID())
 					</OnClick>
 					<OnEnter>
-						GF_ResultItem_Hover_On(self:GetParent())
+						GF_ResultItem_Hover_On(this:GetParent())
 					</OnEnter>
 					<OnLeave>
 						GameTooltip:Hide()
-						GF_ResultItem_Hover_Off(self:GetParent())
+						GF_ResultItem_Hover_Off(this:GetParent())
 					</OnLeave>
 				</Scripts>
 			</Button>
@@ -710,10 +697,10 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Size>
 				<Scripts>
 					<OnClick>
-						GF_EditPlayerNote(GF_FilteredResultsList[GF_ResultsListOffset+self:GetParent():GetID()].op)
+						GF_EditPlayerNote(GF_FilteredResultsList[GF_ResultsListOffset+this:GetParent():GetID()].op)
 					</OnClick>
 					<OnEnter>
-						GF_PlayerNoteButton_ShowTooltip(self:GetParent(),self:GetParent():GetID())
+						GF_PlayerNoteButton_ShowTooltip(this:GetParent(),this:GetParent():GetID())
 					</OnEnter>
 					<OnLeave>
 						GameTooltip:Hide()
@@ -723,13 +710,13 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 		</Frames>
 		<Scripts>
 			<OnMouseDown>
-				GF_ToggleGroupsDropDownMenu(self,self:GetID(),arg1)
+				GF_ToggleGroupsDropDownMenu(this,this:GetID())
 			</OnMouseDown>
 			<OnEnter>
-				GF_ResultItem_Hover_On(self,self:GetID())
+				GF_ResultItem_Hover_On(this,this:GetID())
 			</OnEnter>
 			<OnLeave>
-				GF_ResultItem_Hover_Off(self,self:GetID())
+				GF_ResultItem_Hover_Off(this,this:GetID())
 			</OnLeave>
 		</Scripts>
 	</Frame>
@@ -830,14 +817,14 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						GF_DeletePlayer(self:GetParent():GetID())
+						GF_DeletePlayer(this:GetParent():GetID())
 					</OnClick>
 				</Scripts>
 			</Button>
 		</Frames>
 		<Scripts>
 			<OnClick>
-				GF_EditBlackListItem(self:GetName())
+				GF_EditBlackListItem(this:GetName())
 			</OnClick>
 		</Scripts>
 		<HighlightTexture file="Interface\FriendsFrame\UI-FriendsFrame-HighlightBar" alphaMode="ADD">
@@ -875,10 +862,10 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 		</Layers>
 		<Scripts>
 			<OnMouseDown>
-				GF_ToggleGroupHistoryPlayerDropDownMenu(self,self:GetText(),arg1)
+				GF_ToggleGroupHistoryPlayerDropDownMenu(this,this:GetText(),arg1)
 			</OnMouseDown>
 			<OnEnter>
-				GF_OnHyperlinkShowTooltip(gsub(self:GetText(),"|%x+|H(player:.-)|h%[.-%]|h|r","%1"))
+				GF_OnHyperlinkShowTooltip(gsub(this:GetText(),"|%x+|H(player:.-)|h%[.-%]|h|r","%1"))
 			</OnEnter>
 			<OnLeave>
 				GameTooltip:Hide()
@@ -907,10 +894,10 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 		</Layers>
 		<Scripts>
 			<OnMouseDown>
-				GF_ToggleGroupHistoryItemClick(self:GetText(),arg1)
+				GF_ToggleGroupHistoryItemClick(this:GetText(),arg1)
 			</OnMouseDown>
 			<OnEnter>
-				GF_OnHyperlinkShowTooltip(gsub(self:GetText(),"|%x+|H(item:.-)|h%[.-%]|h|r","%1"))
+				GF_OnHyperlinkShowTooltip(gsub(this:GetText(),"|%x+|H(item:.-)|h%[.-%]|h|r","%1"))
 			</OnEnter>
 			<OnLeave>
 				GameTooltip:Hide()
@@ -925,14 +912,14 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			<AbsDimension x="20" y="20"/>
 		</Size>
 		<Scripts>
-			<OnLoad> self:RegisterForDrag("LeftButton") self:RegisterForClicks("LeftButtonUp","RightButtonUp") self:LockHighlight() getglobal(self:GetName().."Text"):SetText(GF_MOVE_ME) </OnLoad>
-			<OnDragStart> self:StartMoving() </OnDragStart>
+			<OnLoad> this:RegisterForDrag("LeftButton") this:RegisterForClicks("LeftButtonUp","RightButtonUp") this:LockHighlight() getglobal(this:GetName().."Text"):SetText(GF_MOVE_ME) </OnLoad>
+			<OnDragStart> this:StartMoving() </OnDragStart>
 			<OnDragStop>
-				self:StopMovingOrSizing() GF_PerCharVariables.MessagePoint,_,GF_PerCharVariables.MessageRelativePoint,GF_PerCharVariables.MessageXPos,GF_PerCharVariables.MessageYPos = GF_MessageAnchorButton:GetPoint()
+				this:StopMovingOrSizing() _,_,_,GF_PerCharVariables.MessageXPos,GF_PerCharVariables.MessageYPos = GF_MessageAnchorButton:GetPoint()
 			</OnDragStop>
-			<OnClick> if arg1 == "RightButton" then self:Hide() end </OnClick>
+			<OnClick> if arg1 == "RightButton" then this:Hide() end </OnClick>
 			<OnEnter>
-				GF_ShowTooltip(self)
+				GF_ShowTooltip(this)
 			</OnEnter>
 			<OnLeave>
 				GameTooltip:Hide()
@@ -1024,16 +1011,16 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				GF_ToggleMainFrame()
 			</OnClick>
 			<OnEnter>
-				GF_ShowTooltip(self)
+				GF_ShowTooltip(this)
 			</OnEnter>
 			<OnLeave>
 				GameTooltip:Hide()
 			</OnLeave>
 			<OnLoad>
 				GF_MinimapIconBgTexture:SetVertexColor( 0.5, 0.25, 0.25 )
-				self:RegisterForClicks("LeftButtonUp","RightButtonUp")
-				self:RegisterForDrag("LeftButton")
-				self:Show()
+				this:RegisterForClicks("LeftButtonUp","RightButtonUp")
+				this:RegisterForDrag("LeftButton")
+				this:Show()
 			</OnLoad>
 			<OnDragStart>
 				GF_IconMovingFrame:Show()
@@ -1207,11 +1194,11 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Anchors>
 						<Scripts>
 							<OnClick>
-								if self:GetChecked() then GF_PerCharVariables.autofilter = true else GF_PerCharVariables.autofilter = false end
+								if this:GetChecked() then GF_PerCharVariables.autofilter = true else GF_PerCharVariables.autofilter = false end
 								GF_ApplyFiltersToGroupList(true)
 							</OnClick>
 							<OnLoad>
-								getglobal(self:GetName().."TextLabel"):SetText(GF_AUTO_FILTER)
+								getglobal(this:GetName().."TextLabel"):SetText(GF_AUTO_FILTER)
 							</OnLoad>
 						</Scripts>
 					</CheckButton>
@@ -1225,10 +1212,10 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Anchors>
 						<Scripts>
 							<OnClick>
-								if self:GetChecked() then GF_PerCharVariables.playsounds = true else GF_PerCharVariables.playsounds = false end
+								if this:GetChecked() then GF_PerCharVariables.playsounds = true else GF_PerCharVariables.playsounds = false end
 							</OnClick>
 							<OnLoad>
-								getglobal(self:GetName().."TextLabel"):SetText(GF_PLAY_SOUND)
+								getglobal(this:GetName().."TextLabel"):SetText(GF_PLAY_SOUND)
 							</OnLoad>
 						</Scripts>
 					</CheckButton>
@@ -1242,12 +1229,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Anchors>
 						<Scripts>
 							<OnClick>
-								if self:GetChecked() then GF_PerCharVariables.showlfm = true else GF_PerCharVariables.showlfm = false end
+								if this:GetChecked() then GF_PerCharVariables.showlfm = true else GF_PerCharVariables.showlfm = false end
 								GF_GetGroupFilters()
 								GF_ApplyFiltersToGroupList(true)
 							</OnClick>
 							<OnLoad>
-								getglobal(self:GetName().."TextLabel"):SetText(GF_SHOW_LFM)
+								getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_LFM)
 							</OnLoad>
 						</Scripts>
 					</CheckButton>
@@ -1261,12 +1248,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Anchors>
 						<Scripts>
 							<OnClick>
-								if self:GetChecked() then GF_PerCharVariables.showlfg = true else GF_PerCharVariables.showlfg = false end
+								if this:GetChecked() then GF_PerCharVariables.showlfg = true else GF_PerCharVariables.showlfg = false end
 								GF_GetGroupFilters()
 								GF_ApplyFiltersToGroupList(true)
 							</OnClick>
 							<OnLoad>
-								getglobal(self:GetName().."TextLabel"):SetText(GF_SHOW_LFG)
+								getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_LFG)
 							</OnLoad>
 						</Scripts>
 					</CheckButton>
@@ -1293,7 +1280,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								end
 							</OnLeave>
 							<OnLoad>
-								getglobal(self:GetName().."TextLabel"):SetText(GF_GROUP_FILTERS)
+								getglobal(this:GetName().."TextLabel"):SetText(GF_GROUP_FILTERS)
 							</OnLoad>
 						</Scripts>
 						<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up" setAllPoints="true"/>
@@ -1349,12 +1336,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if self:GetChecked() then GF_PerCharVariables.showdungeons = true else GF_PerCharVariables.showdungeons = false end
+										if this:GetChecked() then GF_PerCharVariables.showdungeons = true else GF_PerCharVariables.showdungeons = false end
 										GF_GetGroupFilters()
 										GF_ApplyFiltersToGroupList(true)
 									</OnClick>
 									<OnLoad>
-										getglobal(self:GetName().."TextLabel"):SetText(GF_SHOW_DUNGEONS)
+										getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_DUNGEONS)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -1368,12 +1355,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if self:GetChecked() then GF_PerCharVariables.showraids = true else GF_PerCharVariables.showraids = false end
+										if this:GetChecked() then GF_PerCharVariables.showraids = true else GF_PerCharVariables.showraids = false end
 										GF_GetGroupFilters()
 										GF_ApplyFiltersToGroupList(true)
 									</OnClick>
 									<OnLoad>
-										getglobal(self:GetName().."TextLabel"):SetText(GF_SHOW_RAIDS)
+										getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_RAIDS)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -1387,12 +1374,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if self:GetChecked() then GF_PerCharVariables.showquests = true else GF_PerCharVariables.showquests = false end
+										if this:GetChecked() then GF_PerCharVariables.showquests = true else GF_PerCharVariables.showquests = false end
 										GF_GetGroupFilters()
 										GF_ApplyFiltersToGroupList(true)
 									</OnClick>
 									<OnLoad>
-										getglobal(self:GetName().."TextLabel"):SetText(GF_SHOW_QUESTS)
+										getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_QUESTS)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -1406,12 +1393,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if self:GetChecked() then GF_PerCharVariables.showother = true else GF_PerCharVariables.showother = false end
+										if this:GetChecked() then GF_PerCharVariables.showother = true else GF_PerCharVariables.showother = false end
 										GF_GetGroupFilters()
 										GF_ApplyFiltersToGroupList(true)
 									</OnClick>
 									<OnLoad>
-										getglobal(self:GetName().."TextLabel"):SetText(GF_SHOW_OTHER)
+										getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_OTHER)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -1425,12 +1412,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if self:GetChecked() then GF_PerCharVariables.showtank = true else GF_PerCharVariables.showtank = false end
+										if this:GetChecked() then GF_PerCharVariables.showtank = true else GF_PerCharVariables.showtank = false end
 										GF_GetGroupFilters()
 										GF_ApplyFiltersToGroupList(true)
 									</OnClick>
 									<OnLoad>
-										getglobal(self:GetName().."TextLabel"):SetText(GF_SHOW_TANKS)
+										getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_TANKS)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -1444,12 +1431,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if self:GetChecked() then GF_PerCharVariables.showhealer = true else GF_PerCharVariables.showhealer = false end
+										if this:GetChecked() then GF_PerCharVariables.showhealer = true else GF_PerCharVariables.showhealer = false end
 										GF_GetGroupFilters()
 										GF_ApplyFiltersToGroupList(true)
 									</OnClick>
 									<OnLoad>
-										getglobal(self:GetName().."TextLabel"):SetText(GF_SHOW_HEALERS)
+										getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_HEALERS)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -1463,12 +1450,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if self:GetChecked() then GF_PerCharVariables.showdps = true else GF_PerCharVariables.showdps = false end
+										if this:GetChecked() then GF_PerCharVariables.showdps = true else GF_PerCharVariables.showdps = false end
 										GF_GetGroupFilters()
 										GF_ApplyFiltersToGroupList(true)
 									</OnClick>
 									<OnLoad>
-										getglobal(self:GetName().."TextLabel"):SetText(GF_SHOW_DPS)
+										getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_DPS)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -1493,7 +1480,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						<Scripts>
 							<OnClick>
 								if not GF_LFGHardCore:IsShown() then
-									GF_ButtonListFunctions(gsub(self:GetName(),"%d","").."Show")
+									GF_ButtonListFunctions(gsub(this:GetName(),"%d","").."Show")
 								else
 									GF_LFGHardCore:Hide()
 								end
@@ -1505,7 +1492,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								end
 							</OnLeave>
 							<OnLoad>
-								getglobal(self:GetName().."TextLabel"):SetText(GF_SHOW_HARDCORE)
+								getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_HARDCORE)
 							</OnLoad>
 						</Scripts>
 						<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up" setAllPoints="true"/>
@@ -1528,7 +1515,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								end
 							</OnLeave>
 							<OnLoad>
-								getglobal(self:GetName().."TextLabel"):SetText(GF_CHAT_FILTERS)
+								getglobal(this:GetName().."TextLabel"):SetText(GF_CHAT_FILTERS)
 							</OnLoad>
 						</Scripts>
 						<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up" setAllPoints="true"/>
@@ -1602,11 +1589,11 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if self:GetChecked() then GF_SavedVariables.showgroupsinchat = true else GF_SavedVariables.showgroupsinchat = false end
+										if this:GetChecked() then GF_SavedVariables.showgroupsinchat = true else GF_SavedVariables.showgroupsinchat = false end
 										GF_SavedVariables.showgroupsnewonly = GF_ChatFilterGroupsNewOnlyCheckButton:SetChecked(false)
 									</OnClick>
 									<OnLoad>
-										getglobal(self:GetName().."TextLabel"):SetText(CHAT_LABEL)
+										getglobal(this:GetName().."TextLabel"):SetText(CHAT_LABEL)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -1620,11 +1607,11 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if self:GetChecked() then GF_SavedVariables.showgroupsnewonly = true else GF_SavedVariables.showgroupsnewonly = false end
+										if this:GetChecked() then GF_SavedVariables.showgroupsnewonly = true else GF_SavedVariables.showgroupsnewonly = false end
 										GF_SavedVariables.showgroupsinchat = GF_ChatFilterGroupsInChatCheckButton:SetChecked(false)
 									</OnClick>
 									<OnLoad>
-										getglobal(self:GetName().."TextLabel"):SetText(GF_NEW_ONLY)
+										getglobal(this:GetName().."TextLabel"):SetText(GF_NEW_ONLY)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -1638,10 +1625,10 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if self:GetChecked() then GF_SavedVariables.showgroupsinminimap = true else GF_SavedVariables.showgroupsinminimap = false end
+										if this:GetChecked() then GF_SavedVariables.showgroupsinminimap = true else GF_SavedVariables.showgroupsinminimap = false end
 									</OnClick>
 									<OnLoad>
-										getglobal(self:GetName().."TextLabel"):SetText(MINIMAP_LABEL)
+										getglobal(this:GetName().."TextLabel"):SetText(MINIMAP_LABEL)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -1655,10 +1642,10 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if self:GetChecked() then GF_SavedVariables.showchattexts = true else GF_SavedVariables.showchattexts = false end
+										if this:GetChecked() then GF_SavedVariables.showchattexts = true else GF_SavedVariables.showchattexts = false end
 									</OnClick>
 									<OnLoad>
-										getglobal(self:GetName().."TextLabel"):SetText(CHAT_LABEL)
+										getglobal(this:GetName().."TextLabel"):SetText(CHAT_LABEL)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -1672,10 +1659,10 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if self:GetChecked() then GF_SavedVariables.showtradestexts = true else GF_SavedVariables.showtradestexts = false end
+										if this:GetChecked() then GF_SavedVariables.showtradestexts = true else GF_SavedVariables.showtradestexts = false end
 									</OnClick>
 									<OnLoad>
-										getglobal(self:GetName().."TextLabel"):SetText(GF_TRADES)
+										getglobal(this:GetName().."TextLabel"):SetText(GF_TRADES)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -1689,10 +1676,10 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if self:GetChecked() then GF_SavedVariables.showguilds = true else GF_SavedVariables.showguilds = false end
+										if this:GetChecked() then GF_SavedVariables.showguilds = true else GF_SavedVariables.showguilds = false end
 									</OnClick>
 									<OnLoad>
-										getglobal(self:GetName().."TextLabel"):SetText(GF_GUILDS)
+										getglobal(this:GetName().."TextLabel"):SetText(GF_GUILDS)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -1706,10 +1693,10 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if self:GetChecked() then GF_SavedVariables.showloottexts = true else GF_SavedVariables.showloottexts = false end
+										if this:GetChecked() then GF_SavedVariables.showloottexts = true else GF_SavedVariables.showloottexts = false end
 									</OnClick>
 									<OnLoad>
-										getglobal(self:GetName().."TextLabel"):SetText(GF_LOOTS)
+										getglobal(this:GetName().."TextLabel"):SetText(GF_LOOTS)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -1733,7 +1720,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Anchors>
 						<Scripts>
 							<OnClick>
-								if self:GetChecked() then GF_SavedVariables.usewhoongroups = true else GF_SavedVariables.usewhoongroups = false end
+								if this:GetChecked() then GF_SavedVariables.usewhoongroups = true else GF_SavedVariables.usewhoongroups = false end
 								GF_UpdateResults()
 								if not GF_SavedVariables.usewhoongroups then
 									GF_WhoQueue = {}
@@ -1741,7 +1728,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								end
 							</OnClick>
 							<OnLoad>
-								getglobal(self:GetName().."TextLabel"):SetText(GF_USE_WHO_ON_GROUPS)
+								getglobal(this:GetName().."TextLabel"):SetText(GF_USE_WHO_ON_GROUPS)
 							</OnLoad>
 						</Scripts>
 					</CheckButton>
@@ -1757,7 +1744,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						<Scripts>
 							<OnClick>
 								if not GF_SearchList:IsShown() then
-									GF_ButtonListFunctions(gsub(self:GetName(),"%d","").."Show")
+									GF_ButtonListFunctions(gsub(this:GetName(),"%d","").."Show")
 								else
 									GF_SearchList:Hide()
 								end
@@ -1823,37 +1810,37 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Anchors>
 						<Scripts>
 							<OnEnter>
-								GF_ShowTooltip(self)
+								GF_ShowTooltip(this)
 							</OnEnter>
 							<OnLeave>
 								GameTooltip:Hide()
 							</OnLeave>
 							<OnLoad>
-								self:SetTextInsets(4,0,0,0)
-								getglobal(self:GetName().."TextLabel"):SetText(GF_KEYWORDS_DROPDOWN_DESCR)
+								this:SetTextInsets(4,0,0,0)
+								getglobal(this:GetName().."TextLabel"):SetText(GF_KEYWORDS_DROPDOWN_DESCR)
 							</OnLoad>
 							<OnEditFocusLost>
 								GF_PerCharVariables.searchtext = GF_GroupsFrameDescriptionEditBox:GetText()
 								GF_ApplyFiltersToGroupList(true)
-								self:HighlightText(string.len(self:GetText())+1)
+								this:HighlightText(string.len(this:GetText())+1)
 							</OnEditFocusLost>
 							<OnTabPressed>
-								self:ClearFocus()
+								this:ClearFocus()
 								GF_PerCharVariables.searchtext = GF_GroupsFrameDescriptionEditBox:GetText()
 								GF_ApplyFiltersToGroupList(true)
-								self:HighlightText(string.len(self:GetText())+1)
+								this:HighlightText(string.len(this:GetText())+1)
 							</OnTabPressed>
 							<OnEnterPressed>
-								self:ClearFocus()
+								this:ClearFocus()
 								GF_PerCharVariables.searchtext = GF_GroupsFrameDescriptionEditBox:GetText()
 								GF_ApplyFiltersToGroupList(true)
-								self:HighlightText(string.len(self:GetText())+1)
+								this:HighlightText(string.len(this:GetText())+1)
 							</OnEnterPressed>
 							<OnEscapePressed>
-								self:ClearFocus()
+								this:ClearFocus()
 								GF_PerCharVariables.searchtext = GF_GroupsFrameDescriptionEditBox:GetText()
 								GF_ApplyFiltersToGroupList(true)
-								self:HighlightText(string.len(self:GetText())+1)
+								this:HighlightText(string.len(this:GetText())+1)
 							</OnEscapePressed>
 						</Scripts>
 					</EditBox>
@@ -2000,7 +1987,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						if self:GetChecked() then GF_SavedVariables.mainframeheight = true else GF_SavedVariables.mainframeheight = false end
+						if this:GetChecked() then GF_SavedVariables.mainframeheight = true else GF_SavedVariables.mainframeheight = false end
 						GF_ToggleMainFrame(3)
 					</OnClick>
 				</Scripts>
@@ -2015,7 +2002,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						if self:GetChecked() then GF_SavedVariables.mainframewidth = true else GF_SavedVariables.mainframewidth = false end
+						if this:GetChecked() then GF_SavedVariables.mainframewidth = true else GF_SavedVariables.mainframewidth = false end
 						GF_ToggleMainFrame(3)
 					</OnClick>
 				</Scripts>
@@ -2174,7 +2161,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						GF_ClickQueueLFT()
 					</OnClick>
 					<OnEnter>
-						GF_ShowTooltip(self)
+						GF_ShowTooltip(this)
 					</OnEnter>
 					<OnLeave>
 						GameTooltip:Hide()
@@ -2330,7 +2317,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										<Scripts>
 											<OnClick>
 												if not GF_GetWhoClass:IsShown() then
-													GF_ButtonListFunctions(gsub(self:GetName(),"%d","").."Show")
+													GF_ButtonListFunctions(gsub(this:GetName(),"%d","").."Show")
 												else
 													GF_GetWhoClass:Hide()
 												end
@@ -2394,7 +2381,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										<Scripts>
 											<OnClick>
 												if not GF_GetWhoLevel:IsShown() then
-													GF_ButtonListFunctions(gsub(self:GetName(),"%d","").."Show")
+													GF_ButtonListFunctions(gsub(this:GetName(),"%d","").."Show")
 												else
 													GF_GetWhoLevel:Hide()
 												end
@@ -2472,45 +2459,45 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												</Anchors>
 												<Scripts>
 													<OnMouseDown>
-														GF_ToggleGetWhoDropDownMenu(self,self:GetParent():GetID(),arg1)
+														GF_ToggleGetWhoDropDownMenu(this,this:GetParent():GetID())
 													</OnMouseDown>
 													<OnLoad>
-														self:Disable()
+														this:Disable()
 													</OnLoad>
 												</Scripts>
 											</Button>
 										</Frames>
 										<Scripts>
 											<OnEnter>
-												GF_ShowTooltip(self)
+												GF_ShowTooltip(this)
 											</OnEnter>
 											<OnLeave>
 												GameTooltip:Hide()
 											</OnLeave>
 											<OnLoad>
-												self:SetTextInsets(4,0,0,0)
+												this:SetTextInsets(4,0,0,0)
 											</OnLoad>
 											<OnEditFocusLost>
 												GF_PerCharVariables.searchlfgwhispertext = GF_GetWhoWhisperEditBox:GetText()
-												self:HighlightText(string.len(self:GetText())+1)
+												this:HighlightText(string.len(this:GetText())+1)
 												if GF_PerCharVariables.searchlfgwhispertext ~= "" then GF_GetWhoClearButton:Show() else GF_GetWhoClearButton:Hide() end
 											</OnEditFocusLost>
 											<OnTabPressed>
 												GF_PerCharVariables.searchlfgwhispertext = GF_GetWhoWhisperEditBox:GetText()
-												self:ClearFocus()
-												self:HighlightText(string.len(self:GetText())+1)
+												this:ClearFocus()
+												this:HighlightText(string.len(this:GetText())+1)
 												if GF_PerCharVariables.searchlfgwhispertext ~= "" then GF_GetWhoClearButton:Show() else GF_GetWhoClearButton:Hide() end
 											</OnTabPressed>
 											<OnEnterPressed>
 												GF_PerCharVariables.searchlfgwhispertext = GF_GetWhoWhisperEditBox:GetText()
-												self:ClearFocus()
-												self:HighlightText(string.len(self:GetText())+1)
+												this:ClearFocus()
+												this:HighlightText(string.len(this:GetText())+1)
 												if GF_PerCharVariables.searchlfgwhispertext ~= "" then GF_GetWhoClearButton:Show() else GF_GetWhoClearButton:Hide() end
 											</OnEnterPressed>
 											<OnEscapePressed>
 												GF_PerCharVariables.searchlfgwhispertext = GF_GetWhoWhisperEditBox:GetText()
-												self:ClearFocus()
-												self:HighlightText(string.len(self:GetText())+1)
+												this:ClearFocus()
+												this:HighlightText(string.len(this:GetText())+1)
 												if GF_PerCharVariables.searchlfgwhispertext ~= "" then GF_GetWhoClearButton:Show() else GF_GetWhoClearButton:Hide() end
 											</OnEscapePressed>
 										</Scripts>
@@ -2599,11 +2586,11 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Anchors>
 										<Scripts>
 											<OnClick>
-												if self:GetChecked() then GF_PerCharVariables.lfgauto = true else GF_PerCharVariables.lfgauto = false end
+												if this:GetChecked() then GF_PerCharVariables.lfgauto = true else GF_PerCharVariables.lfgauto = false end
 												GF_FixLFGStrings(true)
 											</OnClick>
 											<OnLoad>
-												getglobal(self:GetName().."TextLabel"):SetText(GF_AUTO)
+												getglobal(this:GetName().."TextLabel"):SetText(GF_AUTO)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -2622,7 +2609,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												GF_LFGRaid:Hide()
 												GF_LFGRole:Hide()
 												if not GF_LFGSize:IsShown() then
-													GF_ButtonListFunctions(gsub(self:GetName(),"%d","").."Show")
+													GF_ButtonListFunctions(gsub(this:GetName(),"%d","").."Show")
 												else
 													GF_LFGSize:Hide()
 												end
@@ -2690,7 +2677,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												GF_LFGRaid:Hide()
 												GF_LFGRole:Hide()
 												if not GF_LFGLFM:IsShown() then
-													GF_ButtonListFunctions(gsub(self:GetName(),"%d","").."Show")
+													GF_ButtonListFunctions(gsub(this:GetName(),"%d","").."Show")
 												else
 													GF_LFGLFM:Hide()
 												end
@@ -2702,7 +2689,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												end
 											</OnLeave>
 											<OnLoad>
-												getglobal(self:GetName().."TextLabel"):SetText(GF_LFM_LFG)
+												getglobal(this:GetName().."TextLabel"):SetText(GF_LFM_LFG)
 											</OnLoad>
 										</Scripts>
 										<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up" setAllPoints="true"/>
@@ -2761,7 +2748,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												GF_LFGRaid:Hide()
 												GF_LFGRole:Hide()
 												if not GF_LFGDungeon:IsShown() then
-													GF_ButtonListFunctions(gsub(self:GetName(),"%d","").."Show")
+													GF_ButtonListFunctions(gsub(this:GetName(),"%d","").."Show")
 												else
 													GF_LFGDungeon:Hide()
 												end
@@ -2773,7 +2760,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												end
 											</OnLeave>
 											<OnLoad>
-												getglobal(self:GetName().."TextLabel"):SetText(GF_DUNGEON)
+												getglobal(this:GetName().."TextLabel"):SetText(GF_DUNGEON)
 											</OnLoad>
 										</Scripts>
 										<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up" setAllPoints="true"/>
@@ -2832,7 +2819,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												GF_LFGDungeon:Hide()
 												GF_LFGRole:Hide()
 												if not GF_LFGRaid:IsShown() then
-													GF_ButtonListFunctions(gsub(self:GetName(),"%d","").."Show")
+													GF_ButtonListFunctions(gsub(this:GetName(),"%d","").."Show")
 												else
 													GF_LFGRaid:Hide()
 												end
@@ -2844,7 +2831,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												end
 											</OnLeave>
 											<OnLoad>
-												getglobal(self:GetName().."TextLabel"):SetText(GF_RAIDS)
+												getglobal(this:GetName().."TextLabel"):SetText(GF_RAIDS)
 											</OnLoad>
 										</Scripts>
 										<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up" setAllPoints="true"/>
@@ -2903,7 +2890,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												GF_LFGDungeon:Hide()
 												GF_LFGRaid:Hide()
 												if not GF_LFGRole:IsShown() then
-													GF_ButtonListFunctions(gsub(self:GetName(),"%d","").."Show")
+													GF_ButtonListFunctions(gsub(this:GetName(),"%d","").."Show")
 												else
 													GF_LFGRole:Hide()
 												end
@@ -2915,7 +2902,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 												end
 											</OnLeave>
 											<OnLoad>
-												getglobal(self:GetName().."TextLabel"):SetText(GF_ROLE)
+												getglobal(this:GetName().."TextLabel"):SetText(GF_ROLE)
 											</OnLoad>
 										</Scripts>
 										<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up" setAllPoints="true"/>
@@ -2962,47 +2949,47 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									<CheckButton name="GF_LFGMyRoleLevelCheckButton" inherits="GF_CheckButtonTemplate_Label">
 										<Scripts>
 											<OnClick>
-												if self:GetChecked() then GF_PerCharVariables.lfglevel = true else GF_PerCharVariables.lfglevel = false end
+												if this:GetChecked() then GF_PerCharVariables.lfglevel = true else GF_PerCharVariables.lfglevel = false end
 												GF_FixLFGStrings()
 											</OnClick>
 											<OnLoad>
-												getglobal(self:GetName().."TextLabel"):SetText(LEVEL)
+												getglobal(this:GetName().."TextLabel"):SetText(LEVEL)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
 									<CheckButton name="GF_LFGMyRoleTankCheckButton" inherits="GF_CheckButtonTemplate_Label">
 										<Scripts>
 											<OnClick>
-												if self:GetChecked() then GF_PerCharVariables.lfgtank = true else GF_PerCharVariables.lfgtank = false end
+												if this:GetChecked() then GF_PerCharVariables.lfgtank = true else GF_PerCharVariables.lfgtank = false end
 												GF_FixLFGStrings()
 												GF_UpdateQueueLFTButton()
 											</OnClick>
 											<OnLoad>
-												getglobal(self:GetName().."TextLabel"):SetText(GF_TANK)
+												getglobal(this:GetName().."TextLabel"):SetText(GF_TANK)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
 									<CheckButton name="GF_LFGMyRoleHealCheckButton" inherits="GF_CheckButtonTemplate_Label">
 										<Scripts>
 											<OnClick>
-												if self:GetChecked() then GF_PerCharVariables.lfgheal = true else GF_PerCharVariables.lfgheal = false end
+												if this:GetChecked() then GF_PerCharVariables.lfgheal = true else GF_PerCharVariables.lfgheal = false end
 												GF_FixLFGStrings()
 												GF_UpdateQueueLFTButton()
 											</OnClick>
 											<OnLoad>
-												getglobal(self:GetName().."TextLabel"):SetText(GF_HEALER)
+												getglobal(this:GetName().."TextLabel"):SetText(GF_HEALER)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
 									<CheckButton name="GF_LFGMyRoleDPSCheckButton" inherits="GF_CheckButtonTemplate_Label">
 										<Scripts>
 											<OnClick>
-												if self:GetChecked() then GF_PerCharVariables.lfgdps = true else GF_PerCharVariables.lfgdps = false end
+												if this:GetChecked() then GF_PerCharVariables.lfgdps = true else GF_PerCharVariables.lfgdps = false end
 												GF_FixLFGStrings()
 												GF_UpdateQueueLFTButton()
 											</OnClick>
 											<OnLoad>
-												getglobal(self:GetName().."TextLabel"):SetText(GF_DPS)
+												getglobal(this:GetName().."TextLabel"):SetText(GF_DPS)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -3070,35 +3057,37 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Layers>
 										<Scripts>
 											<OnLoad>
-												self:SetTextInsets(4,0,0,0)
+												this:SetTextInsets(4,0,0,0)
 											</OnLoad>
 											<OnEditFocusGained>
-												self:HighlightText(string.len(self:GetText())+1)
+												if GF_LFGDescriptionEditBoxHasFocus[2] + .005 &lt; GetTime() then GF_LFGDescriptionEditBoxHasFocus = {true,GetTime()} end
+												this:HighlightText(string.len(this:GetText())+1)
 											</OnEditFocusGained>
 											<OnEditFocusLost>
+												if GF_LFGDescriptionEditBoxHasFocus[2] + .005 &lt; GetTime() then GF_LFGDescriptionEditBoxHasFocus = {nil,GetTime()} end
 												GF_PerCharVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText()
-												self:HighlightText(string.len(self:GetText())+1)
+												this:HighlightText(string.len(this:GetText())+1)
 												if GF_PerCharVariables.searchlfgtext ~= "" then GF_LFGDescriptionClearButton:Show() else GF_LFGDescriptionClearButton:Hide() end
 												GF_UpdateQueueLFTButton()
 											</OnEditFocusLost>
 											<OnTabPressed>
 												GF_PerCharVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText()
-												self:ClearFocus()
-												self:HighlightText(string.len(self:GetText())+1)
+												this:ClearFocus()
+												this:HighlightText(string.len(this:GetText())+1)
 												if GF_PerCharVariables.searchlfgtext ~= "" then GF_LFGDescriptionClearButton:Show() else GF_LFGDescriptionClearButton:Hide() end
 												GF_UpdateQueueLFTButton()
 											</OnTabPressed>
 											<OnEnterPressed>
 												GF_PerCharVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText()
-												self:ClearFocus()
-												self:HighlightText(string.len(self:GetText())+1)
+												this:ClearFocus()
+												this:HighlightText(string.len(this:GetText())+1)
 												if GF_PerCharVariables.searchlfgtext ~= "" then GF_LFGDescriptionClearButton:Show() else GF_LFGDescriptionClearButton:Hide() end
 												GF_UpdateQueueLFTButton()
 											</OnEnterPressed>
 											<OnEscapePressed>
 												GF_PerCharVariables.searchlfgtext = GF_LFGDescriptionEditBox:GetText()
-												self:ClearFocus()
-												self:HighlightText(string.len(self:GetText())+1)
+												this:ClearFocus()
+												this:HighlightText(string.len(this:GetText())+1)
 												if GF_PerCharVariables.searchlfgtext ~= "" then GF_LFGDescriptionClearButton:Show() else GF_LFGDescriptionClearButton:Hide() end
 												GF_UpdateQueueLFTButton()
 											</OnEscapePressed>
@@ -3149,19 +3138,19 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Layers>
 										<Scripts>
 											<OnLoad>
-												getglobal(self:GetName().."High"):SetText("30")
-												getglobal(self:GetName().."Low"):SetText("2")
-												self:SetMinMaxValues(2,14)
-												self:SetValueStep(1)
-												getglobal(self:GetName().."Text"):SetText(GF_ANNOUNCE_TIMER)
+												getglobal(this:GetName().."High"):SetText("30")
+												getglobal(this:GetName().."Low"):SetText("2")
+												this:SetMinMaxValues(2,14)
+												this:SetValueStep(1)
+												getglobal(this:GetName().."Text"):SetText(GF_ANNOUNCE_TIMER)
 											</OnLoad>
 											<OnValueChanged>
-												if self:GetValue() > 10 then
-													GF_SavedVariables.announcetimer = (self:GetValue()-10)*300 + 600
-													getglobal(self:GetName().."Label"):SetText((GF_SavedVariables.announcetimer/60).." -"..GF_MINUTES)
+												if this:GetValue() > 10 then
+													GF_SavedVariables.announcetimer = (this:GetValue()-10)*300 + 600
+													getglobal(this:GetName().."Label"):SetText((GF_SavedVariables.announcetimer/60).." -"..GF_MINUTES)
 												else
-													GF_SavedVariables.announcetimer = self:GetValue()*60
-													getglobal(self:GetName().."Label"):SetText((GF_SavedVariables.announcetimer/60).." -"..GF_MINUTES)
+													GF_SavedVariables.announcetimer = this:GetValue()*60
+													getglobal(this:GetName().."Label"):SetText((GF_SavedVariables.announcetimer/60).." -"..GF_MINUTES)
 												end
 												if GF_AutoAnnounceTimer then GF_AnnounceToLFGButton:SetText(GF_ANNOUNCE_STOP_ANNOUNCE.."-"..GF_SavedVariables.announcetimer - GF_AutoAnnounceTimer) end
 											</OnValueChanged>
@@ -3396,30 +3385,30 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnLoad>
-										self:SetTextInsets(4,0,0,0)
-										self:SetFocus()
+										this:SetTextInsets(4,0,0,0)
+										this:SetFocus()
 									</OnLoad>
 									<OnEditFocusLost>
 										GF_BlackListItemSaveChanges()
 										GF_BlackListItemEditFrame:Hide()
-										self:HighlightText(string.len(self:GetText())+1)
+										this:HighlightText(string.len(this:GetText())+1)
 									</OnEditFocusLost>
 									<OnTabPressed>
 										GF_BlackListItemSaveChanges()
-										self:ClearFocus()
+										this:ClearFocus()
 										GF_BlackListItemEditFrame:Hide()
-										self:HighlightText(string.len(self:GetText())+1)
+										this:HighlightText(string.len(this:GetText())+1)
 									</OnTabPressed>
 									<OnEnterPressed>
 										GF_BlackListItemSaveChanges()
-										self:ClearFocus()
+										this:ClearFocus()
 										GF_BlackListItemEditFrame:Hide()
-										self:HighlightText(string.len(self:GetText())+1)
+										this:HighlightText(string.len(this:GetText())+1)
 									</OnEnterPressed>
 									<OnEscapePressed>
-										self:ClearFocus()
+										this:ClearFocus()
 										GF_BlackListItemEditFrame:Hide()
-										self:HighlightText(string.len(self:GetText())+1)
+										this:HighlightText(string.len(this:GetText())+1)
 									</OnEscapePressed>
 								</Scripts>
 							</EditBox>
@@ -3491,7 +3480,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										<Scripts>
 											<OnClick>
 												PlaySound("igChatBottom")
-												self:GetParent():ScrollToBottom()
+												this:GetParent():ScrollToBottom()
 											</OnClick>
 										</Scripts>
 										<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollEnd-Up"/>
@@ -3512,15 +3501,15 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Anchors>
 										<Scripts>
 											<OnLoad>
-												MessageFrameScrollButton_OnLoad(self)
+												MessageFrameScrollButton_OnLoad(this)
 											</OnLoad>
 											<OnMouseDown>
 												PlaySound("igChatScrollDown")
-												self:GetParent():ScrollDown()
-												self:GetParent():ScrollDown()
-												self:GetParent():ScrollDown()
-												self:GetParent():ScrollDown()
-												self:GetParent():ScrollDown()
+												this:GetParent():ScrollDown()
+												this:GetParent():ScrollDown()
+												this:GetParent():ScrollDown()
+												this:GetParent():ScrollDown()
+												this:GetParent():ScrollDown()
 											</OnMouseDown>
 										</Scripts>
 										<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up"/>
@@ -3537,15 +3526,15 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Anchors>
 										<Scripts>
 											<OnLoad>
-												MessageFrameScrollButton_OnLoad(self)
+												MessageFrameScrollButton_OnLoad(this)
 											</OnLoad>
 											<OnMouseDown>
 												PlaySound("igChatScrollUp")
-												self:GetParent():ScrollUp()
-												self:GetParent():ScrollUp()
-												self:GetParent():ScrollUp()
-												self:GetParent():ScrollUp()
-												self:GetParent():ScrollUp()
+												this:GetParent():ScrollUp()
+												this:GetParent():ScrollUp()
+												this:GetParent():ScrollUp()
+												this:GetParent():ScrollUp()
+												this:GetParent():ScrollUp()
 											</OnMouseDown>
 										</Scripts>
 										<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollUp-Up"/>
@@ -3556,7 +3545,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Frames>
 								<Scripts>
 									<OnHyperlinkClick>
-										GF_TogglePlayerDropDownMenu(arg1,arg2,arg3,self)
+										GF_TogglePlayerDropDownMenu(arg1,arg2,arg3)
 									</OnHyperlinkClick>
 									<OnHyperlinkEnter>
 										GF_OnHyperlinkShowTooltip(arg1)
@@ -3566,15 +3555,14 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnHyperlinkLeave>
 									<OnMouseWheel>
 										if arg1 == 1 then
-											self:ScrollUp()
-											self:ScrollUp()
-											self:ScrollUp()
+											this:ScrollUp()
+											this:ScrollUp()
+											this:ScrollUp()
 										else
-											self:ScrollDown()
-											self:ScrollDown()
-											self:ScrollDown()
+											this:ScrollDown()
+											this:ScrollDown()
+											this:ScrollDown()
 										end
-										GameTooltip:Hide()
 									</OnMouseWheel>
 								</Scripts>
 								<FontString justifyH="LEFT" inherits="GF_BaseFont"/>
@@ -3605,7 +3593,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLeave>
 									<OnLoad>
 										GF_LogFrameInternalFrameTitle:SetText(GF_LOG_AND_MONITOR)
-										getglobal(self:GetName().."TextLabel"):SetText(GF_LOG_FILTERS)
+										getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_FILTERS)
 									</OnLoad>
 								</Scripts>
 								<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up" setAllPoints="true"/>
@@ -3661,12 +3649,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Anchors>
 										<Scripts>
 											<OnClick>
-												if self:GetChecked() then GF_SavedVariables.logshowgroup = true else GF_SavedVariables.logshowgroup = false end
+												if this:GetChecked() then GF_SavedVariables.logshowgroup = true else GF_SavedVariables.logshowgroup = false end
 												if GF_SavedVariables.logshowgroup then GF_LogFilters[1] = true GF_LogFilters[2] = true else GF_LogFilters[1] = nil GF_LogFilters[2] = nil end
 												if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 											</OnClick>
 											<OnLoad>
-												getglobal(self:GetName().."TextLabel"):SetText(GROUP)
+												getglobal(this:GetName().."TextLabel"):SetText(GROUP)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -3680,12 +3668,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Anchors>
 										<Scripts>
 											<OnClick>
-												if self:GetChecked() then GF_SavedVariables.logshowfiltered = true else GF_SavedVariables.logshowfiltered = false end
+												if this:GetChecked() then GF_SavedVariables.logshowfiltered = true else GF_SavedVariables.logshowfiltered = false end
 												if GF_SavedVariables.logshowfiltered then GF_LogFilters[3] = true else GF_LogFilters[3] = nil end
 												if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 											</OnClick>
 											<OnLoad>
-												getglobal(self:GetName().."TextLabel"):SetText(GF_LOG_FILTERED)
+												getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_FILTERED)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -3699,12 +3687,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Anchors>
 										<Scripts>
 											<OnClick>
-												if self:GetChecked() then GF_SavedVariables.logshowchat = true else GF_SavedVariables.logshowchat = false end
+												if this:GetChecked() then GF_SavedVariables.logshowchat = true else GF_SavedVariables.logshowchat = false end
 												if GF_SavedVariables.logshowchat then GF_LogFilters[5] = true else GF_LogFilters[5] = nil end
 												if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 											</OnClick>
 											<OnLoad>
-												getglobal(self:GetName().."TextLabel"):SetText(CHAT_LABEL)
+												getglobal(this:GetName().."TextLabel"):SetText(CHAT_LABEL)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -3718,12 +3706,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Anchors>
 										<Scripts>
 											<OnClick>
-												if self:GetChecked() then GF_SavedVariables.logshowtrades = true else GF_SavedVariables.logshowtrades = false end
+												if this:GetChecked() then GF_SavedVariables.logshowtrades = true else GF_SavedVariables.logshowtrades = false end
 												if GF_SavedVariables.logshowtrades then GF_LogFilters[9] = true else GF_LogFilters[9] = nil end
 												if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 											</OnClick>
 											<OnLoad>
-												getglobal(self:GetName().."TextLabel"):SetText(GF_TRADES)
+												getglobal(this:GetName().."TextLabel"):SetText(GF_TRADES)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -3737,12 +3725,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Anchors>
 										<Scripts>
 											<OnClick>
-												if self:GetChecked() then GF_SavedVariables.logshowguilds = true else GF_SavedVariables.logshowguilds = false end
+												if this:GetChecked() then GF_SavedVariables.logshowguilds = true else GF_SavedVariables.logshowguilds = false end
 												if GF_SavedVariables.logshowguilds then GF_LogFilters[8] = true else GF_LogFilters[8] = nil end
 												if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 											</OnClick>
 											<OnLoad>
-												getglobal(self:GetName().."TextLabel"):SetText(CHAT_MSG_GUILD)
+												getglobal(this:GetName().."TextLabel"):SetText(CHAT_MSG_GUILD)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -3756,12 +3744,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Anchors>
 										<Scripts>
 											<OnClick>
-												if self:GetChecked() then GF_SavedVariables.logshowloot = true else GF_SavedVariables.logshowloot = false end
+												if this:GetChecked() then GF_SavedVariables.logshowloot = true else GF_SavedVariables.logshowloot = false end
 												if GF_SavedVariables.logshowloot then GF_LogFilters[6] = true else GF_LogFilters[6] = nil end
 												if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 											</OnClick>
 											<OnLoad>
-												getglobal(self:GetName().."TextLabel"):SetText(GF_LOOTS)
+												getglobal(this:GetName().."TextLabel"):SetText(GF_LOOTS)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -3775,12 +3763,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Anchors>
 										<Scripts>
 											<OnClick>
-												if self:GetChecked() then GF_SavedVariables.logshowspam = true else GF_SavedVariables.logshowspam = false end
+												if this:GetChecked() then GF_SavedVariables.logshowspam = true else GF_SavedVariables.logshowspam = false end
 												if GF_SavedVariables.logshowspam then GF_LogFilters[7] = true else GF_LogFilters[7] = nil end
 												if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 											</OnClick>
 											<OnLoad>
-												getglobal(self:GetName().."TextLabel"):SetText(GF_LOG_SPAM)
+												getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_SPAM)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -3794,12 +3782,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Anchors>
 										<Scripts>
 											<OnClick>
-												if self:GetChecked() then GF_SavedVariables.logshowblacklist = true else GF_SavedVariables.logshowblacklist = false end
+												if this:GetChecked() then GF_SavedVariables.logshowblacklist = true else GF_SavedVariables.logshowblacklist = false end
 												if GF_SavedVariables.logshowblacklist then GF_LogFilters[10] = true else GF_LogFilters[10] = nil end
 												if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 											</OnClick>
 											<OnLoad>
-												getglobal(self:GetName().."TextLabel"):SetText(GF_BLACK_LIST)
+												getglobal(this:GetName().."TextLabel"):SetText(GF_BLACK_LIST)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -3813,12 +3801,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Anchors>
 										<Scripts>
 											<OnClick>
-												if self:GetChecked() then GF_SavedVariables.logshowbelowlevel = true else GF_SavedVariables.logshowbelowlevel = false end
+												if this:GetChecked() then GF_SavedVariables.logshowbelowlevel = true else GF_SavedVariables.logshowbelowlevel = false end
 												if GF_SavedVariables.logshowbelowlevel then GF_LogFilters[11] = true else GF_LogFilters[11] = nil end
 												if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 											</OnClick>
 											<OnLoad>
-												getglobal(self:GetName().."TextLabel"):SetText(LEVEL)
+												getglobal(this:GetName().."TextLabel"):SetText(LEVEL)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -3857,7 +3845,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										end
 									</OnLeave>
 									<OnLoad>
-										getglobal(self:GetName().."TextLabel"):SetText(GF_LOG_CHANNEL_FILTERS)
+										getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_CHANNEL_FILTERS)
 									</OnLoad>
 								</Scripts>
 								<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up" setAllPoints="true"/>
@@ -3913,12 +3901,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Anchors>
 										<Scripts>
 											<OnClick>
-												if self:GetChecked() then GF_SavedVariables.logchannels = true else GF_SavedVariables.logchannels = false end
+												if this:GetChecked() then GF_SavedVariables.logchannels = true else GF_SavedVariables.logchannels = false end
 												if GF_SavedVariables.logchannels then GF_LogFilters["CHANNEL"] = true else GF_LogFilters["CHANNEL"] = nil end
 												if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 											</OnClick>
 											<OnLoad>
-												getglobal(self:GetName().."TextLabel"):SetText(CHANNELS)
+												getglobal(this:GetName().."TextLabel"):SetText(CHANNELS)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -3932,12 +3920,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Anchors>
 										<Scripts>
 											<OnClick>
-												if self:GetChecked() then GF_SavedVariables.logparty = true else GF_SavedVariables.logparty = false end
+												if this:GetChecked() then GF_SavedVariables.logparty = true else GF_SavedVariables.logparty = false end
 												if GF_SavedVariables.logparty then GF_LogFilters["PARTY"] = true GF_LogFilters["RAID"] = true GF_LogFilters["RAID_LEADER"] = true GF_LogFilters["RAID_WARNING"] = true GF_LogFilters["BATTLEGROUND"] = true GF_LogFilters["BATTLEGROUND_LEADER"] = true else GF_LogFilters["PARTY"] = nil GF_LogFilters["RAID"] = nil GF_LogFilters["RAID_LEADER"] = nil GF_LogFilters["RAID_WARNING"] = nil GF_LogFilters["BATTLEGROUND"] = nil GF_LogFilters["BATTLEGROUND_LEADER"] = nil end
 												if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 											</OnClick>
 											<OnLoad>
-												getglobal(self:GetName().."TextLabel"):SetText(PARTY)
+												getglobal(this:GetName().."TextLabel"):SetText(PARTY)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -3951,12 +3939,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Anchors>
 										<Scripts>
 											<OnClick>
-												if self:GetChecked() then GF_SavedVariables.logguild = true else GF_SavedVariables.logguild = false end
+												if this:GetChecked() then GF_SavedVariables.logguild = true else GF_SavedVariables.logguild = false end
 												if GF_SavedVariables.logguild then GF_LogFilters["GUILD"] = true GF_LogFilters["OFFICER"] = true else GF_LogFilters["GUILD"] = nil GF_LogFilters["OFFICER"] = nil end
 												if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 											</OnClick>
 											<OnLoad>
-												getglobal(self:GetName().."TextLabel"):SetText(CHAT_MSG_GUILD)
+												getglobal(this:GetName().."TextLabel"):SetText(CHAT_MSG_GUILD)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -3970,12 +3958,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Anchors>
 										<Scripts>
 											<OnClick>
-												if self:GetChecked() then GF_SavedVariables.logwhisper = true else GF_SavedVariables.logwhisper = false end
+												if this:GetChecked() then GF_SavedVariables.logwhisper = true else GF_SavedVariables.logwhisper = false end
 												if GF_SavedVariables.logwhisper then GF_LogFilters["WHISPER"] = true GF_LogFilters["WHISPER_INFORM"] = true else GF_LogFilters["WHISPER"] = nil GF_LogFilters["WHISPER_INFORM"] = nil end
 												if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 											</OnClick>
 											<OnLoad>
-												getglobal(self:GetName().."TextLabel"):SetText(WHISPER)
+												getglobal(this:GetName().."TextLabel"):SetText(WHISPER)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -3989,12 +3977,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Anchors>
 										<Scripts>
 											<OnClick>
-												if self:GetChecked() then GF_SavedVariables.logsay = true else GF_SavedVariables.logsay = false end
+												if this:GetChecked() then GF_SavedVariables.logsay = true else GF_SavedVariables.logsay = false end
 												if GF_SavedVariables.logsay then GF_LogFilters["SAY"] = true else GF_LogFilters["SAY"] = nil end
 												if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 											</OnClick>
 											<OnLoad>
-												getglobal(self:GetName().."TextLabel"):SetText(CHAT_MSG_SAY)
+												getglobal(this:GetName().."TextLabel"):SetText(CHAT_MSG_SAY)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -4008,12 +3996,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Anchors>
 										<Scripts>
 											<OnClick>
-												if self:GetChecked() then GF_SavedVariables.logyell = true else GF_SavedVariables.logyell = false end
+												if this:GetChecked() then GF_SavedVariables.logyell = true else GF_SavedVariables.logyell = false end
 												if GF_SavedVariables.logyell then GF_LogFilters["YELL"] = true else GF_LogFilters["YELL"] = nil end
 												if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 											</OnClick>
 											<OnLoad>
-												getglobal(self:GetName().."TextLabel"):SetText(CHAT_MSG_YELL)
+												getglobal(this:GetName().."TextLabel"):SetText(CHAT_MSG_YELL)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -4027,12 +4015,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Anchors>
 										<Scripts>
 											<OnClick>
-												if self:GetChecked() then GF_SavedVariables.loghardcore = true else GF_SavedVariables.loghardcore = false end
+												if this:GetChecked() then GF_SavedVariables.loghardcore = true else GF_SavedVariables.loghardcore = false end
 												if GF_SavedVariables.loghardcore then GF_LogFilters["HARDCORE"] = true GF_LogFilters["SYSTEM"] = true else GF_LogFilters["HARDCORE"] = nil GF_LogFilters["SYSTEM"] = nil end
 												if GF_WhisperLogCurrentButtonID == 0 then GF_DisplayLog() end
 											</OnClick>
 											<OnLoad>
-												getglobal(self:GetName().."TextLabel"):SetText(GF_SHOW_HARDCORE)
+												getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_HARDCORE)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -4059,7 +4047,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										GF_LogFilterDropdownMenu:Hide()
 										GF_LogChannelFilterDropdownMenu:Hide()
 										if not GF_LogChannelName:IsShown() then
-											GF_ButtonListFunctions(gsub(self:GetName(),"%d","").."Show")
+											GF_ButtonListFunctions(gsub(this:GetName(),"%d","").."Show")
 										else
 											GF_LogChannelName:Hide()
 										end
@@ -4137,8 +4125,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Anchors>
 										<Scripts>
 											<OnLoad>
-												self:Show()
-												self:LockHighlight()
+												this:Show()
+												this:LockHighlight()
 											</OnLoad>
 										</Scripts>
 									</Button>
@@ -4151,7 +4139,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Anchors>
 										<Scripts>
 											<OnLoad>
-												self:Show()
+												this:Show()
 											</OnLoad>
 										</Scripts>
 									</Button>
@@ -4402,31 +4390,31 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Layers>
 								<Scripts>
 									<OnEnter>
-										GF_ShowTooltip(self)
+										GF_ShowTooltip(this)
 									</OnEnter>
 									<OnLeave>
 										GameTooltip:Hide()
 									</OnLeave>
 									<OnLoad>
-										self:SetTextInsets(4,0,0,0)
+										this:SetTextInsets(4,0,0,0)
 									</OnLoad>
 									<OnEditFocusGained>
-										self:HighlightText(string.len(self:GetText())+1)
+										this:HighlightText(string.len(this:GetText())+1)
 									</OnEditFocusGained>
 									<OnEditFocusLost>
 										if string.len(GF_GroupChannelEditBox:GetText()) > 1 then GF_GroupChannelNameAddRemove(GF_GroupChannelEditBox:GetText()) else GF_GroupChannelEditBox:SetText(GF_SavedVariables.groupchannelname) end
 									</OnEditFocusLost>
 									<OnTabPressed>
 										if string.len(GF_GroupChannelEditBox:GetText()) > 1 then GF_GroupChannelNameAddRemove(GF_GroupChannelEditBox:GetText()) else GF_GroupChannelEditBox:SetText(GF_SavedVariables.groupchannelname) end
-										self:ClearFocus()
+										this:ClearFocus()
 									</OnTabPressed>
 									<OnEnterPressed>
 										if string.len(GF_GroupChannelEditBox:GetText()) > 1 then GF_GroupChannelNameAddRemove(GF_GroupChannelEditBox:GetText()) else GF_GroupChannelEditBox:SetText(GF_SavedVariables.groupchannelname) end
-										self:ClearFocus()
+										this:ClearFocus()
 									</OnEnterPressed>
 									<OnEscapePressed>
 										GF_GroupChannelEditBox:SetText(GF_SavedVariables.groupchannelname)
-										self:ClearFocus()
+										this:ClearFocus()
 									</OnEscapePressed>
 								</Scripts>
 							</EditBox>
@@ -4442,7 +4430,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									<OnClick>
 										GF_BlockList:Hide()
 										if not GF_GroupChannelName:IsShown() then
-											GF_ButtonListFunctions(gsub(self:GetName(),"%d","").."Show")
+											GF_ButtonListFunctions(gsub(this:GetName(),"%d","").."Show")
 										else
 											GF_GroupChannelName:Hide()
 										end
@@ -4505,11 +4493,11 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if self:GetChecked() then GF_SavedVariables.joinworld = true else GF_SavedVariables.joinworld = false end
+										if this:GetChecked() then GF_SavedVariables.joinworld = true else GF_SavedVariables.joinworld = false end
 										if GF_SavedVariables.joinworld then GF_JoinWorld() else LeaveChannelByName(GF_GroupChannelEditBox:GetText()) end
 									</OnClick>
 									<OnLoad>
-										getglobal(self:GetName().."TextLabel"):SetText(GF_AUTO_JOIN_GROUP_CHANNEL)
+										getglobal(this:GetName().."TextLabel"):SetText(GF_AUTO_JOIN_GROUP_CHANNEL)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -4540,43 +4528,43 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Layers>
 								<Scripts>
 									<OnEnter>
-										GF_ShowTooltip(self)
+										GF_ShowTooltip(this)
 									</OnEnter>
 									<OnLeave>
 										GameTooltip:Hide()
 									</OnLeave>
 									<OnLoad>
-										self:SetTextInsets(4,0,0,0)
+										this:SetTextInsets(4,0,0,0)
 									</OnLoad>
 									<OnEditFocusGained>
-										self:HighlightText(string.len(self:GetText())+1)
+										this:HighlightText(string.len(this:GetText())+1)
 									</OnEditFocusGained>
 									<OnEditFocusLost>
 									</OnEditFocusLost>
 									<OnTabPressed>
-										self:ClearFocus()
+										this:ClearFocus()
 									</OnTabPressed>
 									<OnEnterPressed>
-										if string.len(self:GetText()) > 0 then
+										if string.len(this:GetText()) > 0 then
 											for i=1,getn(GF_SavedVariables.blocklist) do
-												if string.lower(GF_SavedVariables.blocklist[i]) == string.lower(self:GetText()) then
+												if string.lower(GF_SavedVariables.blocklist[i]) == string.lower(this:GetText()) then
 													table.remove(GF_BUTTONS_LIST["BlockList"],i)
 													table.remove(GF_SavedVariables.blocklist,i)
 													break
 												end
 												if i > 59 then table.remove(GF_BUTTONS_LIST["BlockList"],60) table.remove(GF_SavedVariables.blocklist,60) end
 											end
-											table.insert(GF_BUTTONS_LIST["BlockList"],1,{self:GetText()})
-											table.insert(GF_SavedVariables.blocklist,1,self:GetText())
-											GF_WORD_BLOCK_LIST[GF_FormatBlockListWords(self:GetText(),true)] = true
-											self:SetText("")
-											self:HighlightText(string.len(self:GetText())+1)
+											table.insert(GF_BUTTONS_LIST["BlockList"],1,{this:GetText()})
+											table.insert(GF_SavedVariables.blocklist,1,this:GetText())
+											GF_WORD_BLOCK_LIST[GF_FormatBlockListWords(this:GetText(),true)] = true
+											this:SetText("")
+											this:HighlightText(string.len(this:GetText())+1)
 										end
-										self:ClearFocus()
+										this:ClearFocus()
 									</OnEnterPressed>
 									<OnEscapePressed>
 										GF_BlockListEditBox:SetText("")
-										self:ClearFocus()
+										this:ClearFocus()
 									</OnEscapePressed>
 								</Scripts>
 							</EditBox>
@@ -4624,7 +4612,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									<OnClick>
 										GF_GroupChannelName:Hide()
 										if not GF_BlockList:IsShown() then
-											GF_ButtonListFunctions(gsub(self:GetName(),"%d","").."Show")
+											GF_ButtonListFunctions(gsub(this:GetName(),"%d","").."Show")
 										else
 											GF_BlockList:Hide()
 										end
@@ -4636,7 +4624,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										end
 									</OnLeave>
 									<OnLoad>
-										getglobal(self:GetName().."TextLabel"):SetText(GF_BLOCK_LIST)
+										getglobal(this:GetName().."TextLabel"):SetText(GF_BLOCK_LIST)
 									</OnLoad>
 								</Scripts>
 								<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up" setAllPoints="true"/>
@@ -4706,25 +4694,25 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Layers>
 								<Scripts>
 									<OnLoad>
-										getglobal(self:GetName().."High"):SetText("30 min")
-										getglobal(self:GetName().."Low"):SetText("5 sec")
-										self:SetMinMaxValues(1,25)
-										self:SetValueStep(1)
-										getglobal(self:GetName().."Text"):SetText(GF_SPAM_FILTER_TIMER)
+										getglobal(this:GetName().."High"):SetText("30 min")
+										getglobal(this:GetName().."Low"):SetText("5 sec")
+										this:SetMinMaxValues(1,25)
+										this:SetValueStep(1)
+										getglobal(this:GetName().."Text"):SetText(GF_SPAM_FILTER_TIMER)
 									</OnLoad>
 									<OnValueChanged>
-										if self:GetValue() > 21 then
-											GF_SavedVariables.spamfilterduration = (self:GetValue()-21)*300 + 600
-											getglobal(self:GetName().."Label"):SetText((GF_SavedVariables.spamfilterduration/60)..GF_MINUTES)
-										elseif self:GetValue() > 12 then
-											GF_SavedVariables.spamfilterduration = (self:GetValue()-11)*60
-											getglobal(self:GetName().."Label"):SetText((GF_SavedVariables.spamfilterduration/60)..GF_MINUTES)
-										elseif self:GetValue() == 12 then
+										if this:GetValue() > 21 then
+											GF_SavedVariables.spamfilterduration = (this:GetValue()-21)*300 + 600
+											getglobal(this:GetName().."Label"):SetText((GF_SavedVariables.spamfilterduration/60)..GF_MINUTES)
+										elseif this:GetValue() > 12 then
+											GF_SavedVariables.spamfilterduration = (this:GetValue()-11)*60
+											getglobal(this:GetName().."Label"):SetText((GF_SavedVariables.spamfilterduration/60)..GF_MINUTES)
+										elseif this:GetValue() == 12 then
 											GF_SavedVariables.spamfilterduration = 60
-											getglobal(self:GetName().."Label"):SetText((GF_SavedVariables.spamfilterduration/60)..GF_MIN)
+											getglobal(this:GetName().."Label"):SetText((GF_SavedVariables.spamfilterduration/60)..GF_MIN)
 										else
-											GF_SavedVariables.spamfilterduration = self:GetValue()*5
-											getglobal(self:GetName().."Label"):SetText(GF_SavedVariables.spamfilterduration..GF_SECONDS)
+											GF_SavedVariables.spamfilterduration = this:GetValue()*5
+											getglobal(this:GetName().."Label"):SetText(GF_SavedVariables.spamfilterduration..GF_SECONDS)
 										end
 									</OnValueChanged>
 								</Scripts>
@@ -4755,15 +4743,15 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Layers>
 								<Scripts>
 									<OnLoad>
-										getglobal(self:GetName().."High"):SetText("60")
-										getglobal(self:GetName().."Low"):SetText("1")
-										self:SetMinMaxValues(1,60)
-										self:SetValueStep(1)
-										getglobal(self:GetName().."Text"):SetText(GF_BLACKLIST_MINLEVEL)
+										getglobal(this:GetName().."High"):SetText("60")
+										getglobal(this:GetName().."Low"):SetText("1")
+										this:SetMinMaxValues(1,60)
+										this:SetValueStep(1)
+										getglobal(this:GetName().."Text"):SetText(GF_BLACKLIST_MINLEVEL)
 									</OnLoad>
 									<OnValueChanged>
-										GF_SavedVariables.autoblacklistminlevel = self:GetValue()
-										getglobal(self:GetName().."Label"):SetText(LEVEL.." "..self:GetValue())
+										GF_SavedVariables.autoblacklistminlevel = this:GetValue()
+										getglobal(this:GetName().."Label"):SetText(LEVEL.." "..this:GetValue())
 									</OnValueChanged>
 								</Scripts>
 							</Slider>
@@ -4793,15 +4781,15 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Layers>
 								<Scripts>
 									<OnLoad>
-										getglobal(self:GetName().."High"):SetText("60")
-										getglobal(self:GetName().."Low"):SetText("1")
-										self:SetMinMaxValues(1,60)
-										self:SetValueStep(1)
-										getglobal(self:GetName().."Text"):SetText(GF_BLOCK_BELOW_LEVEL)
+										getglobal(this:GetName().."High"):SetText("60")
+										getglobal(this:GetName().."Low"):SetText("1")
+										this:SetMinMaxValues(1,60)
+										this:SetValueStep(1)
+										getglobal(this:GetName().."Text"):SetText(GF_BLOCK_BELOW_LEVEL)
 									</OnLoad>
 									<OnValueChanged>
-										GF_SavedVariables.blockmessagebelowlevel = self:GetValue()
-										getglobal(self:GetName().."Label"):SetText(LEVEL.." "..self:GetValue())
+										GF_SavedVariables.blockmessagebelowlevel = this:GetValue()
+										getglobal(this:GetName().."Label"):SetText(LEVEL.." "..this:GetValue())
 									</OnValueChanged>
 								</Scripts>
 							</Slider>
@@ -4815,11 +4803,11 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if self:GetChecked() then GF_SavedVariables.systemfilter = true else GF_SavedVariables.systemfilter = false end
+										if this:GetChecked() then GF_SavedVariables.systemfilter = true else GF_SavedVariables.systemfilter = false end
 										if GF_SavedVariables.systemfilter then HELP_TEXT_SIMPLE = nil else HELP_TEXT_SIMPLE = GF_HELP_TEXT_SIMPLE end
 									</OnClick>
 									<OnLoad>
-										getglobal(self:GetName().."TextLabel"):SetText(GF_SYSTEM_FILTER)
+										getglobal(this:GetName().."TextLabel"):SetText(GF_SYSTEM_FILTER)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -4833,10 +4821,10 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if self:GetChecked() then GF_SavedVariables.showformattedchat = true else GF_SavedVariables.showformattedchat = false end
+										if this:GetChecked() then GF_SavedVariables.showformattedchat = true else GF_SavedVariables.showformattedchat = false end
 									</OnClick>
 									<OnLoad>
-										getglobal(self:GetName().."TextLabel"):SetText(GF_SHOW_ORIGINAL_CHAT)
+										getglobal(this:GetName().."TextLabel"):SetText(GF_SHOW_ORIGINAL_CHAT)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -4850,10 +4838,10 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if self:GetChecked() then GF_SavedVariables.alwaysshowguild = true else GF_SavedVariables.alwaysshowguild = false end
+										if this:GetChecked() then GF_SavedVariables.alwaysshowguild = true else GF_SavedVariables.alwaysshowguild = false end
 									</OnClick>
 									<OnLoad>
-										getglobal(self:GetName().."TextLabel"):SetText(GF_ALWAYS_SHOW_GUILD)
+										getglobal(this:GetName().."TextLabel"):SetText(GF_ALWAYS_SHOW_GUILD)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -4868,7 +4856,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								<Scripts>
 									<OnClick>
 										if not GF_FontName:IsShown() then
-											GF_ButtonListFunctions(gsub(self:GetName(),"%d","").."Show")
+											GF_ButtonListFunctions(gsub(this:GetName(),"%d","").."Show")
 										else
 											GF_FontName:Hide()
 										end
@@ -4931,14 +4919,14 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if self:GetChecked() then GF_SavedVariables.spamfilter = true else GF_SavedVariables.spamfilter = false end
+										if this:GetChecked() then GF_SavedVariables.spamfilter = true else GF_SavedVariables.spamfilter = false end
 										if not GF_SavedVariables.spamfilter then
 											GF_AutomaticBlacklistCheckButton:SetChecked(false)
 											GF_SavedVariables.autoblacklist = false
 										end
 									</OnClick>
 									<OnLoad>
-										getglobal(self:GetName().."TextLabel"):SetText(GF_SPAM_FILTER)
+										getglobal(this:GetName().."TextLabel"):SetText(GF_SPAM_FILTER)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -4952,10 +4940,10 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if self:GetChecked() then GF_SavedVariables.autoblacklist = true else GF_SavedVariables.autoblacklist = false end
+										if this:GetChecked() then GF_SavedVariables.autoblacklist = true else GF_SavedVariables.autoblacklist = false end
 									</OnClick>
 									<OnLoad>
-										getglobal(self:GetName().."TextLabel"):SetText(GF_AUTO_BLACKLIST)
+										getglobal(this:GetName().."TextLabel"):SetText(GF_AUTO_BLACKLIST)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -5035,10 +5023,10 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Anchors>
 										<Scripts>
 											<OnClick>
-												if self:GetChecked() then GF_SavedVariables.blacklisttrades = true else GF_SavedVariables.blacklisttrades = false end
+												if this:GetChecked() then GF_SavedVariables.blacklisttrades = true else GF_SavedVariables.blacklisttrades = false end
 											</OnClick>
 											<OnLoad>
-												getglobal(self:GetName().."TextLabel"):SetText(GF_TRADES)
+												getglobal(this:GetName().."TextLabel"):SetText(GF_TRADES)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -5052,10 +5040,10 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Anchors>
 										<Scripts>
 											<OnClick>
-												if self:GetChecked() then GF_SavedVariables.blacklistguild = true else GF_SavedVariables.blacklistguild = false end
+												if this:GetChecked() then GF_SavedVariables.blacklistguild = true else GF_SavedVariables.blacklistguild = false end
 											</OnClick>
 											<OnLoad>
-												getglobal(self:GetName().."TextLabel"):SetText(CHAT_MSG_GUILD)
+												getglobal(this:GetName().."TextLabel"):SetText(CHAT_MSG_GUILD)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -5069,10 +5057,10 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Anchors>
 										<Scripts>
 											<OnClick>
-												if self:GetChecked() then GF_SavedVariables.blacklistchat = true else GF_SavedVariables.blacklistchat = false end
+												if this:GetChecked() then GF_SavedVariables.blacklistchat = true else GF_SavedVariables.blacklistchat = false end
 											</OnClick>
 											<OnLoad>
-												getglobal(self:GetName().."TextLabel"):SetText(CHAT_LABEL)
+												getglobal(this:GetName().."TextLabel"):SetText(CHAT_LABEL)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -5086,10 +5074,10 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										</Anchors>
 										<Scripts>
 											<OnClick>
-												if self:GetChecked() then GF_SavedVariables.blacklistforeign = true else GF_SavedVariables.blacklistforeign = false end
+												if this:GetChecked() then GF_SavedVariables.blacklistforeign = true else GF_SavedVariables.blacklistforeign = false end
 											</OnClick>
 											<OnLoad>
-												getglobal(self:GetName().."TextLabel"):SetText(GF_LOG_FOREIGN)
+												getglobal(this:GetName().."TextLabel"):SetText(GF_LOG_FOREIGN)
 											</OnLoad>
 										</Scripts>
 									</CheckButton>
@@ -5143,15 +5131,15 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Layers>
 								<Scripts>
 									<OnLoad>
-										getglobal(self:GetName().."High"):SetText("60")
-										getglobal(self:GetName().."Low"):SetText("15")
-										self:SetMinMaxValues(15,60)
-										self:SetValueStep(15)
-										getglobal(self:GetName().."Text"):SetText(GF_GROUP_LIST_DURATION)
+										getglobal(this:GetName().."High"):SetText("60")
+										getglobal(this:GetName().."Low"):SetText("15")
+										this:SetMinMaxValues(15,60)
+										this:SetValueStep(15)
+										getglobal(this:GetName().."Text"):SetText(GF_GROUP_LIST_DURATION)
 									</OnLoad>
 									<OnValueChanged>
-										GF_SavedVariables.grouplistingduration = self:GetValue()
-										getglobal(self:GetName().."Label"):SetText(self:GetValue()..GF_MINUTES)
+										GF_SavedVariables.grouplistingduration = this:GetValue()
+										getglobal(this:GetName().."Label"):SetText(this:GetValue()..GF_MINUTES)
 									</OnValueChanged>
 								</Scripts>
 							</Slider>
@@ -5181,15 +5169,15 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Layers>
 								<Scripts>
 									<OnLoad>
-										getglobal(self:GetName().."High"):SetText("10")
-										getglobal(self:GetName().."Low"):SetText("3")
-										self:SetMinMaxValues(3,10)
-										self:SetValueStep(1)
-										getglobal(self:GetName().."Text"):SetText(GF_AUTO_FILTER_LEVEL)
+										getglobal(this:GetName().."High"):SetText("10")
+										getglobal(this:GetName().."Low"):SetText("3")
+										this:SetMinMaxValues(3,10)
+										this:SetValueStep(1)
+										getglobal(this:GetName().."Text"):SetText(GF_AUTO_FILTER_LEVEL)
 									</OnLoad>
 									<OnValueChanged>
-										GF_PerCharVariables.autofilterlevelvar = self:GetValue()
-										getglobal(self:GetName().."Label"):SetText(self:GetValue().." "..GF_LEVELS)
+										GF_PerCharVariables.autofilterlevelvar = this:GetValue()
+										getglobal(this:GetName().."Label"):SetText(this:GetValue().." "..GF_LEVELS)
 									</OnValueChanged>
 								</Scripts>
 							</Slider>
@@ -5219,19 +5207,19 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Layers>
 								<Scripts>
 									<OnLoad>
-										getglobal(self:GetName().."High"):SetText("30")
-										getglobal(self:GetName().."Low"):SetText("1")
-										self:SetMinMaxValues(1,14)
-										self:SetValueStep(1)
-										getglobal(self:GetName().."Text"):SetText(GF_NEW_GROUP_TIMEOUT)
+										getglobal(this:GetName().."High"):SetText("30")
+										getglobal(this:GetName().."Low"):SetText("1")
+										this:SetMinMaxValues(1,14)
+										this:SetValueStep(1)
+										getglobal(this:GetName().."Text"):SetText(GF_NEW_GROUP_TIMEOUT)
 									</OnLoad>
 									<OnValueChanged>
-										if self:GetValue() > 10 then
-											GF_SavedVariables.showgroupsnewonlytime = (self:GetValue()-10)*5 + 10
-											getglobal(self:GetName().."Label"):SetText(GF_SavedVariables.showgroupsnewonlytime..GF_MINUTES)
+										if this:GetValue() > 10 then
+											GF_SavedVariables.showgroupsnewonlytime = (this:GetValue()-10)*5 + 10
+											getglobal(this:GetName().."Label"):SetText(GF_SavedVariables.showgroupsnewonlytime..GF_MINUTES)
 										else
-											GF_SavedVariables.showgroupsnewonlytime = self:GetValue()
-											getglobal(self:GetName().."Label"):SetText(GF_SavedVariables.showgroupsnewonlytime..GF_MINUTES)
+											GF_SavedVariables.showgroupsnewonlytime = this:GetValue()
+											getglobal(this:GetName().."Label"):SetText(GF_SavedVariables.showgroupsnewonlytime..GF_MINUTES)
 										end
 									</OnValueChanged>
 								</Scripts>
@@ -5262,15 +5250,15 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Layers>
 								<Scripts>
 									<OnLoad>
-										getglobal(self:GetName().."High"):SetText("Max")
-										getglobal(self:GetName().."Low"):SetText("Min")
-										self:SetMinMaxValues(1,3)
-										self:SetValueStep(1)
-										getglobal(self:GetName().."Text"):SetText(GF_ADJUST_FILTER_LEVEL)
+										getglobal(this:GetName().."High"):SetText("Max")
+										getglobal(this:GetName().."Low"):SetText("Min")
+										this:SetMinMaxValues(1,3)
+										this:SetValueStep(1)
+										getglobal(this:GetName().."Text"):SetText(GF_ADJUST_FILTER_LEVEL)
 									</OnLoad>
 									<OnValueChanged>
-										GF_SavedVariables.FilterLevel = self:GetValue()
-										getglobal(self:GetName().."Label"):SetText(GF_FilterLevelNotes[GF_SavedVariables.FilterLevel])
+										GF_SavedVariables.FilterLevel = this:GetValue()
+										getglobal(this:GetName().."Label"):SetText(GF_FilterLevelNotes[GF_SavedVariables.FilterLevel])
 									</OnValueChanged>
 								</Scripts>
 							</Slider>
@@ -5314,14 +5302,14 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Layers>
 								<Scripts>
 									<OnLoad>
-										getglobal(self:GetName().."High"):SetText("1.2")
-										getglobal(self:GetName().."Low"):SetText(".8")
-										self:SetMinMaxValues(8,12)
-										self:SetValueStep(2)
+										getglobal(this:GetName().."High"):SetText("1.2")
+										getglobal(this:GetName().."Low"):SetText(".8")
+										this:SetMinMaxValues(8,12)
+										this:SetValueStep(2)
 									</OnLoad>
 									<OnValueChanged>
-										GF_SavedVariables.MainFrameUIScale = self:GetValue()
-										getglobal(self:GetName().."Text"):SetText(GF_ADJUST_UISCALE.." - "..math.floor(self:GetValue()+.5)/10)
+										GF_SavedVariables.MainFrameUIScale = this:GetValue()
+										getglobal(this:GetName().."Text"):SetText(GF_ADJUST_UISCALE.." - "..math.floor(this:GetValue()+.5)/10)
 									</OnValueChanged>
 								</Scripts>
 							</Slider>
@@ -5369,16 +5357,16 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Layers>
 								<Scripts>
 									<OnLoad>
-										getglobal(self:GetName().."High"):SetText("100")
-										getglobal(self:GetName().."Low"):SetText("20")
-										self:SetMinMaxValues(0.2,1)
-										self:SetValueStep(0.005)
-										getglobal(self:GetName().."Text"):SetText(GF_ADJUST_TRANSPARENCY)
+										getglobal(this:GetName().."High"):SetText("100")
+										getglobal(this:GetName().."Low"):SetText("20")
+										this:SetMinMaxValues(0.2,1)
+										this:SetValueStep(0.005)
+										getglobal(this:GetName().."Text"):SetText(GF_ADJUST_TRANSPARENCY)
 									</OnLoad>
 									<OnValueChanged>
-										GF_SavedVariables.MainFrameTransparency = self:GetValue()
-										getglobal(self:GetName().."Text"):SetText(GF_ADJUST_TRANSPARENCY.." - "..math.floor(self:GetValue()*100).."%")
-										GF_MainFrame:SetAlpha(self:GetValue())
+										GF_SavedVariables.MainFrameTransparency = this:GetValue()
+										getglobal(this:GetName().."Text"):SetText(GF_ADJUST_TRANSPARENCY.." - "..math.floor(this:GetValue()*100).."%")
+										GF_MainFrame:SetAlpha(this:GetValue())
 									</OnValueChanged>
 								</Scripts>
 							</Slider>
@@ -5409,11 +5397,11 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if self:GetChecked() then GF_SavedVariables.squareminimap = true else GF_SavedVariables.squareminimap = false end
+										if this:GetChecked() then GF_SavedVariables.squareminimap = true else GF_SavedVariables.squareminimap = false end
 										GF_MoveMinimapIcon()
 									</OnClick>
 									<OnLoad>
-										getglobal(self:GetName().."TextLabel"):SetText(GF_SQUARE_MINIMAP)
+										getglobal(this:GetName().."TextLabel"):SetText(GF_SQUARE_MINIMAP)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -5427,12 +5415,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if self:GetChecked() then GF_SavedVariables.iconpriority = true else GF_SavedVariables.iconpriority = false end
+										if this:GetChecked() then GF_SavedVariables.iconpriority = true else GF_SavedVariables.iconpriority = false end
 										GF_SetPFUIAddonButtons()
 										if GF_SavedVariables.iconpriority then if pfMinimap then GF_RelevelMinimapIcons(pfMinimap) else GF_RelevelMinimapIcons(Minimap) end GF_MinimapIcon:SetFrameStrata("HIGH") end
 									</OnClick>
 									<OnLoad>
-										getglobal(self:GetName().."TextLabel"):SetText(GF_MINIMAP_ICON_PRIO)
+										getglobal(this:GetName().."TextLabel"):SetText(GF_MINIMAP_ICON_PRIO)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -5460,11 +5448,11 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if self:GetChecked() then GF_PerCharVariables.usedpsmeter = true else GF_PerCharVariables.usedpsmeter = false end
+										if this:GetChecked() then GF_PerCharVariables.usedpsmeter = true else GF_PerCharVariables.usedpsmeter = false end
 										GF_SetupDPSMeter()
 									</OnClick>
 									<OnLoad>
-										getglobal(self:GetName().."TextLabel"):SetText(GF_USE_DPS_METER)
+										getglobal(this:GetName().."TextLabel"):SetText(GF_USE_DPS_METER)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -5478,10 +5466,10 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if self:GetChecked() then GF_SavedVariables.questmod = true else GF_SavedVariables.questmod = false end
+										if this:GetChecked() then GF_SavedVariables.questmod = true else GF_SavedVariables.questmod = false end
 									</OnClick>
 									<OnLoad>
-										getglobal(self:GetName().."TextLabel"):SetText(GF_QUEST_MOD)
+										getglobal(this:GetName().."TextLabel"):SetText(GF_QUEST_MOD)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -5495,10 +5483,10 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if self:GetChecked() then GF_SavedVariables.purgepfdb = true else GF_SavedVariables.purgepfdb = false end
+										if this:GetChecked() then GF_SavedVariables.purgepfdb = true else GF_SavedVariables.purgepfdb = false end
 									</OnClick>
 									<OnLoad>
-										getglobal(self:GetName().."TextLabel"):SetText(GF_PURGE_PFDB)
+										getglobal(this:GetName().."TextLabel"):SetText(GF_PURGE_PFDB)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -5512,10 +5500,10 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if self:GetChecked() then GF_SavedVariables.usefriendslist = true GF_OnUpdateFunctions["Friendslist"] = GF_UpdateWhoDataViaFriendsList else GF_SavedVariables.usefriendslist = false GF_OnUpdateFunctions["Friendslist"] = nil end
+										if this:GetChecked() then GF_SavedVariables.usefriendslist = true GF_OnUpdateFunctions["Friendslist"] = GF_UpdateWhoDataViaFriendsList else GF_SavedVariables.usefriendslist = false GF_OnUpdateFunctions["Friendslist"] = nil end
 									</OnClick>
 									<OnLoad>
-										getglobal(self:GetName().."TextLabel"):SetText(GF_USE_FRIENDS_LIST_WHO)
+										getglobal(this:GetName().."TextLabel"):SetText(GF_USE_FRIENDS_LIST_WHO)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -5529,7 +5517,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if self:GetChecked() then GF_PerCharVariables.disablehardcore = true else GF_PerCharVariables.disablehardcore = false end
+										if this:GetChecked() then GF_PerCharVariables.disablehardcore = true else GF_PerCharVariables.disablehardcore = false end
 										if GF_PerCharVariables.disablehardcore then
 											GF_BUTTONS_LIST.LFGHardCore[1][4] = nil
 											GF_BUTTONS_LIST.LFGHardCore[2] = {GF_SHOW_NORMAL,1,60,nil,true,nil}
@@ -5544,7 +5532,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 										GF_LFGHardCoreDropdownTextLabel:SetText(GF_BUTTONS_LIST.LFGHardCore[GF_PerCharVariables.hardcore][1])
 									</OnClick>
 									<OnLoad>
-										getglobal(self:GetName().."TextLabel"):SetText(GF_DISABLE_HARDCORE_SETTINGS)
+										getglobal(this:GetName().."TextLabel"):SetText(GF_DISABLE_HARDCORE_SETTINGS)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -5558,10 +5546,10 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if self:GetChecked() then GF_SavedVariables.clickcombos = true else GF_SavedVariables.clickcombos = false end
+										if this:GetChecked() then GF_SavedVariables.clickcombos = true else GF_SavedVariables.clickcombos = false end
 									</OnClick>
 									<OnLoad>
-										getglobal(self:GetName().."TextLabel"):SetText(GF_USE_CLICK_COMBOS)
+										getglobal(this:GetName().."TextLabel"):SetText(GF_USE_CLICK_COMBOS)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -5575,12 +5563,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								</Anchors>
 								<Scripts>
 									<OnClick>
-										if self:GetChecked() then GF_SavedVariables.lfglftintegration = true GF_UpdateQueueLFTButton() else GF_SavedVariables.lfglftintegration = false GF_QueuetoLFTButton:Hide() end
+										if this:GetChecked() then GF_SavedVariables.lfglftintegration = true GF_UpdateQueueLFTButton() else GF_SavedVariables.lfglftintegration = false GF_QueuetoLFTButton:Hide() end
 										GF_GetGroupFilters()
 										GF_ApplyFiltersToGroupList(true)
 									</OnClick>
 									<OnLoad>
-										getglobal(self:GetName().."TextLabel"):SetText(GF_LFGLFT_INTEGRATION)
+										getglobal(this:GetName().."TextLabel"):SetText(GF_LFGLFT_INTEGRATION)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -5689,11 +5677,11 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Layers>
 						<Scripts>
 							<OnShow>
-								self:SetFocus()
-								self:HighlightText()
+								this:SetFocus()
+								this:HighlightText()
 							</OnShow>
 							<OnLoad>
-								self:SetTextInsets(4,0,0,0)
+								this:SetTextInsets(4,0,0,0)
 							</OnLoad>
 							<OnTabPressed>
 								GF_UrlCopyFrame:Hide()
@@ -5826,12 +5814,12 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Anchors>
 						<Scripts>
 							<OnLoad>
-								self:SetTextInsets(4,0,0,0)
-								self:SetFocus()
+								this:SetTextInsets(4,0,0,0)
+								this:SetFocus()
 							</OnLoad>
 							<OnShow>
-								self:SetFocus()
-								self:HighlightText(string.len(self:GetText())+1)
+								this:SetFocus()
+								this:HighlightText(string.len(this:GetText())+1)
 							</OnShow>
 							<OnEditFocusLost>
 								GF_EditPlayerNoteFrame:Hide()
@@ -6009,7 +5997,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Frames>
 				<Scripts>
 					<OnLoad>
-						tinsert(UISpecialFrames,self:GetName())
+						tinsert(UISpecialFrames,this:GetName())
 					</OnLoad>
 					<OnShow>
 						GF_GroupHistoryLogScrollbarUpdate()
@@ -6019,16 +6007,16 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 		</Frames>
 		<Scripts>
 			<OnDragStart>
-				self:StartMoving()
+				this:StartMoving()
 			</OnDragStart>
 			<OnDragStop>
-				self:StopMovingOrSizing()
-				GF_PerCharVariables.MainFramePoint,_,GF_PerCharVariables.MainFrameRelativePoint,GF_PerCharVariables.MainFrameXPos,GF_PerCharVariables.MainFrameYPos = GF_MainFrame:GetPoint()
+				this:StopMovingOrSizing()
+				_,_,_,GF_PerCharVariables.MainFrameXPos,GF_PerCharVariables.MainFrameYPos = GF_MainFrame:GetPoint()
 			</OnDragStop>
 			<OnLoad>
-				self:RegisterForDrag("LeftButton")
-				tinsert(UISpecialFrames,self:GetName())
-				self:SetAlpha(1)
+				this:RegisterForDrag("LeftButton")
+				tinsert(UISpecialFrames,this:GetName())
+				this:SetAlpha(1)
 			</OnLoad>
 			<OnHide>
 				GF_LFGSize:Hide()
@@ -6185,14 +6173,14 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 		</Frames>
 		<Scripts>
 			<OnDragStart>
-				self:StartMoving()
+				this:StartMoving()
 			</OnDragStart>
 			<OnDragStop>
-				self:StopMovingOrSizing()
-				GF_PerCharVariables.DPSMeterPoint,_,GF_PerCharVariables.DPSMeterRelativePoint,GF_PerCharVariables.DPSMeterXPos,GF_PerCharVariables.DPSMeterYPos = GF_DamageMeterFrame:GetPoint()
+				this:StopMovingOrSizing()
+				_,_,_,GF_PerCharVariables.DPSMeterXPos,GF_PerCharVariables.DPSMeterYPos = GF_DamageMeterFrame:GetPoint()
 			</OnDragStop>
 			<OnLoad>
-				self:RegisterForDrag("LeftButton")
+				this:RegisterForDrag("LeftButton")
 			</OnLoad>
 		</Scripts>
 	</Frame>
