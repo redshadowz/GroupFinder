@@ -206,7 +206,7 @@ GF_STOP_WHO = "Stop"
 GF_LEVELS = "levels"
 GF_SKIP = "Skip"
 GF_REQUEST = "Request"
-GF_INVITE_PLEASE = "Invite Please"
+GF_INVITE_FOR = "Invite for: \""
 GF_INVITING_FOR = "Inviting you for: "
 GF_SENDING_GET_WHO = "Sending Get Who request in "
 
