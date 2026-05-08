@@ -998,7 +998,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 					<Anchors>
 						<Anchor point="CENTER">
 							<Offset>
-								<AbsDimension x="-1" y="0"/>
+								<AbsDimension x="-1" y="2"/>
 							</Offset>
 						</Anchor>
 					</Anchors>
@@ -5490,11 +5490,29 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_UseFriendsListCheckButton" inherits="GF_CheckButtonTemplate_Label">
+							<CheckButton name="GF_SendPlayerInfoCheckButton" inherits="GF_CheckButtonTemplate_Label">
 								<Anchors>
 									<Anchor point="TOP">
 										<Offset>
 											<AbsDimension x="-50" y="-10"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										if this:GetChecked() then GF_PerCharVariables.sendplayerinfo = true else GF_PerCharVariables.sendplayerinfo = false end
+										GF_FixLFGStrings()
+									</OnClick>
+									<OnLoad>
+										getglobal(this:GetName().."TextLabel"):SetText(GF_SEND_PLAYER_INFO)
+									</OnLoad>
+								</Scripts>
+							</CheckButton>
+							<CheckButton name="GF_UseFriendsListCheckButton" inherits="GF_CheckButtonTemplate_Label">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GF_SendPlayerInfoCheckButton" relativePoint="BOTTOMLEFT">
+										<Offset>
+											<AbsDimension x="0" y="-5"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
