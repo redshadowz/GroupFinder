@@ -2150,11 +2150,19 @@ function GF_UpdateDPSMeter()
 		if tempTable[i] then
 			getglobal("GF_DPSMeterEntry"..i.."NameLabel"):SetText("|cff"..(GF_ClassColors[tempTable[i][2][2]] or "9d9d9d")..tempTable[i][1].."|r")
 			if GF_PerCharVariables.dpsmeter == 1 then
-				getglobal("GF_DPSMeterEntry"..i.."DataLabel"):SetText(tempTable[i][2][3])
+				if tempTable[i][2][3] > 100000 then
+					getglobal("GF_DPSMeterEntry"..i.."DataLabel"):SetText((tempTable[i][2][3]/1000).."K")
+				else
+					getglobal("GF_DPSMeterEntry"..i.."DataLabel"):SetText(tempTable[i][2][3])
+				end
 			elseif GF_PerCharVariables.dpsmeter == 2 then
 				getglobal("GF_DPSMeterEntry"..i.."DataLabel"):SetText(ceil(tempTable[i][2][3]/tempTable[i][2][5]))
 			elseif GF_PerCharVariables.dpsmeter == 3 then
-				getglobal("GF_DPSMeterEntry"..i.."DataLabel"):SetText(tempTable[i][2][4])
+				if tempTable[i][2][4] > 100000 then
+					getglobal("GF_DPSMeterEntry"..i.."DataLabel"):SetText((tempTable[i][2][4]/1000).."K")
+				else
+					getglobal("GF_DPSMeterEntry"..i.."DataLabel"):SetText(tempTable[i][2][4])
+				end
 			end
 			getglobal("GF_DPSMeterEntry"..i.."NameLabel"):Show()
 			getglobal("GF_DPSMeterEntry"..i.."DataLabel"):Show()
@@ -3432,7 +3440,7 @@ function GF_GetTypes(arg1, showanyway)
 					if foundPvP == 0 then for num,word in gfind(arg1, "[%p%s](%d+)%s?(%a+)[%p%s]") do if (GF_WORD_PVP[word] or GF_PVP_DETECTION[word]) and tonumber(num) > foundPvP and tonumber(num) > 8 and tonumber(num) < 61 then foundPvP = tonumber(num) break end end end
 					if foundPvP == 0 then for word,num in gfind(arg1, "[%p%s](%a+)%s?(%d+)[%p%s]") do if (GF_WORD_PVP[word] or GF_PVP_DETECTION[word]) and tonumber(num) > foundPvP and tonumber(num) > 8 and tonumber(num) < 61 then foundPvP = tonumber(num) break end end end
 					if foundPvP == 0 then table.insert(groupName,wordString) groupName[wordString] = true end
-					foundTradesExclusion = foundTradesExclusion + .3 foundGuildExclusion = foundGuildExclusion + .1
+					if not GF_WORD_PVP_BYPASS[wordString] then foundTradesExclusion = foundTradesExclusion + .5 foundGuildExclusion = foundGuildExclusion + .3 else foundTradesExclusion = foundTradesExclusion + .3 foundGuildExclusion = foundGuildExclusion + .1 end
 					numGroupWords = numGroupWords + 1 + j
 				end
 				if GF_WORD_LEVEL_ZONE[wordString] and (wordTable[i-1] == GF_PORTAL_LOCALIZED or wordTable[i+1] == GF_PORTAL_LOCALIZED) then foundTrades = foundTrades + 1 if showanyway == true then print("portalzone trade 1") end end
