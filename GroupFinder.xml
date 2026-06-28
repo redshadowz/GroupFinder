@@ -1,7 +1,9 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 	<Script file="localization.lua"/>
+	<Script file="database.lua"/>
 	<Script file="GroupFinder.lua"/>
+	<Script file="translation.lua"/>
 	<Font name="GF_BaseFont" inherits="GameFontNormal" virtual="true"><Shadow><Offset><AbsDimension x="1" y="-1"/></Offset><Color r="0" g="0" b="0" a="0.5"/></Shadow></Font>
 	<Font name="GF_MinimapFont" inherits="GameFontNormal" virtual="true"><Shadow><Offset><AbsDimension x="1" y="-1"/></Offset><Color r="0" g="0" b="0" a="0.5"/></Shadow></Font>
 	<Font name="GF_ButtonFont" inherits="GameFontNormal" virtual="true"><Shadow><Offset><AbsDimension x="1" y="-1"/></Offset><Color r="0" g="0" b="0" a="0.5"/></Shadow></Font>
@@ -441,12 +443,8 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						GF_SavedVariables = {}
-						GF_PerCharVariables = {}
-						GF_LoadVariables()
-						GF_LoadSettings()
+						GF_ConfirmationDialogFunctions(gsub(this:GetName(),"%d","").."Sent")
 						this:GetParent():Hide()
-						DEFAULT_CHAT_FRAME:AddMessage("GF: "..GF_YOUR_SETTINGS_RESET, 1, 1, 0.5)
 					</OnClick>
 					<OnHide>
 						this:GetParent():Hide()
@@ -1141,6 +1139,144 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 			</Layer>
 		</Layers>
 		<Frames>
+			<Button name="GF_TranslateDropdownButton" inherits="GF_ButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="8" y="-1"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						if not GF_TranslateDropdownMenu:IsShown() then
+							GF_TranslateDropdownMenu:Show()
+						else
+							GF_TranslateDropdownMenu:Hide()
+						end
+					</OnClick>
+					<OnLeave>
+						if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "GF_Translate") then 
+							GF_MenusToHide["GF_TranslateDropdownMenu"] = {"GF_Translate",GetTime()}
+							GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
+						end
+					</OnLeave>
+					<OnLoad>
+						getglobal(this:GetName().."TextLabel"):SetText(GF_TRANSLATE)
+					</OnLoad>
+				</Scripts>
+				<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up" setAllPoints="true"/>
+				<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Down" setAllPoints="true"/>
+				<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD" setAllPoints="true"/>
+			</Button>
+			<Frame name="GF_TranslateDropdownMenu" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true">
+				<Size>
+					<AbsDimension y="65"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="GF_TranslateDropdownButton" relativePoint="BOTTOMLEFT">
+						<Offset>
+							<AbsDimension x="0" y="4"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border">
+					<BackgroundInsets>
+						<AbsInset left="4" right="4" top="4" bottom="4"/>
+					</BackgroundInsets>
+					<EdgeSize>
+						<AbsValue val="16"/>
+					</EdgeSize>
+					<BorderColor r="0.6" g="0.6" b="0.6"/>
+				</Backdrop>
+				<Layers>
+					<Layer level ="BACKGROUND">
+						<Texture file="Interface\ChatFrame\ChatFrameBackground">
+							<Anchors>
+								<Anchor point="TOPLEFT">
+									<Offset x="4" y="-4"/>
+								</Anchor>
+								<Anchor point="BOTTOMRIGHT">
+									<Offset x="-4" y="4"/>
+								</Anchor>
+							</Anchors>
+							<Gradient orientation="VERTICAL">
+								<MinColor r="0" g="0" b="0" a="0.9"/>
+								<MaxColor r="0.2" g="0.2" b="0.2" a="0.9"/>
+							</Gradient>
+						</Texture>
+					</Layer>
+				</Layers>
+				<Frames>
+					<CheckButton name="GF_TranslateChatCheckButton" inherits="GF_DropdownCheckButtonTemplate_Label">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset>
+									<AbsDimension x="6" y="-4"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								if this:GetChecked() then GF_SavedVariables.showtranslate = true else GF_SavedVariables.showtranslate = false GF_SavedVariables.showuntranslated = GF_TranslateShowUntranslatedCheckButton:SetChecked(false) end
+								GF_SavedVariables.blockforeign = GF_TranslateBlockForeignCheckButton:SetChecked(false)
+								GF_ApplyFiltersToGroupList(true)
+							</OnClick>
+							<OnLoad>
+								getglobal(this:GetName().."TextLabel"):SetText(GF_TRANSLATE_CHAT)
+							</OnLoad>
+						</Scripts>
+					</CheckButton>
+					<CheckButton name="GF_TranslateShowUntranslatedCheckButton" inherits="GF_DropdownCheckButtonTemplate_Label">
+						<Anchors>
+							<Anchor point="TOP" relativeTo="GF_TranslateChatCheckButton" relativePoint="BOTTOM">
+								<Offset>
+									<AbsDimension x="0" y="6"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								if this:GetChecked() then GF_SavedVariables.showuntranslated = true GF_SavedVariables.showtranslate = true GF_TranslateChatCheckButton:SetChecked(true) else GF_SavedVariables.showuntranslated = false end
+								GF_SavedVariables.blockforeign = GF_TranslateBlockForeignCheckButton:SetChecked(false)
+								GF_ApplyFiltersToGroupList(true)
+							</OnClick>
+							<OnLoad>
+								getglobal(this:GetName().."TextLabel"):SetText(GF_TRANSLATE_UNTRANSLATED)
+							</OnLoad>
+						</Scripts>
+					</CheckButton>
+					<CheckButton name="GF_TranslateBlockForeignCheckButton" inherits="GF_DropdownCheckButtonTemplate_Label">
+						<Anchors>
+							<Anchor point="TOP" relativeTo="GF_TranslateShowUntranslatedCheckButton" relativePoint="BOTTOM">
+								<Offset>
+									<AbsDimension x="0" y="6"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								if this:GetChecked() then GF_SavedVariables.blockforeign = true else GF_SavedVariables.blockforeign = false end
+								GF_SavedVariables.showtranslate = GF_TranslateChatCheckButton:SetChecked(false)
+								GF_SavedVariables.showuntranslated = GF_TranslateShowUntranslatedCheckButton:SetChecked(false)
+								GF_GetGroupFilters()
+								GF_ApplyFiltersToGroupList(true)
+							</OnClick>
+							<OnLoad>
+								getglobal(this:GetName().."TextLabel"):SetText(GF_TRANSLATE_BLOCK_FOREIGN)
+							</OnLoad>
+						</Scripts>
+					</CheckButton>
+				</Frames>
+				<Scripts>
+					<OnLeave>
+						if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "GF_Translate") then 
+							GF_MenusToHide["GF_TranslateDropdownMenu"] = {"GF_Translate",GetTime()}
+							GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
+						end
+					</OnLeave>
+				</Scripts>
+			</Frame>
 			<Button name="$parentCloseButton" inherits="UIPanelCloseButton">
 				<Anchors>
 					<Anchor point="TOPRIGHT">
@@ -4302,6 +4438,68 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnClick>
 								</Scripts>
 							</Button>
+							<Button name="GF_SaveCurrentGroupButton" inherits="GF_ButtonTemplate" text="GF_LOG_SAVE_GROUP" hidden="true">
+								<Size>
+									<AbsDimension x="90" y="20"/>
+								</Size>
+								<Anchors>
+									<Anchor point="RIGHT" relativeTo="GF_GroupLogButton" relativePoint="LEFT">
+										<Offset>
+											<AbsDimension x="-5" y="0"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										GF_SaveCurrentGroupDialog:Show()
+									</OnClick>
+								</Scripts>
+							</Button>
+							<Frame name="GF_SaveCurrentGroupDialog" inherits="GF_DialogFrameTemplate_ResetSettings" hidden="true">
+								<Anchors>
+									<Anchor point="CENTER" relativeTo="GF_SettingsFrame">
+										<Offset>
+											<AbsDimension x="0" y="0"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnLoad>
+										GF_SaveCurrentGroupDialogHeadingLabel:SetText(GF_ARE_YOU_SURE_SAVE_GROUP)
+									</OnLoad>
+								</Scripts>
+							</Frame>
+							<Button name="GF_ResetCurrentGroupButton" inherits="GF_ButtonTemplate" text="GF_LOG_RESET_GROUP" hidden="true">
+								<Size>
+									<AbsDimension x="90" y="20"/>
+								</Size>
+								<Anchors>
+									<Anchor point="RIGHT" relativeTo="GF_SaveCurrentGroupButton" relativePoint="LEFT">
+										<Offset>
+											<AbsDimension x="0" y="0"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										GF_ResetCurrentGroupDialog:Show()
+									</OnClick>
+								</Scripts>
+							</Button>
+							<Frame name="GF_ResetCurrentGroupDialog" inherits="GF_DialogFrameTemplate_ResetSettings" hidden="true">
+								<Anchors>
+									<Anchor point="CENTER" relativeTo="GF_SettingsFrame">
+										<Offset>
+											<AbsDimension x="0" y="0"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnLoad>
+										GF_ResetCurrentGroupDialogHeadingLabel:SetText(GF_ARE_YOU_SURE_RESET_GROUP)
+									</OnLoad>
+								</Scripts>
+							</Frame>
 						</Frames>
 					</Frame>
 				</Frames>
@@ -4828,26 +5026,86 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
-							<CheckButton name="GF_AlwaysShowGuildFriendsCheckButton" inherits="GF_CheckButtonTemplate_Label">
+							<Button name="GF_AlwaysShowDropdown" inherits="GF_ButtonTemplate">
 								<Anchors>
 									<Anchor point="TOPRIGHT">
 										<Offset>
-											<AbsDimension x="-155" y="-48"/>
+											<AbsDimension x="-165" y="-48"/>
 										</Offset>
 									</Anchor>
 								</Anchors>
+								<Layers>
+									<Layer level="ARTWORK">
+										<FontString inherits="GF_NormalFont" name="GF_AlwaysShowTextLabel" nonspacewrap="false" justifyH="LEFT"  text="GF_ALWAYS_SHOW">
+											<Anchors>
+												<Anchor point="LEFT" relativeTo="GF_AlwaysShowDropdown" relativePoint="RIGHT">
+													<Offset>
+														<AbsDimension x="0" y="0"/>
+													</Offset>
+												</Anchor>
+											</Anchors>
+										</FontString>
+									</Layer>
+								</Layers>
 								<Scripts>
 									<OnClick>
-										if this:GetChecked() then GF_SavedVariables.alwaysshowguild = true else GF_SavedVariables.alwaysshowguild = false end
+										if not GF_AlwaysShow:IsShown() then
+											GF_ButtonListFunctions(gsub(this:GetName(),"%d","").."Show")
+										else
+											GF_AlwaysShow:Hide()
+										end
 									</OnClick>
-									<OnLoad>
-										getglobal(this:GetName().."TextLabel"):SetText(GF_ALWAYS_SHOW_GUILD)
-									</OnLoad>
+									<OnLeave>
+										if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "AlwaysShow") then 
+											GF_MenusToHide["GF_AlwaysShow"] = {"AlwaysShow",GetTime()}
+											GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
+										end
+									</OnLeave>
 								</Scripts>
-							</CheckButton>
+								<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up" setAllPoints="true"/>
+								<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Down" setAllPoints="true"/>
+								<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD" setAllPoints="true"/>
+							</Button>
+							<Frame name="GF_AlwaysShow" clampedToScreen="true" enableMouse="true" toplevel="true" parent="UIParent" frameStrata="DIALOG" hidden="true">
+								<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border">
+									<BackgroundInsets>
+										<AbsInset left="4" right="4" top="4" bottom="4"/>
+									</BackgroundInsets>
+									<EdgeSize>
+										<AbsValue val="16"/>
+									</EdgeSize>
+									<BorderColor r="0.6" g="0.6" b="0.6"/>
+								</Backdrop>
+								<Layers>
+									<Layer level ="BACKGROUND">
+										<Texture file="Interface\ChatFrame\ChatFrameBackground">
+											<Anchors>
+												<Anchor point="TOPLEFT">
+													<Offset x="4" y="-4"/>
+												</Anchor>
+												<Anchor point="BOTTOMRIGHT">
+													<Offset x="-4" y="4"/>
+												</Anchor>
+											</Anchors>
+											<Gradient orientation="VERTICAL">
+												<MinColor r="0" g="0" b="0" a="0.9"/>
+												<MaxColor r="0.2" g="0.2" b="0.2" a="0.9"/>
+											</Gradient>
+										</Texture>
+									</Layer>
+								</Layers>
+								<Scripts>
+									<OnLeave>
+										if not GetMouseFocus() or not GetMouseFocus():GetName() or not string.find(GetMouseFocus():GetName(), "AlwaysShow") then 
+											GF_MenusToHide["GF_AlwaysShow"] = {"AlwaysShow",GetTime()}
+											GF_OnUpdateFunctions["HideMenus"] = GF_HideDropdownMenus
+										end
+									</OnLeave>
+								</Scripts>
+							</Frame>
 							<Button name="GF_FontNameDropdown" inherits="GF_ButtonTemplate">
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="GF_AlwaysShowGuildFriendsCheckButton" relativePoint="BOTTOMLEFT">
+									<Anchor point="TOPLEFT" relativeTo="GF_AlwaysShowDropdown" relativePoint="BOTTOMLEFT">
 										<Offset>
 											<AbsDimension x="0" y="-8"/>
 										</Offset>
@@ -6011,7 +6269,72 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 								GF_ShowGroupLogEntryFrame:Hide()
 							</OnClick>
 						</Scripts>
+						<NormalFont style="GF_ButtonFont"/>
+						<HighlightFont style="GF_ButtonFontWhite"/>
+						<DisabledFont style="GF_ButtonFont"/>
 					</Button>
+					<Button name="GF_ShowGroupLogEntryFrameReportButton" inherits="GF_ButtonTemplate" text="GF_REPORT">
+						<Size>
+							<AbsDimension x="60" y="25"/>
+						</Size>
+						<Anchors>
+							<Anchor point="BOTTOMLEFT">
+								<Offset>
+									<AbsDimension x="20" y="7"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnEnter>
+								GF_ShowTooltip(this)
+							</OnEnter>
+							<OnLeave>
+								GameTooltip:Hide()
+							</OnLeave>
+							<OnClick>
+								GF_ReportDamageMeter()
+							</OnClick>
+						</Scripts>
+						<NormalFont style="GF_ButtonFont"/>
+						<HighlightFont style="GF_ButtonFontWhite"/>
+						<DisabledFont style="GF_ButtonFont"/>
+					</Button>
+					<CheckButton name="GF_ShowGroupLogEntryFrameReportDamageCheckButton" inherits="GF_CheckButtonTemplate_Label">
+						<Anchors>
+							<Anchor point="LEFT" relativeTo="GF_ShowGroupLogEntryFrameReportButton" relativePoint="RIGHT">
+								<Offset>
+									<AbsDimension x="0" y="0"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								if this:GetChecked() then GF_PerCharVariables.dpsmetersenddamage = true else GF_PerCharVariables.dpsmetersenddamage = false end
+								GF_PerCharVariables.dpsmetersendhealing = GF_ShowGroupLogEntryFrameReportHealingCheckButton:SetChecked(false)
+							</OnClick>
+							<OnLoad>
+								getglobal(this:GetName().."TextLabel"):SetText(GF_DAMAGE)
+							</OnLoad>
+						</Scripts>
+					</CheckButton>
+					<CheckButton name="GF_ShowGroupLogEntryFrameReportHealingCheckButton" inherits="GF_CheckButtonTemplate_Label">
+						<Anchors>
+							<Anchor point="LEFT" relativeTo="GF_ShowGroupLogEntryFrameReportDamageCheckButtonTextLabel" relativePoint="RIGHT">
+								<Offset>
+									<AbsDimension x="0" y="0"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								if this:GetChecked() then GF_PerCharVariables.dpsmetersendhealing = true else GF_PerCharVariables.dpsmetersendhealing = false end
+								GF_PerCharVariables.dpsmetersenddamage = GF_ShowGroupLogEntryFrameReportDamageCheckButton:SetChecked(false)
+							</OnClick>
+							<OnLoad>
+								getglobal(this:GetName().."TextLabel"):SetText(GF_HEALING)
+							</OnLoad>
+						</Scripts>
+					</CheckButton>
 				</Frames>
 				<Scripts>
 					<OnLoad>
@@ -6055,6 +6378,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				GF_LFGHardCore:Hide()
 				GF_GroupChannelName:Hide()
 				GF_FontName:Hide()
+				GF_AlwaysShow:Hide()
 				GF_BlockList:Hide()
 				GF_AutoBlacklistDropdownMenu:Hide()
 				
